@@ -23,7 +23,8 @@
 
 namespace daisi::cpps::logical {
 
-LogicalAgent::LogicalAgent(uint32_t device_id) : device_id_(device_id) {}
+LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger)
+    : device_id_(device_id), logger_(std::move(logger)) {}
 
 void LogicalAgent::initCommunication(const std::string &config_file) {
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);

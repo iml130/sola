@@ -20,6 +20,7 @@
 #include <memory>
 #include <vector>
 
+#include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/algorithms/algorithm_interface.h"
 #include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
@@ -28,7 +29,7 @@ namespace daisi::cpps::logical {
 
 class LogicalAgent {
 public:
-  LogicalAgent(uint32_t device_id);
+  LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger);
 
   virtual ~LogicalAgent() = default;
 
@@ -50,16 +51,16 @@ protected:
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) = 0;
 
+  uint32_t device_id_;
+
   /// @brief The algorithms which logical messages will be forwarded to for processing.
   std::vector<AlgorithmInterface> algorithms_;
 
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
 
-  std::shared_ptr<sola_ns3::SolaLoggerNs3> logger_;
+  std::shared_ptr<CppsLoggerNs3> logger_;
 
   std::string uuid_;
-
-  uint32_t device_id_;
 };
 
 }  // namespace daisi::cpps::logical

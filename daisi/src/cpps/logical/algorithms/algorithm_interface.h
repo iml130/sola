@@ -18,6 +18,7 @@
 #define DAISI_CPPS_LOGICAL_ALGORITHMS_ALGORITHM_INTERFACE_H_
 
 #include <memory>
+#include <variant>
 
 #include "sola-ns3/sola_ns3_wrapper.h"
 
@@ -28,6 +29,8 @@ public:
   AlgorithmInterface(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola) : sola_(std::move(sola)){};
 
   virtual ~AlgorithmInterface() = 0;
+
+  template <typename T> bool operator()(T &msg) { return false; }
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
