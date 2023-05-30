@@ -16,16 +16,21 @@
 
 #include "logical_agent.h"
 
+#include <functional>
+
+#include "cpps/common/uuid_generator.h"
 #include "minhton/utils/config_reader.h"
 
 namespace daisi::cpps::logical {
 
-void LogicalAgent::initSola(const std::string &_config_file, uint32_t _device_id) {
+LogicalAgent::LogicalAgent(uint32_t device_id) : device_id_(device_id) {}
+
+void LogicalAgent::initCommunication(const std::string &config_file) {
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
 
   bool first_node = false;  // TODO
 
-  if (!first_node_) {
+  if (!first_node) {
     sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
   }
 
@@ -33,23 +38,36 @@ void LogicalAgent::initSola(const std::string &_config_file, uint32_t _device_id
   sola::EventDisseminationMinhcast::Config config_ed;
 
   uuid_ = UUIDGenerator::get()();
-  //   logger_->setApplicationUUID(uuid_);
+  logger_->setApplicationUUID(uuid_);
 
-  sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, messageReceiveFunction,
-                                                     topicMessageReceiveFunction,
-                                                     nullptr,  // TODO logger
-                                                     uuid_, device_id);
+  auto message_recv_fct =
+      std::bind(&LogicalAgent::messageReceiveFunction, this, std::placeholders::_1);
+  auto topic_message_recv_fct =
+      std::bind(&LogicalAgent::topicMessageReceiveFunction, this, std::placeholders::_1);
+
+  sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(
+      config_mo, config_ed, message_recv_fct, topic_message_recv_fct, logger_, uuid_, device_id_);
 }
 
-void LogicalAgent::processMessage(const LogicalMessage &_message) {
+void LogicalAgent::processMessage(const Message &msg) {
   for (auto &algorithm : algorithms_) {
-    bool processed = std::visit(algorithm, message);
+    bool processed = std::visit(algorithm, msg);
     if (processed) {
       return;
     }
   }
 
   throw std::runtime_error("Failed to process message");
+}
+
+void LogicalAgent::messageReceiveFunction(const sola::Message &msg) {
+  auto logical_message = deserialize(msg.content);
+  processMessage(logical_message);
+}
+
+void LogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
+  auto logical_message = deserialize(msg.content);
+  processMessage(logical_message);
 }
 
 }  // namespace daisi::cpps::logical

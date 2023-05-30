@@ -17,34 +17,49 @@
 #ifndef DAISI_CPPS_LOGICAL_LOGICAL_AGENT_H_
 #define DAISI_CPPS_LOGICAL_LOGICAL_AGENT_H_
 
-#include <function>
 #include <memory>
 #include <vector>
 
-#include "daisi/cpps/logical/algorithms/algorithm_interface.h"
+#include "cpps/logical/algorithms/algorithm_interface.h"
+#include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
 namespace daisi::cpps::logical {
 
 class LogicalAgent {
 public:
+  LogicalAgent(uint32_t device_id);
+
   virtual ~LogicalAgent() = default;
 
-  void processMessage(const LogicalMessage &_message);
+  /// @brief Forwarding a received message to the appropriate algorithm interface for processing.
+  /// @param _message
+  void processMessage(const Message &msg);
 
 protected:
-  void initCommunication(const std::string &_config_file, uint32_t _device_id);
+  /// @brief Initializing communication via Sola which all logical agents require.
+  /// @param _config_file
+  /// @param _device_id
+  void initCommunication(const std::string &config_file);
 
-  virtual void messageReceiveFunction(const sola::Message &m) = 0;
-  virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) = 0;
+  /// @brief Method being called by sola when we receive a 1-to-1 message
+  /// @param m received message
+  virtual void messageReceiveFunction(const sola::Message &msg) = 0;
 
+  /// @brief Method being called by sola when we receive a message via a topic
+  /// @param m received message
+  virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) = 0;
+
+  /// @brief The algorithms which logical messages will be forwarded to for processing.
   std::vector<AlgorithmInterface> algorithms_;
-
-  // Logger logger_;
 
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
 
+  std::shared_ptr<sola_ns3::SolaLoggerNs3> logger_;
+
   std::string uuid_;
+
+  uint32_t device_id_;
 };
 
 }  // namespace daisi::cpps::logical
