@@ -6,6 +6,7 @@ target_sources(daisi_cpps_logical_material_flow_material_flow_logical_agent
 )
 target_link_libraries(daisi_cpps_logical_material_flow_material_flow_logical_agent
     INTERFACE
+    daisi_cpps_logical_logical_agent
 )
 
 add_library(daisi_cpps_logical_material_flow_centralized_material_flow_logical_agent STATIC)

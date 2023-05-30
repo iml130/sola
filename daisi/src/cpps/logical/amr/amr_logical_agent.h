@@ -46,7 +46,7 @@ struct SocketInfo {
 
 class AmrLogicalAgent {
 public:
-  AmrLogicalAgent(const AlgorithmConfig &_config, const bool _first_node);
+  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config, const bool _first_node);
 
   void init(const SocketInfo &_amr_socket_info, const SocketInfo &_sola_socket_info);
 

@@ -17,8 +17,7 @@
 #ifndef DAISI_CPPS_MATERIAL_FLOW_MATERIAL_FLOW_LOGICAL_AGENT_H_
 #define DAISI_CPPS_MATERIAL_FLOW_MATERIAL_FLOW_LOGICAL_AGENT_H_
 
-#include "../logical_agent.h"
-#include "daisi/cpps/material_flow/task.h"
+#include "cpps/logical/logical_agent.h"
 
 namespace daisi::cpps::logical {
 
