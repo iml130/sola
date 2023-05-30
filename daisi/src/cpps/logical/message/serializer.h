@@ -25,7 +25,7 @@
 
 namespace daisi::cpps::logical {
 
-using Message = std::variant<CallForProposal, BidSubmission>;  // placeholder
+using Message = std::variant<std::monostate, CallForProposal, BidSubmission>;
 
 std::string serialize(const Message &msg);
 
