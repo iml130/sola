@@ -5,7 +5,7 @@ add_subdirectory(common)
 add_subdirectory(message)
 add_subdirectory(negotiation)
 add_subdirectory(to)
-add_subdirectory(order_management)
+add_subdirectory(logical)
 
 add_library(daisi_cpps_packet STATIC)
 target_sources(daisi_cpps_packet
