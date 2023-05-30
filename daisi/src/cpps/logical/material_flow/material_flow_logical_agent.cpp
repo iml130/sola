@@ -20,4 +20,17 @@ namespace daisi::cpps::logical {
 
 void MaterialFlowLogicalAgent::setWaitingForStart() { waiting_for_start_ = true; }
 
+MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id)
+    : LogicalAgent(device_id), logger_(daisi::global_logger_manager->createTOLogger(device_id)) {}
+
+void messageReceiveFunction(const sola::Message &msg) {
+  // TODO add logging of message
+  LogicalAgent::messageReceiveFunction(msg);
+}
+
+void topicMessageReceiveFunction(const sola::TopicMessage &msg) {
+  // TODO add logging of topic message
+  LogicalAgent::topicMessageReceiveFunction(msg);
+}
+
 }  // namespace daisi::cpps::logical

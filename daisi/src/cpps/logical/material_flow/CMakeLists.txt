@@ -16,6 +16,7 @@ target_sources(daisi_cpps_logical_material_flow_centralized_material_flow_logica
 )
 target_link_libraries(daisi_cpps_logical_material_flow_centralized_material_flow_logical_agent
     PUBLIC
+    daisi_cpps_logical_material_flow_material_flow_logical_agent
 )
 
 add_library(daisi_cpps_logical_material_flow_decentralized_material_flow_logical_agent STATIC)
@@ -26,4 +27,5 @@ target_sources(daisi_cpps_logical_material_flow_decentralized_material_flow_logi
 )
 target_link_libraries(daisi_cpps_logical_material_flow_decentralized_material_flow_logical_agent
     PUBLIC
+    daisi_cpps_logical_material_flow_material_flow_logical_agent
 )

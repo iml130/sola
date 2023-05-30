@@ -24,20 +24,40 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent();
+  MaterialFlowLogicalAgent(uint32_t device_id);
 
+  virtual ~MaterialFlowLogicalAgent() = 0;
+
+  /// @brief Method called by the container on start. Initializing further components which require
+  /// the initialization of network components such as Sola.
   virtual void init() = 0;
 
-  virtual void addMaterialFlow(const daisi::material_flow::Task &_task) = 0;
+  /// @brief Adding a material flow in the form of the pure string.
+  /// @param mfdl_program
+  virtual void addMaterialFlow(std::string mfdl_program) = 0;
 
-  // for interaction with manager
+  /// @brief Setting a flag that the agent is currently waiting for other processes to finish before
+  /// the handling of material flows is possible. An example is the initialization of Sola.
   void setWaitingForStart();
+
+  /// @brief Checking whether the agent is currently handling a material flow or running idle
+  /// instead.
+  /// @return status whether the agent is busy or not
   virtual bool isBusy() = 0;
 
 protected:
-  // virtual void messageReceiveFunction(const sola::Message &m);
-  // virtual void topicMessageReceiveFunction(const sola::TopicMessage &m);
+  /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
+  /// messages will be added in comparison to the implementation of the logical agent interface.
+  /// @param m received message
+  virtual void messageReceiveFunction(const sola::Message &m) override;
 
+  /// @brief Method being called by sola when we receive a message via a topic. Here, logging of the
+  /// messages will be added in comparison to the implementation of the logical agent interface
+  /// @param m received message
+  virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
+
+private:
+  /// Simple flag to represent that the agent is still in the initialization process.
   bool waiting_for_start_;
 };
 
