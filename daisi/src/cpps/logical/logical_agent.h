@@ -54,7 +54,7 @@ protected:
   uint32_t device_id_;
 
   /// @brief The algorithms which logical messages will be forwarded to for processing.
-  std::vector<AlgorithmInterface> algorithms_;
+  std::vector<std::unique_ptr<AlgorithmInterface>> algorithms_;
 
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
 
