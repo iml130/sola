@@ -52,7 +52,7 @@ void LogicalAgent::initCommunication(const std::string &config_file) {
 
 void LogicalAgent::processMessage(const Message &msg) {
   for (auto &algorithm : algorithms_) {
-    bool processed = std::visit(algorithm, msg);
+    bool processed = std::visit([&](auto &&msg) { return algorithm->operator()(msg); }, msg);
     if (processed) {
       return;
     }

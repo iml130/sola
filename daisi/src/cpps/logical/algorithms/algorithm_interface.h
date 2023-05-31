@@ -20,6 +20,8 @@
 #include <memory>
 #include <variant>
 
+#include "cpps/logical/message/auction_based/bid_submission.h"
+#include "cpps/logical/message/auction_based/call_for_proposal.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
 namespace daisi::cpps::logical {
@@ -30,7 +32,8 @@ public:
 
   virtual ~AlgorithmInterface() = 0;
 
-  template <typename T> bool operator()(T &msg) { return false; }
+  virtual bool operator()(const BidSubmission &msg) { return false; }
+  virtual bool operator()(const CallForProposal &msg) { return false; }
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;

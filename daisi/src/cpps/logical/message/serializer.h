@@ -20,12 +20,12 @@
 #include <string>
 #include <variant>
 
-#include "bid_submission.h"
-#include "call_for_proposal.h"
+#include "auction_based/bid_submission.h"
+#include "auction_based/call_for_proposal.h"
 
 namespace daisi::cpps::logical {
 
-using Message = std::variant<std::monostate, CallForProposal, BidSubmission>;
+using Message = std::variant<CallForProposal, BidSubmission>;
 
 std::string serialize(const Message &msg);
 
