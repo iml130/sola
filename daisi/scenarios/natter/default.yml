@@ -1,0 +1,25 @@
+# required:  
+title: Test
+name: Ein weiterer Test
+stoptime: 4294967296
+version: 0.1
+physicalLayer: ETH
+fanout: 2
+
+# optional
+defaultDelay: 500
+logLevel: info
+randomSeed: 1 # 0 random, otherwise...
+
+# required:
+numberNodes: 20
+mode: minhcast # minhcast
+
+scenarioSequence: 
+    - join:
+        mode: minhton
+    - publish:
+        number: 5
+        delay: 0
+        mode: random # random, sequential
+        message_size: 100 # in bytes

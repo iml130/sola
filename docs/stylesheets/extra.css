@@ -1,0 +1,22 @@
+:root {
+    --md-text-font: system-ui, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --md-code-font: "Cascadia Code", "Ubuntu Monospace", "Roboto Mono", "SF Mono", "Consolas", monospace;
+}
+
+[data-md-color-scheme="sola"] {
+    --md-primary-fg-color: #29337D;
+    --md-accent-fg-color: #872271;
+}
+
+@keyframes text-color-animation {
+    0% {color: #37A7DF;}
+    40% {color: rgb(var(--text-color));}
+    60% {color: rgb(var(--text-color));}
+    90% {color: #37A7DF;}
+    100% {color: #37A7DF;}
+}
+
+.centered {
+    display: block;
+    margin: 0 auto;
+}

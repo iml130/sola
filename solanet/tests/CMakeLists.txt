@@ -1,0 +1,2 @@
+add_executable(AllTests network_udp_test.cpp)
+target_link_libraries(AllTests Catch2WithMain NetworkUDP)

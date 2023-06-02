@@ -1,0 +1,2 @@
+add_executable(NetworkExample network_example.cpp)
+target_link_libraries(NetworkExample PRIVATE NetworkUDP)

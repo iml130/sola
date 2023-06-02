@@ -1,0 +1,14 @@
+name: IchBinMr.Root
+fanout: 2
+root: true
+verbose: true
+join_mode: none # ip/none/discovery
+
+# Timeouts
+bootstrap_response: 500
+join_response: 500
+join_accept_ack_response: 500
+replacement_offer_response: 500
+replacement_ack_response: 500
+dsn_aggregation: 1000
+inquiry_aggregation: 500

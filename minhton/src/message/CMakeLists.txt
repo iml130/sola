@@ -1,0 +1,50 @@
+add_library(minhton_message STATIC)
+
+target_sources(minhton_message
+  PRIVATE
+    bootstrap_discover.cpp
+    bootstrap_response.cpp
+    empty.cpp
+    find_replacement.cpp
+    get_neighbors.cpp
+    inform_about_neighbors.cpp
+    join_accept_ack.cpp
+    join_accept.cpp
+    join.cpp
+    message_header.cpp
+    remove_neighbor_ack.cpp
+    remove_neighbor.cpp
+    replacement_ack.cpp
+    replacement_offer.cpp
+    replacement_update.cpp
+    search_exact.cpp
+    search_exact_failure.cpp
+    unlock_neighbor.cpp
+    update_neighbors.cpp
+    attribute_inquiry_answer.cpp
+    attribute_inquiry_request.cpp
+    find_query_answer.cpp
+    find_query_request.cpp
+    subscription_order.cpp
+    subscription_update.cpp
+    signoff_parent_answer.cpp
+    signoff_parent_request.cpp
+    replacement_nack.cpp
+    remove_and_update_neighbor.cpp
+    lock_neighbor_request.cpp
+    lock_neighbor_response.cpp
+)
+target_link_libraries(minhton_message 
+  PUBLIC
+    minhton_algorithms # For esearch/NodeData/FindQuery
+    minhton_core_node_info
+    minhton_core_constants
+    minhton_message_serialize
+  PRIVATE
+    minhton_exception_algorithm
+    minhton_core_routing_calculations
+    minhton_utils_uuid
+)
+
+add_library(minhton_message_serialize INTERFACE ${MINHTON_SOURCE_DIR}/include/minhton/message/serialize.h)
+target_link_libraries(minhton_message_serialize INTERFACE Cereal) # TODO Remove public dependency

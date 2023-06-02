@@ -1,0 +1,7 @@
+add_subdirectory(algorithms)
+add_subdirectory(core)
+add_subdirectory(exception)
+add_subdirectory(logging)
+add_subdirectory(message)
+add_subdirectory(network)
+add_subdirectory(utils)

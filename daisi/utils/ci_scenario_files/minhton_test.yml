@@ -1,0 +1,41 @@
+# required
+title: Test
+name: Ein weiterer Test
+stoptime: 10000000
+version: 0.1
+physicalLayer: ETH
+fanout: 2
+outputPath: "/work/ns3/results/"
+defaultDelay: 5000
+logLevel: info
+randomSeed: 1 # 0 = random
+
+timeouts:
+    bootstrap_response: 500
+    join_response: 500
+    join_accept_ack_response: 500
+    replacement_offer_response: 500
+    replacement_ack_response: 500
+    dsn_aggregation: 4000
+    inquiry_aggregation: 1000
+
+algorithms:
+    join: minhton
+    leave: minhton
+    search_exact: minhton
+    response: general
+    bootstrap: general
+
+peerDiscoveryEnvironment:
+    attributes: off
+    requests: off
+
+scenarioSequence:
+    - join-many:
+        number: 20
+        mode: random
+    - search-many:
+        number: 20
+    - leave-many:
+        number: 20
+        mode: random

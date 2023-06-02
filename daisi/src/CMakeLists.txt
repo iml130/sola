@@ -1,0 +1,13 @@
+add_subdirectory(logging)
+add_subdirectory(main)
+
+add_subdirectory(cpps)
+add_subdirectory(minhton-ns3)
+add_subdirectory(natter-ns3)
+add_subdirectory(manager)
+add_subdirectory(path_planning)
+add_subdirectory(sola-ns3)
+add_subdirectory(solanet-ns3)
+add_subdirectory(utils)
+add_subdirectory(datastructure)
+add_subdirectory(material_flow)

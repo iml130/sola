@@ -1,0 +1,231 @@
+# required:  
+title: CPPS
+name: Ein simples Szenario
+stoptime: 50000000
+version: 0.1
+physicalLayer: ETH
+fanout: 2
+
+# optional
+defaultDelay: 2000
+logLevel: info
+randomSeed: 1 # 0 random, otherwise...
+
+topology:
+    width:  50
+    height: 20
+    depth:   0
+
+# required:
+initialNumberNodesAGVs: 30
+numberMaterialFlows: 5
+numberMaterialFlowNodes: 5
+
+# on/off
+materialFlowNodesLeaveAfterFinish: off
+
+mrta_configuration:
+
+    # ContractNet_with_filter
+    # ContractNet_without_filter
+    # Iterated_Auction_Star _TePSSI_original
+    # Iterated_Auction_Star _TePSSI_modified
+    # Iterated_Auction_PubSub_TePSSI_original
+    # Iterated_Auction_PubSub_TePSSI_modified
+    interaction_protocol: Iterated_Auction_PubSub_TePSSI_original
+
+    # Basic_List
+    # Greedy_TSP_List
+    # SimpleTemporalNetwork
+    task_management: SimpleTemporalNetwork
+
+    # min_travel_time
+    # min_travel_time
+    # min_travel_distance
+    # min_makespan
+    # min_delay
+    utility_evaluation: 
+      a1:
+        component: min_makespan
+        factor: 0.5
+      a2:
+        component: min_travel_time
+        factor: 0.5
+
+
+AGVs:
+    - agv1:
+        device_type: "agv"
+        manufacturer: "FhG_IML"
+        model_name: "LoadRunner"
+        model_number: "1"
+        friendly_name: "LR"
+        kinematics:
+            min_velo: 0.0
+            max_velo: 10.0
+            min_acc: -3.0
+            max_acc: 3.0
+            load_time: 2000
+            unload_time: 3000
+        ability:
+            load_carrier_type: "package"
+            max_payload: 30.0
+
+    - agv2:
+        device_type: "agv"
+        manufacturer: "LocusBot"
+        model_name: "LocusOrigin"
+        model_number: "1"
+        friendly_name: "locus"
+        kinematics:
+            min_velo: 0.0
+            max_velo: 1.1
+            min_acc: -0.5
+            max_acc: 0.5
+            load_time: 10000
+            unload_time: 10000
+        ability:
+            load_carrier_type: "package"
+            max_payload: 45.0
+
+    - agv3:
+        device_type: "agv"
+        manufacturer: "FhG_IML"
+        model_name: "ZTF"
+        model_number: "44227"            
+        friendly_name: "ztf"  
+        kinematics: 
+            min_velo: 0.0
+            max_velo: 1.0
+            min_acc: -1.0
+            max_acc: 1.0
+            load_time: 5000
+            unload_time: 5000
+        ability: 
+            load_carrier_type: "eurobox"
+            max_payload: 30.0
+
+    - agv4:
+        device_type: "agv"
+        manufacturer: "FhG_IML"
+        model_name: "Flip"
+        model_number: "3"            
+        friendly_name: "ctv"  
+        kinematics: 
+            min_velo: 0.0
+            max_velo: 1.0
+            min_acc: -0.5
+            max_acc: 0.5
+            load_time: 10000
+            unload_time: 10000
+        ability: 
+            load_carrier_type: "eurobox"
+            max_payload: 60.0
+
+TOs:
+    - to1:
+        friendly_name: "to1"
+        graphs:
+          graph01:
+
+            task01:
+              pickup: 1
+              delivery: 5
+              temporal_constraints:
+              earliest_start: 50000.0
+              latest_finish: 100000.0
+              load_carrier: "package"
+              payload_weight: 20.0
+          
+            task02:
+              pickup: 2
+              delivery: 5
+              earliest_start: 50000.0
+              latest_finish: 180000.0
+              load_carrier: "eurobox"
+              payload_weight: 50.0
+
+            task05:
+              pickup: 5
+              delivery: 8
+              earliest_start: 150000.0
+              latest_finish: 250000.0
+              load_carrier: "package"
+              payload_weight: 40.0
+              precedence_constraints:
+                prec01: task01
+                prec02: task02
+            
+
+
+        locations:
+          l0:
+            x: 0.0
+            y: 0.0
+          l1:
+            x: 10.0
+            y: 0.0
+          l2:
+            x: 20.0
+            y: 0.0
+          l3:
+            x: 30.0
+            y: 0.0
+          l4:
+            x: 40.0
+            y: 0.0
+          l5:
+            x: 50.0
+            y: 0.0
+          l6:
+            x: 0.0
+            y: 20.0
+          l7:
+            x: 10.0
+            y: 20.0
+          l8:
+            x: 20.0
+            y: 20.0
+          l9:
+            x: 30.0
+            y: 20.0
+          l10:
+            x: 40.0
+            y: 20.0
+          l11:
+            x: 50.0
+            y: 20.0
+
+scenarioSequence: 
+    - agv1:
+        type: "agv"
+        friendly_name: "LR"
+        start_time: 0
+        distribution: abs
+        abs: 3
+    - agv2:
+        type: "agv"
+        friendly_name: "locus"
+        start_time: 0
+        distribution: abs
+        abs: 9
+    - agv2:
+        type: "agv"
+        friendly_name: "ztf"
+        start_time: 0
+        distribution: abs
+        abs: 9
+    - agv2:
+        type: "agv"
+        friendly_name: "ctv"
+        start_time: 0
+        distribution: abs
+        abs: 9
+    - to1:
+        type: "to"
+        start_time: 0
+        friendly_name: "to1"
+        spawn_behavior:
+            distribution: gaussian
+            mean: 100000
+            sigma: 10000

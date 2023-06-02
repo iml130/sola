@@ -1,0 +1,12 @@
+[submodule "third_party/Catch2"]
+	path = third_party/Catch2
+	url = https://github.com/catchorg/Catch2.git
+[submodule "third_party/cereal"]
+	path = solanet/third_party/cereal
+	url = https://github.com/USCiLab/cereal.git
+[submodule "solanet/third_party/asio"]
+	path = solanet/third_party/asio
+	url = https://github.com/chriskohlhoff/asio.git
+[submodule "solanet/third_party/cereal"]
+	path = solanet/third_party/cereal
+	url = https://github.com/USCiLab/cereal.git

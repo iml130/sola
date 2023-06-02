@@ -1,0 +1,46 @@
+add_library(minhton_message_sim STATIC)
+target_sources(minhton_message_sim
+  PRIVATE
+    ${MINHTON_SOURCE_DIR}/src/message/attribute_inquiry_answer.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/attribute_inquiry_request.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/bootstrap_discover.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/bootstrap_response.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/empty.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/find_query_answer.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/find_query_request.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/find_replacement.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/get_neighbors.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/inform_about_neighbors.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/join_accept_ack.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/join_accept.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/join.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/lock_neighbor_request.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/lock_neighbor_response.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/message_header.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/remove_and_update_neighbor.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/remove_neighbor_ack.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/remove_neighbor.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/replacement_ack.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/replacement_nack.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/replacement_offer.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/replacement_update.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/search_exact_failure.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/search_exact.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/signoff_parent_answer.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/signoff_parent_request.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/subscription_order.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/subscription_update.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/unlock_neighbor.cpp
+    ${MINHTON_SOURCE_DIR}/src/message/update_neighbors.cpp
+)
+target_link_libraries(minhton_message_sim
+  PUBLIC
+    minhton_algorithms_sim # For esearch/NodeData/FindQuery
+    minhton_core_node_info_sim
+    minhton_core_constants
+    minhton_message_serialize
+  PRIVATE
+    minhton_exception_algorithm
+    minhton_core_routing_calculations
+    minhton_utils_uuid_sim
+)

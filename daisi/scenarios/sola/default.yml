@@ -1,0 +1,51 @@
+# required:
+title: Test
+name: Ein weiterer Test
+stoptime: 4294967296
+version: 0.1
+physicalLayer: ETH
+fanout: 2
+
+# optional
+defaultDelay: 500
+logLevel: info
+randomSeed: 1 # 0 random, otherwise...
+
+# required:
+numberNodes: 3
+
+scenarioSequence:
+  - startSOLA:
+      nodes: "all"
+      delay: 1000
+  - delay:
+      delay: 0
+  - subscribeTopic:
+      nodes: "all" # number or range () or list [x,y] or all
+      topic: "helloworld" # TODO Fix topic names with upper case
+      delay: 1000
+      waitTillFinished: true
+  - delay:
+      delay: 0
+  - publish:
+      topic: "helloworld"
+      waitTillFinished: true
+      messageSize: 100 # bytes
+      nodes: "1" # Must be string # or range () or list [x,y] or random
+      delay: 1000
+  - publish:
+      topic: "helloworld"
+      waitTillFinished: true
+      messageSize: 1000 # bytes
+      nodes: "2" # Must be string # or range () or list [x,y] or random
+      delay: 1000
+
+#  - leaveTopic:
+#      waitTillFinished: true
+#      nodes: "all" # or range () or list [x,y] or all
+#      topic: "HelloWorld"
+#      delay: 1000
+  #- publishService:
+  #- findService:
+  #- removeService:
+  #- updateService:

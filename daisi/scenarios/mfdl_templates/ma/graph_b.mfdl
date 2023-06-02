@@ -1,0 +1,177 @@
+Struct Location
+    type : string 
+    pos_x : number
+    pos_y : number
+End
+
+Location l01
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l02
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l03
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l04
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l05
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l06
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l07
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l08
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l09
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+Location l10
+    id: "0x4711"
+    type: "north"
+    pos_x: {}
+    pos_y: {}
+End
+
+TransportOrderStep tos01
+    Location : l01
+End
+TransportOrderStep tos02
+    Location : l02
+End
+TransportOrderStep tos03
+    Location : l03
+End
+TransportOrderStep tos04
+    Location : l04
+End
+TransportOrderStep tos05
+    Location : l05
+End
+TransportOrderStep tos06
+    Location : l06
+End
+TransportOrderStep tos07
+    Location : l07
+End
+TransportOrderStep tos08
+    Location : l08
+End
+TransportOrderStep tos09
+    Location : l09
+End
+TransportOrderStep tos10
+    Location : l10
+End
+
+
+
+Task graph_b_task_01
+    Transport
+    From tos01
+    To tos05
+    OnDone: graph_b_task_05
+    Constraints: {"LoadCarrier": "package", "PayloadWeight": 40, "ES": 50000, "LF": 150000}
+End
+
+Task graph_b_task_02
+    Transport
+    From tos02
+    To tos05
+    OnDone: graph_b_task_05
+    Constraints: {"LoadCarrier": "eurobox", "PayloadWeight": 50, "ES": 50000, "LF": 150000}
+End
+
+Task graph_b_task_03
+    Transport
+    From tos03
+    To tos05
+    OnDone: graph_b_task_05, graph_b_task_06
+    Constraints: {"LoadCarrier": "package", "PayloadWeight": 20, "ES": 50000, "LF": 120000}
+End
+
+Task graph_b_task_04
+    Transport
+    From tos04
+    To tos08
+    OnDone: graph_b_task_06, graph_b_task_07
+    Constraints: {"LoadCarrier": "package", "PayloadWeight": 40, "ES": 50000, "LF": 150000}
+End
+
+Task graph_b_task_05
+    Transport
+    From tos05
+    To tos07
+    OnDone: graph_b_task_08
+    Constraints: {"LoadCarrier": "package", "PayloadWeight": 20, "ES": 130000, "LF": 210000}
+End
+
+Task graph_b_task_06
+    Transport
+    From tos06
+    To tos03
+    OnDone: graph_b_task_08
+    Constraints: {"LoadCarrier": "eurobox", "PayloadWeight": 25, "ES": 100000, "LF": 220000}
+End
+
+Task graph_b_task_07
+    Transport
+    From tos08
+    To tos09
+    OnDone: graph_b_task_09
+    Constraints: {"LoadCarrier": "eurobox", "PayloadWeight": 25, "ES": 140000, "LF": 260000}
+End
+
+Task graph_b_task_08
+    Transport
+    From tos04
+    To tos05
+    OnDone: graph_b_task_10
+    Constraints: {"LoadCarrier": "eurobox", "PayloadWeight": 50, "ES": 190000, "LF": 330000}
+End
+
+Task graph_b_task_09
+    Transport
+    From tos09
+    To tos10
+    Constraints: {"LoadCarrier": "eurobox", "PayloadWeight": 25, "ES": 250000, "LF": 360000}
+End
+
+Task graph_b_task_10
+    Transport
+    From tos05
+    To tos10
+    Constraints: {"LoadCarrier": "package", "PayloadWeight": 20, "ES": 300000, "LF": 400000}
+End

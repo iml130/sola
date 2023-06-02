@@ -1,0 +1,23 @@
+include(natter_tests)
+
+add_natter_test(TEST tree_helper_test SOURCE tree_helper_test.cpp LINKING natter_utils)
+add_natter_test(TEST utils_test SOURCE utils_test.cpp LINKING natter_utils)
+add_natter_test(TEST network_info_test SOURCE network_info_test.cpp LINKING natter_network_info)
+add_natter_test(TEST minhcast_broadcast_info_test SOURCE broadcast_info_test.cpp LINKING natter_minhcast)
+
+
+if (NATTER_BUILD_SINGLE_TEST_BINARY)
+    set(test_sources "")
+    set(test_linking "")
+    foreach(test IN LISTS natter_test_list)
+        list(APPEND test_sources ${NATTER_TEST_${test}_SOURCE})
+        list(APPEND test_linking ${NATTER_TEST_${test}_LINKING})
+    endforeach()
+    add_executable(NatterAllTests ${test_sources})
+    target_link_libraries(NatterAllTests PUBLIC ${test_linking})
+else()
+    foreach(test IN LISTS natter_test_list)
+        add_executable(${test} ${NATTER_TEST_${test}_SOURCE})
+        target_link_libraries(${test} PUBLIC ${NATTER_TEST_${test}_LINKING})
+    endforeach()
+endif()

@@ -1,0 +1,16 @@
+name: LetMeJoin
+fanout: 2
+root: false
+verbose: true
+join_mode: ip # ip/none/discovery
+join_ip: 1.1.0.2
+join_port: 2001
+
+# timeouts in milliseconds
+bootstrap_response: 500
+join_response: 500
+join_accept_ack_response: 500
+replacement_offer_response: 500
+replacement_ack_response: 500
+dsn_aggregation: 1000
+inquiry_aggregation: 500

@@ -1,0 +1,43 @@
+# required:
+title: PathPlanningTest
+name: Ein simples Szenario
+stoptime: 50000000
+version: 0.1
+physicalLayer: ETH
+fanout: 2
+outputPath: "/work/ns3/results/"
+
+# optional
+defaultDelay: 1000
+logLevel: info
+randomSeed: 1 # 0 random, otherwise...
+
+pickupStations: 8
+deliveryStations: 50
+nextTOMode: randomnearestside # samestation, randomnearestside
+
+consensus: paxos # paxos, central
+
+# Consensus Settings
+#General
+timeBetweenIntersections: 0.5 # min delta time of occupancy for intersections
+maxPreplanningTimeBeforeReject: 1.5 # Max time for which a route is checked before the request is rejected
+
+# Paxos
+paxosTimeBetweenRetries: 1.0
+paxosReplication: 1
+
+# required:
+agvs: 16
+
+max_velo: 10.0
+min_velo: 0.0
+max_acc: 4.0
+min_acc: -4.0
+load_time_s: 2.0
+unload_time_s: 2.0
+
+scenarioSequence:
+  - to1: # Spawn when AGV available
+      type: "to"
+      duration: 60000

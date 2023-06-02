@@ -1,0 +1,2 @@
+add_executable(example_chat chat.cpp)
+target_link_libraries(example_chat natter_minhcast)

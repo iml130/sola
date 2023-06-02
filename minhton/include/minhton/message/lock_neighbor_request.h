@@ -1,0 +1,33 @@
+// Copyright The SOLA Contributors
+//
+// Licensed under the MIT License.
+// For details on the licensing terms, see the LICENSE file.
+// SPDX-License-Identifier: MIT
+
+#ifndef MINHTON_MESSAGE_LOCK_NEIGHBOR_REQUEST_H_
+#define MINHTON_MESSAGE_LOCK_NEIGHBOR_REQUEST_H_
+
+#include "minhton/message/message.h"
+#include "minhton/message/serialize.h"
+
+namespace minhton {
+class MessageLockNeighborRequest : public MinhtonMessage<MessageLockNeighborRequest> {
+public:
+  explicit MessageLockNeighborRequest(const MinhtonMessageHeader &header);
+
+  SERIALIZE(header_);
+
+  MessageLockNeighborRequest() = default;
+
+protected:
+  friend MinhtonMessage;
+
+  /// The header contains always required fields like the sender and target
+  MinhtonMessageHeader header_;
+
+  /// Checks if the message was constructed with all of the necessary information
+  bool validateImpl() const;
+};
+}  // namespace minhton
+
+#endif

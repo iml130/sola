@@ -1,0 +1,110 @@
+site_name: SOLA
+site_author: The SOLA team @ Fraunhofer IML
+site_description: Documentation about SOLA
+site_dir: html
+site_url: https://iml130.github.io/sola/
+use_directory_urls: false
+
+repo_name: iml130/sola
+repo_url: https://github.com/iml130/sola
+edit_uri: ""
+
+nav:
+  - Introduction:
+    - Introduction: index.md
+    - SOLA API: sola_api.md
+    - Main Features: main_features.md
+    - Contributing: contributing.md
+  - Installation:
+    - Installation Manual: installation.md
+  - SOLA:
+    - SOLA: sola/index.md
+    - Environments: sola/environments.md
+    - Logging: sola/logging.md
+    - Management Overlay (MINHTON):
+      - MINHTON: minhton_lib/index.md
+      # - User manual:
+      # TODO
+      - Programmers Manual:
+        - Core: minhton_lib/programmers/core.md
+        - Messages: minhton_lib/programmers/messages.md
+        - Logging: minhton_lib/programmers/logging.md
+        - FSM: minhton_lib/programmers/fsm.md
+      - Algorithms:
+        - Introduction: minhton_lib/algorithms/introduction.md
+        - Join: minhton_lib/algorithms/join.md
+        - Join Accept: minhton_lib/algorithms/join_accept.md
+        - Leave: minhton_lib/algorithms/leave.md
+        - Concurrent Leave: minhton_lib/algorithms/leave_concurrent.md
+        - Bootstrap: minhton_lib/algorithms/bootstrap.md
+        - TreeMapper: minhton_lib/algorithms/treemapper.md
+      - Other:
+        - Glossary: minhton_lib/other/glossary.md
+    - Event Dissemination (natter):
+      - natter: natter_lib/index.md
+      # - User manual:
+      # TODO
+      - Programmers Manual:
+        - Architecture: natter_lib/programmers/architecture.md
+        - Messages: natter_lib/programmers/messages.md
+        - Logging: natter_lib/programmers/logging.md
+      - Other:
+        # - Glossary: natter_lib/other/glossary.md
+        - Known Limitations: natter_lib/other/known-limitations.md
+    - Applications:
+      - Applications: daisi_lib/applications/index.md
+      - CPPS: daisi_lib/applications/cpps/index.md
+      - Path Planning: daisi_lib/applications/path-planning/index.md
+  - ns-3 Integration:
+    - Integration into ns-3: ns-3/index.md
+    - Messages: ns-3/messages.md
+    - Scenario Files: ns-3/scenario_files.md
+    - Events: ns-3/events.md
+    - Network: ns-3/network.md
+    - natter-ns3:
+      - Scenariofile: daisi_lib/natter-ns3/event-distribution.md
+    - minhton-ns3:
+      - Scenariofile: daisi_lib/minhton-ns3/management-overlay.md
+      - ESearch: daisi_lib/minhton-ns3/esearch.md
+  - Doxygen: doxygen/index.html
+
+theme:
+  name: material
+
+  palette:
+    - scheme: sola
+
+  features:
+    - navigation.indexes
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top # back to top button visible
+    - navigation.tracking
+    - content.code.annotate
+    - content.tooltips
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  font: false # Use system fonts
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+extra_css:
+    - stylesheets/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+copyright: Copyright &copy; Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
