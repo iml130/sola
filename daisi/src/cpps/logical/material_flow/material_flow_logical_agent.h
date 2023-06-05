@@ -21,19 +21,33 @@
 
 namespace daisi::cpps::logical {
 
+// TODO
+class MFDL {};
+
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent(uint32_t device_id);
+  /// @brief
+  /// @param device_id
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo);
 
-  virtual ~MaterialFlowLogicalAgent() = 0;
+  /// @brief Includes leaving Sola.
+  ~MaterialFlowLogicalAgent() = default;  // TODO
 
-  /// @brief Method called by the container on start. Initializing further components which require
-  /// the initialization of network components such as Sola.
-  virtual void init() = 0;
+  /// @brief Method called by the container on start. Initializing components such as Sola.
+  virtual void init(const bool first_node);
+
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed for a material flow agent.
+  virtual void initAlgorithms() override;
+
+  /// @brief Starting operations by initalizing components which require the finished initialization
+  /// of Sola.
+  virtual void start();
 
   /// @brief Adding a material flow in the form of the pure string.
+  /// Processing can be started as soon as the mfdl program is set and initialization is finished.
   /// @param mfdl_program
-  virtual void addMaterialFlow(std::string mfdl_program) = 0;
+  virtual void addMaterialFlow(std::string mfdl_program);
 
   /// @brief Setting a flag that the agent is currently waiting for other processes to finish before
   /// the handling of material flows is possible. An example is the initialization of Sola.
@@ -42,7 +56,7 @@ public:
   /// @brief Checking whether the agent is currently handling a material flow or running idle
   /// instead.
   /// @return status whether the agent is busy or not
-  virtual bool isBusy() = 0;
+  bool isBusy();
 
 protected:
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
@@ -54,6 +68,9 @@ protected:
   /// messages will be added in comparison to the implementation of the logical agent interface
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
+
+  /// @brief Material flows that
+  std::vector<MFDL> material_flows_;
 
 private:
   /// Simple flag to represent that the agent is still in the initialization process.
