@@ -1,32 +1,11 @@
-add_library(daisi_cpps_logical_material_flow_material_flow_logical_agent INTERFACE)
+add_library(daisi_cpps_logical_material_flow_material_flow_logical_agent STATIC)
 target_sources(daisi_cpps_logical_material_flow_material_flow_logical_agent
-    INTERFACE
+    PUBLIC
     material_flow_logical_agent.cpp
     material_flow_logical_agent.h
 )
 target_link_libraries(daisi_cpps_logical_material_flow_material_flow_logical_agent
-    INTERFACE
+    PUBLIC
     daisi_cpps_logical_logical_agent
-)
-
-add_library(daisi_cpps_logical_material_flow_centralized_material_flow_logical_agent STATIC)
-target_sources(daisi_cpps_logical_material_flow_centralized_material_flow_logical_agent
-    PUBLIC
-    centralized_material_flow_logical_agent.cpp
-    centralized_material_flow_logical_agent.h
-)
-target_link_libraries(daisi_cpps_logical_material_flow_centralized_material_flow_logical_agent
-    PUBLIC
-    daisi_cpps_logical_material_flow_material_flow_logical_agent
-)
-
-add_library(daisi_cpps_logical_material_flow_decentralized_material_flow_logical_agent STATIC)
-target_sources(daisi_cpps_logical_material_flow_decentralized_material_flow_logical_agent
-    PUBLIC
-    decentralized_material_flow_logical_agent.cpp
-    decentralized_material_flow_logical_agent.h
-)
-target_link_libraries(daisi_cpps_logical_material_flow_decentralized_material_flow_logical_agent
-    PUBLIC
-    daisi_cpps_logical_material_flow_material_flow_logical_agent
+    daisi_cpps_logical_algorithms_disposition_disposition_initiator
 )
