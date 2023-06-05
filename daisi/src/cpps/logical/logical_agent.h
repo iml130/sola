@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "cpps/common/cpps_logger_ns3.h"
+#include "cpps/logical/algorithms/algorithm_config.h"
 #include "cpps/logical/algorithms/algorithm_interface.h"
 #include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
@@ -29,7 +30,8 @@ namespace daisi::cpps::logical {
 
 class LogicalAgent {
 public:
-  LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger);
+  LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
+               const AlgorithmConfig &config_algo);
 
   virtual ~LogicalAgent() = default;
 
@@ -39,9 +41,13 @@ public:
 
 protected:
   /// @brief Initializing communication via Sola which all logical agents require.
-  /// @param _config_file
-  /// @param _device_id
-  void initCommunication(const std::string &config_file);
+  /// @param first_node
+  void initCommunication(const bool first_node = false);
+
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed depending on the type of logical
+  /// agent.
+  virtual void initAlgorithms() = 0;
 
   /// @brief Method being called by sola when we receive a 1-to-1 message
   /// @param m received message
@@ -51,15 +57,23 @@ protected:
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) = 0;
 
+  /// @brief Needed for initialization of Sola.
   uint32_t device_id_;
 
   /// @brief The algorithms which logical messages will be forwarded to for processing.
   std::vector<std::unique_ptr<AlgorithmInterface>> algorithms_;
 
+  /// @brief Decentralized communication middleware.
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
 
+  /// @brief Logging relevant information into Database.
   std::shared_ptr<CppsLoggerNs3> logger_;
 
+  /// @brief Information about which algorithm interfaces will be initialized after the
+  /// initialization of Sola is finished.
+  const AlgorithmConfig algorithm_config_;
+
+  /// @brief Needed for initialization of Sola.
   std::string uuid_;
 };
 
