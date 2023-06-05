@@ -23,13 +23,15 @@
 
 namespace daisi::cpps::logical {
 
-LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger)
-    : device_id_(device_id), logger_(std::move(logger)) {}
+LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
+                           const AlgorithmConfig &config_algo)
+    : device_id_(device_id), logger_(std::move(logger)), algorithm_config_(config_algo) {}
 
-void LogicalAgent::initCommunication(const std::string &config_file) {
+void LogicalAgent::initCommunication(const bool first_node) {
+  const std::string config_file =
+      first_node ? "configurations/root.yml" : "configurations/join.yml";
+
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
-
-  bool first_node = false;  // TODO
 
   if (!first_node) {
     sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
@@ -52,7 +54,7 @@ void LogicalAgent::initCommunication(const std::string &config_file) {
 
 void LogicalAgent::processMessage(const Message &msg) {
   for (auto &algorithm : algorithms_) {
-    bool processed = std::visit([&](auto &&msg) { return algorithm->operator()(msg); }, msg);
+    bool processed = std::visit([&](auto &&msg) { return algorithm->process(msg); }, msg);
     if (processed) {
       return;
     }

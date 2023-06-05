@@ -14,30 +14,20 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ALGORITHM_INTERFACE_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_ALGORITHM_INTERFACE_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ALGORITHM_CONFIG_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ALGORITHM_CONFIG_H_
 
-#include <memory>
-#include <variant>
-
-#include "cpps/logical/message/auction_based/bid_submission.h"
-#include "cpps/logical/message/auction_based/call_for_proposal.h"
-#include "sola-ns3/sola_ns3_wrapper.h"
+#include <vector>
 
 namespace daisi::cpps::logical {
 
-class AlgorithmInterface {
-public:
-  explicit AlgorithmInterface(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-      : sola_(std::move(sola)){};
+enum class AlgorithmType {  // TODO these are placeholders to test a design pattern
+  k_disposition_initiator,
+  k_disposition_participant
+};
 
-  virtual ~AlgorithmInterface() = 0;
-
-  virtual bool process(const BidSubmission &msg) { return false; }
-  virtual bool process(const CallForProposal &msg) { return false; }
-
-protected:
-  std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
+struct AlgorithmConfig {
+  std::vector<AlgorithmType> algorithm_types_;
 };
 
 }  // namespace daisi::cpps::logical

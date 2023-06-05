@@ -13,3 +13,31 @@
 // <https://www.gnu.org/licenses/>.
 //
 // SPDX-License-Identifier: GPL-2.0-only
+
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_DISPOSITION_PARTICIPANT_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_DISPOSITION_PARTICIPANT_H_
+
+#include <memory>
+#include <variant>
+
+#include "cpps/logical/message/auction_based/bid_submission.h"
+#include "cpps/logical/message/auction_based/call_for_proposal.h"
+#include "sola-ns3/sola_ns3_wrapper.h"
+
+namespace daisi::cpps::logical {
+
+// TODO will become abstract class
+// for design pattern purpose its currently not abstract
+class DispositionParticipant : public AlgorithmInterface {
+public:
+  explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
+      : AlgorithmInterface(sola){};
+  ~DispositionParticipant() = default;
+
+  bool process(const BidSubmission &msg) override { return true; }
+  bool process(const CallForProposal &msg) override { return true; }
+};
+
+}  // namespace daisi::cpps::logical
+
+#endif

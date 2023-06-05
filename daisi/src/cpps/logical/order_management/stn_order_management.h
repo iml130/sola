@@ -84,7 +84,7 @@ protected:
 
   daisi::util::Duration time_now_;
 
-  bool solve() override;
+  virtual bool solve() override;
 
   void addPrecedenceConstraintBetweenTask(const StnOrderManagementVertex &start_vertex,
                                           const std::string &precedence_task_name);
