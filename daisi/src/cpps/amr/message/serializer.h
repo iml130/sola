@@ -26,8 +26,12 @@
 #include "cpps/amr/message/amr_status_update.h"
 
 namespace daisi::cpps::amr {
-using Message =
-    std::variant<AmrDescription, AmrStatusUpdate, AmrOrderInfo, AmrOrderUpdate, Topology>;
+using Message = std::variant<AmrDescription,   // physical -> logical
+                             AmrStatusUpdate,  // physical -> logical
+                             AmrOrderInfo,     // logical -> physical
+                             AmrOrderUpdate,   // physical -> logical
+                             Topology          // logical -> physical
+                             >;
 
 std::string serialize(const Message &msg);
 

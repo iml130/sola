@@ -24,16 +24,19 @@
 namespace daisi::cpps::logical {
 
 LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-                           const AlgorithmConfig &config_algo)
-    : device_id_(device_id), logger_(std::move(logger)), algorithm_config_(config_algo) {}
+                           const AlgorithmConfig &config_algo, const bool first_node)
+    : device_id_(device_id),
+      logger_(std::move(logger)),
+      algorithm_config_(config_algo),
+      first_node_(first_node) {}
 
-void LogicalAgent::initCommunication(const bool first_node) {
+void LogicalAgent::initCommunication() {
   const std::string config_file =
-      first_node ? "configurations/root.yml" : "configurations/join.yml";
+      first_node_ ? "configurations/root.yml" : "configurations/join.yml";
 
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
 
-  if (!first_node) {
+  if (!first_node_) {
     sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
   }
 
