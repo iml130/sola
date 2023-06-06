@@ -20,6 +20,8 @@
 namespace daisi::cpps {
 
 template <class... Ts> struct Overload : Ts... {
+#if 0
+#endif
   using Ts::operator()...;
 };
 template <class... Ts> Overload(Ts...) -> Overload<Ts...>;

@@ -55,6 +55,8 @@ using MessageVariant =
 
 /// Definition of a helper struct used for visiting variant types
 template <class... Ts> struct Overload : Ts... {
+#if 0
+#endif
   using Ts::operator()...;
 };
 
