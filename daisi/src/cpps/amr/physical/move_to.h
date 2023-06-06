@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_AMR_PHYSICAL_MOVE_TO_H_
 #define DAISI_CPPS_AMR_PHYSICAL_MOVE_TO_H_
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps {
@@ -25,6 +26,8 @@ public:
   MoveTo() = default;
   explicit MoveTo(const util::Position &destination) : destination(destination) {}
   ~MoveTo() = default;
+
+  SERIALIZE(destination);
 
   util::Position destination;
 };
