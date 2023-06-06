@@ -16,6 +16,7 @@
 
 #include "amr_logical_agent.h"
 
+#include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "cpps/logical/algorithms/disposition/disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
@@ -127,21 +128,32 @@ void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_u
   checkSendingNextTask();
 }
 
-void AmrLogicalAgent::sendTopologyToPhysical() {
-  auto topology_msg = amr::serialize(topology_);
-
+// helper
+void AmrLogicalAgent::sendToPhysical(std::string payload) {
   daisi::cpps::CppsTCPMessage message;
-  message.addMessage({topology_msg, 0});
+  message.addMessage({payload, 0});
 
   auto packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
   socket_to_physical_->Send(packet);
 }
 
+void AmrLogicalAgent::sendTopologyToPhysical() {
+  auto topology_msg = amr::serialize(topology_);
+  sendToPhysical(topology_msg);
+}
+
 void AmrLogicalAgent::sendTaskToPhysical() {
   material_flow::Task task = order_management_->getCurrentTask();
 
-  // TODO convert orders to functionalities
+  daisi::cpps::mrta::model::Ability ability(
+      42.0, daisi::cpps::mrta::model::LoadCarrier::kNoLoadCarrierType);
+
+  AmrOrderInfo amr_order_info(materialFlowToFunctionalities(task.getOrders(), current_position_),
+                              ability);
+  auto order_msg = amr::serialize(amr_order_info);
+
+  sendToPhysical(order_msg);
 }
 
 bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr) {
@@ -166,7 +178,31 @@ void AmrLogicalAgent::checkSendingNextTask() {
 }
 
 void AmrLogicalAgent::logAmrInfos() {
-  // physical asset
+  daisi::cpps::AGVLoggingInfo info;  // TODO rename to AMR
+
+  // general
+  info.friendly_name = "TODO";
+  info.serial_number = description_.getSerialNumber();
+  info.manufacturer = description_.getProperties().getManufacturer();
+  info.model_name = description_.getProperties().getModelName();
+  info.model_number = description_.getProperties().getModelNumber();
+
+  // kinematics
+  info.max_velocity = description_.getKinematics().getMaxVelocity();
+  info.min_velocity = description_.getKinematics().getMinVelocity();
+  info.max_acceleration = description_.getKinematics().getMaxAcceleration();
+  info.min_acceleration = description_.getKinematics().getMaxDeceleration();
+
+  // load handling unit
+  info.load_time = description_.getLoadHandling().getLoadTime();
+  info.unload_time = description_.getLoadHandling().getUnloadTime();
+  info.load_carrier_type =
+      daisi::cpps::mrta::model::LoadCarrier::kNoLoadCarrierType;  // TODO refactor
+  info.max_weight = 42;                                           // TODO refactor
+
+  // network
+
+  // retrieve physical info
   ns3::Address physical_address;
   socket_of_physical_->GetSockName(physical_address);
 
@@ -174,7 +210,7 @@ void AmrLogicalAgent::logAmrInfos() {
   std::string physical_asset_ip = daisi::getIpv4AddressString(i_physical_address.GetIpv4());
   uint16_t physical_asset_port = i_physical_address.GetPort();
 
-  // logical
+  // retrieve logical info
   ns3::Address logical_address;
   socket_of_physical_->GetSockName(logical_address);
 
@@ -182,8 +218,14 @@ void AmrLogicalAgent::logAmrInfos() {
   std::string logical_asset_ip = daisi::getIpv4AddressString(i_logical_address.GetIpv4());
   uint16_t logical_asset_port = i_logical_address.GetPort();
 
-  // TODO log
-  // description, kinematics, load carrier etc
+  info.ip_logical_core = sola_->getIP();
+  info.port_logical_core = sola_->getPort();
+  info.ip_logical_asset = logical_asset_ip;
+  info.port_logical_asset = logical_asset_port;
+  info.ip_physical = physical_asset_ip;
+  info.port_physical = physical_asset_port;
+
+  logger_->logAGV(info);  // TODO rename to AMR
 }
 
 }  // namespace daisi::cpps::logical
