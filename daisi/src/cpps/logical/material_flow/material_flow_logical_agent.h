@@ -26,7 +26,6 @@ class MFDL {};
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-
   MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo);
 
   /// @brief Includes leaving Sola.
@@ -34,10 +33,6 @@ public:
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init(const bool first_node);
-
-  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
-  /// Only a part of the available interfaces might be allowed for a material flow agent.
-  virtual void initAlgorithms() override;
 
   /// @brief Starting operations by initalizing components which require the finished initialization
   /// of Sola.
@@ -58,6 +53,10 @@ public:
   bool isBusy();
 
 protected:
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed for a material flow agent.
+  virtual void initAlgorithms() override;
+
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
