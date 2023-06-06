@@ -11,4 +11,5 @@ target_link_libraries(daisi_cpps_logical_amr_amr_logical_agent
     ns3::libcore
     daisi_cpps_logical_order_management_order_management
     daisi_cpps_logical_order_management_stn_order_management
+    daisi_utils
 )
