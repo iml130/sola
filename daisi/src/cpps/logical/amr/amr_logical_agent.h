@@ -86,6 +86,8 @@ private:
 
   void logAmrInfos();
 
+  void sendToPhysical(std::string payload);
+
   AmrDescription description_;
   bool description_set_;  // to avoid overriding
 
