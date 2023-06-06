@@ -73,7 +73,19 @@ private:
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) override;
 
-  // from amr socket
+  void readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket);
+
+  void processMessageAmrDescription(const AmrDescription &description);
+  void processMessageAmrStatusUpdate(const AmrStatusUpdate &status_update);
+  void processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update);
+
+  void sendTopologyToPhysical();
+  void sendTaskToPhysical();
+
+  void checkSendingNextTask();
+
+  void logAmrInfos();
+
   AmrDescription description_;
   bool description_set_;  // to avoid overriding
 
@@ -81,15 +93,6 @@ private:
 
   daisi::util::Position current_position_;
   AmrState current_state_;
-
-  void sendTopologyToPhysical();
-  void sendTaskToPhysical();  // use mapping to functionalities first
-
-  void readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket);
-
-  void processMessageAmrDescription(const AmrDescription &description);
-  void processMessageAmrStatusUpdate(const AmrStatusUpdate &status_update);
-  void processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update);
 
   // for TCP communication with the Amr Physical Asset
   ns3::Ptr<ns3::Socket> socket_to_physical_;

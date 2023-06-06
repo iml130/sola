@@ -19,6 +19,7 @@
 #include "cpps/logical/algorithms/disposition/disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
+#include "utils/sola_utils.h"
 
 namespace daisi::cpps::logical {
 
@@ -26,7 +27,9 @@ AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_con
                                  const bool first_node)
     : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), _config,
                    first_node),
-      description_set_(false) {}
+      description_set_(false),
+      topology_(daisi::util::Dimensions(50, 20, 0))  // TODO placeholder
+{}
 
 void AmrLogicalAgent::init(ns3::Ptr<ns3::Socket> tcp_socket) {
   initCommunication();
@@ -44,7 +47,7 @@ void AmrLogicalAgent::initAlgorithms() {
     throw std::runtime_error("Initialization not finished yet.");
   }
 
-  // TODO decide about chosen order management depending on algo config
+  // TODO decide about chosen order management depending on algorithm config
   order_management_ = std::make_shared<order_management::StnOrderManagement>(
       description_, topology_, daisi::util::Pose{current_position_});
 
@@ -115,11 +118,13 @@ void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &statu
   current_position_ = status_update.getPosition();
   current_state_ = status_update.getState();
 
-  // TODO sending follow up task if idle?
+  checkSendingNextTask();
 }
 
 void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update) {
-  // TODO sending follow up task if finished?
+  // TODO set current task state in order management
+
+  checkSendingNextTask();
 }
 
 void AmrLogicalAgent::sendTopologyToPhysical() {
@@ -149,7 +154,36 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
   socket_of_physical_->SetRecvCallback(
       MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
 
-  // TODO logging of physical ip and port?
+  logAmrInfos();
+}
+
+void AmrLogicalAgent::checkSendingNextTask() {
+  bool still_busy = true;  // TODO check depending on AmrState and OrderState
+
+  if (!still_busy) {
+    sendTaskToPhysical();
+  }
+}
+
+void AmrLogicalAgent::logAmrInfos() {
+  // physical asset
+  ns3::Address physical_address;
+  socket_of_physical_->GetSockName(physical_address);
+
+  ns3::InetSocketAddress i_physical_address = ns3::InetSocketAddress::ConvertFrom(physical_address);
+  std::string physical_asset_ip = daisi::getIpv4AddressString(i_physical_address.GetIpv4());
+  uint16_t physical_asset_port = i_physical_address.GetPort();
+
+  // logical
+  ns3::Address logical_address;
+  socket_of_physical_->GetSockName(logical_address);
+
+  ns3::InetSocketAddress i_logical_address = ns3::InetSocketAddress::ConvertFrom(logical_address);
+  std::string logical_asset_ip = daisi::getIpv4AddressString(i_logical_address.GetIpv4());
+  uint16_t logical_asset_port = i_logical_address.GetPort();
+
+  // TODO log
+  // description, kinematics, load carrier etc
 }
 
 }  // namespace daisi::cpps::logical
