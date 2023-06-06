@@ -24,6 +24,9 @@
 #include "cpps/logical/message/auction_based/call_for_proposal.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
+#define REGISTER_LOGICAL_MESSAGE(MessageType) \
+  virtual bool process(const MessageType &msg) { return false; }
+
 namespace daisi::cpps::logical {
 
 class AlgorithmInterface {
@@ -33,8 +36,8 @@ public:
 
   virtual ~AlgorithmInterface() = 0;
 
-  virtual bool process(const BidSubmission &msg) { return false; }
-  virtual bool process(const CallForProposal &msg) { return false; }
+  REGISTER_LOGICAL_MESSAGE(CallForProposal);
+  REGISTER_LOGICAL_MESSAGE(BidSubmission);
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
