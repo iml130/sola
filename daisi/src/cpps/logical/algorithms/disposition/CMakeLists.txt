@@ -17,3 +17,27 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_part
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
 )
+
+add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
+    PUBLIC
+    iterated_auction_disposition_initiator.h
+    iterated_auction_disposition_initiator.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_initiator
+    daisi_cpps_logical_algorithms_algorithm_interface
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
+    PUBLIC
+    iterated_auction_disposition_participant.h
+    iterated_auction_disposition_participant.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_participant
+    daisi_cpps_logical_algorithms_algorithm_interface
+)

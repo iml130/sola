@@ -21,9 +21,9 @@
 
 namespace daisi::cpps::logical {
 
-enum class AlgorithmType {  // TODO these are placeholders to test a design pattern
-  k_disposition_initiator,
-  k_disposition_participant
+enum class AlgorithmType {
+  k_iterated_auction_disposition_initiator,
+  k_iterated_auction_disposition_participant
 };
 
 struct AlgorithmConfig {

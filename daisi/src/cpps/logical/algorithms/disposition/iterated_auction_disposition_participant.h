@@ -14,22 +14,24 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_DISPOSITION_PARTICIPANT_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_DISPOSITION_PARTICIPANT_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_PARTICIPANT_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_PARTICIPANT_H_
 
 #include <memory>
 #include <variant>
 
-#include "../algorithm_interface.h"
+#include "disposition_participant.h"
 
 namespace daisi::cpps::logical {
 
-class DispositionParticipant : public AlgorithmInterface {
+class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
-  explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-      : AlgorithmInterface(sola){};
+  explicit IteratedAuctionDispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
 
-  virtual ~DispositionParticipant() = default;
+  ~IteratedAuctionDispositionParticipant() = default;
+
+  bool process(const BidSubmission &msg) override { return true; }
+  bool process(const CallForProposal &msg) override { return true; }
 };
 
 }  // namespace daisi::cpps::logical

@@ -17,7 +17,7 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "cpps/logical/algorithms/disposition/disposition_participant.h"
+#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
 #include "utils/sola_utils.h"
@@ -54,8 +54,8 @@ void AmrLogicalAgent::initAlgorithms() {
 
   for (const auto &algo_type : algorithm_config_.algorithm_types_) {
     switch (algo_type) {
-      case AlgorithmType::k_disposition_participant:
-        algorithms_.push_back(std::make_unique<DispositionParticipant>(sola_));
+      case AlgorithmType::k_iterated_auction_disposition_participant:
+        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
         break;
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");
