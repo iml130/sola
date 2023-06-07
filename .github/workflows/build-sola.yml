@@ -1,0 +1,170 @@
+name: Build SOLA
+
+on: [push, pull_request]
+
+env:
+  NS_3_VERSION: ns-3.37
+  DAISI_OUTPUT_PATH: ${{ github.workspace }}/output
+
+jobs:
+  formatting_check:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Check commit messages
+      run: |
+        pip install gitlint
+        gitlint --commits b11d7f0...HEAD
+    - name: Check newlines and license
+      run: scripts/check_license_and_newline/check_license_and_newline.sh
+    - name: Check formatting
+      run: |
+        find daisi -path daisi/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
+        find minhton -path minhton/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
+        find natter -path natter/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
+        find sola -path sola/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
+        find solanet -path solanet/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
+        clang-format --style='file:.clang-format' --dry-run --Werror `cat files.txt`
+
+
+  ns-3_compile:
+    runs-on: ubuntu-22.04
+    needs: formatting_check
+    steps:
+    - name: Check if cache exists
+      id: cache-exists
+      uses: actions/cache/restore@v3
+      with:
+        path: ~/ns-3_install
+        key: ns-3_install-${{env.NS_3_VERSION}}
+        lookup-only: true
+    - name: Compile ns-3
+      if: steps.cache-exists.outputs.cache-hit != 'true'
+      run: |
+        git clone -b $NS_3_VERSION https://gitlab.com/nsnam/ns-3-dev.git
+        cd ns-3-dev
+        mkdir build && cd build
+        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=~/ns-3_install -DNS3_ENABLED_MODULES="core;mobility;applications;network;bridge;csma;wifi"
+        cmake --build .
+        cmake --install .
+    - name: Upload ns-3 to cache
+      if: steps.cache-exists.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v3
+      with:
+        path: ~/ns-3_install
+        key: ns-3_install-${{env.NS_3_VERSION}}
+
+  clangtidy:
+    needs: ns-3_compile
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Download ns-3 cache
+      uses: actions/cache@v3
+      with:
+        path: ~/ns-3_install
+        key: ns-3_install-${{env.NS_3_VERSION}}
+        fail-on-cache-miss: true
+    - name: Install dependencies
+      run: sudo apt-get install -y libyaml-cpp-dev libevent-dev libsqlite3-dev
+    - name: Configure build
+      run: |
+        mkdir build && cd build
+        cmake ../daisi -DCMAKE_BUILD_TYPE=RelWithDebInfo -Dns3_DIR=~/ns-3_install/lib/cmake/ns3 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cd ..
+        python3 scripts/compile_commands_clean.py build/compile_commands.json third_party tests
+    - name: Run clang-tidy
+      run: |
+        run-clang-tidy -header-filter "(daisi|minhton|natter|sola|solanet)/(src|include|examples).*" -p build
+
+  cppcheck:
+    needs: ns-3_compile
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Download ns-3 cache
+      uses: actions/cache@v3
+      with:
+        path: ~/ns-3_install
+        key: ns-3_install-${{env.NS_3_VERSION}}
+        fail-on-cache-miss: true
+    - name: Install dependencies
+      run: sudo apt-get install -y libyaml-cpp-dev libevent-dev libsqlite3-dev cppcheck
+    - name: Configure build
+      run: |
+        mkdir build && cd build
+        cmake ../daisi -DCMAKE_BUILD_TYPE=RelWithDebInfo -Dns3_DIR=~/ns-3_install/lib/cmake/ns3 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cd ..
+        python3 scripts/compile_commands_clean.py build/compile_commands.json third_party
+    - name: Run cppcheck
+      run: |
+        cppcheck --enable=all --error-exitcode=2 --std=c++17 --project=build/compile_commands.json -DCPPCHECK_IGNORE -j `nproc` --suppressions-list=cppcheck.conf
+
+  build_and_check:
+    needs: ns-3_compile
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Download ns-3 cache
+      uses: actions/cache@v3
+      with:
+        path: ~/ns-3_install
+        key: ns-3_install-${{env.NS_3_VERSION}}
+        fail-on-cache-miss: true
+    - name: Install dependencies
+      run: sudo apt-get install -y libyaml-cpp-dev libevent-dev libsqlite3-dev cppcheck ninja-build
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake ../daisi -G Ninja -DCMAKE_BUILD_TYPE=Release -Dns3_DIR=~/ns-3_install/lib/cmake/ns3 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cmake --build .
+    - name: Run MINHTON unittest
+      run: build/sola_mono/minhton/tests/MinhtonAllTests
+    - name: Run Natter unittest
+      run: build/sola_mono/natter/tests/NatterAllTests
+    - name: Run DAISI unittests
+      run: |
+        build/tests/unittests/NatterStaticCalculationTest
+        build/tests/unittests/CPPSAmrMobilityHelperTest
+        build/tests/unittests/DaisiDatastructureDirectedGraphTest
+        build/tests/unittests/DaisiDatastructureWeightedDirectedGraphTest
+        build/tests/unittests/DaisiDatastructureSimpleTemporalNetworkTest
+        build/tests/unittests/DaisiCppsOrderManagementStnOrderManagement
+    - name: Run MINHTON integrationtest
+      run: |
+        export LD_LIBRARY_PATH=~/ns-3_install/lib
+        mkdir output
+        build/src/main/Main --environment=minhton --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_test.yml
+        python3 evaluation/minhton_verification.py `find output -name '*.db'`
+        rm -rf output
+    - name: Run MINHTON Star Cases integrationtest
+      run: |
+        export LD_LIBRARY_PATH=~/ns-3_install/lib
+        mkdir output
+        build/src/main/Main --environment=minhton --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_cases.yml
+        python3 evaluation/minhton_verification.py `find output -name '*.db'`
+        rm -rf output
+    - name: Run MINHCAST integrationtest
+      run: |
+        export LD_LIBRARY_PATH=~/ns-3_install/lib
+        mkdir output
+        build/src/main/Main --environment=natter --scenario=`pwd`/daisi/utils/ci_scenario_files/minhcast_test.yml
+        python3 evaluation/natter_verification.py `find output -name '*.db'`
+        rm -rf output
+    - name: Run CPPS integrationtest
+      run: |
+        export LD_LIBRARY_PATH=~/ns-3_install/lib
+        export MINHTONDIR=$GITHUB_WORKSPACE/minhton
+        mkdir output
+        export MINHTONDIR=`pwd`/minhton
+        build/src/main/Main --environment=cpps --scenario=`pwd`/daisi/utils/ci_scenario_files/cpps_test.yml
+        python3 evaluation/cpps_verification.py `find output -name '*.db'`
+        rm -rf output
