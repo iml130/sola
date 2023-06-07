@@ -33,7 +33,7 @@ void SolaManager::scheduleSOLAStart(scenario_it it, uint64_t &current_time) {
 
 void SolaManager::scheduleSubscribeTopic(SolaManager::scenario_it it, uint64_t &current_time) {
   auto topic = GET_VALUE(std::string, "topic");
-  auto wait_till_finished = GET_VALUE(std::string, "waitTillFinished");
+  [[maybe_unused]] auto wait_till_finished = GET_VALUE(std::string, "waitTillFinished");
   auto nodes = GET_VALUE(std::string, "nodes");
   auto delay = GET_VALUE(uint64_t, "delay");
   assert(nodes == "all");
