@@ -45,6 +45,8 @@ public:
 
   bool operator==(const Task &other) const { return name_ == other.name_; }
 
+  bool operator!=(const Task &other) const { return name_ != other.name_; }
+
 private:
   std::string name_;
   std::vector<Order> orders_;

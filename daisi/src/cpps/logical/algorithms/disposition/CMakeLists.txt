@@ -27,7 +27,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_dispos
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_initiator
-    daisi_cpps_logical_algorithms_algorithm_interface
+    daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
@@ -39,5 +39,16 @@ target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_dispos
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_participant
-    daisi_cpps_logical_algorithms_algorithm_interface
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+    PUBLIC
+    layered_precedence_graph.h
+    layered_precedence_graph.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+    PUBLIC
+    daisi_datastructure_directed_graph
+    daisi_material_flow_model_task
 )

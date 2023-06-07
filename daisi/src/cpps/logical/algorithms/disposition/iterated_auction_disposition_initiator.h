@@ -21,8 +21,12 @@
 #include <variant>
 
 #include "disposition_initiator.h"
+#include "layered_precedence_graph.h"
 
 namespace daisi::cpps::logical {
+
+struct ReceivedBids {};
+struct Winner {};
 
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
@@ -32,6 +36,14 @@ public:
 
   REGISTER_IMPLEMENTATION(BidSubmission);
   REGISTER_IMPLEMENTATION(WinnerResponse);
+
+private:
+  void startIteration();
+  void finishIteration();
+  void bidProcessing();
+  void winnerResponseProcessing();
+
+  std::unique_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
 };
 
 }  // namespace daisi::cpps::logical
