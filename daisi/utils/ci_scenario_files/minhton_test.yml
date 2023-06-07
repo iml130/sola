@@ -5,7 +5,6 @@ stoptime: 10000000
 version: 0.1
 physicalLayer: ETH
 fanout: 2
-outputPath: "/work/ns3/results/"
 defaultDelay: 5000
 logLevel: info
 randomSeed: 1 # 0 = random
