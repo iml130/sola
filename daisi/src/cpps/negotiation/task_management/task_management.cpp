@@ -115,6 +115,6 @@ std::pair<ns3::Vector, double> TaskManagement::getEndPositionAndTime() const {
   return {current_order_.getDeliveryLocation(), expected_current_order_finish_time_};
 }
 
-mrta::model::Ability TaskManagement::getAbility() const { return *(ability_.get()); }
+mrta::model::Ability TaskManagement::getAbility() const { return *(ability_); }
 
 }  // namespace daisi::cpps

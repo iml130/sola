@@ -1,4 +1,4 @@
-Checks: '-*,readability-*,-readability-magic-numbers,-readability-qualified-auto,-readability-function-cognitive-complexity,-readability-convert-member-functions-to-static,-readability-const-return-type,-readability-use-anyofallof,-readability-redundant-string-init'
+Checks: '-*,readability-*,-readability-magic-numbers,-readability-qualified-auto,-readability-function-cognitive-complexity,-readability-convert-member-functions-to-static,-readability-const-return-type,-readability-use-anyofallof,-readability-redundant-string-init,-readability-identifier-length,-readability-container-data-pointer,-readability-suspicious-call-argument'
 WarningsAsErrors: '*'
 CheckOptions:
   - key:             readability-braces-around-statements.ShortStatementLines
