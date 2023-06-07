@@ -597,7 +597,7 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
 
   auto calc_index = [&](const uint32_t &l, const uint32_t &n) {
     if (l == 0) {
-      return 0u;
+      return 0U;
     }
     return (uint32_t)(((1 - pow(fanout, l)) / (1 - fanout)) + n);
   };
