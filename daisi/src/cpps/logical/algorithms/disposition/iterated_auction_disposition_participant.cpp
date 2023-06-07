@@ -22,4 +22,17 @@ IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
     std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
     : DispositionParticipant(sola) {}
 
+bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_for_proposal) {
+  return true;
+}
+
+bool IteratedAuctionDispositionParticipant::process(
+    const IterationNotification &call_for_proposal) {
+  return true;
+}
+
+bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &call_for_proposal) {
+  return true;
+}
+
 }  // namespace daisi::cpps::logical

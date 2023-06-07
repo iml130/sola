@@ -22,4 +22,12 @@ IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
     std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
     : DispositionInitiator(sola) {}
 
+bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {
+  return true;
+}
+
+bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &bid_submission) {
+  return true;
+}
+
 }  // namespace daisi::cpps::logical

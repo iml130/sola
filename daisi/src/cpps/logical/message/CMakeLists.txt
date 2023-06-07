@@ -10,6 +10,9 @@ target_link_libraries(daisi_cpps_logical_message_serializer
     PUBLIC
     daisi_cpps_logical_message_auction_based_call_for_proposal
     daisi_cpps_logical_message_auction_based_bid_submission
+    daisi_cpps_logical_message_auction_based_iteration_notification
+    daisi_cpps_logical_message_auction_based_winner_notification
+    daisi_cpps_logical_message_auction_based_winner_response
 
     PRIVATE
     solanet_serializer

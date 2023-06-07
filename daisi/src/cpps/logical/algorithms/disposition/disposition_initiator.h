@@ -30,6 +30,9 @@ public:
       : AlgorithmInterface(sola){};
 
   virtual ~DispositionInitiator() = default;
+
+  REQUIRE_IMPLEMENTATION(BidSubmission);
+  REQUIRE_IMPLEMENTATION(WinnerResponse);
 };
 
 }  // namespace daisi::cpps::logical

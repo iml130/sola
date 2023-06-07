@@ -14,24 +14,19 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_INITIATOR_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_INITIATOR_H_
+#ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
+#define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
 
-#include <memory>
-#include <variant>
-
-#include "disposition_initiator.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {
 
-class IteratedAuctionDispositionInitiator : public DispositionInitiator {
+class WinnerResponse {
 public:
-  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
+  SERIALIZE(test_member_);
 
-  ~IteratedAuctionDispositionInitiator() = default;
-
-  REGISTER_IMPLEMENTATION(BidSubmission);
-  REGISTER_IMPLEMENTATION(WinnerResponse);
+private:
+  int test_member_;
 };
 
 }  // namespace daisi::cpps::logical

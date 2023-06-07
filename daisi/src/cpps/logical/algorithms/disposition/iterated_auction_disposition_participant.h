@@ -30,8 +30,9 @@ public:
 
   ~IteratedAuctionDispositionParticipant() = default;
 
-  bool process(const BidSubmission &msg) override { return true; }
-  bool process(const CallForProposal &msg) override { return true; }
+  REGISTER_IMPLEMENTATION(CallForProposal);
+  REGISTER_IMPLEMENTATION(IterationNotification);
+  REGISTER_IMPLEMENTATION(WinnerNotification);
 };
 
 }  // namespace daisi::cpps::logical
