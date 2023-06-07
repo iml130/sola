@@ -5,7 +5,6 @@ stoptime: 4294967296
 version: 0.1
 physicalLayer: ETH
 fanout: 2
-outputPath: "/work/ns3/results/"
 
 # optional
 defaultDelay: 500
