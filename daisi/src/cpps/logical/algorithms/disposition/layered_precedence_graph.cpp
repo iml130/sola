@@ -20,8 +20,11 @@
 
 namespace daisi::cpps::logical {
 
-LayeredPrecedenceGraph::LayeredPrecedenceGraph(const MFDL &mfdl) {
-  // TODO transform scheduler content to
+LayeredPrecedenceGraph::LayeredPrecedenceGraph(
+    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler) {
+  // TODO transform scheduler content to vertices and edges
+
+  initLayers();
 }
 
 void LayeredPrecedenceGraph::initLayers() {
@@ -67,7 +70,7 @@ void LayeredPrecedenceGraph::initLayers() {
 
 /// @brief Implements pseudocode of Algorithm 2 "UpdatePrecGraph" from pIA paper
 /// All free tasks are scheduled.
-void LayeredPrecedenceGraph::updateLayers() {
+void LayeredPrecedenceGraph::next() {
   std::vector<LPCVertex> temp_previously_free_layer;
 
   // 1: Move t: T_F -> T_S
@@ -85,8 +88,6 @@ void LayeredPrecedenceGraph::updateLayers() {
   }
 }
 
-/// @brief Helper method for updateLayers. Handling Line 2 onwards of the algorithm.
-/// @param t A Vertex that previously was on the free layer and is now scheduled.
 void LayeredPrecedenceGraph::updateLayersSecondToFree(const LPCVertex &t) {
   // 2: for all t' in (T_L intersection children(t)) do
   // if a child of a free task is in the second layer, it could move to the free layer next
@@ -123,8 +124,6 @@ void LayeredPrecedenceGraph::updateLayersSecondToFree(const LPCVertex &t) {
   }
 }
 
-/// @brief Helper method for updateLayers. Handling Line 6 onwards of the algorithm.
-/// @param t_dash A Vertex that previously was on the second layer and is now free.
 void LayeredPrecedenceGraph::updateLayersHiddenToSecond(const LPCVertex &t_dash) {
   for (auto &t_dash_dash : vertices_) {
     // 6: for all t' in (T_H intersection children(t')) do
@@ -146,11 +145,14 @@ void LayeredPrecedenceGraph::updateLayersHiddenToSecond(const LPCVertex &t_dash)
   }
 }
 
-/// @brief In this modification of pIA we do not consider prioritizations yet. Therefore, all free
-/// tasks are auctionable.
-/// @return Vector of all free tasks.
 std::vector<daisi::material_flow::Task> LayeredPrecedenceGraph::getAuctionableTasks() {
-  //   auto vertices = getLayerVertices(Layer::kFree);
+  auto vertices = getLayerVertices(Layer::kFree);
+  std::vector<daisi::material_flow::Task> tasks;
+
+  std::transform(vertices.begin(), vertices.end(), std::back_inserter(tasks),
+                 [](const auto &vertex) { return vertex.task; });
+
+  return tasks;
 }
 
 std::vector<LPCVertex> LayeredPrecedenceGraph::getLayerVertices(Layer layer) const {

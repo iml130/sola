@@ -17,10 +17,11 @@
 #ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_LAYERED_PRECEDENCE_GRAPH_H_
 #define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_LAYERED_PRECEDENCE_GRAPH_H_
 
+#include <memory>
 #include <optional>
 
 #include "datastructure/directed_graph.h"
-#include "material_flow/model/task.h"
+#include "material_flow/model/material_flow.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
@@ -38,11 +39,10 @@ struct LPCVertex {
   friend bool operator!=(const LPCVertex &v1, const LPCVertex &v2) { return v1.task != v2.task; }
 };
 
-class MFDL;
-
 /// @brief Helper class to implement the pIA algorithm.
 /// A directed graph is layered into a free, second, and hidden layer.
 /// Prioritization is neglected in this modification of the algorithm.
+/// Therefore, all tasks from the free layer are automatically auctionable.
 ///
 /// The algorithm is based on the following paper:
 /// McIntire, Mitchell, Ernesto Nunes, and Maria Gini. "Iterated multi-robot auctions for
@@ -51,20 +51,36 @@ class MFDL;
 class LayeredPrecedenceGraph
     : private daisi::datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  LayeredPrecedenceGraph(const MFDL &mfdl);
+  LayeredPrecedenceGraph(std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler);
 
   ~LayeredPrecedenceGraph() = default;
 
-  void initLayers();
-  void updateLayers();
+  /// @brief Taking the next step in the algorithm. Updating the graph by assuming that all tasks of
+  /// the free layer are now scheduled. Accordingly, layers from the second and hidden layer need to
+  /// be updated.
+  void next();
 
+  /// @brief In this modification of pIA we do not consider prioritizations yet. Therefore, all free
+  /// tasks are auctionable.
+  /// @return Vector of all free tasks.
   std::vector<daisi::material_flow::Task> getAuctionableTasks();
 
 private:
-  // helper method for updateLayers
+  /// @brief Initializing layers of the precedence graph based on set equations from the pIA
+  /// algorithm.
+  void initLayers();
+
+  /// @brief Helper method for next(). Handling Line 2 onwards of the algorithm.
+  /// @param t A Vertex that previously was on the free layer and is now scheduled.
   void updateLayersSecondToFree(const LPCVertex &t);
+
+  /// @brief Helper method for next(). Handling Line 6 onwards of the algorithm.
+  /// @param t_dash A Vertex that previously was on the second layer and is now free.
   void updateLayersHiddenToSecond(const LPCVertex &t_dash);
 
+  /// @brief Helper method to filter vertices of a certain layer.
+  /// @param layer we want to filter for
+  /// @return Vector of vertices with given layer.
   std::vector<LPCVertex> getLayerVertices(Layer layer) const;
 };
 
