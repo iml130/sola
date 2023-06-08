@@ -115,3 +115,13 @@ target_include_directories(daisi_material_flow_model_task
     PUBLIC
     ${DAISI_SOURCE_DIR}/src
 )
+
+add_library(daisi_material_flow_model_material_flow STATIC "")
+target_sources(daisi_material_flow_model_material_flow
+    PRIVATE
+    material_flow.h
+)
+target_link_libraries(daisi_material_flow_model_material_flow
+    PUBLIC
+    daisi_material_flow_model_task
+)

@@ -22,6 +22,7 @@
 
 #include "disposition_initiator.h"
 #include "layered_precedence_graph.h"
+#include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
 
@@ -37,13 +38,39 @@ public:
   REGISTER_IMPLEMENTATION(BidSubmission);
   REGISTER_IMPLEMENTATION(WinnerResponse);
 
+  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
+
 private:
+  /// @brief Preparing interaction by subscribing to required topics for each ability.
+  /// @return Duration needed to prepare interaction, to time the following interactions
+  /// accordingly.
+  daisi::util::Duration prepareInteraction();
+
   void startIteration();
   void finishIteration();
   void bidProcessing();
   void winnerResponseProcessing();
 
+  void taskAnnouncement();
+  std::vector<Winner> selectWinners();
+  void notifyWinners(const std::vector<Winner> &winners);
+
+  void iterationNotification();
+  void renotifyAboutOpenTasks();
+
+  std::vector<ReceivedBids> bids_;
+  std::vector<Winner> winner_acceptions_;
+
   std::unique_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
+
+  struct {
+    daisi::util::Duration subscribe_topic = 100;
+  } delays_;
+
+  std::vector<daisi::cpps::mrta::model::Ability> available_abilities_;
+
+  std::unordered_map<mrta::model::Ability, std::string, mrta::model::AbilityHasher>
+      ability_topic_mapping_;
 };
 
 }  // namespace daisi::cpps::logical

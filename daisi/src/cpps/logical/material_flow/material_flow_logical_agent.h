@@ -18,11 +18,9 @@
 #define DAISI_CPPS_MATERIAL_FLOW_MATERIAL_FLOW_LOGICAL_AGENT_H_
 
 #include "cpps/logical/logical_agent.h"
+#include "material_flow/model/material_flow.h"
 
 namespace daisi::cpps::logical {
-
-// TODO
-class MFDL {};
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
@@ -71,7 +69,7 @@ protected:
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
 
   /// @brief Material flows that
-  std::vector<MFDL> material_flows_;
+  std::vector<std::shared_ptr<daisi::material_flow::MFDLScheduler>> material_flows_;
 
 private:
   /// Simple flag to represent that the agent is still in the initialization process.

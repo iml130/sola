@@ -21,6 +21,7 @@
 #include <variant>
 
 #include "../algorithm_interface.h"
+#include "material_flow/model/material_flow.h"
 
 namespace daisi::cpps::logical {
 
@@ -33,6 +34,8 @@ public:
 
   REQUIRE_IMPLEMENTATION(BidSubmission);
   REQUIRE_IMPLEMENTATION(WinnerResponse);
+
+  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
 };
 
 }  // namespace daisi::cpps::logical
