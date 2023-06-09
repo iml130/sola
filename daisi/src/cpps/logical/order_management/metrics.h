@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <functional>
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::order_management {
@@ -109,6 +110,9 @@ public:
   daisi::util::Duration action_time;
   daisi::util::Distance empty_travel_distance;
   daisi::util::Distance loaded_travel_distance;
+
+  SERIALIZE(empty_travel_time, loaded_travel_time, action_time, empty_travel_distance,
+            loaded_travel_distance, makespan_, start_time_);
 
 private:
   daisi::util::Duration makespan_ = 0.0;

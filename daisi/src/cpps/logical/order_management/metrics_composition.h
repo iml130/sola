@@ -18,6 +18,7 @@
 #define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_METRICS_COMPOSITION_H_
 
 #include "metrics.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::order_management {
 
@@ -83,6 +84,9 @@ public:
     return MetricsComposition{current_metrics_, insertion_metrics_,
                               current_metrics_ - other.current_metrics_};
   }
+
+  SERIALIZE(current_metrics_, insertion_metrics_, insertion_metrics_set_, diff_insertion_metrics_,
+            diff_insertion_metrics_set_);
 
 private:
   // the current costs
