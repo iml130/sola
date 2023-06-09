@@ -22,6 +22,8 @@ Task::Task(std::string name, const std::vector<Order> &orders,
            const std::vector<std::string> &follow_up_tasks)
     : name_(std::move(name)), orders_(orders), follow_up_tasks_(follow_up_tasks) {}
 
+const std::string &Task::getUuid() const { return uuid_; }
+
 const std::string &Task::getName() const { return name_; }
 
 const std::vector<Order> &Task::getOrders() const { return orders_; }

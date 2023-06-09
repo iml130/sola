@@ -17,16 +17,46 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 
+#include "cpps/logical/order_management/metrics_composition.h"
+#include "cpps/model/ability.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {
 
 class BidSubmission {
 public:
-  SERIALIZE(test_member_);
+  BidSubmission() = default;
+
+  BidSubmission(std::string task_uuid, std::string participant_connection,
+                const daisi::cpps::mrta::model::Ability participant_ability,
+                order_management::MetricsComposition metrics_composition)
+      : task_uuid_(std::move(task_uuid)),
+        participant_connection_(std::move(participant_connection)),
+        participant_ability_(participant_ability),
+        metrics_composition_(metrics_composition) {}
+
+  const std::string &getTaskUuid() const { return task_uuid_; }
+
+  const std::string &getParticipantConnection() const { return participant_connection_; }
+
+  const daisi::cpps::mrta::model::Ability &getParticipantAbility() const {
+    return participant_ability_;
+  }
+
+  const order_management::MetricsComposition &getMetricsComposition() {
+    return metrics_composition_;
+  }
+
+  SERIALIZE(task_uuid_, participant_connection_, participant_ability_, metrics_composition_);
 
 private:
-  int test_member_;
+  std::string task_uuid_;
+
+  std::string participant_connection_;
+
+  daisi::cpps::mrta::model::Ability participant_ability_;
+
+  order_management::MetricsComposition metrics_composition_;
 };
 
 }  // namespace daisi::cpps::logical

@@ -32,6 +32,8 @@ public:
   Task(std::string name, const std::vector<Order> &orders,
        const std::vector<std::string> &follow_up_tasks);
 
+  const std::string &getUuid() const;
+
   const std::string &getName() const;
   const std::vector<Order> &getOrders() const;
   const std::vector<std::string> &getFollowUpTasks() const;
@@ -48,6 +50,8 @@ public:
   bool operator!=(const Task &other) const { return name_ != other.name_; }
 
 private:
+  std::string uuid_ = "TODO";
+
   std::string name_;
   std::vector<Order> orders_;
   std::vector<std::string> follow_up_tasks_;

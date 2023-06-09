@@ -16,6 +16,7 @@ target_sources(daisi_cpps_logical_message_auction_based_bid_submission
 target_link_libraries(daisi_cpps_logical_message_auction_based_bid_submission
     INTERFACE
     solanet_serializer
+    daisi_cpps_model_ability
 )
 
 add_library(daisi_cpps_logical_message_auction_based_iteration_notification INTERFACE)
