@@ -26,13 +26,30 @@
 
 namespace daisi::cpps::logical {
 
-enum Layer { kFree, kSecond, kHidden, kScheduled, kNone };
+enum PrecedenceGraphLayer {
+  kFree,       // T_F
+  kSecond,     // T_L
+  kHidden,     // T_H
+  kScheduled,  // T_S
+  kNone
+};
 
 struct LPCVertex {
+  LPCVertex(const daisi::material_flow::Task &_task) : task(_task){};
+
   daisi::material_flow::Task task;
-  Layer layer;
-  std::optional<daisi::util::Duration> finish_time;
-  std::optional<daisi::util::Duration> earliest_valid_start;
+
+  /// @brief Assigning a layer to the task as presented by the set formulations in pIA.
+  PrecedenceGraphLayer layer = PrecedenceGraphLayer::kNone;
+
+  /// @brief F[t] in pIA; latest finish time of tasks that have been scheduled.
+  /// std::nullopt otherwise
+  std::optional<daisi::util::Duration> latest_finish_time = std::nullopt;
+
+  /// @brief PC[t] in pIA; earliest valid start time of tasks whose predecessors have been
+  /// scheduled. Tasks initially in T_F can be started at any time. If predecessors are not
+  /// scheduled, std::nullopt is set.
+  std::optional<daisi::util::Duration> earliest_valid_start = std::nullopt;
 
   friend bool operator==(const LPCVertex &v1, const LPCVertex &v2) { return v1.task == v2.task; }
 
@@ -65,6 +82,20 @@ public:
   /// @return Vector of all free tasks.
   std::vector<daisi::material_flow::Task> getAuctionableTasks();
 
+  /// @brief Setting the earliest valid start time, in pIA represented as PC[t], of a task.
+  /// @param task Task to search for the according vertex
+  /// @param time Earliest valid start time
+  void setEarliestValidStartTime(const daisi::material_flow::Task &task,
+                                 const daisi::util::Duration &time);
+
+  /// @brief Setting the latest finish time, in pIA represented as F[t], of a task.
+  /// @param task Task to search for the according vertex
+  /// @param time Earliest valid start time
+  void setLatestFinishTime(const daisi::material_flow::Task &task,
+                           const daisi::util::Duration &time);
+
+  bool areAllTasksScheduled() const;
+
 private:
   /// @brief Initializing layers of the precedence graph based on set equations from the pIA
   /// algorithm.
@@ -81,7 +112,7 @@ private:
   /// @brief Helper method to filter vertices of a certain layer.
   /// @param layer we want to filter for
   /// @return Vector of vertices with given layer.
-  std::vector<LPCVertex> getLayerVertices(Layer layer) const;
+  std::vector<LPCVertex> getLayerVertices(PrecedenceGraphLayer layer) const;
 };
 
 }  // namespace daisi::cpps::logical
