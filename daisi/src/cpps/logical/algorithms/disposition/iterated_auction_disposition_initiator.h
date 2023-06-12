@@ -20,14 +20,12 @@
 #include <memory>
 #include <variant>
 
+#include "auction_state_helper.h"
 #include "disposition_initiator.h"
 #include "layered_precedence_graph.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
-
-struct ReceivedBids {};
-struct Winner {};
 
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
@@ -52,25 +50,32 @@ private:
   void winnerResponseProcessing();
 
   void taskAnnouncement();
-  std::vector<Winner> selectWinners();
-  void notifyWinners(const std::vector<Winner> &winners);
+  void notifyWinners(const std::vector<AuctionStateHelper::Winner> &winners);
 
-  void iterationNotification();
-  void renotifyAboutOpenTasks();
+  void iterationNotification(const std::vector<daisi::material_flow::Task> &tasks);
 
-  std::vector<ReceivedBids> bids_;
-  std::vector<Winner> winner_acceptions_;
+  std::unordered_map<daisi::cpps::mrta::model::Ability, std::vector<daisi::material_flow::Task>,
+                     daisi::cpps::mrta::model::AbilityHasher>
+  getTaskAbilityMapping(const std::vector<daisi::material_flow::Task> &tasks);
 
-  std::unique_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
-
-  struct {
-    daisi::util::Duration subscribe_topic = 100;
-  } delays_;
+  std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
+  std::unique_ptr<AuctionStateHelper> auction_state_helper_;
 
   std::vector<daisi::cpps::mrta::model::Ability> available_abilities_;
 
   std::unordered_map<mrta::model::Ability, std::string, mrta::model::AbilityHasher>
       ability_topic_mapping_;
+
+  uint8_t no_winner_acceptions_counter_ = 0;
+
+  struct {
+    daisi::util::Duration subscribe_topic = 0.1;
+
+    daisi::util::Duration waiting_to_receive_bids = 0.7;
+
+    daisi::util::Duration waiting_to_receive_winner_responses = 0.3;
+
+  } delays_;
 };
 
 }  // namespace daisi::cpps::logical

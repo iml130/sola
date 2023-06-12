@@ -16,7 +16,11 @@
 
 #include "iterated_auction_disposition_initiator.h"
 
+#include "cpps/model/agv_fleet.h"
 #include "ns3/simulator.h"
+
+using namespace daisi::material_flow;
+using namespace daisi::cpps::mrta::model;
 
 namespace daisi::cpps::logical {
 
@@ -32,25 +36,27 @@ IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
 }
 
 void IteratedAuctionDispositionInitiator::addMaterialFlow(
-    std::shared_ptr<material_flow::MFDLScheduler> scheduler) {
+    std::shared_ptr<MFDLScheduler> scheduler) {
   if (layered_precedence_graph_) {
     throw std::runtime_error("A material flow is already processed currently. Support of multiple "
                              "is not implemented yet.");
   }
 
-  layered_precedence_graph_ = std::make_unique<LayeredPrecedenceGraph>(scheduler);
+  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler);
 
-  // TODO set sim time for finish time of tasks in free layer
+  auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();
+  for (const auto &task : layered_precedence_graph_->getAuctionableTasks()) {
+    layered_precedence_graph_->setEarliestValidStartTime(task.getUuid(), sim_time);
+  }
 }
 
 daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() {
-  // TODO set available abilities
+  available_abilities_ = AGVFleet::get().getAllExistingAbilities();
 
   uint8_t topic_counter = 0;
 
   for (const auto &ability : available_abilities_) {
-    // TODO get topic for ability
-    std::string topic_for_ability = "something";
+    std::string topic_for_ability = AGVFleet::get().getTopicForAbility(ability);
 
     ability_topic_mapping_[ability] = topic_for_ability;
 
@@ -62,28 +68,135 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
   return delays_.subscribe_topic * topic_counter;
 }
 
-void IteratedAuctionDispositionInitiator::startIteration() {}
+void IteratedAuctionDispositionInitiator::startIteration() {
+  if (layered_precedence_graph_->areAllTasksScheduled()) {
+    return;
+  }
 
-void IteratedAuctionDispositionInitiator::finishIteration() {}
+  auto auctionable_tasks = layered_precedence_graph_->getAuctionableTasks();
 
-void IteratedAuctionDispositionInitiator::bidProcessing() {}
+  taskAnnouncement();
 
-void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {}
+  // starting (while T_{auct} != emptyset) loop
+  // waiting to receive bids
+  ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
+                           &IteratedAuctionDispositionInitiator::bidProcessing, this);
+}
 
-void IteratedAuctionDispositionInitiator::taskAnnouncement() {}
+void IteratedAuctionDispositionInitiator::bidProcessing() {
+  // receiving bids in the meantime
+  auction_state_helper_->countBidSubmissionProcessing();
+  auto winners = auction_state_helper_->selectWinner();
+  if (!winners.empty()) {
+    notifyWinners(winners);
 
-std::vector<Winner> IteratedAuctionDispositionInitiator::selectWinners() { return {}; }
+    // waiting to receive winner responses
+    ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_winner_responses),
+                             &IteratedAuctionDispositionInitiator::winnerResponseProcessing, this);
+  } else {
+    // renotify
+    iterationNotification(layered_precedence_graph_->getAuctionableTasks());
 
-void IteratedAuctionDispositionInitiator::notifyWinners(const std::vector<Winner> &winners) {}
+    ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
+                             &IteratedAuctionDispositionInitiator::bidProcessing, this);
+  }
+}
 
-void IteratedAuctionDispositionInitiator::iterationNotification() {}
-void IteratedAuctionDispositionInitiator::renotifyAboutOpenTasks() {}
+void IteratedAuctionDispositionInitiator::notifyWinners(
+    const std::vector<AuctionStateHelper::Winner> &winners) {
+  auction_state_helper_->clearWinnerAcceptions();
+  auto initiator_connection = sola_->getConectionString();
+
+  for (const auto &winner : winners) {
+    WinnerNotification notification(winner.task_uuid, initiator_connection,
+                                    winner.latest_finish_time);
+
+    sola_->sendData(serialize(notification), sola::Endpoint(winner.winner_connection));
+  }
+}
+
+void IteratedAuctionDispositionInitiator::finishIteration() {
+  // Moving all free tasks from the free layer to the scheduled layer
+  // and updating the other layers accordingly
+  layered_precedence_graph_->next();
+
+  auction_state_helper_->clearIterationInfo();
+
+  startIteration();
+}
+
+void IteratedAuctionDispositionInitiator::taskAnnouncement() {
+  auto initiator_connection = sola_->getConectionString();
+  auto task_ability_mapping =
+      getTaskAbilityMapping(layered_precedence_graph_->getAuctionableTasks());
+
+  for (const auto &[ability, tasks] : task_ability_mapping) {
+    auto topic = ability_topic_mapping_[ability];
+
+    CallForProposal cfp(initiator_connection, tasks);
+    sola_->publishMessage(topic, serialize(cfp), "TODO log cfp");
+  }
+}
+
+std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher>
+IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
+    const std::vector<material_flow::Task> &tasks) {
+  std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher> task_ability_mapping;
+
+  for (const auto &task : tasks) {
+    auto fitting_abilities =
+        AGVFleet::get().getFittingExistingAbilities(task.getAbilityRequirement());
+    for (const auto &ability : fitting_abilities) {
+      task_ability_mapping[ability].push_back(task);
+    }
+  }
+
+  return task_ability_mapping;
+}
+
+void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {
+  auction_state_helper_->countWinnerResponseProcessing();
+
+  auto auctioned_tasks = auction_state_helper_->processWinnerAcceptions();
+
+  iterationNotification(auctioned_tasks);
+
+  if (layered_precedence_graph_->areAllFreeTasksScheduled()) {
+    finishIteration();
+  } else {
+    // continue (while T_{auct} != emptyset) loop
+
+    // waiting to receive bids
+    ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
+                             &IteratedAuctionDispositionInitiator::bidProcessing, this);
+  }
+}
+
+void IteratedAuctionDispositionInitiator::iterationNotification(
+    const std::vector<material_flow::Task> &tasks) {
+  auto initiator_connection = sola_->getConectionString();
+  auto task_ability_mapping = getTaskAbilityMapping(tasks);
+
+  for (const auto &[ability, tasks_for_ability] : task_ability_mapping) {
+    auto topic = ability_topic_mapping_[ability];
+
+    std::vector<std::string> task_uuids;
+    std::transform(tasks_for_ability.begin(), tasks_for_ability.end(),
+                   std::back_inserter(task_uuids),
+                   [&](const auto &task) { return task.getUuid(); });
+
+    IterationNotification notification(initiator_connection, task_uuids);
+    sola_->publishMessage(topic, serialize(notification), "TODO log iteration notification");
+  }
+}
 
 bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {
+  auction_state_helper_->addBidSubmission(bid_submission);
   return true;
 }
 
-bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &bid_submission) {
+bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &winner_response) {
+  auction_state_helper_->addWinnerResponse(winner_response);
   return true;
 }
 
