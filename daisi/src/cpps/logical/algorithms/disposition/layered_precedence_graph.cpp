@@ -113,7 +113,7 @@ void LayeredPrecedenceGraph::updateLayersSecondToFree(const LPCVertex &t) {
         std::vector<daisi::util::Duration> parent_finish_times;
         std::transform(parents_of_t_dash.begin(), parents_of_t_dash.end(),
                        std::back_inserter(parent_finish_times), [](const auto &parent_and_edge) {
-                         return parent_and_edge.first.latest_finish_time.value();
+                         return parent_and_edge.first.latest_finish.value();
                        });
 
         t_dash.earliest_valid_start =
@@ -150,8 +150,11 @@ std::vector<daisi::material_flow::Task> LayeredPrecedenceGraph::getAuctionableTa
   auto vertices = getLayerVertices(PrecedenceGraphLayer::kFree);
   std::vector<daisi::material_flow::Task> tasks;
 
-  std::transform(vertices.begin(), vertices.end(), std::back_inserter(tasks),
-                 [](const auto &vertex) { return vertex.task; });
+  for (const auto &vertex : vertices_) {
+    if (!vertex.scheduled) {
+      tasks.push_back(vertex.task);
+    }
+  }
 
   return tasks;
 }
@@ -165,11 +168,12 @@ std::vector<LPCVertex> LayeredPrecedenceGraph::getLayerVertices(PrecedenceGraphL
   return vertices_of_layer;
 }
 
-void LayeredPrecedenceGraph::setEarliestValidStartTime(const daisi::material_flow::Task &task,
+void LayeredPrecedenceGraph::setEarliestValidStartTime(const std::string &task_uuid,
                                                        const daisi::util::Duration &time) {
-  auto it = std::find(vertices_.begin(), vertices_.end(), LPCVertex(task));
+  auto it = std::find_if(vertices_.begin(), vertices_.end(),
+                         [&](const auto &vertex) { return vertex.task.getUuid() == task_uuid; });
   if (it == vertices_.end()) {
-    throw std::runtime_error("Vertex for task not found in LayeredPrecedenceGraph.");
+    throw std::runtime_error("Vertex for task uuid not found in LayeredPrecedenceGraph.");
   }
 
   if (it->layer != PrecedenceGraphLayer::kFree) {
@@ -180,11 +184,12 @@ void LayeredPrecedenceGraph::setEarliestValidStartTime(const daisi::material_flo
   it->earliest_valid_start = time;
 }
 
-void LayeredPrecedenceGraph::setLatestFinishTime(const daisi::material_flow::Task &task,
+void LayeredPrecedenceGraph::setLatestFinishTime(const std::string &task_uuid,
                                                  const daisi::util::Duration &time) {
-  auto it = std::find(vertices_.begin(), vertices_.end(), LPCVertex(task));
+  auto it = std::find_if(vertices_.begin(), vertices_.end(),
+                         [&](const auto &vertex) { return vertex.task.getUuid() == task_uuid; });
   if (it == vertices_.end()) {
-    throw std::runtime_error("Vertex for task not found in LayeredPrecedenceGraph.");
+    throw std::runtime_error("Vertex for task uuid not found in LayeredPrecedenceGraph.");
   }
 
   if (it->layer != PrecedenceGraphLayer::kFree) {
@@ -192,13 +197,83 @@ void LayeredPrecedenceGraph::setLatestFinishTime(const daisi::material_flow::Tas
                              "layer after its scheduling.");
   }
 
-  it->latest_finish_time = time;
+  it->latest_finish = time;
 }
 
 bool LayeredPrecedenceGraph::areAllTasksScheduled() const {
   return std::all_of(vertices_.begin(), vertices_.end(), [](const auto &vertex) {
     return vertex.layer == PrecedenceGraphLayer::kScheduled;
   });
+}
+
+bool LayeredPrecedenceGraph::areAllFreeTasksScheduled() const {
+  return std::all_of(vertices_.begin(), vertices_.end(), [](const auto &vertex) {
+    return vertex.layer != PrecedenceGraphLayer::kFree || vertex.scheduled;
+  });
+}
+
+LPCVertex LayeredPrecedenceGraph::getVertex(const std::string &task_uuid) const {
+  auto it = std::find_if(vertices_.begin(), vertices_.end(), [&task_uuid](const auto &vertex) {
+    return vertex.task.getUuid() == task_uuid;
+  });
+
+  if (it == vertices_.end()) {
+    throw std::invalid_argument("Vertex with task uuid does not exist.");
+  }
+
+  return *it;
+}
+
+daisi::material_flow::Task LayeredPrecedenceGraph::getTask(const std::string &task_uuid) const {
+  return getVertex(task_uuid).task;
+}
+
+daisi::util::Duration LayeredPrecedenceGraph::getEarliestValidStartTime(
+    const std::string &task_uuid) const {
+  auto vertex = getVertex(task_uuid);
+
+  if (!vertex.earliest_valid_start.has_value()) {
+    throw std::runtime_error("Earliest valid start of vertex is not set.");
+  }
+
+  return vertex.earliest_valid_start.value();
+}
+
+daisi::util::Duration LayeredPrecedenceGraph::getLatestFinishTime(
+    const std::string &task_uuid) const {
+  auto vertex = getVertex(task_uuid);
+
+  if (!vertex.latest_finish.has_value()) {
+    throw std::runtime_error("Latest finish of vertex is not set.");
+  }
+
+  return vertex.latest_finish.value();
+}
+
+void LayeredPrecedenceGraph::setTaskScheduled(const std::string &task_uuid) {
+  auto it = std::find_if(vertices_.begin(), vertices_.end(), [&task_uuid](const auto &vertex) {
+    return vertex.task.getUuid() == task_uuid;
+  });
+
+  if (it == vertices_.end()) {
+    throw std::invalid_argument("Vertex with task uuid does not exist.");
+  }
+
+  if (it->layer != PrecedenceGraphLayer::kFree) {
+    throw std::runtime_error("Only vertices from free layer can be set as scheduled. ");
+  }
+
+  it->scheduled = true;
+}
+
+bool LayeredPrecedenceGraph::isFreeTaskScheduled(const std::string &task_uuid) const {
+  auto vertex = getVertex(task_uuid);
+
+  if (vertex.layer != PrecedenceGraphLayer::kFree) {
+    throw std::runtime_error("Task is not free");
+  }
+
+  return vertex.scheduled;
 }
 
 }  // namespace daisi::cpps::logical

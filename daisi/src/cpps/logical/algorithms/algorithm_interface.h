@@ -25,6 +25,7 @@
 #include "cpps/logical/message/auction_based/iteration_notification.h"
 #include "cpps/logical/message/auction_based/winner_notification.h"
 #include "cpps/logical/message/auction_based/winner_response.h"
+#include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
 #define REGISTER_LOGICAL_MESSAGE(MessageType) \
