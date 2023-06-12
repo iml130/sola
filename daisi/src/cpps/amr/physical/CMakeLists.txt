@@ -90,6 +90,16 @@ target_link_libraries(daisi_cpps_amr_physical_amr_order
     solanet_serialize
 )
 
+add_library(daisi_cpps_amr_physical_charge INTERFACE)
+target_sources(daisi_cpps_amr_physical_charge
+    INTERFACE
+    charge.h
+)
+target_link_libraries(daisi_cpps_amr_physical_charge
+    INTERFACE
+    daisi_structure_helpers
+)
+
 add_library(daisi_cpps_amr_physical_functionality INTERFACE)
 target_sources(daisi_cpps_amr_physical_functionality
     INTERFACE
@@ -97,6 +107,7 @@ target_sources(daisi_cpps_amr_physical_functionality
 )
 target_link_libraries(daisi_cpps_amr_physical_functionality
     INTERFACE
+    daisi_cpps_amr_physical_charge
     daisi_cpps_amr_physical_load
     daisi_cpps_amr_physical_move_to
     daisi_cpps_amr_physical_navigate

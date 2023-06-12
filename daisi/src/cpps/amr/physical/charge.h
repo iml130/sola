@@ -14,23 +14,18 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_AMR_PHYSICAL_FUNCTIONALITY_H_
-#define DAISI_CPPS_AMR_PHYSICAL_FUNCTIONALITY_H_
+#ifndef DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
+#define DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
 
-#include <functional>
-#include <variant>
-
-#include "cpps/amr/physical/charge.h"
-#include "cpps/amr/physical/load.h"
-#include "cpps/amr/physical/move_to.h"
-#include "cpps/amr/physical/navigate.h"
-#include "cpps/amr/physical/unload.h"
+#include "utils/structure_helpers.h"
 
 namespace daisi::cpps {
-enum class FunctionalityType { kCharge, kLoad, kMoveTo, kNavigate, kUnload };
+class Charge {
+public:
+  Charge() = default;
+  explicit Charge(const util::Position &destination) : destination(destination) {}
 
-using FunctionalityVariant = std::variant<std::monostate, Charge, Load, MoveTo, Navigate, Unload>;
-using FunctionalityDoneCallback = std::function<void(const FunctionalityVariant &)>;
-
+  util::Position destination;
+};
 }  // namespace daisi::cpps
 #endif

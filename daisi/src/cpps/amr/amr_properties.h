@@ -56,8 +56,8 @@ private:
   std::string device_type_ = "none";
   std::string friendly_name_ = "none";
   std::set<FunctionalityType> functionalities_ = {
-      FunctionalityType::kLoad, FunctionalityType::kMoveTo, FunctionalityType::kUnload,
-      FunctionalityType::kNavigate};
+      FunctionalityType::kCharge, FunctionalityType::kLoad, FunctionalityType::kMoveTo,
+      FunctionalityType::kUnload, FunctionalityType::kNavigate};
   std::string manufacturer_ = "none";
   std::string model_name_ = "none";
   uint32_t model_number_ = 0;

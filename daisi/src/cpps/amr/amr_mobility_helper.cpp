@@ -20,6 +20,7 @@
 #include <cmath>
 #include <limits>
 #include <numeric>
+#include <variant>
 
 namespace daisi::cpps {
 
@@ -51,33 +52,34 @@ util::Duration AmrMobilityHelper::estimateDuration(const util::Pose &start_pose,
   // Sanity check
   sanityCheck(start_pose, functionality, description, topology);
   // estimation
-  if (std::holds_alternative<MoveTo>(functionality)) {
-    auto move_to = std::get<MoveTo>(functionality);
+  if (auto move_to = std::get_if<MoveTo>(&functionality)) {
     std::vector<double> distances =
-        calculatePhaseDistances(start_pose.position, move_to, description);
+        calculatePhaseDistances(start_pose.position, *move_to, description);
     std::vector<util::Duration> durations = calculatePhaseDurations(distances, description);
     util::Duration total_duration = std::accumulate(durations.begin(), durations.end(), 0.0);
     return total_duration;
   }
-  if (std::holds_alternative<Navigate>(functionality)) {
-    auto navigate = std::get<Navigate>(functionality);
+  if (auto navigate = std::get_if<Navigate>(&functionality)) {
     std::vector<double> distances =
-        calculatePhaseDistances(start_pose.position, navigate, description);
+        calculatePhaseDistances(start_pose.position, *navigate, description);
     std::vector<util::Duration> durations = calculatePhaseDurations(distances, description);
     util::Duration total_duration = std::accumulate(durations.begin(), durations.end(), 0.0);
     return total_duration;
   }
-  if (std::holds_alternative<Load>(functionality)) {
-    if (check_positioning &&
-        calculateDistance(start_pose.position, std::get<Load>(functionality)) != 0)
+  if (auto load = std::get_if<Load>(&functionality)) {
+    if (check_positioning && calculateDistance(start_pose.position, *load) != 0)
       throw std::invalid_argument("start_pose is invalid for destination of Load");
     return description.getLoadHandling().getLoadTime();
   }
-  if (std::holds_alternative<Unload>(functionality)) {
-    if (check_positioning &&
-        calculateDistance(start_pose.position, std::get<Unload>(functionality)) != 0)
+  if (auto unload = std::get_if<Unload>(&functionality)) {
+    if (check_positioning && calculateDistance(start_pose.position, *unload) != 0)
       throw std::invalid_argument("start_pose is invalid for destination of Unload");
     return description.getLoadHandling().getUnloadTime();
+  }
+  if (auto charge = std::get_if<Charge>(&functionality)) {
+    if (check_positioning && calculateDistance(start_pose.position, *charge) != 0)
+      throw std::invalid_argument("start_pose is invalid for destination of Charge");
+    return 30.0;  // TODO use battery capacity instead
   }
   return -1;
 }
@@ -89,25 +91,25 @@ std::vector<daisi::cpps::AmrMobilityStatus> AmrMobilityHelper::calculatePhases(
   // Sanity check
   sanityCheck(start_pose, functionality, description, topology);
   // estimation
-  if (std::holds_alternative<Load>(functionality)) {
-    auto load = std::get<Load>(functionality);
-    return calculatePhases(start_timestamp, start_pose.position, load.destination, {0, 0, 0},
+  if (auto load = std::get_if<Load>(&functionality)) {
+    return calculatePhases(start_timestamp, start_pose.position, load->destination, {0, 0, 0},
                            description.getLoadHandling().getLoadTime(), description);
   }
-  if (std::holds_alternative<MoveTo>(functionality)) {
-    auto move_to = std::get<MoveTo>(functionality);
+  if (auto move_to = std::get_if<MoveTo>(&functionality)) {
     auto distances = calculatePhaseDistances(start_pose.position, functionality, description);
-    return calculatePhases(start_timestamp, start_pose.position, move_to.destination, distances, 0,
+    return calculatePhases(start_timestamp, start_pose.position, move_to->destination, distances, 0,
                            description);
   }
-  if (std::holds_alternative<Unload>(functionality)) {
-    auto unload = std::get<Unload>(functionality);
-    return calculatePhases(start_timestamp, start_pose.position, unload.destination, {0, 0, 0},
+  if (auto unload = std::get_if<Unload>(&functionality)) {
+    return calculatePhases(start_timestamp, start_pose.position, unload->destination, {0, 0, 0},
                            description.getLoadHandling().getUnloadTime(), description);
   }
-  if (std::holds_alternative<Navigate>(functionality)) {
-    auto navigate = std::get<Navigate>(functionality);
-    return calculatePhases(start_timestamp, start_pose.position, navigate, description);
+  if (auto navigate = std::get_if<Navigate>(&functionality)) {
+    return calculatePhases(start_timestamp, start_pose.position, *navigate, description);
+  }
+  if (auto charge = std::get_if<Charge>(&functionality)) {
+    return calculatePhases(start_timestamp, start_pose.position, charge->destination, {0, 0, 0},
+                           description.getLoadHandling().getUnloadTime(), description);
   }
   return std::vector<AmrMobilityStatus>();
 }
@@ -144,26 +146,32 @@ AmrMobilityStatus AmrMobilityHelper::calculateMobilityStatus(
 
 void AmrMobilityHelper::arePositionsInTopology(const FunctionalityVariant &functionality,
                                                const Topology &topology) {
-  if (std::holds_alternative<Load>(functionality)) {
-    util::Position p = std::get<Load>(functionality).destination;
+  if (auto load = std::get_if<Load>(&functionality)) {
+    util::Position p = load->destination;
     if (!topology.isPositionInTopology(p))
       throw std::invalid_argument("destination of Deliver is invalid");
     return;
   }
-  if (std::holds_alternative<MoveTo>(functionality)) {
-    util::Position p = std::get<MoveTo>(functionality).destination;
+  if (auto move_to = std::get_if<MoveTo>(&functionality)) {
+    util::Position p = move_to->destination;
     if (!topology.isPositionInTopology(p))
       throw std::invalid_argument("destination of MoveTo is invalid");
     return;
   }
-  if (std::holds_alternative<Unload>(functionality)) {
-    util::Position p = std::get<Unload>(functionality).destination;
+  if (auto unload = std::get_if<Unload>(&functionality)) {
+    util::Position p = unload->destination;
     if (!topology.isPositionInTopology(p))
       throw std::invalid_argument("destination of PickUp is invalid");
     return;
   }
-  if (std::holds_alternative<Navigate>(functionality)) {
-    std::vector<util::Position> wpts = std::get<Navigate>(functionality).waypoints;
+  if (auto charge = std::get_if<Charge>(&functionality)) {
+    util::Position p = charge->destination;
+    if (!topology.isPositionInTopology(p))
+      throw std::invalid_argument("destination of PickUp is invalid");
+    return;
+  }
+  if (auto navigate = std::get_if<Navigate>(&functionality)) {
+    std::vector<util::Position> wpts = navigate->waypoints;
     if (std::any_of(wpts.begin(), wpts.end(), [topology](const util::Position &p) {
           return !topology.isPositionInTopology(p);
         }))
@@ -180,14 +188,16 @@ void AmrMobilityHelper::arePositionsInTopology(
 
 daisi::util::Distance AmrMobilityHelper::calculateDistance(
     const daisi::util::Position &start_position, const FunctionalityVariant &functionality) {
-  if (std::holds_alternative<Load>(functionality))
-    return (start_position - std::get<Load>(functionality).destination).GetLength();
-  if (std::holds_alternative<MoveTo>(functionality))
-    return (start_position - std::get<MoveTo>(functionality).destination).GetLength();
-  if (std::holds_alternative<Unload>(functionality))
-    return (start_position - std::get<Unload>(functionality).destination).GetLength();
-  if (std::holds_alternative<Navigate>(functionality))
-    return calculateDistance(start_position, std::get<Navigate>(functionality));
+  if (auto load = std::get_if<Load>(&functionality))
+    return (start_position - load->destination).GetLength();
+  if (auto move_to = std::get_if<MoveTo>(&functionality))
+    return (start_position - move_to->destination).GetLength();
+  if (auto unload = std::get_if<Unload>(&functionality))
+    return (start_position - unload->destination).GetLength();
+  if (auto navigate = std::get_if<Navigate>(&functionality))
+    return calculateDistance(start_position, *navigate);
+  if (auto charge = std::get_if<Charge>(&functionality))
+    return (start_position - charge->destination).GetLength();
   return -1;
 }
 
@@ -471,6 +481,8 @@ bool AmrMobilityHelper::isFunctionalityInDescription(const FunctionalityVariant 
     return description.getProperties().getFunctionalities().count(FunctionalityType::kUnload) > 0;
   if (std::holds_alternative<Navigate>(functionality))
     return description.getProperties().getFunctionalities().count(FunctionalityType::kNavigate) > 0;
+  if (std::holds_alternative<Charge>(functionality))
+    return description.getProperties().getFunctionalities().count(FunctionalityType::kCharge) > 0;
   return false;
 }
 
@@ -553,6 +565,8 @@ AmrMobilityHelper::calculateMetricsByDomain(
 
           } else if constexpr (std::is_same_v<T, Navigate>) {
             throw std::invalid_argument("Functionality Navigate not implemented yet");
+          } else if constexpr (std::is_same_v<T, Charge>) {
+            throw std::invalid_argument("Functionality Charge not implemented yet");
           } else if constexpr (std::is_same_v<T, std::monostate>) {
           } else {
             static_assert(kAlwaysFalseV<T>, "Functionality not handled");
