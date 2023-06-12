@@ -18,15 +18,33 @@
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_NOTIFICATION_H_
 
 #include "solanet/serializer/serialize.h"
+#include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
 
 class WinnerNotification {
 public:
-  SERIALIZE(test_member_);
+  WinnerNotification() = default;
+  WinnerNotification(std::string task_uuid, std::string initiator_connection,
+                     double latest_finish_time)
+      : task_uuid_(std::move(task_uuid)),
+        initiator_connection_(std::move(initiator_connection)),
+        latest_finish_time_(latest_finish_time) {}
+
+  const std::string &getTaskUuid() const { return task_uuid_; }
+
+  const std::string &getInitiatorConnection() const { return initiator_connection_; }
+
+  const daisi::util::Duration &getLatestFinishTime() const { return latest_finish_time_; }
+
+  SERIALIZE(task_uuid_, initiator_connection_, latest_finish_time_);
 
 private:
-  int test_member_;
+  std::string task_uuid_;
+
+  std::string initiator_connection_;
+
+  daisi::util::Duration latest_finish_time_;
 };
 
 }  // namespace daisi::cpps::logical

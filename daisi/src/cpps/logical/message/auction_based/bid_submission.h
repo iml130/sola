@@ -47,6 +47,23 @@ public:
     return metrics_composition_;
   }
 
+  bool operator>(const BidSubmission &other) const {
+    // if (metrics_composition_ != other.metrics_composition_) {
+    //   return metrics_composition_ > other.metrics_composition_;
+    // }
+
+    // if metrics are the same, it does not matter whether which one is selected
+    // but for comparability a unique ordering is necessary
+
+    // if abilities are unequal, ability can be used for ordering
+    if (!equalAbility(participant_ability_, other.participant_ability_)) {
+      return lessAbility(participant_ability_, other.participant_ability_);
+    }
+
+    // if abilit is equal, at least the connection strings are different
+    return participant_connection_ > other.participant_connection_;
+  }
+
   SERIALIZE(task_uuid_, participant_connection_, participant_ability_, metrics_composition_);
 
 private:

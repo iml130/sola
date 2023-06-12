@@ -23,10 +23,21 @@ namespace daisi::cpps::logical {
 
 class IterationNotification {
 public:
-  SERIALIZE(test_member_);
+  IterationNotification() = default;
+  IterationNotification(std::string initiator_connection,
+                        const std::vector<std::string> &task_uuids)
+      : initiator_connection_(std::move(initiator_connection)), task_uuids_(task_uuids) {}
+
+  const std::string &getInitiatorConnection() const { return initiator_connection_; }
+
+  const std::vector<std::string> &getTaskUuids() const { return task_uuids_; }
+
+  SERIALIZE(initiator_connection_, task_uuids_);
 
 private:
-  int test_member_;
+  std::string initiator_connection_;
+
+  std::vector<std::string> task_uuids_;
 };
 
 }  // namespace daisi::cpps::logical

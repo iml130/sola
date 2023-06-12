@@ -6,6 +6,7 @@ target_sources(daisi_cpps_logical_message_auction_based_call_for_proposal
 target_link_libraries(daisi_cpps_logical_message_auction_based_call_for_proposal
     INTERFACE
     solanet_serializer
+    daisi_material_flow_model_task
 )
 
 add_library(daisi_cpps_logical_message_auction_based_bid_submission INTERFACE)
@@ -37,6 +38,7 @@ target_sources(daisi_cpps_logical_message_auction_based_winner_notification
 target_link_libraries(daisi_cpps_logical_message_auction_based_winner_notification
     INTERFACE
     solanet_serializer
+    daisi_structure_helpers
 )
 
 add_library(daisi_cpps_logical_message_auction_based_winner_response INTERFACE)
