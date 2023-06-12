@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MODEL_TASK_STATES_NS3_H_
-#define DAISI_MODEL_TASK_STATES_NS3_H_
+#ifndef DAISI_MODEL_ORDER_STATES_H_
+#define DAISI_MODEL_ORDER_STATES_H_
 
 namespace daisi::cpps {
 

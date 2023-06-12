@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
 #define DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps {
@@ -24,6 +25,8 @@ class Charge {
 public:
   Charge() = default;
   explicit Charge(const util::Position &destination) : destination(destination) {}
+
+  SERIALIZE(destination);
 
   util::Position destination;
 };
