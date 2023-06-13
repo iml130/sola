@@ -100,8 +100,11 @@ public:
   }
 
   inline friend bool operator<(const Metrics &lhs, const Metrics &rhs);
-
+  inline friend bool operator<=(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator>(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator>=(const Metrics &lhs, const Metrics &rhs);
   inline friend bool operator==(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator!=(const Metrics &lhs, const Metrics &rhs);
 
   static std::function<double(const Metrics &)> utility_function_;
 
@@ -122,9 +125,20 @@ private:
 bool operator<(const Metrics &lhs, const Metrics &rhs) {
   return Metrics::utility_function_(lhs) < Metrics::utility_function_(rhs);
 }
-
+bool operator<=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) <= Metrics::utility_function_(rhs);
+}
+bool operator>(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) > Metrics::utility_function_(rhs);
+}
+bool operator>=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) >= Metrics::utility_function_(rhs);
+}
 bool operator==(const Metrics &lhs, const Metrics &rhs) {
   return Metrics::utility_function_(lhs) == Metrics::utility_function_(rhs);
+}
+bool operator!=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) != Metrics::utility_function_(rhs);
 }
 
 }  // namespace daisi::cpps::order_management

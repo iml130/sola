@@ -76,8 +76,24 @@ public:
     return getMetricsForAuction() < other.getMetricsForAuction();
   }
 
+  bool operator<=(const MetricsComposition &other) const {
+    return getMetricsForAuction() <= other.getMetricsForAuction();
+  }
+
+  bool operator>(const MetricsComposition &other) const {
+    return getMetricsForAuction() > other.getMetricsForAuction();
+  }
+
+  bool operator>=(const MetricsComposition &other) const {
+    return getMetricsForAuction() >= other.getMetricsForAuction();
+  }
+
   bool operator==(const MetricsComposition &other) const {
     return getMetricsForAuction() == other.getMetricsForAuction();
+  }
+
+  bool operator!=(const MetricsComposition &other) const {
+    return getMetricsForAuction() != other.getMetricsForAuction();
   }
 
   MetricsComposition operator-(const MetricsComposition &other) const {
