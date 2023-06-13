@@ -18,14 +18,43 @@
 #define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_PARTICIPANT_H_
 
 #include <memory>
-#include <variant>
+#include <optional>
 
+#include "cpps/logical/order_management/stn_order_management.h"
 #include "disposition_participant.h"
 
 namespace daisi::cpps::logical {
 
 class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
+  struct AuctionParticipantTaskState {
+    AuctionParticipantTaskState() = default;
+
+    AuctionParticipantTaskState(const daisi::material_flow::Task &task);
+
+    std::shared_ptr<daisi::material_flow::Task> task = nullptr;
+
+    std::shared_ptr<order_management::OrderManagement::InsertionPoint> insertion_point = nullptr;
+
+    std::optional<order_management::MetricsComposition> metrics_composition = std::nullopt;
+  };
+
+  struct AuctionParticipantState {
+    AuctionParticipantState() = default;
+
+    AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
+
+    AuctionParticipantTaskState pickBest();
+
+    void removeTaskState(const std::string &task_uuid);
+
+    bool hasOpenTasks();
+
+    std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;
+
+    std::string previously_submitted;
+  };
+
   explicit IteratedAuctionDispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
 
   ~IteratedAuctionDispositionParticipant() = default;
@@ -33,6 +62,18 @@ public:
   REGISTER_IMPLEMENTATION(CallForProposal);
   REGISTER_IMPLEMENTATION(IterationNotification);
   REGISTER_IMPLEMENTATION(WinnerNotification);
+
+private:
+  // initiator connection -> state
+  std::unordered_map<std::string, AuctionParticipantState> initiator_auction_state_mapping_;
+
+  std::shared_ptr<order_management::StnOrderManagement> order_management_;
+
+  void calculateBids(AuctionParticipantState &state);
+
+  void submitBid(const std::string &initiator_connection);
+
+  void clearStoredInformationAfterInsertion();
 };
 
 }  // namespace daisi::cpps::logical

@@ -44,6 +44,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_dispos
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_participant
+    daisi_cpps_logical_order_management_stn_order_management
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
