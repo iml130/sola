@@ -1,4 +1,3 @@
-
 add_subdirectory(disposition)
 
 add_library(daisi_cpps_logical_algorithms_algorithm_interface INTERFACE)
