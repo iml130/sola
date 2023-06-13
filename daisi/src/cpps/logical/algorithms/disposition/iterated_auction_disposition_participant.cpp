@@ -74,8 +74,9 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     throw std::runtime_error("The auction winner does not have information about auction process.");
   }
 
-  auto it_auction_task_state = it_auction_state->second.task_state_mapping.find(task_uuid);
-  if (it_auction_task_state == it_auction_state->second.task_state_mapping.end()) {
+  AuctionParticipantState &state = it_auction_state->second.;
+  auto it_auction_task_state = state.task_state_mapping.find(task_uuid);
+  if (it_auction_task_state == state.task_state_mapping.end()) {
     throw std::runtime_error(
         "The auction winner does not have information about the auctioned task. ");
   }
@@ -105,6 +106,9 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     WinnerResponse response(task_uuid, participant_connecton, true);
     sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
 
+    // update states
+    calculateBids(state);
+
   } else {
     task_state.metrics_composition = std::nullopt;
     task_state.insertion_point = nullptr;
@@ -127,6 +131,9 @@ void IteratedAuctionDispositionParticipant::calculateBids(
 
       task_state.metrics_composition = result.first;
       task_state.insertion_point = result.second;
+    } else {
+      task_state.metrics_composition = std::nullopt;
+      task_state.insertion_point = nullptr;
     }
   }
 }
@@ -175,7 +182,7 @@ IteratedAuctionDispositionParticipant::AuctionParticipantState::pickBest() {
   auto task_state_comp = [](const auto &s1, const auto &s2) {
     if (s1.metrics_composition.has_value()) {
       if (s2.metrics_composition.has_value()) {
-        // return s1.metrics_composition.value() > s2.metrics_composition.value(); TODO
+        return s1.metrics_composition.value() > s2.metrics_composition.value();
       }
       return false;
     }
