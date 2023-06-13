@@ -36,7 +36,11 @@ StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
     : OrderManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
       current_task_expected_finish_time_(0),
-      time_now_(0) {}
+      current_ordering_(),
+      current_total_metrics_(),
+      newest_task_insert_info_(),
+      time_now_(0),
+      latest_calculated_insertion_info_(std::nullopt) {}
 
 void StnOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
@@ -118,19 +122,24 @@ bool StnOrderManagement::setNextTask() {
   return false;
 }
 
-std::optional<std::pair<MetricsComposition, std::shared_ptr<OrderManagement::InsertionPoint>>>
-StnOrderManagement::canAddTask(const Task &task) const {
+bool StnOrderManagement::canAddTask(const Task &task) {
   // TODO first checking whether we have the ability to execute the task
 
-  StnOrderManagement copy(*this);
-  auto result = copy.addTask(task);
+  latest_calculated_insertion_info_ = std::nullopt;
 
-  return result;
+  StnOrderManagement copy(*this);
+  if (copy.addTask(task)) {
+    latest_calculated_insertion_info_ = copy.getLatestCalculatedInsertionInfo();
+    return true;
+  }
+
+  return false;
 }
 
-std::optional<std::pair<MetricsComposition, std::shared_ptr<OrderManagement::InsertionPoint>>>
-StnOrderManagement::addTask(const Task &task,
-                            std::shared_ptr<OrderManagement::InsertionPoint> insertion_point) {
+bool StnOrderManagement::addTask(const Task &task,
+                                 std::shared_ptr<OrderManagement::InsertionPoint> insertion_point) {
+  latest_calculated_insertion_info_ = std::nullopt;
+
   const auto orders = task.getOrders();
   if (orders.empty()) {
     throw std::invalid_argument("Task must have at least one order");
@@ -180,13 +189,19 @@ StnOrderManagement::addTask(const Task &task,
     bool success = solve();
     if (success) {
       MetricsComposition metrics = newest_task_insert_info_->metrics_composition;
-      return std::make_pair(metrics, insertion_point);
+      latest_calculated_insertion_info_ = std::make_pair(metrics, insertion_point);
+      return true;
     }
 
-    return std::nullopt;
+  } else {
+    auto result = addBestOrdering(info);
+    if (result.has_value()) {
+      latest_calculated_insertion_info_ = result.value();
+      return true;
+    }
   }
 
-  return addBestOrdering(info);
+  return false;
 }
 
 void StnOrderManagement::addPrecedenceConstraintBetweenTask(
@@ -535,6 +550,15 @@ int StnOrderManagement::getVertexIndexOfOrder(const Order &order, const bool sta
 const StnOrderManagementVertex &StnOrderManagement::getVertexOfOrder(const Order &order,
                                                                      const bool start) {
   return *getVertexIteratorOfOrder(order, start);
+}
+
+std::pair<MetricsComposition, std::shared_ptr<OrderManagement::InsertionPoint>>
+StnOrderManagement::getLatestCalculatedInsertionInfo() const {
+  if (latest_calculated_insertion_info_.has_value()) {
+    return latest_calculated_insertion_info_.value();
+  }
+  throw std::logic_error(
+      "There are no intertion info if the canAddTask or addTask were not sucessful");
 }
 
 }  // namespace daisi::cpps::order_management

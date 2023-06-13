@@ -42,11 +42,9 @@ public:
   virtual daisi::material_flow::Task getCurrentTask() const = 0;
   virtual bool setNextTask() = 0;
 
-  virtual std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> canAddTask(
-      const daisi::material_flow::Task &task) const = 0;
-  virtual std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> addTask(
-      const daisi::material_flow::Task &task,
-      std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;
+  virtual bool canAddTask(const daisi::material_flow::Task &task) = 0;
+  virtual bool addTask(const daisi::material_flow::Task &task,
+                       std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;
 
 protected:
   AmrDescription amr_description_;

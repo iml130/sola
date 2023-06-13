@@ -47,11 +47,12 @@ public:
   daisi::material_flow::Task getCurrentTask() const override;
   bool setNextTask() override;
 
-  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> canAddTask(
-      const daisi::material_flow::Task &task) const override;
-  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> addTask(
-      const daisi::material_flow::Task &task,
-      std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
+  bool canAddTask(const daisi::material_flow::Task &task) override;
+  bool addTask(const daisi::material_flow::Task &task,
+               std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
+
+  std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>> getLatestCalculatedInsertionInfo()
+      const;
 
   void setCurrentTime(const daisi::util::Duration &now);
 
@@ -83,6 +84,9 @@ protected:
   std::vector<TaskInsertInfo>::iterator newest_task_insert_info_;
 
   daisi::util::Duration time_now_;
+
+  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>>
+      latest_calculated_insertion_info_;
 
   virtual bool solve() override;
 

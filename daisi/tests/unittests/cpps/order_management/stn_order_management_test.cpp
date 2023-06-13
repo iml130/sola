@@ -85,10 +85,11 @@ TEST_CASE("One Simple Transport Order", "[adding and removing vertices]") {
   Task simple_task("simple_task", {simple_to}, {});
 
   // act
-  auto opt_result = management.canAddTask(simple_task);
-  REQUIRE(opt_result.has_value());
-  auto metrics_comp = std::get<0>(opt_result.value());
-  auto insertion_point = std::get<1>(opt_result.value());
+
+  REQUIRE(management.canAddTask(simple_task));
+  auto res1 = management.getLatestCalculatedInsertionInfo();
+  auto metrics_comp = std::get<0>(res1);
+  auto insertion_point = std::get<1>(res1);
   auto diff_metrics = metrics_comp.getDiffInsertionMetrics();
 
   // assert metrics results
@@ -117,9 +118,8 @@ TEST_CASE("One Simple Transport Order", "[adding and removing vertices]") {
   REQUIRE(!management.setNextTask());
 
   // act
-  auto add_results = management.addTask(simple_task, insertion_point);
-  REQUIRE(add_results.has_value());
-  auto add_metrics_comp = std::get<0>(add_results.value());
+  REQUIRE(management.addTask(simple_task, insertion_point));
+  auto add_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
 
   // assert
   REQUIRE(management.setNextTask());
@@ -152,13 +152,11 @@ TEST_CASE("Two Simple Transport Orders statically", "[adding and removing vertic
   Task simple_task_2("simple_task_2", {simple_to_2}, {});
 
   // can add tests
-  auto can_add_1_result = management.canAddTask(simple_task_1);
-  REQUIRE(can_add_1_result.has_value());
-  auto can_add_1_metrics_comp = std::get<0>(can_add_1_result.value());
+  REQUIRE(management.canAddTask(simple_task_1));
+  auto can_add_1_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
 
-  auto can_add_2_result = management.canAddTask(simple_task_2);
-  REQUIRE(can_add_2_result.has_value());
-  auto can_add_2_metrics_comp = std::get<0>(can_add_2_result.value());
+  REQUIRE(management.canAddTask(simple_task_2));
+  auto can_add_2_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
 
   REQUIRE(can_add_1_metrics_comp.getCurrentMetrics().empty_travel_distance > 0);
   REQUIRE(can_add_1_metrics_comp.getCurrentMetrics().empty_travel_time > 0);
@@ -190,23 +188,20 @@ TEST_CASE("Two Simple Transport Orders statically", "[adding and removing vertic
 
   // adding task 1
   REQUIRE(!management.hasTasks());
-  auto add_1_result = management.addTask(simple_task_1);
-  REQUIRE(add_1_result.has_value());
+  REQUIRE(management.addTask(simple_task_1));
 
   // can add task 2 after 1
-  auto can_add_2_2_result = management.canAddTask(simple_task_2);
-  REQUIRE(can_add_2_2_result.has_value());
+  REQUIRE(management.canAddTask(simple_task_2));
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(can_add_2_2_result.value()));
+          std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(can_add_2_2_stn_insertion_point->new_index == 1);
 
   // adding task 2
-  auto add_2_result = management.addTask(simple_task_2);
-  REQUIRE(add_2_result.has_value());
+  REQUIRE(management.addTask(simple_task_2));
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_2_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(add_2_result.value()));
+          std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(add_2_stn_insertion_point->new_index == 1);
   REQUIRE(!add_2_stn_insertion_point->next_start.has_value());
 
@@ -244,27 +239,27 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
   Task simple_task_2("simple_task_2", {simple_to_2}, {});
 
   // add task 1 and setting it dynamically to the next task
-  auto add_1_opt = management.addTask(simple_task_1);
-  REQUIRE(add_1_opt.has_value());
+  REQUIRE(management.addTask(simple_task_1));
   REQUIRE(management.setNextTask());
   REQUIRE(management.hasTasks());
   REQUIRE(management.getCurrentTask().getName() == "simple_task_1");
+  auto add_1_info = management.getLatestCalculatedInsertionInfo();
 
   // adding task 2, however current ordering is now empty
-  auto can_add_2_1_opt = management.canAddTask(simple_task_2);
-  REQUIRE(can_add_2_1_opt.has_value());
+  REQUIRE(management.canAddTask(simple_task_2));
+  auto can_add_2_1_info = management.getLatestCalculatedInsertionInfo();
 
   // insertion point should be at the first point of the current ordering
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_1_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(can_add_2_1_opt.value()));
+          std::get<1>(can_add_2_1_info));
   REQUIRE(can_add_2_1_stn_insertion_point->new_index == 0);
   REQUIRE(can_add_2_1_stn_insertion_point->previous_finish.isOrigin());
   REQUIRE(!can_add_2_1_stn_insertion_point->next_start.has_value());
 
   // expected finish time of task 1 must be respected in the metrics
-  auto can_add_2_1_metrics_comp = std::get<0>(can_add_2_1_opt.value());
-  auto add_1_metrics_comp = std::get<0>(add_1_opt.value());
+  auto can_add_2_1_metrics_comp = std::get<0>(can_add_2_1_info);
+  auto add_1_metrics_comp = std::get<0>(add_1_info);
   REQUIRE(can_add_2_1_metrics_comp.getCurrentMetrics().getDistance() <
           add_1_metrics_comp.getCurrentMetrics().getDistance());
   REQUIRE(can_add_2_1_metrics_comp.getCurrentMetrics().getMakespan() >=
@@ -273,23 +268,21 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
 
   // increasing time such that task 1 should still be executed -> no change to can_add_2_1 expected
   management.setCurrentTime(10);
-  auto can_add_2_2_opt = management.canAddTask(simple_task_2);
-  REQUIRE(can_add_2_2_opt.has_value());
+  REQUIRE(management.canAddTask(simple_task_2));
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(can_add_2_2_opt.value()));
+          std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(can_add_2_2_stn_insertion_point->new_index == 0);
 
-  auto can_add_2_2_metrics_comp = std::get<0>(can_add_2_2_opt.value());
+  auto can_add_2_2_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
   REQUIRE(can_add_2_1_metrics_comp.getCurrentMetrics().getMakespan() ==
           can_add_2_2_metrics_comp.getCurrentMetrics().getMakespan());
 
   // increasing time such that execution of task 1 should be over
   // therefore makespan must be greater
   management.setCurrentTime(50);
-  auto can_add_2_3_opt = management.canAddTask(simple_task_2);
-  REQUIRE(can_add_2_3_opt.has_value());
-  auto can_add_2_3_metrics_comp = std::get<0>(can_add_2_3_opt.value());
+  REQUIRE(management.canAddTask(simple_task_2));
+  auto can_add_2_3_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
 
   REQUIRE(can_add_2_3_metrics_comp.getCurrentMetrics().getMakespan() >
           can_add_2_2_metrics_comp.getCurrentMetrics().getMakespan());
@@ -297,8 +290,7 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
           50 + can_add_2_2_metrics_comp.getCurrentMetrics().getTime());
 
   // finally adding it
-  auto add_2_opt = management.addTask(simple_task_2);
-  REQUIRE(add_2_opt.has_value());
+  REQUIRE(management.addTask(simple_task_2));
 }
 
 TEST_CASE("Three Simple Transport Orders statically", "[adding and removing vertices]") {
@@ -324,14 +316,13 @@ TEST_CASE("Three Simple Transport Orders statically", "[adding and removing vert
   TransportOrder simple_to_3("simple_to_3", {pickup_3}, delivery_3);
   Task simple_task_3("simple_task_3", {simple_to_3}, {});
 
-  auto add_1_opt = management.addTask(simple_task_1);
-  auto add_2_opt = management.addTask(simple_task_2);
+  REQUIRE(management.addTask(simple_task_1));
+  auto add_1 = management.getLatestCalculatedInsertionInfo();
+  REQUIRE(management.addTask(simple_task_2));
+  auto add_2 = management.getLatestCalculatedInsertionInfo();
 
-  REQUIRE(add_1_opt.has_value());
-  REQUIRE(add_2_opt.has_value());
-
-  auto add_1_metrics_comp = add_1_opt.value().first;
-  auto add_2_metrics_comp = add_2_opt.value().first;
+  auto add_1_metrics_comp = add_1.first;
+  auto add_2_metrics_comp = add_2.first;
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().getDistance() ==
           add_2_metrics_comp.getCurrentMetrics().getDistance());
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().getTime() ==
@@ -341,22 +332,18 @@ TEST_CASE("Three Simple Transport Orders statically", "[adding and removing vert
               add_1_metrics_comp.getCurrentMetrics().getTime());
 
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_1_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(add_1_opt.value()));
+      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(add_1));
 
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_2_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(add_2_opt.value()));
+      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(add_2));
   REQUIRE(add_1_stn_insertion_point->new_index == 0);
   REQUIRE(add_2_stn_insertion_point->new_index == 1);
 
   // trying to add task 3, should come after task 2
-  auto can_add_3_opt = management.canAddTask(simple_task_3);
-  REQUIRE(can_add_3_opt.has_value());
-
+  REQUIRE(management.canAddTask(simple_task_3));
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_3_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(can_add_3_opt.value()));
+          std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE((can_add_3_stn_insertion_point->new_index == 0 ||
            can_add_3_stn_insertion_point->new_index == 2));
 }
@@ -377,9 +364,8 @@ TEST_CASE("Two Transport Orders in one Task", "[adding and removing vertices]") 
 
   Task task_1("task_1", {simple_to_1, simple_to_2}, {});
 
-  auto add_1_opt = management.addTask(task_1);
-  REQUIRE(add_1_opt.has_value());
-  auto add_1_metrics_comp = add_1_opt.value().first;
+  REQUIRE(management.addTask(task_1));
+  auto add_1_metrics_comp = management.getLatestCalculatedInsertionInfo().first;
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().empty_travel_distance == 10);
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().empty_travel_distance == 10);
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().getMakespan() == 58);
@@ -402,9 +388,8 @@ TEST_CASE("One Transport, Move, and Action Order in one Task", "[adding and remo
 
   Task task_1("task_1", {to_1, mo_1, ao_1}, {});
 
-  auto add_1_opt = management.addTask(task_1);
-  REQUIRE(add_1_opt.has_value());
-  auto add_1_metrics_comp = add_1_opt.value().first;
+  REQUIRE(management.addTask(task_1));
+  auto add_1_metrics_comp = management.getLatestCalculatedInsertionInfo().first;
 
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().action_time == 15 + 7);
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().empty_travel_distance == 10);
