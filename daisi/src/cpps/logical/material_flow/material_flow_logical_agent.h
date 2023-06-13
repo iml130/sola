@@ -26,8 +26,7 @@ class MFDL {};
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  /// @brief
-  /// @param device_id
+
   MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo);
 
   /// @brief Includes leaving Sola.
