@@ -74,7 +74,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     throw std::runtime_error("The auction winner does not have information about auction process.");
   }
 
-  AuctionParticipantState &state = it_auction_state->second.;
+  AuctionParticipantState &state = it_auction_state->second;
   auto it_auction_task_state = state.task_state_mapping.find(task_uuid);
   if (it_auction_task_state == state.task_state_mapping.end()) {
     throw std::runtime_error(

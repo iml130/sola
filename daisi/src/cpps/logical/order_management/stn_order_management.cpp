@@ -33,7 +33,7 @@ template <class> inline constexpr bool kAlwaysFalseV = false;
 
 StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
                                        const Topology &topology, const daisi::util::Pose &pose)
-    : OrderManagement(amr_description, topology, pose),
+    : AuctionBasedOrderManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
       current_task_expected_finish_time_(0),
       current_ordering_(),
@@ -136,8 +136,9 @@ bool StnOrderManagement::canAddTask(const Task &task) {
   return false;
 }
 
-bool StnOrderManagement::addTask(const Task &task,
-                                 std::shared_ptr<OrderManagement::InsertionPoint> insertion_point) {
+bool StnOrderManagement::addTask(
+    const Task &task,
+    std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point) {
   latest_calculated_insertion_info_ = std::nullopt;
 
   const auto orders = task.getOrders();
@@ -552,7 +553,7 @@ const StnOrderManagementVertex &StnOrderManagement::getVertexOfOrder(const Order
   return *getVertexIteratorOfOrder(order, start);
 }
 
-std::pair<MetricsComposition, std::shared_ptr<OrderManagement::InsertionPoint>>
+std::pair<MetricsComposition, std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint>>
 StnOrderManagement::getLatestCalculatedInsertionInfo() const {
   if (latest_calculated_insertion_info_.has_value()) {
     return latest_calculated_insertion_info_.value();

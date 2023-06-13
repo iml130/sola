@@ -19,16 +19,16 @@
 
 #include <memory>
 
+#include "auction_based_order_management.h"
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "datastructure/simple_temporal_network.h"
-#include "order_management.h"
 #include "stn_order_management_components.h"
 
 namespace daisi::cpps::order_management {
 
 class StnOrderManagement
-    : public OrderManagement,
+    : public AuctionBasedOrderManagement,
       private daisi::datastructure::SimpleTemporalNetwork<StnOrderManagementVertex,
                                                           StnOrderManagementEdge> {
 public:
@@ -52,7 +52,7 @@ public:
                std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
 
   std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>> getLatestCalculatedInsertionInfo()
-      const;
+      const override;
 
   void setCurrentTime(const daisi::util::Duration &now);
 

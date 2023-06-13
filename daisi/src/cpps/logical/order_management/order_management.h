@@ -22,16 +22,15 @@
 #include <optional>
 #include <utility>
 
+#include "cpps/amr/amr_description.h"
+#include "cpps/amr/amr_topology.h"
 #include "material_flow/model/task.h"
-#include "metrics_composition.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::order_management {
 
 class OrderManagement {
 public:
-  struct InsertionPoint {};
-
   explicit OrderManagement(const AmrDescription &amr_description, const Topology &topology,
                            const daisi::util::Pose &pose)
       : amr_description_(amr_description), topology_(topology), current_pose_(pose) {}
@@ -43,8 +42,7 @@ public:
   virtual bool setNextTask() = 0;
 
   virtual bool canAddTask(const daisi::material_flow::Task &task) = 0;
-  virtual bool addTask(const daisi::material_flow::Task &task,
-                       std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;
+  virtual bool addTask(const daisi::material_flow::Task &task) = 0;
 
 protected:
   AmrDescription amr_description_;

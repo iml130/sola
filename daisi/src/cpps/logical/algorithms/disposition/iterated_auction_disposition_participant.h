@@ -20,7 +20,7 @@
 #include <memory>
 #include <optional>
 
-#include "cpps/logical/order_management/stn_order_management.h"
+#include "cpps/logical/order_management/auction_based_order_management.h"
 #include "disposition_participant.h"
 
 namespace daisi::cpps::logical {
@@ -34,7 +34,8 @@ public:
 
     std::shared_ptr<daisi::material_flow::Task> task = nullptr;
 
-    std::shared_ptr<order_management::OrderManagement::InsertionPoint> insertion_point = nullptr;
+    std::shared_ptr<order_management::AuctionBasedOrderManagement::InsertionPoint> insertion_point =
+        nullptr;
 
     std::optional<order_management::MetricsComposition> metrics_composition = std::nullopt;
   };
@@ -67,7 +68,7 @@ private:
   // initiator connection -> state
   std::unordered_map<std::string, AuctionParticipantState> initiator_auction_state_mapping_;
 
-  std::shared_ptr<order_management::StnOrderManagement> order_management_;
+  std::shared_ptr<order_management::AuctionBasedOrderManagement> order_management_;
 
   void calculateBids(AuctionParticipantState &state);
 
