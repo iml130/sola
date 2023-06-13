@@ -26,7 +26,8 @@ class MFDL {};
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo);
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo,
+                           const bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() = default;  // TODO
