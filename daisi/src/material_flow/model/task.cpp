@@ -40,4 +40,11 @@ bool Task::hasTimeWindow() const {
   return false;  // TODO integrate constraints
 }
 
+daisi::cpps::mrta::model::Ability Task::getAbilityRequirement() const {
+  // TODO
+  daisi::cpps::mrta::model::Ability ability(
+      0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);
+  return ability;
+}
+
 }  // namespace daisi::material_flow

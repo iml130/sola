@@ -18,17 +18,22 @@
 #define DAISI_MATERIAL_FLOW_MOVE_ORDER_H_
 
 #include "move_order_step.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::material_flow {
 
 class MoveOrder {
 public:
+  MoveOrder() = default;
+
   MoveOrder(std::string uuid, const MoveOrderStep &move_order_step);
 
   const std::string &getUuid() const;
   const MoveOrderStep &getMoveOrderStep() const;
 
   bool operator==(const MoveOrder &other) const;
+
+  SERIALIZE(uuid_, move_order_step_);
 
 private:
   std::string uuid_;

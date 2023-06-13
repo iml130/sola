@@ -20,6 +20,7 @@
 #include <variant>
 #include <vector>
 
+#include "solanet/serializer/serialize.h"
 #include "task.h"
 
 namespace daisi::material_flow {
@@ -27,7 +28,11 @@ namespace daisi::material_flow {
 // TODO just placeholder for now
 class MFDLScheduler {
 public:
+  MFDLScheduler() = default;
+
   MFDLScheduler(std::string mfdl_program) {}
+
+  SERIALIZE(tasks);
 
 private:
   std::vector<Task> tasks;

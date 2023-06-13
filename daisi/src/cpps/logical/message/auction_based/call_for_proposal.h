@@ -33,8 +33,7 @@ public:
 
   const std::vector<daisi::material_flow::Task> &getTasks() const { return tasks_; }
 
-  SERIALIZE(initiator_connection_);
-  // SERIALIZE(initiator_connection_, tasks_);
+  SERIALIZE(initiator_connection_, tasks_);
 
 private:
   std::string initiator_connection_;
