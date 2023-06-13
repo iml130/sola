@@ -23,7 +23,7 @@
 #include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class Metrics {
 public:
@@ -141,6 +141,6 @@ bool operator!=(const Metrics &lhs, const Metrics &rhs) {
   return Metrics::utility_function_(lhs) != Metrics::utility_function_(rhs);
 }
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

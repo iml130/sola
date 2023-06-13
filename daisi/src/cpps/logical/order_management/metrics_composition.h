@@ -20,7 +20,7 @@
 #include "metrics.h"
 #include "solanet/serializer/serialize.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class MetricsComposition {
 public:
@@ -118,6 +118,6 @@ private:
   bool diff_insertion_metrics_set_;
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

@@ -100,7 +100,7 @@ private:
   ns3::Ptr<ns3::Socket> socket_to_physical_;
   ns3::Ptr<ns3::Socket> socket_of_physical_;
 
-  std::shared_ptr<order_management::OrderManagement> order_management_;
+  std::shared_ptr<OrderManagement> order_management_;
 };
 }  // namespace daisi::cpps::logical
 

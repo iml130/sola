@@ -29,7 +29,7 @@ public:
 
   BidSubmission(std::string task_uuid, std::string participant_connection,
                 const daisi::cpps::mrta::model::Ability participant_ability,
-                order_management::MetricsComposition metrics_composition)
+                MetricsComposition metrics_composition)
       : task_uuid_(std::move(task_uuid)),
         participant_connection_(std::move(participant_connection)),
         participant_ability_(participant_ability),
@@ -43,9 +43,7 @@ public:
     return participant_ability_;
   }
 
-  const order_management::MetricsComposition &getMetricsComposition() {
-    return metrics_composition_;
-  }
+  const MetricsComposition &getMetricsComposition() { return metrics_composition_; }
 
   bool operator>(const BidSubmission &other) const {
     // if (metrics_composition_ != other.metrics_composition_) {
@@ -73,7 +71,7 @@ private:
 
   daisi::cpps::mrta::model::Ability participant_ability_;
 
-  order_management::MetricsComposition metrics_composition_;
+  MetricsComposition metrics_composition_;
 };
 
 }  // namespace daisi::cpps::logical

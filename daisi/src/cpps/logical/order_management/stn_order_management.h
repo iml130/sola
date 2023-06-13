@@ -25,7 +25,7 @@
 #include "datastructure/simple_temporal_network.h"
 #include "stn_order_management_components.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class StnOrderManagement
     : public AuctionBasedOrderManagement,
@@ -133,6 +133,6 @@ private:
   void updateOriginConstraints(const daisi::util::Duration &time_difference);
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

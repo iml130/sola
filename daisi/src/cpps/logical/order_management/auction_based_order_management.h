@@ -20,7 +20,7 @@
 #include "metrics_composition.h"
 #include "order_management.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class AuctionBasedOrderManagement : public OrderManagement {
 public:
@@ -48,6 +48,6 @@ protected:
   daisi::util::Pose current_pose_;
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

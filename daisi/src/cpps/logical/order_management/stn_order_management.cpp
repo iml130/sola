@@ -27,7 +27,7 @@
 
 using namespace daisi::material_flow;
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 template <class> inline constexpr bool kAlwaysFalseV = false;
 
@@ -562,4 +562,4 @@ StnOrderManagement::getLatestCalculatedInsertionInfo() const {
       "There are no intertion info if the canAddTask or addTask were not sucessful");
 }
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical

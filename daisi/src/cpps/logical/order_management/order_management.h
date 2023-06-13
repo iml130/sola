@@ -27,7 +27,7 @@
 #include "material_flow/model/task.h"
 #include "utils/structure_helpers.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class OrderManagement {
 public:
@@ -50,6 +50,6 @@ protected:
   daisi::util::Pose current_pose_;
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

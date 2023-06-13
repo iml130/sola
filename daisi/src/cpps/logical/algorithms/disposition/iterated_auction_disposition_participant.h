@@ -34,10 +34,9 @@ public:
 
     std::shared_ptr<daisi::material_flow::Task> task = nullptr;
 
-    std::shared_ptr<order_management::AuctionBasedOrderManagement::InsertionPoint> insertion_point =
-        nullptr;
+    std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point = nullptr;
 
-    std::optional<order_management::MetricsComposition> metrics_composition = std::nullopt;
+    std::optional<MetricsComposition> metrics_composition = std::nullopt;
   };
 
   struct AuctionParticipantState {
@@ -68,7 +67,7 @@ private:
   // initiator connection -> state
   std::unordered_map<std::string, AuctionParticipantState> initiator_auction_state_mapping_;
 
-  std::shared_ptr<order_management::AuctionBasedOrderManagement> order_management_;
+  std::shared_ptr<AuctionBasedOrderManagement> order_management_;
 
   void calculateBids(AuctionParticipantState &state);
 
