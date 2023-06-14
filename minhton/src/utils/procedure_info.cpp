@@ -12,10 +12,6 @@
 using namespace std;
 namespace minhton {
 
-ProcedureInfo::ProcedureInfo() {}
-
-ProcedureInfo::~ProcedureInfo() {}
-
 bool ProcedureInfo::hasEvent(ProcedureKey key) const {
   return this->event_ids_.find(key) != this->event_ids_.end();
 };

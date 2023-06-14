@@ -60,7 +60,7 @@ public:
   void stop();
 
   /// Destructor
-  virtual ~MinhtonNode();
+  virtual ~MinhtonNode() = default;
 
   /// \returns the node information of this node
   minhton::NodeInfo getNodeInfo() const;

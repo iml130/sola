@@ -26,7 +26,7 @@ using Entry = std::tuple<std::string, std::variant<int, float, bool, std::string
 
 class Storage {
 public:
-  virtual ~Storage(){};
+  virtual ~Storage() = default;
   virtual void insert(std::vector<Entry> entry) = 0;
   // virtual void update() = 0;
   // virtual void remove() = 0;

@@ -37,8 +37,8 @@ enum ProcedureKey : uint8_t {
 ///
 class ProcedureInfo {
 public:
-  ProcedureInfo();
-  ~ProcedureInfo();
+  ProcedureInfo() = default;
+  ~ProcedureInfo() = default;
 
   bool hasKey(ProcedureKey key) const;
 
