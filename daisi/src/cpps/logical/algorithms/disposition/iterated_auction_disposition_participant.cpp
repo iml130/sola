@@ -121,8 +121,6 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
   return true;
 }
 
-void IteratedAuctionDispositionParticipant::clearStoredInformationAfterInsertion() {}
-
 void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &[task_uuid, task_state] : state.task_state_mapping) {
     if (order_management_->canAddTask(*task_state.task)) {
