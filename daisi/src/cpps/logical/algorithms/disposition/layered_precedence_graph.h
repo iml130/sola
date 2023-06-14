@@ -26,23 +26,22 @@
 
 namespace daisi::cpps::logical {
 
-enum PrecedenceGraphLayer {
-  kFree,       // T_F
-  kSecond,     // T_L
-  kHidden,     // T_H
-  kScheduled,  // T_S
-  kNone
-};
+/// @brief Enum to represent the different layers tasks can be on in this precedence graph.
+/// The free layer is also referred to as T_F, the second layer as T_L, the hidden layer as T_H, and
+/// the scheduled layer as T_S.
+enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
 
 struct LPCVertex {
-  LPCVertex(const daisi::material_flow::Task &_task) : task(_task){};
+  /// @brief Initializing the vertex by setting the task and everything else as invalid.
+  /// @param task The task this vertex represents.
+  LPCVertex(const daisi::material_flow::Task &task) : task(task){};
 
+  /// @brief The task this vertex represents by giving it additional information for auction and
+  /// about the layer.
   daisi::material_flow::Task task;
 
   /// @brief Assigning a layer to the task as presented by the set formulations in pIA.
   PrecedenceGraphLayer layer = PrecedenceGraphLayer::kNone;
-
-  bool scheduled = false;
 
   /// @brief F[t] in pIA; latest finish time of tasks that have been scheduled.
   /// std::nullopt otherwise
@@ -52,6 +51,10 @@ struct LPCVertex {
   /// scheduled. Tasks initially in T_F can be started at any time. If predecessors are not
   /// scheduled, std::nullopt is set.
   std::optional<daisi::util::Duration> earliest_valid_start = std::nullopt;
+
+  /// @brief Flag representing that a free task has been already scheduled.
+  /// The flag is not used outside of free layer tasks and disregarded on further layers.
+  bool scheduled = false;
 
   friend bool operator==(const LPCVertex &v1, const LPCVertex &v2) { return v1.task == v2.task; }
 
@@ -100,12 +103,24 @@ public:
 
   daisi::material_flow::Task getTask(const std::string &task_uuid) const;
 
+  /// @brief Checks whether all tasks are on the scheduled layer. The scheduled flag is not
+  /// considered in this.
+  /// @return True if all tasks are on the scheduled layer.
   bool areAllTasksScheduled() const;
 
+  /// @brief Checks whether for all free tasks the scheduled flag is set. If yes, this means that
+  /// the iteration is finished.
+  /// @return True if for all free tasks the scheduled flag is set.
   bool areAllFreeTasksScheduled() const;
 
+  /// @brief Setting the scheduled flag of a task.
+  /// @param task_uuid Uuid of the task we refer to
   void setTaskScheduled(const std::string &task_uuid);
 
+  /// @brief Checking whether a free task has already been scheduled in this iteration before the
+  /// layers get updated.
+  /// @param task_uuid Uuid of the task we refer to
+  /// @return True if the task is on the free layer and the scheduled flag is set
   bool isFreeTaskScheduled(const std::string &task_uuid) const;
 
 private:
