@@ -14,15 +14,15 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "auction_state_helper.h"
+#include "auction_initiator_state.h"
 
 namespace daisi::cpps::logical {
 
-void AuctionStateHelper::addBidSubmission(const BidSubmission &bid_submission) {
+void AuctionInitiatorState::addBidSubmission(const BidSubmission &bid_submission) {
   bid_submissions_.push_back(bid_submission);
 }
 
-void AuctionStateHelper::addWinnerResponse(const WinnerResponse &winner_response) {
+void AuctionInitiatorState::addWinnerResponse(const WinnerResponse &winner_response) {
   if (winner_response.doesAccept()) {
     winner_acceptions_.push_back(winner_response);
   } else {
@@ -31,17 +31,17 @@ void AuctionStateHelper::addWinnerResponse(const WinnerResponse &winner_response
   }
 }
 
-void AuctionStateHelper::removeBidsForTask(std::vector<BidSubmission> &bid_submissions,
-                                           const std::string &task_uuid) {
+void AuctionInitiatorState::removeBidsForTask(std::vector<BidSubmission> &bid_submissions,
+                                              const std::string &task_uuid) {
   bid_submissions.erase(
       std::remove_if(bid_submissions.begin(), bid_submissions.end(),
                      [&task_uuid](const auto &bid) { return bid.getTaskUuid() == task_uuid; }),
       bid_submissions.end());
 }
 
-void AuctionStateHelper::removeBidsForWinner(std::vector<BidSubmission> &bid_submissions,
-                                             const std::string &task_uuid,
-                                             const std::string &winner_connection) {
+void AuctionInitiatorState::removeBidsForWinner(std::vector<BidSubmission> &bid_submissions,
+                                                const std::string &task_uuid,
+                                                const std::string &winner_connection) {
   bid_submissions.erase(std::remove_if(bid_submissions.begin(), bid_submissions.end(),
                                        [&task_uuid, &winner_connection](const auto &bid) {
                                          return bid.getTaskUuid() == task_uuid &&
@@ -50,7 +50,7 @@ void AuctionStateHelper::removeBidsForWinner(std::vector<BidSubmission> &bid_sub
                         bid_submissions.end());
 }
 
-void AuctionStateHelper::removeBidsWhichMeetAbilityRequirement(
+void AuctionInitiatorState::removeBidsWhichMeetAbilityRequirement(
     std::vector<BidSubmission> &bid_submissions,
     const daisi::cpps::mrta::model::Ability &ability_requirement) {
   bid_submissions.erase(
@@ -62,7 +62,7 @@ void AuctionStateHelper::removeBidsWhichMeetAbilityRequirement(
       bid_submissions.end());
 }
 
-std::vector<daisi::material_flow::Task> AuctionStateHelper::processWinnerAcceptions() {
+std::vector<daisi::material_flow::Task> AuctionInitiatorState::processWinnerAcceptions() {
   std::vector<daisi::material_flow::Task> auctioned_tasks;
 
   for (const auto &winner : winner_acceptions_) {
@@ -76,7 +76,7 @@ std::vector<daisi::material_flow::Task> AuctionStateHelper::processWinnerAccepti
   return auctioned_tasks;
 }
 
-void AuctionStateHelper::countWinnerResponseProcessing() {
+void AuctionInitiatorState::countWinnerResponseProcessing() {
   if (winner_acceptions_.empty()) {
     if (++no_winner_acceptions_counter_ >= 100) {
       throw std::runtime_error("No winner acceptions.");
@@ -86,7 +86,7 @@ void AuctionStateHelper::countWinnerResponseProcessing() {
   }
 }
 
-void AuctionStateHelper::countBidSubmissionProcessing() {
+void AuctionInitiatorState::countBidSubmissionProcessing() {
   if (bid_submissions_.empty()) {
     if (++no_bid_submissions_counter >= 5) {
       throw std::runtime_error("No bid submissions.");
@@ -96,12 +96,12 @@ void AuctionStateHelper::countBidSubmissionProcessing() {
   }
 }
 
-std::vector<AuctionStateHelper::Winner> AuctionStateHelper::selectWinner() {
+std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner() {
   if (bid_submissions_.empty()) {
     return {};
   }
 
-  std::vector<AuctionStateHelper::Winner> winners;
+  std::vector<AuctionInitiatorState::Winner> winners;
   auto temp_bids = bid_submissions_;
 
   while (!temp_bids.empty()) {

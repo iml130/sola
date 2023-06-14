@@ -41,11 +41,6 @@ public:
 
   virtual std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>
   getLatestCalculatedInsertionInfo() const = 0;
-
-protected:
-  AmrDescription amr_description_;
-  Topology topology_;
-  daisi::util::Pose current_pose_;
 };
 
 }  // namespace daisi::cpps::logical

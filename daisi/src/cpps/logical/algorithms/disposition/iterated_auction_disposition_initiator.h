@@ -20,7 +20,7 @@
 #include <memory>
 #include <variant>
 
-#include "auction_state_helper.h"
+#include "auction_initiator_state.h"
 #include "disposition_initiator.h"
 #include "layered_precedence_graph.h"
 #include "utils/structure_helpers.h"
@@ -50,7 +50,7 @@ private:
   void winnerResponseProcessing();
 
   void taskAnnouncement();
-  void notifyWinners(const std::vector<AuctionStateHelper::Winner> &winners);
+  void notifyWinners(const std::vector<AuctionInitiatorState::Winner> &winners);
 
   void iterationNotification(const std::vector<daisi::material_flow::Task> &tasks);
 
@@ -59,7 +59,7 @@ private:
   getTaskAbilityMapping(const std::vector<daisi::material_flow::Task> &tasks);
 
   std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
-  std::unique_ptr<AuctionStateHelper> auction_state_helper_;
+  std::unique_ptr<AuctionInitiatorState> auction_initiator_state_;
 
   std::vector<daisi::cpps::mrta::model::Ability> available_abilities_;
 

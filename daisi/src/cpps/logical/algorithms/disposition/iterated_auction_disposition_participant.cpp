@@ -25,8 +25,8 @@ IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
     : DispositionParticipant(sola) {}
 
 bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_for_proposal) {
-  IteratedAuctionDispositionParticipant::AuctionParticipantState state(
-      call_for_proposal.getTasks());
+  AuctionParticipantState state(call_for_proposal.getTasks());
+
   auto initiator_connection = call_for_proposal.getInitiatorConnection();
 
   if (initiator_auction_state_mapping_.count(initiator_connection) > 0) {
@@ -52,10 +52,10 @@ bool IteratedAuctionDispositionParticipant::process(
     AuctionParticipantState &state = it_auction_state->second;
 
     for (const auto &task_uuid : iteration_notification.getTaskUuids()) {
-      state.removeTaskState(task_uuid);
+      state.task_state_mapping.erase(task_uuid);
     }
 
-    if (state.hasOpenTasks()) {
+    if (!state.task_state_mapping.empty()) {
       submitBid(initiator_connection);
     } else {
       initiator_auction_state_mapping_.erase(it_auction_state);
@@ -123,8 +123,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
 void IteratedAuctionDispositionParticipant::clearStoredInformationAfterInsertion() {}
 
-void IteratedAuctionDispositionParticipant::calculateBids(
-    IteratedAuctionDispositionParticipant::AuctionParticipantState &state) {
+void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &[task_uuid, task_state] : state.task_state_mapping) {
     if (order_management_->canAddTask(*task_state.task)) {
       auto result = order_management_->getLatestCalculatedInsertionInfo();
@@ -158,49 +157,6 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
 
     state.previously_submitted = task_uuid;
   }
-}
-
-IteratedAuctionDispositionParticipant::AuctionParticipantTaskState::AuctionParticipantTaskState(
-    const daisi::material_flow::Task &task)
-    : task(std::make_shared<daisi::material_flow::Task>(task)) {}
-
-IteratedAuctionDispositionParticipant::AuctionParticipantState::AuctionParticipantState(
-    const std::vector<daisi::material_flow::Task> &tasks) {
-  for (const auto &task : tasks) {
-    AuctionParticipantTaskState task_state(task);
-    task_state_mapping[task.getUuid()] = task_state;
-  }
-}
-
-IteratedAuctionDispositionParticipant::AuctionParticipantTaskState
-IteratedAuctionDispositionParticipant::AuctionParticipantState::pickBest() {
-  std::vector<AuctionParticipantTaskState> task_states;
-  for (const auto &entry : task_state_mapping) {
-    task_states.push_back(entry.second);
-  }
-
-  auto task_state_comp = [](const auto &s1, const auto &s2) {
-    if (s1.metrics_composition.has_value()) {
-      if (s2.metrics_composition.has_value()) {
-        return s1.metrics_composition.value() > s2.metrics_composition.value();
-      }
-      return false;
-    }
-    return true;
-  };
-
-  std::sort(task_states.begin(), task_states.end(), task_state_comp);
-
-  return task_states.front();
-}
-
-void IteratedAuctionDispositionParticipant::AuctionParticipantState::removeTaskState(
-    const std::string &task_uuid) {
-  task_state_mapping.erase(task_uuid);
-}
-
-bool IteratedAuctionDispositionParticipant::AuctionParticipantState::hasOpenTasks() {
-  return !task_state_mapping.empty();
 }
 
 }  // namespace daisi::cpps::logical

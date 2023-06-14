@@ -85,8 +85,8 @@ void IteratedAuctionDispositionInitiator::startIteration() {
 
 void IteratedAuctionDispositionInitiator::bidProcessing() {
   // receiving bids in the meantime
-  auction_state_helper_->countBidSubmissionProcessing();
-  auto winners = auction_state_helper_->selectWinner();
+  auction_initiator_state_->countBidSubmissionProcessing();
+  auto winners = auction_initiator_state_->selectWinner();
   if (!winners.empty()) {
     notifyWinners(winners);
 
@@ -103,8 +103,8 @@ void IteratedAuctionDispositionInitiator::bidProcessing() {
 }
 
 void IteratedAuctionDispositionInitiator::notifyWinners(
-    const std::vector<AuctionStateHelper::Winner> &winners) {
-  auction_state_helper_->clearWinnerAcceptions();
+    const std::vector<AuctionInitiatorState::Winner> &winners) {
+  auction_initiator_state_->clearWinnerAcceptions();
   auto initiator_connection = sola_->getConectionString();
 
   for (const auto &winner : winners) {
@@ -120,7 +120,7 @@ void IteratedAuctionDispositionInitiator::finishIteration() {
   // and updating the other layers accordingly
   layered_precedence_graph_->next();
 
-  auction_state_helper_->clearIterationInfo();
+  auction_initiator_state_->clearIterationInfo();
 
   startIteration();
 }
@@ -155,9 +155,9 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
 }
 
 void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {
-  auction_state_helper_->countWinnerResponseProcessing();
+  auction_initiator_state_->countWinnerResponseProcessing();
 
-  auto auctioned_tasks = auction_state_helper_->processWinnerAcceptions();
+  auto auctioned_tasks = auction_initiator_state_->processWinnerAcceptions();
 
   iterationNotification(auctioned_tasks);
 
@@ -191,12 +191,12 @@ void IteratedAuctionDispositionInitiator::iterationNotification(
 }
 
 bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {
-  auction_state_helper_->addBidSubmission(bid_submission);
+  auction_initiator_state_->addBidSubmission(bid_submission);
   return true;
 }
 
 bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &winner_response) {
-  auction_state_helper_->addWinnerResponse(winner_response);
+  auction_initiator_state_->addWinnerResponse(winner_response);
   return true;
 }
 

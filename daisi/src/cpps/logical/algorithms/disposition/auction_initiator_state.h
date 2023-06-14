@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_STATE_HELPER_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_STATE_HELPER_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_INITIATOR_STATE_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_INITIATOR_STATE_H_
 
 #include <memory>
 
@@ -27,7 +27,7 @@
 
 namespace daisi::cpps::logical {
 
-class AuctionStateHelper {
+class AuctionInitiatorState {
 public:
   struct Winner {
     std::string task_uuid;
@@ -35,7 +35,7 @@ public:
     daisi::util::Duration latest_finish_time;
   };
 
-  AuctionStateHelper() = default;
+  AuctionInitiatorState() = default;
 
   void countBidSubmissionProcessing();
   std::vector<Winner> selectWinner();
