@@ -43,21 +43,40 @@ public:
 
   ~StnOrderManagement() = default;
 
+  /// @brief check wether the order management has a current task assigned
   bool hasTasks() const override;
+
+  /// @brief get the current task
   daisi::material_flow::Task getCurrentTask() const override;
+
+  /// @brief set the current task to the first task that is currently queued
+  /// @return true if the assignment was successful
   bool setNextTask() override;
 
+  /// @brief check wether a new task can be assigned to the management
+  /// @param task the task to be assigned
+  /// @return true if the assignment can be made
   bool canAddTask(const daisi::material_flow::Task &task) override;
+
+  /// @brief assign a new task to the management
+  /// @param task the task to be assigned
+  /// @param insertion_point the position in the managements queue where the task should be inserted
+  /// @return true if the insertion was successful
   bool addTask(const daisi::material_flow::Task &task,
                std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
-
+  /// @brief get infos about the latest task insertion (also includes the check wether a task can be
+  /// inserted)
+  /// @return the MetricsComposition and InsertionPoint of the latest task insertion
   std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>> getLatestCalculatedInsertionInfo()
       const override;
 
+  /// @brief set the management's current time
+  /// @param now
   void setCurrentTime(const daisi::util::Duration &now);
 
   using VertexIterator = std::vector<StnOrderManagementVertex>::iterator;
 
+  /// @brief contains a task and the end locations and metrics compositions for the single orders
   struct TaskInsertInfo {
     daisi::material_flow::Task task;
 
@@ -108,18 +127,30 @@ protected:
 
   std::vector<StnInsertionPoint> calcInsertionPoints();
 
+  /// @brief update the metrics compositions of all currently queued tasks as well as the total
+  /// metrics. sort the current ordering by start time. method is called after inserting a new task.
   void updateCurrentOrdering();
 
   daisi::util::Position getLastPositionBefore(int task_index);
 
   daisi::util::Duration calcOrderDurationForInsert(const daisi::material_flow::Order &order,
                                                    const TaskInsertInfo &task_insert_info) const;
-
+  /// @brief calculate the metrics for the given order of the given task and insert them into the
+  /// given metrics.
+  /// @param order the order the metrics should be calculated for
+  /// @param metrics the container to insert the metrics
+  /// @param task_insert_info the TaskInsertInfo for the passed order
+  /// @param task_ordering_index the current ordering index for the task
+  /// @param start_time the start time of the order
   void insertOrderPropertiesIntoMetrics(const daisi::material_flow::Order &order, Metrics &metrics,
                                         const TaskInsertInfo &task_insert_info,
                                         const int &task_ordering_index,
                                         const daisi::util::Duration &start_time);
 
+  // TODO: think about moving the method to avoid duplicates
+  /// @brief get the end location of a given order.
+  /// @param order the order to get the end location for
+  /// @return the end location or null, if the passed order is an ActionOrder
   static std::optional<daisi::material_flow::Location> getEndLocationOfOrder(
       const daisi::material_flow::Order &order);
 
