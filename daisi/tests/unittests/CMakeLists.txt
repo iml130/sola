@@ -61,3 +61,16 @@ target_link_libraries(DaisiCppsOrderManagementStnOrderManagement
         daisi_cpps_logical_order_management_stn_order_management
         daisi_cpps_amr_physical_material_flow_functionality_mapping
 )
+
+add_executable(DaisiCppsOrderManagementSimpleOrderManagement "")
+target_sources(DaisiCppsOrderManagementSimpleOrderManagement
+        PRIVATE
+        cpps/order_management/simple_order_management_test.cpp
+)
+target_link_libraries(DaisiCppsOrderManagementSimpleOrderManagement
+        PRIVATE
+        Catch2::Catch2WithMain
+        ns3::libcore
+        daisi_cpps_logical_order_management_simple_order_management
+        daisi_cpps_amr_physical_material_flow_functionality_mapping
+)
