@@ -444,7 +444,7 @@ void LeaveAlgorithmGeneral::processLockNeighborRequest(const MessageLockNeighbor
   MinhtonMessageHeader header(getSelfNodeInfo(), message.getSender(),
                               message.getHeader().getRefEventId());
 
-  bool successful;
+  bool successful = false;
   if (access_->node_locked /*|| !getRoutingInfo()->getInitializedChildren().empty()*/) {
     successful = false;
   } else {

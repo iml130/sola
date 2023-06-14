@@ -117,7 +117,7 @@ void JoinAlgorithmGeneral::performAcceptChild(NodeInfo entering_node,
     // one adjacent is wrong
 
     NodeInfo target;
-    NeighborRelationship relationship;
+    NeighborRelationship relationship = kUnknownRelationship;
     if (adj_left_wrong) {
       target = entering_node_adjacent_left;
       relationship = NeighborRelationship::kAdjacentRight;

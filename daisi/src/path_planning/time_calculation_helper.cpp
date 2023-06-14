@@ -81,20 +81,15 @@ static double estimatesCostsInTime(const ns3::Vector &start, const ns3::Vector &
   double max_acceleration = kinematics.getMaxAcceleration();
   double min_acceleration = kinematics.getMaxDeceleration();
 
-  double distance_acc;
-  double distance_brake;
-  double d_const;
-
   // calculate distance threshold
-  distance_acc = (max_velocity * max_velocity) / (2 * (max_acceleration));
-  distance_brake = (max_velocity * max_velocity) / (2 * std::abs(min_acceleration));
+  double distance_acc = (max_velocity * max_velocity) / (2 * (max_acceleration));
+  double distance_brake = (max_velocity * max_velocity) / (2 * std::abs(min_acceleration));
   double distance_threshold = (distance_brake + distance_acc);
   double temp_time = 0;
   double distance = ns3::CalculateDistance(start, stop);
 
   switch (state) {
-    case kAcceleration:
-
+    case kAcceleration: {
       if (distance <= distance_threshold) {
         temp_time =
             sqrt((2 * distance / max_acceleration) *
@@ -103,7 +98,8 @@ static double estimatesCostsInTime(const ns3::Vector &start, const ns3::Vector &
         temp_time = max_velocity / max_acceleration;
       }
       break;
-    case kDeceleration:
+    }
+    case kDeceleration: {
       if (distance <= distance_threshold) {
         temp_time =
             sqrt((2 * distance / max_acceleration) *
@@ -112,13 +108,15 @@ static double estimatesCostsInTime(const ns3::Vector &start, const ns3::Vector &
         temp_time = max_velocity / std::abs(min_acceleration);
       }
       break;
-    case kDriving:
+    }
+    case kDriving: {
       if (distance <= distance_threshold) return 0;
       distance_acc = (max_velocity * max_velocity) / (2 * (max_acceleration));
       distance_brake = (max_velocity * max_velocity) / (2 * std::abs(min_acceleration));
-      d_const = distance - distance_acc - distance_brake;
+      const double d_const = distance - distance_acc - distance_brake;
       temp_time = d_const / max_velocity;
       break;
+    }
     default:
       break;
   }
@@ -179,7 +177,7 @@ static DistanceToTimeFct calculateDistanceToTimeFct(const cpps::AmrKinematics &k
 
   auto function_dist_to_time = [calc_vars =
                                     std::as_const(calc_vars)](const float distance) -> float {
-    double time;
+    double time = 0.0;
     if (distance <= calc_vars.dist_acc) {
       // Distance in acceleration phase
       // x = 1/2 * a * t^2
