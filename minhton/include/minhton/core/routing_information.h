@@ -37,7 +37,7 @@ public:
   ///   this->routing_info_ = RoutingInformation();
   /// \endcode
   ///
-  RoutingInformation();
+  RoutingInformation() = default;
 
   ///
   /// Constructor for RoutingInformation. To be re-initialized

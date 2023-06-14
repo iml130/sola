@@ -13,7 +13,7 @@
 namespace sola {
 template <typename LoggerT> class EventDissemination {
 public:
-  virtual ~EventDissemination(){};
+  virtual ~EventDissemination() = default;
   virtual void publish(const std::string &topic, const std::string &message) = 0;
   virtual void subscribe(const std::string &topic, std::vector<LoggerT> logger) = 0;
   virtual void unsubscribe(const std::string &topic) = 0;

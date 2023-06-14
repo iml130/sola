@@ -15,8 +15,6 @@
 
 namespace minhton {
 
-RoutingInformation::RoutingInformation() {}
-
 RoutingInformation::RoutingInformation(const minhton::NodeInfo &self_node_info,
                                        const Logger &logger)
     : self_node_info_(self_node_info), logger_(logger) {

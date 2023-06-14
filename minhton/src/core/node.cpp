@@ -213,10 +213,6 @@ void MinhtonNode::stop() {
   }
 }
 
-MinhtonNode::~MinhtonNode() {
-  // TODO: Check if node is disconnected?
-}
-
 void MinhtonNode::recv(const MessageVariant &msg) {
   prepareReceiving(msg);
   logic_->process(msg);

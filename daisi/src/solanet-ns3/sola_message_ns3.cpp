@@ -20,7 +20,7 @@ using namespace ns3;
 
 namespace daisi::solanet_ns3 {
 
-SolaMessageNs3::SolaMessageNs3() {}
+SolaMessageNs3::SolaMessageNs3() = default;
 
 TypeId SolaMessageNs3::GetTypeId() {
   static TypeId tid =

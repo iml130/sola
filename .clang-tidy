@@ -1,5 +1,6 @@
 Checks: '-*,
          readability-*,
+         modernize-use-equals-default,
          cppcoreguidelines-init-variables,
          -readability-magic-numbers,
          -readability-qualified-auto,
