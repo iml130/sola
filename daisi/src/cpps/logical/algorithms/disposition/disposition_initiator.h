@@ -32,9 +32,6 @@ public:
 
   virtual ~DispositionInitiator() = default;
 
-  REQUIRE_IMPLEMENTATION(BidSubmission);
-  REQUIRE_IMPLEMENTATION(WinnerResponse);
-
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
 };
 

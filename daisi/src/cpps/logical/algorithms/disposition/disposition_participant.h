@@ -30,10 +30,6 @@ public:
       : AlgorithmInterface(sola){};
 
   virtual ~DispositionParticipant() = default;
-
-  REQUIRE_IMPLEMENTATION(CallForProposal);
-  REQUIRE_IMPLEMENTATION(IterationNotification);
-  REQUIRE_IMPLEMENTATION(WinnerNotification);
 };
 
 }  // namespace daisi::cpps::logical
