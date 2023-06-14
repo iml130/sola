@@ -625,7 +625,7 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
   }
 
   // setting positions, left to right
-  uint64_t i;
+  uint64_t i = 0;
   bool stop = false;
   for (uint32_t l = 0;; l++) {
     for (uint32_t n = 0; n < pow(fanout, l); n++) {
@@ -961,7 +961,7 @@ MinhtonManager::Scheduler::createBooleanExpressionForKey(minhton::NodeData::Key 
     // gaussian or uniform numeric
     auto rand_val = uniform_zero_one_distribution_(daisi::global_random_engine);
 
-    minhton::ComparisonTypes comp_type;
+    minhton::ComparisonTypes comp_type = minhton::kEqualTo;
     rand_val *= 4;  // [0,4]
     if (rand_val <= 1) {
       comp_type = minhton::ComparisonTypes::kLessThan;

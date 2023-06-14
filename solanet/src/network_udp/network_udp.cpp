@@ -137,7 +137,7 @@ void Network::Impl::send(const Message &msg) {
 
 std::string Network::Impl::readIPFromInterfaces() {
   std::string ip_addr;
-  struct ifaddrs *addresses;
+  struct ifaddrs *addresses = nullptr;
   if (getifaddrs(&addresses) != 0) throw std::runtime_error("failed to fetch");
 
   for (auto address = addresses; address != nullptr && ip_addr.empty();

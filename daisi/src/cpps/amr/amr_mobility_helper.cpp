@@ -214,16 +214,13 @@ daisi::util::Distance AmrMobilityHelper::calculateDistance(const util::Position 
 
 std::vector<util::Duration> AmrMobilityHelper::calculatePhaseDurations(
     const std::vector<double> &distances_m, const AmrDescription &description) {
-  util::Duration duration_acc;
-  util::Duration duration_const;
-  util::Duration duration_dec;
-  double distance_acc;
-  double distance_const;
-  double distance_dec;
+  util::Duration duration_acc = 0;
+  util::Duration duration_const = 0;
+  util::Duration duration_dec = 0;
   assert(distances_m.size() >= 3);
-  distance_acc = distances_m[0];
-  distance_const = distances_m[1];
-  distance_dec = distances_m[2];
+  double distance_acc = distances_m[0];
+  double distance_const = distances_m[1];
+  double distance_dec = distances_m[2];
   double max_vel = description.getKinematics().getMaxVelocity();
   double max_dec = std::abs(description.getKinematics().getMaxDeceleration());
   double max_acc = description.getKinematics().getMaxAcceleration();
@@ -243,16 +240,14 @@ std::vector<util::Duration> AmrMobilityHelper::calculatePhaseDurations(
 std::vector<double> AmrMobilityHelper::calculatePhaseDistances(
     const util::Position &start_position, const FunctionalityVariant &functionality,
     const AmrDescription &description) {
-  double distance_acc;
-  double distance_const;
-  double distance_dec;
   double distance_m = calculateDistance(start_position, functionality);
   double max_vel = description.getKinematics().getMaxVelocity();
   double max_dec = std::abs(description.getKinematics().getMaxDeceleration());
   double max_acc = description.getKinematics().getMaxAcceleration();
 
-  distance_acc = (max_vel * max_vel) / (2 * max_acc);
-  distance_dec = (max_vel * max_vel) / (2 * max_dec);
+  double distance_acc = (max_vel * max_vel) / (2 * max_acc);
+  double distance_const = 0.0;
+  double distance_dec = (max_vel * max_vel) / (2 * max_dec);
   double distance_threshold = (distance_dec + distance_acc);
   if (distance_m < distance_threshold) {
     distance_acc = distance_m * max_dec / (max_acc + max_dec);
@@ -356,8 +351,8 @@ std::vector<AmrMobilityStatus> AmrMobilityHelper::calculatePhases(
   util::Position wp = start_position;
   util::Position last_wp;
   util::Velocity last_vel = {0, 0};
-  std::vector<AmrMobilityStatus>::size_type i;
-  for (i = 0; i != navigate.waypoints.size(); i++) {
+  std::vector<AmrMobilityStatus>::size_type i = 0;
+  for (; i != navigate.waypoints.size(); i++) {
     last_wp = wp;
     wp = navigate.waypoints[i];
     translation = wp - last_wp;

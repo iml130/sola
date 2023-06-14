@@ -101,7 +101,7 @@ std::string decodeScenarioString(std::string scenario_string) {
                 "Last encoded % is shorter than string")
 
     // Get hex number after % and convert to char
-    char replacement;
+    char replacement = 0;
     std::string code = scenario_string.substr(current_pos + 1, 2);
     std::from_chars(code.begin().operator->(), code.end().operator->(), replacement, 16);
 
