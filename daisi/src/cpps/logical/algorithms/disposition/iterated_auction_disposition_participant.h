@@ -39,21 +39,40 @@ public:
 
   ~IteratedAuctionDispositionParticipant() = default;
 
+  /// @brief To process a CallForProposal we need to initiate AuctionParticipantState for this
+  /// auction process, initially calculate possible bids for each open task, and consequently submit
+  /// the first bid.
   REGISTER_IMPLEMENTATION(CallForProposal);
+
+  /// @brief When receiving an IterationNotification, it means that another task was assigned to a
+  /// different participant. Consequently, we need to remove this open task from the
+  /// AuctionParticipantState and submit a new bid.
   REGISTER_IMPLEMENTATION(IterationNotification);
+
+  /// @brief A WinnerNotification means that a task was assigned to us. First, we need to check
+  /// whether we can still accept the task. If yes, we add the task to the order management and send
+  /// an acceptance WinnerResponse back to the initiator. Otherwise, we must reject.
   REGISTER_IMPLEMENTATION(WinnerNotification);
 
 private:
-  // initiator connection -> state
+  /// @brief Storing the auction states for different auction processes with changing initiators.
+  /// The initiator connection string is the key. In the AuctionParticipantState we store the open
+  /// tasks for each auction process, as well as previously calculated bids and insertion infos.
   std::unordered_map<std::string, AuctionParticipantState> initiator_auction_state_mapping_;
 
+  /// @brief Pointer to the order management of the corresponding AmrLogicalAgent.
+  /// We need access to calculate bids and add tasks after receiving WinnerNotifications.
   std::shared_ptr<AuctionBasedOrderManagement> order_management_;
 
+  /// @brief Calculating bids for each open task in a state.
+  /// @param state Relevant auction state.
   void calculateBids(AuctionParticipantState &state);
 
+  /// @brief Picking the best bid from the referring auction state and submitting it.
+  /// If we already submitted the same bid previously, the submission is not sent to avoid overhead
+  /// traffic.
+  /// @param initiator_connection Key to referr to the correct auction participant state.
   void submitBid(const std::string &initiator_connection);
-
-  void clearStoredInformationAfterInsertion();
 };
 
 }  // namespace daisi::cpps::logical

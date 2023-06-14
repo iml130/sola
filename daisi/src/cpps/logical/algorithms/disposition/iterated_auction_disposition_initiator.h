@@ -66,8 +66,7 @@ private:
   std::unordered_map<mrta::model::Ability, std::string, mrta::model::AbilityHasher>
       ability_topic_mapping_;
 
-  uint8_t no_winner_acceptions_counter_ = 0;
-
+  /// @brief Storing all delays in one place. The unit is seconds.
   struct {
     daisi::util::Duration subscribe_topic = 0.1;
 
