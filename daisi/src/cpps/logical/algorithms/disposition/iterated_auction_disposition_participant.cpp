@@ -102,18 +102,18 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
       throw std::runtime_error("Winner accepts, but cannot add the task.");
     }
 
-    // send winner response acception
+    // Send winner response acception
     WinnerResponse response(task_uuid, participant_connecton, true);
     sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
 
-    // update states
+    // Update states
     calculateBids(state);
 
   } else {
     task_state.metrics_composition = std::nullopt;
     task_state.insertion_point = nullptr;
 
-    // send winner response rejection
+    // Send winner response rejection
     WinnerResponse response(task_uuid, participant_connecton, false);
     sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
   }
@@ -123,12 +123,16 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
 void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &[task_uuid, task_state] : state.task_state_mapping) {
+    // Iterating through each task state of this auction process
+
     if (order_management_->canAddTask(*task_state.task)) {
+      // Setting new calculated information if we can add the task
       auto result = order_management_->getLatestCalculatedInsertionInfo();
 
       task_state.metrics_composition = result.first;
       task_state.insertion_point = result.second;
     } else {
+      // Setting previous information to invalid because we cannot accept anymore
       task_state.metrics_composition = std::nullopt;
       task_state.insertion_point = nullptr;
     }
@@ -137,23 +141,26 @@ void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantStat
 
 void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiator_connection) {
   AuctionParticipantState &state = initiator_auction_state_mapping_[initiator_connection];
+  std::optional<AuctionParticipantTaskState> best_task_state = state.pickBest();
 
-  AuctionParticipantTaskState best_task_state = state.pickBest();
+  // If there is a task that we can execute
+  if (best_task_state.has_value()) {
+    std::string task_uuid = best_task_state.task->getUuid();
 
-  // only submitting again if we previously submitted something else
-  std::string task_uuid = best_task_state.task->getUuid();
-  if (task_uuid != state.previously_submitted) {
-    std::string participant_connection = sola_->getConectionString();
+    // Only submitting again if we previously submitted something else
+    if (task_uuid != state.previously_submitted) {
+      std::string participant_connection = sola_->getConectionString();
 
-    daisi::cpps::mrta::model::Ability participant_ability(
-        0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);
+      daisi::cpps::mrta::model::Ability participant_ability(
+          0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);  // TODO
 
-    BidSubmission bid_submission(task_uuid, participant_connection, participant_ability,
-                                 best_task_state.metrics_composition.value());
+      BidSubmission bid_submission(task_uuid, participant_connection, participant_ability,
+                                   best_task_state.metrics_composition.value());
 
-    sola_->sendData(serialize(bid_submission), sola::Endpoint(initiator_connection));
+      sola_->sendData(serialize(bid_submission), sola::Endpoint(initiator_connection));
 
-    state.previously_submitted = task_uuid;
+      state.previously_submitted = task_uuid;
+    }
   }
 }
 
