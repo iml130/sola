@@ -23,6 +23,7 @@
 
 #include "cpps/amr/message/amr_state.h"
 #include "cpps/amr/message/serializer.h"
+#include "cpps/amr/physical/functionality.h"
 #include "cpps/common/uuid_generator.h"
 #include "cpps/message/task_info.h"
 #include "cpps/negotiation/participant/iterated_auction_participant_pubsub_modified.h"
@@ -294,10 +295,17 @@ void AgvLogicalNs3::sendOrderToAGV() {
   const Task &current_order = task_management_->getCurrentOrder();
   ns3::Vector pickup = current_order.getPickupLocation();
   ns3::Vector delivery = current_order.getDeliveryLocation();
-  AmrOrderInfo ti(current_order.getUUID(), OrderStates::kCreated, {pickup.x, pickup.y},
-                  {delivery.x, delivery.y}, current_order.getAbilityRequirement());
+
+  std::vector<FunctionalityVariant> functionalities;
+  functionalities.push_back(MoveTo({pickup.x, pickup.y}));
+  functionalities.push_back(Load({pickup.x, pickup.y}));
+  functionalities.push_back(MoveTo({delivery.x, delivery.y}));
+  functionalities.push_back(Unload({delivery.x, delivery.y}));
+
+  AmrOrderInfo order_info(functionalities, current_order.getAbilityRequirement());
+
   daisi::cpps::CppsTCPMessage message;
-  message.addMessage({amr::serialize(ti), 0});
+  message.addMessage({amr::serialize(order_info), 0});
   ns3::Ptr<ns3::Packet> packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
   socket_agv_->Send(packet);

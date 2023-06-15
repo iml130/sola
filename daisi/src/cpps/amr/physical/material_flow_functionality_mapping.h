@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef daisi_cpps_amr_physical_material_flow_functionality_mapping_H_
-#define daisi_cpps_amr_physical_material_flow_functionality_mapping_H_
+#ifndef DAISI_CPPS_AMR_PHYSICAL_MATERIAL_FLOW_FUNCTIONALITY_MAPPING_H_
+#define DAISI_CPPS_AMR_PHYSICAL_MATERIAL_FLOW_FUNCTIONALITY_MAPPING_H_
 
 #include <optional>
 
