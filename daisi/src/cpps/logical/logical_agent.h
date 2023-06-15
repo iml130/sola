@@ -31,7 +31,7 @@ namespace daisi::cpps::logical {
 class LogicalAgent {
 public:
   LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-               const AlgorithmConfig &config_algo, const bool first_node);
+               const AlgorithmConfig &config_algo, bool first_node);
 
   virtual ~LogicalAgent() = default;
 
@@ -43,7 +43,6 @@ public:
 
 protected:
   /// @brief Initializing communication via Sola which all logical agents require.
-  /// @param first_node
   void initCommunication();
 
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.

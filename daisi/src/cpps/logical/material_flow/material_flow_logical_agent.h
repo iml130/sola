@@ -24,19 +24,20 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  /// @brief
-  /// @param device_id
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo,
-                           const bool first_node);
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo, bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() = default;  // TODO
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
-  virtual void init(const bool first_node);
+  virtual void init();
 
-  /// @brief Starting operations by initalizing components which require the finished initialization
-  /// of Sola.
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed for a material flow agent.
+  virtual void initAlgorithms() override;
+
+  /// @brief Starting operations by initalizing components which require the finished
+  /// initialization of Sola.
   virtual void start();
 
   /// @brief Adding a material flow in the form of the pure string.
@@ -44,8 +45,8 @@ public:
   /// @param mfdl_program
   virtual void addMaterialFlow(std::string mfdl_program);
 
-  /// @brief Setting a flag that the agent is currently waiting for other processes to finish before
-  /// the handling of material flows is possible. An example is the initialization of Sola.
+  /// @brief Setting a flag that the agent is currently waiting for other processes to finish
+  /// before the handling of material flows is possible. An example is the initialization of Sola.
   void setWaitingForStart();
 
   /// @brief Checking whether the agent is currently handling a material flow or running idle
@@ -54,17 +55,14 @@ public:
   bool isBusy();
 
 protected:
-  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
-  /// Only a part of the available interfaces might be allowed for a material flow agent.
-  virtual void initAlgorithms() override;
-
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
   virtual void messageReceiveFunction(const sola::Message &m) override;
 
-  /// @brief Method being called by sola when we receive a message via a topic. Here, logging of the
-  /// messages will be added in comparison to the implementation of the logical agent interface
+  /// @brief Method being called by sola when we receive a message via a topic. Here, logging of
+  /// the messages will be added in comparison to the implementation of the logical agent
+  /// interface
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
 

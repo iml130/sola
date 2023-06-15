@@ -52,9 +52,9 @@ void AmrLogicalAgent::initAlgorithms() {
   order_management_ = std::make_shared<StnOrderManagement>(description_, topology_,
                                                            daisi::util::Pose{current_position_});
 
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_iterated_auction_disposition_participant:
+      case AlgorithmType::kIteratedAuctionDispositionParticipant:
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
         break;
       default:
