@@ -27,7 +27,7 @@ MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
                    first_node),
       waiting_for_start_(false) {}
 
-void MaterialFlowLogicalAgent::init(bool first_node) { initCommunication(); }
+void MaterialFlowLogicalAgent::init() { initCommunication(); }
 
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
