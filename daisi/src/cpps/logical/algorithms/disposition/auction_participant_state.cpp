@@ -19,17 +19,21 @@
 namespace daisi::cpps::logical {
 
 AuctionParticipantTaskState::AuctionParticipantTaskState(const daisi::material_flow::Task &task)
-    : task(std::make_shared<daisi::material_flow::Task>(task)) {}
+    : task(task) {}
 
 AuctionParticipantState::AuctionParticipantState(
     const std::vector<daisi::material_flow::Task> &tasks) {
   for (const auto &task : tasks) {
     AuctionParticipantTaskState task_state(task);
-    task_state_mapping[task.getUuid()] = task_state;
+    task_state_mapping.emplace(task.getUuid(), task_state);
   }
 }
 
 AuctionParticipantTaskState AuctionParticipantState::pickBest() {
+  if (task_state_mapping.empty()) {
+    throw std::runtime_error("If the task state mapping is empty, this method never be called.");
+  }
+
   std::vector<AuctionParticipantTaskState> task_states;
   for (const auto &entry : task_state_mapping) {
     task_states.push_back(entry.second);

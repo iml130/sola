@@ -27,27 +27,39 @@
 
 namespace daisi::cpps::logical {
 
+/// @brief Helper struct for the IteratedAuctionDispositionParticipant, used inside of the
+/// AuctionParticipantState, to store information related to exactly one task.
+/// This includes the previously calculated bids (metrics) and insertion points.
 struct AuctionParticipantTaskState {
-  AuctionParticipantTaskState() = default;
-
   AuctionParticipantTaskState(const daisi::material_flow::Task &task);
 
-  std::shared_ptr<daisi::material_flow::Task> task = nullptr;
+  daisi::material_flow::Task task;
 
   std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point = nullptr;
 
   std::optional<MetricsComposition> metrics_composition = std::nullopt;
 };
 
+/// @brief Helper struct for the IteratedAuctionDispositionParticipant to store the state of open
+/// auction processes, calculated bids (metrics) and insertion points.
+/// Each AuctionParticipantState is only responsible for one auction process by one dedicated
+/// initiator.
 struct AuctionParticipantState {
-  AuctionParticipantState() = default;
-
+  /// @brief Initiatoring the task states based on the given tasks.
+  /// @param tasks Open tasks that initially got annouced.
   AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
 
+  /// @brief Storing the state of each open task. The key is the task uuid.
   std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;
 
+  /// @brief Task uuid of the lastest previously submitted task. If a task was submitted before, the
+  /// initiator has still the relevant information and sending this bid again is unnecessary
+  /// overhead.
   std::string previously_submitted;
 
+  /// @brief Given the information from the task_state_mapping, the best possible task is picked
+  /// depending on stored metrics.
+  /// @return
   AuctionParticipantTaskState pickBest();
 };
 

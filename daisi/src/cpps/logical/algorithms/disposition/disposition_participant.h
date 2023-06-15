@@ -21,9 +21,11 @@
 #include <variant>
 
 #include "../algorithm_interface.h"
-
 namespace daisi::cpps::logical {
 
+/// @brief Algorithm for disposing tasks from a material flow to fitting AMRs.
+/// This algorithm is participating in the procedure which is beeing coordinated by an initiator.
+/// There always must be a corresponding derived class from DispositionInitiator.
 class DispositionParticipant : public AlgorithmInterface {
 public:
   explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
