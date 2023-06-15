@@ -32,9 +32,9 @@ void MaterialFlowLogicalAgent::init(const bool first_node) { initCommunication()
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
 void MaterialFlowLogicalAgent::initAlgorithms() {
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_disposition_initiator:
+      case AlgorithmType::kDispositionInitiator:
         algorithms_.push_back(std::make_unique<DispositionInitiator>(sola_));
         break;
       default:

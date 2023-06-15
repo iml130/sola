@@ -21,13 +21,10 @@
 
 namespace daisi::cpps::logical {
 
-enum class AlgorithmType {  // TODO these are placeholders to test a design pattern
-  k_disposition_initiator,
-  k_disposition_participant
-};
+enum class AlgorithmType { kDispositionInitiator, kDispositionParticipant };
 
 struct AlgorithmConfig {
-  std::vector<AlgorithmType> algorithm_types_;
+  std::vector<AlgorithmType> algorithm_types;
 };
 
 }  // namespace daisi::cpps::logical
