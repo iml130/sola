@@ -23,6 +23,8 @@ namespace daisi::cpps::logical {
 
 class CallForProposal {
 public:
+  CallForProposal() = default;
+
   SERIALIZE(test_member_);
 
 private:

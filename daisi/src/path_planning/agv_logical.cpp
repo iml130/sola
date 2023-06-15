@@ -245,7 +245,7 @@ void AGVLogical::processReachedGoal() {
 void AGVLogical::processMessageField(const message::FieldMessage &msg) {
   if (auto pos_update = std::get_if<message::PositionUpdate>(&msg)) {
     processMessageUpdate(*pos_update);
-  } else if (auto reached_goal = std::get_if<message::ReachedGoalField>(&msg)) {
+  } else if (std::holds_alternative<message::ReachedGoalField>(msg)) {
     processReachedGoal();
   } else {
     throw std::runtime_error("unhandled message");

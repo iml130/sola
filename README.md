@@ -17,14 +17,14 @@ However, we welcome any kind of feedback via the issue tracker or by e-mail.
 This repository contains multiple subprojects which are published under different licenses.
 The top-level folder of this repository is licensed under the MIT license.
 
-| Folder     | License | Description                                                         |
-| ---------- | --------| ------------------------------------------------------------------- |
-| DAISI      | GPLv2   | ns-3 network simulation setup for all components and applications   |
-| MINHTON    | MIT     | P2P tree-structured overlay network                                 |
-| natter     | MIT     | P2P broadcasting framework with broadcasting algorithm for MINHTON  |
-| SOLA       | MIT     | Decentralized communication middleware                              |
-| SOLANET    | MIT     | Networking utils for other components                               |
-| Evaluation | MIT     | Verification/Validation/Evaluation scrips                            |
+| Folder     | SPDX Identifier | Description                                                         |
+| ---------- | ----------------| ------------------------------------------------------------------- |
+| daisi      | GPL-2.0-only    | ns-3 network simulation setup for all components and applications   |
+| minhton    | MIT             | P2P tree-structured overlay network                                 |
+| natter     | MIT             | P2P broadcasting framework with broadcasting algorithm for MINHTON  |
+| sola       | MIT             | Decentralized communication middleware                              |
+| solanet    | MIT             | Networking utils for other components                               |
+| evaluation | MIT             | Verification/Validation/Evaluation scrips                           |
 
 This project uses third party software which might be licensed differently.
 For the licenses of third party software see the license files in the corresponding folders.

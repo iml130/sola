@@ -29,6 +29,7 @@ MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
 
 void MaterialFlowLogicalAgent::init(const bool first_node) { initCommunication(); }
 
+
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
 void MaterialFlowLogicalAgent::initAlgorithms() {

@@ -23,6 +23,8 @@ namespace daisi::cpps::logical {
 
 class BidSubmission {
 public:
+  BidSubmission() = default;
+
   SERIALIZE(test_member_);
 
 private:

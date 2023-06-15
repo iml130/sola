@@ -46,6 +46,7 @@ protected:
   /// @param first_node
   void initCommunication();
 
+
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed depending on the type of logical
   /// agent.
@@ -79,6 +80,7 @@ protected:
   std::string uuid_;
 
   bool first_node_;
+
 };
 
 }  // namespace daisi::cpps::logical

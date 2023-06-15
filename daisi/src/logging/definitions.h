@@ -52,7 +52,7 @@ template <typename... Tp> inline std::string toSQL(const std::string &format_str
   // Write statement to string
   std::string statement;
   statement.resize(len);
-  int rc = snprintf(&statement[0], len + 1, format_str.c_str(), values...);
+  int rc = snprintf(statement.data(), len + 1, format_str.c_str(), values...);
   if (rc < 0) {
     throw std::runtime_error("Unable to format SQL statement!");
   }
@@ -274,7 +274,7 @@ std::string getInsertStatement(const DatabaseTable &table, const std::tuple<Tp..
   // Write query with now known length to string and return it
   std::string query;
   query.resize(len);
-  buffer_format_tuple = std::make_tuple(&query[0], len + 1, format_str.c_str());
+  buffer_format_tuple = std::make_tuple(query.data(), len + 1, format_str.c_str());
   snprintf_args = std::tuple_cat(buffer_format_tuple, values);
   int rc = std::apply(snprintf, snprintf_args);
   if (rc < 0) {
