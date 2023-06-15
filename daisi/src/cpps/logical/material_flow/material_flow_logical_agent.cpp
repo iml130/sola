@@ -25,14 +25,14 @@ MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
     : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo),
       waiting_for_start_(false) {}
 
-void MaterialFlowLogicalAgent::init(const bool first_node) { initCommunication(first_node); }
+void MaterialFlowLogicalAgent::init(bool first_node) { initCommunication(first_node); }
 
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
 void MaterialFlowLogicalAgent::initAlgorithms() {
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_disposition_initiator:
+      case AlgorithmType::kDispositionInitiator:
         algorithms_.push_back(std::make_unique<DispositionInitiator>(sola_));
         break;
       default:

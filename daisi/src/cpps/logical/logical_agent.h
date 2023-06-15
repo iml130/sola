@@ -42,7 +42,7 @@ public:
 protected:
   /// @brief Initializing communication via Sola which all logical agents require.
   /// @param first_node
-  void initCommunication(const bool first_node = false);
+  void initCommunication(bool first_node = false);
 
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed depending on the type of logical

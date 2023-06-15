@@ -32,7 +32,7 @@ public:
   ~MaterialFlowLogicalAgent() = default;  // TODO
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
-  virtual void init(const bool first_node);
+  virtual void init(bool first_node);
 
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed for a material flow agent.

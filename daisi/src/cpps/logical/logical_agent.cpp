@@ -27,7 +27,7 @@ LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> lo
                            const AlgorithmConfig &config_algo)
     : device_id_(device_id), logger_(std::move(logger)), algorithm_config_(config_algo) {}
 
-void LogicalAgent::initCommunication(const bool first_node) {
+void LogicalAgent::initCommunication(bool first_node) {
   const std::string config_file =
       first_node ? "configurations/root.yml" : "configurations/join.yml";
 
