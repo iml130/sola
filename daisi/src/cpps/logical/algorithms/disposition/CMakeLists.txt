@@ -1,0 +1,19 @@
+add_library(daisi_cpps_logical_algorithms_disposition_disposition_initiator INTERFACE)
+target_sources(daisi_cpps_logical_algorithms_disposition_disposition_initiator
+    INTERFACE
+    disposition_initiator.h
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_initiator
+    INTERFACE
+    daisi_cpps_logical_algorithms_algorithm_interface
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_disposition_participant INTERFACE)
+target_sources(daisi_cpps_logical_algorithms_disposition_disposition_participant
+    INTERFACE
+    disposition_participant.h
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_participant
+    INTERFACE
+    daisi_cpps_logical_algorithms_algorithm_interface
+)

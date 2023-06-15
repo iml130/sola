@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
 
 #include <memory>
 
@@ -84,7 +84,7 @@ protected:
 
   daisi::util::Duration time_now_;
 
-  bool solve() override;
+  virtual bool solve() override;
 
   void addPrecedenceConstraintBetweenTask(const StnOrderManagementVertex &start_vertex,
                                           const std::string &precedence_task_name);
