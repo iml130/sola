@@ -25,6 +25,9 @@
 
 namespace daisi::cpps::logical {
 
+/// @brief Algorithm for disposing tasks from a material flow to fitting AMRs.
+/// This algorithm is initiating and coordinating the procedure.
+/// There always must be a corresponding derived class from DispositionParticipant.
 class DispositionInitiator : public AlgorithmInterface {
 public:
   explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
@@ -32,6 +35,8 @@ public:
 
   virtual ~DispositionInitiator() = default;
 
+  /// @brief Adding a material flow whose tasks should be allocated.
+  /// @param scheduler MFDL Scheduler
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
 };
 
