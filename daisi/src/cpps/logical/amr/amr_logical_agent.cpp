@@ -200,7 +200,7 @@ void AmrLogicalAgent::logAmrInfos() {
 
   // retrieve logical info
   ns3::Address logical_address;
-  socket_server_->GetSockName(logical_address);
+  server_socket_->GetSockName(logical_address);
 
   ns3::InetSocketAddress i_logical_address = ns3::InetSocketAddress::ConvertFrom(logical_address);
   std::string logical_asset_ip = daisi::getIpv4AddressString(i_logical_address.GetIpv4());
