@@ -25,11 +25,12 @@
 namespace daisi::cpps::logical {
 
 AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config,
-                                 const bool first_node)
+                                 bool first_node)
     : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), _config,
                    first_node),
       description_set_(false),
-      topology_(daisi::util::Dimensions(50, 20, 0))  // TODO placeholder
+      topology_(daisi::util::Dimensions(50, 20, 0)),
+      current_state_(AmrState::kIdle)  // TODO placeholder
 {}
 
 void AmrLogicalAgent::init(ns3::Ptr<ns3::Socket> tcp_socket) {
@@ -52,9 +53,9 @@ void AmrLogicalAgent::initAlgorithms() {
   order_management_ = std::make_shared<order_management::StnOrderManagement>(
       description_, topology_, daisi::util::Pose{current_position_});
 
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_disposition_participant:
+      case AlgorithmType::kDispositionParticipant:
         algorithms_.push_back(std::make_unique<DispositionParticipant>(sola_));
         break;
       default:
@@ -170,11 +171,9 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
 }
 
 void AmrLogicalAgent::checkSendingNextTask() {
-  bool still_busy = true;  // TODO check depending on AmrState and OrderState
+  // TODO check depending on AmrState and OrderState whether we are still busy or not
 
-  if (!still_busy) {
-    sendTaskToPhysical();
-  }
+  sendTaskToPhysical();
 }
 
 void AmrLogicalAgent::logAmrInfos() {

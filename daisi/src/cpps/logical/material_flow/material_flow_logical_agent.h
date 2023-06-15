@@ -26,8 +26,7 @@ class MFDL {};
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo,
-                           const bool first_node);
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo, bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() = default;  // TODO
@@ -37,7 +36,7 @@ public:
 
   /// @brief Starting operations by initalizing components which require the finished initialization
   /// of Sola.
-  virtual void start();
+  virtual void start() override;
 
   /// @brief Adding a material flow in the form of the pure string.
   /// Processing can be started as soon as the mfdl program is set and initialization is finished.

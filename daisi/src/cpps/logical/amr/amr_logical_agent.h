@@ -31,32 +31,16 @@
 
 namespace daisi::cpps::logical {
 
-enum class SocketType : int {
-  k_tcp = 0,
-  k_udp = 1,
-};
-
-struct SocketConfig {
-  std::string ip_;
-  int port_;
-  SocketType type_;
-};
-
-struct SocketInfo {
-  SocketConfig local_config_;
-  SocketConfig remote_config_;
-};
-
 class AmrLogicalAgent : public LogicalAgent {
 public:
-  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config, const bool first_node);
+  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config, bool first_node);
 
   ~AmrLogicalAgent() = default;
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init(ns3::Ptr<ns3::Socket> tcp_socket);
 
-  virtual void start();
+  virtual void start() override;
 
   // to initialize socket to physical AMR
   bool connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
