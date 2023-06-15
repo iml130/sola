@@ -24,9 +24,9 @@
 
 namespace daisi::cpps::logical {
 
-AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config,
+AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &config,
                                  bool first_node)
-    : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), _config,
+    : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), config,
                    first_node),
       description_set_(false),
       topology_(daisi::util::Dimensions(50, 20, 0)),

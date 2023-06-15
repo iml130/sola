@@ -33,7 +33,7 @@ namespace daisi::cpps::logical {
 
 class AmrLogicalAgent : public LogicalAgent {
 public:
-  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config, bool first_node);
+  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &config, bool first_node);
 
   ~AmrLogicalAgent() = default;
 
