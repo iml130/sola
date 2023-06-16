@@ -90,14 +90,8 @@ bool SimpleOrderManagement::addTask(const Task &task) {
   if (!final_order.has_value()) {
     throw std::logic_error("Task must contain at least one TransportOrder or MoveOrder");
   }
-  if (std::holds_alternative<TransportOrder>(final_order.value())) {
-    TransportOrder transport_order = std::get<TransportOrder>(final_order.value());
-    expected_end_position_ =
-        transport_order.getDeliveryTransportOrderStep().getLocation().getPosition();
-  } else {
-    MoveOrder move_order = std::get<MoveOrder>(final_order.value());
-    expected_end_position_ = move_order.getMoveOrderStep().getLocation().getPosition();
-  }
+  auto end_location = getEndLocationOfOrder(final_order.value());
+  expected_end_position_ = end_location->getPosition();
 
   return true;
 }
