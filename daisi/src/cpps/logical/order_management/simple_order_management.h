@@ -49,13 +49,6 @@ public:
 
   void setCurrentTime(const daisi::util::Duration &now);
 
-  // TODO: think about moving the method to avoid duplicates
-  /// @brief get the end location of a given order.
-  /// @param order the order to get the end location for
-  /// @return the end location or null, if the passed order is an ActionOrder
-  std::optional<daisi::material_flow::Location> getEndLocationOfOrder(
-      const daisi::material_flow::Order &order);
-
 private:
   /// @brief update the current metrics by assuming that a new task has been inserted into the
   /// management's queue.

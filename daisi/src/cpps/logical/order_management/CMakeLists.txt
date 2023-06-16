@@ -1,3 +1,13 @@
+add_library(daisi_cpps_logical_order_management_order_management_helper STATIC)
+target_sources(daisi_cpps_logical_order_management_order_management_helper
+PUBLIC
+order_management_helper.h
+order_management_helper.cpp
+)
+target_link_libraries(daisi_cpps_logical_order_management_order_management_helper
+daisi_material_flow_model_task
+)
+
 add_library(daisi_cpps_logical_order_management_order_management INTERFACE)
 target_sources(daisi_cpps_logical_order_management_order_management
     INTERFACE
@@ -7,7 +17,9 @@ target_link_libraries(daisi_cpps_logical_order_management_order_management
     INTERFACE
     daisi_material_flow_model_task
     daisi_cpps_amr_amr_description
+    daisi_cpps_logical_order_management_order_management_helper
 )
+
 
 add_library(daisi_cpps_logical_order_management_metrics_composition INTERFACE)
 target_sources(daisi_cpps_logical_order_management_metrics_composition
