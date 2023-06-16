@@ -13,6 +13,10 @@
 // <https://www.gnu.org/licenses/>.
 //
 // SPDX-License-Identifier: GPL-2.0-only
+
+#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_SIMPLE_ORDER_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_SIMPLE_ORDER_MANAGEMENT_H_
+
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "order_management.h"
@@ -82,3 +86,5 @@ private:
 };
 
 }  // namespace daisi::cpps::logical
+
+#endif
