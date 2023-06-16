@@ -169,7 +169,7 @@ void AmrLogicalAgent::logAmrInfos() {
   daisi::cpps::AGVLoggingInfo info;  // TODO rename to AMR
 
   // general
-  info.friendly_name = "TODO";
+  info.friendly_name = description_.getProperties().getFriendlyName();
   info.serial_number = description_.getSerialNumber();
   info.manufacturer = description_.getProperties().getManufacturer();
   info.model_name = description_.getProperties().getModelName();
