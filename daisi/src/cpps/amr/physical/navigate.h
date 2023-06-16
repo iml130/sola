@@ -19,6 +19,7 @@
 
 #include <vector>
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps {
@@ -26,6 +27,8 @@ class Navigate {
 public:
   Navigate() {}
   explicit Navigate(const std::vector<util::Position> &waypoints) : waypoints(waypoints) {}
+
+  SERIALIZE(waypoints);
 
   std::vector<util::Position> waypoints;
 };

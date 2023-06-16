@@ -111,6 +111,7 @@ target_sources(daisi_cpps_amr_physical_load
 target_link_libraries(daisi_cpps_amr_physical_load
     INTERFACE
     daisi_structure_helpers
+    solanet_serialize
 )
 
 add_library(daisi_cpps_amr_physical_move_to INTERFACE)
@@ -121,6 +122,7 @@ target_sources(daisi_cpps_amr_physical_move_to
 target_link_libraries(daisi_cpps_amr_physical_move_to
     INTERFACE
     daisi_structure_helpers
+    solanet_serialize
 )
 
 add_library(daisi_cpps_amr_physical_navigate INTERFACE)
@@ -131,6 +133,7 @@ target_sources(daisi_cpps_amr_physical_navigate
 target_link_libraries(daisi_cpps_amr_physical_navigate
     INTERFACE
     daisi_structure_helpers
+    solanet_serialize
 )
 
 add_library(daisi_cpps_amr_unload INTERFACE)
@@ -141,6 +144,7 @@ target_sources(daisi_cpps_amr_unload
 target_link_libraries(daisi_cpps_amr_unload
     INTERFACE
     daisi_structure_helpers
+    solanet_serialize
 )
 
 add_library(daisi_cpps_amr_physical_material_flow_functionality_mapping STATIC)

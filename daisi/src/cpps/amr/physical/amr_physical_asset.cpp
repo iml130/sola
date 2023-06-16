@@ -114,12 +114,19 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 }
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
-  current_order_ = AmrOrder(order_info.getOrderUuid(), order_info.getLoadPosition(),
-                            order_info.getUnloadPosition());
-  functionality_queue_.push(MoveTo(current_order_.pick_up_location));
-  functionality_queue_.push(Load(current_order_.pick_up_location));
-  functionality_queue_.push(MoveTo(current_order_.delivery_location));
-  functionality_queue_.push(Unload(current_order_.delivery_location));
+  // TODO add in future something like this:
+  // if (current_order_.order_state != OrderStates::kFinished &&
+  //     current_order_.order_state != OrderStates::kError) {
+  //   throw std::runtime_error("Order is not finished, before setting a new order.");
+  // }
+
+  current_order_ = AmrOrder();
+  current_order_.order_state = OrderStates::kCreated;
+
+  for (const auto &func : order_info.getFunctionalities()) {
+    functionality_queue_.push(func);
+  }
+
   continueOrder();
 }
 

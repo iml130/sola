@@ -15,19 +15,19 @@ target_link_libraries(daisi_cpps_agv_agv_logical
         daisi_cpps_model_task
         daisi_cpps_agv_topology
         daisi_cpps_common_cpps_logger_ns3
-        
+
         daisi_cpps_task_allocation_participant_task_allocation_participant
         daisi_cpps_negotiation_mrta_configuration
         daisi_cpps_negotiation_task_management_task_management
         daisi_cpps_amr_message_amr_state
-        
+
         PRIVATE
         daisi_cpps_negotiation_task_management_basic_list_task_management
         daisi_cpps_negotiation_task_management_greedy_tsp_list_task_management
         daisi_cpps_negotiation_task_management_stn_task_management
         daisi_cpps_task_allocation_participant_iterated_auction_participant_pubsub_tepssi
         daisi_cpps_task_allocation_participant_iterated_auction_participant_pubsub_modified
-        
+
         daisi_cpps_negotiation_utility_utility_dimensions
         daisi_cpps_negotiation_utility_utility_evaluator
         daisi_cpps_negotiation_utility_utility_evaluator
@@ -41,6 +41,7 @@ target_link_libraries(daisi_cpps_agv_agv_logical
         daisi_utils
         daisi_cpps_amr_message_serializer
         daisi_cpps_common_uuid_generator
+        daisi_cpps_amr_physical_functionality
 
         minhton_logging
         minhton_utils_config_reader
@@ -54,7 +55,7 @@ target_sources(daisi_cpps_agv_agv_physical_basic
         PRIVATE
         agv_physical_basic.h
         agv_physical_basic.cpp
-        )
+)
 target_link_libraries(daisi_cpps_agv_agv_physical_basic
         PUBLIC
         ns3::libcore
@@ -67,7 +68,7 @@ target_link_libraries(daisi_cpps_agv_agv_physical_basic
         daisi_cpps_common_agv_description
         PRIVATE
         daisi_cpps_packet
-        )
+)
 target_include_directories(daisi_cpps_agv_agv_physical_basic
         PUBLIC
         ${DAISI_SOURCE_DIR}/src)
@@ -84,11 +85,11 @@ target_sources(daisi_cpps_agv_pose
         PRIVATE
         pose.cpp
         pose.h
-        )
+)
 target_link_libraries(daisi_cpps_agv_pose
         PUBLIC
-            ns3::libcore
-        )
+        ns3::libcore
+)
 target_include_directories(daisi_cpps_agv_pose
         PUBLIC
         ${DAISI_SOURCE_DIR}/src)
@@ -98,10 +99,10 @@ target_sources(daisi_cpps_agv_topology
         PRIVATE
         topology.cpp
         topology.h
-        )
+)
 target_link_libraries(daisi_cpps_agv_topology
         PUBLIC
-            ns3::libcore
+        ns3::libcore
 )
 target_include_directories(daisi_cpps_agv_topology
         PUBLIC

@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 #define DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 
+#include "cpps/amr/physical/functionality.h"
 #include "cpps/model/ability.h"
 #include "cpps/model/order_states.h"
 #include "solanet/serializer/serialize.h"
@@ -26,27 +27,16 @@ namespace daisi::cpps {
 class AmrOrderInfo {
 public:
   AmrOrderInfo() = default;
-  AmrOrderInfo(std::string order_uuid, OrderStates state, const util::Position &load_position,
-               const util::Position &unload_position,
+  AmrOrderInfo(const std::vector<FunctionalityVariant> &functionalities,
                const mrta::model::Ability &ability_requirement)
-      : order_uuid_(std::move(order_uuid)),
-        state_(state),
-        load_position_(load_position),
-        unload_position_(unload_position),
-        ability_requirement_(ability_requirement) {}
+      : functionalities_(functionalities), ability_requirement_(ability_requirement) {}
 
-  std::string getOrderUuid() const { return order_uuid_; }
-  util::Position getLoadPosition() const { return load_position_; }
-  util::Position getUnloadPosition() const { return unload_position_; }
+  std::vector<FunctionalityVariant> getFunctionalities() const { return functionalities_; }
   mrta::model::Ability getAbilityRequirement() const { return ability_requirement_; }
-  OrderStates getState() { return state_; }
-  SERIALIZE(order_uuid_, state_, load_position_, unload_position_, ability_requirement_);
+  SERIALIZE(functionalities_, ability_requirement_);
 
 private:
-  std::string order_uuid_;
-  OrderStates state_ = OrderStates::kInvalid;
-  util::Position load_position_;
-  util::Position unload_position_;
+  std::vector<FunctionalityVariant> functionalities_;
   mrta::model::Ability ability_requirement_;
 };
 }  // namespace daisi::cpps
