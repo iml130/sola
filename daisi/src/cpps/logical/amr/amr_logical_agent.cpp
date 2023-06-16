@@ -126,7 +126,7 @@ void AmrLogicalAgent::sendToPhysical(std::string payload) {
 
   auto packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
-  server_socket_->Send(packet);
+  physical_socket_->Send(packet);
 }
 
 void AmrLogicalAgent::sendTopologyToPhysical() {
