@@ -114,6 +114,12 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 }
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
+  // TODO add in future something like this:
+  // if (current_order_.order_state != OrderStates::kFinished &&
+  //     current_order_.order_state != OrderStates::kError) {
+  //   throw std::runtime_error("Order is not finished, before setting a new order.");
+  // }
+
   current_order_ = AmrOrder();
   current_order_.order_state = OrderStates::kCreated;
 

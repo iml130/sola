@@ -24,21 +24,21 @@
 
 namespace daisi::cpps::logical {
 
-AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config,
-                                 const bool first_node)
-    : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), _config,
+AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &config, bool first_node)
+    : LogicalAgent(device_id, daisi::global_logger_manager->createAMRLogger(device_id), config,
                    first_node),
       description_set_(false),
-      topology_(daisi::util::Dimensions(50, 20, 0))  // TODO placeholder
+      topology_(daisi::util::Dimensions(50, 20, 0)),
+      current_state_(AmrState::kIdle)  // TODO placeholder
 {}
 
 void AmrLogicalAgent::init(ns3::Ptr<ns3::Socket> tcp_socket) {
   initCommunication();
 
-  socket_to_physical_ = tcp_socket;
-  socket_to_physical_->Listen();
+  server_socket_ = tcp_socket;
+  server_socket_->Listen();
 
-  socket_to_physical_->SetAcceptCallback(
+  server_socket_->SetAcceptCallback(
       ns3::MakeCallback(&AmrLogicalAgent::connectionRequest, this),
       ns3::MakeCallback(&AmrLogicalAgent::newConnectionCreated, this));
 }
@@ -95,15 +95,6 @@ void AmrLogicalAgent::readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket) {
     } else if (auto amr_order_update = std::get_if<AmrOrderUpdate>(&amr_msg)) {
       processMessageAmrOrderUpdate(*amr_order_update);
     }
-
-    if (auto amr_description = std::get_if<AmrDescription>(&amr_msg)) {
-      if (!description_set_) {
-        description_ = *amr_description;
-      } else {
-        throw std::runtime_error("AmrDescription attempted to be set twice.");
-      }
-    } else {
-    }
   }
 }
 
@@ -135,7 +126,7 @@ void AmrLogicalAgent::sendToPhysical(std::string payload) {
 
   auto packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
-  socket_to_physical_->Send(packet);
+  physical_socket_->Send(packet);
 }
 
 void AmrLogicalAgent::sendTopologyToPhysical() {
@@ -162,26 +153,23 @@ bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3:
 }
 
 void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr) {
-  socket_of_physical_ = socket;
-  socket_of_physical_->SetRecvCallback(
-      MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
+  physical_socket_ = socket;
+  physical_socket_->SetRecvCallback(MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
 
   logAmrInfos();
 }
 
 void AmrLogicalAgent::checkSendingNextTask() {
-  bool still_busy = true;  // TODO check depending on AmrState and OrderState
+  // TODO check depending on AmrState and OrderState whether we are still busy or not
 
-  if (!still_busy) {
-    sendTaskToPhysical();
-  }
+  sendTaskToPhysical();
 }
 
 void AmrLogicalAgent::logAmrInfos() {
   daisi::cpps::AGVLoggingInfo info;  // TODO rename to AMR
 
   // general
-  info.friendly_name = "TODO";
+  info.friendly_name = description_.getProperties().getFriendlyName();
   info.serial_number = description_.getSerialNumber();
   info.manufacturer = description_.getProperties().getManufacturer();
   info.model_name = description_.getProperties().getModelName();
@@ -204,7 +192,7 @@ void AmrLogicalAgent::logAmrInfos() {
 
   // retrieve physical info
   ns3::Address physical_address;
-  socket_of_physical_->GetSockName(physical_address);
+  physical_socket_->GetSockName(physical_address);
 
   ns3::InetSocketAddress i_physical_address = ns3::InetSocketAddress::ConvertFrom(physical_address);
   std::string physical_asset_ip = daisi::getIpv4AddressString(i_physical_address.GetIpv4());
@@ -212,7 +200,7 @@ void AmrLogicalAgent::logAmrInfos() {
 
   // retrieve logical info
   ns3::Address logical_address;
-  socket_of_physical_->GetSockName(logical_address);
+  server_socket_->GetSockName(logical_address);
 
   ns3::InetSocketAddress i_logical_address = ns3::InetSocketAddress::ConvertFrom(logical_address);
   std::string logical_asset_ip = daisi::getIpv4AddressString(i_logical_address.GetIpv4());

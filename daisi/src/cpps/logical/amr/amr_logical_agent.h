@@ -31,36 +31,16 @@
 
 namespace daisi::cpps::logical {
 
-enum class SocketType : int {
-  k_tcp = 0,
-  k_udp = 1,
-};
-
-struct SocketConfig {
-  std::string ip_;
-  int port_;
-  SocketType type_;
-};
-
-struct SocketInfo {
-  SocketConfig local_config_;
-  SocketConfig remote_config_;
-};
-
 class AmrLogicalAgent : public LogicalAgent {
 public:
-  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &_config, const bool first_node);
+  AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &config, bool first_node);
 
   ~AmrLogicalAgent() = default;
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init(ns3::Ptr<ns3::Socket> tcp_socket);
 
-  virtual void start();
-
-  // to initialize socket to physical AMR
-  bool connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
-  void newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
+  virtual void start() override;
 
 private:
   virtual void initAlgorithms() override;
@@ -72,6 +52,13 @@ private:
   /// @brief Method being called by sola when we receive a message via a topic
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) override;
+
+  /// @brief We always accept an incoming connection.
+  bool connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
+
+  /// @brief Once a connection request is received and accepted via the server socket, this method
+  /// is called and the physical socket created.
+  void newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
 
   void readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket);
 
@@ -96,11 +83,16 @@ private:
   daisi::util::Position current_position_;
   AmrState current_state_;
 
-  // for TCP communication with the Amr Physical Asset
-  ns3::Ptr<ns3::Socket> socket_to_physical_;
-  ns3::Ptr<ns3::Socket> socket_of_physical_;
+  /// @brief For TCP communication with the AmrPhysicalAsset.
+  /// The AmrLogicalAgent is acting as the server according to the TCP model.
+  /// It uses the socket to listen to connection requests.
+  ns3::Ptr<ns3::Socket> server_socket_;
 
-  std::shared_ptr<OrderManagement> order_management_;
+  /// @brief For TCP communication with the AmrPhysicalAsset.
+  /// This socket is used to communicate with the physical, for both sending and receiving messages.
+  ns3::Ptr<ns3::Socket> physical_socket_;
+
+  std::shared_ptr<order_management::OrderManagement> order_management_;
 };
 }  // namespace daisi::cpps::logical
 

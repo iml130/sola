@@ -32,13 +32,9 @@ public:
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init();
 
-  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
-  /// Only a part of the available interfaces might be allowed for a material flow agent.
-  virtual void initAlgorithms() override;
-
-  /// @brief Starting operations by initalizing components which require the finished
-  /// initialization of Sola.
-  virtual void start();
+  /// @brief Starting operations by initalizing components which require the finished initialization
+  /// of Sola.
+  virtual void start() override;
 
   /// @brief Adding a material flow in the form of the pure string.
   /// Processing can be started as soon as the mfdl program is set and initialization is finished.
@@ -55,6 +51,10 @@ public:
   bool isBusy();
 
 protected:
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed for a material flow agent.
+  virtual void initAlgorithms() override;
+
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
