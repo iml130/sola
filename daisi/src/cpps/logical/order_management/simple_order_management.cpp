@@ -19,8 +19,6 @@
 using namespace daisi::material_flow;
 namespace daisi::cpps::logical {
 
-template <class> inline constexpr bool always_false_v = false;
-
 SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_description,
                                              const Topology &topology,
                                              const daisi::util::Pose &pose)
@@ -90,7 +88,7 @@ bool SimpleOrderManagement::addTask(const Task &task) {
   if (!final_order.has_value()) {
     throw std::logic_error("Task must contain at least one TransportOrder or MoveOrder");
   }
-  auto end_location = getEndLocationOfOrder(final_order.value());
+  auto end_location = OrderManagementHelper::getEndLocationOfOrder(final_order.value());
   expected_end_position_ = end_location->getPosition();
 
   return true;
@@ -130,7 +128,7 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
   std::optional<Location> previous_location;
   order_it++;
   for (; order_it != orders.rend(); order_it++) {
-    previous_location = getEndLocationOfOrder(*order_it);
+    previous_location = OrderManagementHelper::getEndLocationOfOrder(*order_it);
     if (previous_location.has_value()) {
       break;
     }
@@ -168,23 +166,6 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
   } else {
     throw std::invalid_argument("Order type not supported");
   }
-}
-
-std::optional<Location> SimpleOrderManagement::getEndLocationOfOrder(const Order &order) {
-  return std::visit(
-      [&](auto &&arg) -> std::optional<Location> {
-        using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, MoveOrder>) {
-          return std::get<MoveOrder>(order).getMoveOrderStep().getLocation();
-        } else if constexpr (std::is_same_v<T, TransportOrder>) {
-          return std::get<TransportOrder>(order).getDeliveryTransportOrderStep().getLocation();
-        } else if constexpr (std::is_same_v<T, ActionOrder>) {
-          return std::nullopt;
-        } else {
-          static_assert(always_false_v<T>, "Order type not handled");
-        }
-      },
-      order);
 }
 
 }  // namespace daisi::cpps::logical

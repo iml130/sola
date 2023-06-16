@@ -26,6 +26,7 @@
 #include "cpps/amr/amr_topology.h"
 #include "material_flow/model/task.h"
 #include "metrics_composition.h"
+#include "order_management_helper.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {

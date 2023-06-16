@@ -147,13 +147,6 @@ protected:
                                         const int &task_ordering_index,
                                         const daisi::util::Duration &start_time);
 
-  // TODO: think about moving the method to avoid duplicates
-  /// @brief get the end location of a given order.
-  /// @param order the order to get the end location for
-  /// @return the end location or null, if the passed order is an ActionOrder
-  static std::optional<daisi::material_flow::Location> getEndLocationOfOrder(
-      const daisi::material_flow::Order &order);
-
   // simple helper
   VertexIterator getVertexIteratorOfOrder(const daisi::material_flow::Order &order, bool start);
   int getVertexIndexOfOrder(const daisi::material_flow::Order &order, bool start);
