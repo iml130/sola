@@ -25,13 +25,13 @@ SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_descripti
                                              const Topology &topology,
                                              const daisi::util::Pose &pose)
     : OrderManagement(amr_description, topology, pose),
-      current_task_(),
-      current_ordering_(),
-      current_metrics_(),
-      current_end_position_(pose.position),
+      active_task_(),
+      queue_(),
+      final_metrics_(),
+      expected_end_position_(pose.position),
       time_now_(0) {}
 
-Metrics SimpleOrderManagement::getCurrentMetrics() const { return current_metrics_; }
+Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; }
 
 void SimpleOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
@@ -40,22 +40,22 @@ void SimpleOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   time_now_ = now;
 }
 
-bool SimpleOrderManagement::hasTasks() const { return current_task_.has_value(); }
+bool SimpleOrderManagement::hasTasks() const { return active_task_.has_value(); }
 
 Task SimpleOrderManagement::getCurrentTask() const {
   if (!hasTasks()) {
     throw std::logic_error("no tasks available");
   }
-  return current_task_.value();
+  return active_task_.value();
 }
 
 bool SimpleOrderManagement::setNextTask() {
-  if (!current_ordering_.empty()) {
-    current_task_ = current_ordering_.front();
-    current_ordering_.erase(current_ordering_.begin());
+  if (!queue_.empty()) {
+    active_task_ = queue_.front();
+    queue_.erase(queue_.begin());
     return true;
   }
-  current_task_ = std::nullopt;
+  active_task_ = std::nullopt;
   return false;
 }
 
@@ -73,12 +73,12 @@ bool SimpleOrderManagement::addTask(const Task &task) {
     throw std::invalid_argument("Task must have at least one order");
   }
 
-  current_ordering_.push_back(task);
+  queue_.push_back(task);
 
   // update current_metrics to match the final order of the new task
-  updateCurrentMetrics();
+  updateFinalMetrics();
 
-  // find final order with an endpoint to update current_end_position_
+  // find final order with an endpoint to update expected_end_position_
   std::optional<Order> final_order = std::nullopt;
   for (auto rev_orders_it = orders.rbegin(); rev_orders_it != orders.rend(); rev_orders_it++) {
     if (std::holds_alternative<TransportOrder>(*rev_orders_it) ||
@@ -92,22 +92,22 @@ bool SimpleOrderManagement::addTask(const Task &task) {
   }
   if (std::holds_alternative<TransportOrder>(final_order.value())) {
     TransportOrder transport_order = std::get<TransportOrder>(final_order.value());
-    current_end_position_ =
+    expected_end_position_ =
         transport_order.getDeliveryTransportOrderStep().getLocation().getPosition();
   } else {
     MoveOrder move_order = std::get<MoveOrder>(final_order.value());
-    current_end_position_ = move_order.getMoveOrderStep().getLocation().getPosition();
+    expected_end_position_ = move_order.getMoveOrderStep().getLocation().getPosition();
   }
 
   return true;
 }
 
-void SimpleOrderManagement::updateCurrentMetrics() {
+void SimpleOrderManagement::updateFinalMetrics() {
   // calculate the start time and metrics for the new task
-  auto start_time = std::max(current_metrics_.getMakespan(), time_now_);
+  auto start_time = std::max(final_metrics_.getMakespan(), time_now_);
 
   Metrics new_current_metrics;
-  Task new_task = current_ordering_.back();
+  Task new_task = queue_.back();
   auto orders = new_task.getOrders();
 
   // iterate through orders to find the correct start time for the final order
@@ -119,7 +119,7 @@ void SimpleOrderManagement::updateCurrentMetrics() {
   }
 
   // update current metrics
-  current_metrics_ = new_current_metrics;
+  final_metrics_ = new_current_metrics;
 }
 
 void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
@@ -143,13 +143,10 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
   }
   daisi::util::Position previous_position;
   if (!previous_location.has_value()) {
-    if (!current_end_position_.has_value()) {
-      // previous_position = current_pose_.position_;
+    if (!expected_end_position_.has_value()) {
       throw std::logic_error("there must exist a location for the amr to start from");
     }
-    // else {
-    previous_position = current_end_position_.value();
-    // }
+    previous_position = expected_end_position_.value();
   } else {
     previous_position = previous_location.value().getPosition();
   }

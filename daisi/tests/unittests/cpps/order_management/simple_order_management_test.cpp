@@ -84,7 +84,7 @@ TEST_CASE("SimpleOrderManagement One Simple Transport Order", "[adding and remov
   // act
   auto opt_result = management.canAddTask(simple_task);
   REQUIRE(opt_result);
-  auto metrics = management.getCurrentMetrics();
+  auto metrics = management.getFinalMetrics();
   REQUIRE(metrics.getTime() == 0);
   REQUIRE(metrics.loaded_travel_time == 0);
   REQUIRE(metrics.empty_travel_time == 0);
@@ -102,7 +102,7 @@ TEST_CASE("SimpleOrderManagement One Simple Transport Order", "[adding and remov
   // act
   auto add_results = management.addTask(simple_task);
   REQUIRE(add_results);
-  metrics = management.getCurrentMetrics();
+  metrics = management.getFinalMetrics();
   // assert metrics results
   REQUIRE(metrics.loaded_travel_time == 11);
   REQUIRE(metrics.empty_travel_time == 11);
@@ -146,7 +146,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
 
   auto can_add_2 = management.canAddTask(simple_task_2);
   REQUIRE(can_add_2);
-  auto metrics = management.getCurrentMetrics();
+  auto metrics = management.getFinalMetrics();
   REQUIRE(metrics.getTime() == 0);
   REQUIRE(metrics.loaded_travel_time == 0);
   REQUIRE(metrics.empty_travel_time == 0);
@@ -161,7 +161,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
   auto add_1_result = management.addTask(simple_task_1);
   REQUIRE(add_1_result);
 
-  auto add_1_metrics = management.getCurrentMetrics();
+  auto add_1_metrics = management.getFinalMetrics();
 
   // can add task 2 after 1
   auto can_add_2_2 = management.canAddTask(simple_task_2);
@@ -171,7 +171,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
   auto add_2_result = management.addTask(simple_task_2);
   REQUIRE(add_2_result);
 
-  auto add_2_metrics = management.getCurrentMetrics();
+  auto add_2_metrics = management.getFinalMetrics();
   REQUIRE(add_2_metrics.loaded_travel_time == 6);
   REQUIRE(add_2_metrics.empty_travel_time == 6);
   REQUIRE(add_2_metrics.action_time == 15);
@@ -219,7 +219,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
   REQUIRE(!management.hasTasks());
   auto add_2_1_result = management.addTask(simple_task_2);
   REQUIRE(add_2_1_result);
-  auto add_2_1_metrics = management.getCurrentMetrics();
+  auto add_2_1_metrics = management.getFinalMetrics();
   REQUIRE(management.setNextTask());
   auto second_task = management.getCurrentTask();
   REQUIRE(second_task.getName() == "simple_task_2");
@@ -231,7 +231,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
   auto add_1_result = management.addTask(simple_task_1);
   REQUIRE(add_1_result);
 
-  auto add_1_metrics = management.getCurrentMetrics();
+  auto add_1_metrics = management.getFinalMetrics();
   auto makespan_task_1 = add_1_metrics.getMakespan();
 
   // makespan of task 1 must depend on the makespan of task 2
@@ -245,7 +245,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
   auto add_2_2_result = management.addTask(simple_task_2);
   REQUIRE(add_2_2_result);
 
-  auto add_2_2_metrics = management.getCurrentMetrics();
+  auto add_2_2_metrics = management.getFinalMetrics();
   REQUIRE(add_2_2_metrics.loaded_travel_time == 6);
   REQUIRE(add_2_2_metrics.empty_travel_time == 6);
   REQUIRE(add_2_2_metrics.action_time == 15);
@@ -303,9 +303,9 @@ TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and re
   Task simple_task_3("simple_task_3", {simple_to_3}, {});
 
   auto add_1_opt = management.addTask(simple_task_1);
-  auto add_1_metrics = management.getCurrentMetrics();
+  auto add_1_metrics = management.getFinalMetrics();
   auto add_2_opt = management.addTask(simple_task_2);
-  auto add_2_metrics = management.getCurrentMetrics();
+  auto add_2_metrics = management.getFinalMetrics();
 
   REQUIRE(add_1_opt);
   REQUIRE(add_2_opt);
@@ -318,7 +318,7 @@ TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and re
   auto can_add_3_opt = management.canAddTask(simple_task_3);
   REQUIRE(can_add_3_opt);
   auto add_3_opt = management.addTask(simple_task_3);
-  auto add_3_metrics = management.getCurrentMetrics();
+  auto add_3_metrics = management.getFinalMetrics();
 
   REQUIRE(add_3_metrics.getMakespan() == add_2_metrics.getMakespan() + add_3_metrics.getTime());
 }
@@ -344,7 +344,7 @@ TEST_CASE("SimpleOrderManagement Two Transport Orders in one Task",
   REQUIRE(add_1_opt);
 
   // current metrics of the second order
-  auto add_1_metrics = management.getCurrentMetrics();
+  auto add_1_metrics = management.getFinalMetrics();
   REQUIRE(add_1_metrics.empty_travel_distance == 10);
   REQUIRE(add_1_metrics.empty_travel_time == 11);
   REQUIRE(add_1_metrics.getMakespan() == 58);
@@ -371,7 +371,7 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
   REQUIRE_THROWS(management.addTask(task_1));
 
   // current metrics should be unchanged
-  auto metrics = management.getCurrentMetrics();
+  auto metrics = management.getFinalMetrics();
   REQUIRE(metrics.getTime() == 0);
   REQUIRE(metrics.loaded_travel_time == 0);
   REQUIRE(metrics.empty_travel_time == 0);
@@ -385,7 +385,7 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
 
   auto add_opt = management.addTask(task_2);
   REQUIRE(add_opt);
-  auto add_metrics = management.getCurrentMetrics();
+  auto add_metrics = management.getFinalMetrics();
 
   // current metrics of the action order
   REQUIRE(add_metrics.action_time == 7);
@@ -423,11 +423,11 @@ TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay
   Task simple_task_3("simple_task_3", {simple_to_3}, {});
 
   auto add_1_opt = management.addTask(simple_task_1);
-  auto add_1_metrics = management.getCurrentMetrics();
+  auto add_1_metrics = management.getFinalMetrics();
 
   management.setCurrentTime(10);
   auto add_2_opt = management.addTask(simple_task_2);
-  auto add_2_metrics = management.getCurrentMetrics();
+  auto add_2_metrics = management.getFinalMetrics();
 
   REQUIRE(add_1_opt);
   REQUIRE(add_2_opt);
@@ -446,7 +446,7 @@ TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay
   auto can_add_3_opt = management.canAddTask(simple_task_3);
   REQUIRE(can_add_3_opt);
   auto add_3_opt = management.addTask(simple_task_3);
-  auto add_3_metrics = management.getCurrentMetrics();
+  auto add_3_metrics = management.getFinalMetrics();
 
   // makespan should have been affected by the current time
   REQUIRE(add_3_metrics.getMakespan() == add_3_metrics.getTime() + 100);

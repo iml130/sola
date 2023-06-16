@@ -27,7 +27,7 @@ public:
 
   /// @brief return the metrics of the final order contained in the last task that has been added to
   /// the management
-  Metrics getCurrentMetrics() const;
+  Metrics getFinalMetrics() const;
 
   /// @brief check wether the order management has a current task assigned
   bool hasTasks() const override;
@@ -60,7 +60,7 @@ private:
   /// @brief update the current metrics by assuming that a new task has been inserted into the
   /// management's queue.
   /// Uses the metrics from the last order of the previous task.
-  void updateCurrentMetrics();
+  void updateFinalMetrics();
 
   /// @brief calculate the metrics for the given order of the given task and insert them into the
   /// given metrics.
@@ -73,13 +73,18 @@ private:
                                         const daisi::util::Duration &start_time);
 
   /// @brief the currently active task
-  std::optional<daisi::material_flow::Task> current_task_;
+  std::optional<daisi::material_flow::Task> active_task_;
+
   /// @brief the management's queued tasks (without the current task)
-  std::vector<daisi::material_flow::Task> current_ordering_;
+  std::vector<daisi::material_flow::Task> queue_;
+
   /// @brief the metrics of the final order that has been added
-  Metrics current_metrics_;
+  Metrics final_metrics_;
+
   /// @brief the final position after executing all currently known orders
-  std::optional<daisi::util::Position> current_end_position_;
+  std::optional<daisi::util::Position> expected_end_position_;
+
+  /// @brief the current time
   daisi::util::Duration time_now_;
 };
 
