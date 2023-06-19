@@ -1,27 +1,28 @@
-add_library(daisi_cpps_model_load_carrier_ability STATIC)
-target_sources(daisi_cpps_model_load_carrier_ability
+add_library(daisi_cpps_amr_amr_load_carrier STATIC)
+target_sources(daisi_cpps_amr_amr_load_carrier
     PRIVATE
     amr_load_carrier.cpp
     amr_load_carrier.h
 )
-target_link_libraries(daisi_cpps_model_load_carrier_ability
+target_link_libraries(daisi_cpps_amr_amr_load_carrier
     PUBLIC
-    daisi_cpps_message_serializer
+    solanet_serialize
 )
-target_include_directories(daisi_cpps_model_load_carrier_ability
+target_include_directories(daisi_cpps_amr_amr_load_carrier
     PUBLIC
     ${DAISI_SOURCE_DIR}/src)
 
-add_library(daisi_cpps_model_ability STATIC)
-target_sources(daisi_cpps_model_ability
+add_library(daisi_cpps_amr_amr_static_ability STATIC)
+target_sources(daisi_cpps_amr_amr_static_ability
     PRIVATE
     amr_static_ability.cpp
     amr_static_ability.h
 )
-target_link_libraries(daisi_cpps_model_ability
+target_link_libraries(daisi_cpps_amr_amr_static_ability
     PUBLIC
-    daisi_cpps_model_load_carrier_ability
+    daisi_cpps_amr_amr_load_carrier
+    solanet_serialize
 )
-target_include_directories(daisi_cpps_model_ability
+target_include_directories(daisi_cpps_amr_amr_static_ability
     PUBLIC
     ${DAISI_SOURCE_DIR}/src)

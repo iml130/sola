@@ -14,13 +14,52 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/model/ability.h"
+#include "amr_static_ability.h"
 
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
 
 namespace daisi::cpps::amr {
+
+AmrStaticAbility::AmrStaticAbility(const LoadCarrier &load_carrier, float max_payload_weight_kg)
+    : load_carrier_(load_carrier), max_payload_weight_kg_(max_payload_weight_kg) {}
+
+const LoadCarrier &AmrStaticAbility::getLoadCarrier() const { return load_carrier_; }
+
+float AmrStaticAbility::getMaxPayloadWeight() const { return max_payload_weight_kg_; }
+
+bool operator==(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() == a1.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() == a2.getMaxPayloadWeight();
+}
+
+bool operator!=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() != a1.getLoadCarrier() ||
+         a1.getMaxPayloadWeight() != a2.getMaxPayloadWeight();
+}
+
+bool operator<(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() == a1.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() < a2.getMaxPayloadWeight();
+}
+
+bool operator<=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() == a1.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() <= a2.getMaxPayloadWeight();
+}
+
+bool operator>(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() == a1.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() > a2.getMaxPayloadWeight();
+}
+
+bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
+  return a1.getLoadCarrier() == a1.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() >= a2.getMaxPayloadWeight();
+}
+
+// --------------------------------------------------------------------------------------------
 
 template <typename TupleT, std::size_t... Is>
 bool equalAbilityImpl(const TupleT &t1, const TupleT &t2, std::index_sequence<Is...> /*unused*/) {
