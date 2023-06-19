@@ -21,7 +21,7 @@
 #include <tuple>
 #include <vector>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::consensus {
 //! Request message from a pickup station to the central server

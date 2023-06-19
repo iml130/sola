@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serializer.h"
 
 namespace daisi::path_planning::consensus {
 //!< Response message send from acceptors to proposer to acknowledge that the acceptor received an

@@ -17,7 +17,7 @@
 #ifndef DAISI_PATH_PLANNING_MESSAGE_FIELD_DRIVE_MESSAGE_FIELD_H_
 #define DAISI_PATH_PLANNING_MESSAGE_FIELD_DRIVE_MESSAGE_FIELD_H_
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::message {
 //! Message send from \c AGVLogical to \c AGVPhysicalBasic with a 2D coordinate.

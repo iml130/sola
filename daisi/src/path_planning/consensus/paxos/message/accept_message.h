@@ -20,8 +20,8 @@
 #include <cstdint>
 #include <string>
 
-#include "cpps/message/serialize.h"
 #include "path_planning/station.h"
+#include "solanet/serializer/serializer.h"
 
 namespace daisi::path_planning::consensus {
 //!< Accept message send from the proposer to the acceptors with the actual intersection

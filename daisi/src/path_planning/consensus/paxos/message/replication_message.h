@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::consensus {
 //!< Replication message send from all acceptors on the replication topic to let other network
