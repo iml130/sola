@@ -35,10 +35,10 @@ AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &conf
 void AmrLogicalAgent::init(ns3::Ptr<ns3::Socket> tcp_socket) {
   initCommunication();
 
-  socket_to_physical_ = tcp_socket;
-  socket_to_physical_->Listen();
+  server_socket_ = tcp_socket;
+  server_socket_->Listen();
 
-  socket_to_physical_->SetAcceptCallback(
+  server_socket_->SetAcceptCallback(
       ns3::MakeCallback(&AmrLogicalAgent::connectionRequest, this),
       ns3::MakeCallback(&AmrLogicalAgent::newConnectionCreated, this));
 }
@@ -52,9 +52,9 @@ void AmrLogicalAgent::initAlgorithms() {
   order_management_ = std::make_shared<StnOrderManagement>(description_, topology_,
                                                            daisi::util::Pose{current_position_});
 
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_iterated_auction_disposition_participant:
+      case AlgorithmType::kIteratedAuctionDispositionParticipant:
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
         break;
       default:
