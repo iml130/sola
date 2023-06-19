@@ -121,7 +121,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
   return true;
 }
 
-void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
+void IteratedAuctionDispositionParticipant::calculateBids(const AuctionParticipantState &state) {
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
     auto task_state = pair.second;
