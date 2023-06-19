@@ -44,7 +44,7 @@ target_link_libraries(daisi_cpps_negotiation_task_management_task_management
         daisi_cpps_negotiation_task_management_insert_info
         ns3::libcore
         daisi_cpps_model_kinematics
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
         daisi_cpps_model_task
         daisi_cpps_common_cpps_logger_ns3
 )

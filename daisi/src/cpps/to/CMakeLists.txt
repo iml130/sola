@@ -8,7 +8,7 @@ target_link_libraries(daisi_cpps_to_transport_order
         PUBLIC
         daisi_sola_sola_ns3_wrapper
         ns3::libmobility
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
         daisi_cpps_task_allocation_initiator_task_allocation_initiator
         daisi_cpps_negotiation_mrta_configuration
         daisi_cpps_common_cpps_logger_ns3

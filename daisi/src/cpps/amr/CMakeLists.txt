@@ -32,7 +32,7 @@ target_sources(daisi_cpps_amr_amr_load_handling_unit
 )
 target_link_libraries(daisi_cpps_amr_amr_load_handling_unit INTERFACE
     solanet_serialize
-    daisi_cpps_amr_amr_static_ability
+    daisi_cpps_amr_model_amr_static_ability
 )
 
 add_library(daisi_cpps_amr_amr_mobility_helper STATIC)
@@ -71,7 +71,7 @@ target_sources(daisi_cpps_amr_amr_properties
 )
 target_link_libraries(daisi_cpps_amr_amr_properties
     INTERFACE
-    daisi_cpps_amr_amr_static_ability
+    daisi_cpps_amr_model_amr_static_ability
     daisi_cpps_amr_physical_functionality
     solanet_serialize
 )

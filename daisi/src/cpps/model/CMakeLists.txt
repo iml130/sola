@@ -8,7 +8,7 @@ target_link_libraries(daisi_cpps_model_task
         PUBLIC
         ns3::libcore
         daisi_cpps_model_order_states
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
         daisi_cpps_model_kinematics
         daisi_cpps_model_agv_fleet
         daisi_cpps_model_time_window
@@ -87,7 +87,7 @@ target_sources(daisi_cpps_model_agv_fleet
 target_link_libraries(daisi_cpps_model_agv_fleet
         PUBLIC
         daisi_cpps_model_kinematics
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
 )
 target_include_directories(daisi_cpps_model_agv_fleet
         PUBLIC

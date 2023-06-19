@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_AMR_AMR_LOAD_CARRIER_H_
-#define DAISI_CPPS_AMR_AMR_LOAD_CARRIER_H_
+#ifndef DAISI_CPPS_AMR_MODEL_AMR_LOAD_CARRIER_H_
+#define DAISI_CPPS_AMR_MODEL_AMR_LOAD_CARRIER_H_
 
 #include <cstdint>
 #include <string>
