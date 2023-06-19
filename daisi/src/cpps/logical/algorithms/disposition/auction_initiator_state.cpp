@@ -113,10 +113,7 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
 
     removeBidsForTask(bid_submissions_, task_uuid);
 
-    if (layered_precedence_graph_->isFreeTaskScheduled(task_uuid)) {
-      throw std::runtime_error("Received bid for scheduled task.");
-
-    } else {
+    if (!layered_precedence_graph_->isFreeTaskScheduled(task_uuid)) {
       daisi::util::Duration latest_finish_time =
           best_bid.getMetricsComposition().getCurrentMetrics().getMakespan();
       layered_precedence_graph_->setLatestFinishTime(task_uuid, latest_finish_time);
@@ -124,6 +121,8 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
       layered_precedence_graph_->setTaskScheduled(task_uuid);
 
       winners.push_back({task_uuid, best_bid.getParticipantConnection(), latest_finish_time});
+    } else {
+      throw std::runtime_error("Received bid for scheduled task.");
     }
   }
 
