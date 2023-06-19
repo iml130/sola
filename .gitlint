@@ -1,0 +1,6 @@
+[general]
+ignore=B6
+contrib = contrib-title-conventional-commits,CC2
+
+[contrib-title-conventional-commits]
+types=fix,feat,build,ci,docs,style,refactor,test
