@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MODEL_ABILITY_H_
-#define DAISI_MODEL_ABILITY_H_
+#ifndef DAISI_CPPS_AMR_AMR_STATIC_ABILITY_H_
+#define DAISI_CPPS_AMR_AMR_STATIC_ABILITY_H_
 
 #include <iostream>
 #include <string>
@@ -23,9 +23,41 @@
 #include <unordered_map>
 #include <utility>
 
-#include "cpps/model/load_carrier_ability.h"
+#include "amr_load_carrier.h"
 
 namespace daisi::cpps::amr {
+
+class AmrStaticAbility {
+public:
+  AmrStaticAbility() = default;
+  AmrStaticAbility(const LoadCarrier &load_carrier, float max_payload_weight_kg);
+
+  const LoadCarrier &getLoadCarrier() const;
+  float getMaxPayloadWeight() const;
+
+  friend bool operator==(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+  friend bool operator!=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+  friend bool operator<(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+  friend bool operator<=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+  friend bool operator>(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+  friend bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+
+private:
+  LoadCarrier load_carrier_;
+  float max_payload_weight_kg_;
+};
+
+struct AmrStaticAbilityHasher {
+  std::size_t operator()(const AmrStaticAbility &ability) const {
+    std::string rep = ability.getLoadCarrier().getTypeAsString() + "|" +
+                      std::to_string(ability.getMaxPayloadWeight());
+
+    std::size_t res = std::hash<std::string>()(rep);
+    return res;
+  }
+};
+
+// --------------------------------------------------------------------------------------------
 
 using Ability = std::tuple<float, LoadCarrier>;
 

@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/model/load_carrier_ability.h"
+#include "amr_load_carrier.h"
 
 #include <stdexcept>
 
