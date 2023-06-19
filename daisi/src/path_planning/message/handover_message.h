@@ -19,8 +19,8 @@
 
 #include <utility>
 
-#include "cpps/message/serialize.h"
 #include "drive_message.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::message {
 

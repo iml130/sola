@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::message {
 //! Message from \c AGVLogical to \c PickupStation to register the AGV with the pickup station (the

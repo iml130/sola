@@ -17,7 +17,7 @@
 #ifndef DAISI_PATH_PLANNING_MESSAGE_FIELD_POSITION_UPDATE_H_
 #define DAISI_PATH_PLANNING_MESSAGE_FIELD_POSITION_UPDATE_H_
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::message {
 //! Update of the actual AGV position send from \c AGVPhysicalBasic to \c AGVLogical

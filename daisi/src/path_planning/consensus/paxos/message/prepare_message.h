@@ -21,8 +21,8 @@
 #include <string>
 #include <vector>
 
-#include "cpps/message/serialize.h"
 #include "path_planning/station.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::consensus {
 //!< Prepare message send from proposer to all acceptors which is used to get a promise from

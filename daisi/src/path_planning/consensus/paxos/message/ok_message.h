@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::consensus {
 //!< OK message from all acceptors to all other participants to commit the requested occupancy
