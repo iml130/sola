@@ -21,10 +21,12 @@
 #include <unordered_map>
 
 #include "location.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::material_flow {
 
 struct TransportOrderStep {
+  TransportOrderStep() = default;
   TransportOrderStep(std::string name,
                      const std::unordered_map<std::string, std::string> &parameters,
                      const Location &location);
@@ -32,6 +34,8 @@ struct TransportOrderStep {
   const std::string &getName() const;
   const std::unordered_map<std::string, std::string> &getParameters() const;
   const Location &getLocation() const;
+
+  SERIALIZE(name_, parameters_, location_);
 
 private:
   std::string name_;

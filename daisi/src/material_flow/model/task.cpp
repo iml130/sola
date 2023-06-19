@@ -22,6 +22,8 @@ Task::Task(std::string name, const std::vector<Order> &orders,
            const std::vector<std::string> &follow_up_tasks)
     : name_(std::move(name)), orders_(orders), follow_up_tasks_(follow_up_tasks) {}
 
+const std::string &Task::getUuid() const { return uuid_; }
+
 const std::string &Task::getName() const { return name_; }
 
 const std::vector<Order> &Task::getOrders() const { return orders_; }
@@ -36,6 +38,13 @@ void Task::setPrecedingTasks(const std::vector<std::string> &preceding_tasks) {
 
 bool Task::hasTimeWindow() const {
   return false;  // TODO integrate constraints
+}
+
+daisi::cpps::mrta::model::Ability Task::getAbilityRequirement() const {
+  // TODO
+  daisi::cpps::mrta::model::Ability ability(
+      0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);
+  return ability;
 }
 
 }  // namespace daisi::material_flow

@@ -92,7 +92,7 @@ private:
   /// This socket is used to communicate with the physical, for both sending and receiving messages.
   ns3::Ptr<ns3::Socket> physical_socket_;
 
-  std::shared_ptr<order_management::OrderManagement> order_management_;
+  std::shared_ptr<OrderManagement> order_management_;
 };
 }  // namespace daisi::cpps::logical
 

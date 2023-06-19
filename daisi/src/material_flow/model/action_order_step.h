@@ -20,13 +20,19 @@
 #include <string>
 #include <unordered_map>
 
+#include "solanet/serializer/serialize.h"
+
 namespace daisi::material_flow {
 
 struct ActionOrderStep {
+  ActionOrderStep() = default;
+
   ActionOrderStep(std::string name, const std::unordered_map<std::string, std::string> &parameters);
 
   const std::string &getName() const;
   const std::unordered_map<std::string, std::string> &getParameters() const;
+
+  SERIALIZE(name_, parameters_);
 
 private:
   std::string name_;

@@ -16,7 +16,7 @@
 
 #include "material_flow_logical_agent.h"
 
-#include "cpps/logical/algorithms/disposition/disposition_initiator.h"
+#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 
 namespace daisi::cpps::logical {
 
@@ -34,8 +34,8 @@ void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 void MaterialFlowLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kDispositionInitiator:
-        algorithms_.push_back(std::make_unique<DispositionInitiator>(sola_));
+      case AlgorithmType::kIteratedAuctionDispositionInitiator:
+        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionInitiator>(sola_));
         break;
       default:
         throw std::invalid_argument(

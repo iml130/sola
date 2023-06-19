@@ -20,23 +20,24 @@
 #include <memory>
 #include <variant>
 
-#include "cpps/logical/algorithms/algorithm_interface.h"
-#include "cpps/logical/message/auction_based/bid_submission.h"
-#include "cpps/logical/message/auction_based/call_for_proposal.h"
+#include "../algorithm_interface.h"
+#include "material_flow/model/material_flow.h"
 
 namespace daisi::cpps::logical {
 
-// TODO will become abstract class
-// for design pattern purpose its currently not abstract
+/// @brief Algorithm for disposing tasks from a material flow to fitting AMRs.
+/// This algorithm is initiating and coordinating the procedure.
+/// There always must be a corresponding derived class from DispositionParticipant.
 class DispositionInitiator : public AlgorithmInterface {
 public:
   explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
       : AlgorithmInterface(sola){};
 
-  ~DispositionInitiator() = default;
+  virtual ~DispositionInitiator() = default;
 
-  bool process(const BidSubmission &msg) override { return true; }
-  bool process(const CallForProposal &msg) override { return true; }
+  /// @brief Adding a material flow whose tasks should be allocated.
+  /// @param scheduler MFDL Scheduler
+  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
 };
 
 }  // namespace daisi::cpps::logical

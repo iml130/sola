@@ -39,7 +39,6 @@ struct AbilityHasher {
   std::size_t operator()(const Ability &ability) const {
     using std::hash;
     using std::size_t;
-    using std::string;
 
     std::string rep =
         std::to_string(std::get<0>(ability)) + "|" + std::get<1>(ability).getTypeAsString();

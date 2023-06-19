@@ -22,10 +22,18 @@
 
 #include "cpps/logical/message/auction_based/bid_submission.h"
 #include "cpps/logical/message/auction_based/call_for_proposal.h"
+#include "cpps/logical/message/auction_based/iteration_notification.h"
+#include "cpps/logical/message/auction_based/winner_notification.h"
+#include "cpps/logical/message/auction_based/winner_response.h"
+#include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
 #define REGISTER_LOGICAL_MESSAGE(MessageType) \
   virtual bool process(const MessageType &msg) { return false; }
+
+#define REQUIRE_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg) = 0;
+
+#define REGISTER_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg) override;
 
 namespace daisi::cpps::logical {
 
@@ -38,6 +46,9 @@ public:
 
   REGISTER_LOGICAL_MESSAGE(CallForProposal);
   REGISTER_LOGICAL_MESSAGE(BidSubmission);
+  REGISTER_LOGICAL_MESSAGE(IterationNotification);
+  REGISTER_LOGICAL_MESSAGE(WinnerNotification);
+  REGISTER_LOGICAL_MESSAGE(WinnerResponse);
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;

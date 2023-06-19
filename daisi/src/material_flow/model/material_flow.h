@@ -14,33 +14,28 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MATERIAL_FLOW_MOVE_ORDER_STEP_H_
-#define DAISI_MATERIAL_FLOW_MOVE_ORDER_STEP_H_
+#ifndef DAISI_MATERIAL_FLOW_MATERIAL_FLOW_H_
+#define DAISI_MATERIAL_FLOW_MATERIAL_FLOW_H_
 
-#include <string>
-#include <unordered_map>
+#include <variant>
+#include <vector>
 
-#include "location.h"
 #include "solanet/serializer/serialize.h"
+#include "task.h"
 
 namespace daisi::material_flow {
 
-struct MoveOrderStep {
-  MoveOrderStep() = default;
+// TODO just placeholder for now
+class MFDLScheduler {
+public:
+  MFDLScheduler() = default;
 
-  MoveOrderStep(std::string name, const std::unordered_map<std::string, std::string> &parameters,
-                const Location &location);
+  explicit MFDLScheduler(const std::string &mfdl_program) {}
 
-  const std::string &getName() const;
-  const std::unordered_map<std::string, std::string> &getParameters() const;
-  const Location &getLocation() const;
-
-  SERIALIZE(name_, parameters_, location_);
+  SERIALIZE(tasks_);
 
 private:
-  std::string name_;
-  std::unordered_map<std::string, std::string> parameters_;
-  Location location_;
+  std::vector<Task> tasks_;
 };
 
 }  // namespace daisi::material_flow

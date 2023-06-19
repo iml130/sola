@@ -6,7 +6,7 @@ target_sources(daisi_cpps_logical_amr_amr_logical_agent PUBLIC
 target_link_libraries(daisi_cpps_logical_amr_amr_logical_agent
     PUBLIC
     daisi_cpps_logical_logical_agent
-    daisi_cpps_logical_algorithms_disposition_disposition_participant
+    daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
     daisi_cpps_amr_message_serializer
     ns3::libcore
     daisi_cpps_logical_order_management_order_management

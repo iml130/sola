@@ -19,16 +19,16 @@
 
 #include <memory>
 
+#include "auction_based_order_management.h"
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "datastructure/simple_temporal_network.h"
-#include "order_management.h"
 #include "stn_order_management_components.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class StnOrderManagement
-    : public OrderManagement,
+    : public AuctionBasedOrderManagement,
       private daisi::datastructure::SimpleTemporalNetwork<StnOrderManagementVertex,
                                                           StnOrderManagementEdge> {
 public:
@@ -47,11 +47,12 @@ public:
   daisi::material_flow::Task getCurrentTask() const override;
   bool setNextTask() override;
 
-  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> canAddTask(
-      const daisi::material_flow::Task &task) const override;
-  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>> addTask(
-      const daisi::material_flow::Task &task,
-      std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
+  bool canAddTask(const daisi::material_flow::Task &task) override;
+  bool addTask(const daisi::material_flow::Task &task,
+               std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
+
+  std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>> getLatestCalculatedInsertionInfo()
+      const override;
 
   void setCurrentTime(const daisi::util::Duration &now);
 
@@ -83,6 +84,9 @@ protected:
   std::vector<TaskInsertInfo>::iterator newest_task_insert_info_;
 
   daisi::util::Duration time_now_;
+
+  std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>>
+      latest_calculated_insertion_info_;
 
   virtual bool solve() override;
 
@@ -129,6 +133,6 @@ private:
   void updateOriginConstraints(const daisi::util::Duration &time_difference);
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

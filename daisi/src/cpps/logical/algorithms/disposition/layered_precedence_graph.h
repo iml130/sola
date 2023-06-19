@@ -1,0 +1,149 @@
+// Copyright 2023 The SOLA authors
+//
+// This file is part of DAISI.
+//
+// DAISI is free software: you can redistribute it and/or modify it under the terms of the GNU
+// General Public License as published by the Free Software Foundation; version 2.
+//
+// DAISI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+// the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with DAISI. If not, see
+// <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-2.0-only
+
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_LAYERED_PRECEDENCE_GRAPH_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_LAYERED_PRECEDENCE_GRAPH_H_
+
+#include <memory>
+#include <optional>
+
+#include "datastructure/directed_graph.h"
+#include "material_flow/model/material_flow.h"
+#include "utils/structure_helpers.h"
+
+namespace daisi::cpps::logical {
+
+/// @brief Enum to represent the different layers tasks can be on in this precedence graph.
+/// The free layer is also referred to as T_F, the second layer as T_L, the hidden layer as T_H, and
+/// the scheduled layer as T_S.
+enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
+
+struct LPCVertex {
+  /// @brief Initializing the vertex by setting the task and everything else as invalid.
+  /// @param task The task this vertex represents.
+  explicit LPCVertex(const daisi::material_flow::Task &task) : task(task){};
+
+  /// @brief The task this vertex represents by giving it additional information for auction and
+  /// about the layer.
+  daisi::material_flow::Task task;
+
+  /// @brief Assigning a layer to the task as presented by the set formulations in pIA.
+  PrecedenceGraphLayer layer = PrecedenceGraphLayer::kNone;
+
+  /// @brief F[t] in pIA; latest finish time of tasks that have been scheduled.
+  /// std::nullopt otherwise
+  std::optional<daisi::util::Duration> latest_finish = std::nullopt;
+
+  /// @brief PC[t] in pIA; earliest valid start time of tasks whose predecessors have been
+  /// scheduled. Tasks initially in T_F can be started at any time. If predecessors are not
+  /// scheduled, std::nullopt is set.
+  std::optional<daisi::util::Duration> earliest_valid_start = std::nullopt;
+
+  /// @brief Flag representing that a free task has been already scheduled.
+  /// The flag is not used outside of free layer tasks and disregarded on further layers.
+  bool scheduled = false;
+
+  friend bool operator==(const LPCVertex &v1, const LPCVertex &v2) { return v1.task == v2.task; }
+
+  friend bool operator!=(const LPCVertex &v1, const LPCVertex &v2) { return v1.task != v2.task; }
+};
+
+/// @brief Helper class to implement the pIA algorithm.
+/// A directed graph is layered into a free, second, and hidden layer.
+/// Prioritization is neglected in this modification of the algorithm.
+/// Therefore, all tasks from the free layer are automatically auctionable.
+///
+/// The algorithm is based on the following paper:
+/// McIntire, Mitchell, Ernesto Nunes, and Maria Gini. "Iterated multi-robot auctions for
+/// precedence-constrained task scheduling." Proceedings of the 2016 international conference on
+/// autonomous agents & multiagent systems. 2016.
+class LayeredPrecedenceGraph
+    : private daisi::datastructure::DirectedGraph<LPCVertex, std::monostate> {
+public:
+  explicit LayeredPrecedenceGraph(std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler);
+
+  ~LayeredPrecedenceGraph() = default;
+
+  /// @brief Taking the next step in the algorithm. Updating the graph by assuming that all tasks of
+  /// the free layer are now scheduled. Accordingly, layers from the second and hidden layer need to
+  /// be updated.
+  void next();
+
+  /// @brief In this modification of pIA we do not consider prioritizations yet. Therefore, all free
+  /// tasks are auctionable.
+  /// @return Vector of all free tasks.
+  std::vector<daisi::material_flow::Task> getAuctionableTasks();
+
+  /// @brief Setting the earliest valid start time, in pIA represented as PC[t], of a task.
+  /// @param task Task to search for the according vertex
+  /// @param time Earliest valid start time
+  void setEarliestValidStartTime(const std::string &task_uuid, const daisi::util::Duration &time);
+
+  /// @brief Setting the latest finish time, in pIA represented as F[t], of a task.
+  /// @param task Task to search for the according vertex
+  /// @param time Earliest valid start time
+  void setLatestFinishTime(const std::string &task_uuid, const daisi::util::Duration &time);
+
+  daisi::util::Duration getEarliestValidStartTime(const std::string &task_uuid) const;
+
+  daisi::util::Duration getLatestFinishTime(const std::string &task_uuid) const;
+
+  daisi::material_flow::Task getTask(const std::string &task_uuid) const;
+
+  /// @brief Checks whether all tasks are on the scheduled layer. The scheduled flag is not
+  /// considered in this.
+  /// @return True if all tasks are on the scheduled layer.
+  bool areAllTasksScheduled() const;
+
+  /// @brief Checks whether for all free tasks the scheduled flag is set. If yes, this means that
+  /// the iteration is finished.
+  /// @return True if for all free tasks the scheduled flag is set.
+  bool areAllFreeTasksScheduled() const;
+
+  /// @brief Setting the scheduled flag of a task.
+  /// @param task_uuid Uuid of the task we refer to
+  void setTaskScheduled(const std::string &task_uuid);
+
+  /// @brief Checking whether a free task has already been scheduled in this iteration before the
+  /// layers get updated.
+  /// @param task_uuid Uuid of the task we refer to
+  /// @return True if the task is on the free layer and the scheduled flag is set
+  bool isFreeTaskScheduled(const std::string &task_uuid) const;
+
+private:
+  /// @brief Initializing layers of the precedence graph based on set equations from the pIA
+  /// algorithm.
+  void initLayers();
+
+  /// @brief Helper method for next(). Handling Line 2 onwards of the algorithm.
+  /// @param t A Vertex that previously was on the free layer and is now scheduled.
+  void updateLayersSecondToFree(const LPCVertex &t);
+
+  /// @brief Helper method for next(). Handling Line 6 onwards of the algorithm.
+  /// @param t_dash A Vertex that previously was on the second layer and is now free.
+  void updateLayersHiddenToSecond(const LPCVertex &t_dash);
+
+  /// @brief Helper method to filter vertices of a certain layer.
+  /// @param layer we want to filter for
+  /// @return Vector of vertices with given layer.
+  std::vector<LPCVertex> getLayerVertices(PrecedenceGraphLayer layer) const;
+
+  LPCVertex getVertex(const std::string &task_uuid) const;
+};
+
+}  // namespace daisi::cpps::logical
+
+#endif

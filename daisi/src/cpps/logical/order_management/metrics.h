@@ -20,9 +20,10 @@
 #include <algorithm>
 #include <functional>
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class Metrics {
 public:
@@ -99,8 +100,11 @@ public:
   }
 
   inline friend bool operator<(const Metrics &lhs, const Metrics &rhs);
-
+  inline friend bool operator<=(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator>(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator>=(const Metrics &lhs, const Metrics &rhs);
   inline friend bool operator==(const Metrics &lhs, const Metrics &rhs);
+  inline friend bool operator!=(const Metrics &lhs, const Metrics &rhs);
 
   static std::function<double(const Metrics &)> utility_function_;
 
@@ -110,6 +114,9 @@ public:
   daisi::util::Distance empty_travel_distance;
   daisi::util::Distance loaded_travel_distance;
 
+  SERIALIZE(empty_travel_time, loaded_travel_time, action_time, empty_travel_distance,
+            loaded_travel_distance, makespan_, start_time_);
+
 private:
   daisi::util::Duration makespan_ = 0.0;
   daisi::util::Duration start_time_ = 0.0;
@@ -118,11 +125,22 @@ private:
 bool operator<(const Metrics &lhs, const Metrics &rhs) {
   return Metrics::utility_function_(lhs) < Metrics::utility_function_(rhs);
 }
-
+bool operator<=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) <= Metrics::utility_function_(rhs);
+}
+bool operator>(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) > Metrics::utility_function_(rhs);
+}
+bool operator>=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) >= Metrics::utility_function_(rhs);
+}
 bool operator==(const Metrics &lhs, const Metrics &rhs) {
   return Metrics::utility_function_(lhs) == Metrics::utility_function_(rhs);
 }
+bool operator!=(const Metrics &lhs, const Metrics &rhs) {
+  return Metrics::utility_function_(lhs) != Metrics::utility_function_(rhs);
+}
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

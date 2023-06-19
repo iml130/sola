@@ -17,7 +17,7 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "cpps/logical/algorithms/disposition/disposition_participant.h"
+#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
 #include "utils/sola_utils.h"
@@ -49,13 +49,14 @@ void AmrLogicalAgent::initAlgorithms() {
   }
 
   // TODO decide about chosen order management depending on algorithm config
-  order_management_ = std::make_shared<order_management::StnOrderManagement>(
-      description_, topology_, daisi::util::Pose{current_position_});
+  order_management_ = std::make_shared<StnOrderManagement>(description_, topology_,
+                                                           daisi::util::Pose{current_position_});
 
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kDispositionParticipant:
-        algorithms_.push_back(std::make_unique<DispositionParticipant>(sola_));
+      case AlgorithmType::kIteartedAuctionDispositionParticipant:
+        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
+
         break;
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");

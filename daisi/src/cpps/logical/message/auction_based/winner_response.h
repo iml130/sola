@@ -14,31 +14,35 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
-#define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
+#ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
+#define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
 
-#include "material_flow/model/task.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {
 
-class CallForProposal {
+class WinnerResponse {
 public:
-  CallForProposal() = default;
-  CallForProposal(std::string initiator_connection,
-                  const std::vector<daisi::material_flow::Task> &tasks)
-      : initiator_connection_(std::move(initiator_connection)), tasks_(tasks) {}
+  WinnerResponse() = default;
+  WinnerResponse(std::string task_uuid, std::string participant_connection, bool accept)
+      : task_uuid_(std::move(task_uuid)),
+        participant_connection_(std::move(participant_connection)),
+        accept_(accept){};
 
-  const std::string &getInitiatorConnection() const { return initiator_connection_; }
+  const std::string &getTaskUuid() const { return task_uuid_; }
 
-  const std::vector<daisi::material_flow::Task> &getTasks() const { return tasks_; }
+  const std::string &getParticipantConnection() const { return participant_connection_; }
 
-  SERIALIZE(initiator_connection_, tasks_);
+  bool doesAccept() const { return accept_; }
+
+  SERIALIZE(task_uuid_, accept_, participant_connection_);
 
 private:
-  std::string initiator_connection_;
+  std::string task_uuid_;
 
-  std::vector<daisi::material_flow::Task> tasks_;
+  std::string participant_connection_;
+
+  bool accept_;
 };
 
 }  // namespace daisi::cpps::logical

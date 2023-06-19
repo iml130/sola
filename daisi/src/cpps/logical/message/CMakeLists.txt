@@ -1,3 +1,5 @@
+add_subdirectory(auction_based)
+
 add_library(daisi_cpps_logical_message_serializer STATIC)
 target_sources(daisi_cpps_logical_message_serializer
     PUBLIC
@@ -8,30 +10,14 @@ target_link_libraries(daisi_cpps_logical_message_serializer
     PUBLIC
     daisi_cpps_logical_message_auction_based_call_for_proposal
     daisi_cpps_logical_message_auction_based_bid_submission
+    daisi_cpps_logical_message_auction_based_iteration_notification
+    daisi_cpps_logical_message_auction_based_winner_notification
+    daisi_cpps_logical_message_auction_based_winner_response
 
     PRIVATE
     solanet_serializer
 )
 target_include_directories(daisi_cpps_logical_message_serializer
     PUBLIC
-    ${DAISI_SOURCE_DIR}/src)
-
-add_library(daisi_cpps_logical_message_auction_based_call_for_proposal INTERFACE)
-target_sources(daisi_cpps_logical_message_auction_based_call_for_proposal
-    INTERFACE
-    auction_based/call_for_proposal.h
-)
-target_link_libraries(daisi_cpps_logical_message_auction_based_call_for_proposal
-    INTERFACE
-    solanet_serializer
-)
-
-add_library(daisi_cpps_logical_message_auction_based_bid_submission INTERFACE)
-target_sources(daisi_cpps_logical_message_auction_based_bid_submission
-    INTERFACE
-    auction_based/bid_submission.h
-)
-target_link_libraries(daisi_cpps_logical_message_auction_based_bid_submission
-    INTERFACE
-    solanet_serializer
+    ${DAISI_SOURCE_DIR}/src
 )
