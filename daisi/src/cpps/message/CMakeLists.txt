@@ -53,7 +53,7 @@ target_sources(daisi_cpps_message_ssi_submission
 target_link_libraries(daisi_cpps_message_ssi_submission
         PUBLIC
         ns3::libcore
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
         solanet_serialize
 )
 target_include_directories(daisi_cpps_message_ssi_submission
@@ -139,7 +139,7 @@ target_link_libraries(daisi_cpps_message_types_all
         daisi_cpps_message_ssi_iteration_notification
         daisi_cpps_message_task_update
         daisi_cpps_message_task_info
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
 )
 target_include_directories(daisi_cpps_message_types_all
         INTERFACE

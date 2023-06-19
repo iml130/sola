@@ -8,7 +8,7 @@ target_link_libraries(daisi_cpps_common_agv_description
         ns3::libcore
         daisi_cpps_amr_physical_amr_mobility_model_ns3
         daisi_cpps_model_kinematics
-        daisi_cpps_amr_amr_static_ability
+        daisi_cpps_amr_model_amr_static_ability
 )
 
 add_library(daisi_cpps_common_boundaries INTERFACE)
