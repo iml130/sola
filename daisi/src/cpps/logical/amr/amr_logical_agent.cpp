@@ -49,12 +49,12 @@ void AmrLogicalAgent::initAlgorithms() {
   }
 
   // TODO decide about chosen order management depending on algorithm config
-  order_management_ = std::make_shared<order_management::StnOrderManagement>(
-      description_, topology_, daisi::util::Pose{current_position_});
+  order_management_ = std::make_shared<StnOrderManagement>(description_, topology_,
+                                                           daisi::util::Pose{current_position_});
 
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kIteratedAuctionDispositionParticipant:
+      case AlgorithmType::kIteartedAuctionDispositionParticipant:
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
 
         break;
