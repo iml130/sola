@@ -19,12 +19,12 @@
 
 #include <memory>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/ssi_call_for_proposal.h"
 #include "cpps/message/ssi_iteration_notification.h"
 #include "cpps/message/ssi_submission.h"
 #include "cpps/message/ssi_winner_notification.h"
 #include "cpps/message/ssi_winner_response.h"
-#include "cpps/model/ability.h"
 #include "cpps/negotiation/initiator/task_allocation_initiator.h"
 #include "cpps/negotiation/utility/utility_evaluator.h"
 #include "cpps/negotiation/utils/overload.h"

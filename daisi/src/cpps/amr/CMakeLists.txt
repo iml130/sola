@@ -1,5 +1,6 @@
 add_subdirectory(message)
 add_subdirectory(physical)
+add_subdirectory(model)
 
 add_library(daisi_cpps_amr_amr_description INTERFACE)
 target_sources(daisi_cpps_amr_amr_description

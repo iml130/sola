@@ -19,8 +19,8 @@
 
 #include <string>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "ns3/ptr.h"
 

@@ -16,7 +16,7 @@
 
 #include "cpps/model/material_flow_model.h"
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/model/task.h"
 #include "ns3/vector.h"
 #include "utils/random_engine.h"

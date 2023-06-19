@@ -19,8 +19,8 @@
 
 #include <optional>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/serialize.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/task.h"
 #include "cpps/negotiation/utility/accumulated_utility_dimensions.h"
 #include "cpps/negotiation/utility/utility_dimensions.h"

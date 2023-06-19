@@ -20,8 +20,8 @@
 #include <iostream>
 #include <optional>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/serialize.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/agv_fleet.h"
 #include "cpps/model/kinematics.h"
 #include "cpps/model/order_states.h"

@@ -17,8 +17,8 @@
 #ifndef DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 #define DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/functionality.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/order_states.h"
 #include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"

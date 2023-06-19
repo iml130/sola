@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/model/kinematics.h"
 
 namespace daisi::cpps {
