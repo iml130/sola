@@ -70,9 +70,6 @@ template <typename TupleT> bool comparableAbility(const TupleT &t1, const TupleT
 
 struct AbilityHasher {
   std::size_t operator()(const Ability &ability) const {
-    using std::hash;
-    using std::size_t;
-
     std::string rep =
         std::to_string(std::get<0>(ability)) + "|" + std::get<1>(ability).getTypeAsString();
     std::size_t res = std::hash<std::string>()(rep);
