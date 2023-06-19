@@ -26,8 +26,8 @@ class AuctionBasedOrderManagement : public OrderManagement {
 public:
   struct InsertionPoint {};
 
-  AuctionBasedOrderManagement(const AmrDescription &amr_description,
-                                       const Topology &topology, const daisi::util::Pose &pose)
+  AuctionBasedOrderManagement(const AmrDescription &amr_description, const Topology &topology,
+                              const daisi::util::Pose &pose)
       : OrderManagement(amr_description, topology, pose) {}
 
   virtual ~AuctionBasedOrderManagement() = default;
