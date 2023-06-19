@@ -116,8 +116,7 @@ private:
   void clearFinishedMaterialFlows();
 
   Kinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
-  mrta::model::Ability parseAGVAbility(
-      std::shared_ptr<daisi::ScenariofileParser::Table> description);
+  amr::Ability parseAGVAbility(std::shared_ptr<daisi::ScenariofileParser::Table> description);
 
   MRTAConfig mrta_config_;
 

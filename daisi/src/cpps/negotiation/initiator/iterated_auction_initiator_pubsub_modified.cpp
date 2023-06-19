@@ -63,7 +63,7 @@ void IteratedAuctionInitiatorPubsubModified::subscribeTopic(const std::string &t
 
 void IteratedAuctionInitiatorPubsubModified::taskAnnoucement() {
   // preparing T_{auct}^{G_j} for each G_j
-  std::unordered_map<mrta::model::Ability, std::vector<Task>, mrta::model::AbilityHasher>
+  std::unordered_map<amr::Ability, std::vector<Task>, amr::AbilityHasher>
       tasks_for_existing_abilities;
 
   for (auto const &task : auctionable_tasks_) {
@@ -151,7 +151,7 @@ IteratedAuctionInitiatorPubsubModified::selectWinners() {
 
 void IteratedAuctionInitiatorPubsubModified::iterationNotification(
     const std::vector<std::tuple<std::string, Task>> &iteration_info) {
-  std::unordered_map<mrta::model::Ability, std::vector<std::string>, mrta::model::AbilityHasher>
+  std::unordered_map<amr::Ability, std::vector<std::string>, amr::AbilityHasher>
       relevant_auctioned_tasks_info_for_abilities;
 
   for (auto const &[winner_connection, task] : iteration_info) {
@@ -174,7 +174,7 @@ void IteratedAuctionInitiatorPubsubModified::iterationNotification(
 }
 
 void IteratedAuctionInitiatorPubsubModified::renotifyAboutOpenTasks() {
-  std::unordered_map<mrta::model::Ability, std::vector<std::string>, mrta::model::AbilityHasher>
+  std::unordered_map<amr::Ability, std::vector<std::string>, amr::AbilityHasher>
       relevant_open_tasks_info_for_abilities;
 
   for (auto const &task : auctionable_tasks_) {

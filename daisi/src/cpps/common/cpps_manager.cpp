@@ -649,7 +649,7 @@ void CppsManager::parseTopology() {
 }
 
 void CppsManager::parseAGVs() {
-  std::vector<std::pair<mrta::model::Ability, Kinematics>> agv_infos;
+  std::vector<std::pair<amr::Ability, Kinematics>> agv_infos;
 
   auto agv_table =
       parser_.getParsedContent()
@@ -819,12 +819,11 @@ Kinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Tabl
   return Kinematics(max_velo, min_velo, max_acc, min_acc, load_time, unload_time);
 }
 
-mrta::model::Ability CppsManager::parseAGVAbility(
-    std::shared_ptr<ScenariofileParser::Table> description) {
+amr::Ability CppsManager::parseAGVAbility(std::shared_ptr<ScenariofileParser::Table> description) {
   std::string load_carrier_type_string = description->getRequired<std::string>("load_carrier_type");
   float max_payload = description->getRequired<float>("max_payload");
 
-  mrta::model::LoadCarrier load_carrier(load_carrier_type_string);
+  amr::LoadCarrier load_carrier(load_carrier_type_string);
   return std::make_tuple(max_payload, load_carrier);
 }
 

@@ -33,7 +33,7 @@ public:
   const std::string &getTaskUuid() const;
   ns3::Vector getPickupLocation() const;
   ns3::Vector getDeliveryLocation() const;
-  mrta::model::Ability getAbilityRequirement() const;
+  amr::Ability getAbilityRequirement() const;
 
   SERIALIZE(task_uuid_, pickup_x_, pickup_y_, delivery_x_, delivery_y_, ability_requirement_);
 
@@ -43,7 +43,7 @@ private:
   double pickup_y_ = 0.0;
   double delivery_x_ = 0.0;
   double delivery_y_ = 0.0;
-  mrta::model::Ability ability_requirement_;
+  amr::Ability ability_requirement_;
 };
 
 }  // namespace daisi::cpps

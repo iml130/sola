@@ -190,7 +190,7 @@ void IteratedAuctionInitiator::removeBidsForWinner(std::vector<ReceivedBids> &bi
 }
 
 void IteratedAuctionInitiator::removeBidsWhichMeetAbilityRequirement(
-    std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement) {
+    std::vector<ReceivedBids> &bids, const amr::Ability &ability_requirement) {
   auto remove_condition_lambda =
       [&ability_requirement](const IteratedAuctionInitiator::ReceivedBids &bid) {
         return comparableAbility(ability_requirement, bid.participant_ability) &&
@@ -201,7 +201,7 @@ void IteratedAuctionInitiator::removeBidsWhichMeetAbilityRequirement(
 }
 
 void IteratedAuctionInitiator::removeBidsWhichAreLesserThanAbilityRequirement(
-    std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement) {
+    std::vector<ReceivedBids> &bids, const amr::Ability &ability_requirement) {
   auto remove_condition_lambda =
       [&ability_requirement](const IteratedAuctionInitiator::ReceivedBids &bid) {
         return comparableAbility(ability_requirement, bid.participant_ability) &&

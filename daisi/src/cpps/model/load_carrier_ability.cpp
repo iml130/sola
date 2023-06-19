@@ -18,7 +18,7 @@
 
 #include <stdexcept>
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
 LoadCarrier::LoadCarrier(const Types &type) : type_(type) {}
 
@@ -64,4 +64,4 @@ std::unordered_map<std::string, LoadCarrier::Types> LoadCarrier::string_to_type_
     {"package", LoadCarrier::Types::kPackage},
 };
 
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr

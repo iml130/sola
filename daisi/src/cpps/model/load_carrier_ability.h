@@ -23,7 +23,7 @@
 
 #include "cpps/message/serialize.h"
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
 class LoadCarrier {
 public:
@@ -60,5 +60,5 @@ private:
 
 bool comparable(const LoadCarrier &l1, const LoadCarrier &l2);
 
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr
 #endif

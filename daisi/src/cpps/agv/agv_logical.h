@@ -91,7 +91,7 @@ private:
   AgvDataModel data_model_;
 
   std::shared_ptr<Kinematics> kinematics_;
-  std::shared_ptr<mrta::model::Ability> ability_;
+  std::shared_ptr<amr::Ability> ability_;
   std::shared_ptr<ns3::Vector> last_position_;
 
   AmrState last_agv_state_ = AmrState::kIdle;

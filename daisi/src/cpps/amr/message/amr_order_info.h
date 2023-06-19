@@ -28,16 +28,16 @@ class AmrOrderInfo {
 public:
   AmrOrderInfo() = default;
   AmrOrderInfo(const std::vector<FunctionalityVariant> &functionalities,
-               const mrta::model::Ability &ability_requirement)
+               const amr::Ability &ability_requirement)
       : functionalities_(functionalities), ability_requirement_(ability_requirement) {}
 
   std::vector<FunctionalityVariant> getFunctionalities() const { return functionalities_; }
-  mrta::model::Ability getAbilityRequirement() const { return ability_requirement_; }
+  amr::Ability getAbilityRequirement() const { return ability_requirement_; }
   SERIALIZE(functionalities_, ability_requirement_);
 
 private:
   std::vector<FunctionalityVariant> functionalities_;
-  mrta::model::Ability ability_requirement_;
+  amr::Ability ability_requirement_;
 };
 }  // namespace daisi::cpps
 

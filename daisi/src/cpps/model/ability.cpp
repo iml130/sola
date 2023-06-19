@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
 template <typename TupleT, std::size_t... Is>
 bool equalAbilityImpl(const TupleT &t1, const TupleT &t2, std::index_sequence<Is...> /*unused*/) {
@@ -103,15 +103,10 @@ template <typename TupleT> std::ostream &printAbility(std::ostream &os, const Tu
   return printAbilityImpl(os, tp, std::make_index_sequence<std::tuple_size<Ability>::value>{});
 }
 
-template bool equalAbility<mrta::model::Ability>(const mrta::model::Ability &t1,
-                                                 const mrta::model::Ability &t2);
-template bool lessAbility<mrta::model::Ability>(const mrta::model::Ability &t1,
-                                                const mrta::model::Ability &t2);
-template bool lessOrEqualAbility<mrta::model::Ability>(const mrta::model::Ability &t1,
-                                                       const mrta::model::Ability &t2);
-template bool comparableAbility<mrta::model::Ability>(const mrta::model::Ability &t1,
-                                                      const mrta::model::Ability &t2);
-template std::ostream &printAbility<mrta::model::Ability>(std::ostream &os,
-                                                          const mrta::model::Ability &tp);
+template bool equalAbility<amr::Ability>(const amr::Ability &t1, const amr::Ability &t2);
+template bool lessAbility<amr::Ability>(const amr::Ability &t1, const amr::Ability &t2);
+template bool lessOrEqualAbility<amr::Ability>(const amr::Ability &t1, const amr::Ability &t2);
+template bool comparableAbility<amr::Ability>(const amr::Ability &t1, const amr::Ability &t2);
+template std::ostream &printAbility<amr::Ability>(std::ostream &os, const amr::Ability &tp);
 
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr

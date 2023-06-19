@@ -52,11 +52,10 @@ private:
   void subscribeTopic(const std::string &topic, const uint8_t &topic_number = 0);
 
   // saving existing abilities
-  std::vector<mrta::model::Ability> existing_abilities_;
+  std::vector<amr::Ability> existing_abilities_;
 
   // saving topics we have subscribed to
-  std::unordered_map<mrta::model::Ability, std::string, mrta::model::AbilityHasher>
-      topics_for_abilities_;
+  std::unordered_map<amr::Ability, std::string, amr::AbilityHasher> topics_for_abilities_;
 
   struct {
     uint64_t subscription = 100;
