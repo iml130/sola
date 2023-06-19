@@ -77,22 +77,22 @@ std::vector<daisi::material_flow::Task> AuctionInitiatorState::processWinnerAcce
 }
 
 void AuctionInitiatorState::countWinnerResponseProcessing() {
-  if (winner_acceptions_.empty()) {
+  if (!winner_acceptions_.empty()) {
+    no_winner_acceptions_counter_ = 0;
+  } else {
     if (++no_winner_acceptions_counter_ >= 100) {
       throw std::runtime_error("No winner acceptions.");
     }
   }
-
-  no_winner_acceptions_counter_ = 0;
 }
 
 void AuctionInitiatorState::countBidSubmissionProcessing() {
-  if (bid_submissions_.empty()) {
+  if (!bid_submissions_.empty()) {
+    no_bid_submissions_counter_ = 0;
+  } else {
     if (++no_bid_submissions_counter_ >= 5) {
       throw std::runtime_error("No bid submissions.");
     }
-  } else {
-    no_bid_submissions_counter_ = 0;
   }
 }
 

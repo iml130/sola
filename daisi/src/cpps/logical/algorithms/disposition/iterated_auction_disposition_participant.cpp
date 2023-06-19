@@ -122,7 +122,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 }
 
 void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
-  for (auto &[task_uuid, task_state] : state.task_state_mapping) {
+  for (auto &[_, task_state] : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
     if (order_management_->canAddTask(task_state.task)) {

@@ -31,7 +31,7 @@ namespace daisi::cpps::logical {
 /// AuctionParticipantState, to store information related to exactly one task.
 /// This includes the previously calculated bids (metrics) and insertion points.
 struct AuctionParticipantTaskState {
-  AuctionParticipantTaskState(const daisi::material_flow::Task &task);
+  explicit AuctionParticipantTaskState(const daisi::material_flow::Task &task);
 
   daisi::material_flow::Task task;
 
@@ -47,7 +47,7 @@ struct AuctionParticipantTaskState {
 struct AuctionParticipantState {
   /// @brief Initiatoring the task states based on the given tasks.
   /// @param tasks Open tasks that initially got annouced.
-  AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
+  explicit AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
 
   /// @brief Storing the state of each open task. The key is the task uuid.
   std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;

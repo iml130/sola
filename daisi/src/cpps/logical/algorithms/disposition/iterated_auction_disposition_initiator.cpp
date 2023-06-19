@@ -139,10 +139,10 @@ void IteratedAuctionDispositionInitiator::callForProposal() {
   auto task_ability_mapping =
       getTaskAbilityMapping(layered_precedence_graph_->getAuctionableTasks());
 
-  for (const auto &[ability, tasks] : task_ability_mapping) {
-    auto topic = ability_topic_mapping_[ability];
+  for (const auto &pair : task_ability_mapping) {
+    auto topic = ability_topic_mapping_[pair.first];
 
-    CallForProposal cfp(initiator_connection, tasks);
+    CallForProposal cfp(initiator_connection, pair.second);
     sola_->publishMessage(topic, serialize(cfp), "TODO log cfp");
   }
 }
