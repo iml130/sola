@@ -38,7 +38,7 @@ namespace daisi::cpps {
 class TaskManagement {
 public:
   TaskManagement(const std::shared_ptr<Kinematics> &kinematics,
-                 const std::shared_ptr<mrta::model::Ability> &ability,
+                 const std::shared_ptr<amr::Ability> &ability,
                  const std::shared_ptr<ns3::Vector> &last_position,
                  const std::shared_ptr<daisi::cpps::CppsLoggerNs3> &logger,
                  const std::shared_ptr<UtilityEvaluator> &utility_evaluator);
@@ -62,7 +62,7 @@ public:
 
   void setAgvUUID(const std::string &uuid);
 
-  mrta::model::Ability getAbility() const;
+  amr::Ability getAbility() const;
 
   virtual bool hasOrder(const std::string &order_uuid) = 0;
 
@@ -74,7 +74,7 @@ protected:
   double expected_current_order_finish_time_ = -1.0;
 
   const std::shared_ptr<Kinematics> &kinematics_;
-  const std::shared_ptr<mrta::model::Ability> &ability_;
+  const std::shared_ptr<amr::Ability> &ability_;
   const std::shared_ptr<ns3::Vector> &last_position_;
 
   const std::shared_ptr<daisi::cpps::CppsLoggerNs3> &logger_;

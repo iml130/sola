@@ -28,13 +28,13 @@ std::ostream &operator<<(std::ostream &os, const Task &order) {
   return os;
 }
 
-Task::Task(const ns3::Vector &from, const ns3::Vector &to, const mrta::model::Ability &ability)
+Task::Task(const ns3::Vector &from, const ns3::Vector &to, const amr::Ability &ability)
     : Task(UUIDGenerator::get()(), from, to, ability) {
   loadKinematics();
 }
 
 Task::Task(const std::string &uuid, const ns3::Vector &from, const ns3::Vector &to,
-           const mrta::model::Ability &ability)
+           const amr::Ability &ability)
     : uuid_(uuid), current_pos_(from), ability_requirement_(ability) {
   from_x_ = from.x;
   from_y_ = from.y;
@@ -63,7 +63,7 @@ void Task::setCurrentPosition(const ns3::Vector &currentPosition) {
 
 std::string Task::getUUID() const { return uuid_; }
 
-mrta::model::Ability Task::getAbilityRequirement() const { return ability_requirement_; }
+amr::Ability Task::getAbilityRequirement() const { return ability_requirement_; }
 
 void Task::setConnection(const std::string &connection) { connection_ = connection; }
 
@@ -73,7 +73,7 @@ void Task::setName(const std::string &name) { name_ = name; }
 
 std::string Task::getName() const { return name_; }
 
-void Task::setSpecificAbilityRequirement(const mrta::model::Ability &specific_requirement) {
+void Task::setSpecificAbilityRequirement(const amr::Ability &specific_requirement) {
   specific_ability_ = specific_requirement;
   specific_kinematics_ = AGVFleet::get().getKinematicsOfAbility(specific_requirement);
   time_window.setDuration(getDuration(true));

@@ -26,8 +26,7 @@ namespace daisi::cpps {
 class AmrLoadHandlingUnit {
 public:
   AmrLoadHandlingUnit() = default;
-  AmrLoadHandlingUnit(double load_time_s, double unload_time_s,
-                      const daisi::cpps::mrta::model::Ability &carrier_ability)
+  AmrLoadHandlingUnit(double load_time_s, double unload_time_s, const amr::Ability &carrier_ability)
       : load_time_s_(load_time_s),
         unload_time_s_(unload_time_s),
         carrier_ability_(carrier_ability) {}
@@ -38,14 +37,14 @@ public:
   double getUnloadTime() const { return unload_time_s_; }
   /// @}
 
-  daisi::cpps::mrta::model::Ability getAbility() const { return carrier_ability_; }
+  amr::Ability getAbility() const { return carrier_ability_; }
 
   SERIALIZE(carrier_ability_, load_time_s_, unload_time_s_);
 
 private:
   double load_time_s_ = -1;
   double unload_time_s_ = -1;
-  daisi::cpps::mrta::model::Ability carrier_ability_;
+  amr::Ability carrier_ability_;
 };
 }  // namespace daisi::cpps
 #endif

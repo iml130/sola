@@ -25,7 +25,7 @@
 
 #include "cpps/model/load_carrier_ability.h"
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
 using Ability = std::tuple<float, LoadCarrier>;
 
@@ -48,6 +48,6 @@ struct AbilityHasher {
   }
 };
 
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr
 
 #endif

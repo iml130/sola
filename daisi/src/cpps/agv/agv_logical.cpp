@@ -50,7 +50,7 @@ AgvLogicalNs3::AgvLogicalNs3(TopologyNs3 topology, const MRTAConfig &mrta_config
   logger_ = daisi::global_logger_manager->createAMRLogger(device_id_);
 
   last_position_ = std::make_shared<ns3::Vector>();
-  ability_ = std::make_shared<mrta::model::Ability>();
+  ability_ = std::make_shared<amr::Ability>();
   kinematics_ = std::make_shared<Kinematics>();
 }
 
@@ -177,7 +177,7 @@ void AgvLogicalNs3::processMessageDescription(const AmrDescription &description)
   kinematics_->set(Kinematics(k.getMaxVelocity(), k.getMinVelocity(), k.getMaxAcceleration(),
                               k.getMaxDeceleration(), l.getLoadTime() * 1000.0,
                               l.getUnloadTime() * 1000.0));
-  ability_ = std::make_shared<mrta::model::Ability>(l.getAbility());
+  ability_ = std::make_shared<amr::Ability>(l.getAbility());
   service_.friendly_name =
       "service_" +
       description.getProperties().getFriendlyName();  // As we are only having a single service

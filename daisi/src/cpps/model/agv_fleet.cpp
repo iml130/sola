@@ -20,9 +20,9 @@ namespace daisi::cpps {
 
 /// as tau(t) of task t in thesis
 /// where ability_requirement is h(t)
-std::vector<mrta::model::Ability> AGVFleet::getFittingExistingAbilities(
-    const mrta::model::Ability &ability_requirement) {
-  std::vector<mrta::model::Ability> fitting_abilities;
+std::vector<amr::Ability> AGVFleet::getFittingExistingAbilities(
+    const amr::Ability &ability_requirement) {
+  std::vector<amr::Ability> fitting_abilities;
   for (auto const &[existing_ability, _] : infos_) {
     if (lessOrEqualAbility(ability_requirement, existing_ability)) {
       fitting_abilities.push_back(existing_ability);
@@ -32,8 +32,7 @@ std::vector<mrta::model::Ability> AGVFleet::getFittingExistingAbilities(
   return fitting_abilities;
 }
 
-mrta::model::Ability AGVFleet::getClosestExistingAbility(
-    const mrta::model::Ability &ability_requirement) {
+amr::Ability AGVFleet::getClosestExistingAbility(const amr::Ability &ability_requirement) {
   /*
   finding minimal element in taut(t), where h(t) = ability_requirement
 
@@ -47,7 +46,7 @@ mrta::model::Ability AGVFleet::getClosestExistingAbility(
   */
 
   // NOLINTNEXTLINE(readability-identifier-naming)
-  std::vector<mrta::model::Ability> S = getFittingExistingAbilities(ability_requirement);
+  std::vector<amr::Ability> S = getFittingExistingAbilities(ability_requirement);
 
   if (S.size() == 1) {
     return S[0];
@@ -72,15 +71,15 @@ mrta::model::Ability AGVFleet::getClosestExistingAbility(
 }
 
 /// \mathcal{G} = {G1, G2, ...} in thesis
-std::vector<mrta::model::Ability> AGVFleet::getAllExistingAbilities() {
-  std::vector<mrta::model::Ability> abilities;
+std::vector<amr::Ability> AGVFleet::getAllExistingAbilities() {
+  std::vector<amr::Ability> abilities;
   for (auto const &[ability, _] : infos_) {
     abilities.push_back(ability);
   }
   return abilities;
 }
 
-std::string AGVFleet::getTopicForAbility(const mrta::model::Ability &ability) {
+std::string AGVFleet::getTopicForAbility(const amr::Ability &ability) {
   std::ostringstream stream;
   stream << "topic";
   printAbility(stream, ability);
@@ -88,7 +87,7 @@ std::string AGVFleet::getTopicForAbility(const mrta::model::Ability &ability) {
   return topic;
 }
 
-Kinematics AGVFleet::getKinematicsOfAbility(const mrta::model::Ability &ability) {
+Kinematics AGVFleet::getKinematicsOfAbility(const amr::Ability &ability) {
   for (auto const &[existing_ability, kinematics] : infos_) {
     if (equalAbility(ability, existing_ability)) {
       return kinematics;

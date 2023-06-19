@@ -39,9 +39,9 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
   AmrProperties impossible_properties("manufacturer", "model_name", 0, "device_type",
                                       "friendly_name", {});
   auto physical_properties = AmrPhysicalProperties();
-  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::mrta::model::Ability());
-  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::mrta::model::Ability());
-  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::mrta::model::Ability());
+  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::amr::Ability());
+  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::amr::Ability());
+  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::amr::Ability());
 
   auto move_to11 = MoveTo({10, 0});
   auto move_to12 = MoveTo({0, 10});
@@ -494,9 +494,9 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
   AmrProperties impossible_properties("manufacturer", "model_name", 0, "device_type",
                                       "friendly_name", {});
   auto physical_properties = AmrPhysicalProperties();
-  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::mrta::model::Ability());
-  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::mrta::model::Ability());
-  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::mrta::model::Ability());
+  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::amr::Ability());
+  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::amr::Ability());
+  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::amr::Ability());
 
   auto move_to11 = MoveTo({10, 0});
   auto move_to12 = MoveTo({0, 10});
@@ -940,9 +940,9 @@ TEST_CASE("calculatePhases single functionality (neglect rotation cost, neglect 
   AmrProperties impossible_properties("manufacturer", "model_name", 0, "device_type",
                                       "friendly_name", {});
   auto physical_properties = AmrPhysicalProperties();
-  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::mrta::model::Ability());
-  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::mrta::model::Ability());
-  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::mrta::model::Ability());
+  auto load_handling1 = AmrLoadHandlingUnit(1, 1, daisi::cpps::amr::Ability());
+  auto load_handling2 = AmrLoadHandlingUnit(10, 10, daisi::cpps::amr::Ability());
+  auto load_handling3 = AmrLoadHandlingUnit(2.5, 5, daisi::cpps::amr::Ability());
   auto load_handling_list = {load_handling1, load_handling2, load_handling3};
 
   auto move_to11 = MoveTo({10, 0});

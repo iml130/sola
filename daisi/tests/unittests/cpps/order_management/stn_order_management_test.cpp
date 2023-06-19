@@ -22,7 +22,7 @@
 using namespace daisi::material_flow;
 using namespace daisi::cpps;
 using namespace daisi::cpps::order_management;
-using namespace daisi::cpps::mrta::model;
+using namespace daisi::cpps::amr;
 
 std::function<double(const Metrics &)> Metrics::utility_function_ = [](const Metrics &m) {
   return -m.empty_travel_time;

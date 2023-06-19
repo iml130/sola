@@ -31,14 +31,14 @@ class SSISubmission {
 public:
   SSISubmission() = default;
   SSISubmission(const std::string &order_uuid, const std::string &initiator_connection,
-                const std::string &participant_connection,
-                const mrta::model::Ability &participant_ability, const UtilityDimensions &udims);
+                const std::string &participant_connection, const amr::Ability &participant_ability,
+                const UtilityDimensions &udims);
 
   std::string getTaskUuid() const;
   std::string getInitiatorConnection() const;
 
   std::string getParticipantConnection() const;
-  mrta::model::Ability getParticipantAbility() const;
+  amr::Ability getParticipantAbility() const;
 
   std::optional<UtilityDimensions> getUtilityDimensions() const;
 
@@ -52,7 +52,7 @@ private:
   std::string initiator_connection_;
 
   std::string participant_connection_;
-  mrta::model::Ability participant_ability_;
+  amr::Ability participant_ability_;
 
   std::optional<UtilityDimensions> udims_;
 };

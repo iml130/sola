@@ -20,7 +20,7 @@ namespace daisi::cpps {
 
 SSISubmission::SSISubmission(const std::string &order_uuid, const std::string &initiator_connection,
                              const std::string &participant_connection,
-                             const mrta::model::Ability &participant_ability,
+                             const amr::Ability &participant_ability,
                              const UtilityDimensions &udims)
     : task_uuid_(order_uuid),
       initiator_connection_(initiator_connection),
@@ -34,7 +34,7 @@ std::string SSISubmission::getInitiatorConnection() const { return initiator_con
 
 std::string SSISubmission::getParticipantConnection() const { return participant_connection_; }
 
-mrta::model::Ability SSISubmission::getParticipantAbility() const { return participant_ability_; }
+amr::Ability SSISubmission::getParticipantAbility() const { return participant_ability_; }
 
 std::optional<UtilityDimensions> SSISubmission::getUtilityDimensions() const { return udims_; }
 

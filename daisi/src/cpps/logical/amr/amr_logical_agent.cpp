@@ -137,8 +137,7 @@ void AmrLogicalAgent::sendTopologyToPhysical() {
 void AmrLogicalAgent::sendTaskToPhysical() {
   material_flow::Task task = order_management_->getCurrentTask();
 
-  daisi::cpps::mrta::model::Ability ability(
-      42.0, daisi::cpps::mrta::model::LoadCarrier::kNoLoadCarrierType);
+  amr::Ability ability(42.0, amr::LoadCarrier::kNoLoadCarrierType);
 
   AmrOrderInfo amr_order_info(materialFlowToFunctionalities(task.getOrders(), current_position_),
                               ability);
@@ -184,8 +183,7 @@ void AmrLogicalAgent::logAmrInfos() {
   // load handling unit
   info.load_time = description_.getLoadHandling().getLoadTime();
   info.unload_time = description_.getLoadHandling().getUnloadTime();
-  info.load_carrier_type =
-      daisi::cpps::mrta::model::LoadCarrier::kNoLoadCarrierType;  // TODO refactor
+  info.load_carrier_type = amr::LoadCarrier::kNoLoadCarrierType;  // TODO refactor
   info.max_weight = 42;                                           // TODO refactor
 
   // network
