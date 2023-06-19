@@ -32,9 +32,9 @@ void MaterialFlowLogicalAgent::init() { initCommunication(); }
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
 void MaterialFlowLogicalAgent::initAlgorithms() {
-  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::k_iterated_auction_disposition_initiator:
+      case AlgorithmType::kIteratedAuctionDispositionInitiator:
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionInitiator>(sola_));
         break;
       default:

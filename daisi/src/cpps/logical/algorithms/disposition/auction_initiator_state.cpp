@@ -81,18 +81,18 @@ void AuctionInitiatorState::countWinnerResponseProcessing() {
     if (++no_winner_acceptions_counter_ >= 100) {
       throw std::runtime_error("No winner acceptions.");
     }
-  } else {
-    no_winner_acceptions_counter_ = 0;
   }
+
+  no_winner_acceptions_counter_ = 0;
 }
 
 void AuctionInitiatorState::countBidSubmissionProcessing() {
   if (bid_submissions_.empty()) {
-    if (++no_bid_submissions_counter >= 5) {
+    if (++no_bid_submissions_counter_ >= 5) {
       throw std::runtime_error("No bid submissions.");
     }
   } else {
-    no_bid_submissions_counter = 0;
+    no_bid_submissions_counter_ = 0;
   }
 }
 

@@ -48,7 +48,7 @@ public:
   /// @brief Storing winner response notification in a helper class to determine outdated bids.
   REGISTER_IMPLEMENTATION(WinnerResponse);
 
-  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
+  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
 
 private:
   /// @brief Preparing interaction by subscribing to required topics for each ability.

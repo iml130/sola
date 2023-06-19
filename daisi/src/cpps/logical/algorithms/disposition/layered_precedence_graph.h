@@ -34,7 +34,7 @@ enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
 struct LPCVertex {
   /// @brief Initializing the vertex by setting the task and everything else as invalid.
   /// @param task The task this vertex represents.
-  LPCVertex(const daisi::material_flow::Task &task) : task(task){};
+  explicit LPCVertex(const daisi::material_flow::Task &task) : task(task){};
 
   /// @brief The task this vertex represents by giving it additional information for auction and
   /// about the layer.
@@ -73,7 +73,7 @@ struct LPCVertex {
 class LayeredPrecedenceGraph
     : private daisi::datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  LayeredPrecedenceGraph(std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler);
+  explicit LayeredPrecedenceGraph(std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler);
 
   ~LayeredPrecedenceGraph() = default;
 

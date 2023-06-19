@@ -33,7 +33,7 @@
 
 #define REQUIRE_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg) = 0;
 
-#define REGISTER_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg);
+#define REGISTER_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg) override;
 
 namespace daisi::cpps::logical {
 

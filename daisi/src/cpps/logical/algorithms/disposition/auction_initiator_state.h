@@ -107,7 +107,7 @@ private:
   std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph_;
 
   /// @brief Counter for how many times no bid submissions were received.
-  uint8_t no_bid_submissions_counter = 0;
+  uint8_t no_bid_submissions_counter_ = 0;
 
   /// @brief Counter for how many times no winner acceptions were received.
   uint8_t no_winner_acceptions_counter_ = 0;

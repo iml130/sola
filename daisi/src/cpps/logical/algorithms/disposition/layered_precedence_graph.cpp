@@ -147,10 +147,10 @@ void LayeredPrecedenceGraph::updateLayersHiddenToSecond(const LPCVertex &t_dash)
 }
 
 std::vector<daisi::material_flow::Task> LayeredPrecedenceGraph::getAuctionableTasks() {
-  auto vertices = getLayerVertices(PrecedenceGraphLayer::kFree);
+  auto free_vertices = getLayerVertices(PrecedenceGraphLayer::kFree);
   std::vector<daisi::material_flow::Task> tasks;
 
-  for (const auto &vertex : vertices_) {
+  for (const auto &vertex : free_vertices) {
     if (!vertex.scheduled) {
       tasks.push_back(vertex.task);
     }

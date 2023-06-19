@@ -68,8 +68,6 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
 }
 
 void IteratedAuctionDispositionInitiator::startIteration() {
-  auto auctionable_tasks = layered_precedence_graph_->getAuctionableTasks();
-
   // Sending CallForProposal messages to initiate the auction.
   callForProposal();
 

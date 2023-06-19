@@ -26,7 +26,7 @@ class CallForProposal {
 public:
   CallForProposal() = default;
   CallForProposal(std::string initiator_connection,
-                  const std::vector<daisi::material_flow::Task> tasks)
+                  const std::vector<daisi::material_flow::Task> &tasks)
       : initiator_connection_(std::move(initiator_connection)), tasks_(tasks) {}
 
   const std::string &getInitiatorConnection() const { return initiator_connection_; }

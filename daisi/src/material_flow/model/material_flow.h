@@ -30,12 +30,12 @@ class MFDLScheduler {
 public:
   MFDLScheduler() = default;
 
-  MFDLScheduler(std::string mfdl_program) {}
+  explicit MFDLScheduler(std::string mfdl_program) {}
 
-  SERIALIZE(tasks);
+  SERIALIZE(tasks_);
 
 private:
-  std::vector<Task> tasks;
+  std::vector<Task> tasks_;
 };
 
 }  // namespace daisi::material_flow

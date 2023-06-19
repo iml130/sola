@@ -27,7 +27,7 @@ enum class AlgorithmType {
 };
 
 struct AlgorithmConfig {
-  std::vector<AlgorithmType> algorithm_types_;
+  std::vector<AlgorithmType> algorithm_types;
 };
 
 }  // namespace daisi::cpps::logical

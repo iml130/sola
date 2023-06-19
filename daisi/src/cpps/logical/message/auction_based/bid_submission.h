@@ -28,8 +28,8 @@ public:
   BidSubmission() = default;
 
   BidSubmission(std::string task_uuid, std::string participant_connection,
-                const daisi::cpps::mrta::model::Ability participant_ability,
-                MetricsComposition metrics_composition)
+                const daisi::cpps::mrta::model::Ability &participant_ability,
+                const MetricsComposition &metrics_composition)
       : task_uuid_(std::move(task_uuid)),
         participant_connection_(std::move(participant_connection)),
         participant_ability_(participant_ability),

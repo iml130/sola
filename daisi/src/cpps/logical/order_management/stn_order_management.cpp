@@ -36,9 +36,6 @@ StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
     : AuctionBasedOrderManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
       current_task_expected_finish_time_(0),
-      current_ordering_(),
-      current_total_metrics_(),
-      newest_task_insert_info_(),
       time_now_(0),
       latest_calculated_insertion_info_(std::nullopt) {}
 
