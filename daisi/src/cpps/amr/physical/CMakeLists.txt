@@ -111,63 +111,51 @@ target_sources(daisi_cpps_amr_physical_load
 target_link_libraries(daisi_cpps_amr_physical_load
     INTERFACE
     daisi_structure_helpers
-    <<<<<<< HEAD
-    solanet_serializer
-    =======
     solanet_serialize
-    >>>>>>> 44307ea0... feat(logical_amr) : Basic Amr Logical Agent Implementation( # 23)
-    )
+)
 
-    add_library(daisi_cpps_amr_physical_move_to INTERFACE)
-    target_sources(daisi_cpps_amr_physical_move_to
+add_library(daisi_cpps_amr_physical_move_to INTERFACE)
+target_sources(daisi_cpps_amr_physical_move_to
     INTERFACE
     move_to.h
-    )
-    target_link_libraries(daisi_cpps_amr_physical_move_to
+)
+target_link_libraries(daisi_cpps_amr_physical_move_to
     INTERFACE
     daisi_structure_helpers
-    <<<<<<< HEAD
-    solanet_serializer
-    =======
     solanet_serialize
-    >>>>>>> 44307ea0... feat(logical_amr) : Basic Amr Logical Agent Implementation( # 23)
-    )
+)
 
-    add_library(daisi_cpps_amr_physical_navigate INTERFACE)
-    target_sources(daisi_cpps_amr_physical_navigate
+add_library(daisi_cpps_amr_physical_navigate INTERFACE)
+target_sources(daisi_cpps_amr_physical_navigate
     INTERFACE
     navigate.h
-    )
-    target_link_libraries(daisi_cpps_amr_physical_navigate
+)
+target_link_libraries(daisi_cpps_amr_physical_navigate
     INTERFACE
     daisi_structure_helpers
-    <<<<<<< HEAD
-    solanet_serializer
-    =======
     solanet_serialize
-    >>>>>>> 44307ea0... feat(logical_amr) : Basic Amr Logical Agent Implementation( # 23)
-    )
+)
 
-    add_library(daisi_cpps_amr_unload INTERFACE)
-    target_sources(daisi_cpps_amr_unload
+add_library(daisi_cpps_amr_unload INTERFACE)
+target_sources(daisi_cpps_amr_unload
     INTERFACE
     unload.h
-    )
-    target_link_libraries(daisi_cpps_amr_unload
+)
+target_link_libraries(daisi_cpps_amr_unload
     INTERFACE
     daisi_structure_helpers
     solanet_serialize
-    )
+)
 
-    add_library(daisi_cpps_amr_physical_material_flow_functionality_mapping STATIC)
-    target_sources(daisi_cpps_amr_physical_material_flow_functionality_mapping
+add_library(daisi_cpps_amr_physical_material_flow_functionality_mapping STATIC)
+target_sources(daisi_cpps_amr_physical_material_flow_functionality_mapping
     PUBLIC
     material_flow_functionality_mapping.cpp
     material_flow_functionality_mapping.h
-    )
-    target_link_libraries(daisi_cpps_amr_physical_material_flow_functionality_mapping
+)
+target_link_libraries(daisi_cpps_amr_physical_material_flow_functionality_mapping
     PUBLIC
     daisi_cpps_amr_amr_mobility_helper
     daisi_cpps_amr_physical_functionality
     daisi_material_flow_model_task
-    )
+)
