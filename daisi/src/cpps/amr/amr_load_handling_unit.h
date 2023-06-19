@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {

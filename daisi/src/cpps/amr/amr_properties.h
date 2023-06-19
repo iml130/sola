@@ -20,8 +20,8 @@
 #include <set>
 #include <string>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/functionality.h"
-#include "cpps/model/ability.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {

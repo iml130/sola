@@ -24,8 +24,8 @@
 #include <utility>
 #include <vector>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "cpps/model/task.h"
 #include "cpps/negotiation/mrta_configuration.h"

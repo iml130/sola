@@ -1,52 +1,23 @@
-
 add_library(daisi_cpps_model_task STATIC)
 target_sources(daisi_cpps_model_task
         PRIVATE
         task.cpp
         task.h
-        )
+)
 target_link_libraries(daisi_cpps_model_task
         PUBLIC
-            ns3::libcore
-            daisi_cpps_model_order_states
-            daisi_cpps_model_ability
-            daisi_cpps_model_kinematics
-            daisi_cpps_model_agv_fleet
-            daisi_cpps_model_time_window
-            daisi_cpps_model_precedence_constraint
-            daisi_cpps_model_material_flow_model
-            daisi_cpps_message_serializer
-        PRIVATE
-            daisi_cpps_common_uuid_generator
-)
-
-add_library(daisi_cpps_model_load_carrier_ability STATIC)
-target_sources(daisi_cpps_model_load_carrier_ability
-        PRIVATE
-        load_carrier_ability.cpp
-        load_carrier_ability.h
-        )
-target_link_libraries(daisi_cpps_model_load_carrier_ability
-        PUBLIC
+        ns3::libcore
+        daisi_cpps_model_order_states
+        daisi_cpps_model_ability
+        daisi_cpps_model_kinematics
+        daisi_cpps_model_agv_fleet
+        daisi_cpps_model_time_window
+        daisi_cpps_model_precedence_constraint
+        daisi_cpps_model_material_flow_model
         daisi_cpps_message_serializer
-)
-target_include_directories(daisi_cpps_model_load_carrier_ability
-        PUBLIC
-        ${DAISI_SOURCE_DIR}/src)
-
-add_library(daisi_cpps_model_ability STATIC)
-target_sources(daisi_cpps_model_ability
         PRIVATE
-        ability.cpp
-        ability.h
-        )
-target_link_libraries(daisi_cpps_model_ability
-        PUBLIC
-        daisi_cpps_model_load_carrier_ability
+        daisi_cpps_common_uuid_generator
 )
-target_include_directories(daisi_cpps_model_ability
-        PUBLIC
-        ${DAISI_SOURCE_DIR}/src)
 
 add_library(daisi_cpps_model_order_states INTERFACE)
 target_sources(daisi_cpps_model_order_states
@@ -58,7 +29,7 @@ add_library(daisi_cpps_model_time_window INTERFACE)
 target_sources(daisi_cpps_model_time_window
         INTERFACE
         time_window.h
-        )
+)
 target_link_libraries(daisi_cpps_model_time_window
         INTERFACE
         daisi_cpps_message_serializer
@@ -68,7 +39,7 @@ add_library(daisi_cpps_model_precedence_constraint INTERFACE)
 target_sources(daisi_cpps_model_precedence_constraint
         INTERFACE
         precedence_constraint.h
-        )
+)
 target_link_libraries(daisi_cpps_model_precedence_constraint
         INTERFACE
         daisi_cpps_message_serializer
@@ -79,7 +50,7 @@ target_sources(daisi_cpps_model_material_flow_model
         PRIVATE
         material_flow_model.h
         material_flow_model.cpp
-        )
+)
 target_link_libraries(daisi_cpps_model_material_flow_model
         PUBLIC
         ns3::libcore
@@ -97,7 +68,7 @@ target_sources(daisi_cpps_model_kinematics
         PRIVATE
         kinematics.cpp
         kinematics.h
-        )
+)
 target_link_libraries(daisi_cpps_model_kinematics
         PUBLIC
         ns3::libcore
@@ -107,13 +78,12 @@ target_include_directories(daisi_cpps_model_kinematics
         PUBLIC
         ${DAISI_SOURCE_DIR}/src)
 
-
 add_library(daisi_cpps_model_agv_fleet STATIC)
 target_sources(daisi_cpps_model_agv_fleet
         PRIVATE
         agv_fleet.cpp
         agv_fleet.h
-        )
+)
 target_link_libraries(daisi_cpps_model_agv_fleet
         PUBLIC
         daisi_cpps_model_kinematics

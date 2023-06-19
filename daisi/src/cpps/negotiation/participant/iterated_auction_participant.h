@@ -21,12 +21,12 @@
 #include <queue>
 #include <unordered_map>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/ssi_call_for_proposal.h"
 #include "cpps/message/ssi_iteration_notification.h"
 #include "cpps/message/ssi_submission.h"
 #include "cpps/message/ssi_winner_notification.h"
 #include "cpps/message/ssi_winner_response.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/task.h"
 #include "cpps/negotiation/participant/task_allocation_participant.h"
 #include "cpps/negotiation/utils/overload.h"

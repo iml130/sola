@@ -18,7 +18,7 @@
 
 #include <limits>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/negotiation/utils/kmeans.h"
 #include "cpps/negotiation/utils/simple_temporal_network.h"
 #include "ns3/vector.h"

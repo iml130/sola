@@ -22,11 +22,11 @@
 #include <queue>
 #include <unordered_map>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/common/agv_description.h"
 #include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "cpps/negotiation/mrta_configuration.h"
 #include "manager/manager.h"
