@@ -24,6 +24,7 @@
 #include <utility>
 
 #include "amr_load_carrier.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::amr {
 
@@ -41,6 +42,10 @@ public:
   friend bool operator<=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
   friend bool operator>(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
   friend bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
+
+  friend std::ostream &operator<<(std::ostream &os, const AmrStaticAbility &a);
+
+  SERIALIZE(load_carrier_, max_payload_weight_kg_);
 
 private:
   LoadCarrier load_carrier_;
@@ -61,11 +66,7 @@ struct AmrStaticAbilityHasher {
 
 using Ability = std::tuple<float, LoadCarrier>;
 
-template <typename TupleT> bool equalAbility(const TupleT &t1, const TupleT &t2);
-template <typename TupleT> bool lessAbility(const TupleT &t1, const TupleT &t2);
-template <typename TupleT> bool lessOrEqualAbility(const TupleT &t1, const TupleT &t2);
 template <typename TupleT> bool comparableAbility(const TupleT &t1, const TupleT &t2);
-template <typename TupleT> std::ostream &printAbility(std::ostream &os, const TupleT &tp);
 
 struct AbilityHasher {
   std::size_t operator()(const Ability &ability) const {

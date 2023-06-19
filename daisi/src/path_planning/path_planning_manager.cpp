@@ -50,7 +50,8 @@ PathPlanningManager::PathPlanningManager(const std::string &scenario_config_file
        1 + 5 + (static_cast<double>(number_pickup_stations_) / 2 * delta_stations_) + 1 + 5, 0});
 
   // TODO Workaround - Simple task for logging should not depend on possible AGV kinematics
-  cpps::amr::Ability ability{100.0F, cpps::amr::LoadCarrier::kEuroBox};
+  cpps::amr::AmrStaticAbility ability(
+      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 100.0F));
   cpps::AGVFleet::init({{ability, kinematics_}});
 }
 
@@ -147,7 +148,7 @@ void PathPlanningManager::initAGV(uint32_t index) {
   properties.manufacturer = "FhG";
 
   // Set dummy ability
-  properties.ability = cpps::amr::Ability({100, cpps::amr::LoadCarrier("package")});
+  properties.ability = cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier("package"), 100);
 
   properties.kinematic = kinematics_;
 

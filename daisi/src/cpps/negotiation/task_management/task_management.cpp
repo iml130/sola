@@ -21,7 +21,7 @@
 namespace daisi::cpps {
 
 TaskManagement::TaskManagement(const std::shared_ptr<Kinematics> &kinematics,
-                               const std::shared_ptr<amr::Ability> &ability,
+                               const std::shared_ptr<amr::AmrStaticAbility> &ability,
                                const std::shared_ptr<ns3::Vector> &last_position,
                                const std::shared_ptr<daisi::cpps::CppsLoggerNs3> &logger,
                                const std::shared_ptr<UtilityEvaluator> &utility_evaluator)
@@ -42,7 +42,7 @@ void TaskManagement::setNextOrderToExecute() {
 }
 
 bool TaskManagement::couldExecuteOrder(const Task &order) {
-  bool ability_fits = lessOrEqualAbility(order.getAbilityRequirement(), *ability_);
+  bool ability_fits = order.getAbilityRequirement() <= *ability_;
 
   if (ability_fits) {
     double execution_duration = std::get<0>(kinematics_->getStartStopTimeAndDistance(
@@ -115,6 +115,6 @@ std::pair<ns3::Vector, double> TaskManagement::getEndPositionAndTime() const {
   return {current_order_.getDeliveryLocation(), expected_current_order_finish_time_};
 }
 
-amr::Ability TaskManagement::getAbility() const { return *(ability_); }
+amr::AmrStaticAbility TaskManagement::getAbility() const { return *(ability_); }
 
 }  // namespace daisi::cpps

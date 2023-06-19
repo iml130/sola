@@ -33,7 +33,7 @@ void IteratedAuctionParticipantPubsubTePSSI::processCallForProposal(const SSICal
 
   std::vector<Task> relevant_tasks;
   for (auto const &task : msg.getTasks()) {
-    if (lessOrEqualAbility(task.getAbilityRequirement(), task_management_->getAbility())) {
+    if (task.getAbilityRequirement() <= task_management_->getAbility()) {
       relevant_tasks.push_back(task);
     }
   }

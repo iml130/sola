@@ -39,9 +39,9 @@ public:
   Task() = default;
   ~Task() = default;
 
-  Task(const ns3::Vector &from, const ns3::Vector &to, const amr::Ability &ability);
+  Task(const ns3::Vector &from, const ns3::Vector &to, const amr::AmrStaticAbility &ability);
   Task(const std::string &uuid, const ns3::Vector &from, const ns3::Vector &to,
-       const amr::Ability &ability);
+       const amr::AmrStaticAbility &ability);
 
   ns3::Vector getPickupLocation() const;
   ns3::Vector getDeliveryLocation() const;
@@ -53,7 +53,7 @@ public:
   void setCurrentPosition(const ns3::Vector &currentPosition);
 
   std::string getUUID() const;
-  amr::Ability getAbilityRequirement() const;
+  amr::AmrStaticAbility getAbilityRequirement() const;
 
   void setConnection(const std::string &connection);
   std::string getConnection() const;
@@ -61,7 +61,7 @@ public:
   void setName(const std::string &name);
   std::string getName() const;
 
-  void setSpecificAbilityRequirement(const amr::Ability &specific_requirement);
+  void setSpecificAbilityRequirement(const amr::AmrStaticAbility &specific_requirement);
   bool hasSpecificAbilityRequirement() const;
 
   friend std::ostream &operator<<(std::ostream &os, const Task &order);
@@ -96,10 +96,10 @@ private:
   ns3::Vector current_pos_;
   OrderStates order_state_ = OrderStates::kError;
 
-  amr::Ability ability_requirement_;
+  amr::AmrStaticAbility ability_requirement_;
   std::vector<Kinematics> possible_kinematics_;
 
-  std::optional<amr::Ability> specific_ability_;
+  std::optional<amr::AmrStaticAbility> specific_ability_;
   std::optional<Kinematics> specific_kinematics_;
 
   void loadKinematics();
