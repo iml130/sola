@@ -28,7 +28,7 @@
 namespace daisi::cpps {
 
 class AGVFleet {
-  using AGVInfo = std::pair<amr::Ability, Kinematics>;
+  using AGVInfo = std::pair<amr::AmrStaticAbility, Kinematics>;
 
 private:
   std::vector<AGVInfo> infos_;
@@ -58,15 +58,16 @@ public:
 
   // -----------------------------------------
 
-  std::vector<amr::Ability> getFittingExistingAbilities(const amr::Ability &ability_requirement);
+  std::vector<amr::AmrStaticAbility> getFittingExistingAbilities(
+      const amr::AmrStaticAbility &ability_requirement);
 
-  amr::Ability getClosestExistingAbility(const amr::Ability &ability_requirement);
+  amr::AmrStaticAbility getClosestExistingAbility(const amr::AmrStaticAbility &ability_requirement);
 
-  std::vector<amr::Ability> getAllExistingAbilities();
+  std::vector<amr::AmrStaticAbility> getAllExistingAbilities();
 
-  std::string getTopicForAbility(const amr::Ability &ability);
+  std::string getTopicForAbility(const amr::AmrStaticAbility &ability);
 
-  Kinematics getKinematicsOfAbility(const amr::Ability &ability);
+  Kinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability);
 
   static std::string getDefaultTopic() { return "defaulttopic"; }
 };

@@ -32,7 +32,8 @@ AmrDescription buildBasicAmrDescription() {
   AmrKinematics kinematics{1, 0, 1, 1};
   AmrProperties properties{};
   AmrPhysicalProperties physical_properties{50, {0.5, 0.5, 0.5}};
-  AmrLoadHandlingUnit load_hanling_unit{7, 8, {50, LoadCarrier{LoadCarrier::kEuroBox}}};
+  AmrLoadHandlingUnit load_hanling_unit{
+      7, 8, amr::AmrStaticAbility(LoadCarrier(LoadCarrier::kEuroBox), 50)};
 
   return AmrDescription{42, kinematics, properties, physical_properties, load_hanling_unit};
 }

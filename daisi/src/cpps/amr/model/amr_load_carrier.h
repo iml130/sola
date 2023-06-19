@@ -45,7 +45,6 @@ public:
   friend bool operator>(const LoadCarrier &l1, const LoadCarrier &l2);
   friend bool operator>=(const LoadCarrier &l1, const LoadCarrier &l2);
 
-  // TODO remove when not needed anymore
   friend std::ostream &operator<<(std::ostream &os, const LoadCarrier &l);
 
   std::string getTypeAsString() const;
@@ -59,9 +58,6 @@ private:
 
   static Types getTypeFromString(const std::string &type_name);
 };
-
-// TODO remove when not needed anymore
-bool comparable(const LoadCarrier &l1, const LoadCarrier &l2);
 
 }  // namespace daisi::cpps::amr
 #endif

@@ -48,7 +48,7 @@ protected:
   struct ReceivedBids {
     std::string task_uuid;
     std::string participant_connection;
-    amr::Ability participant_ability;
+    amr::AmrStaticAbility participant_ability;
     UtilityDimensions udims;
 
     friend bool operator==(const ReceivedBids &r1, const ReceivedBids &r2) {
@@ -115,10 +115,10 @@ protected:
   static void removeBidsForTask(std::vector<ReceivedBids> &bids, const std::string &task_uuid);
   static void removeBidsForWinner(std::vector<ReceivedBids> &bids, const std::string &task_uuid,
                                   const std::string &winner_connection);
-  static void removeBidsWhichMeetAbilityRequirement(std::vector<ReceivedBids> &bids,
-                                                    const amr::Ability &ability_requirement);
+  static void removeBidsWhichMeetAbilityRequirement(
+      std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement);
   static void removeBidsWhichAreLesserThanAbilityRequirement(
-      std::vector<ReceivedBids> &bids, const amr::Ability &ability_requirement);
+      std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement);
 
 private:
   // receiving and inserting bids into B_{valid}

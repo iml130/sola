@@ -43,7 +43,7 @@ void MaterialFlowModel::loadFromScenarioTable(
 
     amr::LoadCarrier load_carrier(task_desc->getRequired<std::string>("load_carrier"));
     float payload_weight = task_desc->getRequired<float>("payload_weight");
-    amr::Ability ability{payload_weight, load_carrier};
+    amr::AmrStaticAbility ability(load_carrier, payload_weight);
 
     Task task(random_locations[pickup_index], random_locations[delivery_index], ability);
 

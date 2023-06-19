@@ -63,7 +63,7 @@ void IteratedAuctionInitiatorPubsubModified::subscribeTopic(const std::string &t
 
 void IteratedAuctionInitiatorPubsubModified::taskAnnoucement() {
   // preparing T_{auct}^{G_j} for each G_j
-  std::unordered_map<amr::Ability, std::vector<Task>, amr::AbilityHasher>
+  std::unordered_map<amr::AmrStaticAbility, std::vector<Task>, amr::AmrStaticAbilityHasher>
       tasks_for_existing_abilities;
 
   for (auto const &task : auctionable_tasks_) {
@@ -104,8 +104,8 @@ IteratedAuctionInitiatorPubsubModified::selectWinners() {
       // but for comparability a unique ordering is necessary
     }
     // if abilities are unequal, we can use ability for ordering
-    if (!equalAbility(b1.participant_ability, b2.participant_ability)) {
-      return lessAbility(b1.participant_ability, b2.participant_ability);
+    if (b1.participant_ability != b2.participant_ability) {
+      return b1.participant_ability < b2.participant_ability;
     }
 
     // if even the ability is equal, at least the connection strings are unique
@@ -151,7 +151,7 @@ IteratedAuctionInitiatorPubsubModified::selectWinners() {
 
 void IteratedAuctionInitiatorPubsubModified::iterationNotification(
     const std::vector<std::tuple<std::string, Task>> &iteration_info) {
-  std::unordered_map<amr::Ability, std::vector<std::string>, amr::AbilityHasher>
+  std::unordered_map<amr::AmrStaticAbility, std::vector<std::string>, amr::AmrStaticAbilityHasher>
       relevant_auctioned_tasks_info_for_abilities;
 
   for (auto const &[winner_connection, task] : iteration_info) {
@@ -174,7 +174,7 @@ void IteratedAuctionInitiatorPubsubModified::iterationNotification(
 }
 
 void IteratedAuctionInitiatorPubsubModified::renotifyAboutOpenTasks() {
-  std::unordered_map<amr::Ability, std::vector<std::string>, amr::AbilityHasher>
+  std::unordered_map<amr::AmrStaticAbility, std::vector<std::string>, amr::AmrStaticAbilityHasher>
       relevant_open_tasks_info_for_abilities;
 
   for (auto const &task : auctionable_tasks_) {
