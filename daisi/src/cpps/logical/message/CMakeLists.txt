@@ -19,4 +19,5 @@ target_link_libraries(daisi_cpps_logical_message_serializer
 )
 target_include_directories(daisi_cpps_logical_message_serializer
     PUBLIC
-    ${DAISI_SOURCE_DIR}/src)
+    ${DAISI_SOURCE_DIR}/src
+)

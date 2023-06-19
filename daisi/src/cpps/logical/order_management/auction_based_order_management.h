@@ -26,7 +26,7 @@ class AuctionBasedOrderManagement : public OrderManagement {
 public:
   struct InsertionPoint {};
 
-  explicit AuctionBasedOrderManagement(const AmrDescription &amr_description,
+  AuctionBasedOrderManagement(const AmrDescription &amr_description,
                                        const Topology &topology, const daisi::util::Pose &pose)
       : OrderManagement(amr_description, topology, pose) {}
 
