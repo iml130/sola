@@ -17,8 +17,8 @@
 #ifndef DAISI_CPPS_MESSAGE_SSI_ITERATION_NOTIFICATION_TYPES_H_
 #define DAISI_CPPS_MESSAGE_SSI_ITERATION_NOTIFICATION_TYPES_H_
 
-#include "cpps/message/serialize.h"
 #include "cpps/model/task.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

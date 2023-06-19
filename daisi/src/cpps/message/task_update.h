@@ -19,9 +19,9 @@
 
 #include <cstdint>
 
-#include "cpps/message/serialize.h"
 #include "cpps/model/task.h"
 #include "ns3/vector.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 
