@@ -184,8 +184,9 @@ void AmrLogicalAgent::logAmrInfos() {
   // load handling unit
   info.load_time = description_.getLoadHandling().getLoadTime();
   info.unload_time = description_.getLoadHandling().getUnloadTime();
-  info.load_carrier_type = amr::LoadCarrier::kNoLoadCarrierType;  // TODO refactor
-  info.max_weight = 42;                                           // TODO refactor
+  info.load_carrier_type =
+      description_.getLoadHandling().getAbility().getLoadCarrier().getTypeAsString();
+  info.max_weight = description_.getLoadHandling().getAbility().getMaxPayloadWeight();
 
   // network
 
