@@ -1,6 +1,6 @@
 add_library(daisi_cpps_amr_amr_load_carrier STATIC)
 target_sources(daisi_cpps_amr_amr_load_carrier
-    PRIVATE
+    PUBLIC
     amr_load_carrier.cpp
     amr_load_carrier.h
 )
@@ -14,7 +14,7 @@ target_include_directories(daisi_cpps_amr_amr_load_carrier
 
 add_library(daisi_cpps_amr_amr_static_ability STATIC)
 target_sources(daisi_cpps_amr_amr_static_ability
-    PRIVATE
+    PUBLIC
     amr_static_ability.cpp
     amr_static_ability.h
 )

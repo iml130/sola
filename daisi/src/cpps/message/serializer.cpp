@@ -16,6 +16,8 @@
 
 #include "cpps/message/serializer.h"
 
+#include "solanet/serializer/serializer.h"
+
 #ifndef CPPCHECK_IGNORE
 #include <cereal/archives/binary.hpp>
 #include <cereal/cereal.hpp>
@@ -29,19 +31,10 @@
 
 namespace daisi::cpps {
 
-std::string serialize(const Message &msg) {
-  std::stringstream ss;
-  cereal::BinaryOutputArchive archive(ss);
-  archive(msg);
-  return ss.str();
-}
+std::string serialize(const Message &msg) { return solanet::serializer::serialize(msg); }
 
 Message deserialize(const std::string &msg) {
-  Message m;
-  std::istringstream iss(msg);
-  cereal::BinaryInputArchive a(iss);
-  a(m);
-  return m;
+  return solanet::serializer::deserialize<Message>(msg);
 }
 
 }  // namespace daisi::cpps

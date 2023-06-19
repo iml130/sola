@@ -17,8 +17,8 @@
 #ifndef DAISI_NEGOTIATION_UTILITY_UTILITY_DIMENSION_NS3_H_
 #define DAISI_NEGOTIATION_UTILITY_UTILITY_DIMENSION_NS3_H_
 
-#include "cpps/message/serialize.h"
 #include "cpps/model/task.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

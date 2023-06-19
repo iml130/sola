@@ -17,8 +17,8 @@
 #ifndef DAISI_NEGOTIATION_UTILITY_ACCUMULATED_UTILITY_DIMENSION_NS3_H_
 #define DAISI_NEGOTIATION_UTILITY_ACCUMULATED_UTILITY_DIMENSION_NS3_H_
 
-#include "cpps/message/serialize.h"
 #include "cpps/negotiation/utility/utility_dimensions.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

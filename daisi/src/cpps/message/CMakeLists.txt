@@ -8,7 +8,7 @@ target_link_libraries(daisi_cpps_message_ssi_call_for_proposal
         PUBLIC
         ns3::libcore
         daisi_cpps_model_task
-        daisi_cpps_message_serialize
+        solanet_serialize
 )
 target_include_directories(daisi_cpps_message_ssi_call_for_proposal
         PUBLIC
@@ -23,7 +23,7 @@ target_sources(daisi_cpps_message_ssi_iteration_notification
 target_link_libraries(daisi_cpps_message_ssi_iteration_notification
         PUBLIC
         ns3::libcore
-        daisi_cpps_message_serialize
+        solanet_serialize
 )
 target_include_directories(daisi_cpps_message_ssi_iteration_notification
         PUBLIC
@@ -38,7 +38,7 @@ target_sources(daisi_cpps_message_ssi_winner_notification
 target_link_libraries(daisi_cpps_message_ssi_winner_notification
         PUBLIC
         ns3::libcore
-        daisi_cpps_message_serialize
+        solanet_serialize
 )
 target_include_directories(daisi_cpps_message_ssi_winner_notification
         PUBLIC
@@ -54,7 +54,7 @@ target_link_libraries(daisi_cpps_message_ssi_submission
         PUBLIC
         ns3::libcore
         daisi_cpps_amr_amr_static_ability
-        daisi_cpps_message_serialize
+        solanet_serialize
 )
 target_include_directories(daisi_cpps_message_ssi_submission
         PUBLIC
@@ -69,20 +69,11 @@ target_sources(daisi_cpps_message_ssi_winner_response
 target_link_libraries(daisi_cpps_message_ssi_winner_response
         PUBLIC
         ns3::libcore
-        daisi_cpps_message_serialize
+        solanet_serialize
+        daisi_cpps_model_task
 )
 target_include_directories(daisi_cpps_message_ssi_submission
         PUBLIC
-        ${DAISI_SOURCE_DIR}/src)
-
-add_library(daisi_cpps_message_serialize INTERFACE)
-target_sources(daisi_cpps_message_serialize
-        INTERFACE
-        serialize.h
-)
-
-target_include_directories(daisi_cpps_message_serialize
-        INTERFACE
         ${DAISI_SOURCE_DIR}/src)
 
 add_library(daisi_cpps_message_serializer STATIC)
@@ -93,7 +84,7 @@ target_sources(daisi_cpps_message_serializer
 )
 target_link_libraries(daisi_cpps_message_serializer
         PUBLIC
-        daisi_cpps_message_serialize
+        solanet_serialize
         daisi_cpps_message_types_all
         PRIVATE
         Cereal
@@ -111,7 +102,7 @@ target_sources(daisi_cpps_message_task_update
 target_link_libraries(daisi_cpps_message_task_update
         PUBLIC
         ns3::libcore
-        daisi_cpps_message_serialize
+        solanet_serialize
         daisi_cpps_model_task
 )
 target_include_directories(daisi_cpps_message_task_update
@@ -127,7 +118,7 @@ target_sources(daisi_cpps_message_task_info
 target_link_libraries(daisi_cpps_message_task_info
         PUBLIC
         ns3::libcore
-        daisi_cpps_message_serialize
+        solanet_serialize
         daisi_cpps_model_task
 )
 target_include_directories(daisi_cpps_message_task_info
