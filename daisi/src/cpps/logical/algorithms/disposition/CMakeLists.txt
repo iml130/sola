@@ -6,6 +6,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_disposition_initiator
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_initiator
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
+    daisi_material_flow_model_material_flow
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_disposition_participant INTERFACE)
@@ -16,4 +17,68 @@ target_sources(daisi_cpps_logical_algorithms_disposition_disposition_participant
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_participant
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
+    PUBLIC
+    iterated_auction_disposition_initiator.h
+    iterated_auction_disposition_initiator.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_initiator
+    daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+    daisi_cpps_logical_algorithms_disposition_auction_initiator_state
+    daisi_structure_helpers
+    ns3::libcore
+    daisi_cpps_model_agv_fleet
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
+    PUBLIC
+    iterated_auction_disposition_participant.h
+    iterated_auction_disposition_participant.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_participant
+    daisi_cpps_logical_order_management_auction_based_order_management
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+    PUBLIC
+    layered_precedence_graph.h
+    layered_precedence_graph.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+    PUBLIC
+    daisi_datastructure_directed_graph
+    daisi_material_flow_model_material_flow
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_auction_initiator_state STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_auction_initiator_state
+    PUBLIC
+    auction_initiator_state.h
+    auction_initiator_state.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_auction_initiator_state
+    PUBLIC
+    daisi_material_flow_model_material_flow
+    daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_auction_participant_state STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_auction_participant_state
+    PUBLIC
+    auction_participant_state.h
+    auction_participant_state.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_auction_participant_state
+    PUBLIC
+    daisi_material_flow_model_material_flow
+    daisi_cpps_logical_order_management_auction_based_order_management
 )

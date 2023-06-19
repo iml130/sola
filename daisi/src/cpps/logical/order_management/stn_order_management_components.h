@@ -24,7 +24,7 @@
 #include "metrics_composition.h"
 #include "utils/structure_helpers.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 struct StnOrderManagementVertex {
   StnOrderManagementVertex(const daisi::material_flow::Order &order, bool is_start);
@@ -94,12 +94,12 @@ private:
   bool all_positive_;
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 namespace std {
 
-template <> struct hash<daisi::cpps::order_management::StnOrderManagementVertex> {
-  std::size_t operator()(const daisi::cpps::order_management::StnOrderManagementVertex &v) const {
+template <> struct hash<daisi::cpps::logical::StnOrderManagementVertex> {
+  std::size_t operator()(const daisi::cpps::logical::StnOrderManagementVertex &v) const {
     std::string repr;
 
     if (auto move_order_pval = std::get_if<daisi::material_flow::MoveOrder>(&v.getOrder())) {

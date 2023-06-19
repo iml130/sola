@@ -18,7 +18,7 @@
 
 using namespace daisi::material_flow;
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 StnOrderManagementVertex::StnOrderManagementVertex(const Order &order, const bool is_start)
     : order_(order), is_start_(is_start), is_origin_(false) {}
@@ -72,4 +72,4 @@ bool operator==(const StnOrderManagementVertex &v1, const StnOrderManagementVert
   return false;
 }
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical

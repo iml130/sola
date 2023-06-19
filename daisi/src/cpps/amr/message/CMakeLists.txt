@@ -32,6 +32,7 @@ target_link_libraries(daisi_cpps_amr_message_amr_order_info INTERFACE
     daisi_structure_helpers
     daisi_cpps_model_order_states
     daisi_cpps_model_ability
+    daisi_cpps_amr_physical_functionality
 )
 
 add_library(daisi_cpps_amr_message_amr_order_update INTERFACE)

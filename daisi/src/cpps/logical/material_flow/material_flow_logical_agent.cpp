@@ -16,24 +16,26 @@
 
 #include "material_flow_logical_agent.h"
 
-#include "cpps/logical/algorithms/disposition/disposition_initiator.h"
+#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 
 namespace daisi::cpps::logical {
 
 MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
-                                                   const AlgorithmConfig &config_algo)
-    : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo),
+                                                   const AlgorithmConfig &config_algo,
+                                                   const bool first_node)
+    : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo,
+                   first_node),
       waiting_for_start_(false) {}
 
-void MaterialFlowLogicalAgent::init(bool first_node) { initCommunication(first_node); }
+void MaterialFlowLogicalAgent::init(const bool first_node) { initCommunication(); }
 
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
 void MaterialFlowLogicalAgent::initAlgorithms() {
-  for (const auto &algo_type : algorithm_config_.algorithm_types) {
+  for (const auto &algo_type : algorithm_config_.algorithm_types_) {
     switch (algo_type) {
-      case AlgorithmType::kDispositionInitiator:
-        algorithms_.push_back(std::make_unique<DispositionInitiator>(sola_));
+      case AlgorithmType::k_iterated_auction_disposition_initiator:
+        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionInitiator>(sola_));
         break;
       default:
         throw std::invalid_argument(

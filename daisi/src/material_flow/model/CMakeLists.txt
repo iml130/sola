@@ -7,10 +7,9 @@ target_sources(daisi_material_flow_model_location
 target_link_libraries(daisi_material_flow_model_location
     PUBLIC
     daisi_structure_helpers
-)
-target_include_directories(daisi_material_flow_model_location
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_action_order_step STATIC)
@@ -19,9 +18,9 @@ target_sources(daisi_material_flow_model_action_order_step
     action_order_step.h
     action_order_step.cpp
 )
-target_include_directories(daisi_material_flow_model_action_order_step
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+target_link_libraries(daisi_material_flow_model_action_order_step
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_action_order STATIC)
@@ -33,10 +32,9 @@ target_sources(daisi_material_flow_model_action_order
 target_link_libraries(daisi_material_flow_model_action_order
     PUBLIC
     daisi_material_flow_model_action_order_step
-)
-target_include_directories(daisi_material_flow_model_action_order
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_move_order_step STATIC)
@@ -48,10 +46,9 @@ target_sources(daisi_material_flow_model_move_order_step
 target_link_libraries(daisi_material_flow_model_move_order_step
     PUBLIC
     daisi_material_flow_model_location
-)
-target_include_directories(daisi_material_flow_model_move_order_step
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_move_order STATIC "")
@@ -63,10 +60,9 @@ target_sources(daisi_material_flow_model_move_order
 target_link_libraries(daisi_material_flow_model_move_order
     PUBLIC
     daisi_material_flow_model_move_order_step
-)
-target_include_directories(daisi_material_flow_model_move_order
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_transport_order_step STATIC "")
@@ -78,10 +74,9 @@ target_sources(daisi_material_flow_model_transport_order_step
 target_link_libraries(daisi_material_flow_model_transport_order_step
     PUBLIC
     daisi_material_flow_model_location
-)
-target_include_directories(daisi_material_flow_model_transport_order_step
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_transport_order STATIC "")
@@ -93,10 +88,9 @@ target_sources(daisi_material_flow_model_transport_order
 target_link_libraries(daisi_material_flow_model_transport_order
     PUBLIC
     daisi_material_flow_model_transport_order_step
-)
-target_include_directories(daisi_material_flow_model_transport_order
-    PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+
+    PRIVATE
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_task STATIC "")
@@ -110,8 +104,21 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_material_flow_model_transport_order
     daisi_material_flow_model_move_order
     daisi_material_flow_model_action_order
+
+    PRIVATE
+    solanet_serializer
 )
-target_include_directories(daisi_material_flow_model_task
+
+add_library(daisi_material_flow_model_material_flow STATIC "")
+target_sources(daisi_material_flow_model_material_flow
+    PRIVATE
+    material_flow.h
+    material_flow.cpp
+)
+target_link_libraries(daisi_material_flow_model_material_flow
     PUBLIC
-    ${DAISI_SOURCE_DIR}/src
+    daisi_material_flow_model_task
+
+    PRIVATE
+    solanet_serializer
 )

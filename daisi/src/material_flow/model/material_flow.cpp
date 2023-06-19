@@ -14,21 +14,10 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_AMR_PHYSICAL_LOAD_H_
-#define DAISI_CPPS_AMR_PHYSICAL_LOAD_H_
+#include "material_flow.h"
 
-#include "solanet/serializer/serialize.h"
-#include "utils/structure_helpers.h"
+namespace daisi::material_flow {
 
-namespace daisi::cpps {
-class Load {
-public:
-  Load() = default;
-  explicit Load(const util::Position &destination) : destination(destination) {}
+// TODO
 
-  SERIALIZE(destination);
-
-  util::Position destination;
-};
-}  // namespace daisi::cpps
-#endif
+}  // namespace daisi::material_flow

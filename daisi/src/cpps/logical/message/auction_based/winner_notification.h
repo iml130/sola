@@ -14,31 +14,37 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
-#define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
+#ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_NOTIFICATION_H_
+#define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_NOTIFICATION_H_
 
-#include "material_flow/model/task.h"
 #include "solanet/serializer/serialize.h"
+#include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
 
-class CallForProposal {
+class WinnerNotification {
 public:
-  CallForProposal() = default;
-  CallForProposal(std::string initiator_connection,
-                  const std::vector<daisi::material_flow::Task> tasks)
-      : initiator_connection_(std::move(initiator_connection)), tasks_(tasks) {}
+  WinnerNotification() = default;
+  WinnerNotification(std::string task_uuid, std::string initiator_connection,
+                     double latest_finish_time)
+      : task_uuid_(std::move(task_uuid)),
+        initiator_connection_(std::move(initiator_connection)),
+        latest_finish_time_(latest_finish_time) {}
+
+  const std::string &getTaskUuid() const { return task_uuid_; }
 
   const std::string &getInitiatorConnection() const { return initiator_connection_; }
 
-  const std::vector<daisi::material_flow::Task> &getTasks() const { return tasks_; }
+  const daisi::util::Duration &getLatestFinishTime() const { return latest_finish_time_; }
 
-  SERIALIZE(initiator_connection_, tasks_);
+  SERIALIZE(task_uuid_, initiator_connection_, latest_finish_time_);
 
 private:
+  std::string task_uuid_;
+
   std::string initiator_connection_;
 
-  std::vector<daisi::material_flow::Task> tasks_;
+  daisi::util::Duration latest_finish_time_;
 };
 
 }  // namespace daisi::cpps::logical

@@ -19,17 +19,22 @@
 
 #include <string>
 
+#include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::material_flow {
 
 struct Location {
+  Location() = default;
+
   Location(std::string id, std::string type);
   Location(std::string id, std::string type, const daisi::util::Position &position);
 
   const std::string &getId() const;
   const std::string &getType() const;
   const daisi::util::Position getPosition() const;
+
+  SERIALIZE(id_, type_, position_);
 
 private:
   std::string id_;

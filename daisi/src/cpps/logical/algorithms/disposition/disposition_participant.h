@@ -20,22 +20,18 @@
 #include <memory>
 #include <variant>
 
-#include "cpps/logical/message/auction_based/bid_submission.h"
-#include "cpps/logical/message/auction_based/call_for_proposal.h"
-#include "sola-ns3/sola_ns3_wrapper.h"
-
+#include "../algorithm_interface.h"
 namespace daisi::cpps::logical {
 
-// TODO will become abstract class
-// for design pattern purpose its currently not abstract
+/// @brief Algorithm for disposing tasks from a material flow to fitting AMRs.
+/// This algorithm is participating in the procedure which is beeing coordinated by an initiator.
+/// There always must be a corresponding derived class from DispositionInitiator.
 class DispositionParticipant : public AlgorithmInterface {
 public:
   explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
       : AlgorithmInterface(sola){};
-  ~DispositionParticipant() = default;
 
-  bool process(const BidSubmission &msg) override { return true; }
-  bool process(const CallForProposal &msg) override { return true; }
+  virtual ~DispositionParticipant() = default;
 };
 
 }  // namespace daisi::cpps::logical

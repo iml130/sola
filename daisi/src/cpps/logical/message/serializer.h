@@ -22,10 +22,14 @@
 
 #include "auction_based/bid_submission.h"
 #include "auction_based/call_for_proposal.h"
+#include "auction_based/iteration_notification.h"
+#include "auction_based/winner_notification.h"
+#include "auction_based/winner_response.h"
 
 namespace daisi::cpps::logical {
 
-using Message = std::variant<CallForProposal, BidSubmission>;
+using Message = std::variant<CallForProposal, BidSubmission, IterationNotification,
+                             WinnerNotification, WinnerResponse>;
 
 std::string serialize(const Message &msg);
 

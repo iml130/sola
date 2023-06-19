@@ -21,10 +21,13 @@
 
 namespace daisi::cpps::logical {
 
-enum class AlgorithmType { kDispositionInitiator, kDispositionParticipant };
+enum class AlgorithmType {
+  k_iterated_auction_disposition_initiator,
+  k_iterated_auction_disposition_participant
+};
 
 struct AlgorithmConfig {
-  std::vector<AlgorithmType> algorithm_types;
+  std::vector<AlgorithmType> algorithm_types_;
 };
 
 }  // namespace daisi::cpps::logical

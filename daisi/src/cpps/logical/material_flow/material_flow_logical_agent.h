@@ -18,25 +18,22 @@
 #define DAISI_CPPS_MATERIAL_FLOW_MATERIAL_FLOW_LOGICAL_AGENT_H_
 
 #include "cpps/logical/logical_agent.h"
+#include "material_flow/model/material_flow.h"
 
 namespace daisi::cpps::logical {
 
-// TODO
-class MFDL {};
-
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo);
+  /// @brief
+  /// @param device_id
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo,
+                           const bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() = default;  // TODO
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
-  virtual void init(bool first_node);
-
-  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
-  /// Only a part of the available interfaces might be allowed for a material flow agent.
-  virtual void initAlgorithms() override;
+  virtual void init(const bool first_node);
 
   /// @brief Starting operations by initalizing components which require the finished initialization
   /// of Sola.
@@ -57,6 +54,10 @@ public:
   bool isBusy();
 
 protected:
+  /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
+  /// Only a part of the available interfaces might be allowed for a material flow agent.
+  virtual void initAlgorithms() override;
+
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
@@ -68,7 +69,7 @@ protected:
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
 
   /// @brief Material flows that
-  std::vector<MFDL> material_flows_;
+  std::vector<std::shared_ptr<daisi::material_flow::MFDLScheduler>> material_flows_;
 
 private:
   /// Simple flag to represent that the agent is still in the initialization process.

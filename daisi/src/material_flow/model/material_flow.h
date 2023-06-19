@@ -14,21 +14,30 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_AMR_PHYSICAL_LOAD_H_
-#define DAISI_CPPS_AMR_PHYSICAL_LOAD_H_
+#ifndef DAISI_MATERIAL_FLOW_MATERIAL_FLOW_H_
+#define DAISI_MATERIAL_FLOW_MATERIAL_FLOW_H_
+
+#include <variant>
+#include <vector>
 
 #include "solanet/serializer/serialize.h"
-#include "utils/structure_helpers.h"
+#include "task.h"
 
-namespace daisi::cpps {
-class Load {
+namespace daisi::material_flow {
+
+// TODO just placeholder for now
+class MFDLScheduler {
 public:
-  Load() = default;
-  explicit Load(const util::Position &destination) : destination(destination) {}
+  MFDLScheduler() = default;
 
-  SERIALIZE(destination);
+  MFDLScheduler(std::string mfdl_program) {}
 
-  util::Position destination;
+  SERIALIZE(tasks);
+
+private:
+  std::vector<Task> tasks;
 };
-}  // namespace daisi::cpps
+
+}  // namespace daisi::material_flow
+
 #endif

@@ -18,8 +18,9 @@
 #define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_METRICS_COMPOSITION_H_
 
 #include "metrics.h"
+#include "solanet/serializer/serialize.h"
 
-namespace daisi::cpps::order_management {
+namespace daisi::cpps::logical {
 
 class MetricsComposition {
 public:
@@ -75,14 +76,33 @@ public:
     return getMetricsForAuction() < other.getMetricsForAuction();
   }
 
+  bool operator<=(const MetricsComposition &other) const {
+    return getMetricsForAuction() <= other.getMetricsForAuction();
+  }
+
+  bool operator>(const MetricsComposition &other) const {
+    return getMetricsForAuction() > other.getMetricsForAuction();
+  }
+
+  bool operator>=(const MetricsComposition &other) const {
+    return getMetricsForAuction() >= other.getMetricsForAuction();
+  }
+
   bool operator==(const MetricsComposition &other) const {
     return getMetricsForAuction() == other.getMetricsForAuction();
+  }
+
+  bool operator!=(const MetricsComposition &other) const {
+    return getMetricsForAuction() != other.getMetricsForAuction();
   }
 
   MetricsComposition operator-(const MetricsComposition &other) const {
     return MetricsComposition{current_metrics_, insertion_metrics_,
                               current_metrics_ - other.current_metrics_};
   }
+
+  SERIALIZE(current_metrics_, insertion_metrics_, insertion_metrics_set_, diff_insertion_metrics_,
+            diff_insertion_metrics_set_);
 
 private:
   // the current costs
@@ -98,6 +118,6 @@ private:
   bool diff_insertion_metrics_set_;
 };
 
-}  // namespace daisi::cpps::order_management
+}  // namespace daisi::cpps::logical
 
 #endif

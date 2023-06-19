@@ -19,12 +19,15 @@
 
 #include <vector>
 
+#include "solanet/serializer/serialize.h"
 #include "transport_order_step.h"
 
 namespace daisi::material_flow {
 
 class TransportOrder {
 public:
+  TransportOrder() = default;
+
   TransportOrder(std::string uuid,
                  const std::vector<TransportOrderStep> &pickup_transport_order_steps,
                  const TransportOrderStep &delivery_transport_order_step);
@@ -35,6 +38,8 @@ public:
   const std::vector<TransportOrderStep> getPickupTransportOrderSteps() const;
 
   bool operator==(const TransportOrder &other) const;
+
+  SERIALIZE(uuid_, pickup_transport_order_steps_, delivery_transport_order_step_);
 
 private:
   std::string uuid_;
