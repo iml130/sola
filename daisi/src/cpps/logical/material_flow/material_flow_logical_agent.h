@@ -26,14 +26,13 @@ class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
   /// @brief
   /// @param device_id
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo,
-                           const bool first_node);
+  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo, bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() = default;  // TODO
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
-  virtual void init(const bool first_node);
+  virtual void init();
 
   /// @brief Starting operations by initalizing components which require the finished initialization
   /// of Sola.

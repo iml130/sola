@@ -22,12 +22,12 @@ namespace daisi::cpps::logical {
 
 MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
                                                    const AlgorithmConfig &config_algo,
-                                                   const bool first_node)
+                                                   bool first_node)
     : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo,
                    first_node),
       waiting_for_start_(false) {}
 
-void MaterialFlowLogicalAgent::init(const bool first_node) { initCommunication(); }
+void MaterialFlowLogicalAgent::init() { initCommunication(); }
 
 void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
 
