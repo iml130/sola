@@ -58,7 +58,7 @@ amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
 
     for (auto const &s : S) {
       bool a = s <= m;
-      bool b = m <= m;
+      bool b = m <= s;
 
       bool valid = !a || b;
       if (!valid) {
