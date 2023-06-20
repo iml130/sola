@@ -22,13 +22,13 @@
 #include <unordered_map>
 #include <vector>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/model/kinematics.h"
 
 namespace daisi::cpps {
 
 class AGVFleet {
-  using AGVInfo = std::pair<mrta::model::Ability, Kinematics>;
+  using AGVInfo = std::pair<amr::AmrStaticAbility, Kinematics>;
 
 private:
   std::vector<AGVInfo> infos_;
@@ -58,16 +58,16 @@ public:
 
   // -----------------------------------------
 
-  std::vector<mrta::model::Ability> getFittingExistingAbilities(
-      const mrta::model::Ability &ability_requirement);
+  std::vector<amr::AmrStaticAbility> getFittingExistingAbilities(
+      const amr::AmrStaticAbility &ability_requirement);
 
-  mrta::model::Ability getClosestExistingAbility(const mrta::model::Ability &ability_requirement);
+  amr::AmrStaticAbility getClosestExistingAbility(const amr::AmrStaticAbility &ability_requirement);
 
-  std::vector<mrta::model::Ability> getAllExistingAbilities();
+  std::vector<amr::AmrStaticAbility> getAllExistingAbilities();
 
-  std::string getTopicForAbility(const mrta::model::Ability &ability);
+  std::string getTopicForAbility(const amr::AmrStaticAbility &ability);
 
-  Kinematics getKinematicsOfAbility(const mrta::model::Ability &ability);
+  Kinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability);
 
   static std::string getDefaultTopic() { return "defaulttopic"; }
 };

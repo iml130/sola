@@ -19,9 +19,9 @@
 
 #include <memory>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/logical/message/auction_based/bid_submission.h"
 #include "cpps/logical/message/auction_based/winner_response.h"
-#include "cpps/model/ability.h"
 #include "layered_precedence_graph.h"
 #include "material_flow/model/material_flow.h"
 
@@ -94,7 +94,7 @@ private:
   /// @param ability_requirement Relevant ability
   static void removeBidsWhichMeetAbilityRequirement(
       std::vector<BidSubmission> &bid_submissions,
-      const daisi::cpps::mrta::model::Ability &ability_requirement);
+      const amr::AmrStaticAbility &ability_requirement);
 
   /// @brief Vector of all open and still valid BidSubmissions in this iteration.
   std::vector<BidSubmission> bid_submissions_;

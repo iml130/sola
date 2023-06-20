@@ -18,7 +18,7 @@
 
 #include <limits>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/negotiation/utils/kmeans.h"
 #include "cpps/negotiation/utils/simple_temporal_network.h"
 #include "ns3/vector.h"
@@ -190,22 +190,20 @@ void IteratedAuctionInitiator::removeBidsForWinner(std::vector<ReceivedBids> &bi
 }
 
 void IteratedAuctionInitiator::removeBidsWhichMeetAbilityRequirement(
-    std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement) {
+    std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement) {
   auto remove_condition_lambda =
       [&ability_requirement](const IteratedAuctionInitiator::ReceivedBids &bid) {
-        return comparableAbility(ability_requirement, bid.participant_ability) &&
-               lessOrEqualAbility(ability_requirement, bid.participant_ability);
+        return ability_requirement <= bid.participant_ability;
       };
 
   bids.erase(std::remove_if(bids.begin(), bids.end(), remove_condition_lambda), bids.end());
 }
 
 void IteratedAuctionInitiator::removeBidsWhichAreLesserThanAbilityRequirement(
-    std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement) {
+    std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement) {
   auto remove_condition_lambda =
       [&ability_requirement](const IteratedAuctionInitiator::ReceivedBids &bid) {
-        return comparableAbility(ability_requirement, bid.participant_ability) &&
-               lessOrEqualAbility(bid.participant_ability, ability_requirement);
+        return bid.participant_ability <= ability_requirement;
       };
 
   bids.erase(std::remove_if(bids.begin(), bids.end(), remove_condition_lambda), bids.end());

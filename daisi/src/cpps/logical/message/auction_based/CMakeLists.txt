@@ -17,7 +17,7 @@ target_sources(daisi_cpps_logical_message_auction_based_bid_submission
 target_link_libraries(daisi_cpps_logical_message_auction_based_bid_submission
     INTERFACE
     solanet_serializer
-    daisi_cpps_model_ability
+    daisi_cpps_amr_model_amr_static_ability
 )
 
 add_library(daisi_cpps_logical_message_auction_based_iteration_notification INTERFACE)

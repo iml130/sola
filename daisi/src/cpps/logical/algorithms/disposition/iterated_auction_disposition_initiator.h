@@ -90,8 +90,8 @@ private:
 
   /// @brief Helper method to determine the relevant abilities to each task and mapping them.
   /// @param tasks Relevant tasks to be mapped
-  std::unordered_map<daisi::cpps::mrta::model::Ability, std::vector<daisi::material_flow::Task>,
-                     daisi::cpps::mrta::model::AbilityHasher>
+  std::unordered_map<amr::AmrStaticAbility, std::vector<daisi::material_flow::Task>,
+                     amr::AmrStaticAbilityHasher>
   getTaskAbilityMapping(const std::vector<daisi::material_flow::Task> &tasks);
 
   /// @brief Helper class for storing information about tasks and their layers in a precedence
@@ -103,7 +103,7 @@ private:
 
   /// @brief Storing which ability corresponds to which topic when publishing CallForProposals and
   /// IterationNotifiations.
-  std::unordered_map<mrta::model::Ability, std::string, mrta::model::AbilityHasher>
+  std::unordered_map<amr::AmrStaticAbility, std::string, amr::AmrStaticAbilityHasher>
       ability_topic_mapping_;
 
   /// @brief Storing all delays in one place. The unit is seconds.

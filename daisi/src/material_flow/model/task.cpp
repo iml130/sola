@@ -40,10 +40,10 @@ bool Task::hasTimeWindow() const {
   return false;  // TODO integrate constraints
 }
 
-daisi::cpps::mrta::model::Ability Task::getAbilityRequirement() const {
+cpps::amr::AmrStaticAbility Task::getAbilityRequirement() const {
   // TODO
-  daisi::cpps::mrta::model::Ability ability(
-      0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);
+  cpps::amr::AmrStaticAbility ability(
+      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kNoLoadCarrierType), 0);
   return ability;
 }
 

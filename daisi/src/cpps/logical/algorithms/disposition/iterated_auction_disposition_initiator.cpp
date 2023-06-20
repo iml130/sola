@@ -19,9 +19,6 @@
 #include "cpps/model/agv_fleet.h"
 #include "ns3/simulator.h"
 
-using namespace daisi::material_flow;
-using namespace daisi::cpps::mrta::model;
-
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
@@ -36,7 +33,7 @@ IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
 }
 
 void IteratedAuctionDispositionInitiator::addMaterialFlow(
-    std::shared_ptr<MFDLScheduler> scheduler) {
+    std::shared_ptr<material_flow::MFDLScheduler> scheduler) {
   if (layered_precedence_graph_) {
     throw std::runtime_error("A material flow is already processed currently. Support of multiple "
                              "is not implemented yet.");
@@ -181,10 +178,13 @@ void IteratedAuctionDispositionInitiator::notifyWinners(
   }
 }
 
-std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher>
+std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
+                   amr::AmrStaticAbilityHasher>
 IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
     const std::vector<material_flow::Task> &tasks) {
-  std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher> task_ability_mapping;
+  std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
+                     amr::AmrStaticAbilityHasher>
+      task_ability_mapping;
 
   for (const auto &task : tasks) {
     auto fitting_abilities =

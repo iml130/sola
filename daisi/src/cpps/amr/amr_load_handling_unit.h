@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
@@ -27,10 +27,8 @@ class AmrLoadHandlingUnit {
 public:
   AmrLoadHandlingUnit() = default;
   AmrLoadHandlingUnit(double load_time_s, double unload_time_s,
-                      const daisi::cpps::mrta::model::Ability &carrier_ability)
-      : load_time_s_(load_time_s),
-        unload_time_s_(unload_time_s),
-        carrier_ability_(carrier_ability) {}
+                      const amr::AmrStaticAbility &ability)
+      : load_time_s_(load_time_s), unload_time_s_(unload_time_s), ability_(ability) {}
 
   /// @{
   /// Return load/unload time in seconds
@@ -38,14 +36,14 @@ public:
   double getUnloadTime() const { return unload_time_s_; }
   /// @}
 
-  daisi::cpps::mrta::model::Ability getAbility() const { return carrier_ability_; }
+  amr::AmrStaticAbility getAbility() const { return ability_; }
 
-  SERIALIZE(carrier_ability_, load_time_s_, unload_time_s_);
+  SERIALIZE(ability_, load_time_s_, unload_time_s_);
 
 private:
   double load_time_s_ = -1;
   double unload_time_s_ = -1;
-  daisi::cpps::mrta::model::Ability carrier_ability_;
+  amr::AmrStaticAbility ability_;
 };
 }  // namespace daisi::cpps
 #endif

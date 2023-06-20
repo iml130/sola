@@ -17,8 +17,8 @@
 #ifndef DAISI_PATH_PLANNING_MESSAGE_SERIALIZER_H_
 #define DAISI_PATH_PLANNING_MESSAGE_SERIALIZER_H_
 
-#include "cpps/message/serialize.h"
 #include "path_planning/consensus/paxos/message/types.h"
+#include "solanet/serializer/serialize.h"
 #include "types_all.h"
 
 namespace daisi::path_planning::message {

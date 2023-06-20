@@ -16,7 +16,7 @@
 
 #include "cpps/model/material_flow_model.h"
 
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/model/task.h"
 #include "ns3/vector.h"
 #include "utils/random_engine.h"
@@ -41,9 +41,9 @@ void MaterialFlowModel::loadFromScenarioTable(
     int pickup_index = task_desc->getRequired<uint64_t>("pickup");
     int delivery_index = task_desc->getRequired<uint64_t>("delivery");
 
-    mrta::model::LoadCarrier load_carrier(task_desc->getRequired<std::string>("load_carrier"));
+    amr::LoadCarrier load_carrier(task_desc->getRequired<std::string>("load_carrier"));
     float payload_weight = task_desc->getRequired<float>("payload_weight");
-    mrta::model::Ability ability{payload_weight, load_carrier};
+    amr::AmrStaticAbility ability(load_carrier, payload_weight);
 
     Task task(random_locations[pickup_index], random_locations[delivery_index], ability);
 

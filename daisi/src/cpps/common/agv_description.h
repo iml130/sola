@@ -19,8 +19,8 @@
 
 #include <string>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "ns3/ptr.h"
 
@@ -33,7 +33,7 @@ struct AgvDeviceProperties {
   std::string friendly_name;  // + number for individual AGV
 
   Kinematics kinematic;
-  mrta::model::Ability ability;
+  amr::AmrStaticAbility ability;
 };
 
 struct AgvDeviceDescription {
@@ -58,8 +58,8 @@ inline std::ostream &operator<<(std::ostream &os, const AgvDataModel &agv_data_m
   os << agv_data_model.agv_properties.kinematic.getMinAcceleration() << ";";
   os << agv_data_model.agv_properties.kinematic.getLoadTime() << ";";
   os << agv_data_model.agv_properties.kinematic.getUnloadTime() << ";";
-  os << std::get<1>(agv_data_model.agv_properties.ability) << ";";
-  os << std::get<0>(agv_data_model.agv_properties.ability) << ";";
+  os << agv_data_model.agv_properties.ability.getLoadCarrier() << ";";
+  os << agv_data_model.agv_properties.ability.getMaxPayloadWeight() << ";";
   os << agv_data_model.agv_device_descr.serial_number << ";";
 
   return os;
@@ -106,9 +106,9 @@ inline std::istream &operator>>(std::istream &is, AgvDataModel &agv_data_model) 
                        std::stod(load_time), std::stod(unload_time));
   agv_data_model.agv_properties.kinematic = kinematic;
 
-  mrta::model::LoadCarrier load_carrier(load_carrier_type);
+  amr::LoadCarrier load_carrier(load_carrier_type);
   float max_payload_number = std::stod(max_payload);
-  mrta::model::Ability ability{max_payload_number, load_carrier};
+  amr::AmrStaticAbility ability(load_carrier, max_payload_number);
   agv_data_model.agv_properties.ability = ability;
 
   agv_data_model.agv_device_descr.serial_number = std::stoi(serial_number);

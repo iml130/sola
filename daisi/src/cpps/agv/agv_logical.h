@@ -25,9 +25,9 @@
 #include "cpps/amr/message/amr_order_info.h"
 #include "cpps/amr/message/amr_order_update.h"
 #include "cpps/amr/message/amr_status_update.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/common/agv_description.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "cpps/model/task.h"
 #include "cpps/negotiation/mrta_configuration.h"
@@ -91,7 +91,7 @@ private:
   AgvDataModel data_model_;
 
   std::shared_ptr<Kinematics> kinematics_;
-  std::shared_ptr<mrta::model::Ability> ability_;
+  std::shared_ptr<amr::AmrStaticAbility> ability_;
   std::shared_ptr<ns3::Vector> last_position_;
 
   AmrState last_agv_state_ = AmrState::kIdle;

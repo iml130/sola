@@ -14,11 +14,11 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/model/load_carrier_ability.h"
+#include "amr_load_carrier.h"
 
 #include <stdexcept>
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
 LoadCarrier::LoadCarrier(const Types &type) : type_(type) {}
 
@@ -64,4 +64,4 @@ std::unordered_map<std::string, LoadCarrier::Types> LoadCarrier::string_to_type_
     {"package", LoadCarrier::Types::kPackage},
 };
 
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr

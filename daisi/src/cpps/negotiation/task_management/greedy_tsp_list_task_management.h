@@ -24,7 +24,7 @@ namespace daisi::cpps {
 class GreedyTSPListTaskManagement : public BasicListTaskManagement {
 public:
   GreedyTSPListTaskManagement(const std::shared_ptr<Kinematics> &kinematics,
-                              const std::shared_ptr<mrta::model::Ability> &ability,
+                              const std::shared_ptr<amr::AmrStaticAbility> &ability,
                               const std::shared_ptr<ns3::Vector> &last_position,
                               const std::shared_ptr<daisi::cpps::CppsLoggerNs3> &logger,
                               const std::shared_ptr<UtilityEvaluator> &utility_evaluator);

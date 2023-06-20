@@ -17,8 +17,9 @@
 #ifndef DAISI_CPPS_MESSAGE_SERIALIZER_H_
 #define DAISI_CPPS_MESSAGE_SERIALIZER_H_
 
-#include "cpps/message/serialize.h"
 #include "cpps/message/types_all.h"
+#include "solanet/serializer/serialize.h"
+#include "types_all.h"
 
 namespace daisi::cpps {
 

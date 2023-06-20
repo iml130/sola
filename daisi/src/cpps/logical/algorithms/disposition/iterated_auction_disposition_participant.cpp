@@ -155,8 +155,9 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
   if (task_uuid != state.previously_submitted) {
     std::string participant_connection = sola_->getConectionString();
 
-    daisi::cpps::mrta::model::Ability participant_ability(
-        0, daisi::cpps::mrta::model::LoadCarrier::Types::kNoLoadCarrierType);  // TODO
+    amr::AmrStaticAbility participant_ability(
+        amr::LoadCarrier(amr::LoadCarrier::Types::kNoLoadCarrierType),
+        0);  // TODO
 
     BidSubmission bid_submission(task_uuid, participant_connection, participant_ability,
                                  best_task_state.metrics_composition.value());

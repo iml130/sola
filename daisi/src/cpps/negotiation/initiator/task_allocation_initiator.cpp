@@ -21,6 +21,7 @@
 #include "cpps/model/material_flow_model.h"
 #include "cpps/model/task.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

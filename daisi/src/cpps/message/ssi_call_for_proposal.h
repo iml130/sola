@@ -20,8 +20,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "cpps/message/serialize.h"
 #include "cpps/model/task.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

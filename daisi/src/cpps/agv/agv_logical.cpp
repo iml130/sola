@@ -50,7 +50,7 @@ AgvLogicalNs3::AgvLogicalNs3(TopologyNs3 topology, const MRTAConfig &mrta_config
   logger_ = daisi::global_logger_manager->createAMRLogger(device_id_);
 
   last_position_ = std::make_shared<ns3::Vector>();
-  ability_ = std::make_shared<mrta::model::Ability>();
+  ability_ = std::make_shared<amr::AmrStaticAbility>();
   kinematics_ = std::make_shared<Kinematics>();
 }
 
@@ -177,15 +177,15 @@ void AgvLogicalNs3::processMessageDescription(const AmrDescription &description)
   kinematics_->set(Kinematics(k.getMaxVelocity(), k.getMinVelocity(), k.getMaxAcceleration(),
                               k.getMaxDeceleration(), l.getLoadTime() * 1000.0,
                               l.getUnloadTime() * 1000.0));
-  ability_ = std::make_shared<mrta::model::Ability>(l.getAbility());
+  ability_ = std::make_shared<amr::AmrStaticAbility>(l.getAbility());
   service_.friendly_name =
       "service_" +
       description.getProperties().getFriendlyName();  // As we are only having a single service
   service_.uuid = UUIDGenerator::get()();
   service_.key_values.insert({"servicetype", std::string("transport")});
-  service_.key_values.insert({"maxpayload", static_cast<float>(std::get<0>(l.getAbility()))});
+  service_.key_values.insert({"maxpayload", l.getAbility().getMaxPayloadWeight()});
 
-  std::string type = std::get<1>(l.getAbility()).getTypeAsString();
+  std::string type = l.getAbility().getLoadCarrier().getTypeAsString();
 
   service_.key_values.insert({"loadcarriertype", type});
 
@@ -266,8 +266,8 @@ void AgvLogicalNs3::logAGV() const {
 
   info.load_time = data_model_.agv_properties.kinematic.getLoadTime();
   info.unload_time = data_model_.agv_properties.kinematic.getUnloadTime();
-  info.load_carrier_type = std::get<1>(data_model_.agv_properties.ability).getTypeAsString();
-  info.max_weight = std::get<0>(data_model_.agv_properties.ability);
+  info.load_carrier_type = data_model_.agv_properties.ability.getLoadCarrier().getTypeAsString();
+  info.max_weight = data_model_.agv_properties.ability.getMaxPayloadWeight();
 
   info.max_velocity = data_model_.agv_properties.kinematic.getMaxVelocity();
   info.min_velocity = data_model_.agv_properties.kinematic.getMinVelocity();

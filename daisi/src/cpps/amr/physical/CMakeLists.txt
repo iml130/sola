@@ -84,7 +84,7 @@ target_sources(daisi_cpps_amr_physical_amr_order
 )
 target_link_libraries(daisi_cpps_amr_physical_amr_order
     INTERFACE
-    daisi_cpps_model_ability
+    daisi_cpps_amr_model_amr_static_ability
     daisi_cpps_amr_physical_functionality
     daisi_structure_helpers
     solanet_serialize

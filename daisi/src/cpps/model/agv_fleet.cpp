@@ -20,11 +20,11 @@ namespace daisi::cpps {
 
 /// as tau(t) of task t in thesis
 /// where ability_requirement is h(t)
-std::vector<mrta::model::Ability> AGVFleet::getFittingExistingAbilities(
-    const mrta::model::Ability &ability_requirement) {
-  std::vector<mrta::model::Ability> fitting_abilities;
+std::vector<amr::AmrStaticAbility> AGVFleet::getFittingExistingAbilities(
+    const amr::AmrStaticAbility &ability_requirement) {
+  std::vector<amr::AmrStaticAbility> fitting_abilities;
   for (auto const &[existing_ability, _] : infos_) {
-    if (lessOrEqualAbility(ability_requirement, existing_ability)) {
+    if (ability_requirement <= existing_ability) {
       fitting_abilities.push_back(existing_ability);
     }
   }
@@ -32,10 +32,10 @@ std::vector<mrta::model::Ability> AGVFleet::getFittingExistingAbilities(
   return fitting_abilities;
 }
 
-mrta::model::Ability AGVFleet::getClosestExistingAbility(
-    const mrta::model::Ability &ability_requirement) {
+amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
+    const amr::AmrStaticAbility &ability_requirement) {
   /*
-  finding minimal element in taut(t), where h(t) = ability_requirement
+  finding minimal element in tau(t), where h(t) = ability_requirement
 
   m in S is a minimal element if
   if s in S, and s <= m, then necessarily m <= s
@@ -47,7 +47,7 @@ mrta::model::Ability AGVFleet::getClosestExistingAbility(
   */
 
   // NOLINTNEXTLINE(readability-identifier-naming)
-  std::vector<mrta::model::Ability> S = getFittingExistingAbilities(ability_requirement);
+  std::vector<amr::AmrStaticAbility> S = getFittingExistingAbilities(ability_requirement);
 
   if (S.size() == 1) {
     return S[0];
@@ -57,7 +57,10 @@ mrta::model::Ability AGVFleet::getClosestExistingAbility(
     bool is_min = true;
 
     for (auto const &s : S) {
-      bool valid = !lessOrEqualAbility(s, m) || lessOrEqualAbility(m, s);
+      bool s_less_equal_m = s <= m;
+      bool m_less_equal_s = m <= s;
+
+      bool valid = !s_less_equal_m || m_less_equal_s;
       if (!valid) {
         is_min = false;
       }
@@ -72,25 +75,25 @@ mrta::model::Ability AGVFleet::getClosestExistingAbility(
 }
 
 /// \mathcal{G} = {G1, G2, ...} in thesis
-std::vector<mrta::model::Ability> AGVFleet::getAllExistingAbilities() {
-  std::vector<mrta::model::Ability> abilities;
+std::vector<amr::AmrStaticAbility> AGVFleet::getAllExistingAbilities() {
+  std::vector<amr::AmrStaticAbility> abilities;
   for (auto const &[ability, _] : infos_) {
     abilities.push_back(ability);
   }
   return abilities;
 }
 
-std::string AGVFleet::getTopicForAbility(const mrta::model::Ability &ability) {
+std::string AGVFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
   std::ostringstream stream;
   stream << "topic";
-  printAbility(stream, ability);
+  stream << ability;
   std::string topic = stream.str();
   return topic;
 }
 
-Kinematics AGVFleet::getKinematicsOfAbility(const mrta::model::Ability &ability) {
+Kinematics AGVFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
   for (auto const &[existing_ability, kinematics] : infos_) {
-    if (equalAbility(ability, existing_ability)) {
+    if (ability == existing_ability) {
       return kinematics;
     }
   }

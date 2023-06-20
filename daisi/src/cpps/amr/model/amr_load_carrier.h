@@ -14,17 +14,18 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MODEL_LOAD_CARRIER_ABILITY_NS3_H_
-#define DAISI_MODEL_LOAD_CARRIER_ABILITY_NS3_H_
+#ifndef DAISI_CPPS_AMR_MODEL_AMR_LOAD_CARRIER_H_
+#define DAISI_CPPS_AMR_MODEL_AMR_LOAD_CARRIER_H_
 
 #include <cstdint>
 #include <string>
 #include <unordered_map>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
-namespace daisi::cpps::mrta::model {
+namespace daisi::cpps::amr {
 
+// TODO: add documentation
 class LoadCarrier {
 public:
   enum Types : uint8_t {
@@ -44,6 +45,7 @@ public:
   friend bool operator<=(const LoadCarrier &l1, const LoadCarrier &l2);
   friend bool operator>(const LoadCarrier &l1, const LoadCarrier &l2);
   friend bool operator>=(const LoadCarrier &l1, const LoadCarrier &l2);
+
   friend std::ostream &operator<<(std::ostream &os, const LoadCarrier &l);
 
   std::string getTypeAsString() const;
@@ -53,12 +55,10 @@ public:
 private:
   Types type_ = Types::kNoLoadCarrierType;
 
-  static Types getTypeFromString(const std::string &type_name);
-
   static std::unordered_map<std::string, Types> string_to_type_;
+
+  static Types getTypeFromString(const std::string &type_name);
 };
 
-bool comparable(const LoadCarrier &l1, const LoadCarrier &l2);
-
-}  // namespace daisi::cpps::mrta::model
+}  // namespace daisi::cpps::amr
 #endif

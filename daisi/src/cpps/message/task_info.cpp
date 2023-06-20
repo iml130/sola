@@ -34,6 +34,6 @@ ns3::Vector TaskInfo::getDeliveryLocation() const {
   return ns3::Vector(delivery_x_, delivery_y_, 0.0);
 }
 
-mrta::model::Ability TaskInfo::getAbilityRequirement() const { return ability_requirement_; }
+amr::AmrStaticAbility TaskInfo::getAbilityRequirement() const { return ability_requirement_; }
 
 }  // namespace daisi::cpps

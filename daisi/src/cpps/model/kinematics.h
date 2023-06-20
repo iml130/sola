@@ -17,11 +17,11 @@
 #ifndef DAISI_MODEL_KINEMATICS_NS3_H_
 #define DAISI_MODEL_KINEMATICS_NS3_H_
 
-#include "cpps/message/serialize.h"
 #include "ns3/object.h"
 #include "ns3/packet.h"
 #include "ns3/simulator.h"
 #include "ns3/vector.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

@@ -19,6 +19,7 @@
 
 #include <variant>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/ssi_call_for_proposal.h"
 #include "cpps/message/ssi_iteration_notification.h"
 #include "cpps/message/ssi_submission.h"
@@ -26,7 +27,6 @@
 #include "cpps/message/ssi_winner_response.h"
 #include "cpps/message/task_info.h"
 #include "cpps/message/task_update.h"
-#include "cpps/model/ability.h"
 
 namespace daisi::cpps {
 

@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/message/ssi_winner_response.h"
+#include "ssi_winner_response.h"
 
 namespace daisi::cpps {
 

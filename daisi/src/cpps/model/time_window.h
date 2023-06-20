@@ -20,7 +20,7 @@
 #include <cassert>
 #include <optional>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps {
 

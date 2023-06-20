@@ -17,8 +17,8 @@
 #ifndef DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 #define DAISI_CPPS_AMR_MESSAGE_AMR_ORDER_INFO_H_
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/functionality.h"
-#include "cpps/model/ability.h"
 #include "cpps/model/order_states.h"
 #include "solanet/serializer/serialize.h"
 #include "utils/structure_helpers.h"
@@ -28,16 +28,16 @@ class AmrOrderInfo {
 public:
   AmrOrderInfo() = default;
   AmrOrderInfo(const std::vector<FunctionalityVariant> &functionalities,
-               const mrta::model::Ability &ability_requirement)
+               const amr::AmrStaticAbility &ability_requirement)
       : functionalities_(functionalities), ability_requirement_(ability_requirement) {}
 
   std::vector<FunctionalityVariant> getFunctionalities() const { return functionalities_; }
-  mrta::model::Ability getAbilityRequirement() const { return ability_requirement_; }
+  amr::AmrStaticAbility getAbilityRequirement() const { return ability_requirement_; }
   SERIALIZE(functionalities_, ability_requirement_);
 
 private:
   std::vector<FunctionalityVariant> functionalities_;
-  mrta::model::Ability ability_requirement_;
+  amr::AmrStaticAbility ability_requirement_;
 };
 }  // namespace daisi::cpps
 

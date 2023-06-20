@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::message {
 //! Message that \c AGVLogical sends to inform \c PickupStation that previous goal from \c

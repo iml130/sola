@@ -19,12 +19,12 @@
 
 #include <memory>
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/message/ssi_call_for_proposal.h"
 #include "cpps/message/ssi_iteration_notification.h"
 #include "cpps/message/ssi_submission.h"
 #include "cpps/message/ssi_winner_notification.h"
 #include "cpps/message/ssi_winner_response.h"
-#include "cpps/model/ability.h"
 #include "cpps/negotiation/initiator/task_allocation_initiator.h"
 #include "cpps/negotiation/utility/utility_evaluator.h"
 #include "cpps/negotiation/utils/overload.h"
@@ -48,7 +48,7 @@ protected:
   struct ReceivedBids {
     std::string task_uuid;
     std::string participant_connection;
-    mrta::model::Ability participant_ability;
+    amr::AmrStaticAbility participant_ability;
     UtilityDimensions udims;
 
     friend bool operator==(const ReceivedBids &r1, const ReceivedBids &r2) {
@@ -116,9 +116,9 @@ protected:
   static void removeBidsForWinner(std::vector<ReceivedBids> &bids, const std::string &task_uuid,
                                   const std::string &winner_connection);
   static void removeBidsWhichMeetAbilityRequirement(
-      std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement);
+      std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement);
   static void removeBidsWhichAreLesserThanAbilityRequirement(
-      std::vector<ReceivedBids> &bids, const mrta::model::Ability &ability_requirement);
+      std::vector<ReceivedBids> &bids, const amr::AmrStaticAbility &ability_requirement);
 
 private:
   // receiving and inserting bids into B_{valid}

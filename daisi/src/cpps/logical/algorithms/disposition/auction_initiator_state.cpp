@@ -51,15 +51,12 @@ void AuctionInitiatorState::removeBidsForWinner(std::vector<BidSubmission> &bid_
 }
 
 void AuctionInitiatorState::removeBidsWhichMeetAbilityRequirement(
-    std::vector<BidSubmission> &bid_submissions,
-    const daisi::cpps::mrta::model::Ability &ability_requirement) {
-  bid_submissions.erase(
-      std::remove_if(bid_submissions.begin(), bid_submissions.end(),
-                     [&ability_requirement](const auto &bid) {
-                       return comparableAbility(ability_requirement, bid.getParticipantAbility()) &&
-                              lessOrEqualAbility(ability_requirement, bid.getParticipantAbility());
-                     }),
-      bid_submissions.end());
+    std::vector<BidSubmission> &bid_submissions, const amr::AmrStaticAbility &ability_requirement) {
+  bid_submissions.erase(std::remove_if(bid_submissions.begin(), bid_submissions.end(),
+                                       [&ability_requirement](const auto &bid) {
+                                         return ability_requirement <= bid.getParticipantAbility();
+                                       }),
+                        bid_submissions.end());
 }
 
 std::vector<daisi::material_flow::Task> AuctionInitiatorState::processWinnerAcceptions() {

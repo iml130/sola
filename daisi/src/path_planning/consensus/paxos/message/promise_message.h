@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-#include "cpps/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace daisi::path_planning::consensus {
 //!< Promise message from acceptors to proposer to promise that the acceptor will accept new values

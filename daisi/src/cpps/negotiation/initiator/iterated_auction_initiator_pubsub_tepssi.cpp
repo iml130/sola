@@ -69,8 +69,8 @@ IteratedAuctionInitiatorPubsubTePSSI::selectWinners() {
     }
 
     // if abilities are unequal, we can use ability for ordering
-    if (!equalAbility(b1.participant_ability, b2.participant_ability)) {
-      return lessAbility(b1.participant_ability, b2.participant_ability);
+    if (b1.participant_ability != b2.participant_ability) {
+      return b1.participant_ability < b2.participant_ability;
     }
 
     // if even the ability is equal, at least the connection strings are unique

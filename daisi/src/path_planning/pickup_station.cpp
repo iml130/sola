@@ -164,9 +164,9 @@ void PickupStation::update(const std::string &agv_id) {
     // Pack to/from station IDS into first element of vector
     ns3::Vector pickup(agv.current_to.delivery_station, -1, -1);
     ns3::Vector delivery(info_.station_id, -1, -1);
-    cpps::Task task(
-        agv.current_to.uuid, pickup, delivery,
-        {100.0F, cpps::mrta::model::LoadCarrier(cpps::mrta::model::LoadCarrier::kEuroBox)});
+    cpps::Task task(agv.current_to.uuid, pickup, delivery,
+                    cpps::amr::AmrStaticAbility(
+                        cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::kEuroBox), 100.0F));
     logger_->logTransportOrder(task, agv.current_to.delivery_station, info_.station_id);
     logger_->logPPTransportOrderUpdate(agv.current_to.uuid, 4);
   }
@@ -425,9 +425,9 @@ void PickupStation::spawnTO() {
     if (next.has_value()) next_station = next.value();
   }
 
-  cpps::Task task(
-      info.uuid, pickup, delivery,
-      {100.0F, cpps::mrta::model::LoadCarrier(cpps::mrta::model::LoadCarrier::kEuroBox)});
+  cpps::Task task(info.uuid, pickup, delivery,
+                  cpps::amr::AmrStaticAbility(
+                      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::kEuroBox), 100.0F));
   logger_->logTransportOrder(task, info_.station_id, info.delivery_station);
 
   logger_->logTOSpawn(info.uuid, info_.station_id, info.delivery_station);

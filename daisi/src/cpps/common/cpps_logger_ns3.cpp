@@ -446,7 +446,7 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
   std::string name = order.getName();
   ns3::Vector3D start = order.getPickupLocation();
   ns3::Vector3D stop = order.getDeliveryLocation();
-  std::string load_carrier_type = std::get<1>(order.getAbilityRequirement()).getTypeAsString();
+  std::string load_carrier_type = order.getAbilityRequirement().getLoadCarrier().getTypeAsString();
 
   if (mf_uuid.empty()) {
     table.columns[4] = {"MaterialFlowId", "NULL"};
@@ -462,7 +462,7 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
         // /* DeliveryStationId */ delivery_station_id,
         /* LoadCarrierType */
         load_carrier_type.c_str(),  // TODO: Change to id based field?
-        /* Weight_kg */ std::get<0>(order.getAbilityRequirement()),
+        /* Weight_kg */ order.getAbilityRequirement().getMaxPayloadWeight(),
         /* EarliestStart_ms */ earliest_start,
         /* LatestFinish_ms */ latest_finish,
         /* PrecedenceConstraints */ precedence_constraints.c_str());
@@ -482,7 +482,7 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
         // /* DeliveryStationId */ delivery_station_id,
         /* LoadCarrierType */
         load_carrier_type.c_str(),  // TODO: Change to id based field?
-        /* Weight_kg */ std::get<0>(order.getAbilityRequirement()),
+        /* Weight_kg */ order.getAbilityRequirement().getMaxPayloadWeight(),
         /* EarliestStart_ms */ earliest_start,
         /* LatestFinish_ms */ latest_finish,
         /* PrecedenceConstraints */ precedence_constraints.c_str());

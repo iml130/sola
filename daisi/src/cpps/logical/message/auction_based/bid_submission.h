@@ -17,8 +17,8 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 
+#include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/logical/order_management/metrics_composition.h"
-#include "cpps/model/ability.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {
@@ -28,7 +28,7 @@ public:
   BidSubmission() = default;
 
   BidSubmission(std::string task_uuid, std::string participant_connection,
-                const daisi::cpps::mrta::model::Ability &participant_ability,
+                const amr::AmrStaticAbility &participant_ability,
                 const MetricsComposition &metrics_composition)
       : task_uuid_(std::move(task_uuid)),
         participant_connection_(std::move(participant_connection)),
@@ -39,26 +39,24 @@ public:
 
   const std::string &getParticipantConnection() const { return participant_connection_; }
 
-  const daisi::cpps::mrta::model::Ability &getParticipantAbility() const {
-    return participant_ability_;
-  }
+  const amr::AmrStaticAbility &getParticipantAbility() const { return participant_ability_; }
 
   const MetricsComposition &getMetricsComposition() { return metrics_composition_; }
 
   bool operator>(const BidSubmission &other) const {
-    // if (metrics_composition_ != other.metrics_composition_) {
-    //   return metrics_composition_ > other.metrics_composition_;
-    // }
+    if (metrics_composition_ != other.metrics_composition_) {
+      return metrics_composition_ > other.metrics_composition_;
+    }
 
     // if metrics are the same, it does not matter whether which one is selected
     // but for comparability a unique ordering is necessary
 
     // if abilities are unequal, ability can be used for ordering
-    if (!equalAbility(participant_ability_, other.participant_ability_)) {
-      return lessAbility(participant_ability_, other.participant_ability_);
+    if (participant_ability_ != other.participant_ability_) {
+      return participant_ability_ < other.participant_ability_;
     }
 
-    // if abilit is equal, at least the connection strings are different
+    // if ability is equal, at least the connection strings are different
     return participant_connection_ > other.participant_connection_;
   }
 
@@ -69,7 +67,7 @@ private:
 
   std::string participant_connection_;
 
-  daisi::cpps::mrta::model::Ability participant_ability_;
+  amr::AmrStaticAbility participant_ability_;
 
   MetricsComposition metrics_composition_;
 };
