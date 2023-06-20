@@ -89,10 +89,14 @@ void CppsManager::spawnAGV(uint32_t agv_index, const AgvDeviceProperties &proper
     throw std::runtime_error("mobility model not empty");
   }
 
+  logical::AlgorithmConfig algorithm_config;
+  algorithm_config.algorithm_types.push_back(
+      logical::AlgorithmType::kIteartedAuctionDispositionParticipant);
+
   this->agvs_.Get(agv_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
   this->agvs_.Get(agv_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<AgvLogicalNs3>(topology, mrta_config_, agv_index, device_id);
+      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, false);
 }
 
 void CppsManager::setup() {
@@ -227,9 +231,9 @@ uint64_t CppsManager::getNumberOfNodes() {
 }
 
 void CppsManager::checkStarted(uint32_t index) {
-  auto cpps_app_logical = std::get<std::shared_ptr<AgvLogicalNs3>>(
+  auto cpps_app_logical = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(
       this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
-  if (!cpps_app_logical->getSOLA()->isStorageRunning()) {
+  if (!cpps_app_logical->isRunning()) {
     throw std::runtime_error("storage instance not started yet");
   }
 }
@@ -240,9 +244,6 @@ void CppsManager::initAGV(uint32_t index) {
 
   cpps_app_physical->start();
   cpps_app_logical->start();
-
-  ns3::Simulator::Schedule(MilliSeconds(250), &CppsManager::checkStarted, this, index);
-  std::get<std::shared_ptr<AgvLogicalNs3>>(cpps_app_logical->application)->checkOrderQueue();
 }
 
 void CppsManager::connect(int index) {
