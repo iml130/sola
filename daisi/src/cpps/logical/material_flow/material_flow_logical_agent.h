@@ -50,6 +50,8 @@ public:
   /// @return status whether the agent is busy or not
   bool isBusy();
 
+  bool isFinished() const;
+
 protected:
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed for a material flow agent.

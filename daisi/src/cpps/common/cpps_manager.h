@@ -26,6 +26,7 @@
 #include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
+#include "cpps/logical/material_flow/material_flow_logical_agent.h"
 #include "cpps/model/ability.h"
 #include "cpps/model/kinematics.h"
 #include "cpps/negotiation/mrta_configuration.h"
@@ -103,8 +104,6 @@ private:
   void parseToSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseTopology();
   void parseScenarioSequence();
-  void parseMaterialFlowModel(const std::shared_ptr<MaterialFlowModel> &model,
-                              const std::shared_ptr<ScenariofileParser::Table> &model_description);
 
   void parseMRTAConfiguration();
   static std::unordered_map<std::string, InteractionProtocolType> interaction_protocol_types_map_;

@@ -76,4 +76,10 @@ void LogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
   processMessage(logical_message);
 }
 
+bool LogicalAgent::isRunning() { return sola_->isStorageRunning(); }
+
+bool LogicalAgent::canStop() { return sola_->canStop(); }
+
+void LogicalAgent::prepareStop() { sola_->stop(); }
+
 }  // namespace daisi::cpps::logical

@@ -41,6 +41,15 @@ public:
 
   virtual void start() = 0;
 
+  /// @brief Helper method for event scheduling.
+  bool isRunning();
+
+  /// @brief Helper method for event scheduling.
+  bool canStop();
+
+  /// @brief Helper method for event scheduling.
+  void prepareStop();
+
 protected:
   /// @brief Initializing communication via Sola which all logical agents require.
   /// @param first_node
