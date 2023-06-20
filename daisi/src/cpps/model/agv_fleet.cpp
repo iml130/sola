@@ -35,7 +35,7 @@ std::vector<amr::AmrStaticAbility> AGVFleet::getFittingExistingAbilities(
 amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
     const amr::AmrStaticAbility &ability_requirement) {
   /*
-  finding minimal element in taut(t), where h(t) = ability_requirement
+  finding minimal element in tau(t), where h(t) = ability_requirement
 
   m in S is a minimal element if
   if s in S, and s <= m, then necessarily m <= s
@@ -57,7 +57,10 @@ amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
     bool is_min = true;
 
     for (auto const &s : S) {
-      bool valid = s > m || s <= m;
+      bool a = s <= m;
+      bool b = m <= m;
+
+      bool valid = !a || b;
       if (!valid) {
         is_min = false;
       }

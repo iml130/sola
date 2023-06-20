@@ -44,6 +44,7 @@ public:
   friend bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
 
   friend std::ostream &operator<<(std::ostream &os, const AmrStaticAbility &a);
+  bool comparable(const AmrStaticAbility &other) const;
 
   SERIALIZE(load_carrier_, max_payload_weight_kg_);
 
@@ -57,21 +58,6 @@ struct AmrStaticAbilityHasher {
     std::string rep = ability.getLoadCarrier().getTypeAsString() + "|" +
                       std::to_string(ability.getMaxPayloadWeight());
 
-    std::size_t res = std::hash<std::string>()(rep);
-    return res;
-  }
-};
-
-// --------------------------------------------------------------------------------------------
-
-using Ability = std::tuple<float, LoadCarrier>;
-
-template <typename TupleT> bool comparableAbility(const TupleT &t1, const TupleT &t2);
-
-struct AbilityHasher {
-  std::size_t operator()(const Ability &ability) const {
-    std::string rep =
-        std::to_string(std::get<0>(ability)) + "|" + std::get<1>(ability).getTypeAsString();
     std::size_t res = std::hash<std::string>()(rep);
     return res;
   }
