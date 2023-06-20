@@ -56,7 +56,7 @@ public:
       return participant_ability_ < other.participant_ability_;
     }
 
-    // if abilit is equal, at least the connection strings are different
+    // if ability is equal, at least the connection strings are different
     return participant_connection_ > other.participant_connection_;
   }
 

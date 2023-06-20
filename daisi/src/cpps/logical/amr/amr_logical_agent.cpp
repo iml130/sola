@@ -138,8 +138,8 @@ void AmrLogicalAgent::sendTopologyToPhysical() {
 void AmrLogicalAgent::sendTaskToPhysical() {
   material_flow::Task task = order_management_->getCurrentTask();
 
-  amr::AmrStaticAbility ability(amr::LoadCarrier(amr::LoadCarrier::Types::kNoLoadCarrierType),
-                                42.0);
+  // TODO
+  amr::AmrStaticAbility ability(amr::LoadCarrier());
 
   AmrOrderInfo amr_order_info(materialFlowToFunctionalities(task.getOrders(), current_position_),
                               ability);

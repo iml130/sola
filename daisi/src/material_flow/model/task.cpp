@@ -16,8 +16,6 @@
 
 #include "task.h"
 
-using namespace daisi::cpps;
-
 namespace daisi::material_flow {
 
 Task::Task(std::string name, const std::vector<Order> &orders,
@@ -42,9 +40,10 @@ bool Task::hasTimeWindow() const {
   return false;  // TODO integrate constraints
 }
 
-amr::AmrStaticAbility Task::getAbilityRequirement() const {
+cpps::amr::AmrStaticAbility Task::getAbilityRequirement() const {
   // TODO
-  amr::AmrStaticAbility ability(amr::LoadCarrier(amr::LoadCarrier::Types::kNoLoadCarrierType), 0);
+  cpps::amr::AmrStaticAbility ability(
+      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kNoLoadCarrierType), 0);
   return ability;
 }
 

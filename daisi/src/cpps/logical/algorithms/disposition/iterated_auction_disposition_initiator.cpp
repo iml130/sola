@@ -19,9 +19,6 @@
 #include "cpps/model/agv_fleet.h"
 #include "ns3/simulator.h"
 
-using namespace daisi::material_flow;
-using namespace daisi::cpps::amr;
-
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
@@ -36,7 +33,7 @@ IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
 }
 
 void IteratedAuctionDispositionInitiator::addMaterialFlow(
-    std::shared_ptr<MFDLScheduler> scheduler) {
+    std::shared_ptr<material_flow::MFDLScheduler> scheduler) {
   if (layered_precedence_graph_) {
     throw std::runtime_error("A material flow is already processed currently. Support of multiple "
                              "is not implemented yet.");
