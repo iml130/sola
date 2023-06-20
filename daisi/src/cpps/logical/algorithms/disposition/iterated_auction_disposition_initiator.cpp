@@ -20,7 +20,7 @@
 #include "ns3/simulator.h"
 
 using namespace daisi::material_flow;
-using namespace daisi::cpps::mrta::model;
+using namespace daisi::cpps::amr;
 
 namespace daisi::cpps::logical {
 
@@ -181,10 +181,13 @@ void IteratedAuctionDispositionInitiator::notifyWinners(
   }
 }
 
-std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher>
+std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
+                   amr::AmrStaticAbilityHasher>
 IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
     const std::vector<material_flow::Task> &tasks) {
-  std::unordered_map<Ability, std::vector<material_flow::Task>, AbilityHasher> task_ability_mapping;
+  std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
+                     amr::AmrStaticAbilityHasher>
+      task_ability_mapping;
 
   for (const auto &task : tasks) {
     auto fitting_abilities =

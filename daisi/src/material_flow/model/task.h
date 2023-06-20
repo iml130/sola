@@ -20,7 +20,7 @@
 #include <variant>
 
 #include "action_order.h"
-#include "cpps/model/ability.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "move_order.h"
 #include "solanet/serializer/serialize.h"
 #include "transport_order.h"
@@ -47,7 +47,7 @@ public:
 
   bool hasTimeWindow() const;
 
-  daisi::cpps::mrta::model::Ability getAbilityRequirement() const;
+  cpps::amr::AmrStaticAbility getAbilityRequirement() const;
 
   bool operator<(const Task &other) const { return name_ < other.name_; }
 

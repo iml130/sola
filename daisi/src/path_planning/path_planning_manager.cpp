@@ -51,7 +51,7 @@ PathPlanningManager::PathPlanningManager(const std::string &scenario_config_file
 
   // TODO Workaround - Simple task for logging should not depend on possible AGV kinematics
   cpps::amr::AmrStaticAbility ability(
-      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 100.0F));
+      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 100.0F);
   cpps::AGVFleet::init({{ability, kinematics_}});
 }
 
