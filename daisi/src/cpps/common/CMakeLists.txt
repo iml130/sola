@@ -32,7 +32,7 @@ target_link_libraries(daisi_cpps_common_cpps_application
         ns3::libnetwork
         daisi_cpps_amr_physical_amr_physical_asset
         minhton_logging
-        daisi_cpps_agv_agv_logical
+        daisi_cpps_logical_amr_amr_logical_agent
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_logical_material_flow_material_flow_logical_agent
 )
@@ -73,7 +73,7 @@ target_link_libraries(daisi_cpps_common_cpps_manager
         daisi_cpps_logical_material_flow_material_flow_logical_agent
         PRIVATE
         daisi_cpps_amr_physical_amr_physical_asset
-        daisi_cpps_agv_agv_logical
+        daisi_cpps_logical_amr_amr_logical_agent
         ns3::libwifi
         daisi_minhton_logger_ns3
         daisi_natter_logger_ns3

@@ -32,10 +32,6 @@
 #include "cpps/model/kinematics.h"
 #include "cpps/negotiation/mrta_configuration.h"
 #include "manager/manager.h"
-#include "minhton/logging/logger.h"
-#include "minhton/logging/logger_interface.h"
-#include "natter-ns3/natter_logger_ns3.h"
-#include "natter/logger_interface.h"
 #include "ns3/bridge-helper.h"
 #include "ns3/csma-helper.h"
 #include "ns3/internet-stack-helper.h"
@@ -105,12 +101,6 @@ private:
   void parseToSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseTopology();
   void parseScenarioSequence();
-
-  void parseMRTAConfiguration();
-  static std::unordered_map<std::string, InteractionProtocolType> interaction_protocol_types_map_;
-  static std::unordered_map<std::string, TaskManagementType> task_management_types_map_;
-  static std::unordered_map<std::string, UtilityEvaluationComponents>
-      utility_evaluation_components_map_;
 
   // Initiates shutdown of finished TOs
   void clearFinishedMaterialFlows();

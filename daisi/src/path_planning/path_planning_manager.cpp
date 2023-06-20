@@ -18,7 +18,6 @@
 
 #include <cassert>
 
-#include "cpps/agv/agv_logical.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/common/uuid_generator.h"
 #include "delivery_station.h"
