@@ -183,7 +183,7 @@ void AgvLogicalNs3::processMessageDescription(const AmrDescription &description)
       description.getProperties().getFriendlyName();  // As we are only having a single service
   service_.uuid = UUIDGenerator::get()();
   service_.key_values.insert({"servicetype", std::string("transport")});
-  service_.key_values.insert({"maxpayload", l.getAbility()});
+  service_.key_values.insert({"maxpayload", l.getAbility().getMaxPayloadWeight()});
 
   std::string type = l.getAbility().getLoadCarrier().getTypeAsString();
 
