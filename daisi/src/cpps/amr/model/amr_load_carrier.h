@@ -25,6 +25,7 @@
 
 namespace daisi::cpps::amr {
 
+// TODO: add documentation
 class LoadCarrier {
 public:
   enum Types : uint8_t {

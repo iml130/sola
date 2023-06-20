@@ -28,6 +28,7 @@
 
 namespace daisi::cpps::amr {
 
+// TODO: add documentation
 class AmrStaticAbility {
 public:
   AmrStaticAbility() = default;
@@ -44,7 +45,6 @@ public:
   friend bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
 
   friend std::ostream &operator<<(std::ostream &os, const AmrStaticAbility &a);
-  bool comparable(const AmrStaticAbility &other) const;
 
   SERIALIZE(load_carrier_, max_payload_weight_kg_);
 

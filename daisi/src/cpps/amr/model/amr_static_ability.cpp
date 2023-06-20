@@ -29,10 +29,6 @@ const LoadCarrier &AmrStaticAbility::getLoadCarrier() const { return load_carrie
 
 float AmrStaticAbility::getMaxPayloadWeight() const { return max_payload_weight_kg_; }
 
-bool AmrStaticAbility::comparable(const AmrStaticAbility &other) const {
-  return load_carrier_ == other.load_carrier_;
-}
-
 bool operator==(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
   return a1.getLoadCarrier() == a2.getLoadCarrier() &&
          a1.getMaxPayloadWeight() == a2.getMaxPayloadWeight();
@@ -44,19 +40,23 @@ bool operator!=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
 }
 
 bool operator<(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
-  return a1.comparable(a2) && a1.getMaxPayloadWeight() < a2.getMaxPayloadWeight();
+  return a1.getLoadCarrier() < a2.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() < a2.getMaxPayloadWeight();
 }
 
 bool operator<=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
-  return a1.comparable(a2) && a1.getMaxPayloadWeight() <= a2.getMaxPayloadWeight();
+  return a1.getLoadCarrier() <= a2.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() <= a2.getMaxPayloadWeight();
 }
 
 bool operator>(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
-  return a1.comparable(a2) && a1.getMaxPayloadWeight() > a2.getMaxPayloadWeight();
+  return a1.getLoadCarrier() > a2.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() > a2.getMaxPayloadWeight();
 }
 
 bool operator>=(const AmrStaticAbility &a1, const AmrStaticAbility &a2) {
-  return a1.comparable(a2) && a1.getMaxPayloadWeight() >= a2.getMaxPayloadWeight();
+  return a1.getLoadCarrier() >= a2.getLoadCarrier() &&
+         a1.getMaxPayloadWeight() >= a2.getMaxPayloadWeight();
 }
 
 std::ostream &operator<<(std::ostream &os, const AmrStaticAbility &a) {
