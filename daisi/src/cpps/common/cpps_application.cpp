@@ -61,11 +61,11 @@ void CppsApplication::cleanup() {
 }
 
 void CppsApplication::start() {
-  if (std::holds_alternative<std::shared_ptr<AgvLogicalNs3>>(application)) {
+  if (std::holds_alternative<std::shared_ptr<logical::AmrLogicalAgent>>(application)) {
     generateUDPSockets();
     auto tcp_socket = generateTCPSocket();
     tcp_socket->Bind(InetSocketAddress(local_ip_address_tcp, listening_port_tcp));
-    auto ptr = std::get<std::shared_ptr<AgvLogicalNs3>>(application);
+    auto ptr = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(application);
     if (ptr) ptr->init(tcp_socket);
   }
 
