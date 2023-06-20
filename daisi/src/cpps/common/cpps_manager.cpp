@@ -27,6 +27,7 @@
 #include "cpps/agv/agv_logical.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
+#include "cpps/logical/algorithms/algorithm_config.h"
 #include "cpps/model/agv_fleet.h"
 #include "minhton-ns3/minhton_logger_ns3.h"
 #include "minhton/logging/logger.h"
@@ -442,14 +443,11 @@ void CppsManager::setupNetworkWifi() {
 
 void CppsManager::executeMaterialFlow(int index, const std::string &friendly_name) {
   auto cpps_app = this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto to_app = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(cpps_app->application);
+  auto to_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
 
-  MaterialFlowInfo info = material_flow_models_[friendly_name];
+  // TODO MaterialFlowInfo info = material_flow_models_[friendly_name];
 
-  std::uniform_int_distribution<int> dist(0, info.descriptions.size() - 1);
-  int model_index = dist(daisi::global_random_engine);
-
-  to_app->completeYourself(info.descriptions[model_index], info.locations);
+  to_app->addMaterialFlow("todo");
 }
 
 void CppsManager::clearFinishedMaterialFlows() {
@@ -457,22 +455,21 @@ void CppsManager::clearFinishedMaterialFlows() {
 
   for (uint32_t i = 0; i < material_flows_.GetN(); i++) {
     auto cpps_app = this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>();
-    if (std::holds_alternative<std::shared_ptr<TransportOrderApplicationNs3>>(
+    if (std::holds_alternative<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
             cpps_app->application)) {
-      auto to_app = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(cpps_app->application);
+      auto to_app =
+          std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
       if (to_app) {
-        if (material_flow_nodes_leave_after_finish_ && to_app->getSOLA()->canStop()) {
+        if (material_flow_nodes_leave_after_finish_ && to_app->canStop()) {
           found_running_matrial_flow_app = true;
           cpps_app->cleanup();
 
-        } else if (to_app->getState() == OrderStates::kFinished) {
+        } else if (to_app->isFinished()) {
           number_material_flows_finished_++;
           found_running_matrial_flow_app = true;
 
           if (material_flow_nodes_leave_after_finish_) {
-            to_app->getSOLA()->stop();
-          } else {
-            to_app->clearMaterialFlowInformation();
+            to_app->prepareStop();
           }
         }
       }
@@ -502,9 +499,10 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
       break;
     }
 
-    if (std::holds_alternative<std::shared_ptr<TransportOrderApplicationNs3>>(
+    if (std::holds_alternative<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
             cpps_app->application)) {
-      auto mf_app = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(cpps_app->application);
+      auto mf_app =
+          std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
       if (!mf_app->isBusy()) {
         init_application = false;
         break;
@@ -518,12 +516,16 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
   if (init_application) {
     const uint32_t device_id = material_flows_.Get(i)->GetId();
 
+    logical::AlgorithmConfig mf_algorithm_config;
+    mf_algorithm_config.algorithm_types.push_back(
+        logical::AlgorithmType::kIteratedAuctionDispositionInitiator);
+
     this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->application =
-        std::make_shared<TransportOrderApplicationNs3>(mrta_config_, device_id);
+        std::make_shared<logical::MaterialFlowLogicalAgent>(device_id, mf_algorithm_config, false);
 
     this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->start();
 
-    auto mf_app = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(
+    auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
         this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->application);
     mf_app->setWaitingForStart();
   }

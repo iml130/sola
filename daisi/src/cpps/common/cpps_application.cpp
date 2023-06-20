@@ -69,9 +69,9 @@ void CppsApplication::start() {
     if (ptr) ptr->init(tcp_socket);
   }
 
-  if (std::holds_alternative<std::shared_ptr<TransportOrderApplicationNs3>>(application)) {
+  if (std::holds_alternative<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(application)) {
     generateUDPSockets();
-    auto ptr = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(application);
+    auto ptr = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(application);
     if (ptr) ptr->init();
   }
 

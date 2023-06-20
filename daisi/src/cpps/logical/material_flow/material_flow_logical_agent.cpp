@@ -58,6 +58,10 @@ void MaterialFlowLogicalAgent::setWaitingForStart() { waiting_for_start_ = true;
 
 bool MaterialFlowLogicalAgent::isBusy() { return !material_flows_.empty(); }
 
+bool MaterialFlowLogicalAgent::isFinished() const {
+  return false;  // TODO
+}
+
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   // TODO integrate wrapper and add to material_flow_ vector
 }
