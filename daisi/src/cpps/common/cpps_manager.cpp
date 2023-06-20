@@ -24,13 +24,11 @@
 #include <unordered_map>
 
 #include "../src/logging/logger.h"
-#include "cpps/agv/agv_logical.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
 #include "cpps/logical/algorithms/algorithm_config.h"
+#include "cpps/logical/amr/amr_logical_agent.h"
 #include "cpps/model/agv_fleet.h"
-#include "minhton-ns3/minhton_logger_ns3.h"
-#include "minhton/logging/logger.h"
 #include "ns3/core-module.h"
 #include "ns3/mobility-helper.h"
 #include "ns3/wifi-module.h"
@@ -577,7 +575,6 @@ void CppsManager::parse() {
   number_material_flow_nodes_ =
       parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlowNodes");
 
-  parseMRTAConfiguration();
   number_material_flows_ = parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlows");
   material_flow_nodes_leave_after_finish_ = parser_.getParsedContent()->getRequired<std::string>(
                                                 "materialFlowNodesLeaveAfterFinish") == "on";
@@ -586,59 +583,6 @@ void CppsManager::parse() {
   parseTOs();
   parseTopology();
   parseScenarioSequence();
-}
-
-std::unordered_map<std::string, InteractionProtocolType>
-    CppsManager::interaction_protocol_types_map_{
-        {"iterated_auction_pubsub_modified",
-         InteractionProtocolType::kIteratedAuctionPubSubModified},
-        {"iterated_auction_pubsub_tepssi", InteractionProtocolType::kIteratedAuctionPubSubTePSSI},
-    };
-
-std::unordered_map<std::string, TaskManagementType> CppsManager::task_management_types_map_{
-    {"basic_list", TaskManagementType::kBasicList},
-    {"greedy_tsp_list", TaskManagementType::kGreedyTSPList},
-    {"simpletemporalnetwork", TaskManagementType::kSimpleTemporalNetwork}};
-
-std::unordered_map<std::string, UtilityEvaluationComponents>
-    CppsManager::utility_evaluation_components_map_{
-        {"min_travel_time", UtilityEvaluationComponents::kMinTravelTime},
-        {"min_travel_distance", UtilityEvaluationComponents::kMinTravelDistance},
-        {"min_makespan", UtilityEvaluationComponents::kMinMakespan},
-        {"min_delay", UtilityEvaluationComponents::kMinDelay},
-    };
-
-void CppsManager::parseMRTAConfiguration() {
-  auto config =
-      parser_.getParsedContent()->getRequired<std::shared_ptr<daisi::ScenariofileParser::Table>>(
-          "mrta_configuration");
-
-  std::string ip_str = config->getRequired<std::string>("interaction_protocol");
-  std::string om_str = config->getRequired<std::string>("task_management");
-
-  auto lower_lambda = [](unsigned char c) { return std::tolower(c); };
-
-  std::transform(ip_str.begin(), ip_str.end(), ip_str.begin(), lower_lambda);
-
-  std::transform(om_str.begin(), om_str.end(), om_str.begin(), lower_lambda);
-
-  mrta_config_.interaction_protocol_type = interaction_protocol_types_map_[ip_str];
-  mrta_config_.task_management_type = task_management_types_map_[om_str];
-
-  auto utility_eval_config =
-      config->getRequired<std::shared_ptr<daisi::ScenariofileParser::Table>>("utility_evaluation");
-
-  for (auto &entry : utility_eval_config->content) {
-    auto component_and_factor = std::get<std::shared_ptr<ScenariofileParser::Table>>(entry.second);
-    float factor = component_and_factor->getRequired<float>("factor");
-
-    std::string component_str = component_and_factor->getRequired<std::string>("component");
-    std::transform(component_str.begin(), component_str.end(), component_str.begin(), lower_lambda);
-    UtilityEvaluationComponents component = utility_evaluation_components_map_[component_str];
-
-    mrta_config_.utility_evaluation_type.components.push_back(component);
-    mrta_config_.utility_evaluation_type.factors.push_back(factor);
-  }
 }
 
 void CppsManager::parseTopology() {

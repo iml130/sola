@@ -19,7 +19,6 @@
 
 #include <deque>
 
-#include "cpps/agv/agv_logical.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/amr/amr_logical_agent.h"
