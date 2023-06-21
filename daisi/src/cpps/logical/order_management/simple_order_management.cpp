@@ -23,9 +23,6 @@ SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_descripti
                                              const Topology &topology,
                                              const daisi::util::Pose &pose)
     : OrderManagement(amr_description, topology, pose),
-      active_task_(),
-      queue_(),
-      final_metrics_(),
       expected_end_position_(pose.position),
       time_now_(0) {}
 
