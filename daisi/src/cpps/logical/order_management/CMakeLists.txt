@@ -8,14 +8,15 @@ target_link_libraries(daisi_cpps_logical_order_management_order_management
     daisi_material_flow_model_task
 )
 
-add_library(daisi_cpps_logical_order_management_metrics_composition INTERFACE)
+add_library(daisi_cpps_logical_order_management_metrics_composition STATIC)
 target_sources(daisi_cpps_logical_order_management_metrics_composition
-    INTERFACE
+    PUBLIC
     metrics.h
+    metrics.cpp
     metrics_composition.h
 )
 target_link_libraries(daisi_cpps_logical_order_management_metrics_composition
-    INTERFACE
+    PUBLIC
     daisi_structure_helpers
     solanet_serialize
 )

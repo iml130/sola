@@ -33,7 +33,7 @@ public:
   explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
       : AlgorithmInterface(sola){};
 
-  virtual ~DispositionInitiator() = default;
+  ~DispositionInitiator() = default;
 
   /// @brief Adding a material flow whose tasks should be allocated.
   /// @param scheduler MFDL Scheduler

@@ -27,84 +27,34 @@ namespace daisi::cpps::logical {
 
 class Metrics {
 public:
-  Metrics()
-      : empty_travel_time(0.0),
-        loaded_travel_time(0.0),
-        action_time(0.0),
-        empty_travel_distance(0.0),
-        loaded_travel_distance(0.0),
-        makespan_(0.0),
-        start_time_(0.0) {}
+  Metrics();
 
   Metrics(daisi::util::Duration empty_travel_time, daisi::util::Duration loaded_travel_time,
           daisi::util::Duration action_time, daisi::util::Distance empty_travel_distance,
-          daisi::util::Distance loaded_travel_distance)
-      : empty_travel_time(empty_travel_time),
-        loaded_travel_time(loaded_travel_time),
-        action_time(action_time),
-        empty_travel_distance(empty_travel_distance),
-        loaded_travel_distance(loaded_travel_distance),
-        makespan_(0.0),
-        start_time_(0.0) {}
+          daisi::util::Distance loaded_travel_distance);
 
-  static void setMetricUtilityMapper(std::function<double(const Metrics &)> mapper) {
-    utility_function_ = mapper;
-  }
+  void setMakespan(const daisi::util::Duration &makespan);
 
-  void setMakespan(const daisi::util::Duration &makespan) {
-    if (!isStartTimeSet()) {
-      makespan_ = makespan;
-    } else {
-      throw std::invalid_argument("makespan cannot be set if start_time_ is set");
-    }
-  }
+  void setStartTime(const daisi::util::Duration &start_time);
 
-  void setStartTime(const daisi::util::Duration &start_time) { start_time_ = start_time; }
+  bool isStartTimeSet() const;
 
-  bool isStartTimeSet() const { return start_time_ != 0; }
+  daisi::util::Duration getMakespan() const;
 
-  daisi::util::Duration getMakespan() const {
-    if (makespan_ > 0) {
-      return makespan_;
-    }
+  daisi::util::Duration getTime() const;
 
-    return start_time_ + getTime();
-  }
+  daisi::util::Distance getDistance() const;
 
-  daisi::util::Duration getTime() const {
-    return empty_travel_time + loaded_travel_time + action_time;
-  }
+  Metrics operator-(const Metrics &other) const;
 
-  daisi::util::Distance getDistance() const {
-    return empty_travel_distance + loaded_travel_distance;
-  }
+  Metrics operator+(const Metrics &other) const;
 
-  Metrics operator-(const Metrics &other) const {
-    Metrics diff{empty_travel_time - other.empty_travel_time,
-                 loaded_travel_time - other.loaded_travel_time, action_time - other.action_time,
-                 empty_travel_distance - other.empty_travel_distance,
-                 loaded_travel_distance - other.loaded_travel_distance};
-
-    diff.setMakespan(std::min(getMakespan(), other.getMakespan()));
-    return diff;
-  }
-
-  Metrics operator+(const Metrics &other) const {
-    Metrics sum{empty_travel_time + other.empty_travel_time,
-                loaded_travel_time + other.loaded_travel_time, action_time + other.action_time,
-                empty_travel_distance + other.empty_travel_distance,
-                loaded_travel_distance + other.loaded_travel_distance};
-
-    sum.setMakespan(std::max(getMakespan(), other.getMakespan()));
-    return sum;
-  }
-
-  inline friend bool operator<(const Metrics &lhs, const Metrics &rhs);
-  inline friend bool operator<=(const Metrics &lhs, const Metrics &rhs);
-  inline friend bool operator>(const Metrics &lhs, const Metrics &rhs);
-  inline friend bool operator>=(const Metrics &lhs, const Metrics &rhs);
-  inline friend bool operator==(const Metrics &lhs, const Metrics &rhs);
-  inline friend bool operator!=(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator<(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator<=(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator>(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator>=(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator==(const Metrics &lhs, const Metrics &rhs);
+  friend bool operator!=(const Metrics &lhs, const Metrics &rhs);
 
   static std::function<double(const Metrics &)> utility_function_;
 
@@ -121,25 +71,6 @@ private:
   daisi::util::Duration makespan_ = 0.0;
   daisi::util::Duration start_time_ = 0.0;
 };
-
-bool operator<(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) < Metrics::utility_function_(rhs);
-}
-bool operator<=(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) <= Metrics::utility_function_(rhs);
-}
-bool operator>(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) > Metrics::utility_function_(rhs);
-}
-bool operator>=(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) >= Metrics::utility_function_(rhs);
-}
-bool operator==(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) == Metrics::utility_function_(rhs);
-}
-bool operator!=(const Metrics &lhs, const Metrics &rhs) {
-  return Metrics::utility_function_(lhs) != Metrics::utility_function_(rhs);
-}
 
 }  // namespace daisi::cpps::logical
 
