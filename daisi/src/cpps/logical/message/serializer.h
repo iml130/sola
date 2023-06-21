@@ -25,11 +25,16 @@
 #include "auction_based/iteration_notification.h"
 #include "auction_based/winner_notification.h"
 #include "auction_based/winner_response.h"
+#include "central_allocation/assignment_notification.h"
+#include "central_allocation/assignment_response.h"
+#include "central_allocation/status_update.h"
+#include "central_allocation/status_update_request.h"
 
 namespace daisi::cpps::logical {
 
 using Message = std::variant<CallForProposal, BidSubmission, IterationNotification,
-                             WinnerNotification, WinnerResponse>;
+                             WinnerNotification, WinnerResponse, AssignmentNotification,
+                             AssignmentResponse, StatusUpdate, StatusUpdateRequest>;
 
 std::string serialize(const Message &msg);
 

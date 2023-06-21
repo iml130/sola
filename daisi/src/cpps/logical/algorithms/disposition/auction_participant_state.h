@@ -46,13 +46,13 @@ struct AuctionParticipantTaskState {
 /// initiator.
 struct AuctionParticipantState {
   /// @brief Initiatoring the task states based on the given tasks.
-  /// @param tasks Open tasks that initially got annouced.
+  /// @param tasks Open tasks that initially got announced.
   explicit AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
 
   /// @brief Storing the state of each open task. The key is the task uuid.
   std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;
 
-  /// @brief Task uuid of the lastest previously submitted task. If a task was submitted before, the
+  /// @brief Task uuid of the latest previously submitted task. If a task was submitted before, the
   /// initiator has still the relevant information and sending this bid again is unnecessary
   /// overhead.
   std::string previously_submitted;

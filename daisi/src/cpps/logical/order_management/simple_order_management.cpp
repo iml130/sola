@@ -26,6 +26,13 @@ SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_descripti
 
 Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; }
 
+daisi::util::Position SimpleOrderManagement::getExpectedEndPosition() const {
+  if (!expected_end_position_.has_value()) {
+    throw std::logic_error("there must exist at least a position for the amr to start from");
+  }
+  return expected_end_position_.value();
+}
+
 void SimpleOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
     throw std::invalid_argument("new time must be later than current time");
@@ -129,10 +136,7 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
   }
   daisi::util::Position previous_position;
   if (!previous_location.has_value()) {
-    if (!expected_end_position_.has_value()) {
-      throw std::logic_error("there must exist a location for the amr to start from");
-    }
-    previous_position = expected_end_position_.value();
+    previous_position = getExpectedEndPosition();
   } else {
     previous_position = previous_location.value().getPosition();
   }
