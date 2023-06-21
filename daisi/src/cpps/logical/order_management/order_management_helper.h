@@ -17,6 +17,8 @@
 #ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
 #define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
 
+#include <optional>
+
 #include "material_flow/model/task.h"
 
 namespace daisi::cpps::logical {
