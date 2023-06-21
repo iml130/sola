@@ -22,16 +22,16 @@
 using namespace daisi::material_flow;
 using namespace daisi::cpps;
 using namespace daisi::cpps::logical;
-using namespace daisi::cpps::mrta::model;
+using namespace daisi::cpps::amr;
 
 AmrDescription buildBasicAmrDescription() {
   AmrKinematics kinematics{1, 0, 1, 1};
   AmrProperties properties{};
   AmrPhysicalProperties physical_properties{50, {0.5, 0.5, 0.5}};
-  AmrLoadHandlingUnit load_hanling_unit{
-      7, 8, {50, mrta::model::LoadCarrier{LoadCarrier::kEuroBox}}};
+  AmrLoadHandlingUnit load_handling_unit{7, 8,
+                                         AmrStaticAbility(LoadCarrier(LoadCarrier::kEuroBox), 50)};
 
-  return AmrDescription{42, kinematics, properties, physical_properties, load_hanling_unit};
+  return AmrDescription{42, kinematics, properties, physical_properties, load_handling_unit};
 }
 
 Topology buildBasicTopology() { return Topology{{20, 20, 0}}; }
