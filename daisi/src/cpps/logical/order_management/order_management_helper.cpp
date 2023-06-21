@@ -19,7 +19,7 @@
 using namespace daisi::material_flow;
 namespace daisi::cpps::logical {
 
-template <class> inline constexpr bool always_false_v = false;
+template <class> inline constexpr bool kAlwaysFalseV = false;
 
 std::optional<Location> OrderManagementHelper::getEndLocationOfOrder(const Order &order) {
   return std::visit(
@@ -32,7 +32,7 @@ std::optional<Location> OrderManagementHelper::getEndLocationOfOrder(const Order
         } else if constexpr (std::is_same_v<T, ActionOrder>) {
           return std::nullopt;
         } else {
-          static_assert(always_false_v<T>, "Order type not handled");
+          static_assert(kAlwaysFalseV<T>, "Order type not handled");
         }
       },
       order);
