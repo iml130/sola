@@ -8,7 +8,7 @@ target_link_libraries(daisi_cpps_common_agv_description
         ns3::libcore
         daisi_cpps_amr_physical_amr_mobility_model_ns3
         daisi_cpps_model_kinematics
-        daisi_cpps_model_ability
+        daisi_cpps_amr_model_amr_static_ability
 )
 
 add_library(daisi_cpps_common_boundaries INTERFACE)
@@ -31,7 +31,6 @@ target_link_libraries(daisi_cpps_common_cpps_application
         ns3::libapplications
         ns3::libnetwork
         daisi_cpps_amr_physical_amr_physical_asset
-        minhton_logging
         daisi_cpps_logical_amr_amr_logical_agent
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_logical_material_flow_material_flow_logical_agent

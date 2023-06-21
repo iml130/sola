@@ -45,6 +45,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_participant
     daisi_cpps_logical_order_management_auction_based_order_management
+    daisi_cpps_logical_algorithms_disposition_auction_participant_state
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
@@ -52,6 +53,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_layered_precedence_grap
     PUBLIC
     layered_precedence_graph.h
     layered_precedence_graph.cpp
+    layered_precedence_graph_components.h
 )
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
     PUBLIC

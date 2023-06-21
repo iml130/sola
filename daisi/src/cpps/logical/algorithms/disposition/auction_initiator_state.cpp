@@ -126,4 +126,14 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
   return winners;
 }
 
+void AuctionInitiatorState::clearIterationInfo() {
+  bid_submissions_.clear();
+  winner_acceptions_.clear();
+}
+
+void AuctionInitiatorState::clearWinnerAcceptions() {
+  bid_submissions_.clear();
+  winner_acceptions_.clear();
+}
+
 }  // namespace daisi::cpps::logical
