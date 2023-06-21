@@ -28,16 +28,18 @@ namespace daisi::cpps {
 static constexpr uint32_t kUpdateFrequencyHz = 10;
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector, const Topology &topology)
-    : connector_(std::move(connector)),
-      fsm(OrderStates::kFinished) {  // alsways initialize to kFinished since it is equivalent to
-                                     // having no task/being idle
+    : fsm(OrderStates::kFinished),
+      last_order_states_(OrderStates::kFinished),
+      connector_(std::move(connector)) {  // always initialize to kFinished since it is
+                                          // equivalent to having no task/being idle
   connector_.setTopology(topology);
 }
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector)
-    : connector_(std::move(connector)),
-      fsm(OrderStates::kFinished) {
-}  // alsways initialize to kFinished since it is equivalent to having no task/being idle
+    : fsm(OrderStates::kFinished),
+      last_order_states_(OrderStates::kFinished),
+      connector_(std::move(connector)) {
+}  // always initialize to kFinished since it is equivalent to having no task/being idle
 
 void AmrPhysicalAsset::init(const ns3::Ptr<ns3::Socket> &socket) {
   socket_ = socket;
@@ -83,13 +85,14 @@ void AmrPhysicalAsset::sendVehicleStatusUpdateNs3(bool force) {
 /// @return
 std::vector<OrderStates> AmrPhysicalAsset::getCurrentAndTransitionedStates() {
   using s = OrderStates;
-  std::vector<OrderStates>(ret);
+  std::vector<OrderStates> ret;
   switch (current_state()) {
     case s::kGoToPickUpLocation:
-      ret = {s::kQueued, s::kStarted, s::kGoToPickUpLocation};
+      ret = last_order_states_ == s::kFinished ? std::vector<s>{s::kStarted, s::kGoToPickUpLocation}
+                                               : std::vector<s>{s::kGoToPickUpLocation};
       break;
     case s::kGoToDeliveryLocation:
-      ret = {s::kQueued, s::kStarted, s::kGoToDeliveryLocation};
+      ret = {s::kLoaded, s::kGoToDeliveryLocation};
       break;
     case s::kLoad:
       ret = {s::kReachedPickUpLocation, s::kLoad};
@@ -157,6 +160,7 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 }
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
+  DAISI_CHECK(functionality_queue_.empty(), "Should not get new task before last task is finished");
   for (auto &functionality : order_info.getFunctionalities())
     functionality_queue_.push_back(functionality);
   process_event(ReceivedOrder());
@@ -170,8 +174,9 @@ util::Position AmrPhysicalAsset::getPosition() const { return connector_.getPosi
 /////////////////////
 
 void AmrPhysicalAsset::executeFrontFunctionality() {
-  connector_.execute(functionality_queue_.front(),
-                     [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
+  connector_.execute(functionality_queue_.front(), [this](FunctionalityVariant f) {
+    ns3::Simulator::Schedule(ns3::Seconds(0), &AmrPhysicalAsset::updateFunctionality, this, f);
+  });
 }
 
 bool AmrPhysicalAsset::holdsMoveType(const FunctionalityVariant &f) const {
