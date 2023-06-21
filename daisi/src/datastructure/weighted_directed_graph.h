@@ -17,7 +17,7 @@
 #ifndef DAISI_DATASTRUCTURE_WEIGHTED_DIRECTED_GRAPH_H_
 #define DAISI_DATASTRUCTURE_WEIGHTED_DIRECTED_GRAPH_H_
 
-#include "directed_graph.h"
+#include "directed_graph.tpp"
 
 namespace daisi::datastructure {
 

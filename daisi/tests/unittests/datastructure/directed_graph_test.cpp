@@ -14,10 +14,10 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
+#include "datastructure/directed_graph.tpp"
+
 #include <catch2/catch_test_macros.hpp>
 #include <string>
-
-#include "datastructure/directed_graph_impl.h"
 
 struct TestVertex {
   explicit TestVertex(const std::string &name) : test_member_(0), name_(name){};

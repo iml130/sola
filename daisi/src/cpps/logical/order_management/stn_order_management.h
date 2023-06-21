@@ -22,7 +22,7 @@
 #include "auction_based_order_management.h"
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "datastructure/simple_temporal_network.h"
+#include "datastructure/simple_temporal_network.tpp"
 #include "stn_order_management_components.h"
 
 namespace daisi::cpps::logical {

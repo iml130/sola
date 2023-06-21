@@ -14,10 +14,10 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
+#include "datastructure/simple_temporal_network.tpp"
+
 #include <catch2/catch_test_macros.hpp>
 #include <string>
-
-#include "datastructure/simple_temporal_network_impl.h"
 
 using namespace daisi::datastructure;
 

@@ -24,10 +24,6 @@ using namespace daisi::cpps;
 using namespace daisi::cpps::logical;
 using namespace daisi::cpps::amr;
 
-std::function<double(const Metrics &)> Metrics::utility_function_ = [](const Metrics &m) {
-  return -m.empty_travel_time;
-};
-
 AmrDescription buildBasicAmrDescription() {
   AmrKinematics kinematics{1, 0, 1, 1};
   AmrProperties properties{};

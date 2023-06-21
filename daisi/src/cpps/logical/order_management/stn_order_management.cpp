@@ -23,8 +23,6 @@
 #include <numeric>
 #include <sstream>
 
-#include "datastructure/simple_temporal_network_impl.h"
-
 using namespace daisi::material_flow;
 
 namespace daisi::cpps::logical {

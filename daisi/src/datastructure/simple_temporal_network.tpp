@@ -18,10 +18,8 @@
 #define DAISI_DATASTRUCTURE_SIMPLE_TEMPORAL_NETWORK_IMPL_H_
 
 #include "simple_temporal_network.h"
-#include "weighted_directed_graph_impl.h"
 
 namespace daisi::datastructure {
-
 template <typename Vertex, typename Edge>
 SimpleTemporalNetwork<Vertex, Edge>::SimpleTemporalNetwork() {
   this->addVertex(Vertex::createOrigin());

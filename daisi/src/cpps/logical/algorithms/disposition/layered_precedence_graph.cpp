@@ -45,7 +45,7 @@ void LayeredPrecedenceGraph::initLayers() {
   for (const auto &free_vertex : temp_free_layer_vertices) {
     for (auto &vertex : vertices_) {
       if (free_vertex != vertex) {
-        if (hasEdge(free_vertex, vertex)) {
+        if (this->hasEdge(free_vertex, vertex)) {
           if (vertex.layer == PrecedenceGraphLayer::kFree) {
             throw std::runtime_error("Conceptionally, the algorithm should not allow this state.");
           }
@@ -94,8 +94,8 @@ void LayeredPrecedenceGraph::updateLayersSecondToFree(const LPCVertex &t) {
   // if a child of a free task is in the second layer, it could move to the free layer next
 
   for (auto &t_dash : vertices_) {
-    if (t_dash.layer == PrecedenceGraphLayer::kSecond && hasEdge(t, t_dash)) {
-      auto parents_of_t_dash = getIncomingEdges(t_dash);
+    if (t_dash.layer == PrecedenceGraphLayer::kSecond && this->hasEdge(t, t_dash)) {
+      auto parents_of_t_dash = this->getIncomingEdges(t_dash);
       bool parents_of_t_dash_are_subset = std::all_of(
           parents_of_t_dash.begin(), parents_of_t_dash.end(), [](const auto &parent_and_edge) {
             return parent_and_edge.first.layer == PrecedenceGraphLayer::kScheduled;
@@ -129,9 +129,9 @@ void LayeredPrecedenceGraph::updateLayersHiddenToSecond(const LPCVertex &t_dash)
   for (auto &t_dash_dash : vertices_) {
     // 6: for all t' in (T_H intersection children(t')) do
     // t' is free now, therefore children from hidden layer can go to the second layer
-    if (t_dash_dash.layer == PrecedenceGraphLayer::kHidden && hasEdge(t_dash, t_dash_dash)) {
+    if (t_dash_dash.layer == PrecedenceGraphLayer::kHidden && this->hasEdge(t_dash, t_dash_dash)) {
       // 7: if parents(t'') subset (T_S union T_F) then
-      auto parents_of_t_dash_dash = getIncomingEdges(t_dash_dash);
+      auto parents_of_t_dash_dash = this->getIncomingEdges(t_dash_dash);
       bool parents_of_t_dash_dash_are_subset =
           std::all_of(parents_of_t_dash_dash.begin(), parents_of_t_dash_dash.end(),
                       [](const auto &parent_and_edge) {
