@@ -25,6 +25,10 @@
 #include "cpps/logical/message/auction_based/iteration_notification.h"
 #include "cpps/logical/message/auction_based/winner_notification.h"
 #include "cpps/logical/message/auction_based/winner_response.h"
+#include "cpps/logical/message/central_allocation/assignment_notification.h"
+#include "cpps/logical/message/central_allocation/assignment_response.h"
+#include "cpps/logical/message/central_allocation/status_update.h"
+#include "cpps/logical/message/central_allocation/status_update_request.h"
 #include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
@@ -49,6 +53,10 @@ public:
   REGISTER_LOGICAL_MESSAGE(IterationNotification);
   REGISTER_LOGICAL_MESSAGE(WinnerNotification);
   REGISTER_LOGICAL_MESSAGE(WinnerResponse);
+  REGISTER_LOGICAL_MESSAGE(AssignmentNotification);
+  REGISTER_LOGICAL_MESSAGE(AssignmentResponse);
+  REGISTER_LOGICAL_MESSAGE(StatusUpdate);
+  REGISTER_LOGICAL_MESSAGE(StatusUpdateRequest);
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;

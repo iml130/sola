@@ -1,0 +1,50 @@
+// Copyright 2023 The SOLA authors
+//
+// This file is part of DAISI.
+//
+// DAISI is free software: you can redistribute it and/or modify it under the terms of the GNU
+// General Public License as published by the Free Software Foundation; version 2.
+//
+// DAISI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+// the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with DAISI. If not, see
+// <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: GPL-2.0-only
+
+#ifndef DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_STATUS_UPDATE_H_
+#define DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_STATUS_UPDATE_H_
+
+#include "cpps/amr/model/amr_static_ability.h"
+#include "cpps/logical/order_management/metrics_composition.h"
+#include "solanet/serializer/serialize.h"
+#include "utils/structure_helpers.h"
+
+namespace daisi::cpps::logical {
+
+/// might need some revision / additions in the future
+class StatusUpdate {
+public:
+  StatusUpdate() = default;
+  StatusUpdate(std::string participant_connection, const Metrics metrics,
+               const daisi::util::Position end_position)
+      : participant_connection_(std::move(participant_connection)),
+        metrics_(metrics),
+        end_position_(end_position) {}
+
+  const std::string &getParticipantConnection() const { return participant_connection_; }
+  const Metrics &getMetrics() { return metrics_; }
+  const daisi::util::Position getEndPosition() { return end_position_; }
+
+  SERIALIZE(participant_connection_, metrics_, end_position_);
+
+private:
+  std::string participant_connection_;
+  Metrics metrics_;
+  daisi::util::Position end_position_;
+};
+}  // namespace daisi::cpps::logical
+
+#endif

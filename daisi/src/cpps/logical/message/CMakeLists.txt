@@ -1,4 +1,5 @@
 add_subdirectory(auction_based)
+add_subdirectory(central_allocation)
 
 add_library(daisi_cpps_logical_message_serializer STATIC)
 target_sources(daisi_cpps_logical_message_serializer
@@ -13,6 +14,10 @@ target_link_libraries(daisi_cpps_logical_message_serializer
     daisi_cpps_logical_message_auction_based_iteration_notification
     daisi_cpps_logical_message_auction_based_winner_notification
     daisi_cpps_logical_message_auction_based_winner_response
+    daisi_cpps_logical_message_central_allocation_assignment_notification
+    daisi_cpps_logical_message_central_allocation_assignment_response
+    daisi_cpps_logical_message_central_allocation_status_update
+    daisi_cpps_logical_message_central_allocation_status_update_request
 
     PRIVATE
     solanet_serializer

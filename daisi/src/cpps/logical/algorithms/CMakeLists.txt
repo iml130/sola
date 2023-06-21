@@ -22,4 +22,8 @@ target_link_libraries(daisi_cpps_logical_algorithms_algorithm_interface
     daisi_cpps_logical_message_auction_based_iteration_notification
     daisi_cpps_logical_message_auction_based_winner_notification
     daisi_cpps_logical_message_auction_based_winner_response
+    daisi_cpps_logical_message_central_allocation_assignment_notification
+    daisi_cpps_logical_message_central_allocation_assignment_response
+    daisi_cpps_logical_message_central_allocation_status_update
+    daisi_cpps_logical_message_central_allocation_status_update_request
 )

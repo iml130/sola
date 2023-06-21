@@ -33,6 +33,9 @@ public:
   /// the management
   Metrics getFinalMetrics() const;
 
+  /// @brief return the end position after executing the final task in the queue
+  daisi::util::Position getExpectedEndPosition() const;
+
   /// @brief check wether the order management has a current task assigned
   bool hasTasks() const override;
 
