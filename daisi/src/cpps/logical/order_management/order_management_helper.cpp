@@ -37,4 +37,5 @@ std::optional<Location> OrderManagementHelper::getEndLocationOfOrder(const Order
       },
       order);
 }
+
 }  // namespace daisi::cpps::logical

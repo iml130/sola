@@ -14,6 +14,9 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
+#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
+#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
+
 #include "material_flow/model/task.h"
 
 namespace daisi::cpps::logical {
@@ -26,4 +29,7 @@ public:
   static std::optional<daisi::material_flow::Location> getEndLocationOfOrder(
       const daisi::material_flow::Order &order);
 };
+
 }  // namespace daisi::cpps::logical
+
+#endif
