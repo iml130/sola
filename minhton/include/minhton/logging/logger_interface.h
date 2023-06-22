@@ -62,7 +62,7 @@ struct LoggerInfoAddContent {
   std::string content_text;
 };
 
-struct LoggerNetworkInfo {
+struct LoggerPhysicalNodeInfo {
   std::string ip;
   uint16_t port;
 };
@@ -98,7 +98,7 @@ public:
   virtual void logNodeUninit(const LoggerInfoNodeState &info) = 0;
   virtual void logNodeRunning(const LoggerInfoNodeState &info) = 0;
   virtual void logNodeLeft(const LoggerInfoNodeState &info) = 0;
-  virtual void logNetworkInfo(const LoggerNetworkInfo &info) = 0;
+  virtual void logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) = 0;
   virtual void logNode(const LoggerInfoAddNode &info) = 0;
   virtual void logNeighbor(const LoggerInfoAddNeighbor &info) = 0;
   virtual void logEvent(const LoggerInfoAddEvent &info) = 0;

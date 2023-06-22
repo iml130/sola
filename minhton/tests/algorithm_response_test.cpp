@@ -202,9 +202,9 @@ TEST_CASE("ResponseAlgorithmGeneral processGetNeighbors",
   REQUIRE_NOTHROW(response_algo.process(msg7));
 
   REQUIRE(!sent_msg_sender.isValidPeer());
-  REQUIRE(!sent_msg_sender.getNetworkInfo().isInitialized());
+  REQUIRE(!sent_msg_sender.getPhysicalNodeInfo().isInitialized());
   REQUIRE(!sent_msg_target.isValidPeer());
-  REQUIRE(!sent_msg_target.getNetworkInfo().isInitialized());
+  REQUIRE(!sent_msg_target.getPhysicalNodeInfo().isInitialized());
   REQUIRE(sent_msg_requested_neighbors.empty());
 }
 

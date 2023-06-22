@@ -31,8 +31,8 @@ public:
   /// Sending the initial Join message for a node to join the network.
   /// Only for join via address, not bootstrap.
   ///
-  /// \param network_info address to send initial join to
-  void initiateJoin(const NetworkInfo &network_info) override;
+  /// \param p_node_info address to send initial join to
+  void initiateJoin(const PhysicalNodeInfo &p_node_info) override;
 
 protected:
   /// This method will be called when we receive a JOIN message.
@@ -332,7 +332,7 @@ protected:
 
   void allUpdatesAcknowledged();
 
-  NetworkInfo last_join_info_;
+  PhysicalNodeInfo last_join_info_;
 };
 
 }  // namespace minhton

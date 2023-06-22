@@ -157,8 +157,8 @@ bool RoutingInformation::resetRoutingTableNeighborChild(
   if (it != this->routing_table_neighbor_children_.end() &&
       it->getLogicalNodeInfo() == routing_table_neighbor_child.getLogicalNodeInfo()) {
     // if we would actually change something by resetting
-    if (it->getNetworkInfo().isInitialized()) {
-      it->setNetworkInfo(minhton::NetworkInfo());
+    if (it->getPhysicalNodeInfo().isInitialized()) {
+      it->setPhysicalNodeInfo(minhton::PhysicalNodeInfo());
       this->notifyNeighborChange(*it, NeighborRelationship::kRoutingTableNeighborChild,
                                  ref_event_id);
       return true;

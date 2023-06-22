@@ -11,16 +11,16 @@
 
 namespace minhton {
 
-DistributedData::DistributedData(const NetworkInfo &network_info) {
-  setNetworkInfo(network_info);
+DistributedData::DistributedData(const PhysicalNodeInfo &p_node_info) {
+  setPhysicalNodeInfo(p_node_info);
   this->timestamp_storage_limit_ = 5;
 }
 
-void DistributedData::setNetworkInfo(const NetworkInfo &network_info) {
-  network_info_ = network_info;
+void DistributedData::setPhysicalNodeInfo(const PhysicalNodeInfo &p_node_info) {
+  p_node_info_ = p_node_info;
 }
 
-NetworkInfo DistributedData::getNetworkInfo() const { return network_info_; }
+PhysicalNodeInfo DistributedData::getPhysicalNodeInfo() const { return p_node_info_; }
 
 bool DistributedData::insert(NodeData::Key key,
                              NodeData::ValueTimestampAndType value_timestamp_and_type) {

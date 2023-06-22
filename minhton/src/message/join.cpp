@@ -21,7 +21,7 @@ MessageJoin::MessageJoin(const MinhtonMessageHeader &header, minhton::NodeInfo e
 }
 
 bool MessageJoin::validateImpl() const {
-  return getEnteringNode().getNetworkInfo().isInitialized();
+  return getEnteringNode().getPhysicalNodeInfo().isInitialized();
 }
 
 minhton::NodeInfo MessageJoin::getEnteringNode() const { return entering_node_; }

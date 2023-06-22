@@ -4,8 +4,8 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#ifndef MINHTON_CORE_NETWORK_INFO_H_
-#define MINHTON_CORE_NETWORK_INFO_H_
+#ifndef MINHTON_CORE_PHYSICAL_NODE_INFO_H_
+#define MINHTON_CORE_PHYSICAL_NODE_INFO_H_
 
 #include <cstdint>
 #include <string>
@@ -24,22 +24,22 @@ namespace minhton {
 #define IPv4_PORT 2906
 
 ///
-/// A NetworkInfo represents the remote host, by having a IPv4/IPv6 IP address and a port
+/// A PhysicalNodeInfo represents the remote host, by having a IPv4/IPv6 IP address and a port
 ///
-class NetworkInfo {
+class PhysicalNodeInfo {
 public:
   ///
-  /// Constructing an empty uninitialized NetworkInfo object.
+  /// Constructing an empty uninitialized PhysicalNodeInfo object.
   ///
-  NetworkInfo();
+  PhysicalNodeInfo();
 
   ///
-  /// Constructing an initialized NetworkInfo object with the given information.
+  /// Constructing an initialized PhysicalNodeInfo object with the given information.
   ///
   /// \param address valid IPv4address string
   /// \param port valid port number
   ///
-  NetworkInfo(const std::string &address, uint16_t port);
+  PhysicalNodeInfo(const std::string &address, uint16_t port);
 
   /// \returns the port of the object
   uint16_t getPort() const;
@@ -70,33 +70,33 @@ public:
   std::string getString() const;
 
   ///
-  /// Returns the current state of the networkinfo if the node is proper initialized.
+  /// Returns the current state of the PhysicalNodeInfo if the node is properly initialized.
   ///
   /// Typical usage:
   /// \code
   ///   isInitialized();
   /// \endcode
   ///
-  /// \returns true if the node has proper network information, otherwise false
+  /// \returns true if the node has a proper PhysicalNodeInfo, otherwise false
   bool isInitialized() const;
 
   /// \returns true if the address and port are the same
-  friend bool operator==(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator==(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   /// \returns true if n1 and n2 are not equal
-  friend bool operator!=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator!=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   /// \returns true if the calculated unique value of n1 is smaller than that of n2
-  friend bool operator<(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator<(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   /// \returns true if the calculated unique value of n1 is smaller or equal than that of n2
-  friend bool operator<=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator<=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   /// \returns true if the calculated unique value of n1 is larger than that of n2
-  friend bool operator>(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator>(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   /// \returns true if the calculated unique value of n1 is larger or equal than that of n2
-  friend bool operator>=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2);
+  friend bool operator>=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
   SERIALIZE(address_, port_);
 
@@ -113,8 +113,8 @@ private:
   static bool isIpv6Address(const std::string &str);
 };
 
-struct NetworkInfoHasher {
-  std::size_t operator()(const minhton::NetworkInfo &net) const {
+struct PhysicalNodeInfoHasher {
+  std::size_t operator()(const minhton::PhysicalNodeInfo &net) const {
     using std::hash;
     using std::size_t;
     using std::string;

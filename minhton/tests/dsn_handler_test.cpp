@@ -69,7 +69,7 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     for (auto const &cover_node : cover_nodes) {
       auto cover_node_it = cover_data.find(cover_node.getLogicalNodeInfo());
       REQUIRE(cover_node_it != cover_data.end());
-      REQUIRE(cover_node_it->second.getNetworkInfo() == cover_node.getNetworkInfo());
+      REQUIRE(cover_node_it->second.getPhysicalNodeInfo() == cover_node.getPhysicalNodeInfo());
       REQUIRE(cover_node_it->second.getData().empty());
     }
 
@@ -167,7 +167,7 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     for (auto const &cover_node : cover_nodes) {
       auto cover_node_it = cover_data.find(cover_node.getLogicalNodeInfo());
       REQUIRE(cover_node_it != cover_data.end());
-      REQUIRE(cover_node_it->second.getNetworkInfo() == cover_node.getNetworkInfo());
+      REQUIRE(cover_node_it->second.getPhysicalNodeInfo() == cover_node.getPhysicalNodeInfo());
       REQUIRE(cover_node_it->second.getData().empty());
     }
 
@@ -244,7 +244,7 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     for (auto const &cover_node : cover_nodes) {
       auto cover_node_it = cover_data.find(cover_node.getLogicalNodeInfo());
       REQUIRE(cover_node_it != cover_data.end());
-      REQUIRE(cover_node_it->second.getNetworkInfo() == cover_node.getNetworkInfo());
+      REQUIRE(cover_node_it->second.getPhysicalNodeInfo() == cover_node.getPhysicalNodeInfo());
       REQUIRE(cover_node_it->second.getData().empty());
     }
 
@@ -300,7 +300,7 @@ TEST_CASE("DSNHandler onNeighborChangeNotification", "[DSNHandler][Constructor]"
   for (auto const &cover_node : init_cover_nodes) {
     auto cover_node_it = cover_data1.find(cover_node.getLogicalNodeInfo());
     REQUIRE(cover_node_it != cover_data1.end());
-    REQUIRE(cover_node_it->second.getNetworkInfo() == cover_node.getNetworkInfo());
+    REQUIRE(cover_node_it->second.getPhysicalNodeInfo() == cover_node.getPhysicalNodeInfo());
     REQUIRE(cover_node_it->second.getData().empty());
   }
 
@@ -310,7 +310,7 @@ TEST_CASE("DSNHandler onNeighborChangeNotification", "[DSNHandler][Constructor]"
   auto cover_data2 = handler.getCoverData();
   auto node_5_6_it = cover_data2.find(node_5_6.getLogicalNodeInfo());
   REQUIRE(node_5_6_it != cover_data2.end());
-  REQUIRE(node_5_6_it->second.getNetworkInfo() == node_5_6.getNetworkInfo());
+  REQUIRE(node_5_6_it->second.getPhysicalNodeInfo() == node_5_6.getPhysicalNodeInfo());
   REQUIRE(node_5_6_it->second.getData().empty());
   REQUIRE(cover_data1.size() + 1 == cover_data2.size());
 
@@ -323,18 +323,18 @@ TEST_CASE("DSNHandler onNeighborChangeNotification", "[DSNHandler][Constructor]"
   auto cover_data3 = handler.getCoverData();
   auto node_5_7_it = cover_data3.find(node_5_7.getLogicalNodeInfo());
   REQUIRE(node_5_7_it != cover_data3.end());
-  REQUIRE(node_5_7_it->second.getNetworkInfo() == node_5_7.getNetworkInfo());
+  REQUIRE(node_5_7_it->second.getPhysicalNodeInfo() == node_5_7.getPhysicalNodeInfo());
   REQUIRE(node_5_7_it->second.getData().empty());
   REQUIRE(cover_data2.size() + 1 == cover_data3.size());
 
-  node_5_7.setNetworkInfo(NetworkInfo("8.8.8.8", 1111));
+  node_5_7.setPhysicalNodeInfo(PhysicalNodeInfo("8.8.8.8", 1111));
   routing_info->updateNeighbor(node_5_7);
   REQUIRE(handler.isActive());
 
   auto cover_data4 = handler.getCoverData();
   auto node_5_7_it2 = cover_data4.find(node_5_7.getLogicalNodeInfo());
   REQUIRE(node_5_7_it2 != cover_data4.end());
-  REQUIRE(node_5_7_it2->second.getNetworkInfo() == node_5_7.getNetworkInfo());
+  REQUIRE(node_5_7_it2->second.getPhysicalNodeInfo() == node_5_7.getPhysicalNodeInfo());
   REQUIRE(node_5_7_it2->second.getData().empty());
   REQUIRE(cover_data3.size() == cover_data4.size());
 

@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "minhton/algorithms/algorithm_interface.h"
-#include "minhton/core/network_info.h"
+#include "minhton/core/physical_node_info.h"
 #include "minhton/message/message.h"
 
 namespace minhton {
@@ -23,7 +23,7 @@ public:
 
   virtual void process(const MessageVariant &msg) override = 0;
   virtual void initiateJoin(NodeInfo &node_info) = 0;
-  virtual void initiateJoin(const NetworkInfo &network_info) = 0;
+  virtual void initiateJoin(const PhysicalNodeInfo &p_node_info) = 0;
 
   virtual void continueAcceptChildProcedure(const MessageInformAboutNeighbors &message) noexcept(
       false) = 0;

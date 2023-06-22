@@ -135,14 +135,14 @@ void LeaveAlgorithmGeneral::processReplacementUpdate(const MessageReplacementUpd
   getRoutingInfo()->removeNeighbor(message.getRemovedPositionNode(),
                                    message.getHeader().getRefEventId());
 
-  // Replacing the Network Information about the replaced position
+  // Replacing the PhysicalNodeInfo about the replaced position
   // with those of the removed position
   auto replaced_neighbor = message.getReplacedPositionNode();
-  replaced_neighbor.setNetworkInfo(
-      message.getRemovedPositionNode().getNetworkInfo());  // new physical address
+  replaced_neighbor.setPhysicalNodeInfo(
+      message.getRemovedPositionNode().getPhysicalNodeInfo());  // new physical address
   replaced_neighbor.setLogicalNodeInfo(message.getNewLogicalNodeInfo());
 
-  // Updating the node at the replaced position with the new Network Information
+  // Updating the node at the replaced position with the new PhysicalNodeInfo
   NodeInfo old_node = getRoutingInfo()->getNodeInfoByPosition(replaced_neighbor.getLevel(),
                                                               replaced_neighbor.getNumber());
   if (!old_node.isInitialized()) {
@@ -242,7 +242,7 @@ void LeaveAlgorithmGeneral::performLeaveWithReplacement(
 
   uint32_t acks_replacement_update = 0;
   // sending ReplacementUpdate to every neighbor of the leaving node
-  // if NetworkInfo is not known we use SearchExact
+  // if PhysicalNodeInfo is not known we use SearchExact
   for (auto const &replaced_pos_neighbor : existing_symmetrical_neighbors_of_replaced_position) {
     // not sending to removed position
     if (replaced_pos_neighbor.getLogicalNodeInfo() == removed_position_node.getLogicalNodeInfo()) {
@@ -645,7 +645,7 @@ void LeaveAlgorithmGeneral::replaceMyself(NodeInfo node_to_replace,
                                                 node_to_replace.getLogicalNodeInfo().getNumber(),
                                                 node_to_replace.getLogicalNodeInfo().getFanout()));
 
-  // replacing self_node_info position (NetworkInfo stays the same!), resetting routing_info
+  // replacing self_node_info position (PhysicalNodeInfo stays the same!), resetting routing_info
   // we are a different peer now
   getRoutingInfo()->setNodeStatus(NodeStatus::kRunning, ref_event_id);
   LOG_NODE(getSelfNodeInfo());

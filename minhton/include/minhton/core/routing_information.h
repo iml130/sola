@@ -59,7 +59,7 @@ public:
   void resetPosition(uint64_t event_id);
 
   /// Calling this method if our position has changed.
-  /// It resets all neighbors, but we keep our network information!
+  /// It resets all neighbors, but we keep our PhysicalNodeInfo!
   ///
   /// \param peer_position information about our new position
   /// and fanout has to be set
@@ -289,7 +289,7 @@ public:
   /// initialized
   bool areRoutingTableNeighborChildrenFull() const;
 
-  /// Updates a routing table neighbor entry with the given NetworkInfo information.
+  /// Updates a routing table neighbor entry with the given PhysicalNodeInfo information.
   ///
   /// Is being used when we receive a new information about our routing table neighbors.
   ///
@@ -298,14 +298,15 @@ public:
   ///   this->routing_info_.updateRoutingTableNeighbor(updated_routing_table_neighbor);
   /// \endcode
   ///
-  /// \param routing_table_neighbor the NodeInfo with new NetworkInfo, and needs to be initialized
+  /// \param routing_table_neighbor the NodeInfo with new PhysicalNodeInfo, and needs to be
+  /// initialized
   /// \param ref_event_id ID of the event which is the reason for this change
   ///
   void updateRoutingTableNeighbor(minhton::NodeInfo routing_table_neighbor,
                                   uint64_t ref_event_id = 0);
 
   ///
-  /// Updates a routing table neighbor child entry with the given NetworkInfo information.
+  /// Updates a routing table neighbor child entry with the given PhysicalNodeInfo information.
   ///
   /// Is being used when we receive a new information about our routing table neighbors children.
   ///
@@ -314,7 +315,7 @@ public:
   ///   this->routing_info_.updateRoutingTableNeighborChild(updated_routing_table_neighbor_child);
   /// \endcode
   ///
-  /// \param routing_table_neighbor_child the NodeInfo with new NetworkInfo, and needs to be
+  /// \param routing_table_neighbor_child the NodeInfo with new PhysicalNodeInfo, and needs to be
   /// initialized
   /// \param ref_event_id ID of the event which is the reason for this change
   ///
@@ -322,7 +323,7 @@ public:
                                        uint64_t ref_event_id = 0);
 
   /// Resetting information about our child at the given position.
-  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
+  /// We will only reset the PhysicalNodeInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -337,7 +338,7 @@ public:
   void resetChild(uint16_t position, uint64_t ref_event_id = 0);
 
   /// Resetting information about our adjacent right.
-  /// We will reset NetworkInfo and LogicalNodeInfo.
+  /// We will reset PhysicalNodeInfo and LogicalNodeInfo.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -351,7 +352,7 @@ public:
   void resetAdjacentRight(uint64_t ref_event_id = 0);
 
   /// Resetting information about our adjacent left.
-  /// We will reset NetworkInfo and LogicalNodeInfo.
+  /// We will reset PhysicalNodeInfo and LogicalNodeInfo.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -366,8 +367,8 @@ public:
 
   /// Resetting information about a routing table neighbor.
   /// We do not need to know whether its in the left or right routing table.
-  /// Only LogicalNodeInfo is relevant, we ignore NetworkInfo.
-  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
+  /// Only LogicalNodeInfo is relevant, we ignore PhysicalNodeInfo.
+  /// We will only reset the PhysicalNodeInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -384,8 +385,8 @@ public:
 
   /// Resetting information about a routing table neighbor child or child.
   /// We do not need to know whether its in the left or right routing table or if its a child.
-  /// Only LogicalNodeInfo is relevant, we ignore NetworkInfo.
-  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
+  /// Only LogicalNodeInfo is relevant, we ignore PhysicalNodeInfo.
+  /// We will only reset the PhysicalNodeInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -457,7 +458,7 @@ public:
   /// We need to have the LogicalNodeInfo position set somewhere.
   ///
   /// When we remove an adjacent, we reset the full NodeInfo.
-  /// When we remove a non adjacent, we reset only NetworkInfo.
+  /// When we remove a non adjacent, we reset only PhysicalNodeInfo.
   /// If a node has multiple roles (e.g. child and adjacent),
   /// both will be reset appropriately.
   ///
@@ -474,7 +475,7 @@ public:
   void removeNeighbor(const minhton::NodeInfo &position_to_remove, uint64_t ref_event_id = 0);
 
   ///
-  /// Setting the new NetworkInfo at the appropriate position.
+  /// Setting the new PhysicalNodeInfo at the appropriate position.
   /// We need to have the LogicalNodeInfo position set somewhere.
   ///
   /// If a node has multiple roles (e.g. child and adjacent),
@@ -515,7 +516,7 @@ public:
   /// (those neighbors who know one node as a routing table neighbor child,
   /// but the node does not always know those neighbors (asymmetrical)).
   ///
-  /// Creates a vector of all of those neighbors, but all NetworkInfos are uninitialized.
+  /// Creates a vector of all of those neighbors, but all PhysicalNodeInfos are uninitialized.
   ///
   /// Typical usage:
   /// \code
@@ -532,8 +533,8 @@ public:
   ///
   /// Helper method to easily add vectors of NodeInfo objects together.
   /// If there are dublicates, only one object will be added.
-  /// And if one of those dublicates has NetworkInfo initialized,
-  /// the one with initialized NetworkInfo will be chosen.
+  /// And if one of those duplicates has PhysicalNodeInfo initialized,
+  /// the one with initialized PhysicalNodeInfo will be chosen.
   ///
   /// Typical usage:
   /// \code

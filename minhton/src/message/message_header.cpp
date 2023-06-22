@@ -117,13 +117,13 @@ MessageLoggingAdditionalInfo MinhtonMessageHeader::getAdditionalLoggingInfo() co
 }
 
 bool MinhtonMessageHeader::validate() const {
-  bool network_info_init =
-      sender_.getNetworkInfo().isInitialized() && target_.getNetworkInfo().isInitialized();
+  bool p_node_info_init = sender_.getPhysicalNodeInfo().isInitialized() &&
+                          target_.getPhysicalNodeInfo().isInitialized();
   bool message_type_set = message_type_ != MessageType::kInit;
   bool same_fanout = sender_.isInitialized() ? sender_.getFanout() == target_.getFanout() : true;
   bool event_id_set = event_id_ > 0;
 
-  return network_info_init && message_type_set && same_fanout && event_id_set;
+  return p_node_info_init && message_type_set && same_fanout && event_id_set;
 }
 
 uint64_t MinhtonMessageHeader::getEventId() const { return this->event_id_; }

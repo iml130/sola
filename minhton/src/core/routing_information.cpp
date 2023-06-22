@@ -189,7 +189,7 @@ void RoutingInformation::setParent(const minhton::NodeInfo &parent, uint64_t ref
     throw std::invalid_argument("Parent must be initialized / must exist");
   }
 
-  if (parent.getNetworkInfo() != this->parent_.getNetworkInfo()) {
+  if (parent.getPhysicalNodeInfo() != this->parent_.getPhysicalNodeInfo()) {
     minhton::NodeInfo node = parent;
     std::swap(this->parent_, node);
     this->notifyNeighborChange(this->parent_, NeighborRelationship::kParent, ref_event_id, node);
@@ -224,8 +224,7 @@ void RoutingInformation::setChild(const minhton::NodeInfo &child, uint16_t posit
     throw std::invalid_argument("Child must be initialized / must exist");
   }
 
-  // if there is a difference in network info
-  if (child.getNetworkInfo() != this->children_[position].getNetworkInfo()) {
+  if (child.getPhysicalNodeInfo() != this->children_[position].getPhysicalNodeInfo()) {
     minhton::NodeInfo node = child;
     std::swap(this->children_[position], node);
     this->notifyNeighborChange(this->children_[position], NeighborRelationship::kChild,
@@ -270,7 +269,7 @@ void RoutingInformation::setAdjacentLeft(const minhton::NodeInfo &adjacent_left,
     throw std::invalid_argument("Adjacent is not to the left of us");
   }
 
-  // if there is a difference in network info or LogicalNodeInfo
+  // if there is a difference in PhysicalNodeInfo or LogicalNodeInfo
   if (this->adjacent_left_ != adjacent_left) {
     minhton::NodeInfo node = adjacent_left;
     std::swap(this->adjacent_left_, node);
@@ -300,7 +299,7 @@ void RoutingInformation::setAdjacentRight(const minhton::NodeInfo &adjacent_righ
     throw std::invalid_argument("Adjacent is not to the right of us");
   }
 
-  // if there is a difference in network info or LogicalNodeInfo
+  // if there is a difference in PhysicalNodeInfo or LogicalNodeInfo
   if (this->adjacent_right_ != adjacent_right) {
     minhton::NodeInfo node = adjacent_right;
     std::swap(this->adjacent_right_, node);
@@ -352,9 +351,9 @@ bool RoutingInformation::resetRoutingTableNeighbor(const minhton::NodeInfo &rout
   if (it != this->routing_table_neighbors_.end() &&
       it->getLogicalNodeInfo() == routing_table_neighbor.getLogicalNodeInfo()) {
     // if we would actually change something by resetting
-    if (it->getNetworkInfo().isInitialized()) {
+    if (it->getPhysicalNodeInfo().isInitialized()) {
       minhton::NodeInfo node = *it;
-      it->setNetworkInfo(minhton::NetworkInfo());
+      it->setPhysicalNodeInfo(minhton::PhysicalNodeInfo());
       this->notifyNeighborChange(*it, NeighborRelationship::kRoutingTableNeighbor, ref_event_id,
                                  node);
       return true;
@@ -405,9 +404,9 @@ void RoutingInformation::resetChild(uint16_t position, uint64_t ref_event_id) {
   if (position >= this->getFanout()) {
     throw std::invalid_argument("Invalid Position to reset Child");
   }
-  if (this->children_[position].getNetworkInfo().isInitialized()) {
+  if (this->children_[position].getPhysicalNodeInfo().isInitialized()) {
     minhton::NodeInfo node = this->children_[position];
-    this->children_[position].setNetworkInfo(minhton::NetworkInfo());
+    this->children_[position].setPhysicalNodeInfo(minhton::PhysicalNodeInfo());
     this->notifyNeighborChange(this->children_[position], kChild, ref_event_id, node, position);
   }
 }

@@ -23,7 +23,7 @@ void BootstrapAlgorithmGeneral::process(const MessageVariant &msg) {
       msg);
 }
 
-void BootstrapAlgorithmGeneral::initiateJoin([[maybe_unused]] const NetworkInfo &network_info) {
+void BootstrapAlgorithmGeneral::initiateJoin([[maybe_unused]] const PhysicalNodeInfo &p_node_info) {
   MinhtonMessageHeader header(getSelfNodeInfo(), NodeInfo());
   MessageBootstrapDiscover msg_bootstrap_discover(header);
 

@@ -37,7 +37,7 @@ protected:
   bool validateImpl() const;
 
 private:
-  /// The node that wants to enter the network. NetworkInfo must be set appropriately.
+  /// The node that wants to enter the network. PhysicalNodeInfo must be set appropriately.
   NodeInfo entering_node_;
 
   /// Stores information about what steps were already done (only for the minhton algorithm)

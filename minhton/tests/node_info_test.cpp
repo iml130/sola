@@ -16,9 +16,9 @@ TEST_CASE("NodeInfo Constructor", "[NodeInfo][Init]") {
   REQUIRE(test.getLogicalNodeInfo().getLevel() == 0);
   REQUIRE(test.getLogicalNodeInfo().getNumber() == 0);
   REQUIRE_FALSE(test.isValidPeer());
-  REQUIRE(test.getNetworkInfo().getAddress() == "");
-  REQUIRE(test.getNetworkInfo().getPort() == 0);
-  REQUIRE_FALSE(test.getNetworkInfo().isInitialized());
+  REQUIRE(test.getPhysicalNodeInfo().getAddress() == "");
+  REQUIRE(test.getPhysicalNodeInfo().getPort() == 0);
+  REQUIRE_FALSE(test.getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(test.isInitialized());
 
   // constructor with level and number
@@ -26,9 +26,9 @@ TEST_CASE("NodeInfo Constructor", "[NodeInfo][Init]") {
   REQUIRE(test_2.getLogicalNodeInfo().getLevel() == 1);
   REQUIRE(test_2.getLogicalNodeInfo().getNumber() == 1);
   REQUIRE(test_2.isValidPeer());
-  REQUIRE(test_2.getNetworkInfo().getAddress() == "");
-  REQUIRE(test_2.getNetworkInfo().getPort() == 0);
-  REQUIRE_FALSE(test_2.getNetworkInfo().isInitialized());
+  REQUIRE(test_2.getPhysicalNodeInfo().getAddress() == "");
+  REQUIRE(test_2.getPhysicalNodeInfo().getPort() == 0);
+  REQUIRE_FALSE(test_2.getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(test_2.isInitialized());
 
   // constructor with invalid arguments
@@ -61,31 +61,31 @@ TEST_CASE("NodeInfo getLogicalNodeInfo setLogicalNodeInfo",
   REQUIRE(test_2.isValidPeer() == peer_2.isInitialized());
 }
 
-TEST_CASE("NodeInfo getNetworkInfo setNetworkInfo",
-          "[NodeInfo][Method][getNetworkInfo setNetworkInfo") {
+TEST_CASE("NodeInfo getPhysicalNodeInfo setPhysicalNodeInfo",
+          "[NodeInfo][Method][getPhysicalNodeInfo setPhysicalNodeInfo") {
   minhton::NodeInfo test;
-  minhton::NetworkInfo net("1.2.3.4", 3000);
+  minhton::PhysicalNodeInfo net("1.2.3.4", 3000);
 
-  // with initialized network info
-  test.setNetworkInfo(net);
-  REQUIRE(test.getNetworkInfo().getAddress() == net.getAddress());
-  REQUIRE(test.getNetworkInfo().getPort() == net.getPort());
-  REQUIRE(test.getNetworkInfo().isInitialized() == net.isInitialized());
+  // with initialized PhysicalNodeInfo
+  test.setPhysicalNodeInfo(net);
+  REQUIRE(test.getPhysicalNodeInfo().getAddress() == net.getAddress());
+  REQUIRE(test.getPhysicalNodeInfo().getPort() == net.getPort());
+  REQUIRE(test.getPhysicalNodeInfo().isInitialized() == net.isInitialized());
 
-  // with uninitialized network info
+  // with uninitialized PhysicalNodeInfo
   minhton::NodeInfo test_2;
-  minhton::NetworkInfo net_2;
-  test_2.setNetworkInfo(net_2);
-  REQUIRE(test_2.getNetworkInfo().getAddress() == net_2.getAddress());
-  REQUIRE(test_2.getNetworkInfo().getPort() == net_2.getPort());
-  REQUIRE(test_2.getNetworkInfo().isInitialized() == net_2.isInitialized());
+  minhton::PhysicalNodeInfo net_2;
+  test_2.setPhysicalNodeInfo(net_2);
+  REQUIRE(test_2.getPhysicalNodeInfo().getAddress() == net_2.getAddress());
+  REQUIRE(test_2.getPhysicalNodeInfo().getPort() == net_2.getPort());
+  REQUIRE(test_2.getPhysicalNodeInfo().isInitialized() == net_2.isInitialized());
 }
 
 TEST_CASE("NodeInfo isInitialized", "[NodeInfo][Method][isInitialized") {
   minhton::NodeInfo test;
 
-  minhton::NetworkInfo net_uninit;
-  minhton::NetworkInfo net_init("1.2.3.4", 2098);
+  minhton::PhysicalNodeInfo net_uninit;
+  minhton::PhysicalNodeInfo net_init("1.2.3.4", 2098);
   REQUIRE_FALSE(net_uninit.isInitialized());
   REQUIRE(net_init.isInitialized());
 
@@ -95,22 +95,22 @@ TEST_CASE("NodeInfo isInitialized", "[NodeInfo][Method][isInitialized") {
   REQUIRE(peer_init.isInitialized());
 
   // uninit + uninit = uninit
-  test.setNetworkInfo(net_uninit);
+  test.setPhysicalNodeInfo(net_uninit);
   test.setLogicalNodeInfo(peer_uninit);
   REQUIRE_FALSE(test.isInitialized());
 
   // uninit + init = uninit
-  test.setNetworkInfo(net_uninit);
+  test.setPhysicalNodeInfo(net_uninit);
   test.setLogicalNodeInfo(peer_init);
   REQUIRE_FALSE(test.isInitialized());
 
   // init + uninit = uninit
-  test.setNetworkInfo(net_init);
+  test.setPhysicalNodeInfo(net_init);
   test.setLogicalNodeInfo(peer_uninit);
   REQUIRE_FALSE(test.isInitialized());
 
   // init + init = init
-  test.setNetworkInfo(net_init);
+  test.setPhysicalNodeInfo(net_init);
   test.setLogicalNodeInfo(peer_init);
   REQUIRE(test.isInitialized());
 }

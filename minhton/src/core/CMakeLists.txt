@@ -6,7 +6,7 @@ target_include_directories(minhton_core_node_info
 )
 target_link_libraries(minhton_core_node_info
   PUBLIC
-    minhton_core_network_info
+    minhton_core_physical_node_info
     minhton_core_logical_node_info
     minhton_message_serialize
 )
@@ -26,18 +26,18 @@ target_link_libraries(minhton_core_logical_node_info
     minhton_core_routing_calculations
 )
 
-# Network Info
-add_library(minhton_core_network_info STATIC network_info.cpp)
-target_include_directories(minhton_core_network_info
+# PhysicalNodeInfo
+add_library(minhton_core_physical_node_info STATIC physical_node_info.cpp)
+target_include_directories(minhton_core_physical_node_info
         PUBLIC
         ${MINHTON_SOURCE_DIR}/include
 )
-target_link_libraries(minhton_core_network_info
+target_link_libraries(minhton_core_physical_node_info
   PUBLIC
     minhton_message_serialize
 )
 
-# Network Info
+# Routing Calculations
 add_library(minhton_core_routing_calculations STATIC routing_calculations.cpp)
 target_include_directories(minhton_core_routing_calculations
         PUBLIC

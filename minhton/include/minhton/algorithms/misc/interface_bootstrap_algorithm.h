@@ -22,7 +22,7 @@ public:
   virtual ~BootstrapAlgorithmInterface(){};
 
   virtual void process(const MessageVariant &msg) override = 0;
-  virtual void initiateJoin(const NetworkInfo &network_info) = 0;
+  virtual void initiateJoin(const PhysicalNodeInfo &p_node_info) = 0;
 
   virtual void processBootstrapResponseTimeout() = 0;
   virtual bool isBootstrapResponseValid() const = 0;

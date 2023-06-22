@@ -19,10 +19,10 @@ TEST_CASE("RoutingInformation areChildrenFull", "[RoutingInformation][Methods][a
   minhton::NodeInfo child_2(1, 2, (uint16_t)4);
   minhton::NodeInfo child_3(1, 3, (uint16_t)4);
 
-  child_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  child_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  child_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  child_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  child_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  child_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info_4.setChild(child_3, 3);
   REQUIRE_FALSE(routing_info_4.areChildrenFull());
@@ -44,9 +44,9 @@ TEST_CASE("RoutingInformation areRoutingTableNeighborsFull",
     minhton::NodeInfo node_1_1(1, 1, 3);
     minhton::NodeInfo node_1_2(1, 2, 3);
 
-    node_1_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    node_1_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    node_1_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+    node_1_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    node_1_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    node_1_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
     minhton::RoutingInformation routing_info_2(node_1_1, Logger());
     REQUIRE_FALSE(routing_info_2.areRoutingTableNeighborsFull());
@@ -64,10 +64,10 @@ TEST_CASE("RoutingInformation areRoutingTableNeighborsFull",
     minhton::NodeInfo node_1_2(1, 2, 4);
     minhton::NodeInfo node_1_3(1, 3, 4);
 
-    node_1_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    node_1_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    node_1_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    node_1_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+    node_1_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    node_1_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    node_1_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    node_1_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
     minhton::RoutingInformation routing_info_3(node_1_0, Logger());
     REQUIRE_FALSE(routing_info_3.areRoutingTableNeighborsFull());
@@ -88,24 +88,24 @@ TEST_CASE("RoutingInformation areRoutingTableNeighborChildrenFull",
   uint16_t fanout = 3;
 
   minhton::NodeInfo node_1_0(1, 0, fanout);
-  node_1_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_1_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_1_1(1, 1, fanout);
-  node_1_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_1_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_1_2(1, 2, fanout);
-  node_1_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_1_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   minhton::NodeInfo node_2_0(2, 0, fanout);
-  node_2_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_2_1(2, 1, fanout);
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_2_2(2, 2, fanout);
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_2_6(2, 6, fanout);
-  node_2_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_2_7(2, 7, fanout);
-  node_2_7.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_7.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   minhton::NodeInfo node_2_8(2, 8, fanout);
-  node_2_8.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_8.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   minhton::RoutingInformation routing_info(node_1_1, Logger());
   routing_info.updateRoutingTableNeighbor(node_1_0);
@@ -335,8 +335,8 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   minhton::NodeInfo node_2_1(2, 1, (uint16_t)3);
   minhton::NodeInfo node_2_8(2, 8, (uint16_t)3);
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_8.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_8.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighborChild(node_2_1);
   routing_info.updateRoutingTableNeighborChild(node_2_8);
@@ -427,9 +427,9 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
   minhton::NodeInfo node_1_0(1, 0, (uint16_t)3);
   minhton::NodeInfo node_2_1(2, 1, (uint16_t)3);
   minhton::NodeInfo node_2_8(2, 8, (uint16_t)3);
-  node_1_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_8.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_1_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_8.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_1_0);
   routing_info.updateRoutingTableNeighborChild(node_2_1);
@@ -521,9 +521,9 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
   minhton::NodeInfo node_1_2(1, 2, (uint16_t)3);
   minhton::NodeInfo node_2_1(2, 1, (uint16_t)3);
   minhton::NodeInfo node_2_8(2, 8, (uint16_t)3);
-  node_1_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_8.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_1_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_8.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_1_2);
   routing_info.updateRoutingTableNeighborChild(node_2_1);
@@ -620,12 +620,12 @@ TEST_CASE("RoutingInformation Getter getDirectLeftNeighbor",
   minhton::NodeInfo node_2_6(2, 6, (uint16_t)3);
   minhton::NodeInfo node_2_7(2, 7, (uint16_t)3);
 
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_5.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_7.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_5.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_7.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_2_1);
   routing_info.updateRoutingTableNeighbor(node_2_2);
@@ -639,7 +639,7 @@ TEST_CASE("RoutingInformation Getter getDirectLeftNeighbor",
   REQUIRE(neighbor.isInitialized());
   REQUIRE(neighbor.getLevel() == 2);
   REQUIRE(neighbor.getNumber() == 3);
-  REQUIRE(neighbor.getNetworkInfo().getAddress() == "1.2.3.4");
+  REQUIRE(neighbor.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
 }
 
 TEST_CASE("RoutingInformation Getter getDirectRightNeighbor",
@@ -655,12 +655,12 @@ TEST_CASE("RoutingInformation Getter getDirectRightNeighbor",
   minhton::NodeInfo node_2_6(2, 6, (uint16_t)3);
   minhton::NodeInfo node_2_7(2, 7, (uint16_t)3);
 
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_5.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_7.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_5.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_7.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_2_1);
   routing_info.updateRoutingTableNeighbor(node_2_2);
@@ -674,7 +674,7 @@ TEST_CASE("RoutingInformation Getter getDirectRightNeighbor",
   REQUIRE(neighbor.isInitialized());
   REQUIRE(neighbor.getLevel() == 2);
   REQUIRE(neighbor.getNumber() == 5);
-  REQUIRE(neighbor.getNetworkInfo().getAddress() == "1.2.3.4");
+  REQUIRE(neighbor.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
 }
 
 TEST_CASE("RoutingInformation Getter getLeftmostNeighbor",
@@ -690,12 +690,12 @@ TEST_CASE("RoutingInformation Getter getLeftmostNeighbor",
   minhton::NodeInfo node_2_6(2, 6, (uint16_t)3);
   minhton::NodeInfo node_2_7(2, 7, (uint16_t)3);
 
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_5.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_7.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_5.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_7.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_2_1);
   routing_info.updateRoutingTableNeighbor(node_2_2);
@@ -709,7 +709,7 @@ TEST_CASE("RoutingInformation Getter getLeftmostNeighbor",
   REQUIRE(neighbor.isInitialized());
   REQUIRE(neighbor.getLevel() == 2);
   REQUIRE(neighbor.getNumber() == 1);
-  REQUIRE(neighbor.getNetworkInfo().getAddress() == "1.2.3.4");
+  REQUIRE(neighbor.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
 }
 
 TEST_CASE("RoutingInformation Getter getRightmostNeighbor",
@@ -725,12 +725,12 @@ TEST_CASE("RoutingInformation Getter getRightmostNeighbor",
   minhton::NodeInfo node_2_6(2, 6, (uint16_t)3);
   minhton::NodeInfo node_2_7(2, 7, (uint16_t)3);
 
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_5.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_7.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_5.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_7.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_2_1);
   routing_info.updateRoutingTableNeighbor(node_2_2);
@@ -744,7 +744,7 @@ TEST_CASE("RoutingInformation Getter getRightmostNeighbor",
   REQUIRE(neighbor.isInitialized());
   REQUIRE(neighbor.getLevel() == 2);
   REQUIRE(neighbor.getNumber() == 7);
-  REQUIRE(neighbor.getNetworkInfo().getAddress() == "1.2.3.4");
+  REQUIRE(neighbor.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
 }
 
 TEST_CASE("RoutingInformation Getter getLeftmostNeighborChild",
@@ -761,13 +761,13 @@ TEST_CASE("RoutingInformation Getter getLeftmostNeighborChild",
   minhton::NodeInfo node_3_5(3, 5, (uint16_t)3);
   minhton::NodeInfo node_3_6(3, 6, (uint16_t)3);
 
-  node_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_3_3.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_3_4.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_3_5.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_3_6.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_3_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_3_4.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_3_5.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_3_6.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
 
   routing_info.updateRoutingTableNeighbor(node_2_1);
   routing_info.updateRoutingTableNeighbor(node_2_2);
@@ -787,7 +787,7 @@ TEST_CASE("RoutingInformation Getter getLeftmostNeighborChild",
   REQUIRE(neighbor.isInitialized());
   REQUIRE(neighbor.getLevel() == 3);
   REQUIRE(neighbor.getNumber() == 3);
-  REQUIRE(neighbor.getNetworkInfo().getAddress() == "1.2.3.4");
+  REQUIRE(neighbor.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
 }
 
 TEST_CASE("RoutingInformationGeneralHelper updateNeighbor",
@@ -800,34 +800,34 @@ TEST_CASE("RoutingInformationGeneralHelper updateNeighbor",
     minhton::NodeInfo parent_uninit(0, 0, fanout);
     minhton::NodeInfo parent_1(0, 0, fanout);
     minhton::NodeInfo parent_2(0, 0, fanout);
-    parent_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-    parent_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.5", 2001));
+    parent_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+    parent_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.5", 2001));
 
     minhton::NodeInfo child_uninit(2, 0, fanout);
     minhton::NodeInfo child_1_1(2, 0, fanout);
-    child_1_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+    child_1_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
     minhton::NodeInfo child_1_2(2, 0, fanout);
-    child_1_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.6", 2020));
+    child_1_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.6", 2020));
 
     minhton::NodeInfo child_2_1(2, 1, fanout);
-    child_2_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+    child_2_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
     minhton::NodeInfo child_2_2(2, 1, fanout);
-    child_2_2.setNetworkInfo(minhton::NetworkInfo("1.2.3.6", 2020));
+    child_2_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.6", 2020));
 
     minhton::NodeInfo adj_right_1 = parent_1;
     minhton::NodeInfo adj_right_2 = child_2_2;
 
     minhton::NodeInfo adj_left_1 = child_1_1;
     minhton::NodeInfo adj_left_2(3, 1, fanout);
-    adj_left_2.setNetworkInfo(minhton::NetworkInfo("1.2.7.5", 2201));
+    adj_left_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.7.5", 2201));
 
     minhton::NodeInfo rt_neighbor_1(1, 1, fanout);
-    rt_neighbor_1.setNetworkInfo(minhton::NetworkInfo("12.2.3.4", 2000));
+    rt_neighbor_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("12.2.3.4", 2000));
     minhton::NodeInfo rt_neighbor_2(1, 1, fanout);
-    rt_neighbor_2.setNetworkInfo(minhton::NetworkInfo("13.2.3.4", 2000));
+    rt_neighbor_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("13.2.3.4", 2000));
 
     minhton::NodeInfo rt_neighbor_child_1(2, 3, fanout);
-    rt_neighbor_child_1.setNetworkInfo(minhton::NetworkInfo("13.2.3.4", 2100));
+    rt_neighbor_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("13.2.3.4", 2100));
 
     // initial setting of adjacents
     REQUIRE_FALSE(routing_info.getAdjacentLeft().isValidPeer());

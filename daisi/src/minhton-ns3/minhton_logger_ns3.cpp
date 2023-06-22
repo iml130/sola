@@ -79,25 +79,26 @@ void MinhtonLoggerNs3::logFindQueryResult(const LoggerInfoAddFindQueryResult &in
   log_(getInsertStatement(kFindQueryResult, t));
 }
 
-// * MinhtonNetworkInfo
-TableDefinition kMinhtonNetworkInfo("MinhtonNetworkInfo",
-                                    {{"ApplicationUuid", "%s", true,
-                                      "DeviceApplication(ApplicationUuid)", true},
-                                     {"Ip", "%s", true},
-                                     {"Port", "%u", true}});
-static const std::string kCreateMinhtonNetworkInfo = getCreateTableStatement(kMinhtonNetworkInfo);
-static bool minhton_network_info_exists_ = false;
+// * MinhtonPhysicalNodeInfo
+TableDefinition kMinhtonPhysicalNodeInfo("MinhtonPhysicalNodeInfo",
+                                         {{"ApplicationUuid", "%s", true,
+                                           "DeviceApplication(ApplicationUuid)", true},
+                                          {"Ip", "%s", true},
+                                          {"Port", "%u", true}});
+static const std::string kCreateMinhtonPhysicalNodeInfo =
+    getCreateTableStatement(kMinhtonPhysicalNodeInfo);
+static bool minhton_p_node_info_exists_ = false;
 
-void MinhtonLoggerNs3::logNetworkInfo(const LoggerNetworkInfo &info) {
-  if (!minhton_network_info_exists_) {
-    log_(kCreateMinhtonNetworkInfo);
-    minhton_network_info_exists_ = true;
+void MinhtonLoggerNs3::logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) {
+  if (!minhton_p_node_info_exists_) {
+    log_(kCreateMinhtonPhysicalNodeInfo);
+    minhton_p_node_info_exists_ = true;
   }
 
   auto t = std::make_tuple(/* ApplicationUuid */ uuid_.c_str(),
                            /* Ip */ info.ip.c_str(),
                            /* Port */ info.port);
-  log_(getInsertStatement(kMinhtonNetworkInfo, t));
+  log_(getInsertStatement(kMinhtonPhysicalNodeInfo, t));
 }
 
 // * MinhtonNode
@@ -171,7 +172,7 @@ ViewDefinition kNodeStateReplacements = {
 static const std::string kCreateViewMinhtonNodeState = getCreateViewStatement(
     kMinhtonNodeState, kNodeStateReplacements,
     {"LEFT JOIN MinhtonNode AS N1 ON MinhtonNodeState.PositionUuid = N1.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS Net1 ON N1.ApplicationUuid = Net1.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS Net1 ON N1.ApplicationUuid = Net1.ApplicationUuid",
      "LEFT JOIN enumMinhtonNodeState ON MinhtonNodeState.State = enumMinhtonNodeState.Id"});
 
 void MinhtonLoggerNs3::logNodeUninit(const LoggerInfoNodeState &info) {
@@ -271,13 +272,16 @@ static const std::string kCreateViewMinhtonTraffic = getCreateViewStatement(
     kMinhtonTraffic, kTrafficReplacements,
     {"LEFT JOIN enumMinhtonMessageType ON MinhtonTraffic.MsgType = enumMinhtonMessageType.Id",
      "LEFT JOIN MinhtonNode AS SNode ON MinhtonTraffic.SenderNodeUuid = SNode.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS SNetwork ON SNode.ApplicationUuid = SNetwork.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS SNetwork ON SNode.ApplicationUuid = "
+     "SNetwork.ApplicationUuid",
      "LEFT JOIN MinhtonNode AS TNode ON MinhtonTraffic.TargetNodeUuid = TNode.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS TNetwork ON TNode.ApplicationUuid = TNetwork.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS TNetwork ON TNode.ApplicationUuid = "
+     "TNetwork.ApplicationUuid",
      "LEFT JOIN MinhtonNode AS Node1 ON MinhtonTraffic.PrimaryOtherNodeUuid = Node1.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS Network1 ON Node1.ApplicationUuid = Network1.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS Network1 ON Node1.ApplicationUuid = "
+     "Network1.ApplicationUuid",
      "LEFT JOIN MinhtonNode AS Node2 ON MinhtonTraffic.SecondaryOtherNodeUuid = Node2.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS Network2 ON Node2.ApplicationUuid = "
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS Network2 ON Node2.ApplicationUuid = "
      "Network2.ApplicationUuid"});
 
 void MinhtonLoggerNs3::logTraffic(const MessageLoggingInfo &info) {
@@ -409,9 +413,9 @@ ViewDefinition kRtReplacements = {
 static const std::string kCreateViewRoutingInfo = getCreateViewStatement(
     kRoutingInfo, kRtReplacements,
     {"LEFT JOIN MinhtonNode AS N1 ON RoutingInfo.NodeUuid = N1.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS Net1 ON N1.ApplicationUuid = Net1.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS Net1 ON N1.ApplicationUuid = Net1.ApplicationUuid",
      "LEFT JOIN MinhtonNode AS N2 ON RoutingInfo.NeighborNodeUuid = N2.PositionUuid",
-     "LEFT JOIN MinhtonNetworkInfo AS Net2 ON N2.ApplicationUuid = Net2.ApplicationUuid",
+     "LEFT JOIN MinhtonPhysicalNodeInfo AS Net2 ON N2.ApplicationUuid = Net2.ApplicationUuid",
      "LEFT JOIN enumMinhtonRelationship ON RoutingInfo.Relationship = enumMinhtonRelationship.Id"});
 
 void MinhtonLoggerNs3::logNeighbor(const LoggerInfoAddNeighbor &info) {
