@@ -75,7 +75,7 @@ void JoinAlgorithmGeneral::performAcceptChild(NodeInfo entering_node,
         "We have no free child position, but want to accept this child. Caused "
         "by an error in sweep join procedure!");
   }
-  entering_node.setPosition(new_child_position.getPeerInfo());
+  entering_node.setPosition(new_child_position.getLogicalNodeInfo());
 
   // calculate new adjacents for entering node locally
   // they are the clostest that we know
@@ -161,7 +161,7 @@ void JoinAlgorithmGeneral::continueAcceptChildProcedure(
   NodeInfo correct_adj_right;
 
   // left adjacent of entering node
-  if (requested_adjacent.getPeerInfo() < entering_node.getPeerInfo()) {
+  if (requested_adjacent.getLogicalNodeInfo() < entering_node.getLogicalNodeInfo()) {
     correct_adj_left = requested_adjacent;
     correct_adj_right = entering_node_adj_right_local;
   } else {
@@ -214,7 +214,7 @@ void JoinAlgorithmGeneral::processJoinAccept(const MessageJoinAccept &msg) {
   auto routing_table_neighbors = msg.getRoutingTableNeighbors();
 
   // set our position
-  getRoutingInfo()->setPosition(our_new_position.getPeerInfo());
+  getRoutingInfo()->setPosition(our_new_position.getLogicalNodeInfo());
   // logging that we are now an existing peer
   LOG_NODE(getSelfNodeInfo());
 
@@ -297,7 +297,8 @@ void JoinAlgorithmGeneral::processJoinAcceptAck(const MessageJoinAcceptAck &msg)
   auto our_adj_right = calcOurNewAdjacentRight(entering_node, entering_node_adjacent_left);
 
   // set our new information
-  uint16_t child_index = entering_node.getPeerInfo().getNumber() % getSelfNodeInfo().getFanout();
+  uint16_t child_index =
+      entering_node.getLogicalNodeInfo().getNumber() % getSelfNodeInfo().getFanout();
   getRoutingInfo()->setChild(entering_node, child_index, msg.getHeader().getRefEventId());
 
   if (our_adj_left.isInitialized()) {

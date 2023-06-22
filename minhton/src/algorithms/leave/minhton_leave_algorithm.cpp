@@ -130,7 +130,7 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
     // The current node emerged as the last node of the network
     case SearchProgress::kReplacementNode:
       LOG_INFO("FR Case 4");
-      if (msg.getTarget().getPeerInfo() != getSelfNodeInfo().getPeerInfo()) {
+      if (msg.getTarget().getLogicalNodeInfo() != getSelfNodeInfo().getLogicalNodeInfo()) {
         return;  // DROP DO NOT FORWARD TO INVALID NODES
       }
 

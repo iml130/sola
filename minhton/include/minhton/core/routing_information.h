@@ -63,7 +63,7 @@ public:
   ///
   /// \param peer_position information about our new position
   /// and fanout has to be set
-  void setPosition(const minhton::PeerInfo &peer_position);
+  void setPosition(const minhton::LogicalNodeInfo &peer_position);
 
   /// @brief Setting the status of our NodeInfo object
   /// @param status NodeStatus that the node will be set to
@@ -83,7 +83,7 @@ public:
   /// \returns the parent node
   minhton::NodeInfo getParent() const;
 
-  /// Sets the parent node. The PeerInfo need to have set the correct position.
+  /// Sets the parent node. The LogicalNodeInfo need to have set the correct position.
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
   /// We cannot set a parent if we are root.
@@ -322,7 +322,7 @@ public:
                                        uint64_t ref_event_id = 0);
 
   /// Resetting information about our child at the given position.
-  /// We will only reset the NetworkInfo. PeerInfo always stays the same.
+  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -337,7 +337,7 @@ public:
   void resetChild(uint16_t position, uint64_t ref_event_id = 0);
 
   /// Resetting information about our adjacent right.
-  /// We will reset NetworkInfo and PeerInfo.
+  /// We will reset NetworkInfo and LogicalNodeInfo.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -351,7 +351,7 @@ public:
   void resetAdjacentRight(uint64_t ref_event_id = 0);
 
   /// Resetting information about our adjacent left.
-  /// We will reset NetworkInfo and PeerInfo.
+  /// We will reset NetworkInfo and LogicalNodeInfo.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -366,8 +366,8 @@ public:
 
   /// Resetting information about a routing table neighbor.
   /// We do not need to know whether its in the left or right routing table.
-  /// Only PeerInfo is relevant, we ignore NetworkInfo.
-  /// We will only reset the NetworkInfo. PeerInfo always stays the same.
+  /// Only LogicalNodeInfo is relevant, we ignore NetworkInfo.
+  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -376,7 +376,7 @@ public:
   ///   this->routing_info.resetRoutingTableNeighbor(rt_neighbor);
   /// \endcode
   ///
-  /// \param routing_table_neighbor with the PeerInfo position which we want to reset
+  /// \param routing_table_neighbor with the LogicalNodeInfo position which we want to reset
   /// \param ref_event_id ID of the event which is the reason for this change
   ///
   bool resetRoutingTableNeighbor(const minhton::NodeInfo &routing_table_neighbor,
@@ -384,8 +384,8 @@ public:
 
   /// Resetting information about a routing table neighbor child or child.
   /// We do not need to know whether its in the left or right routing table or if its a child.
-  /// Only PeerInfo is relevant, we ignore NetworkInfo.
-  /// We will only reset the NetworkInfo. PeerInfo always stays the same.
+  /// Only LogicalNodeInfo is relevant, we ignore NetworkInfo.
+  /// We will only reset the NetworkInfo. LogicalNodeInfo always stays the same.
   ///
   /// RoutingInformation needs to be initialized properly beforehand.
   ///
@@ -394,8 +394,8 @@ public:
   ///   this->routing_info.resetChildOrRoutingTableNeighborChild(node);
   /// \endcode
   ///
-  /// \param routing_table_neighbor_child_or_child with the PeerInfo position which we want to
-  /// reset
+  /// \param routing_table_neighbor_child_or_child with the LogicalNodeInfo position which we want
+  /// to reset
   /// \param ref_event_id ID of the event which is the reason for this change
   ///
   bool resetChildOrRoutingTableNeighborChild(
@@ -454,7 +454,7 @@ public:
 
   ///
   /// Uninitializing the given position to remove.
-  /// We need to have the PeerInfo position set somewhere.
+  /// We need to have the LogicalNodeInfo position set somewhere.
   ///
   /// When we remove an adjacent, we reset the full NodeInfo.
   /// When we remove a non adjacent, we reset only NetworkInfo.
@@ -475,7 +475,7 @@ public:
 
   ///
   /// Setting the new NetworkInfo at the appropriate position.
-  /// We need to have the PeerInfo position set somewhere.
+  /// We need to have the LogicalNodeInfo position set somewhere.
   ///
   /// If a node has multiple roles (e.g. child and adjacent),
   /// both will be updated.
@@ -666,7 +666,7 @@ private:
   void initRoutingTableNeighborChildren(uint32_t parent_level, uint32_t parent_number);
 
   ///
-  /// Helper method to set the right PeerInfo positions into
+  /// Helper method to set the right LogicalNodeInfo positions into
   /// the parent and children neighbors.
   ///
   /// We leave the adjacents empty because their position can change.

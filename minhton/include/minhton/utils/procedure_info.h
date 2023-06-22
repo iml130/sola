@@ -15,7 +15,7 @@
 #include "minhton/core/definitions.h"
 #include "minhton/core/network_info.h"
 #include "minhton/core/node_info.h"
-#include "minhton/core/peer_info.h"
+
 namespace minhton {
 
 enum ProcedureKey : uint8_t {

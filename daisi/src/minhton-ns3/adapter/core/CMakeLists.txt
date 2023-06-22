@@ -87,17 +87,17 @@ target_include_directories(minhton_core_node_info_sim
 target_link_libraries(minhton_core_node_info_sim
   PUBLIC
     minhton_core_network_info
-    minhton_core_peer_info_sim
+    minhton_core_logical_node_info_sim
     minhton_message_serialize
 )
 
-# Peer Info
-add_library(minhton_core_peer_info_sim STATIC ${MINHTON_SOURCE_DIR}/src/core/peer_info.cpp)
-target_include_directories(minhton_core_peer_info_sim
+# Logical node info
+add_library(minhton_core_logical_node_info_sim STATIC ${MINHTON_SOURCE_DIR}/src/core/logical_node_info.cpp)
+target_include_directories(minhton_core_logical_node_info_sim
         PUBLIC
         ${MINHTON_SOURCE_DIR}/include
 )
-target_link_libraries(minhton_core_peer_info_sim
+target_link_libraries(minhton_core_logical_node_info_sim
   PUBLIC
     minhton_message_serialize
     minhton_utils_uuid_sim

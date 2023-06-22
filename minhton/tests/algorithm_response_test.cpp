@@ -59,8 +59,8 @@ TEST_CASE("ResponseAlgorithmGeneral processUpdateNeighbors",
   // update 3:2 as routing table neighbor child
 
   REQUIRE(!routing_info->getRoutingTableNeighborChildren()[0].isInitialized());
-  REQUIRE(routing_info->getRoutingTableNeighborChildren()[0].getPeerInfo() ==
-          node_3_2.getPeerInfo());
+  REQUIRE(routing_info->getRoutingTableNeighborChildren()[0].getLogicalNodeInfo() ==
+          node_3_2.getLogicalNodeInfo());
 
   MessageUpdateNeighbors msg3(
       header, {std::make_tuple(node_3_2, NeighborRelationship::kRoutingTableNeighborChild)});
@@ -254,7 +254,7 @@ TEST_CASE("ResponseAlgorithmGeneral processRemoveNeighbor",
   REQUIRE_NOTHROW(response_algo.process(msg1));
 
   REQUIRE(!routing_info->getChild(0).isInitialized());
-  REQUIRE(routing_info->getChild(0).getPeerInfo() == node_3_6.getPeerInfo());
+  REQUIRE(routing_info->getChild(0).getLogicalNodeInfo() == node_3_6.getLogicalNodeInfo());
 
   // remove
 
@@ -265,7 +265,8 @@ TEST_CASE("ResponseAlgorithmGeneral processRemoveNeighbor",
   REQUIRE_NOTHROW(response_algo.process(msg2));
 
   REQUIRE(!routing_info->getRoutingTableNeighbors()[0].isInitialized());
-  REQUIRE(routing_info->getRoutingTableNeighbors()[0].getPeerInfo() == node_2_1.getPeerInfo());
+  REQUIRE(routing_info->getRoutingTableNeighbors()[0].getLogicalNodeInfo() ==
+          node_2_1.getLogicalNodeInfo());
 
   // cannot remove
 

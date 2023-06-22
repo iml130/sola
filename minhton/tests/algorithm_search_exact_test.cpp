@@ -108,32 +108,32 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
 
     // 2:4 to 0:0
     se_algo.performSearchExact(NodeInfo(0, 0, fanout), query);
-    REQUIRE(((target_node.getPeerInfo() == PeerInfo(3, 17, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(3, 18, fanout))));
+    REQUIRE(((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 17, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 18, fanout))));
 
     // 2:4 to 1:0
     se_algo.performSearchExact(NodeInfo(1, 0, fanout), query);
-    REQUIRE(((target_node.getPeerInfo() == PeerInfo(3, 5, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(3, 6, fanout))));
+    REQUIRE(((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 5, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout))));
 
     // 2:4 to 1:1
     se_algo.performSearchExact(NodeInfo(1, 1, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 1, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 1, fanout)));
 
     // 2:4 to 3:23
     se_algo.performSearchExact(NodeInfo(3, 23, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 23, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 23, fanout)));
 
     // 2:4 to 2:6
     se_algo.performSearchExact(NodeInfo(2, 6, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(2, 6, fanout)));  // TODO
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 6, fanout)));  // TODO
 
     // 2:4 to 2:0
     // TODO here it would make much more sense to send to 2:1,
     // because its a direct neighbor to 2:0
     // 3:3 is not a direct neighbor, but closer horizontally
     se_algo.performSearchExact(NodeInfo(2, 0, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 3, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 3, fanout)));
   }
 
   SECTION("Fanout 4") {
@@ -215,53 +215,53 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
 
     // 1:1 to 0:0
     se_algo.performSearchExact(NodeInfo(0, 0, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(0, 0, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(0, 0, fanout)));
 
     // 1:1 to 2:6
     se_algo.performSearchExact(NodeInfo(2, 6, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(2, 6, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 6, fanout)));
 
     // 1:1 to 3:23
     se_algo.performSearchExact(NodeInfo(3, 23, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 23, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 23, fanout)));
 
     // 1:1 to 3:24
     se_algo.performSearchExact(NodeInfo(3, 24, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 24, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 24, fanout)));
 
     // 1:1 to 1:0
     se_algo.performSearchExact(NodeInfo(1, 0, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 0, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 0, fanout)));
 
     // 1:1 to 1:2
     se_algo.performSearchExact(NodeInfo(1, 2, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 2, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 2, fanout)));
 
     // 1:1 to 1:3
     se_algo.performSearchExact(NodeInfo(1, 3, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 3, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 3, fanout)));
 
     // non direct forwards
 
     // 1:1 to 3:0 -> over 2:0
     se_algo.performSearchExact(NodeInfo(3, 0, fanout), query);
-    REQUIRE((target_node.getPeerInfo() == PeerInfo(2, 0, fanout)));
+    REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 0, fanout)));
 
     // 1:1 to 3:3 -> over 2:0 or 2:1
     se_algo.performSearchExact(NodeInfo(3, 3, fanout), query);
-    REQUIRE(((target_node.getPeerInfo() == PeerInfo(2, 0, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(2, 1, fanout))));
+    REQUIRE(((target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 0, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 1, fanout))));
 
     // 1:1 to 3:4 -> over 2:0 or 2:1
     se_algo.performSearchExact(NodeInfo(3, 4, fanout), query);
-    REQUIRE(((target_node.getPeerInfo() == PeerInfo(2, 0, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(2, 1, fanout))));
+    REQUIRE(((target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 0, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 1, fanout))));
 
     // 1:1 to 3:31 -> over 2:7, 2:8 or 0:0
     se_algo.performSearchExact(NodeInfo(3, 31, fanout), query);
-    REQUIRE(((target_node.getPeerInfo() == PeerInfo(0, 0, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(2, 7, fanout)) ||
-             (target_node.getPeerInfo() == PeerInfo(2, 8, fanout))));
+    REQUIRE(((target_node.getLogicalNodeInfo() == LogicalNodeInfo(0, 0, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 7, fanout)) ||
+             (target_node.getLogicalNodeInfo() == LogicalNodeInfo(2, 8, fanout))));
   }
 
   // SECTION("Fanout 2 - 1") {
@@ -302,27 +302,27 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
 
   //   // 3:0 to 3:5
   //   se_algo.performSearchExact(NodeInfo(3, 5, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
 
   //   // 3:0 to 3:6
   //   se_algo.performSearchExact(NodeInfo(3, 6, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
 
   //   // 3:0 to 3:7
   //   se_algo.performSearchExact(NodeInfo(3, 7, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
 
   //   // 3:0 to 2:2
   //   se_algo.performSearchExact(NodeInfo(2, 2, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
 
   //   // 3:0 to 1:1
   //   se_algo.performSearchExact(NodeInfo(1, 1, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
 
   //   // 3:0 to 4:15
   //   se_algo.performSearchExact(NodeInfo(4, 15, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 4, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 4, fanout)));
   // }
 
   // SECTION("Fanout 2 - 2") {
@@ -378,44 +378,44 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
 
   //   // 3:4 to 1:1
   //   se_algo.performSearchExact(NodeInfo(1, 1, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 5, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 5, fanout)));
 
   //   // 3:4 to 3:6
   //   se_algo.performSearchExact(NodeInfo(3, 6, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 6, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout)));
 
   //   // 3:4 to 3:7
   //   se_algo.performSearchExact(NodeInfo(3, 7, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 6, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout)));
 
   //   // 3:4 to 4:15
   //   se_algo.performSearchExact(NodeInfo(4, 15, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 6, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout)));
 
   //   // 3:4 to 4:14
   //   se_algo.performSearchExact(NodeInfo(4, 14, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 6, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout)));
 
   //   // 3:4 to 2:3
   //   se_algo.performSearchExact(NodeInfo(2, 3, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 6, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 6, fanout)));
 
   //   // 3:4 to 4:11
   //   // we know 4:11, but according to the paper you cannot go over rtn children
   //   se_algo.performSearchExact(NodeInfo(4, 11, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 5, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 5, fanout)));
 
   //   // 3:4 to 3:2
   //   se_algo.performSearchExact(NodeInfo(3, 2, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 2, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 2, fanout)));
 
   //   // 3:4 to 3:0
   //   se_algo.performSearchExact(NodeInfo(3, 0, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 0, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 0, fanout)));
 
   //   // 3:4 to 3:3
   //   se_algo.performSearchExact(NodeInfo(3, 3, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 3, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 3, fanout)));
   // }
 
   // SECTION("Fanout 2 - 3") {
@@ -456,26 +456,26 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
 
   //   // 4:11 to 1:1
   //   se_algo.performSearchExact(NodeInfo(1, 1, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 1, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 1, fanout)));
 
   //   // 4:11 to 4:7
   //   se_algo.performSearchExact(NodeInfo(4, 7, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(4, 7, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(4, 7, fanout)));
 
   //   // 4:11 to 4:15
   //   se_algo.performSearchExact(NodeInfo(4, 15, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(4, 15, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(4, 15, fanout)));
 
   //   // 4:11 to 3:5
   //   se_algo.performSearchExact(NodeInfo(3, 5, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 5, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 5, fanout)));
 
   //   // 4:11 to 3:6
   //   se_algo.performSearchExact(NodeInfo(3, 6, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(1, 1, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(1, 1, fanout)));
 
   //   // 4:11 to 3:4
   //   se_algo.performSearchExact(NodeInfo(3, 4, fanout), query);
-  //   REQUIRE((target_node.getPeerInfo() == PeerInfo(3, 5, fanout)));
+  //   REQUIRE((target_node.getLogicalNodeInfo() == LogicalNodeInfo(3, 5, fanout)));
   // }
 }

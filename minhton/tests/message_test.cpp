@@ -285,10 +285,10 @@ TEST_CASE("MessageVariant ReplacementUpdate", "[MessageVariant][ReplacementUpdat
 
   MinhtonMessageHeader header(node2, node2, 99);
 
-  REQUIRE_THROWS(MessageReplacementUpdate(header, node1, node1, node2.getPeerInfo()));
-  REQUIRE_THROWS(MessageReplacementUpdate(header, node2, node1, node2.getPeerInfo()));
+  REQUIRE_THROWS(MessageReplacementUpdate(header, node1, node1, node2.getLogicalNodeInfo()));
+  REQUIRE_THROWS(MessageReplacementUpdate(header, node2, node1, node2.getLogicalNodeInfo()));
 
-  MessageReplacementUpdate msg(header, node2, node2, node2.getPeerInfo());
+  MessageReplacementUpdate msg(header, node2, node2, node2.getLogicalNodeInfo());
 
   REQUIRE(msg.getHeader().getRefEventId() == 99);
   REQUIRE(msg.getHeader().getMessageType() == MessageType::kReplacementUpdate);

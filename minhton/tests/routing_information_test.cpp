@@ -14,13 +14,13 @@ TEST_CASE("RoutingInformation Default Constructor", "[RoutingInformation][Init]"
   minhton::RoutingInformation routing_info;
 
   REQUIRE_FALSE(routing_info.getParent().getNetworkInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getParent().getPeerInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
 
   REQUIRE_FALSE(routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getAdjacentLeft().getPeerInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
 
   REQUIRE_FALSE(routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getAdjacentRight().getPeerInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
 
   REQUIRE(routing_info.getChildren().size() == 0);
   REQUIRE(routing_info.getInitializedChildren().size() == 0);
@@ -39,14 +39,14 @@ TEST_CASE("RoutingInformation Constructor", "[RoutingInformation][Init]") {
   minhton::NodeInfo node(1, 1, fanout);
   minhton::RoutingInformation routing_info(node, Logger());
 
-  REQUIRE(routing_info.getParent().getPeerInfo().isInitialized());
+  REQUIRE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getParent().getNetworkInfo().isInitialized());
 
   REQUIRE_FALSE(routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getAdjacentLeft().getPeerInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
 
   REQUIRE_FALSE(routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getAdjacentRight().getPeerInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
 
   REQUIRE(routing_info.getChildren().size() == fanout);
   REQUIRE(routing_info.getInitializedChildren().size() == 0);
@@ -123,8 +123,8 @@ TEST_CASE("RoutingInformation Setter/Getter Child", "[RoutingInformation][Attrib
   minhton::NodeInfo node_2(0, 0, (uint16_t)2);
   minhton::RoutingInformation routing_info_2(node_2, Logger());
   REQUIRE(routing_info_2.getChildren().size() == 2);
-  REQUIRE(routing_info_2.getChildren()[0].getPeerInfo().isInitialized());
-  REQUIRE(routing_info_2.getChildren()[1].getPeerInfo().isInitialized());
+  REQUIRE(routing_info_2.getChildren()[0].getLogicalNodeInfo().isInitialized());
+  REQUIRE(routing_info_2.getChildren()[1].getLogicalNodeInfo().isInitialized());
   // setting at invalid position
   REQUIRE_THROWS_AS(routing_info_2.setChild(minhton::NodeInfo(), 3), std::out_of_range);
   REQUIRE_THROWS_AS(routing_info_2.setChild(minhton::NodeInfo(), 4), std::out_of_range);
@@ -159,7 +159,7 @@ TEST_CASE("RoutingInformation Setter/Getter Child", "[RoutingInformation][Attrib
 
   routing_info_2.resetChild(0);
   REQUIRE_FALSE(routing_info_2.getChild(0).isInitialized());
-  REQUIRE(routing_info_2.getChild(0).getPeerInfo().isInitialized());
+  REQUIRE(routing_info_2.getChild(0).getLogicalNodeInfo().isInitialized());
 
   REQUIRE_THROWS_AS(routing_info_2.resetChild(15), std::invalid_argument);
   REQUIRE_THROWS_AS(routing_info_2.getChild(2), std::out_of_range);
@@ -391,19 +391,19 @@ TEST_CASE("RoutingInformation setPosition", "[RoutingInformation][Methods][setPo
   REQUIRE(routing_info.getInitializedRoutingTableNeighborsAndChildren().size() == 1);
   REQUIRE(routing_info.getInitializedChildren().size() == 1);
 
-  minhton::PeerInfo peer_2_3(2, 1, fanout);
+  minhton::LogicalNodeInfo peer_2_3(2, 1, fanout);
   routing_info.setPosition(peer_2_3);
 
   REQUIRE(!routing_info.getParent().isInitialized());
-  REQUIRE(routing_info.getParent().getPeerInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentLeft().getPeerInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentRight().getPeerInfo().isInitialized());
+  REQUIRE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
   REQUIRE(routing_info.getInitializedRoutingTableNeighborsAndChildren().size() == 0);
   REQUIRE(routing_info.getInitializedChildren().size() == 0);
-  REQUIRE(routing_info.getChild(0).getPeerInfo().isInitialized());
-  REQUIRE(routing_info.getChild(1).getPeerInfo().isInitialized());
+  REQUIRE(routing_info.getChild(0).getLogicalNodeInfo().isInitialized());
+  REQUIRE(routing_info.getChild(1).getLogicalNodeInfo().isInitialized());
 
   routing_info.setParent(NodeInfo(1, 0, fanout, "2.3.4.5", 4000));
   routing_info.setAdjacentLeft(NodeInfo(1, 0, fanout, "2.2.4.5", 4000));
@@ -412,9 +412,9 @@ TEST_CASE("RoutingInformation setPosition", "[RoutingInformation][Methods][setPo
   routing_info.resetPosition(0);
 
   REQUIRE(!routing_info.getParent().isInitialized());
-  REQUIRE(!routing_info.getParent().getPeerInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentLeft().getPeerInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentRight().getPeerInfo().isInitialized());
+  REQUIRE(!routing_info.getParent().getLogicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
   REQUIRE(routing_info.getInitializedRoutingTableNeighborsAndChildren().size() == 0);

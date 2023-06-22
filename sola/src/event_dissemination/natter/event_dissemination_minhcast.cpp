@@ -117,7 +117,7 @@ void EventDisseminationMinhcast::joinMinhton(
       minhcast_->addPeer(
           topic, {{neighbor.node.getLevel(), neighbor.node.getNumber(), neighbor.node.getFanout()},
                   {neighbor.node.getAddress(), 2002},
-                  neighbor.node.getPeerInfo().getRawUuid()});
+                  neighbor.node.getLogicalNodeInfo().getRawUuid()});
     }
 
     if (!neighbor.ip_old.empty()) {

@@ -30,14 +30,14 @@ RoutingInformation::RoutingInformation(const minhton::NodeInfo &self_node_info,
 
 void RoutingInformation::resetPosition(uint64_t event_id) {
   auto temp_previous = self_node_info_;
-  self_node_info_.setPeerInfo(PeerInfo());
+  self_node_info_.setLogicalNodeInfo(LogicalNodeInfo());
   clearRoutingTable();
 
-  this->logger_.logNodeLeft({temp_previous.getPeerInfo().getUuid(), event_id});
+  this->logger_.logNodeLeft({temp_previous.getLogicalNodeInfo().getUuid(), event_id});
   notifyNodeInfoChange(temp_previous, self_node_info_);
 }
 
-void RoutingInformation::setPosition(const minhton::PeerInfo &peer_position) {
+void RoutingInformation::setPosition(const minhton::LogicalNodeInfo &peer_position) {
   auto temp_previous = self_node_info_;
   self_node_info_.setPosition(peer_position);
 
@@ -123,9 +123,9 @@ void RoutingInformation::notifyNeighborChange(const minhton::NodeInfo &new_node,
                                               NeighborRelationship relationship,
                                               uint64_t ref_event_id,
                                               const minhton::NodeInfo &old_node, uint16_t index) {
-  logger_.logNeighbor(
-      minhton::LoggerInfoAddNeighbor{ref_event_id, this->self_node_info_.getPeerInfo().getUuid(),
-                                     new_node.getPeerInfo().getUuid(), relationship});
+  logger_.logNeighbor(minhton::LoggerInfoAddNeighbor{
+      ref_event_id, this->self_node_info_.getLogicalNodeInfo().getUuid(),
+      new_node.getLogicalNodeInfo().getUuid(), relationship});
 
   for (const auto &subscription_callback : this->neighbor_change_subscription_callbacks_) {
     subscription_callback(new_node, relationship, old_node, index);
@@ -149,13 +149,14 @@ void RoutingInformation::setNodeStatus(NodeStatus status, uint64_t event_id) {
   // Log changed status
   switch (status) {
     case NodeStatus::kUninit:
-      this->logger_.logNodeUninit({this->self_node_info_.getPeerInfo().getUuid(), event_id});
+      this->logger_.logNodeUninit({this->self_node_info_.getLogicalNodeInfo().getUuid(), event_id});
       break;
     case NodeStatus::kRunning:
-      this->logger_.logNodeRunning({this->self_node_info_.getPeerInfo().getUuid(), event_id});
+      this->logger_.logNodeRunning(
+          {this->self_node_info_.getLogicalNodeInfo().getUuid(), event_id});
       break;
     case NodeStatus::kLeft:
-      this->logger_.logNodeLeft({this->self_node_info_.getPeerInfo().getUuid(), event_id});
+      this->logger_.logNodeLeft({this->self_node_info_.getLogicalNodeInfo().getUuid(), event_id});
       break;
     default:
       break;
@@ -174,13 +175,14 @@ void RoutingInformation::setParent(const minhton::NodeInfo &parent, uint64_t ref
     throw std::logic_error("Root cannot have a parent");
   }
 
-  if (this->parent_.getPeerInfo() != parent.getPeerInfo()) {
+  if (this->parent_.getLogicalNodeInfo() != parent.getLogicalNodeInfo()) {
     throw std::invalid_argument(
-        "The NodeInfo needs to have the correct PeerInfo position in the tree.");
+        "The NodeInfo needs to have the correct LogicalNodeInfo position in the tree.");
   }
 
   if (this->getFanout() != parent.getFanout()) {
-    throw std::invalid_argument("The Fanout needs to be set properly in the PeerInfo object");
+    throw std::invalid_argument(
+        "The Fanout needs to be set properly in the LogicalNodeInfo object");
   }
 
   if (!parent.isInitialized()) {
@@ -208,13 +210,14 @@ void RoutingInformation::setChild(const minhton::NodeInfo &child, uint16_t posit
     throw std::out_of_range("Position not in range");
   }
 
-  if (this->children_[position].getPeerInfo() != child.getPeerInfo()) {
+  if (this->children_[position].getLogicalNodeInfo() != child.getLogicalNodeInfo()) {
     throw std::invalid_argument(
-        "The NodeInfo needs to have the correct PeerInfo position in the tree.");
+        "The NodeInfo needs to have the correct LogicalNodeInfo position in the tree.");
   }
 
   if (this->getFanout() != child.getFanout()) {
-    throw std::invalid_argument("The Fanout needs to be set properly in the PeerInfo object");
+    throw std::invalid_argument(
+        "The Fanout needs to be set properly in the LogicalNodeInfo object");
   }
 
   if (!child.isInitialized()) {
@@ -253,7 +256,8 @@ void RoutingInformation::setAdjacentLeft(const minhton::NodeInfo &adjacent_left,
   }
 
   if (adjacent_left.getFanout() != this->getFanout()) {
-    throw std::invalid_argument("The Fanout needs to be set properly in the PeerInfo object");
+    throw std::invalid_argument(
+        "The Fanout needs to be set properly in the LogicalNodeInfo object");
   }
 
   if (!adjacent_left.isInitialized()) {
@@ -261,12 +265,12 @@ void RoutingInformation::setAdjacentLeft(const minhton::NodeInfo &adjacent_left,
   }
 
   // node is not to the left of us
-  if (adjacent_left.getPeerInfo().getHorizontalValue() >=
-      this->self_node_info_.getPeerInfo().getHorizontalValue()) {
+  if (adjacent_left.getLogicalNodeInfo().getHorizontalValue() >=
+      this->self_node_info_.getLogicalNodeInfo().getHorizontalValue()) {
     throw std::invalid_argument("Adjacent is not to the left of us");
   }
 
-  // if there is a difference in network info or peer info
+  // if there is a difference in network info or LogicalNodeInfo
   if (this->adjacent_left_ != adjacent_left) {
     minhton::NodeInfo node = adjacent_left;
     std::swap(this->adjacent_left_, node);
@@ -282,7 +286,8 @@ void RoutingInformation::setAdjacentRight(const minhton::NodeInfo &adjacent_righ
   }
 
   if (adjacent_right.getFanout() != this->getFanout()) {
-    throw std::invalid_argument("The Fanout needs to be set properly in the PeerInfo object");
+    throw std::invalid_argument(
+        "The Fanout needs to be set properly in the LogicalNodeInfo object");
   }
 
   if (!adjacent_right.isInitialized()) {
@@ -290,12 +295,12 @@ void RoutingInformation::setAdjacentRight(const minhton::NodeInfo &adjacent_righ
   }
 
   // node is not to the right of us
-  if (adjacent_right.getPeerInfo().getHorizontalValue() <=
-      this->self_node_info_.getPeerInfo().getHorizontalValue()) {
+  if (adjacent_right.getLogicalNodeInfo().getHorizontalValue() <=
+      this->self_node_info_.getLogicalNodeInfo().getHorizontalValue()) {
     throw std::invalid_argument("Adjacent is not to the right of us");
   }
 
-  // if there is a difference in network info or peer info
+  // if there is a difference in network info or LogicalNodeInfo
   if (this->adjacent_right_ != adjacent_right) {
     minhton::NodeInfo node = adjacent_right;
     std::swap(this->adjacent_right_, node);
@@ -337,7 +342,7 @@ bool RoutingInformation::resetRoutingTableNeighbor(const minhton::NodeInfo &rout
   }
 
   if (!routing_table_neighbor.isValidPeer()) {
-    throw std::invalid_argument("PeerInfo to reset is not initialized");
+    throw std::invalid_argument("LogicalNodeInfo to reset is not initialized");
   }
 
   auto it = std::lower_bound(this->routing_table_neighbors_.begin(),
@@ -345,7 +350,7 @@ bool RoutingInformation::resetRoutingTableNeighbor(const minhton::NodeInfo &rout
 
   // if the iterator is at the right position
   if (it != this->routing_table_neighbors_.end() &&
-      it->getPeerInfo() == routing_table_neighbor.getPeerInfo()) {
+      it->getLogicalNodeInfo() == routing_table_neighbor.getLogicalNodeInfo()) {
     // if we would actually change something by resetting
     if (it->getNetworkInfo().isInitialized()) {
       minhton::NodeInfo node = *it;
@@ -362,7 +367,7 @@ bool RoutingInformation::resetRoutingTableNeighbor(const minhton::NodeInfo &rout
 bool RoutingInformation::resetChildOrRoutingTableNeighborChild(
     const minhton::NodeInfo &routing_table_neighbor_child_or_child, uint64_t ref_event_id) {
   if (!routing_table_neighbor_child_or_child.isValidPeer()) {
-    throw std::invalid_argument("Childs PeerInfo to reset is not initialized");
+    throw std::invalid_argument("Childs LogicalNodeInfo to reset is not initialized");
   }
 
   if (routing_table_neighbor_child_or_child.getLevel() != this->self_node_info_.getLevel() + 1) {
@@ -372,11 +377,12 @@ bool RoutingInformation::resetChildOrRoutingTableNeighborChild(
   // if its our child, depening on the number
   if (routing_table_neighbor_child_or_child.getNumber() / this->self_node_info_.getFanout() ==
       this->self_node_info_.getNumber()) {
-    auto it = std::find_if(
-        this->children_.begin(), this->children_.end(), [&](const minhton::NodeInfo &child) {
-          return child.isInitialized() &&
-                 child.getPeerInfo() == routing_table_neighbor_child_or_child.getPeerInfo();
-        });
+    auto it = std::find_if(this->children_.begin(), this->children_.end(),
+                           [&](const minhton::NodeInfo &child) {
+                             return child.isInitialized() &&
+                                    child.getLogicalNodeInfo() ==
+                                        routing_table_neighbor_child_or_child.getLogicalNodeInfo();
+                           });
     if (it != this->children_.end()) {
       this->resetChild(it->getNumber() % this->getFanout(), ref_event_id);
       return true;

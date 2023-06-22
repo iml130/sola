@@ -8,7 +8,7 @@ from minhton.analysis.treemapper import treeMapper
 
 class Node:
     """
-        Simple class for nodes (peer info and network info) for comparison of nodes.
+        Simple class for nodes (LogicalNodeInfo and network info) for comparison of nodes.
     """
 
     def __init__(self, level, number, address, port, fanout):

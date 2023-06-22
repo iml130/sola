@@ -22,8 +22,8 @@ MessageJoinAccept::MessageJoinAccept(const MinhtonMessageHeader &header, uint16_
       routing_table_neighbors_(std::move(routing_table_neighbors)) {
   header_.setMessageType(MessageType::kJoinAccept);
 
-  MessageLoggingAdditionalInfo logging_info{getAdjacentLeft().getPeerInfo().getUuid(),
-                                            getAdjacentRight().getPeerInfo().getUuid(), ""};
+  MessageLoggingAdditionalInfo logging_info{getAdjacentLeft().getLogicalNodeInfo().getUuid(),
+                                            getAdjacentRight().getLogicalNodeInfo().getUuid(), ""};
   logging_info.content = "m=" + std::to_string(getFanout());
   header_.setAdditionalLoggingInfo(logging_info);
 

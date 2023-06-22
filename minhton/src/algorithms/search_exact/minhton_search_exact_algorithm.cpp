@@ -13,7 +13,7 @@
 namespace minhton {
 
 minhton::NodeInfo MinhtonSearchExactAlgorithm::calcClosestRedirect(double dest_value) {
-  double self_value = getSelfNodeInfo().getPeerInfo().getHorizontalValue();
+  double self_value = getSelfNodeInfo().getLogicalNodeInfo().getHorizontalValue();
   auto neighbors = getRoutingInfo()->getAllUniqueKnownExistingNeighbors();
 
   if (self_value < dest_value) {
@@ -21,7 +21,8 @@ minhton::NodeInfo MinhtonSearchExactAlgorithm::calcClosestRedirect(double dest_v
     // removing every neighbor from the left
     neighbors.erase(std::remove_if(neighbors.begin(), neighbors.end(),
                                    [&, self_value](const minhton::NodeInfo &node) {
-                                     return self_value > node.getPeerInfo().getHorizontalValue();
+                                     return self_value >
+                                            node.getLogicalNodeInfo().getHorizontalValue();
                                    }),
                     neighbors.end());
 
@@ -30,7 +31,8 @@ minhton::NodeInfo MinhtonSearchExactAlgorithm::calcClosestRedirect(double dest_v
     // removing every neighbor from the right
     neighbors.erase(std::remove_if(neighbors.begin(), neighbors.end(),
                                    [&, self_value](const minhton::NodeInfo &node) {
-                                     return self_value < node.getPeerInfo().getHorizontalValue();
+                                     return self_value <
+                                            node.getLogicalNodeInfo().getHorizontalValue();
                                    }),
                     neighbors.end());
   }
@@ -39,7 +41,7 @@ minhton::NodeInfo MinhtonSearchExactAlgorithm::calcClosestRedirect(double dest_v
   double best_diff = std::fabs(self_value - dest_value);
   auto best_node = getSelfNodeInfo();
   for (auto const &link : neighbors) {
-    double node_value = link.getPeerInfo().getHorizontalValue();
+    double node_value = link.getLogicalNodeInfo().getHorizontalValue();
     double current_diff = std::fabs(node_value - dest_value);
     if (current_diff < best_diff) {
       best_diff = current_diff;
