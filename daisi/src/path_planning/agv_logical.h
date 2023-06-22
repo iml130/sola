@@ -19,8 +19,8 @@
 
 #include <memory>
 
-#include "cpps/agv/topology.h"
 #include "cpps/amr/amr_kinematics.h"
+#include "cpps/amr/amr_topology.h"
 #include "logging/logger_manager.h"
 #include "ns3/socket.h"
 #include "path_planning/consensus/consensus_types.h"
@@ -39,7 +39,7 @@ namespace daisi::path_planning {
 //! and stores replications of Paxos instances.
 class AGVLogical {
 public:
-  AGVLogical(cpps::TopologyNs3 topology, consensus::ConsensusSettings consensus_settings,
+  AGVLogical(cpps::Topology topology, consensus::ConsensusSettings consensus_settings,
              bool first_node, const ns3::Ptr<ns3::Socket> &socket, uint32_t device_id);
 
   std::string getConnectionString() const;
@@ -71,7 +71,7 @@ private:
   std::shared_ptr<PathPlanningLoggerNs3> logger_;
   bool first_node_;  //!< TODO: Workaround to specify the node that is the first node in the overlay
   std::string uuid_;
-  cpps::TopologyNs3 topology_;
+  cpps::Topology topology_;
   uint32_t current_authority_station_id_ = UINT32_MAX;
   std::string current_authority_ip_ = "NONE";
   uint16_t current_authority_port_ = 0;

@@ -1,12 +1,3 @@
-add_library(daisi_cpps_common_boundaries INTERFACE)
-target_sources(daisi_cpps_common_boundaries
-        INTERFACE
-        boundaries.h
-)
-target_link_libraries(daisi_cpps_common_boundaries
-        INTERFACE
-        ns3::libcore
-)
 add_library(daisi_cpps_common_cpps_application STATIC)
 target_sources(daisi_cpps_common_cpps_application
         PRIVATE
@@ -35,7 +26,10 @@ target_link_libraries(daisi_cpps_common_cpps_logger_ns3
         daisi_logging_definitions
 
         PRIVATE
+        solanet_serializer
         solanet_serialize
+        daisi_structure_helpers
+        ns3::libcore
 )
 
 add_library(daisi_cpps_common_cpps_manager STATIC)
@@ -45,27 +39,23 @@ target_sources(daisi_cpps_common_cpps_manager
         cpps_manager.h
 )
 target_link_libraries(daisi_cpps_common_cpps_manager
-        PUBLIC
-        ns3::libbridge
-        ns3::libcsma
-        ns3::libinternet
-        ns3::libcore
+        PRIVATE
         daisi_manager
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_common_cpps_application
-        daisi_cpps_model_kinematics
         daisi_cpps_amr_physical_amr_mobility_model_ns3
-        daisi_cpps_common_boundaries
-        daisi_cpps_logical_algorithms_algorithm_config
-        daisi_cpps_logical_material_flow_material_flow_logical_agent
-        daisi_structure_helpers
-        PRIVATE
         daisi_cpps_amr_physical_amr_physical_asset
         daisi_cpps_logical_amr_amr_logical_agent
+        daisi_cpps_logical_material_flow_material_flow_logical_agent
+        daisi_cpps_logical_algorithms_algorithm_config
+        solanet_serializer
+        daisi_structure_helpers
+        ns3::libcore
         ns3::libwifi
-        daisi_minhton_logger_ns3
-        daisi_natter_logger_ns3
         ns3::libmobility
+        ns3::libbridge
+        ns3::libcsma
+        ns3::libinternet
         daisi_utils
         daisi_random_engine
 )

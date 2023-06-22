@@ -26,3 +26,18 @@ target_link_libraries(daisi_cpps_amr_model_amr_static_ability
 target_include_directories(daisi_cpps_amr_model_amr_static_ability
     PUBLIC
     ${DAISI_SOURCE_DIR}/src)
+
+add_library(daisi_cpps_amr_model_amr_fleet STATIC)
+target_sources(daisi_cpps_amr_model_amr_fleet
+    PRIVATE
+    amr_fleet.cpp
+    amr_fleet.h
+)
+target_link_libraries(daisi_cpps_amr_model_amr_fleet
+    PUBLIC
+    daisi_cpps_amr_model_amr_static_ability
+    daisi_cpps_amr_amr_kinematics
+)
+target_include_directories(daisi_cpps_amr_model_amr_fleet
+    PUBLIC
+    ${DAISI_SOURCE_DIR}/src)

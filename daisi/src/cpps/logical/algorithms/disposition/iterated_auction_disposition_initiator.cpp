@@ -16,7 +16,7 @@
 
 #include "iterated_auction_disposition_initiator.h"
 
-#include "cpps/model/agv_fleet.h"
+#include "cpps/amr/model/amr_fleet.h"
 #include "ns3/simulator.h"
 
 namespace daisi::cpps::logical {
@@ -48,11 +48,11 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
 }
 
 daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() {
-  auto available_abilities = AGVFleet::get().getAllExistingAbilities();
+  auto available_abilities = AmrFleet::get().getAllExistingAbilities();
   uint8_t topic_counter = 0;
 
   for (const auto &ability : available_abilities) {
-    std::string topic_for_ability = AGVFleet::get().getTopicForAbility(ability);
+    std::string topic_for_ability = AmrFleet::get().getTopicForAbility(ability);
 
     ability_topic_mapping_[ability] = topic_for_ability;
 
@@ -188,7 +188,7 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
 
   for (const auto &task : tasks) {
     auto fitting_abilities =
-        AGVFleet::get().getFittingExistingAbilities(task.getAbilityRequirement());
+        AmrFleet::get().getFittingExistingAbilities(task.getAbilityRequirement());
     for (const auto &ability : fitting_abilities) {
       task_ability_mapping[ability].push_back(task);
     }

@@ -18,9 +18,9 @@
 
 #include <cassert>
 
+#include "cpps/amr/model/amr_fleet.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/common/uuid_generator.h"
-#include "cpps/model/agv_fleet.h"
 #include "delivery_station.h"
 #include "destination.h"
 #include "intersection_set.h"
@@ -45,14 +45,14 @@ PathPlanningManager::PathPlanningManager(const std::string &scenario_config_file
 
   parse();
 
-  topology_ = cpps::TopologyNs3(
+  topology_ = cpps::Topology(
       {6 + 6 + static_cast<double>(number_delivery_stations_) / 2 * delta_stations_,
        1 + 5 + (static_cast<double>(number_pickup_stations_) / 2 * delta_stations_) + 1 + 5, 0});
 
   // TODO Workaround - Simple task for logging should not depend on possible AGV kinematics
   cpps::amr::AmrStaticAbility ability(
       cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 100.0F);
-  cpps::AGVFleet::init({{ability, kinematics_}});
+  cpps::AmrFleet::init({{ability, kinematics_}});
 }
 
 void PathPlanningManager::setup() {

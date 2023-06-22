@@ -24,7 +24,7 @@
 
 namespace daisi::cpps {
 
-AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &data_model, const TopologyNs3 &topology,
+AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &data_model, const Topology &topology,
                                    int id_for_friendly, ns3::Ptr<ns3::Socket> socket)
     : amr_description_(data_model), socket_(socket) {
   // Topology
@@ -32,7 +32,7 @@ AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &data_model, const Topol
   topology_ = Topology({size.x, size.y, size.z});
 
   // AmrMobilityModelNs3
-  mobility_ = data_model.agv_device_descr.mobility;
+  // mobility_ = data_model.agv_device_descr.mobility;
 
   socket_->SetRecvCallback(MakeCallback(&AGVPhysicalBasic::readFromSocket, this));
 }
@@ -44,7 +44,7 @@ void AGVPhysicalBasic::connect(ns3::InetSocketAddress endpoint) {
 
   std::stringstream stream;
 
-  stream << agv_data_model_;
+  // stream << agv_data_model_;
 
   message.addMessage({stream.str(), 0});
   message.addMessage({generatePosUpdate(), 2});

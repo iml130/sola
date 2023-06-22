@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/model/agv_fleet.h"
+#include "cpps/amr/model/amr_fleet.h"
 
 #include <sstream>
 
@@ -22,7 +22,7 @@ namespace daisi::cpps {
 
 /// as tau(t) of task t in thesis
 /// where ability_requirement is h(t)
-std::vector<amr::AmrStaticAbility> AGVFleet::getFittingExistingAbilities(
+std::vector<amr::AmrStaticAbility> AmrFleet::getFittingExistingAbilities(
     const amr::AmrStaticAbility &ability_requirement) {
   std::vector<amr::AmrStaticAbility> fitting_abilities;
   for (auto const &[existing_ability, _] : infos_) {
@@ -34,7 +34,7 @@ std::vector<amr::AmrStaticAbility> AGVFleet::getFittingExistingAbilities(
   return fitting_abilities;
 }
 
-amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
+amr::AmrStaticAbility AmrFleet::getClosestExistingAbility(
     const amr::AmrStaticAbility &ability_requirement) {
   /*
   finding minimal element in tau(t), where h(t) = ability_requirement
@@ -77,7 +77,7 @@ amr::AmrStaticAbility AGVFleet::getClosestExistingAbility(
 }
 
 /// \mathcal{G} = {G1, G2, ...} in thesis
-std::vector<amr::AmrStaticAbility> AGVFleet::getAllExistingAbilities() {
+std::vector<amr::AmrStaticAbility> AmrFleet::getAllExistingAbilities() {
   std::vector<amr::AmrStaticAbility> abilities;
   for (auto const &[ability, _] : infos_) {
     abilities.push_back(ability);
@@ -85,7 +85,7 @@ std::vector<amr::AmrStaticAbility> AGVFleet::getAllExistingAbilities() {
   return abilities;
 }
 
-std::string AGVFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
+std::string AmrFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
   std::ostringstream stream;
   stream << "topic";
   stream << ability;
@@ -93,7 +93,7 @@ std::string AGVFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
   return topic;
 }
 
-AmrKinematics AGVFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
+AmrKinematics AmrFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
   for (auto const &[existing_ability, kinematics] : infos_) {
     if (ability == existing_ability) {
       return kinematics;

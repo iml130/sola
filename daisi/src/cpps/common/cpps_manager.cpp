@@ -24,11 +24,11 @@
 #include <unordered_map>
 
 #include "../src/logging/logger.h"
+#include "cpps/amr/model/amr_fleet.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
 #include "cpps/logical/algorithms/algorithm_config.h"
 #include "cpps/logical/amr/amr_logical_agent.h"
-#include "cpps/model/agv_fleet.h"
 #include "ns3/core-module.h"
 #include "ns3/mobility-helper.h"
 #include "ns3/wifi-module.h"
@@ -50,11 +50,8 @@ CppsManager::CppsManager(const std::string &scenario_config_file)
 }
 
 void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description,
-                           const TopologyNs3 &topology) {
+                           const Topology &topology) {
   const uint32_t device_id = agvs_.Get(agv_index)->GetId();
-
-  // Create applications
-  Topology amr_topology({topology.getWidth(), topology.getHeight(), 0});
 
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
@@ -63,7 +60,7 @@ void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description
   next_mobility_model =
       DynamicCast<AmrMobilityModelNs3>(agvs_.Get(agv_index)->GetObject<MobilityModel>());
 
-  AmrAssetConnector connector(description, amr_topology);
+  AmrAssetConnector connector(description, topology);
 
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
@@ -88,7 +85,7 @@ void CppsManager::setup() {
   // Setup AGVs
   assert(this->nodeContainer_.GetN() == getNumberOfNodes());
 
-  auto topology = TopologyNs3(ns3::Vector(width_, height_, depth_));
+  auto topology = Topology(util::Dimensions(width_, height_, depth_));
 
   ns3::MobilityHelper mob;
   mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX", ns3::DoubleValue(width_ * 0.2),
@@ -615,7 +612,7 @@ void CppsManager::parseAGVs() {
   //       ability});
   // }
 
-  AGVFleet::init(agv_infos);
+  AmrFleet::init(agv_infos);
 }
 
 void CppsManager::parseTOs() {
@@ -661,19 +658,6 @@ void CppsManager::parseTOs() {
       material_flow_models_[friendly_name] = info;
     }
   }
-}
-
-Boundaries CppsManager::parseBoundaries(
-    const std::shared_ptr<ScenariofileParser::Table> &description) {
-  Boundaries result;
-
-  double min_x = static_cast<double>(description->getRequired<uint64_t>("widthMin"));
-  double max_x = static_cast<double>(description->getRequired<uint64_t>("widthMax"));
-  double min_y = static_cast<double>(description->getRequired<uint64_t>("heightMin"));
-  double max_y = static_cast<double>(description->getRequired<uint64_t>("heightMax"));
-  result = {{min_x, min_y}, {max_x, max_y}};
-
-  return result;
 }
 
 void CppsManager::parseScenarioSequence() {

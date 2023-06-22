@@ -17,8 +17,8 @@
 #ifndef DAISI_AGV_PHYSICAL_BASIC_H_
 #define DAISI_AGV_PHYSICAL_BASIC_H_
 
-#include "cpps/agv/topology.h"
 #include "cpps/amr/amr_description.h"
+#include "cpps/amr/amr_topology.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "ns3/socket.h"
 
@@ -26,8 +26,7 @@ namespace daisi::cpps {
 
 class AGVPhysicalBasic {
 public:
-  AGVPhysicalBasic(const AmrDescription &data_model, const TopologyNs3 &topology,
-                   int id_for_friendly,
+  AGVPhysicalBasic(const AmrDescription &data_model, const Topology &topology, int id_for_friendly,
                    ns3::Ptr<ns3::Socket> socket);  // TODO WORKAROUND: id_for_friendly
 
   void connect(ns3::InetSocketAddress endpoint);

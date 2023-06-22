@@ -22,9 +22,8 @@
 #include <queue>
 #include <unordered_map>
 
-#include "cpps/agv/topology.h"
+#include "cpps/amr/amr_topology.h"
 #include "cpps/amr/model/amr_static_ability.h"
-#include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/material_flow/material_flow_logical_agent.h"
@@ -88,7 +87,7 @@ private:
   virtual uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
-  void spawnAGV(uint32_t agv_index, const AmrDescription &properties, const TopologyNs3 &topology);
+  void spawnAGV(uint32_t agv_index, const AmrDescription &properties, const Topology &topology);
 
   void parse();
   void parseAGVs();
@@ -105,7 +104,6 @@ private:
   amr::AmrStaticAbility parseAGVAbility(
       std::shared_ptr<daisi::ScenariofileParser::Table> description);
 
-  Boundaries parseBoundaries(const std::shared_ptr<ScenariofileParser::Table> &description);
   void checkStarted(uint32_t index);
 
   uint64_t number_agvs_later_ = 0;

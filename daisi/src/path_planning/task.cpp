@@ -22,9 +22,9 @@
 
 namespace daisi::path_planning {
 
-std::ostream &operator<<(std::ostream &os, const Task &order) {
-  os << "OrderId: {" << order.uuid_ << "}, From: {" << order.getPickupLocation() << "}, To: {"
-     << order.getDeliveryLocation() << "}";
+std::ostream &operator<<(std::ostream &os, const Task &task) {
+  // os << "OrderId: {" << task.getUuid() << "}, From: {" << task.getPickupLocation() << "}, To: {"
+  //    << tas.getDeliveryLocation() << "}";
   return os;
 }
 
@@ -39,12 +39,12 @@ Task::Task(const std::string &uuid, const ns3::Vector &from, const ns3::Vector &
   to_x_ = to.x;
   to_y_ = to.y;
 
-  order_state_ = OrderStates::kCreated;
+  order_state_ = cpps::OrderStates::kCreated;
 }
 
-OrderStates Task::getOrderState() const { return order_state_; }
+cpps::OrderStates Task::getOrderState() const { return order_state_; }
 
-void Task::setOrderState(const OrderStates &state) { order_state_ = state; }
+void Task::setOrderState(const cpps::OrderStates &state) { order_state_ = state; }
 
 ns3::Vector Task::getPickupLocation() const { return ns3::Vector(from_x_, from_y_, 0); }
 
@@ -56,7 +56,7 @@ void Task::setCurrentPosition(const ns3::Vector &currentPosition) {
   current_pos_ = currentPosition;
 }
 
-std::string Task::getUUID() const { return uuid_; }
+std::string Task::getUuid() const { return uuid_; }
 
 void Task::setConnection(const std::string &connection) { connection_ = connection; }
 

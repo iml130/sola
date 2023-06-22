@@ -35,6 +35,7 @@
 #include "path_planning/message/misc/new_authority_agv.h"
 #include "path_planning/message/misc/reached_goal.h"
 #include "path_planning/path_planning_logger_ns_3.h"
+#include "path_planning/task.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 #include "station.h"
 #include "transport_order_info.h"

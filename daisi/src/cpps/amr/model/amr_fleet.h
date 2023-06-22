@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MODEL_AGV_FLEET_NS3_H_
-#define DAISI_MODEL_AGV_FLEET_NS3_H_
+#ifndef DAISI_CPPS_AMR_MODEL_AMR_FLEET_H_
+#define DAISI_CPPS_AMR_MODEL_AMR_FLEET_H_
 
 #include <optional>
 #include <stdexcept>
@@ -27,34 +27,34 @@
 
 namespace daisi::cpps {
 
-class AGVFleet {
-  using AGVInfo = std::pair<amr::AmrStaticAbility, AmrKinematics>;
+class AmrFleet {
+  using AmrInfo = std::pair<amr::AmrStaticAbility, AmrKinematics>;
 
 private:
-  std::vector<AGVInfo> infos_;
+  std::vector<AmrInfo> infos_;
 
-  static AGVFleet &getImpl(const std::optional<std::vector<AGVInfo>> &infos = std::nullopt) {
-    static AGVFleet instance{infos};
+  static AmrFleet &getImpl(const std::optional<std::vector<AmrInfo>> &infos = std::nullopt) {
+    static AmrFleet instance{infos};
     return instance;
   }
 
-  explicit AGVFleet(const std::optional<std::vector<AGVInfo>> &infos) {
+  explicit AmrFleet(const std::optional<std::vector<AmrInfo>> &infos) {
     if (!infos.has_value()) {
-      throw std::runtime_error("AGVFleet not initialized");
+      throw std::runtime_error("AmrFleet not initialized");
     }
 
     infos_ = infos.value();
   }
 
-  AGVFleet() = default;
+  AmrFleet() = default;
 
 public:
-  static AGVFleet &get() { return getImpl(); }
+  static AmrFleet &get() { return getImpl(); }
 
-  static void init(const std::vector<AGVInfo> &infos) { getImpl(infos); }
+  static void init(const std::vector<AmrInfo> &infos) { getImpl(infos); }
 
-  AGVFleet(AGVFleet const &) = delete;
-  void operator=(AGVFleet const &) = delete;
+  AmrFleet(AmrFleet const &) = delete;
+  void operator=(AmrFleet const &) = delete;
 
   // -----------------------------------------
 

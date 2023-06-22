@@ -20,7 +20,7 @@ target_sources(daisi_material_flow_model_action_order_step
 )
 target_link_libraries(daisi_material_flow_model_action_order_step
     PRIVATE
-    solanet_serialize
+    solanet_serializer
 )
 
 add_library(daisi_material_flow_model_action_order STATIC)

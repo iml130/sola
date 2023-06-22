@@ -22,8 +22,8 @@
 #include <unordered_map>
 #include <utility>
 
+#include "agv_physical_basic.h"
 #include "cpps/amr/amr_kinematics.h"
-#include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "manager/manager.h"
 #include "minhton/logging/logger_interface.h"
@@ -103,7 +103,7 @@ private:
   uint32_t number_pickup_stations_ = 0;
   uint32_t number_delivery_stations_ = 0;
   uint64_t number_agvs_ = 0;
-  cpps::TopologyNs3 topology_;
+  cpps::Topology topology_;
   uint64_t to_spawn_duration_ms_ = 0;
 
   // TODO Pack to topology

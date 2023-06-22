@@ -21,6 +21,12 @@ target_sources(PathPlanning
     time_calculation_helper.cpp
     next_to_mode.h
     time_calculation_helper.h
+    task.h
+    task.cpp
+    agv_logical.cpp
+    agv_logical.h
+    agv_physical_basic.cpp
+    agv_physical_basic.h
     message/serializer.cpp
     path_planning_logger_ns_3.cpp
     path_planning_logger_ns_3.h
@@ -53,8 +59,6 @@ target_link_libraries(PathPlanning
     ns3::libnetwork
     minhton_logging
     daisi_manager
-    daisi_cpps_agv_agv_physical_basic
-    daisi_cpps_logical_amr_amr_logical_agent
     daisi_cpps_common_cpps_logger_ns3
     daisi_sola_sola_ns3_wrapper
     daisi_logging_sqlite_helper

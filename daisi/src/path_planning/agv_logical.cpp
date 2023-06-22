@@ -32,7 +32,7 @@
 
 namespace daisi::path_planning {
 
-AGVLogical::AGVLogical(cpps::TopologyNs3 topology, consensus::ConsensusSettings consensus_settings,
+AGVLogical::AGVLogical(cpps::Topology topology, consensus::ConsensusSettings consensus_settings,
                        bool first_node, const ns3::Ptr<ns3::Socket> &socket, uint32_t device_id)
     : device_id_(device_id),
       socket_(socket),

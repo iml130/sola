@@ -168,7 +168,7 @@ void PickupStation::update(const std::string &agv_id) {
     ns3::Vector pickup(agv.current_to.delivery_station, -1, -1);
     ns3::Vector delivery(info_.station_id, -1, -1);
     Task task(agv.current_to.uuid, pickup, delivery);
-    // logger_->logTransportOrder(task.getUUID(), agv.current_to.delivery_station,
+    // logger_->logTransportOrder(task.getUuid(), agv.current_to.delivery_station,
     // info_.station_id);
     logger_->logPPTransportOrderUpdate(agv.current_to.uuid, 4);
   }

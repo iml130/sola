@@ -44,7 +44,7 @@ public:
   ns3::Vector getCurrentPosition() const;
   void setCurrentPosition(const ns3::Vector &currentPosition);
 
-  std::string getUUID() const;
+  std::string getUuid() const;
 
   void setConnection(const std::string &connection);
   std::string getConnection() const;

@@ -52,7 +52,7 @@ struct PathPlanningApplication final : public ns3::Application {
 
   void postInit();
 
-  void setTopology(cpps::TopologyNs3 topology) { topology_ = std::move(topology); };
+  void setTopology(cpps::Topology topology) { topology_ = std::move(topology); };
 
   /**
    * Creating \p number sockets connected to the IP of this application and injects them into the
@@ -75,7 +75,7 @@ struct PathPlanningApplication final : public ns3::Application {
 
 private:
   bool initialized_ = false;
-  cpps::TopologyNs3 topology_;
+  cpps::Topology topology_;
 
   void checkInitialized();
 };

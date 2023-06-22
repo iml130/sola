@@ -20,6 +20,7 @@
 #include <ctime>
 
 #include "SOLA/service.h"
+#include "cpps/model/order_states.h"
 #include "logging/definitions.h"
 #include "material_flow/model/task.h"
 

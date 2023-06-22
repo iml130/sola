@@ -16,6 +16,8 @@
 
 #include "cpps_logger_ns3.h"
 
+#include "ns3/simulator.h"
+
 #define TableDefinition static const DatabaseTable
 #define ViewDefinition static const std::unordered_map<std::string, std::string>
 
@@ -432,19 +434,19 @@ void CppsLoggerNs3::logTransportOrder(const material_flow::Task &task, uint32_t 
     transport_order_exists_ = true;
   }
 
-  double earliest_start = order.time_window.getEarliestStart();
-  double latest_finish = order.time_window.getLatestFinish();
+  double earliest_start = 42;  // order.time_window.getEarliestStart();
+  double latest_finish = 42;   // order.time_window.getLatestFinish();
 
-  std::string precedence_constraints;
-  for (const std::string &constraint_uuid : order.precedence_constraints.getConstraintUUIDs()) {
-    precedence_constraints += constraint_uuid + ";";
-  }
+  std::string precedence_constraints = "TODO";
+  // for (const std::string &constraint_uuid : order.precedence_constraints.getConstraintUUIDs()) {
+  //   precedence_constraints += constraint_uuid + ";";
+  // }
 
   auto table = kTransportOrder;
-  std::string task_uuid = task.getUUID();
+  std::string task_uuid = task.getUuid();
   std::string name = task.getName();
-  ns3::Vector3D start = task.getPickupLocation();
-  ns3::Vector3D stop = task.getDeliveryLocation();
+  ns3::Vector3D start = {0, 0, 0};  // task.getPickupLocation();
+  ns3::Vector3D stop = {0, 0, 0};   // task.getDeliveryLocation();
   std::string load_carrier_type = task.getAbilityRequirement().getLoadCarrier().getTypeAsString();
 
   if (mf_uuid.empty()) {
@@ -461,7 +463,7 @@ void CppsLoggerNs3::logTransportOrder(const material_flow::Task &task, uint32_t 
         // /* DeliveryStationId */ delivery_station_id,
         /* LoadCarrierType */
         load_carrier_type.c_str(),  // TODO: Change to id based field?
-        /* Weight_kg */ order.getAbilityRequirement().getMaxPayloadWeight(),
+        /* Weight_kg */ task.getAbilityRequirement().getMaxPayloadWeight(),
         /* EarliestStart_ms */ earliest_start,
         /* LatestFinish_ms */ latest_finish,
         /* PrecedenceConstraints */ precedence_constraints.c_str());
@@ -481,7 +483,7 @@ void CppsLoggerNs3::logTransportOrder(const material_flow::Task &task, uint32_t 
         // /* DeliveryStationId */ delivery_station_id,
         /* LoadCarrierType */
         load_carrier_type.c_str(),  // TODO: Change to id based field?
-        /* Weight_kg */ order.getAbilityRequirement().getMaxPayloadWeight(),
+        /* Weight_kg */ task.getAbilityRequirement().getMaxPayloadWeight(),
         /* EarliestStart_ms */ earliest_start,
         /* LatestFinish_ms */ latest_finish,
         /* PrecedenceConstraints */ precedence_constraints.c_str());
@@ -516,11 +518,12 @@ void CppsLoggerNs3::logTransportOrderUpdate(const material_flow::Task &task,
     transport_order_history_exists_ = true;
   }
 
-  ns3::Vector pos = order.getCurrentPosition();
-  auto order_state = order.getOrderState();
+  ns3::Vector pos = {0, 0, 0};  // order.getCurrentPosition();
+  // auto order_state = order.getOrderState();
+  OrderStates order_state = OrderStates::kCreated;
 
   std::string transport_order_id =
-      "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + order.getUUID() + "')";
+      "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + task.getUuid() + "')";
 
   auto table = kTransportOrderHistory;
   if (!assigned_agv.empty()) {
