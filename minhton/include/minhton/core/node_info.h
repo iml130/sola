@@ -10,7 +10,7 @@
 #include <string>
 
 #include "minhton/core/logical_node_info.h"
-#include "minhton/core/network_info.h"
+#include "minhton/core/physical_node_info.h"
 #include "minhton/message/serialize.h"
 
 namespace minhton {
@@ -18,8 +18,8 @@ namespace minhton {
 enum NodeStatus : uint8_t { kUninit = 0, kRunning = 1, kLeft = 2, kFailed = 3 };
 
 ///
-/// A NodeInfo is based on a LogicalNodeInfo and NetworkInfo. These two classes build the core of a
-/// node in our peer2peer network
+/// A NodeInfo is based on a LogicalNodeInfo and PhysicalNodeInfo. These two classes build the core
+/// of a node in our peer2peer network
 ///
 class NodeInfo {
 public:
@@ -57,23 +57,23 @@ public:
   ///
   void setLogicalNodeInfo(const minhton::LogicalNodeInfo &l_node_info);
 
-  /// \returns A NetworkInfo, which represents the remote host, by having a IPv4/IPv6 IP address and
-  /// a port
-  minhton::NetworkInfo getNetworkInfo() const;
+  /// \returns A PhysicalNodeInfo, which represents the remote host, by having a IPv4/IPv6 IP
+  /// address and a port
+  minhton::PhysicalNodeInfo getPhysicalNodeInfo() const;
 
   ///
-  /// Sets the NetworkInfo within the NodeInfo object
+  /// Sets the PhysicalNodeInfo within the NodeInfo object
   ///
-  /// \param network_info valid LogicalNodeInfo instance
+  /// \param p_node_info valid LogicalNodeInfo instance
   ///
-  void setNetworkInfo(const minhton::NetworkInfo &network_info);
+  void setPhysicalNodeInfo(const minhton::PhysicalNodeInfo &p_node_info);
 
   std::string getString() const;
 
   ///
   /// Returns the current state of the node if the node is properly initialized.
   /// If a node is initialized, it exists.
-  /// This method depends on initialized state of the LogicalNodeInfo and NetworkInfo
+  /// This method depends on initialized state of the LogicalNodeInfo and PhysicalNodeInfo
   ///
   /// Typical usage:
   /// \code
@@ -112,21 +112,21 @@ public:
   /// \returns true if the node consists of an actual known peer, otherwise false
   bool isValidPeer() const;
 
-  // -------------- NetworkInfo access Helper methods -------------------
+  // -------------- PhysicalNodeInfo access Helper methods -------------------
 
-  /// Helper method, which sets the port for NetworkInfo
+  /// Helper method, which sets the port for PhysicalNodeInfo
   void setPort(uint16_t port);
 
-  /// Helper method, which sets the address for NetworkInfo
+  /// Helper method, which sets the address for PhysicalNodeInfo
   void setAddress(const std::string &address);
 
-  /// \returns the port of NetworkInfo
+  /// \returns the port of PhysicalNodeInfo
   uint16_t getPort() const;
 
-  /// \returns the address of NetworkInfo
+  /// \returns the address of PhysicalNodeInfo
   std::string getAddress() const;
 
-  /// \returns a unique number representing the ip address of NetworkInfo
+  /// \returns a unique number representing the ip address of PhysicalNodeInfo
   uint32_t getAddressValue() const;
 
   friend bool operator==(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
@@ -136,11 +136,11 @@ public:
   friend bool operator>(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
   friend bool operator>=(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
 
-  SERIALIZE(l_node_info_, network_info_);
+  SERIALIZE(l_node_info_, p_node_info_);
 
 private:
   minhton::LogicalNodeInfo l_node_info_;
-  minhton::NetworkInfo network_info_;
+  minhton::PhysicalNodeInfo p_node_info_;
 
   NodeStatus status_{kUninit};
 };
@@ -151,7 +151,7 @@ struct NodeInfoHasher {
     using std::size_t;
 
     std::size_t peer_hash = minhton::LogicalNodeInfoHasher()(node.getLogicalNodeInfo());
-    std::size_t network_hash = minhton::NetworkInfoHasher()(node.getNetworkInfo());
+    std::size_t network_hash = minhton::PhysicalNodeInfoHasher()(node.getPhysicalNodeInfo());
 
     return peer_hash ^ network_hash;
   }

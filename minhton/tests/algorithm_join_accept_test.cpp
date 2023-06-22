@@ -522,7 +522,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (1:1) has no children, so new_child_1 should be (2:5), because its closest to (0:0)
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 2);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 5);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
@@ -531,7 +531,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (2:5) to (1:1) -> (2:4) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 2);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 2);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 4);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
@@ -540,7 +540,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (2:4) to (1:1) -> (2:3) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 2);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 3);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
@@ -550,7 +550,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     routing_info.setChild(new_child_3, 0);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 
 //   SECTION("Right Edge of Level 2, Fanout 3") {
@@ -559,7 +559,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (2:8) has no children, so new_child_1 should be (3:24), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 3);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 24);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
@@ -568,7 +568,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (3:24) to (2:8) -> (3:25) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 0);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 3);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 25);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
@@ -577,7 +577,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (3:25) to (2:8) -> (3:26) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 3);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 26);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
@@ -587,7 +587,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     routing_info.setChild(new_child_3, 2);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 
 //   SECTION("Left Edge of Level 4, Fanout 3") {
@@ -596,7 +596,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (4:0) has no children, so new_child_1 should be (5:2), because its closest to (0:0)
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 5);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 2);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
@@ -605,7 +605,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (5:2) to (4:0) -> (5:1) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 2);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 5);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 1);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
@@ -614,7 +614,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (5:1) to (4:0) -> (5:0) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_3.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 5);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 0);
 //     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
@@ -624,7 +624,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     routing_info.setChild(new_child_3, 0);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 // }
 
@@ -638,7 +638,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (2:1) has no children, so new_child_1 should be (3:3), because its closest to (0:0)
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.isInitialized());
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 3);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 3);
@@ -650,7 +650,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // adding child (3:3) to (2:1) -> (3:2) is only free position
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.isInitialized());
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 3);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 2);
@@ -663,7 +663,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (3:2) -> no free position left
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 
 //   SECTION("Left Edge of Level 3, Fanout 2") {
@@ -672,7 +672,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (2:1) has no children, so new_child_1_1 should be (3:3), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 4);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 1);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
@@ -681,7 +681,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (4:1) to (3:0) -> (4:1) is only free position
 //     routing_info.setChild(new_child_1, 1);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 4);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 0);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
@@ -691,7 +691,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     routing_info.setChild(new_child_2, 0);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 
 //   SECTION("Right Edge of Level 4, Fanout 2") {
@@ -700,7 +700,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // node (4:15) has no children, so new_child_1 should be (5:30), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
-//     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 5);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 30);
 //     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
@@ -709,7 +709,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // adding child (5:30) to (4:15) -> (5:31) is only free position
 //     routing_info.setChild(new_child_1, 0);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
-//     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
+//     new_child_2.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 5);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 31);
 //     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
@@ -719,7 +719,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
-//     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getPhysicalNodeInfo().isInitialized() == false);
 //   }
 // }
 
@@ -818,7 +818,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
 TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJoin]") {
   NodeInfo node;
-  node.setNetworkInfo(NetworkInfo("123.0.0.42", 2123));
+  node.setPhysicalNodeInfo(PhysicalNodeInfo("123.0.0.42", 2123));
 
   auto routing_info = std::make_shared<RoutingInformation>(node, Logger());
   auto access = std::make_shared<AccessContainer>();
@@ -849,12 +849,12 @@ TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJ
 
   MinhtonJoinAlgorithmForTest join_algo(access);
 
-  NetworkInfo target_network_info = NetworkInfo("1.2.3.4", 2020);
-  join_algo.initiateJoin(target_network_info);
+  PhysicalNodeInfo target_p_node_info = PhysicalNodeInfo("1.2.3.4", 2020);
+  join_algo.initiateJoin(target_p_node_info);
 
   REQUIRE(sent_msg_sender == node);
-  REQUIRE(sent_msg_target.getNetworkInfo() == target_network_info);
-  REQUIRE(sent_msg_entering_node.getNetworkInfo() == node.getNetworkInfo());
+  REQUIRE(sent_msg_target.getPhysicalNodeInfo() == target_p_node_info);
+  REQUIRE(sent_msg_entering_node.getPhysicalNodeInfo() == node.getPhysicalNodeInfo());
 
   // join accept response timeout must have been set
   REQUIRE(set_timeout_type == TimeoutType::kJoinAcceptResponseTimeout);
@@ -863,7 +863,7 @@ TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJ
 TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][processJoinAccept]") {
   SECTION("Fanout 2") {
     NodeInfo node;
-    node.setNetworkInfo(NetworkInfo("123.0.0.42", 2123));
+    node.setPhysicalNodeInfo(PhysicalNodeInfo("123.0.0.42", 2123));
 
     auto routing_info = std::make_shared<RoutingInformation>(node, Logger());
     auto access = std::make_shared<AccessContainer>();
@@ -898,7 +898,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
 
     NodeInfo parent(1, 0, fanout, "1.2.3.5", 2000);
     NodeInfo new_node(2, 1, fanout);
-    new_node.setNetworkInfo(node.getNetworkInfo());
+    new_node.setPhysicalNodeInfo(node.getPhysicalNodeInfo());
 
     NodeInfo adjacent_right(0, 0, fanout, "1.2.3.6", 2000);
     NodeInfo rt_neighbor_1(2, 0, fanout, "1.2.3.7", 2000);
@@ -938,7 +938,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
 
   SECTION("Fanout 5") {
     NodeInfo node;
-    node.setNetworkInfo(NetworkInfo("12.3.0.42", 2123));
+    node.setPhysicalNodeInfo(PhysicalNodeInfo("12.3.0.42", 2123));
 
     auto routing_info = std::make_shared<RoutingInformation>(node, Logger());
     auto access = std::make_shared<AccessContainer>();
@@ -972,7 +972,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
 
     NodeInfo parent(1, 3, fanout, "1.2.3.5", 2000);
     NodeInfo new_node(2, 16, fanout);
-    new_node.setNetworkInfo(node.getNetworkInfo());
+    new_node.setPhysicalNodeInfo(node.getPhysicalNodeInfo());
 
     NodeInfo adjacent_left(2, 15, fanout, "1.2.3.6", 2000);
     NodeInfo adjacent_right(2, 17, fanout, "1.2.3.6", 2000);
@@ -1142,8 +1142,8 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     auto adj_left_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_0.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_0_0.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_0.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_0_0.getPhysicalNodeInfo();
                      });
     REQUIRE(adj_left_update != update_neighbor_msg_contents.end());
 
@@ -1151,8 +1151,8 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     auto adj_right_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_0.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_1_0.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_0.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_1_0.getPhysicalNodeInfo();
                      });
     REQUIRE(adj_right_update == update_neighbor_msg_contents.end());
 
@@ -1160,8 +1160,8 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     auto rt_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_0.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_1_1.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_0.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_1_1.getPhysicalNodeInfo();
                      });
     REQUIRE(rt_update != update_neighbor_msg_contents.end());
   }
@@ -1274,16 +1274,16 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     auto adj_left_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_2_15.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_2_15.getPhysicalNodeInfo();
                      });
     REQUIRE(adj_left_update != update_neighbor_msg_contents.end());
 
     auto adj_right_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_2_17.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_2_17.getPhysicalNodeInfo();
                      });
     REQUIRE(adj_right_update != update_neighbor_msg_contents.end());
 
@@ -1291,8 +1291,8 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     auto rt_update =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_1_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_1_1.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_1_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_1_1.getPhysicalNodeInfo();
                      });
     REQUIRE(rt_update != update_neighbor_msg_contents.end());
   }
@@ -1368,48 +1368,48 @@ TEST_CASE("MinhtonJoinAlgorithm performSendUpdateNeighbor",
     auto update_2_1 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_2_1.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_2_1.getPhysicalNodeInfo();
                      });
     REQUIRE(update_2_1 != update_neighbor_msg_contents.end());
 
     auto update_2_2 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_2_1.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_2_1.getPhysicalNodeInfo();
                      });
     REQUIRE(update_2_2 != update_neighbor_msg_contents.end());
 
     auto update_3_4 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_3_4.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_3_4.getPhysicalNodeInfo();
                      });
     REQUIRE(update_3_4 != update_neighbor_msg_contents.end());
 
     auto update_3_5 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_3_5.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_3_5.getPhysicalNodeInfo();
                      });
     REQUIRE(update_3_5 != update_neighbor_msg_contents.end());
 
     auto update_3_7 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_3_7.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_3_7.getPhysicalNodeInfo();
                      });
     REQUIRE(update_3_7 != update_neighbor_msg_contents.end());
 
     auto not_update_3_2 =
         std::find_if(begin(update_neighbor_msg_contents), end(update_neighbor_msg_contents),
                      [&](std::vector<NodeInfo> nodes) {
-                       return nodes[0].getNetworkInfo() == node_2_3.getNetworkInfo() &&
-                              nodes[1].getNetworkInfo() == node_3_2.getNetworkInfo();
+                       return nodes[0].getPhysicalNodeInfo() == node_2_3.getPhysicalNodeInfo() &&
+                              nodes[1].getPhysicalNodeInfo() == node_3_2.getPhysicalNodeInfo();
                      });
     REQUIRE(not_update_3_2 == update_neighbor_msg_contents.end());
   }

@@ -159,9 +159,9 @@ protected:
   ///
   /// Removing the node of the removed position from our routing information if we have it.
   ///
-  /// Replacing the Network Information from the neighbor at the replaced position
+  /// Replacing the PhysicalNodeInfo from the neighbor at the replaced position
   /// with those from the removed position.
-  /// (Exchanging NetworkInformation of the leaving node with that of the replacing node.)
+  /// (Exchanging PhysicalNodeInfo of the leaving node with that of the replacing node.)
   ///
   /// Typical Usage:
   /// \code
@@ -181,12 +181,12 @@ protected:
   void performLeaveWithoutReplacement();
 
   ///
-  /// Performing the update of all network information in a leave with replacement
+  /// Performing the update of every PhysicalNodeInfo in a leave with replacement
   /// while we are the node replacing the leaving node.
   ///
   /// Sending RemoveNeighbor messages to nodes who only know the removed position,
   /// and ReplacementUpdate messages to nodes who know the replaced (and removed) position.
-  /// If we do not have the Network Information about the nodes we send via SearchExact.
+  /// If we do not have the network information about the nodes, we send via SearchExact.
   ///
   /// We also must update the adjacents of the removed position
   ///
@@ -255,7 +255,7 @@ protected:
   /// Replacing our own self_node_info and routing_info with the information
   /// that we got from the node to replace positions with.
   ///
-  /// But we keep our current Network Information!
+  /// But we keep our current PhysicalNodeInfo!
   ///
   /// We have to iterate through the given neighbor information and determine
   /// if the neighbor is a parent, child, adjacent, routing table neighbor etc.

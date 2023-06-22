@@ -38,8 +38,8 @@ void Logger::logDebug(const std::string &msg) const {
   }
 }
 
-void Logger::logNetworkInfo(const LoggerNetworkInfo &info) {
-  logCommand([&](const LoggerPtr &logger) { logger->logNetworkInfo(info); });
+void Logger::logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) {
+  logCommand([&](const LoggerPtr &logger) { logger->logPhysicalNodeInfo(info); });
 }
 
 void Logger::logNode(const LoggerInfoAddNode &info) {

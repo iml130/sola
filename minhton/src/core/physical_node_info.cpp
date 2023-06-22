@@ -4,7 +4,7 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#include "minhton/core/network_info.h"
+#include "minhton/core/physical_node_info.h"
 
 #include <arpa/inet.h>
 
@@ -18,12 +18,12 @@ static constexpr int kBitshift1{24};
 static constexpr int kBitshift2{16};
 static constexpr int kBitshift3{8};
 
-NetworkInfo::NetworkInfo() {
+PhysicalNodeInfo::PhysicalNodeInfo() {
   this->address_ = "";
   this->port_ = 0;
 }
 
-NetworkInfo::NetworkInfo(const std::string &address, uint16_t port) {
+PhysicalNodeInfo::PhysicalNodeInfo(const std::string &address, uint16_t port) {
   this->address_ = "";
   this->port_ = 0;
   try {
@@ -39,20 +39,20 @@ NetworkInfo::NetworkInfo(const std::string &address, uint16_t port) {
   }
 }
 
-uint16_t NetworkInfo::getPort() const { return this->port_; }
-std::string NetworkInfo::getAddress() const { return this->address_; }
+uint16_t PhysicalNodeInfo::getPort() const { return this->port_; }
+std::string PhysicalNodeInfo::getAddress() const { return this->address_; }
 
-void NetworkInfo::setPort(uint16_t port) {
+void PhysicalNodeInfo::setPort(uint16_t port) {
   if (port < PORT_MIN || port >= PORT_MAX) throw std::invalid_argument(INVALID_PORT);
 
   this->port_ = port;
 }
-void NetworkInfo::setAddress(std::string address) {
+void PhysicalNodeInfo::setAddress(std::string address) {
   if (address.length() == 0) {
     throw std::invalid_argument(INVALID_IP_ADDRESS);
   }
 
-  if (!NetworkInfo::isIpv4Address(address) && !NetworkInfo::isIpv6Address(address)) {
+  if (!PhysicalNodeInfo::isIpv4Address(address) && !PhysicalNodeInfo::isIpv6Address(address)) {
     throw std::invalid_argument(INVALID_IP_ADDRESS);
   }
 
@@ -60,28 +60,29 @@ void NetworkInfo::setAddress(std::string address) {
 }
 
 // methods for validation of an ip address
-bool NetworkInfo::isIpv4Address(const std::string &str) {
+bool PhysicalNodeInfo::isIpv4Address(const std::string &str) {
   struct sockaddr_in sa {};
   return inet_pton(AF_INET, str.c_str(), &(sa.sin_addr)) != 0;
 }
 
-bool NetworkInfo::isIpv6Address(const std::string &str) {
+bool PhysicalNodeInfo::isIpv6Address(const std::string &str) {
   struct sockaddr_in6 sa {};
   return inet_pton(AF_INET6, str.c_str(), &(sa.sin6_addr)) != 0;
 }
 
-std::string NetworkInfo::getString() const {
+std::string PhysicalNodeInfo::getString() const {
   return this->address_ + ":" + std::to_string(this->port_);
 }
 
 ///
 /// We are initialized, if our address and port are valid.
 ///
-bool NetworkInfo::isInitialized() const {
-  return this->port_ != 0 && !this->address_.empty() && NetworkInfo::isIpv4Address(this->address_);
+bool PhysicalNodeInfo::isInitialized() const {
+  return this->port_ != 0 && !this->address_.empty() &&
+         PhysicalNodeInfo::isIpv4Address(this->address_);
 }
 
-uint32_t NetworkInfo::getAddressValue() const {
+uint32_t PhysicalNodeInfo::getAddressValue() const {
   if (!this->isInitialized()) {
     return 0;
   }
@@ -110,33 +111,33 @@ uint32_t NetworkInfo::getAddressValue() const {
   return ip;
 }
 
-bool operator==(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator==(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return n1.getPort() == n2.getPort() && n1.getAddress() == n2.getAddress();
 }
 
-bool operator!=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator!=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return !(n1 == n2);
 }
 
-bool operator<(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator<(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return n1.getAddressValue() + n1.getPort() * pow(256,  // NOLINT(readability-magic-numbers)
                                                    4) <  // NOLINT(readability-magic-numbers)
          n2.getAddressValue() + n2.getPort() * pow(256,  // NOLINT(readability-magic-numbers)
                                                    4);   // NOLINT(readability-magic-numbers)
 }
 
-bool operator<=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator<=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return n1.getAddressValue() + n1.getPort() * pow(256,   // NOLINT(readability-magic-numbers)
                                                    4) <=  // NOLINT(readability-magic-numbers)
          n2.getAddressValue() + n2.getPort() * pow(256,   // NOLINT(readability-magic-numbers)
                                                    4);    // NOLINT(readability-magic-numbers)
 }
 
-bool operator>(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator>(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return !(n1 <= n2);
 }
 
-bool operator>=(const minhton::NetworkInfo &n1, const minhton::NetworkInfo &n2) {
+bool operator>=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2) {
   return !(n1 < n2);
 }
 

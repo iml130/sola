@@ -5,7 +5,7 @@
 
 ## NodeInfo
 
-This class can be used to represent all information about a neighbor node or a node itself. It contains logical information about e.g. the position in the tree and the fanout, and information about the physical layer like IP-address and port. The logical information are stored in the LogicalNodeInfo class and physical layer information in the NetworkInfo class.
+This class can be used to represent all information about a neighbor node or a node itself. It contains logical information about e.g. the position in the tree and the fanout, and information about the physical layer like IP-address and port. The logical information are stored in the LogicalNodeInfo class and physical layer information in the PhysicalNodeInfo class.
 
 The comparison operators are only comparing the LogicalNodeInfo objects and use directly the corresponding LogicalNodeInfo comparison operators.
 
@@ -25,7 +25,7 @@ The comparison operators are explicitly using the tree mapper function. This mea
 
 To compare different properties like the depth within the tree there are different methods like `isSameLevel()` or `isDeeperThan()`.
 
-### NetworkInfo
+### PhysicalNodeInfo
 
 This class contains the information about the physical layer, namely the IP-address and port. At the moment only ipv4 addresses are supported.
 
@@ -91,7 +91,7 @@ TODO: Port Figure to Draw.io and use an simpler example
 
 When using a setter method, the tree position of the NodeInfo objects needs to have a right position. When setting a neighbor with a static position, the set NodeInfo objects must have the exact same position. The parent position of 1:0 e.g. may never deviate from 0:0. When setting a neighbor with a dynamic position (adjacents) the position must be on the correct side of the node, e.g. with fanout 2 0:0 may not have a adjacent left neighbor like 1:1 because 1:1 is on the right side of 0:0. The adjacent left neighbor of 0:0 must always be on its left side, e.g.  1:0, 2:1 or 3:3.
 
-Also when using setters the NodeInfo object must always be initialized (must exist). If a NodeInfo object is not initialized, either NetworkInfo or LogicalNodeInfo are not initialized. LogicalNodeInfo always need to be initialized due to the correct tree position. NetworkInfo also must be initialized by having a correct IP-address and port.
+Also when using setters the NodeInfo object must always be initialized (must exist). If a NodeInfo object is not initialized, either PhysicalNodeInfo or LogicalNodeInfo are not initialized. LogicalNodeInfo always need to be initialized due to the correct tree position. PhysicalNodeInfo also must be initialized by having a correct IP-address and port.
 
 When you want to remove a neighbor (e.g. when the neighbor leaves) you cannot use setters for this purpose. You must explicitly use the reset methods to make the neighbor non-existent, to not accidentally remove a neighor somewhere else. A reset method for the parent node is not supported, because it would logically not make sense to remove the parent node.
 

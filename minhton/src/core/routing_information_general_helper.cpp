@@ -122,11 +122,11 @@ void RoutingInformation::updateRoutingTableNeighbor(minhton::NodeInfo routing_ta
   if (it != this->routing_table_neighbors_.end() &&
       it->getLogicalNodeInfo() == routing_table_neighbor.getLogicalNodeInfo()) {
     // if the network info to update is actually different
-    if (it->getNetworkInfo() != routing_table_neighbor.getNetworkInfo()) {
+    if (it->getPhysicalNodeInfo() != routing_table_neighbor.getPhysicalNodeInfo()) {
       minhton::NodeInfo old_node = *it;
       // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
       it->setLogicalNodeInfo(routing_table_neighbor.getLogicalNodeInfo());
-      it->setNetworkInfo(routing_table_neighbor.getNetworkInfo());
+      it->setPhysicalNodeInfo(routing_table_neighbor.getPhysicalNodeInfo());
       this->notifyNeighborChange(*it, kRoutingTableNeighbor, ref_event_id,
                                  old_node);  // TODO Index
     }
@@ -154,10 +154,10 @@ void RoutingInformation::updateRoutingTableNeighborChild(
   if (it != this->routing_table_neighbor_children_.end() &&
       it->getLogicalNodeInfo() == routing_table_neighbor_child.getLogicalNodeInfo()) {
     // if the network info to update is actually different
-    if (it->getNetworkInfo() != routing_table_neighbor_child.getNetworkInfo()) {
+    if (it->getPhysicalNodeInfo() != routing_table_neighbor_child.getPhysicalNodeInfo()) {
       // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
       it->setLogicalNodeInfo(routing_table_neighbor_child.getLogicalNodeInfo());
-      it->setNetworkInfo(routing_table_neighbor_child.getNetworkInfo());
+      it->setPhysicalNodeInfo(routing_table_neighbor_child.getPhysicalNodeInfo());
       this->notifyNeighborChange(routing_table_neighbor_child, kRoutingTableNeighborChild,
                                  ref_event_id);
     }
@@ -348,7 +348,7 @@ minhton::NodeInfo RoutingInformation::getLeftmostNeighborChild() const {
 }
 
 ///
-/// If there is a duplicate, we will chose the node where NetworkInfo is initialized
+/// If there is a duplicate, we will chose the node where PhysicalNodeInfo is initialized
 ///
 std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDuplicate(
     std::vector<minhton::NodeInfo> v1, const std::vector<minhton::NodeInfo> &v2) {
@@ -364,10 +364,10 @@ std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDu
       minhton::NodeInfo same_pos_node_in_result = *same_pos_it;
 
       if (same_pos_node_in_result.isValidPeer() &&
-          !same_pos_node_in_result.getNetworkInfo().isInitialized() &&
-          node1.getNetworkInfo().isInitialized()) {
+          !same_pos_node_in_result.getPhysicalNodeInfo().isInitialized() &&
+          node1.getPhysicalNodeInfo().isInitialized()) {
         // updaing node in result with network info
-        same_pos_it->setNetworkInfo(node1.getNetworkInfo());
+        same_pos_it->setPhysicalNodeInfo(node1.getPhysicalNodeInfo());
       }
 
     } else {

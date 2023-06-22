@@ -13,8 +13,8 @@
 
 #include "minhton/algorithms/esearch/find_query.h"
 #include "minhton/core/definitions.h"
-#include "minhton/core/network_info.h"
 #include "minhton/core/node_info.h"
+#include "minhton/core/physical_node_info.h"
 
 namespace minhton {
 

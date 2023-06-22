@@ -132,7 +132,7 @@ void DSNHandler::buildCoverArea() {
     auto cover_node = routing_info_->getNodeInfoByPosition(level, number);
 
     if (cover_node.isInitialized()) {
-      DistributedData distr_data(cover_node.getNetworkInfo());
+      DistributedData distr_data(cover_node.getPhysicalNodeInfo());
       cover_data_[cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
@@ -158,7 +158,7 @@ void DSNHandler::buildTempCoverArea() {
     auto cover_node = routing_info_->getNodeInfoByPosition(level, number);
 
     if (cover_node.isInitialized()) {
-      DistributedData distr_data(cover_node.getNetworkInfo());
+      DistributedData distr_data(cover_node.getPhysicalNodeInfo());
       cover_data_[cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
@@ -188,7 +188,7 @@ void DSNHandler::buildExtendedCoverArea() {
     auto extended_cover_node = routing_info_->getNodeInfoByPosition(level, number);
 
     if (extended_cover_node.isInitialized()) {
-      DistributedData distr_data(extended_cover_node.getNetworkInfo());
+      DistributedData distr_data(extended_cover_node.getPhysicalNodeInfo());
       extended_cover_data_[extended_cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
@@ -218,25 +218,25 @@ void DSNHandler::onNeighborChangeNotification(const minhton::NodeInfo &neighbor,
   auto it_cover_data = cover_data_.find(neighbor.getLogicalNodeInfo());
 
   // possible cases:
-  // network info init - inside -> update if different
-  // network info not init - inside -> delete
-  // network info init - not inside -> insert
-  // network info not init - not inside -> nothing
+  // PhysicalNodeInfo init - inside -> update if different
+  // PhysicalNodeInfo not init - inside -> delete
+  // PhysicalNodeInfo init - not inside -> insert
+  // PhysicalNodeInfo not init - not inside -> nothing
 
   bool inside = it_cover_data != cover_data_.end();
-  bool init = neighbor.getNetworkInfo().isInitialized();
+  bool init = neighbor.getPhysicalNodeInfo().isInitialized();
 
   if (inside && !init) {  // -> delete
     cover_data_.erase(it_cover_data);
 
-  } else if (inside && init) {  // -> update if different network info, otherwise nothing
-    if (it_cover_data->second.getNetworkInfo() != neighbor.getNetworkInfo()) {
+  } else if (inside && init) {  // -> update if different PhysicalNodeInfo, otherwise nothing
+    if (it_cover_data->second.getPhysicalNodeInfo() != neighbor.getPhysicalNodeInfo()) {
       // update
-      it_cover_data->second.setNetworkInfo(neighbor.getNetworkInfo());
+      it_cover_data->second.setPhysicalNodeInfo(neighbor.getPhysicalNodeInfo());
     }
 
   } else if (!inside && init) {  // -> insert
-    DistributedData distr_data(neighbor.getNetworkInfo());
+    DistributedData distr_data(neighbor.getPhysicalNodeInfo());
     cover_data_[neighbor.getLogicalNodeInfo()] = distr_data;
     requestAttributeInformation(neighbor.getLogicalNodeInfo(), distr_data);
   }
@@ -264,7 +264,7 @@ DSNHandler::getUndecidedNodesAndMissingKeys(FindQuery &query, bool all_informati
     if (val.isUndecided()) {
       NodeInfo undecided_node;
       undecided_node.setLogicalNodeInfo(peer);
-      undecided_node.setNetworkInfo(distr_data.getNetworkInfo());
+      undecided_node.setPhysicalNodeInfo(distr_data.getPhysicalNodeInfo());
 
       std::vector<NodeData::Key> missing_keys =
           query.evaluateMissingAttributes(distr_data, timestamp_now);
@@ -284,7 +284,7 @@ std::vector<NodeInfo> DSNHandler::getTrueNodes(FindQuery &query, const uint64_t 
     if (val.isTrue()) {
       NodeInfo true_node;
       true_node.setLogicalNodeInfo(peer);
-      true_node.setNetworkInfo(distr_data.getNetworkInfo());
+      true_node.setPhysicalNodeInfo(distr_data.getPhysicalNodeInfo());
 
       true_nodes.push_back(true_node);
     }
@@ -309,10 +309,10 @@ void DSNHandler::updateInquiredOrSubscribedAttributeValues(
 
   DistributedData &inquired_distr_data = inquired_distr_data_it->second;
 
-  if (inquired_distr_data.getNetworkInfo() != inquired_or_updated_node.getNetworkInfo()) {
-    if (!inquired_distr_data.getNetworkInfo().isInitialized() &&
-        inquired_or_updated_node.getNetworkInfo().isInitialized()) {
-      inquired_distr_data.setNetworkInfo(inquired_or_updated_node.getNetworkInfo());
+  if (inquired_distr_data.getPhysicalNodeInfo() != inquired_or_updated_node.getPhysicalNodeInfo()) {
+    if (!inquired_distr_data.getPhysicalNodeInfo().isInitialized() &&
+        inquired_or_updated_node.getPhysicalNodeInfo().isInitialized()) {
+      inquired_distr_data.setPhysicalNodeInfo(inquired_or_updated_node.getPhysicalNodeInfo());
     } else {
       throw std::logic_error("something has gone wrong");
     }
@@ -342,7 +342,7 @@ void DSNHandler::updateRemovedAttributes(const NodeInfo &inquired_node,
 
   DistributedData &inquired_distr_data = inquired_distr_data_it->second;
 
-  if (inquired_distr_data.getNetworkInfo() != inquired_node.getNetworkInfo()) {
+  if (inquired_distr_data.getPhysicalNodeInfo() != inquired_node.getPhysicalNodeInfo()) {
     throw std::logic_error("something has gone wrong");
   }
 
@@ -387,7 +387,7 @@ DSNHandler::getNodesAndKeysToSubscribe(uint64_t const &timestamp_now) {
       double req_frequency = DSNHandler::calculateFrequency(timestamps, timestamp_now);
       if (req_frequency >= min_req_frequency) {
         for (auto &[peer, distr_data] : cover_data_) {
-          if (distr_data.getNetworkInfo().isInitialized()) {
+          if (distr_data.getPhysicalNodeInfo().isInitialized()) {
             double update_frequency =
                 DSNHandler::calculateFrequency(distr_data.getUpdateTimestamps(key), timestamp_now);
 
@@ -396,7 +396,7 @@ DSNHandler::getNodesAndKeysToSubscribe(uint64_t const &timestamp_now) {
 
               NodeInfo node;
               node.setLogicalNodeInfo(peer);
-              node.setNetworkInfo(distr_data.getNetworkInfo());
+              node.setPhysicalNodeInfo(distr_data.getPhysicalNodeInfo());
 
               // if not subscribed yet
               if (!distr_data.isKeySubscribed(key)) {
@@ -423,7 +423,7 @@ DSNHandler::getNodesAndKeysToUnsubscribe(uint64_t const &timestamp_now) {
   std::vector<NodeData::Key> sub_keys;
 
   for (auto const &[peer, distr_data] : cover_data_) {
-    if (distr_data.getNetworkInfo().isInitialized()) {
+    if (distr_data.getPhysicalNodeInfo().isInitialized()) {
       auto sub_order_keys = distr_data.getSubscriptionOrderKeys();
 
       for (auto const &key : sub_order_keys) {
@@ -456,7 +456,7 @@ DSNHandler::getNodesAndKeysToUnsubscribe(uint64_t const &timestamp_now) {
   for (auto &[peer, distr_data, key] : current_sub_tuples) {
     NodeInfo node;
     node.setLogicalNodeInfo(peer);
-    node.setNetworkInfo(distr_data.getNetworkInfo());
+    node.setPhysicalNodeInfo(distr_data.getPhysicalNodeInfo());
 
     auto timestamps = distr_data.getUpdateTimestamps(key);
     double frequency = DSNHandler::calculateFrequency(timestamps, timestamp_now);
@@ -553,10 +553,10 @@ NodeData::Attributes DSNHandler::getNodeAttributes(const NodeInfo &node) {
 
 void DSNHandler::requestAttributeInformation(LogicalNodeInfo peer,
                                              const DistributedData &distr_data) {
-  if (distr_data.getNetworkInfo().isInitialized()) {
+  if (distr_data.getPhysicalNodeInfo().isInitialized()) {
     NodeInfo request_node;
     request_node.setLogicalNodeInfo(peer);
-    request_node.setNetworkInfo(distr_data.getNetworkInfo());
+    request_node.setPhysicalNodeInfo(distr_data.getPhysicalNodeInfo());
 
     request_attribute_inquiry_callback_(request_node);
   }

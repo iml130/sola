@@ -215,17 +215,17 @@ using namespace minhton;
 //   REQUIRE(data.getUpdateTimestamps("c").size() == data.getTimestampStorageLimit());
 // }
 
-// TEST_CASE("DistributedData NetworkInfo", "[NodeData][NetworkInfo]") {
+// TEST_CASE("DistributedData PhysicalNodeInfo", "[NodeData][PhysicalNodeInfo]") {
 //   DistributedData data;
 
-//   REQUIRE(!data.getNetworkInfo().isInitialized());
-//   data.setNetworkInfo(NetworkInfo("1.2.3.4", 20123));
+//   REQUIRE(!data.getPhysicalNodeInfo().isInitialized());
+//   data.setPhysicalNodeInfo(PhysicalNodeInfo("1.2.3.4", 20123));
 
-//   REQUIRE(data.getNetworkInfo().getAddress() == "1.2.3.4");
-//   REQUIRE(data.getNetworkInfo().getPort() == 20123);
+//   REQUIRE(data.getPhysicalNodeInfo().getAddress() == "1.2.3.4");
+//   REQUIRE(data.getPhysicalNodeInfo().getPort() == 20123);
 
-//   DistributedData data2(NetworkInfo("8.8.8.8", 1111));
+//   DistributedData data2(PhysicalNodeInfo("8.8.8.8", 1111));
 
-//   REQUIRE(data2.getNetworkInfo().getAddress() == "8.8.8.8");
-//   REQUIRE(data2.getNetworkInfo().getPort() == 1111);
+//   REQUIRE(data2.getPhysicalNodeInfo().getAddress() == "8.8.8.8");
+//   REQUIRE(data2.getPhysicalNodeInfo().getPort() == 1111);
 // }

@@ -40,7 +40,7 @@ public:
   void logNodeUninit(const LoggerInfoNodeState &info) final;
   void logNodeRunning(const LoggerInfoNodeState &info) final;
   void logNodeLeft(const LoggerInfoNodeState &info) final;
-  void logNetworkInfo(const LoggerNetworkInfo &info) final;
+  void logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) final;
   void logNode(const LoggerInfoAddNode &info) final;
   void logNeighbor(const LoggerInfoAddNeighbor &info) final;
   void logEvent(const LoggerInfoAddEvent &info) final;

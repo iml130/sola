@@ -99,12 +99,12 @@ void LogicContainer::processSignal(Signal &signal) {
     this->leave_algo_->initiateSelfDeparture();
   } else if (signal.signal_type == SignalType::kJoinNetwork) {
     if (signal.join_via_bootstrap) {
-      this->bootstrap_algo_->initiateJoin(NetworkInfo(signal.join_address, signal.join_port));
+      this->bootstrap_algo_->initiateJoin(PhysicalNodeInfo(signal.join_address, signal.join_port));
     } else {
       if (signal.join_nodeinfo.isInitialized()) {
         this->join_algo_->initiateJoin(signal.join_nodeinfo);
       } else {
-        this->join_algo_->initiateJoin(NetworkInfo(signal.join_address, signal.join_port));
+        this->join_algo_->initiateJoin(PhysicalNodeInfo(signal.join_address, signal.join_port));
       }
     }
   }

@@ -39,7 +39,7 @@ TEST_CASE("RoutingInformationTable getRoutingTableNeighbors",
   REQUIRE(routing_info.getRoutingTableNeighbors()[0].getLogicalNodeInfo() ==
           minhton::LogicalNodeInfo(2, 0, fanout));
   REQUIRE(routing_info.getRoutingTableNeighbors()[0].isValidPeer());
-  REQUIRE(routing_info.getRoutingTableNeighbors()[0].getNetworkInfo().isInitialized());
+  REQUIRE(routing_info.getRoutingTableNeighbors()[0].getPhysicalNodeInfo().isInitialized());
   REQUIRE(routing_info.getRoutingTableNeighbors()[0].isInitialized());
 }
 
@@ -60,7 +60,7 @@ TEST_CASE("RoutingInformationTable getRoutingTableNeighborChildren",
               .getLogicalNodeInfo()
               .isInitialized());
   REQUIRE_FALSE(routing_info.getRoutingTableNeighborChildren()[0 * fanout + 2]
-                    .getNetworkInfo()
+                    .getPhysicalNodeInfo()
                     .isInitialized());
   REQUIRE(routing_info.getRoutingTableNeighborChildren()[1 * fanout + 0].getLogicalNodeInfo() ==
           minhton::LogicalNodeInfo(3, 3, fanout));
@@ -68,7 +68,7 @@ TEST_CASE("RoutingInformationTable getRoutingTableNeighborChildren",
               .getLogicalNodeInfo()
               .isInitialized());
   REQUIRE_FALSE(routing_info.getRoutingTableNeighborChildren()[1 * fanout + 0]
-                    .getNetworkInfo()
+                    .getPhysicalNodeInfo()
                     .isInitialized());
 }
 

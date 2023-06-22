@@ -30,9 +30,9 @@ void JoinAlgorithmGeneral::initiateJoin(NodeInfo &node_info) {
   if (node_info.getAddress() == "255.255.255.255") {  // TODO 255. workaround
     // Should be retry
     assert(last_join_info_.isInitialized());
-    node_info.setNetworkInfo(last_join_info_);
+    node_info.setPhysicalNodeInfo(last_join_info_);
   } else {
-    last_join_info_ = node_info.getNetworkInfo();
+    last_join_info_ = node_info.getPhysicalNodeInfo();
   }
 
   this->access_->set_timeout(TimeoutType::kJoinAcceptResponseTimeout);
@@ -42,9 +42,9 @@ void JoinAlgorithmGeneral::initiateJoin(NodeInfo &node_info) {
   this->send(msg_join);
 }
 
-void JoinAlgorithmGeneral::initiateJoin(const NetworkInfo &network_info) {
+void JoinAlgorithmGeneral::initiateJoin(const PhysicalNodeInfo &p_node_info) {
   NodeInfo target_node_info;
-  target_node_info.setNetworkInfo(network_info);
+  target_node_info.setPhysicalNodeInfo(p_node_info);
   initiateJoin(target_node_info);
 }
 
@@ -243,7 +243,7 @@ void JoinAlgorithmGeneral::processJoinAccept(const MessageJoinAccept &msg) {
   MessageJoinAcceptAck msg_temp(header);
   this->send(msg_temp);
 
-  last_join_info_ = NetworkInfo();
+  last_join_info_ = PhysicalNodeInfo();
 }
 
 /// We are the parent of the node that has entered the network

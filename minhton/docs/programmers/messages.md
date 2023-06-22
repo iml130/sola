@@ -99,7 +99,7 @@ None.
 
 **Content**:
 
-- *Entering Node*: The node that wants to enter the network. NetworkInfo must be set appropriately.
+- *Entering Node*: The node that wants to enter the network. PhysicalNodeInfo must be set appropriately.
 
 ### Join Accept
 

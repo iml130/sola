@@ -27,8 +27,8 @@ public:
   /// Initiating a join without knowing an address to join to,
   /// but only a multicast address.
   ///
-  /// \param network_info multicast address to send bootstrap discover to
-  void initiateJoin(const NetworkInfo &network_info) override;
+  /// \param p_node_info multicast address to send bootstrap discover to
+  void initiateJoin(const PhysicalNodeInfo &p_node_info) override;
 
   /// This method will be called when we receive a MessageBootstrapDiscover message.
   ///

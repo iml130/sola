@@ -34,7 +34,7 @@ target_include_directories(minhton_algorithms_sim
 )
 target_link_libraries(minhton_algorithms_sim 
   PUBLIC
-    minhton_core_network_info
+    minhton_core_physical_node_info
     minhton_core_node_info_sim
     minhton_core_routing_table_sim
     minhton_message_serialize

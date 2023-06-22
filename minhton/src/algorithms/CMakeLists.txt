@@ -33,7 +33,7 @@ target_include_directories(minhton_algorithms PUBLIC
 
 target_link_libraries(minhton_algorithms 
   PUBLIC
-    minhton_core_network_info
+    minhton_core_physical_node_info
     minhton_core_node_info
     minhton_core_routing_table
     minhton_message_serialize

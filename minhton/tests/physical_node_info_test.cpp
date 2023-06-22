@@ -4,36 +4,36 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#include "core/network_info.h"
+#include "core/physical_node_info.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <unordered_map>
 
 using namespace minhton;
 
-TEST_CASE("NetworkInfoTest Constructor", "[NetworkInfo][Init]") {
+TEST_CASE("PhysicalNodeInfo Test Constructor", "[PhysicalNodeInfo][Init]") {
   // empty
-  minhton::NetworkInfo test;
+  minhton::PhysicalNodeInfo test;
   REQUIRE(test.getPort() == 0);
   REQUIRE(test.getAddress() == "");
 
   // with valid address and port
-  minhton::NetworkInfo test_2(IPv4_ADDRESS, IPv4_PORT);
+  minhton::PhysicalNodeInfo test_2(IPv4_ADDRESS, IPv4_PORT);
   REQUIRE(test_2.getPort() == IPv4_PORT);
   REQUIRE(test_2.getAddress() == IPv4_ADDRESS);
 
   // with invalid address
-  REQUIRE_THROWS_AS(new minhton::NetworkInfo("", IPv4_PORT), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo("", IPv4_PORT), std::invalid_argument);
 
   // with invalid port
-  REQUIRE_THROWS_AS(new minhton::NetworkInfo(IPv4_ADDRESS, 0), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo(IPv4_ADDRESS, 0), std::invalid_argument);
 
   // with invalid address and port
-  REQUIRE_THROWS_AS(new minhton::NetworkInfo("", 0), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo("", 0), std::invalid_argument);
 }
 
-TEST_CASE("NetworkInfo setPort getPort", "[NetworkInfo][Method][setPort getPort]") {
-  minhton::NetworkInfo test;
+TEST_CASE("PhysicalNodeInfo setPort getPort", "[PhysicalNodeInfo][Method][setPort getPort]") {
+  minhton::PhysicalNodeInfo test;
   uint16_t testValue = 1025;
 
   REQUIRE_NOTHROW(test.setPort(testValue));
@@ -42,9 +42,9 @@ TEST_CASE("NetworkInfo setPort getPort", "[NetworkInfo][Method][setPort getPort]
   REQUIRE_THROWS_AS(test.setPort(PORT_MIN - 1), std::invalid_argument);
 }
 
-TEST_CASE("NetworkInfo setAddress getAddress",
-          "[NetworkInfo][Method][setAddress getAddress][IPv4]") {
-  minhton::NetworkInfo test;
+TEST_CASE("PhysicalNodeInfo setAddress getAddress",
+          "[PhysicalNodeInfo][Method][setAddress getAddress][IPv4]") {
+  minhton::PhysicalNodeInfo test;
 
   // invalid
   REQUIRE_THROWS_AS(test.setAddress(""), std::invalid_argument);
@@ -79,31 +79,31 @@ TEST_CASE("NetworkInfo setAddress getAddress",
   REQUIRE(test.getAddress() == "fd12:3456:789f:1234:1234:1234:1234:1234");
 }
 
-TEST_CASE("NetworkInfo isInitialized", "[NetworkInfo][Method][isInitialized]") {
-  minhton::NetworkInfo test;
+TEST_CASE("PhysicalNodeInfo isInitialized", "[PhysicalNodeInfo][Method][isInitialized]") {
+  minhton::PhysicalNodeInfo test;
   REQUIRE_FALSE(test.isInitialized());
   test.setAddress("1.2.3.4");
   REQUIRE_FALSE(test.isInitialized());
   test.setPort(2906);
   REQUIRE(test.isInitialized());
 
-  minhton::NetworkInfo test_2;
+  minhton::PhysicalNodeInfo test_2;
   test_2.setPort(2908);
   REQUIRE_FALSE(test_2.isInitialized());
   test_2.setAddress("2.3.4.5");
   REQUIRE(test_2.isInitialized());
 
-  minhton::NetworkInfo test_3("12.3.4.5", 2999);
+  minhton::PhysicalNodeInfo test_3("12.3.4.5", 2999);
   REQUIRE(test_3.isInitialized());
 }
 
-TEST_CASE("NetworkInfo NetworkInfoHasher", "[NetworkInfo][NetworkInfoHasher]") {
-  minhton::NetworkInfo net_1("1.2.3.4", 2000);
-  minhton::NetworkInfo net_2("1.2.3.4", 2001);
-  minhton::NetworkInfo net_3("1.2.3.5", 2001);
+TEST_CASE("PhysicalNodeInfo PhysicalNodeInfoHasher", "[PhysicalNodeInfo][PhysicalNodeInfoHasher]") {
+  minhton::PhysicalNodeInfo net_1("1.2.3.4", 2000);
+  minhton::PhysicalNodeInfo net_2("1.2.3.4", 2001);
+  minhton::PhysicalNodeInfo net_3("1.2.3.5", 2001);
 
-  std::unordered_map<minhton::NetworkInfo, int, NetworkInfoHasher> test_map =
-      std::unordered_map<minhton::NetworkInfo, int, NetworkInfoHasher>();
+  std::unordered_map<minhton::PhysicalNodeInfo, int, PhysicalNodeInfoHasher> test_map =
+      std::unordered_map<minhton::PhysicalNodeInfo, int, PhysicalNodeInfoHasher>();
   test_map[net_1] = 1;
   test_map[net_2] = 2;
   test_map[net_3] = 3;
@@ -112,7 +112,7 @@ TEST_CASE("NetworkInfo NetworkInfoHasher", "[NetworkInfo][NetworkInfoHasher]") {
   REQUIRE(test_map[net_2] == 2);
   REQUIRE(test_map[net_3] == 3);
 
-  minhton::NetworkInfoHasher hasher = minhton::NetworkInfoHasher();
+  minhton::PhysicalNodeInfoHasher hasher = minhton::PhysicalNodeInfoHasher();
 
   REQUIRE(hasher(net_1) == hasher(net_1));
   REQUIRE(hasher(net_1) != hasher(net_2));
@@ -122,17 +122,17 @@ TEST_CASE("NetworkInfo NetworkInfoHasher", "[NetworkInfo][NetworkInfoHasher]") {
   REQUIRE(hasher(net_3) == hasher(net_3));
 }
 
-TEST_CASE("NetworkInfo Equal, Unequal", "[NetworkInfo][Equal, Unequal]") {
-  minhton::NetworkInfo p1("1.2.3.4", 2000);
-  minhton::NetworkInfo p2("1.2.3.5", 2000);
-  minhton::NetworkInfo p3("1.2.3.4", 2100);
-  minhton::NetworkInfo p4("1.7.3.4", 2000);
-  minhton::NetworkInfo p5("1.2.8.4", 2000);
-  minhton::NetworkInfo p6("1.2.3.4", 2070);
-  minhton::NetworkInfo p7("1.2.2.4", 2100);
-  minhton::NetworkInfo p8("1.2.3.4", 2009);
-  minhton::NetworkInfo p9("1.2.3.4", 2004);
-  minhton::NetworkInfo p10("1.2.3.4", 2200);
+TEST_CASE("PhysicalNodeInfo Equal, Unequal", "[PhysicalNodeInfo][Equal, Unequal]") {
+  minhton::PhysicalNodeInfo p1("1.2.3.4", 2000);
+  minhton::PhysicalNodeInfo p2("1.2.3.5", 2000);
+  minhton::PhysicalNodeInfo p3("1.2.3.4", 2100);
+  minhton::PhysicalNodeInfo p4("1.7.3.4", 2000);
+  minhton::PhysicalNodeInfo p5("1.2.8.4", 2000);
+  minhton::PhysicalNodeInfo p6("1.2.3.4", 2070);
+  minhton::PhysicalNodeInfo p7("1.2.2.4", 2100);
+  minhton::PhysicalNodeInfo p8("1.2.3.4", 2009);
+  minhton::PhysicalNodeInfo p9("1.2.3.4", 2004);
+  minhton::PhysicalNodeInfo p10("1.2.3.4", 2200);
 
   REQUIRE(p1 == p1);
   REQUIRE(p2 == p2);

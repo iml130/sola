@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "minhton/algorithms/algorithm_interface.h"
-#include "minhton/core/network_info.h"
+#include "minhton/core/physical_node_info.h"
 #include "minhton/message/message.h"
 #include "minhton/message/se_types.h"
 

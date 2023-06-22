@@ -80,8 +80,8 @@ template <typename T> T MinhtonMessage<T>::getFullMessage() const {
 
 template <typename T>
 bool MinhtonMessage<T>::validateHeader(const MinhtonMessageHeader &header) const {
-  return header.getSender().getNetworkInfo().isInitialized() &&
-         (header.getTarget().getNetworkInfo().isInitialized() ||
+  return header.getSender().getPhysicalNodeInfo().isInitialized() &&
+         (header.getTarget().getPhysicalNodeInfo().isInitialized() ||
           header.getTarget().getLogicalNodeInfo().isInitialized());
 }
 

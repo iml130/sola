@@ -13,17 +13,17 @@
 #include <vector>
 
 #include "minhton/algorithms/esearch/node_data.h"
-#include "minhton/core/network_info.h"
+#include "minhton/core/physical_node_info.h"
 
 namespace minhton {
 
 class DistributedData : public NodeData {
 public:
   DistributedData() = default;
-  explicit DistributedData(const NetworkInfo &network_info);
+  explicit DistributedData(const PhysicalNodeInfo &p_node_info);
 
-  void setNetworkInfo(const NetworkInfo &network_info);
-  NetworkInfo getNetworkInfo() const;
+  void setPhysicalNodeInfo(const PhysicalNodeInfo &p_node_info);
+  PhysicalNodeInfo getPhysicalNodeInfo() const;
 
   virtual bool insert(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
   virtual bool update(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
@@ -45,7 +45,7 @@ public:
   virtual bool isLocal() const override;
 
 private:
-  NetworkInfo network_info_;
+  PhysicalNodeInfo p_node_info_;
 
   // for which keys we have sent a subscription order
   std::vector<NodeData::Key> subscription_ordered_keys_;

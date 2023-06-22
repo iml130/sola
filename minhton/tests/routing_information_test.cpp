@@ -13,13 +13,13 @@ using namespace minhton;
 TEST_CASE("RoutingInformation Default Constructor", "[RoutingInformation][Init]") {
   minhton::RoutingInformation routing_info;
 
-  REQUIRE_FALSE(routing_info.getParent().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getParent().getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
 
-  REQUIRE_FALSE(routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentLeft().getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
 
-  REQUIRE_FALSE(routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentRight().getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
 
   REQUIRE(routing_info.getChildren().size() == 0);
@@ -40,12 +40,12 @@ TEST_CASE("RoutingInformation Constructor", "[RoutingInformation][Init]") {
   minhton::RoutingInformation routing_info(node, Logger());
 
   REQUIRE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
-  REQUIRE_FALSE(routing_info.getParent().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getParent().getPhysicalNodeInfo().isInitialized());
 
-  REQUIRE_FALSE(routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentLeft().getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
 
-  REQUIRE_FALSE(routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
+  REQUIRE_FALSE(routing_info.getAdjacentRight().getPhysicalNodeInfo().isInitialized());
   REQUIRE_FALSE(routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
 
   REQUIRE(routing_info.getChildren().size() == fanout);
@@ -104,7 +104,7 @@ TEST_CASE("RoutingInformation Setter/Getter Parent", "[RoutingInformation][Attri
   REQUIRE_THROWS_AS(routing_info_4.setParent(node_4_parent), std::invalid_argument);
 
   // setting initalized parent at right position
-  node_4_parent.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
+  node_4_parent.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
   REQUIRE(node_4_parent.isInitialized());
   REQUIRE_NOTHROW(routing_info_4.setParent(node_4_parent));
   REQUIRE(routing_info_4.getParent().getLevel() == 1);
@@ -137,15 +137,15 @@ TEST_CASE("RoutingInformation Setter/Getter Child", "[RoutingInformation][Attrib
   REQUIRE_THROWS_AS(routing_info_2.setChild(minhton::NodeInfo(1, 0, (uint16_t)3), 0),
                     std::invalid_argument);
 
-  // setting with uninitialized network info
+  // setting with uninitialized PhysicalNodeInfo
   minhton::NodeInfo node_2_child_0(1, 0, (uint16_t)2);
   minhton::NodeInfo node_2_child_1(1, 1, (uint16_t)2);
   REQUIRE_THROWS_AS(routing_info_2.setChild(node_2_child_0, 0), std::invalid_argument);
   REQUIRE_THROWS_AS(routing_info_2.setChild(node_2_child_1, 0), std::invalid_argument);
 
-  // setting correctly with initialized network inf
-  node_2_child_0.setNetworkInfo(minhton::NetworkInfo("1.2.3.4", 2000));
-  node_2_child_1.setNetworkInfo(minhton::NetworkInfo("1.2.3.5", 2001));
+  // setting correctly with initialized PhysicalNodeInfo
+  node_2_child_0.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.4", 2000));
+  node_2_child_1.setPhysicalNodeInfo(minhton::PhysicalNodeInfo("1.2.3.5", 2001));
   REQUIRE_NOTHROW(routing_info_2.setChild(node_2_child_0, 0));
   REQUIRE(routing_info_2.getChild(0).getLevel() == 1);
   REQUIRE(routing_info_2.getChild(0).getNumber() == 0);
@@ -181,7 +181,7 @@ TEST_CASE("RoutingInformation Setter/Getter AdjacentLeft AdjacentRight",
   REQUIRE_THROWS_AS(routing_info_5.setAdjacentRight(minhton::NodeInfo(1, 2, (uint16_t)3)),
                     std::invalid_argument);
 
-  // setting with uninitialized network info
+  // setting with uninitialized PhysicalNodeInfo
   REQUIRE_THROWS_AS(routing_info_5.setAdjacentLeft(minhton::NodeInfo(1, 1, (uint16_t)5)),
                     std::invalid_argument);
   REQUIRE_THROWS_AS(routing_info_5.setAdjacentRight(minhton::NodeInfo(1, 3, (uint16_t)5)),
@@ -398,8 +398,8 @@ TEST_CASE("RoutingInformation setPosition", "[RoutingInformation][Methods][setPo
   REQUIRE(routing_info.getParent().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentLeft().getPhysicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentRight().getPhysicalNodeInfo().isInitialized());
   REQUIRE(routing_info.getInitializedRoutingTableNeighborsAndChildren().size() == 0);
   REQUIRE(routing_info.getInitializedChildren().size() == 0);
   REQUIRE(routing_info.getChild(0).getLogicalNodeInfo().isInitialized());
@@ -415,8 +415,8 @@ TEST_CASE("RoutingInformation setPosition", "[RoutingInformation][Methods][setPo
   REQUIRE(!routing_info.getParent().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentLeft().getLogicalNodeInfo().isInitialized());
   REQUIRE(!routing_info.getAdjacentRight().getLogicalNodeInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentLeft().getNetworkInfo().isInitialized());
-  REQUIRE(!routing_info.getAdjacentRight().getNetworkInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentLeft().getPhysicalNodeInfo().isInitialized());
+  REQUIRE(!routing_info.getAdjacentRight().getPhysicalNodeInfo().isInitialized());
   REQUIRE(routing_info.getInitializedRoutingTableNeighborsAndChildren().size() == 0);
   REQUIRE(routing_info.getInitializedChildren().size() == 0);
 }

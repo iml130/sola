@@ -54,7 +54,7 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
 
   Logger log;
 
-  // TODO Temporary UUID generator. Should go to Node/Peer/Networkinfo
+  // TODO Temporary UUID generator. Should go to Node/L/P/NodeInfo
   minhton::UUID uuid = minhton::generateUUID();
   for (const Logger::LoggerPtr &logger : config.getLogger()) {
     logger->setApplicationUUID(uuid);
@@ -106,7 +106,7 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
 }
 
 void MinhtonNode::start(const JoinInfo &info, bool auto_connect) {
-  access_->logger.logNetworkInfo({network_facade_.getIP(), network_facade_.getPort()});
+  access_->logger.logPhysicalNodeInfo({network_facade_.getIP(), network_facade_.getPort()});
   const auto &l_node_info = getNodeInfo().getLogicalNodeInfo();
   access_->logger.logNode({l_node_info.getUuid(), l_node_info.getLevel(), l_node_info.getNumber(),
                            l_node_info.getFanout(), l_node_info.isInitialized()});

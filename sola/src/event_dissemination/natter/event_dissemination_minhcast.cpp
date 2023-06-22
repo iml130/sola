@@ -108,8 +108,8 @@ void EventDisseminationMinhcast::joinMinhton(
       // Subscribe when receiving first neighbor update
       minhcast_->subscribeTopic(topic, {{neighbor.ourself.getLevel(), neighbor.ourself.getNumber(),
                                          neighbor.ourself.getFanout()},
-                                        {neighbor.ourself.getNetworkInfo().getAddress(),
-                                         neighbor.ourself.getNetworkInfo().getPort()}});
+                                        {neighbor.ourself.getPhysicalNodeInfo().getAddress(),
+                                         neighbor.ourself.getPhysicalNodeInfo().getPort()}});
     }
 
     if (number_current_added == 1) {

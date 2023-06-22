@@ -20,6 +20,7 @@
 - *Routing Table (RT)*: Each node has a routing table which contains (the positon and network address of) other nodes on the same level. The other nodes are selected based on a formula from the BATON / BATON\* paper. Nodes in close proxmity are more likely to be included.
 - *TreeMapper value*: The TreeMapper assigns a floating-point value to each node. The value resembles the global horizontal value, defaulting to 100.0 for the root node, 50 for the node 1:0 and 150 for the node 1:1 with fanout 2.
 - *LogicalNodeInfo*: Logical information about a node like level and number.
+- *PhysicalNodeInfo*: Physical information about a node like networking information.
 
 ## Maintenance Algorithm
 
