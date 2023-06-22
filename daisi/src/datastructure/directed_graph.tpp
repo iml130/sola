@@ -18,6 +18,7 @@
 #define DAISI_DATASTRUCTURE_DIRECTED_GRAPH_IMPL_H_
 
 #include <algorithm>
+#include <stdexcept>
 
 #include "directed_graph.h"
 

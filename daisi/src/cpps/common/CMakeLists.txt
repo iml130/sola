@@ -1,16 +1,3 @@
-add_library(daisi_cpps_common_agv_description INTERFACE)
-target_sources(daisi_cpps_common_agv_description
-        INTERFACE
-        agv_description.h
-)
-target_link_libraries(daisi_cpps_common_agv_description
-        INTERFACE
-        ns3::libcore
-        daisi_cpps_amr_physical_amr_mobility_model_ns3
-        daisi_cpps_model_kinematics
-        daisi_cpps_amr_model_amr_static_ability
-)
-
 add_library(daisi_cpps_common_boundaries INTERFACE)
 target_sources(daisi_cpps_common_boundaries
         INTERFACE
@@ -44,8 +31,11 @@ target_sources(daisi_cpps_common_cpps_logger_ns3
 )
 target_link_libraries(daisi_cpps_common_cpps_logger_ns3
         PUBLIC
-        daisi_cpps_model_task
         sola_service
+        daisi_logging_definitions
+
+        PRIVATE
+        solanet_serialize
 )
 
 add_library(daisi_cpps_common_cpps_manager STATIC)
@@ -64,12 +54,11 @@ target_link_libraries(daisi_cpps_common_cpps_manager
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_common_cpps_application
         daisi_cpps_model_kinematics
-        daisi_cpps_common_agv_description
-        daisi_cpps_negotiation_mrta_configuration
         daisi_cpps_amr_physical_amr_mobility_model_ns3
         daisi_cpps_common_boundaries
         daisi_cpps_logical_algorithms_algorithm_config
         daisi_cpps_logical_material_flow_material_flow_logical_agent
+        daisi_structure_helpers
         PRIVATE
         daisi_cpps_amr_physical_amr_physical_asset
         daisi_cpps_logical_amr_amr_logical_agent

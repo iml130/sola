@@ -20,8 +20,8 @@
 #include <ctime>
 
 #include "SOLA/service.h"
-#include "cpps/model/task.h"
 #include "logging/definitions.h"
+#include "material_flow/model/task.h"
 
 namespace daisi::cpps {
 
@@ -98,14 +98,15 @@ public:
   // cpps specific logging functions
   void logMaterialFlow(const uint64_t &timestamp, const std::string &mf_uuid, const std::string &ip,
                        uint16_t port, uint8_t state);
-  void logTransportOrder(const Task &order, uint32_t pickup_station_id,
+  void logTransportOrder(const material_flow::Task &order, uint32_t pickup_station_id,
                          uint32_t delivery_station_id);
-  void logTransportOrder(const Task &order, uint32_t pickup_station_id,
+  void logTransportOrder(const material_flow::Task &order, uint32_t pickup_station_id,
                          uint32_t delivery_station_id, const std::string &mf_uuid);
   void logAGV(const AGVLoggingInfo &agv_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,
                   const std::vector<ns3::Vector2D> &additionalPositions = {});
-  void logTransportOrderUpdate(const Task &order, const std::string &assigned_agv = "");
+  void logTransportOrderUpdate(const material_flow::Task &order,
+                               const std::string &assigned_agv = "");
   void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
                                const std::string &assigned_agv);
   void logTransportService(const sola::Service &service, bool active);

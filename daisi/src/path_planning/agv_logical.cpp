@@ -19,7 +19,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "cpps/common/agv_description.h"
+#include "cpps/amr/amr_description.h"
 #include "cpps/common/uuid_generator.h"
 #include "cpps/packet.h"
 #include "minhton/utils/config_reader.h"
@@ -51,11 +51,12 @@ bool AGVLogical::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Addr
 }
 
 void AGVLogical::processMessageDescription(const std::string &payload) {
-  cpps::AgvDataModel data;
+  cpps::AmrDescription description;
 
-  std::istringstream stream(payload);
-  stream >> data;
-  kinematics_ = data.agv_properties.kinematic;
+  // TODO
+  // std::istringstream stream(payload);
+  // stream >> data;
+  kinematics_ = description.getKinematics();
 
   logAGV();
   std::cout << "AGV logical registered" << std::endl;
@@ -174,12 +175,12 @@ void AGVLogical::processTopicMessage(const sola::TopicMessage &msg) {
 void AGVLogical::registerByAuthority(const std::string &ip) {
   message::NewAuthorityAGV new_msg{sola_->getConectionString(),
                                    uuid_,
-                                   kinematics_.getMinAcceleration(),
+                                   kinematics_.getMaxDeceleration(),
                                    kinematics_.getMaxAcceleration(),
                                    kinematics_.getMinVelocity(),
                                    kinematics_.getMaxVelocity(),
-                                   kinematics_.getLoadTime(),
-                                   kinematics_.getUnloadTime(),
+                                   42,  // kinematics_.getLoadTime(),
+                                   42,  // kinematics_.getUnloadTime(),
                                    last_x_,
                                    last_y_};
   current_authority_ip_ = ip.substr(0, ip.find(':'));
@@ -260,12 +261,12 @@ void AGVLogical::processHandoverMessage(const message::HandoverMessage &msg) {
   // Introduce ourselves by new owner
   message::NewAuthorityAGV new_msg{sola_->getConectionString(),
                                    uuid_,
-                                   kinematics_.getMinAcceleration(),
+                                   kinematics_.getMaxDeceleration(),
                                    kinematics_.getMaxAcceleration(),
                                    kinematics_.getMinVelocity(),
                                    kinematics_.getMaxVelocity(),
-                                   kinematics_.getLoadTime(),
-                                   kinematics_.getUnloadTime(),
+                                   42,  // kinematics_.getLoadTime(),
+                                   42,  // kinematics_.getUnloadTime(),
                                    last_x_,
                                    last_y_};
   new_msg.initial = false;

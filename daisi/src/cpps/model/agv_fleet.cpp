@@ -16,6 +16,8 @@
 
 #include "cpps/model/agv_fleet.h"
 
+#include <sstream>
+
 namespace daisi::cpps {
 
 /// as tau(t) of task t in thesis
@@ -91,7 +93,7 @@ std::string AGVFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
   return topic;
 }
 
-Kinematics AGVFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
+AmrKinematics AGVFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
   for (auto const &[existing_ability, kinematics] : infos_) {
     if (ability == existing_ability) {
       return kinematics;

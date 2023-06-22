@@ -21,10 +21,12 @@
 
 #include "cpps/common/uuid_generator.h"
 #include "minhton/utils/config_reader.h"
+#include "ns3/simulator.h"
 #include "path_planning/consensus/paxos/message/prepare_message.h"
 #include "path_planning/consensus/paxos/paxos_consensus.h"
 #include "path_planning/message/serializer.h"
 #include "sola_check.h"
+#include "task.h"
 #include "time_calculation_helper.h"
 #include "utils/daisi_check.h"
 #include "utils/random_engine.h"
@@ -94,8 +96,9 @@ void PickupStation::addToAGVOwnership(const message::NewAuthorityAGV &msg) {
   AGVInfo info;
   info.id = msg.agv_uuid;
   info.ip = msg.agv_ip;
-  info.kinematics = {msg.max_velocity,     msg.min_velocity, msg.max_acceleration,
-                     msg.min_acceleration, msg.load_time_s,  msg.unload_time_s};
+  info.kinematics = {msg.max_velocity, msg.min_velocity, msg.max_acceleration,
+                     msg.min_acceleration};
+  //, msg.load_time_s,  msg.unload_time_s};
   info.last_position = {msg.current_x, msg.current_y};
   info.next_station = info_.station_id;  // Is inbound to ourselves
   agv_ownership_.insert({msg.agv_uuid, info});
@@ -164,10 +167,9 @@ void PickupStation::update(const std::string &agv_id) {
     // Pack to/from station IDS into first element of vector
     ns3::Vector pickup(agv.current_to.delivery_station, -1, -1);
     ns3::Vector delivery(info_.station_id, -1, -1);
-    cpps::Task task(agv.current_to.uuid, pickup, delivery,
-                    cpps::amr::AmrStaticAbility(
-                        cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::kEuroBox), 100.0F));
-    logger_->logTransportOrder(task, agv.current_to.delivery_station, info_.station_id);
+    Task task(agv.current_to.uuid, pickup, delivery);
+    // logger_->logTransportOrder(task.getUUID(), agv.current_to.delivery_station,
+    // info_.station_id);
     logger_->logPPTransportOrderUpdate(agv.current_to.uuid, 4);
   }
 
@@ -292,7 +294,7 @@ void PickupStation::initiateConsensus(const std::string &agv_id, RouteIdentifier
   }
   assert(!current_consensus_.has_value());
 
-  const cpps::Kinematics &kinematics = agv_ownership_.at(agv_id).kinematics;
+  const cpps::AmrKinematics &kinematics = agv_ownership_.at(agv_id).kinematics;
 
   ns3::Vector2D start = info_.routes[d].start;
   ns3::Vector2D end = info_.routes[d].end;
@@ -307,7 +309,7 @@ void PickupStation::initiateConsensus(const std::string &agv_id, RouteIdentifier
   current_consensus_.emplace(ConsensusData{agv_id, intersection_times});
 
   consensus_->findConsensus(
-      intersection_times, kinematics.getLoadTime(),
+      intersection_times, 42,  // kinematics.getLoadTime(),
       [this](uint32_t instance, double start_time) {
         assert(current_consensus_.has_value());
         retry_ = 1;
@@ -425,10 +427,8 @@ void PickupStation::spawnTO() {
     if (next.has_value()) next_station = next.value();
   }
 
-  cpps::Task task(info.uuid, pickup, delivery,
-                  cpps::amr::AmrStaticAbility(
-                      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::kEuroBox), 100.0F));
-  logger_->logTransportOrder(task, info_.station_id, info.delivery_station);
+  Task task(info.uuid, pickup, delivery);
+  // logger_->logTransportOrder(task, info_.station_id, info.delivery_station);
 
   logger_->logTOSpawn(info.uuid, info_.station_id, info.delivery_station);
 

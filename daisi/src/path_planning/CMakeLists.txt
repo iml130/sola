@@ -56,7 +56,6 @@ target_link_libraries(PathPlanning
     daisi_cpps_agv_agv_physical_basic
     daisi_cpps_logical_amr_amr_logical_agent
     daisi_cpps_common_cpps_logger_ns3
-    daisi_cpps_model_task
     daisi_sola_sola_ns3_wrapper
     daisi_logging_sqlite_helper
     Cereal

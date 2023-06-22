@@ -22,13 +22,13 @@
 #include <unordered_map>
 #include <vector>
 
+#include "cpps/amr/amr_kinematics.h"
 #include "cpps/amr/model/amr_static_ability.h"
-#include "cpps/model/kinematics.h"
 
 namespace daisi::cpps {
 
 class AGVFleet {
-  using AGVInfo = std::pair<amr::AmrStaticAbility, Kinematics>;
+  using AGVInfo = std::pair<amr::AmrStaticAbility, AmrKinematics>;
 
 private:
   std::vector<AGVInfo> infos_;
@@ -67,7 +67,7 @@ public:
 
   std::string getTopicForAbility(const amr::AmrStaticAbility &ability);
 
-  Kinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability);
+  AmrKinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability);
 
   static std::string getDefaultTopic() { return "defaulttopic"; }
 };

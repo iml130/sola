@@ -49,30 +49,12 @@ CppsManager::CppsManager(const std::string &scenario_config_file)
   parse();
 }
 
-void CppsManager::spawnAGV(uint32_t agv_index, const AgvDeviceProperties &properties,
+void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description,
                            const TopologyNs3 &topology) {
   const uint32_t device_id = agvs_.Get(agv_index)->GetId();
 
   // Create applications
   Topology amr_topology({topology.getWidth(), topology.getHeight(), 0});
-
-  const Kinematics &kinematic = properties.kinematic;
-  AmrKinematics kinematics(kinematic.getMaxVelocity(), kinematic.getMinVelocity(),
-                           kinematic.getMaxAcceleration(), kinematic.getMinAcceleration());
-
-  AmrProperties amr_properties(
-      properties.manufacturer, properties.model_name, properties.model_number,
-      properties.device_type, properties.friendly_name + std::to_string(device_id),
-      {FunctionalityType::kLoad, FunctionalityType::kMoveTo, FunctionalityType::kUnload});
-
-  AmrPhysicalProperties physical_properties(10, {0.0});
-
-  // Kinematics uses miliseconds while AmrLoadHandlingUnit uses seconds
-  AmrLoadHandlingUnit load_handling(properties.kinematic.getLoadTime() / 1000.0,
-                                    properties.kinematic.getUnloadTime() / 1000.0,
-                                    properties.ability);
-
-  AmrDescription description(0, kinematics, amr_properties, physical_properties, load_handling);
 
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
@@ -192,8 +174,9 @@ void CppsManager::setup() {
         // Find matching properties
         auto properties_it =
             std::find_if(agv_device_properties_.begin(), agv_device_properties_.end(),
-                         [&](const AgvDeviceProperties &prop) {
-                           return prop.friendly_name == spawn_info[index].friendly_name;
+                         [&](const AmrDescription &description) {
+                           return description.getProperties().getFriendlyName() ==
+                                  spawn_info[index].friendly_name;
                          });
         assert(properties_it != agv_device_properties_.end());
         spawnAGV(i, *properties_it, topology);
@@ -205,11 +188,11 @@ void CppsManager::setup() {
           auto current_number = std::get<DistAbs>(entry.distribution).abs;
 
           // Find matching properties
-          auto properties_it =
-              std::find_if(agv_device_properties_.begin(), agv_device_properties_.end(),
-                           [&](const AgvDeviceProperties &prop) {
-                             return prop.friendly_name == entry.friendly_name;
-                           });
+          auto properties_it = std::find_if(
+              agv_device_properties_.begin(), agv_device_properties_.end(),
+              [&](const AmrDescription &description) {
+                return description.getProperties().getFriendlyName() == entry.friendly_name;
+              });
 
           for (auto i = previous_index; i < previous_index + current_number; i++) {
             std::cout << "SPAWNING AGV " << entry.friendly_name << std::endl;
@@ -596,38 +579,41 @@ void CppsManager::parseTopology() {
 }
 
 void CppsManager::parseAGVs() {
-  std::vector<std::pair<amr::AmrStaticAbility, Kinematics>> agv_infos;
+  std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> agv_infos;
 
   auto agv_table =
       parser_.getParsedContent()
           ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("AGVs");
-  for (const auto &agv : agv_table) {
-    auto agv_inner = agv->content.begin()->second;
-    auto agv_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&agv_inner);
 
-    std::string device_type = agv_description->getRequired<std::string>("device_type");
-    std::string friendly_name = agv_description->getRequired<std::string>("friendly_name");
-    std::string model_name = agv_description->getRequired<std::string>("model_name");
+  // TODO rewrite parsing of amr description
+  // for (const auto &agv : agv_table) {
+  //   auto agv_inner = agv->content.begin()->second;
+  //   auto agv_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&agv_inner);
 
-    auto opt_manufacturer = agv_description->getOptional<std::string>("manufacturer");
-    std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
+  //   std::string device_type = agv_description->getRequired<std::string>("device_type");
+  //   std::string friendly_name = agv_description->getRequired<std::string>("friendly_name");
+  //   std::string model_name = agv_description->getRequired<std::string>("model_name");
 
-    auto opt_model_number = agv_description->getOptional<uint64_t>("model_number");
-    uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
+  //   auto opt_manufacturer = agv_description->getOptional<std::string>("manufacturer");
+  //   std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
 
-    auto kinematics_description =
-        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
-    auto ability_description =
-        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
+  //   auto opt_model_number = agv_description->getOptional<uint64_t>("model_number");
+  //   uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
 
-    auto kinematics = parseKinematics(kinematics_description);
-    auto ability = parseAGVAbility(ability_description);
+  //   auto kinematics_description =
+  //       agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
+  //   auto ability_description =
+  //       agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
 
-    agv_infos.push_back({ability, kinematics});
+  //   auto kinematics = parseKinematics(kinematics_description);
+  //   auto ability = parseAGVAbility(ability_description);
 
-    agv_device_properties_.push_back(AgvDeviceProperties{
-        manufacturer, model_name, model_number, device_type, friendly_name, kinematics, ability});
-  }
+  //   agv_infos.push_back({ability, kinematics});
+
+  //   agv_device_properties_.push_back(AmrDescription{
+  //       manufacturer, model_name, model_number, device_type, friendly_name, kinematics,
+  //       ability});
+  // }
 
   AGVFleet::init(agv_infos);
 }
@@ -754,7 +740,7 @@ void CppsManager::parseToSpawn(
   spawn_info_.emplace(info);
 }
 
-Kinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Table> description) {
+AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Table> description) {
   float max_velo = description->getRequired<float>("max_velo");
   float min_velo = description->getRequired<float>("min_velo");
   float max_acc = description->getRequired<float>("max_acc");
@@ -763,7 +749,7 @@ Kinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Tabl
   uint64_t load_time = description->getRequired<uint64_t>("load_time");
   uint64_t unload_time = description->getRequired<uint64_t>("unload_time");
 
-  return Kinematics(max_velo, min_velo, max_acc, min_acc, load_time, unload_time);
+  return AmrKinematics(max_velo, min_velo, max_acc, min_acc);
 }
 
 amr::AmrStaticAbility CppsManager::parseAGVAbility(

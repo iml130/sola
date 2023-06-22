@@ -16,6 +16,8 @@
 
 #include "time_calculation_helper.h"
 
+#include <math.h>
+
 #include <functional>
 
 #include "utils/daisi_check.h"
@@ -74,10 +76,10 @@ static void verifyFunction(ns3::Vector2D start, ns3::Vector2D stop, CalcVars cal
 }
 
 static double estimatesCostsInTime(const ns3::Vector &start, const ns3::Vector &stop,
-                                   MobilityStates state, const cpps::Kinematics &kinematics) {
+                                   MobilityStates state, const cpps::AmrKinematics &kinematics) {
   double max_velocity = kinematics.getMaxVelocity();
   double max_acceleration = kinematics.getMaxAcceleration();
-  double min_acceleration = kinematics.getMinAcceleration();
+  double min_acceleration = kinematics.getMaxDeceleration();
 
   double distance_acc;
   double distance_brake;
@@ -123,7 +125,7 @@ static double estimatesCostsInTime(const ns3::Vector &start, const ns3::Vector &
   return temp_time;
 }
 
-static CalcVars calculateVariables(const cpps::Kinematics &kinematics, ns3::Vector2D start,
+static CalcVars calculateVariables(const cpps::AmrKinematics &kinematics, ns3::Vector2D start,
                                    ns3::Vector2D stop) {
   using namespace ns3;
 
@@ -134,7 +136,7 @@ static CalcVars calculateVariables(const cpps::Kinematics &kinematics, ns3::Vect
   double time_decel = estimatesCostsInTime(Vector3D(start.x, start.y, 0),
                                            Vector3D(stop.x, stop.y, 0), kDeceleration, kinematics);
 
-  double min_acc = std::abs(kinematics.getMinAcceleration());
+  double min_acc = std::abs(kinematics.getMaxDeceleration());
   double max_acc = kinematics.getMaxAcceleration();
   double max_velo = kinematics.getMaxVelocity();
 
@@ -171,7 +173,7 @@ static CalcVars calculateVariables(const cpps::Kinematics &kinematics, ns3::Vect
  * @param stop
  * @return
  */
-static DistanceToTimeFct calculateDistanceToTimeFct(const cpps::Kinematics &kinematics,
+static DistanceToTimeFct calculateDistanceToTimeFct(const cpps::AmrKinematics &kinematics,
                                                     ns3::Vector2D start, ns3::Vector2D stop) {
   CalcVars calc_vars = calculateVariables(kinematics, start, stop);
 
@@ -226,7 +228,7 @@ static DistanceToTimeFct calculateDistanceToTimeFct(const cpps::Kinematics &kine
   return function_dist_to_time;
 }
 
-PointTimePairs calculateTimeTillPoints(const cpps::Kinematics &kinematics, ns3::Vector2D start,
+PointTimePairs calculateTimeTillPoints(const cpps::AmrKinematics &kinematics, ns3::Vector2D start,
                                        ns3::Vector2D stop,
                                        const std::vector<ns3::Vector2D> &points) {
   DistanceToTimeFct fct = calculateDistanceToTimeFct(kinematics, start, stop);

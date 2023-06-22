@@ -24,13 +24,10 @@
 
 #include "cpps/agv/topology.h"
 #include "cpps/amr/model/amr_static_ability.h"
-#include "cpps/common/agv_description.h"
 #include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/material_flow/material_flow_logical_agent.h"
-#include "cpps/model/kinematics.h"
-#include "cpps/negotiation/mrta_configuration.h"
 #include "manager/manager.h"
 #include "ns3/bridge-helper.h"
 #include "ns3/csma-helper.h"
@@ -91,8 +88,7 @@ private:
   virtual uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
-  void spawnAGV(uint32_t agv_index, const AgvDeviceProperties &properties,
-                const TopologyNs3 &topology);
+  void spawnAGV(uint32_t agv_index, const AmrDescription &properties, const TopologyNs3 &topology);
 
   void parse();
   void parseAGVs();
@@ -105,11 +101,9 @@ private:
   // Initiates shutdown of finished TOs
   void clearFinishedMaterialFlows();
 
-  Kinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
+  AmrKinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
   amr::AmrStaticAbility parseAGVAbility(
       std::shared_ptr<daisi::ScenariofileParser::Table> description);
-
-  MRTAConfig mrta_config_;
 
   Boundaries parseBoundaries(const std::shared_ptr<ScenariofileParser::Table> &description);
   void checkStarted(uint32_t index);
@@ -125,7 +119,7 @@ private:
   int width_ = 0;
   int height_ = 0;
   int depth_ = 0;
-  std::vector<AgvDeviceProperties> agv_device_properties_;
+  std::vector<AmrDescription> agv_device_properties_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> spawn_info_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> schedule_info_;
 

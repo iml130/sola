@@ -21,7 +21,8 @@
 #include <string>
 
 #include "agv_state.h"
-#include "cpps/model/kinematics.h"
+#include "cpps/amr/amr_kinematics.h"
+#include "ns3/vector.h"
 #include "transport_order_info.h"
 
 namespace daisi::path_planning {
@@ -30,7 +31,7 @@ namespace daisi::path_planning {
 struct AGVInfo {
   std::string id;
   std::string ip;
-  cpps::Kinematics kinematics;
+  cpps::AmrKinematics kinematics;
   ns3::Vector2D next_position;
   ns3::Vector2D last_position;
 

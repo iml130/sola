@@ -9,7 +9,7 @@ target_link_libraries(daisi_material_flow_model_location
     daisi_structure_helpers
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_action_order_step STATIC)
@@ -20,7 +20,7 @@ target_sources(daisi_material_flow_model_action_order_step
 )
 target_link_libraries(daisi_material_flow_model_action_order_step
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_action_order STATIC)
@@ -34,7 +34,7 @@ target_link_libraries(daisi_material_flow_model_action_order
     daisi_material_flow_model_action_order_step
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_move_order_step STATIC)
@@ -48,7 +48,7 @@ target_link_libraries(daisi_material_flow_model_move_order_step
     daisi_material_flow_model_location
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_move_order STATIC "")
@@ -62,7 +62,7 @@ target_link_libraries(daisi_material_flow_model_move_order
     daisi_material_flow_model_move_order_step
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_transport_order_step STATIC "")
@@ -76,7 +76,7 @@ target_link_libraries(daisi_material_flow_model_transport_order_step
     daisi_material_flow_model_location
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_transport_order STATIC "")
@@ -90,7 +90,7 @@ target_link_libraries(daisi_material_flow_model_transport_order
     daisi_material_flow_model_transport_order_step
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_task STATIC "")
@@ -106,7 +106,7 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_material_flow_model_action_order
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_material_flow STATIC "")
@@ -120,5 +120,5 @@ target_link_libraries(daisi_material_flow_model_material_flow
     daisi_material_flow_model_task
 
     PRIVATE
-    solanet_serializer
+    solanet_serialize
 )

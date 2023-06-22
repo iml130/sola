@@ -22,11 +22,9 @@
 #include <unordered_map>
 #include <utility>
 
-#include "cpps/common/agv_description.h"
+#include "cpps/amr/amr_kinematics.h"
 #include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/kinematics.h"
-#include "cpps/negotiation/mrta_configuration.h"
 #include "manager/manager.h"
 #include "minhton/logging/logger_interface.h"
 #include "ns3/bridge-helper.h"
@@ -125,7 +123,7 @@ private:
 
   consensus::ConsensusType consensus_type_ = consensus::ConsensusType::kNone;
   consensus::ConsensusSettings consensus_settings_;
-  cpps::Kinematics kinematics_;  //!< Kinematics of the simulated AGV
+  cpps::AmrKinematics kinematics_;  //!< Kinematics of the simulated AGV
 };
 
 }  // namespace daisi::path_planning

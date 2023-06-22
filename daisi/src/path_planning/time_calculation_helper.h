@@ -17,7 +17,7 @@
 #ifndef DAISI_PATH_PLANNING_TIME_CALCULATION_HELPER_H_
 #define DAISI_PATH_PLANNING_TIME_CALCULATION_HELPER_H_
 
-#include "cpps/model/kinematics.h"
+#include "cpps/amr/amr_kinematics.h"
 #include "path_planning/constants.h"
 
 namespace daisi::path_planning {
@@ -30,7 +30,7 @@ namespace daisi::path_planning {
  * @param points
  * @return
  */
-PointTimePairs calculateTimeTillPoints(const cpps::Kinematics &kinematics, ns3::Vector2D start,
+PointTimePairs calculateTimeTillPoints(const cpps::AmrKinematics &kinematics, ns3::Vector2D start,
                                        ns3::Vector2D stop,
                                        const std::vector<ns3::Vector2D> &points);
 }  // namespace daisi::path_planning

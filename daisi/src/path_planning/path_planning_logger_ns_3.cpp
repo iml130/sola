@@ -16,6 +16,8 @@
 
 #include "path_planning_logger_ns_3.h"
 
+#include "ns3/simulator.h"
+
 #define TableDefinition static const DatabaseTable
 #define ViewDefinition static const std::unordered_map<std::string, std::string>
 

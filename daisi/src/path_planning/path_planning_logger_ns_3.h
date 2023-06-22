@@ -19,6 +19,7 @@
 
 #include "cpps/common/cpps_logger_ns3.h"
 #include "logging/definitions.h"
+#include "task.h"
 
 namespace daisi::path_planning {
 //! SQLite logger for path planning which extends \c daisi::cpps::CppsLoggerNs3 and its database

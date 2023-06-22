@@ -20,6 +20,7 @@
 
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/common/uuid_generator.h"
+#include "cpps/model/agv_fleet.h"
 #include "delivery_station.h"
 #include "destination.h"
 #include "intersection_set.h"
@@ -134,25 +135,14 @@ uint64_t PathPlanningManager::getNumberOfNodes() {
 }
 
 void PathPlanningManager::initAGV(uint32_t index) {
-  cpps::AgvDeviceDescription desc;
-  desc.serial_number = index;
-  auto mobility =
-      DynamicCast<cpps::AmrMobilityModelNs3>(agvs_.Get(index)->GetObject<ns3::MobilityModel>());
-  desc.mobility = mobility;
-
-  cpps::AgvDeviceProperties properties;
-  properties.device_type = "AGV";
-  properties.model_name = "Mk42";
-  properties.model_number = 0;
-  properties.manufacturer = "FhG";
-
-  // Set dummy ability
-  properties.ability = cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier("package"), 100);
-
-  properties.kinematic = kinematics_;
+  cpps::AmrProperties properties("agv");
+  cpps::AmrPhysicalProperties physical_properties;
+  cpps::AmrLoadHandlingUnit load_handling_unit;
+  cpps::AmrDescription description(index, kinematics_, properties, physical_properties,
+                                   load_handling_unit);
 
   this->agvs_.Get(index)->GetApplication(1)->GetObject<PathPlanningApplication>()->initAGVPhysical(
-      cpps::AgvDataModel{desc, properties}, index);
+      description, index);
   this->agvs_.Get(index)->GetApplication(0)->GetObject<PathPlanningApplication>()->initAGVLogical(
       consensus_settings_, index == 0);
 }
@@ -591,7 +581,7 @@ void PathPlanningManager::parse() {
   auto min_acc = getParsed(float, "min_acc");
   auto load_time_s = getParsed(float, "load_time_s");
   auto unload_time_s = getParsed(float, "unload_time_s");
-  kinematics_ = cpps::Kinematics(max_velo, min_velo, max_acc, min_acc, load_time_s, unload_time_s);
+  kinematics_ = cpps::AmrKinematics(max_velo, min_velo, max_acc, min_acc);
 
   parseConsensusSettings();
   parseScenarioSequence();

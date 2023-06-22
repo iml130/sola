@@ -14,9 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/common/cpps_logger_ns3.h"
-
-#include "cpps/message/types_all.h"
+#include "cpps_logger_ns3.h"
 
 #define TableDefinition static const DatabaseTable
 #define ViewDefinition static const std::unordered_map<std::string, std::string>
@@ -247,12 +245,13 @@ TableDefinition kEnumCppsMessageType("enumCppsMessageType",
 static const std::string kCreateEnumCppsMessageType = getCreateTableStatement(kEnumCppsMessageType);
 
 void CppsLoggerNs3::logCppsMessageTypes() {
-  for (auto const &[key, name] : kMapCppsMessageTypeStrings) {
-    auto t = std::make_tuple(
-        /* Id */ key,
-        /* Name */ name.c_str());
-    log_(getInsertStatement(kEnumCppsMessageType, t));
-  }
+  // TODO: add logging of refactored message types
+  // for (auto const &[key, name] : kMapCppsMessageTypeStrings) {
+  //   auto t = std::make_tuple(
+  //       /* Id */ key,
+  //       /* Name */ name.c_str());
+  //   log_(getInsertStatement(kEnumCppsMessageType, t));
+  // }
 }
 
 ViewDefinition kNegotiationTrafficReplacements = {
@@ -425,7 +424,7 @@ TableDefinition kTransportOrder("TransportOrder",
 static const std::string kCreateTransportOrder = getCreateTableStatement(kTransportOrder);
 static bool transport_order_exists_ = false;
 
-void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station_id,
+void CppsLoggerNs3::logTransportOrder(const material_flow::Task &task, uint32_t pickup_station_id,
                                       uint32_t delivery_station_id, const std::string &mf_uuid) {
   // TODO: Use ids instead of x/y for Stations
   if (!transport_order_exists_) {
@@ -442,16 +441,16 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
   }
 
   auto table = kTransportOrder;
-  std::string order_uuid = order.getUUID();
-  std::string name = order.getName();
-  ns3::Vector3D start = order.getPickupLocation();
-  ns3::Vector3D stop = order.getDeliveryLocation();
-  std::string load_carrier_type = order.getAbilityRequirement().getLoadCarrier().getTypeAsString();
+  std::string task_uuid = task.getUUID();
+  std::string name = task.getName();
+  ns3::Vector3D start = task.getPickupLocation();
+  ns3::Vector3D stop = task.getDeliveryLocation();
+  std::string load_carrier_type = task.getAbilityRequirement().getLoadCarrier().getTypeAsString();
 
   if (mf_uuid.empty()) {
     table.columns[4] = {"MaterialFlowId", "NULL"};
     auto t = std::make_tuple(
-        /* OrderUuid */ order_uuid.c_str(),
+        /* OrderUuid */ task_uuid.c_str(),
         /* MaterialFlowUuid */ uuid_.c_str(),
         /* Name */ name.c_str(),
         /* PickupX_m */ start.x,
@@ -470,7 +469,7 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
   } else {
     std::string material_flow = "(SELECT Id FROM MaterialFlow WHERE Uuid='" + mf_uuid + "')";
     auto t = std::make_tuple(
-        /* OrderUuid */ order_uuid.c_str(),
+        /* OrderUuid */ task_uuid.c_str(),
         /* MaterialFlowUuid */ uuid_.c_str(),
         /* Name */ name.c_str(),
         /* MaterialFlowId */ material_flow.c_str(),
@@ -490,9 +489,9 @@ void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station
   }
 }
 
-void CppsLoggerNs3::logTransportOrder(const Task &order, uint32_t pickup_station_id,
+void CppsLoggerNs3::logTransportOrder(const material_flow::Task &task, uint32_t pickup_station_id,
                                       uint32_t delivery_station_id) {
-  logTransportOrder(order, pickup_station_id, delivery_station_id, "");
+  logTransportOrder(task, pickup_station_id, delivery_station_id, "");
 }
 
 // * TransportOrderHistory
@@ -510,7 +509,8 @@ static const std::string kCreateTransportOrderHistory =
     getCreateTableStatement(kTransportOrderHistory);
 static bool transport_order_history_exists_ = false;
 
-void CppsLoggerNs3::logTransportOrderUpdate(const Task &order, const std::string &assigned_agv) {
+void CppsLoggerNs3::logTransportOrderUpdate(const material_flow::Task &task,
+                                            const std::string &assigned_agv) {
   if (!transport_order_history_exists_) {
     log_(kCreateTransportOrderHistory);
     transport_order_history_exists_ = true;

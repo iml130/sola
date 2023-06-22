@@ -100,7 +100,7 @@ void PathPlanningApplication::checkInitialized() {
   initialized_ = true;
 }
 
-void PathPlanningApplication::initAGVPhysical(const cpps::AgvDataModel &data_model,
+void PathPlanningApplication::initAGVPhysical(const cpps::AmrDescription &data_model,
                                               int id_friendly) {
   checkInitialized();
   auto tcp_socket = generateTCPSocket();
