@@ -635,7 +635,7 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
         break;
       }
 
-      std::get<0>(info[i]).setPeerInfo(minhton::PeerInfo(l, n, fanout));
+      std::get<0>(info[i]).setLogicalNodeInfo(minhton::LogicalNodeInfo(l, n, fanout));
     }
     if (stop) break;
   }
@@ -707,8 +707,8 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
 
   auto sort_by_horizontal_pos = [](std::tuple<uint64_t, minhton::NodeInfo> &tupl1,
                                    std::tuple<uint64_t, minhton::NodeInfo> &tupl2) {
-    return std::get<1>(tupl1).getPeerInfo().getHorizontalValue() <
-           std::get<1>(tupl2).getPeerInfo().getHorizontalValue();
+    return std::get<1>(tupl1).getLogicalNodeInfo().getHorizontalValue() <
+           std::get<1>(tupl2).getLogicalNodeInfo().getHorizontalValue();
   };
   std::sort(index_node.begin(), index_node.end(), sort_by_horizontal_pos);
 

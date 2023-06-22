@@ -25,7 +25,7 @@ For the join procedure this means reaching the node which is the first one from 
 
 1. Entering node *n* sends **Message Join (10)** to a known node of the network
 2. **Message Join (10)** eventually reaches correct null node that will become the parent *p*
-3. *p* sends **Message Join Accept (12)** to *n* (target PeerInfo includes designated position of *n*)
+3. *p* sends **Message Join Accept (12)** to *n* (target LogicalNodeInfo includes designated position of *n*)
 4. *n* replies with **Message Join Accept Ack (14)** to *p*
 5. *p* sends **Update Neighbors (64)** to right and left adjacents of *n*
 6. *p* sends **Update Neighbors (64)** to its routing table neighbors

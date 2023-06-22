@@ -138,7 +138,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::getRightRoutingTableNeighborC
   return neighbors;
 }
 
-// resetting by peer info
+// resetting by LogicalNodeInfo
 bool RoutingInformation::resetRoutingTableNeighborChild(
     const minhton::NodeInfo &routing_table_neighbor_child, uint64_t ref_event_id) {
   if (!this->self_node_info_.isValidPeer()) {
@@ -146,7 +146,7 @@ bool RoutingInformation::resetRoutingTableNeighborChild(
   }
 
   if (!routing_table_neighbor_child.isValidPeer()) {
-    throw std::invalid_argument("PeerInfo to reset is not initialized");
+    throw std::invalid_argument("LogicalNodeInfo to reset is not initialized");
   }
 
   auto it =
@@ -155,7 +155,7 @@ bool RoutingInformation::resetRoutingTableNeighborChild(
 
   // if the iterator is at the right position
   if (it != this->routing_table_neighbor_children_.end() &&
-      it->getPeerInfo() == routing_table_neighbor_child.getPeerInfo()) {
+      it->getLogicalNodeInfo() == routing_table_neighbor_child.getLogicalNodeInfo()) {
     // if we would actually change something by resetting
     if (it->getNetworkInfo().isInitialized()) {
       it->setNetworkInfo(minhton::NetworkInfo());

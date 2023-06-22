@@ -14,7 +14,7 @@ MessageJoin::MessageJoin(const MinhtonMessageHeader &header, minhton::NodeInfo e
                          SearchProgress search_progress)
     : header_(header), entering_node_(std::move(entering_node)), search_progress_(search_progress) {
   header_.setMessageType(MessageType::kJoin);
-  MessageLoggingAdditionalInfo logging_info{getEnteringNode().getPeerInfo().getUuid(), "",
+  MessageLoggingAdditionalInfo logging_info{getEnteringNode().getLogicalNodeInfo().getUuid(), "",
                                             "Prog: " + std::to_string(search_progress)};
   header_.setAdditionalLoggingInfo(logging_info);
   validate();

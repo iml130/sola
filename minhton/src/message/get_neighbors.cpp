@@ -16,7 +16,8 @@ MessageGetNeighbors::MessageGetNeighbors(const MinhtonMessageHeader &header,
       relationships_(std::move(relationships)) {
   header_.setMessageType(kGetNeighbors);
 
-  MessageLoggingAdditionalInfo logging_info{getSendBackToNode().getPeerInfo().getUuid(), "", ""};
+  MessageLoggingAdditionalInfo logging_info{getSendBackToNode().getLogicalNodeInfo().getUuid(), "",
+                                            ""};
   std::string text = "relationships_to_request={";
   for (auto const &rel : relationships_) {
     // TODO add positions to request

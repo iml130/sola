@@ -85,7 +85,7 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
   // this is the receiver handler; messages needs to be forwarded to "recv"-Method
   if (config.isRoot()) {
     // if root, basically wait for a package
-    self_node_info.setPosition(minhton::PeerInfo(0, 0, config.getFanout()));
+    self_node_info.setPosition(minhton::LogicalNodeInfo(0, 0, config.getFanout()));
 
     // the fsm of root initially always needs to be connected
     // otherwise no other node could connect
@@ -107,12 +107,12 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
 
 void MinhtonNode::start(const JoinInfo &info, bool auto_connect) {
   access_->logger.logNetworkInfo({network_facade_.getIP(), network_facade_.getPort()});
-  const auto &peer_info = getNodeInfo().getPeerInfo();
-  access_->logger.logNode({peer_info.getUuid(), peer_info.getLevel(), peer_info.getNumber(),
-                           peer_info.getFanout(), peer_info.isInitialized()});
-  access_->logger.logNodeUninit({peer_info.getUuid(), 0});
+  const auto &l_node_info = getNodeInfo().getLogicalNodeInfo();
+  access_->logger.logNode({l_node_info.getUuid(), l_node_info.getLevel(), l_node_info.getNumber(),
+                           l_node_info.getFanout(), l_node_info.isInitialized()});
+  access_->logger.logNodeUninit({l_node_info.getUuid(), 0});
 
-  if (!getNodeInfo().getPeerInfo().isRoot() && auto_connect) {
+  if (!getNodeInfo().getLogicalNodeInfo().isRoot() && auto_connect) {
     // now its time to connect to a "node" and to start a join procedure
     switch (info.join_mode) {
       case JoinInfo::kIp:
@@ -131,7 +131,7 @@ void MinhtonNode::start(const JoinInfo &info, bool auto_connect) {
     }
   }
 
-  if (getNodeInfo().getPeerInfo().isRoot()) {
+  if (getNodeInfo().getLogicalNodeInfo().isRoot()) {
     if (info.join_mode != JoinInfo::kNone) {
       throw std::runtime_error("Cannot start root with JoinMode other that None");
     }
@@ -284,7 +284,8 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         }
 
         if (header.getMessageType() == kFindReplacement &&
-            header.getTarget().getPeerInfo() != routing_info_->getSelfNodeInfo().getPeerInfo()) {
+            header.getTarget().getLogicalNodeInfo() !=
+                routing_info_->getSelfNodeInfo().getLogicalNodeInfo()) {
           // Message was forwarded to us because with knowledge of the sender we are nearer to the
           // successor. But the sender had outdated information about our position. Therefore
           // discard the message for now.
@@ -322,7 +323,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
 
         if (header.getMessageType() == MessageType::kReplacementOffer) {
           replacing_node_ = header.getSender();
-          replacing_node_.setPosition(routing_info_->getSelfNodeInfo().getPeerInfo());
+          replacing_node_.setPosition(routing_info_->getSelfNodeInfo().getLogicalNodeInfo());
         }
 
         // TODO WORKAROUND TO SWITCH BACK TO CONNECTED IF SIGNOFF PARENT WAS NEGATIVE

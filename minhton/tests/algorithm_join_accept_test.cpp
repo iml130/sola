@@ -59,7 +59,7 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
     // adjacent left of B is A
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
     REQUIRE(adj_left_of_b.isInitialized());
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_a.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_a.getLogicalNodeInfo());
 
     // adjacent right of B does not exist
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
@@ -70,12 +70,12 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
     REQUIRE_FALSE(join_algo.mustSendUpdateRight(adj_left_of_b));
 
     // A's new adjacent right is B
-    REQUIRE(join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b).getPeerInfo() ==
-            node_b.getPeerInfo());
+    REQUIRE(join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b).getLogicalNodeInfo() ==
+            node_b.getLogicalNodeInfo());
 
     // A's adjacent left does not change
-    REQUIRE(join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b).getPeerInfo() ==
-            node_x.getPeerInfo());
+    REQUIRE(join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b).getLogicalNodeInfo() ==
+            node_x.getLogicalNodeInfo());
   }
 
   SECTION("Scenario 2.2, Fanout 2") {
@@ -114,11 +114,11 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
 
     // adjacent left of C is B
     minhton::NodeInfo adj_left_of_c = join_algo.calcAdjacentLeftOfNewChild(node_c);
-    REQUIRE(adj_left_of_c.getPeerInfo() == node_b.getPeerInfo());
+    REQUIRE(adj_left_of_c.getLogicalNodeInfo() == node_b.getLogicalNodeInfo());
 
     // adjacent right of C is A
     minhton::NodeInfo adj_right_of_c = join_algo.calcAdjacentRightOfNewChild(node_c);
-    REQUIRE(adj_right_of_c.getPeerInfo() == node_a.getPeerInfo());
+    REQUIRE(adj_right_of_c.getLogicalNodeInfo() == node_a.getLogicalNodeInfo());
 
     // we have to send an update right to B, because C is in between B and A now
     // update left and update right cannot be both true simultaneously
@@ -126,12 +126,12 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
     REQUIRE_FALSE(join_algo.mustSendUpdateLeft(adj_right_of_c));
 
     // A's new adjacent left is C
-    REQUIRE(join_algo.calcOurNewAdjacentLeft(node_c, adj_right_of_c).getPeerInfo() ==
-            node_c.getPeerInfo());
+    REQUIRE(join_algo.calcOurNewAdjacentLeft(node_c, adj_right_of_c).getLogicalNodeInfo() ==
+            node_c.getLogicalNodeInfo());
 
     // A's adjacent right does not change
-    REQUIRE(join_algo.calcOurNewAdjacentRight(node_c, adj_left_of_c).getPeerInfo() ==
-            node_x.getPeerInfo());
+    REQUIRE(join_algo.calcOurNewAdjacentRight(node_c, adj_left_of_c).getLogicalNodeInfo() ==
+            node_x.getLogicalNodeInfo());
   }
 }
 
@@ -163,16 +163,16 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
 
     // adj right of B is X
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_x.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_x.getLogicalNodeInfo());
 
     REQUIRE_FALSE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_x.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_x.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
   }
 
   SECTION("Scenario 3.2") {
@@ -193,19 +193,19 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
     routing_info->setChild(node_z, 2);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_a.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_a.getLogicalNodeInfo());
 
     REQUIRE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE_FALSE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_b.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_b.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_z.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_z.getLogicalNodeInfo());
   }
 
   SECTION("Scenario 3.3") {
@@ -228,19 +228,19 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
     routing_info->setChild(node_y, 1);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_a.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_a.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_p.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_p.getLogicalNodeInfo());
 
     REQUIRE_FALSE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_b.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_b.getLogicalNodeInfo());
   }
 }
 
@@ -267,20 +267,20 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 4",
     routing_info->setChild(node_z, 3);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_a.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_a.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
     REQUIRE(adj_right_of_b.isInitialized());
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_z.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_z.getLogicalNodeInfo());
 
     REQUIRE_FALSE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_b.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_b.getLogicalNodeInfo());
   }
 
   SECTION("Scenario 4.2") {
@@ -315,19 +315,19 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 4",
     routing_info->updateRoutingTableNeighborChild(node_y3);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_x2.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_x2.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_y0.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_y0.getLogicalNodeInfo());
 
     REQUIRE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_x1.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_x1.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_x2.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_x2.getLogicalNodeInfo());
   }
 }
 
@@ -356,19 +356,19 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 5",
     routing_info->setChild(node_v, 4);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_x.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_x.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
 
     REQUIRE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_y.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_y.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_w.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_w.getLogicalNodeInfo());
   }
 
   SECTION("Scenario 5.2") {
@@ -399,19 +399,19 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 5",
     routing_info->updateRoutingTableNeighbor(node_d);
 
     minhton::NodeInfo adj_left_of_b = join_algo.calcAdjacentLeftOfNewChild(node_b);
-    REQUIRE(adj_left_of_b.getPeerInfo() == node_c.getPeerInfo());
+    REQUIRE(adj_left_of_b.getLogicalNodeInfo() == node_c.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_b = join_algo.calcAdjacentRightOfNewChild(node_b);
-    REQUIRE(adj_right_of_b.getPeerInfo() == node_x1.getPeerInfo());
+    REQUIRE(adj_right_of_b.getLogicalNodeInfo() == node_x1.getLogicalNodeInfo());
 
     REQUIRE(join_algo.mustSendUpdateRight(adj_left_of_b));
     REQUIRE(join_algo.mustSendUpdateLeft(adj_right_of_b));
 
     minhton::NodeInfo adj_left_of_a = join_algo.calcOurNewAdjacentLeft(node_b, adj_right_of_b);
-    REQUIRE(adj_left_of_a.getPeerInfo() == node_x2.getPeerInfo());
+    REQUIRE(adj_left_of_a.getLogicalNodeInfo() == node_x2.getLogicalNodeInfo());
 
     minhton::NodeInfo adj_right_of_a = join_algo.calcOurNewAdjacentRight(node_b, adj_left_of_b);
-    REQUIRE(adj_right_of_a.getPeerInfo() == node_x3.getPeerInfo());
+    REQUIRE(adj_right_of_a.getLogicalNodeInfo() == node_x3.getLogicalNodeInfo());
   }
 }
 
@@ -438,7 +438,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
     routing_info->setChild(node_4_47, 2);
 
     auto closer_adj1 = join_algo.getCloserAdjacent(node_4_45, node_4_44);
-    REQUIRE(closer_adj1.getPeerInfo() == node_1_1.getPeerInfo());
+    REQUIRE(closer_adj1.getLogicalNodeInfo() == node_1_1.getLogicalNodeInfo());
 
     auto closer_adj2 = join_algo.getCloserAdjacent(node_4_45, node_1_1);
     REQUIRE_FALSE(closer_adj2.isInitialized());
@@ -473,11 +473,11 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
     REQUIRE_FALSE(closer_adj1.isInitialized());
 
     auto closer_adj2 = join_algo.getCloserAdjacent(node_4_159, node_3_40);
-    REQUIRE(closer_adj2.getPeerInfo() == node_1_2.getPeerInfo());
+    REQUIRE(closer_adj2.getLogicalNodeInfo() == node_1_2.getLogicalNodeInfo());
 
     routing_info->setChild(node_4_159, 3);
     auto closer_adj3 = join_algo.getCloserAdjacent(node_4_158, node_1_2);
-    REQUIRE(closer_adj3.getPeerInfo() == node_4_159.getPeerInfo());
+    REQUIRE(closer_adj3.getLogicalNodeInfo() == node_4_159.getLogicalNodeInfo());
   }
 
   SECTION("Fanout 5") {
@@ -505,7 +505,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
     REQUIRE_FALSE(closer_adj1.isInitialized());
 
     auto closer_adj2 = join_algo.getCloserAdjacent(node_3_15, node_3_14);
-    REQUIRE(closer_adj2.getPeerInfo() == node_1_0.getPeerInfo());
+    REQUIRE(closer_adj2.getLogicalNodeInfo() == node_1_0.getLogicalNodeInfo());
   }
 }
 
@@ -523,33 +523,33 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // node (1:1) has no children, so new_child_1 should be (2:5), because its closest to (0:0)
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 2);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 5);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_1.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 2);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 5);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (2:5) to (1:1) -> (2:4) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 2);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 2);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 4);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_2.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 2);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 4);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (2:4) to (1:1) -> (2:3) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_3.getPeerInfo().getLevel() == 2);
-//     REQUIRE(new_child_3.getPeerInfo().getNumber() == 3);
-//     REQUIRE(new_child_3.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 2);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 3);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (2:3) -> no free position left
 //     routing_info.setChild(new_child_3, 0);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_4.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
 //   }
 
@@ -560,33 +560,33 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // node (2:8) has no children, so new_child_1 should be (3:24), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 3);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 24);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_1.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 3);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 24);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (3:24) to (2:8) -> (3:25) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 0);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 3);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 25);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_2.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 3);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 25);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (3:25) to (2:8) -> (3:26) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_3.getPeerInfo().getLevel() == 3);
-//     REQUIRE(new_child_3.getPeerInfo().getNumber() == 26);
-//     REQUIRE(new_child_3.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 3);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 26);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (2:3) -> no free position left
 //     routing_info.setChild(new_child_3, 2);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_4.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
 //   }
 
@@ -597,33 +597,33 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // node (4:0) has no children, so new_child_1 should be (5:2), because its closest to (0:0)
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 5);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 2);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_1.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 5);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 2);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (5:2) to (4:0) -> (5:1) is next closest to (0:0)
 //     routing_info.setChild(new_child_1, 2);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 5);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 1);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_2.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 5);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 1);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (5:1) to (4:0) -> (5:0) is last free position
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
 //     new_child_3.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_3.getPeerInfo().getLevel() == 5);
-//     REQUIRE(new_child_3.getPeerInfo().getNumber() == 0);
-//     REQUIRE(new_child_3.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getLevel() == 5);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getNumber() == 0);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (4:0) -> no free position left
 //     routing_info.setChild(new_child_3, 0);
 //     minhton::NodeInfo new_child_4 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_4.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_4.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_4.getNetworkInfo().isInitialized() == false);
 //   }
 // }
@@ -640,9 +640,9 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_1.isInitialized());
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 3);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 3);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 3);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 3);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
 
 //     routing_info.setChild(new_child_1, new_child_1.getNumber() % fanout);
 //     REQUIRE(routing_info.getChildren()[0].isInitialized() == false);
@@ -652,9 +652,9 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
 //     REQUIRE(new_child_2.isInitialized());
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 3);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 2);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 3);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 2);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
 
 //     routing_info.setChild(new_child_2, new_child_2.getNumber() % fanout);
 //     REQUIRE(routing_info.getChildren()[0].isInitialized());
@@ -662,7 +662,7 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 
 //     // adding child (3:2) -> no free position left
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
 //   }
 
@@ -673,24 +673,24 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // node (2:1) has no children, so new_child_1_1 should be (3:3), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 4);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 1);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_1.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 4);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 1);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (4:1) to (3:0) -> (4:1) is only free position
 //     routing_info.setChild(new_child_1, 1);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 4);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 0);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_2.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 4);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 0);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().isInitialized());
 
 //     // no free position left
 //     routing_info.setChild(new_child_2, 0);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
 //   }
 
@@ -701,24 +701,24 @@ TEST_CASE("JoinAlgorithmGeneral getCloserAdjacent",
 //     // node (4:15) has no children, so new_child_1 should be (5:30), because its closest to
 //     (0:0) minhton::NodeInfo new_child_1 = routing_info.calcNewChildPosition();
 //     new_child_1.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_1.getPeerInfo().getLevel() == 5);
-//     REQUIRE(new_child_1.getPeerInfo().getNumber() == 30);
-//     REQUIRE(new_child_1.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_1.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getLevel() == 5);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getNumber() == 30);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_1.getLogicalNodeInfo().isInitialized());
 
 //     // adding child (5:30) to (4:15) -> (5:31) is only free position
 //     routing_info.setChild(new_child_1, 0);
 //     minhton::NodeInfo new_child_2 = routing_info.calcNewChildPosition();
 //     new_child_2.setNetworkInfo(minhton::NetworkInfo("127.0.0.1", 1234));
-//     REQUIRE(new_child_2.getPeerInfo().getLevel() == 5);
-//     REQUIRE(new_child_2.getPeerInfo().getNumber() == 31);
-//     REQUIRE(new_child_2.getPeerInfo().getFanout() == fanout);
-//     REQUIRE(new_child_2.getPeerInfo().isInitialized());
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getLevel() == 5);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getNumber() == 31);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().getFanout() == fanout);
+//     REQUIRE(new_child_2.getLogicalNodeInfo().isInitialized());
 
 //     // no free position left
 //     routing_info.setChild(new_child_2, 1);
 //     minhton::NodeInfo new_child_3 = routing_info.calcNewChildPosition();
-//     REQUIRE(new_child_3.getPeerInfo().isInitialized() == false);
+//     REQUIRE(new_child_3.getLogicalNodeInfo().isInitialized() == false);
 //     REQUIRE(new_child_3.getNetworkInfo().isInitialized() == false);
 //   }
 // }
@@ -771,7 +771,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
     bool inside = false;
     for (auto const &n : neighbors) {
-      if (n.getPeerInfo() == minhton::PeerInfo(3, 1, fanout)) {
+      if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 1, fanout)) {
         inside = true;
         break;
       }
@@ -780,7 +780,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
     inside = false;
     for (auto const &n : neighbors) {
-      if (n.getPeerInfo() == minhton::PeerInfo(3, 2, fanout)) {
+      if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 2, fanout)) {
         inside = true;
         break;
       }
@@ -789,7 +789,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
     inside = false;
     for (auto const &n : neighbors) {
-      if (n.getPeerInfo() == minhton::PeerInfo(3, 4, fanout)) {
+      if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 4, fanout)) {
         inside = true;
         break;
       }
@@ -798,7 +798,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
     inside = false;
     for (auto const &n : neighbors) {
-      if (n.getPeerInfo() == minhton::PeerInfo(3, 5, fanout)) {
+      if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 5, fanout)) {
         inside = true;
         break;
       }
@@ -807,7 +807,7 @@ TEST_CASE("JoinAlgorithmGeneral getRoutingTableNeighborsForNewChild",
 
     inside = false;
     for (auto const &n : neighbors) {
-      if (n.getPeerInfo() == minhton::PeerInfo(3, 7, fanout)) {
+      if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 7, fanout)) {
         inside = true;
         break;
       }

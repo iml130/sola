@@ -18,15 +18,15 @@ namespace minhton {
 class MessageReplacementUpdate : public MinhtonMessage<MessageReplacementUpdate> {
 public:
   MessageReplacementUpdate(const MinhtonMessageHeader &header, NodeInfo removed_position_node,
-                           NodeInfo replaced_position_node, PeerInfo new_peer,
+                           NodeInfo replaced_position_node, LogicalNodeInfo new_l_node_info,
                            bool should_acknowledge = false);
 
   NodeInfo getRemovedPositionNode() const;
   NodeInfo getReplacedPositionNode() const;
-  PeerInfo getNewPeer() const;
+  LogicalNodeInfo getNewLogicalNodeInfo() const;
   bool getShouldAcknowledge() const;
 
-  SERIALIZE(header_, removed_position_node_, replaced_position_node_, new_peer_,
+  SERIALIZE(header_, removed_position_node_, replaced_position_node_, new_l_node_info_,
             should_acknowledge_);
 
   MessageReplacementUpdate() = default;
@@ -48,8 +48,8 @@ private:
   /// afterwards.
   NodeInfo replaced_position_node_;
 
-  /// The peer that has the replaced position and a new uuid
-  PeerInfo new_peer_;
+  /// The LogicalNodeInfo that has the replaced position and a new uuid
+  LogicalNodeInfo new_l_node_info_;
 
   bool should_acknowledge_ = false;
 };

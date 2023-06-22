@@ -4,7 +4,7 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#include "core/peer_info.h"
+#include "core/logical_node_info.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>
@@ -13,13 +13,13 @@
 #include "core/constants.h"
 using namespace minhton;
 
-TEST_CASE("PeerInfo Constructors", "[PeerInfo][Init]") {
+TEST_CASE("LogicalNodeInfo Constructors", "[LogicalNodeInfo][Init]") {
   uint16_t chosen_fanout = 4;
   uint32_t chosen_level = 2;
   uint32_t chosen_num = 2;
 
   // empty constructor
-  minhton::PeerInfo test_1;
+  minhton::LogicalNodeInfo test_1;
   REQUIRE(test_1.getLevel() == 0);
   REQUIRE(test_1.getNumber() == 0);
   REQUIRE_FALSE(test_1.isInitialized());
@@ -28,7 +28,7 @@ TEST_CASE("PeerInfo Constructors", "[PeerInfo][Init]") {
 
   // constructor with fanout
   // nothing set, except for the fanout
-  minhton::PeerInfo test_2(chosen_fanout);
+  minhton::LogicalNodeInfo test_2(chosen_fanout);
   REQUIRE(test_2.getLevel() == 0);
   REQUIRE(test_2.getNumber() == 0);
   REQUIRE_FALSE(test_2.isInitialized());
@@ -36,7 +36,7 @@ TEST_CASE("PeerInfo Constructors", "[PeerInfo][Init]") {
 
   // constructor with position, but no fanout
   // initialized false
-  minhton::PeerInfo test_3(chosen_level, chosen_level);
+  minhton::LogicalNodeInfo test_3(chosen_level, chosen_level);
   REQUIRE(test_3.getLevel() == chosen_level);
   REQUIRE(test_3.getNumber() == chosen_num);
   REQUIRE_FALSE(test_3.isInitialized());
@@ -44,7 +44,7 @@ TEST_CASE("PeerInfo Constructors", "[PeerInfo][Init]") {
 
   // constructor with position, but no fanout
   // initialized true
-  minhton::PeerInfo test_4(chosen_level, chosen_level, (uint16_t)2);
+  minhton::LogicalNodeInfo test_4(chosen_level, chosen_level, (uint16_t)2);
   REQUIRE(test_4.getLevel() == chosen_level);
   REQUIRE(test_4.getNumber() == chosen_num);
   REQUIRE(test_4.isInitialized());
@@ -56,32 +56,33 @@ TEST_CASE("PeerInfo Constructors", "[PeerInfo][Init]") {
 
   // empty constructor with invalid fanout
   // under minimum fanout
-  REQUIRE_THROWS_AS(new minhton::PeerInfo(under_min_fanout), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::LogicalNodeInfo(under_min_fanout), std::invalid_argument);
 
   // empty constructor with invalid fanout
   // over maximum fanout
-  REQUIRE_THROWS_AS(new minhton::PeerInfo(over_max_fanout), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::LogicalNodeInfo(over_max_fanout), std::invalid_argument);
 
   // normal constructor with invalid fanout
   // under minimum fanout
-  REQUIRE_THROWS_AS(new minhton::PeerInfo(1, 0, under_min_fanout), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::LogicalNodeInfo(1, 0, under_min_fanout), std::invalid_argument);
 
   // normal constructor with invalid fanout
   // over maximum fanout
-  REQUIRE_THROWS_AS(new minhton::PeerInfo(1, 0, over_max_fanout), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::LogicalNodeInfo(1, 0, over_max_fanout), std::invalid_argument);
 
   // checking exceptions with invalid positions with the normal constructor
-  REQUIRE_THROWS_AS(new minhton::PeerInfo(0, 1, kFanoutDefault), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::LogicalNodeInfo(0, 1, kFanoutDefault), std::invalid_argument);
 }
 
-TEST_CASE("PeerInfo Setter/Getter PeerToString", "[PeerInfo][Attributes][PeerToString]") {
-  minhton::PeerInfo test(3);
+TEST_CASE("LogicalNodeInfo Setter/Getter PeerToString",
+          "[LogicalNodeInfo][Attributes][PeerToString]") {
+  minhton::LogicalNodeInfo test(3);
   test.setPosition(1, 2);
   REQUIRE(test.getString().find("1:2 | m=3") != std::string::npos);
 }
 
-TEST_CASE("PeerInfo Setter/Getter Fanout", "[PeerInfo][Attributes][Fanout]") {
-  minhton::PeerInfo peer;
+TEST_CASE("LogicalNodeInfo Setter/Getter Fanout", "[LogicalNodeInfo][Attributes][Fanout]") {
+  minhton::LogicalNodeInfo peer;
 
   SECTION("Valid Fanouts") {
     peer.setFanout(kFanoutDefault);
@@ -106,10 +107,11 @@ TEST_CASE("PeerInfo Setter/Getter Fanout", "[PeerInfo][Attributes][Fanout]") {
   }
 }
 
-TEST_CASE("PeerInfo setPosition, Getter Level/Number", "[PeerInfo][Method][setPosition]") {
+TEST_CASE("LogicalNodeInfo setPosition, Getter Level/Number",
+          "[LogicalNodeInfo][Method][setPosition]") {
   // fanout is set
   // setPosition with valid fanout throws no exception
-  minhton::PeerInfo test_1(kFanoutDefault);
+  minhton::LogicalNodeInfo test_1(kFanoutDefault);
   REQUIRE(test_1.getLevel() == 0);
   REQUIRE(test_1.getNumber() == 0);
 
@@ -119,7 +121,7 @@ TEST_CASE("PeerInfo setPosition, Getter Level/Number", "[PeerInfo][Method][setPo
 
   // invalid position
   // position wont cange if setPosition throws eception
-  minhton::PeerInfo test_2(kFanoutDefault);
+  minhton::LogicalNodeInfo test_2(kFanoutDefault);
   test_2.setPosition(0, 0);
 
   REQUIRE_THROWS_AS(test_2.setPosition(0, 1), std::invalid_argument);
@@ -127,7 +129,7 @@ TEST_CASE("PeerInfo setPosition, Getter Level/Number", "[PeerInfo][Method][setPo
   REQUIRE(test_2.getNumber() == 0);
 
   // some other valid positions
-  minhton::PeerInfo test_3(kFanoutDefault);
+  minhton::LogicalNodeInfo test_3(kFanoutDefault);
 
   REQUIRE_NOTHROW(test_3.setPosition(7, 0));
   REQUIRE(test_3.getLevel() == 7);
@@ -158,9 +160,10 @@ TEST_CASE("PeerInfo setPosition, Getter Level/Number", "[PeerInfo][Method][setPo
   REQUIRE(test_3.getNumber() == 35);
 }
 
-TEST_CASE("PeerInfo setPosition through PeerInfo", "[PeerInfo][Method][setPosition]") {
-  minhton::PeerInfo peer1;
-  minhton::PeerInfo peer2(1, 1, kFanoutDefault);
+TEST_CASE("LogicalNodeInfo setPosition through LogicalNodeInfo",
+          "[LogicalNodeInfo][Method][setPosition]") {
+  minhton::LogicalNodeInfo peer1;
+  minhton::LogicalNodeInfo peer2(1, 1, kFanoutDefault);
 
   peer1.setPosition(peer2);
   REQUIRE(peer1.getLevel() == peer2.getLevel());
@@ -169,43 +172,43 @@ TEST_CASE("PeerInfo setPosition through PeerInfo", "[PeerInfo][Method][setPositi
   REQUIRE(peer1.isInitialized() == peer2.isInitialized());
 }
 
-TEST_CASE("PeerInfo isInitialized", "[PeerInfo][Attributes][initialized]") {
-  minhton::PeerInfo test_1(2);
+TEST_CASE("LogicalNodeInfo isInitialized", "[LogicalNodeInfo][Attributes][initialized]") {
+  minhton::LogicalNodeInfo test_1(2);
   REQUIRE_FALSE(test_1.isInitialized());
   test_1.setPosition(1, 1);
   REQUIRE_FALSE(test_1.isInitialized());
 
   // constructor with initalized set false as default value
-  minhton::PeerInfo test_3(1, 1);
+  minhton::LogicalNodeInfo test_3(1, 1);
   REQUIRE_FALSE(test_3.isInitialized());
 
   // constructor with initalized set true in normal constructor with fanout
-  minhton::PeerInfo test_5(1, 1, (uint16_t)2);
+  minhton::LogicalNodeInfo test_5(1, 1, (uint16_t)2);
   REQUIRE(test_5.isInitialized());
 }
 
-TEST_CASE("PeerInfo isSameLevel", "[PeerInfo][Method][isSameLevel]") {
+TEST_CASE("LogicalNodeInfo isSameLevel", "[LogicalNodeInfo][Method][isSameLevel]") {
   SECTION("Both peers not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isSameLevel(peer2));
   }
 
   SECTION("First peer not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE_FALSE(peer1.isSameLevel(peer2));
   }
 
   SECTION("Second peer not initialized") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isSameLevel(peer2));
   }
 
   SECTION("Both initialized and same level") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE(peer1.isSameLevel(peer2));
 
     peer1.setFanout(kFanoutDefault);
@@ -216,8 +219,8 @@ TEST_CASE("PeerInfo isSameLevel", "[PeerInfo][Method][isSameLevel]") {
   }
 
   SECTION("Both initialized and different levels") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(1, 1, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(1, 1, (uint16_t)2);
     REQUIRE_FALSE(peer1.isSameLevel(peer2));
 
     peer1.setFanout(kFanoutDefault);
@@ -228,8 +231,8 @@ TEST_CASE("PeerInfo isSameLevel", "[PeerInfo][Method][isSameLevel]") {
   }
 
   SECTION("Both initialized and different levels with normal constructor") {
-    minhton::PeerInfo peer1(0, 0, kFanoutDefault);
-    minhton::PeerInfo peer2(1, 1, kFanoutDefault);
+    minhton::LogicalNodeInfo peer1(0, 0, kFanoutDefault);
+    minhton::LogicalNodeInfo peer2(1, 1, kFanoutDefault);
     REQUIRE_FALSE(peer1.isSameLevel(peer2));
 
     peer1.setPosition(1, 1);
@@ -238,28 +241,28 @@ TEST_CASE("PeerInfo isSameLevel", "[PeerInfo][Method][isSameLevel]") {
   }
 }
 
-TEST_CASE("PeerInfo isDeeperThan", "[PeerInfo][Method][isDeeperThan]") {
+TEST_CASE("LogicalNodeInfo isDeeperThan", "[LogicalNodeInfo][Method][isDeeperThan]") {
   SECTION("Both peers not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isDeeperThan(peer2));
   }
 
   SECTION("First peer not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE_FALSE(peer1.isDeeperThan(peer2));
   }
 
   SECTION("Second peer not initialized") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isDeeperThan(peer2));
   }
 
   SECTION("Both initialized and same level") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE_FALSE(peer1.isDeeperThan(peer2));
 
     peer1.setFanout(kFanoutDefault);
@@ -270,8 +273,8 @@ TEST_CASE("PeerInfo isDeeperThan", "[PeerInfo][Method][isDeeperThan]") {
   }
 
   SECTION("Both initialized with normal constructor and level variations") {
-    minhton::PeerInfo peer1(0, 0, kFanoutDefault);
-    minhton::PeerInfo peer2(1, 1, kFanoutDefault);
+    minhton::LogicalNodeInfo peer1(0, 0, kFanoutDefault);
+    minhton::LogicalNodeInfo peer2(1, 1, kFanoutDefault);
     REQUIRE_FALSE(peer1.isDeeperThan(peer2));
 
     peer1.setPosition(1, 1);
@@ -287,28 +290,29 @@ TEST_CASE("PeerInfo isDeeperThan", "[PeerInfo][Method][isDeeperThan]") {
   }
 }
 
-TEST_CASE("PeerInfo isDeeperThanOrSameLevel", "[PeerInfo][Method][isDeeperThanOrSameLevel]") {
+TEST_CASE("LogicalNodeInfo isDeeperThanOrSameLevel",
+          "[LogicalNodeInfo][Method][isDeeperThanOrSameLevel]") {
   SECTION("Both peers not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isDeeperThanOrSameLevel(peer2));
   }
 
   SECTION("First peer not initialized") {
-    minhton::PeerInfo peer1(0, 0);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE_FALSE(peer1.isDeeperThanOrSameLevel(peer2));
   }
 
   SECTION("Second peer not initialized") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0);
     REQUIRE_FALSE(peer1.isDeeperThanOrSameLevel(peer2));
   }
 
   SECTION("Both initialized and same level") {
-    minhton::PeerInfo peer1(0, 0, (uint16_t)2);
-    minhton::PeerInfo peer2(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer1(0, 0, (uint16_t)2);
+    minhton::LogicalNodeInfo peer2(0, 0, (uint16_t)2);
     REQUIRE(peer1.isDeeperThanOrSameLevel(peer2));
 
     peer1.setFanout(kFanoutDefault);
@@ -319,8 +323,8 @@ TEST_CASE("PeerInfo isDeeperThanOrSameLevel", "[PeerInfo][Method][isDeeperThanOr
   }
 
   SECTION("Both initialized with normal constructor and level variations") {
-    minhton::PeerInfo peer1(0, 0, kFanoutDefault);
-    minhton::PeerInfo peer2(1, 1, kFanoutDefault);
+    minhton::LogicalNodeInfo peer1(0, 0, kFanoutDefault);
+    minhton::LogicalNodeInfo peer2(1, 1, kFanoutDefault);
     REQUIRE_FALSE(peer1.isDeeperThanOrSameLevel(peer2));
     REQUIRE(peer2.isDeeperThanOrSameLevel(peer1));
 
@@ -338,8 +342,8 @@ TEST_CASE("PeerInfo isDeeperThanOrSameLevel", "[PeerInfo][Method][isDeeperThanOr
   }
 }
 
-TEST_CASE("PeerInfo isRoot", "[PeerInfo][Method][isRoot]") {
-  minhton::PeerInfo peer(0, 0, kFanoutDefault);
+TEST_CASE("LogicalNodeInfo isRoot", "[LogicalNodeInfo][Method][isRoot]") {
+  minhton::LogicalNodeInfo peer(0, 0, kFanoutDefault);
   REQUIRE(peer.isRoot());
 
   peer.setPosition(1, 0);
@@ -358,15 +362,15 @@ TEST_CASE("PeerInfo isRoot", "[PeerInfo][Method][isRoot]") {
   REQUIRE(peer.isRoot());
 }
 
-TEST_CASE("PeerInfo PeerInfoHasher", "[PeerInfo][PeerInfoHasher]") {
-  minhton::PeerInfo peer_1(0, 0, (uint16_t)2);
-  minhton::PeerInfo peer_2(1, 0, (uint16_t)2);
-  minhton::PeerInfo peer_3(1, 1, (uint16_t)2);
-  minhton::PeerInfo peer_4(1, 1, (uint16_t)3);
-  minhton::PeerInfo peer_5(1, 1);
+TEST_CASE("LogicalNodeInfo LogicalNodeInfoHasher", "[LogicalNodeInfo][LogicalNodeInfoHasher]") {
+  minhton::LogicalNodeInfo peer_1(0, 0, (uint16_t)2);
+  minhton::LogicalNodeInfo peer_2(1, 0, (uint16_t)2);
+  minhton::LogicalNodeInfo peer_3(1, 1, (uint16_t)2);
+  minhton::LogicalNodeInfo peer_4(1, 1, (uint16_t)3);
+  minhton::LogicalNodeInfo peer_5(1, 1);
 
-  std::unordered_map<minhton::PeerInfo, int, PeerInfoHasher> test_map =
-      std::unordered_map<minhton::PeerInfo, int, PeerInfoHasher>();
+  std::unordered_map<minhton::LogicalNodeInfo, int, LogicalNodeInfoHasher> test_map =
+      std::unordered_map<minhton::LogicalNodeInfo, int, LogicalNodeInfoHasher>();
   test_map[peer_1] = 1;
   test_map[peer_2] = 2;
   test_map[peer_3] = 3;
@@ -379,7 +383,7 @@ TEST_CASE("PeerInfo PeerInfoHasher", "[PeerInfo][PeerInfoHasher]") {
   REQUIRE(test_map[peer_4] == 4);
   REQUIRE(test_map[peer_5] == 5);
 
-  minhton::PeerInfoHasher hasher = minhton::PeerInfoHasher();
+  minhton::LogicalNodeInfoHasher hasher = minhton::LogicalNodeInfoHasher();
 
   REQUIRE(hasher(peer_1) == hasher(peer_1));
   REQUIRE(hasher(peer_1) != hasher(peer_2));
@@ -398,19 +402,19 @@ TEST_CASE("PeerInfo PeerInfoHasher", "[PeerInfo][PeerInfoHasher]") {
   REQUIRE(hasher(peer_5) == hasher(peer_5));
 }
 
-TEST_CASE("PeerInfo Equal Unequal", "[PeerInfo][Method][Equal, Unequal]") {
-  minhton::PeerInfo p1(7, 0);
-  minhton::PeerInfo p2(0, 0);
-  minhton::PeerInfo p3(1, 0);
-  minhton::PeerInfo p4(1, 1);
+TEST_CASE("LogicalNodeInfo Equal Unequal", "[LogicalNodeInfo][Method][Equal, Unequal]") {
+  minhton::LogicalNodeInfo p1(7, 0);
+  minhton::LogicalNodeInfo p2(0, 0);
+  minhton::LogicalNodeInfo p3(1, 0);
+  minhton::LogicalNodeInfo p4(1, 1);
 
-  minhton::PeerInfo p5(0, 0, (uint16_t)3);
-  minhton::PeerInfo p6(1, 0, (uint16_t)3);
-  minhton::PeerInfo p7(1, 1, (uint16_t)3);
+  minhton::LogicalNodeInfo p5(0, 0, (uint16_t)3);
+  minhton::LogicalNodeInfo p6(1, 0, (uint16_t)3);
+  minhton::LogicalNodeInfo p7(1, 1, (uint16_t)3);
 
-  minhton::PeerInfo p8(0, 0, (uint16_t)15);
-  minhton::PeerInfo p9(1, 0, (uint16_t)15);
-  minhton::PeerInfo p10(1, 1, (uint16_t)15);
+  minhton::LogicalNodeInfo p8(0, 0, (uint16_t)15);
+  minhton::LogicalNodeInfo p9(1, 0, (uint16_t)15);
+  minhton::LogicalNodeInfo p10(1, 1, (uint16_t)15);
 
   REQUIRE(p1 == p1);
   REQUIRE(p2 == p2);

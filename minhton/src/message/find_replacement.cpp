@@ -16,7 +16,7 @@ MessageFindReplacement::MessageFindReplacement(const MinhtonMessageHeader &heade
       node_to_replace_(std::move(node_to_replace)),
       search_progress_(search_progress) {
   header_.setMessageType(MessageType::kFindReplacement);
-  MessageLoggingAdditionalInfo logging_info{getNodeToReplace().getPeerInfo().getUuid(), "",
+  MessageLoggingAdditionalInfo logging_info{getNodeToReplace().getLogicalNodeInfo().getUuid(), "",
                                             "Prog: " + std::to_string(search_progress)};
   header_.setAdditionalLoggingInfo(logging_info);
   validate();

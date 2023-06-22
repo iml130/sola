@@ -82,7 +82,7 @@ template <typename T>
 bool MinhtonMessage<T>::validateHeader(const MinhtonMessageHeader &header) const {
   return header.getSender().getNetworkInfo().isInitialized() &&
          (header.getTarget().getNetworkInfo().isInitialized() ||
-          header.getTarget().getPeerInfo().isInitialized());
+          header.getTarget().getLogicalNodeInfo().isInitialized());
 }
 
 template <typename T> void MinhtonMessage<T>::validate() const {

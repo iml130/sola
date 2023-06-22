@@ -74,7 +74,7 @@ public:
   void onNodeInfoChangeNotification(const minhton::NodeInfo &previous_node_info,
                                     const minhton::NodeInfo &new_node_info);
 
-  void requestAttributeInformation(PeerInfo peer, const DistributedData &distr_data);
+  void requestAttributeInformation(LogicalNodeInfo peer, const DistributedData &distr_data);
 
   ///
   /// If we have subscribed or inquired an attributes value
@@ -96,7 +96,7 @@ public:
                                std::vector<NodeData::Key> removed_keys);
 
   /// \returns current cover data
-  std::unordered_map<PeerInfo, DistributedData, PeerInfoHasher> getCoverData();
+  std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher> getCoverData();
 
   // TODO unit tests
   void notifyAboutQueryRequest(const FindQuery &query, uint64_t request_timestamp);
@@ -146,17 +146,17 @@ private:
   std::shared_ptr<RoutingInformation> routing_info_;
 
   /// The heart of the DSN Handler.
-  /// A map from peer info to distributed data
+  /// A map from LogicalNodeInfo to distributed data
   /// to store information about each node in our cover area.
   /// It requires constant maintanance if a neighbor or our own position changes
-  std::unordered_map<PeerInfo, DistributedData, PeerInfoHasher> cover_data_;
+  std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher> cover_data_;
 
   /// Precalculated vector of all positions within the cover area,
   /// depending on our current position.
   std::vector<std::tuple<uint32_t, uint32_t>> cover_area_positions_;
 
   std::vector<std::tuple<uint32_t, uint32_t>> extended_cover_area_positions_;
-  std::unordered_map<PeerInfo, DistributedData, PeerInfoHasher> extended_cover_data_;
+  std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher> extended_cover_data_;
 
   /// Storing how often keys have been requested, by storing the timestamps of the request.
   /// With those, the request frequency can be calculated.

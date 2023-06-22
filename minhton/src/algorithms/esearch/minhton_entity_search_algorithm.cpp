@@ -81,7 +81,7 @@ std::future<FindResult> MinhtonEntitySearchAlgorithm::find(FindQuery query) {
     MessageFindQueryRequest msg_request(header, query, MessageFindQueryRequest::kDirectionNone,
                                         {0, pow(fanout, dsn_target.getLevel())});
 
-    if (dsn_target.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+    if (dsn_target.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
       if (dsn_handler_.isActive()) {
         performFindQueryForwarding(msg_request);
         performSendInquiryAggregations(ref_event_id, query);
@@ -419,7 +419,7 @@ NodeData::NodesWithAttributes MinhtonEntitySearchAlgorithm::getRelevantAttribute
   for (auto const &node : true_nodes) {
     std::vector<std::tuple<NodeData::Key, NodeData::Value>> node_data;
 
-    if (node.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+    if (node.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
       // local
 
       if (selection == FindQuery::FindQuerySelection::kSelectAll || relevant_keys.empty()) {
@@ -439,7 +439,7 @@ NodeData::NodesWithAttributes MinhtonEntitySearchAlgorithm::getRelevantAttribute
     } else {
       // distributed
 
-      auto it = cover_data.find(node.getPeerInfo());
+      auto it = cover_data.find(node.getLogicalNodeInfo());
       if (it != cover_data.end()) {
         DistributedData &distr_data = it->second;
         if (selection == FindQuery::FindQuerySelection::kSelectAll || relevant_keys.empty()) {

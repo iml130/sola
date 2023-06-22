@@ -140,7 +140,7 @@ void LeaveAlgorithmGeneral::processReplacementUpdate(const MessageReplacementUpd
   auto replaced_neighbor = message.getReplacedPositionNode();
   replaced_neighbor.setNetworkInfo(
       message.getRemovedPositionNode().getNetworkInfo());  // new physical address
-  replaced_neighbor.setPeerInfo(message.getNewPeer());
+  replaced_neighbor.setLogicalNodeInfo(message.getNewLogicalNodeInfo());
 
   // Updating the node at the replaced position with the new Network Information
   NodeInfo old_node = getRoutingInfo()->getNodeInfoByPosition(replaced_neighbor.getLevel(),
@@ -160,8 +160,8 @@ void LeaveAlgorithmGeneral::processReplacementUpdate(const MessageReplacementUpd
     for (const auto &neighbor : getRoutingInfo()->getRoutingTableNeighbors()) {
       MinhtonMessageHeader header(getSelfNodeInfo(), neighbor, message.getHeader().getRefEventId());
       MessageReplacementUpdate msg(header, message.getRemovedPositionNode(),
-                                   message.getReplacedPositionNode(), message.getNewPeer(),
-                                   message.getShouldAcknowledge());
+                                   message.getReplacedPositionNode(),
+                                   message.getNewLogicalNodeInfo(), message.getShouldAcknowledge());
       send(msg);
       ack_replacement_update_forward++;
     }
@@ -231,10 +231,12 @@ void LeaveAlgorithmGeneral::performLeaveWithReplacement(
   std::sort(existing_symmetrical_neighbors_of_replaced_position.begin(),
             existing_symmetrical_neighbors_of_replaced_position.end());
 
-  if (removed_position_adjacent_left.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (removed_position_adjacent_left.getLogicalNodeInfo() ==
+      getSelfNodeInfo().getLogicalNodeInfo()) {
     removed_position_adjacent_left = getSelfNodeInfo();
   }
-  if (removed_position_adjacent_right.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (removed_position_adjacent_right.getLogicalNodeInfo() ==
+      getSelfNodeInfo().getLogicalNodeInfo()) {
     removed_position_adjacent_right = getSelfNodeInfo();
   }
 
@@ -243,7 +245,7 @@ void LeaveAlgorithmGeneral::performLeaveWithReplacement(
   // if NetworkInfo is not known we use SearchExact
   for (auto const &replaced_pos_neighbor : existing_symmetrical_neighbors_of_replaced_position) {
     // not sending to removed position
-    if (replaced_pos_neighbor.getPeerInfo() == removed_position_node.getPeerInfo()) {
+    if (replaced_pos_neighbor.getLogicalNodeInfo() == removed_position_node.getLogicalNodeInfo()) {
       continue;
     }
 
@@ -253,9 +255,9 @@ void LeaveAlgorithmGeneral::performLeaveWithReplacement(
 
     // sending ReplacementUpdate
     MinhtonMessageHeader temp_header(getSelfNodeInfo(), replaced_pos_neighbor, leaving_event_id_);
-    MessageReplacementUpdate message_replacement_update(temp_header, removed_position_node,
-                                                        replaced_position_node,
-                                                        getSelfNodeInfo().getPeerInfo(), true);
+    MessageReplacementUpdate message_replacement_update(
+        temp_header, removed_position_node, replaced_position_node,
+        getSelfNodeInfo().getLogicalNodeInfo(), true);
 
     LOG_INFO("Sending ReplacementUpdate to " + replaced_pos_neighbor.getString());
 
@@ -409,7 +411,7 @@ void LeaveAlgorithmGeneral::processSignOffParentRequest(
     // When we are the root node and the successor is 1:0, we don't need to lock other nodes, since
     // there are no other nodes in the network
     NodeInfo dummy_node = getSelfNodeInfo();
-    dummy_node.setPeerInfo(PeerInfo());
+    dummy_node.setLogicalNodeInfo(LogicalNodeInfo());
     MinhtonMessageHeader header(dummy_node, dummy_node);
     MessageLockNeighborResponse resp(header, true);
     remaining_lock_neighbor_response_ = 1;
@@ -587,7 +589,7 @@ void LeaveAlgorithmGeneral::processReceiveSignoffNeighborAdjacentsAck() {
 void LeaveAlgorithmGeneral::processReceiveReplacementUpdateAck() {
   // Unlock parent
   MinhtonMessageHeader header(getSelfNodeInfo(), old_parent_, leaving_event_id_);
-  if (old_parent_.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (old_parent_.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
     header.setTarget(getSelfNodeInfo());
   }
   MessageUnlockNeighbor unlock(header);
@@ -639,9 +641,9 @@ void LeaveAlgorithmGeneral::replaceMyself(NodeInfo node_to_replace,
 
   getRoutingInfo()->setNodeStatus(NodeStatus::kLeft, ref_event_id);
 
-  getRoutingInfo()->setPosition(PeerInfo(node_to_replace.getPeerInfo().getLevel(),
-                                         node_to_replace.getPeerInfo().getNumber(),
-                                         node_to_replace.getPeerInfo().getFanout()));
+  getRoutingInfo()->setPosition(LogicalNodeInfo(node_to_replace.getLogicalNodeInfo().getLevel(),
+                                                node_to_replace.getLogicalNodeInfo().getNumber(),
+                                                node_to_replace.getLogicalNodeInfo().getFanout()));
 
   // replacing self_node_info position (NetworkInfo stays the same!), resetting routing_info
   // we are a different peer now
@@ -651,7 +653,7 @@ void LeaveAlgorithmGeneral::replaceMyself(NodeInfo node_to_replace,
   neighbors_of_node_to_replace.erase(
       std::remove_if(neighbors_of_node_to_replace.begin(), neighbors_of_node_to_replace.end(),
                      [&](const NodeInfo &node) {
-                       return node.getPeerInfo() == old_self_node_info.getPeerInfo();
+                       return node.getLogicalNodeInfo() == old_self_node_info.getLogicalNodeInfo();
                      }),
       neighbors_of_node_to_replace.end());
 

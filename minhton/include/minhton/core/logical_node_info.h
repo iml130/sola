@@ -4,8 +4,8 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#ifndef MINHTON_CORE_PEER_INFO_H_
-#define MINHTON_CORE_PEER_INFO_H_
+#ifndef MINHTON_CORE_LOGICAL_NODE_INFO_H_
+#define MINHTON_CORE_LOGICAL_NODE_INFO_H_
 
 #include <string>
 
@@ -16,54 +16,54 @@ namespace minhton
 
 {
 
-/// PeerInfo represents the position of a peer within the p2p network.
+/// LogicalNodeInfo represents the position of a peer within the p2p network.
 /// Each peer has a unique position (level:number) in the range of 0..(m^level)-1
 ///
-class PeerInfo {
+class LogicalNodeInfo {
 public:
-  PeerInfo();
+  LogicalNodeInfo();
 
   ///
-  /// Creates a PeerInfo object without a given position. It's optional to give a fanout.
+  /// Creates a LogicalNodeInfo object without a given position. It's optional to give a fanout.
   /// As default the k_FANOUT_DEFAULT value gets set. Level and Number are being set as 0.
   /// This object is set as not initialized. There is no possibility of initializing it.
   /// This constructor is there to represent a non-existing peer.
   ///
   /// Typical usage:
   /// \code
-  ///    PeerInfo peer(3);
+  ///    LogicalNodeInfo l_node_info(3);
   /// \endcode
   ///
   /// \param fanout maximum number of children a node can have
   ///
   /// \returns nothing on success, otherwise throws std::invalid_argument in case of an invalid
   /// fanout
-  explicit PeerInfo(uint16_t fanout);
+  explicit LogicalNodeInfo(uint16_t fanout);
 
   ///
-  /// Creates a PeerInfo object with a given position but without a fanout.
+  /// Creates a LogicalNodeInfo object with a given position but without a fanout.
   /// Directly after the fanout is known, setFanout has to be called
   /// to set the fanout. Otherwise the fanout stays set as 0 and an invalid
   /// position might not get recognized.
   ///
   /// Typical usage:
   /// \code
-  ///    PeerInfo peer(1, 0, true);
+  ///    LogicalNodeInfo l_node_info(1, 0, true);
   /// \endcode
   ///
   /// \param level level in the tree, root has level 0
   /// \param number number in the tree, the leftmost node on the level has number 0
   ///
   /// \returns nothing
-  PeerInfo(uint32_t level, uint32_t number);
+  LogicalNodeInfo(uint32_t level, uint32_t number);
 
   ///
-  /// Creates a PeerInfo object with a given position and fanout. It gets set as initialized.
+  /// Creates a LogicalNodeInfo object with a given position and fanout. It gets set as initialized.
   /// It gets verified if the position with the given fanout is valid.
   ///
   /// Typical usage:
   /// \code
-  ///    PeerInfo peer(1, 1, 2);
+  ///    LogicalNodeInfo l_node_info(1, 1, 2);
   /// \endcode
   ///
   /// \param level level in the tree, root has level 0
@@ -72,9 +72,9 @@ public:
   ///
   /// \returns nothing on success, otherwise throws std::invalid_argument in case of an invalid
   /// level:number or fanout
-  PeerInfo(uint32_t level, uint32_t number, uint16_t fanout);
+  LogicalNodeInfo(uint32_t level, uint32_t number, uint16_t fanout);
 
-  ~PeerInfo();
+  ~LogicalNodeInfo();
 
   /// \returns the level of this peer within MINHTON tree
   uint32_t getLevel() const;
@@ -136,7 +136,7 @@ public:
   ///
   /// \returns nothing on succes, otherwise throws std::invalid_argument in case of an invalid
   /// level:number
-  void setPosition(PeerInfo other);
+  void setPosition(LogicalNodeInfo other);
 
   ///
   /// Returns the current state of the peer if the peer is proper initialized.
@@ -172,7 +172,7 @@ public:
   /// \param other instance of a peer which is compared to.
   ///
   /// \returns true if same level, otherwise false.
-  bool isSameLevel(PeerInfo other) const;
+  bool isSameLevel(LogicalNodeInfo other) const;
 
   ///
   /// Checks if another peer has a deeper/ higher (>) level.
@@ -186,7 +186,7 @@ public:
   /// \param other instance of a peer which is compared to.
   ///
   /// \returns true if same level, otherwise false.
-  bool isDeeperThan(PeerInfo other) const;
+  bool isDeeperThan(LogicalNodeInfo other) const;
 
   ///
   /// Checks if another peer has is on the same or on a deeper/ higher (>=) level.
@@ -201,7 +201,7 @@ public:
   /// \param other instance of a peer which is compared to.
   ///
   /// \returns true if same level, otherwise false.
-  bool isDeeperThanOrSameLevel(PeerInfo other) const;
+  bool isDeeperThanOrSameLevel(LogicalNodeInfo other) const;
 
   ///
   /// Checks if the current peer with its level:number is part of the prio-node set
@@ -214,12 +214,12 @@ public:
   /// \returns true if peer is a prio-node, otherwise false.
   bool isPrioNode() const;
 
-  friend bool operator==(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
-  friend bool operator!=(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
-  friend bool operator<(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
-  friend bool operator<=(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
-  friend bool operator>(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
-  friend bool operator>=(const minhton::PeerInfo &p1, const minhton::PeerInfo &p2);
+  friend bool operator==(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
+  friend bool operator!=(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
+  friend bool operator<(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
+  friend bool operator<=(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
+  friend bool operator>(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
+  friend bool operator>=(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
 
   SERIALIZE(level_, number_, fanout_, uuid_, initialized_);
 
@@ -231,15 +231,16 @@ private:
   bool initialized_ = false;
 };
 
-struct PeerInfoHasher {
-  std::size_t operator()(const minhton::PeerInfo &peer) const {
+struct LogicalNodeInfoHasher {
+  std::size_t operator()(const minhton::LogicalNodeInfo &l_node_info) const {
     using std::hash;
     using std::size_t;
     using std::string;
 
-    std::string rep = std::to_string(peer.getLevel()) + ":" + std::to_string(peer.getNumber()) +
-                      ":" + std::to_string(peer.getFanout()) +
-                      (peer.isInitialized() ? "init" : "uninit");
+    std::string rep = std::to_string(l_node_info.getLevel()) + ":" +
+                      std::to_string(l_node_info.getNumber()) + ":" +
+                      std::to_string(l_node_info.getFanout()) +
+                      (l_node_info.isInitialized() ? "init" : "uninit");
     std::size_t res = std::hash<std::string>()(rep);
     return res;
   }

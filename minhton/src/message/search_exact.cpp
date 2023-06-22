@@ -20,7 +20,8 @@ MessageSearchExact::MessageSearchExact(const MinhtonMessageHeader &header,
   MessageLoggingAdditionalInfo logging_info{};
   MessageType type = std::visit(
       [](auto &&msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
-  logging_info.content = "query_destination=(" + getDestinationNode().getPeerInfo().getString() +
+  logging_info.content = "query_destination=(" +
+                         getDestinationNode().getLogicalNodeInfo().getString() +
                          "), query_msg_type=" + getMessageTypeString(type);
   header_.setAdditionalLoggingInfo(logging_info);
 

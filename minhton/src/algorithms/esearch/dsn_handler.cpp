@@ -133,7 +133,7 @@ void DSNHandler::buildCoverArea() {
 
     if (cover_node.isInitialized()) {
       DistributedData distr_data(cover_node.getNetworkInfo());
-      cover_data_[cover_node.getPeerInfo()] = distr_data;
+      cover_data_[cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
 }
@@ -159,7 +159,7 @@ void DSNHandler::buildTempCoverArea() {
 
     if (cover_node.isInitialized()) {
       DistributedData distr_data(cover_node.getNetworkInfo());
-      cover_data_[cover_node.getPeerInfo()] = distr_data;
+      cover_data_[cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
 }
@@ -189,7 +189,7 @@ void DSNHandler::buildExtendedCoverArea() {
 
     if (extended_cover_node.isInitialized()) {
       DistributedData distr_data(extended_cover_node.getNetworkInfo());
-      extended_cover_data_[extended_cover_node.getPeerInfo()] = distr_data;
+      extended_cover_data_[extended_cover_node.getLogicalNodeInfo()] = distr_data;
     }
   }
 }
@@ -215,7 +215,7 @@ void DSNHandler::onNeighborChangeNotification(const minhton::NodeInfo &neighbor,
     return;  // not in cover area -> not relevant
   }
 
-  auto it_cover_data = cover_data_.find(neighbor.getPeerInfo());
+  auto it_cover_data = cover_data_.find(neighbor.getLogicalNodeInfo());
 
   // possible cases:
   // network info init - inside -> update if different
@@ -237,8 +237,8 @@ void DSNHandler::onNeighborChangeNotification(const minhton::NodeInfo &neighbor,
 
   } else if (!inside && init) {  // -> insert
     DistributedData distr_data(neighbor.getNetworkInfo());
-    cover_data_[neighbor.getPeerInfo()] = distr_data;
-    requestAttributeInformation(neighbor.getPeerInfo(), distr_data);
+    cover_data_[neighbor.getLogicalNodeInfo()] = distr_data;
+    requestAttributeInformation(neighbor.getLogicalNodeInfo(), distr_data);
   }
 }
 
@@ -263,7 +263,7 @@ DSNHandler::getUndecidedNodesAndMissingKeys(FindQuery &query, bool all_informati
     FuzzyValue val = query.evaluate(distr_data, all_information_present, timestamp_now);
     if (val.isUndecided()) {
       NodeInfo undecided_node;
-      undecided_node.setPeerInfo(peer);
+      undecided_node.setLogicalNodeInfo(peer);
       undecided_node.setNetworkInfo(distr_data.getNetworkInfo());
 
       std::vector<NodeData::Key> missing_keys =
@@ -283,7 +283,7 @@ std::vector<NodeInfo> DSNHandler::getTrueNodes(FindQuery &query, const uint64_t 
     FuzzyValue val = query.evaluate(distr_data, true, timestamp_now);
     if (val.isTrue()) {
       NodeInfo true_node;
-      true_node.setPeerInfo(peer);
+      true_node.setLogicalNodeInfo(peer);
       true_node.setNetworkInfo(distr_data.getNetworkInfo());
 
       true_nodes.push_back(true_node);
@@ -297,9 +297,10 @@ void DSNHandler::updateInquiredOrSubscribedAttributeValues(
     const NodeInfo &inquired_or_updated_node,
     std::unordered_map<NodeData::Key, NodeData::ValueAndType> attribute_values_and_types,
     uint64_t update_timestamp) {
-  auto inquired_distr_data_it = cover_data_.find(inquired_or_updated_node.getPeerInfo());
+  auto inquired_distr_data_it = cover_data_.find(inquired_or_updated_node.getLogicalNodeInfo());
   if (inquired_distr_data_it == cover_data_.end()) {
-    inquired_distr_data_it = extended_cover_data_.find(inquired_or_updated_node.getPeerInfo());
+    inquired_distr_data_it =
+        extended_cover_data_.find(inquired_or_updated_node.getLogicalNodeInfo());
     if (inquired_distr_data_it == extended_cover_data_.end()) {
       // not in cover area nor extended cover area
       return;
@@ -333,7 +334,7 @@ void DSNHandler::updateInquiredOrSubscribedAttributeValues(
 
 void DSNHandler::updateRemovedAttributes(const NodeInfo &inquired_node,
                                          std::vector<NodeData::Key> removed_keys) {
-  auto inquired_distr_data_it = cover_data_.find(inquired_node.getPeerInfo());
+  auto inquired_distr_data_it = cover_data_.find(inquired_node.getLogicalNodeInfo());
   if (inquired_distr_data_it == cover_data_.end()) {
     // remove this later
     throw std::logic_error("something has gone wrong");
@@ -350,7 +351,8 @@ void DSNHandler::updateRemovedAttributes(const NodeInfo &inquired_node,
   }
 }
 
-std::unordered_map<PeerInfo, DistributedData, PeerInfoHasher> DSNHandler::getCoverData() {
+std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher>
+DSNHandler::getCoverData() {
   return this->cover_data_;
 }
 
@@ -393,7 +395,7 @@ DSNHandler::getNodesAndKeysToSubscribe(uint64_t const &timestamp_now) {
               // NOTE[epic=esearch] maybe add delta for threshold
 
               NodeInfo node;
-              node.setPeerInfo(peer);
+              node.setLogicalNodeInfo(peer);
               node.setNetworkInfo(distr_data.getNetworkInfo());
 
               // if not subscribed yet
@@ -417,7 +419,7 @@ DSNHandler::getNodesAndKeysToSubscribe(uint64_t const &timestamp_now) {
 
 std::unordered_map<NodeInfo, std::vector<NodeData::Key>, NodeInfoHasher>
 DSNHandler::getNodesAndKeysToUnsubscribe(uint64_t const &timestamp_now) {
-  std::vector<std::tuple<PeerInfo, DistributedData, NodeData::Key>> current_sub_tuples;
+  std::vector<std::tuple<LogicalNodeInfo, DistributedData, NodeData::Key>> current_sub_tuples;
   std::vector<NodeData::Key> sub_keys;
 
   for (auto const &[peer, distr_data] : cover_data_) {
@@ -453,7 +455,7 @@ DSNHandler::getNodesAndKeysToUnsubscribe(uint64_t const &timestamp_now) {
       update_frequencies;
   for (auto &[peer, distr_data, key] : current_sub_tuples) {
     NodeInfo node;
-    node.setPeerInfo(peer);
+    node.setLogicalNodeInfo(peer);
     node.setNetworkInfo(distr_data.getNetworkInfo());
 
     auto timestamps = distr_data.getUpdateTimestamps(key);
@@ -508,7 +510,7 @@ void DSNHandler::setPlacedSubscriptionOrders(
     std::unordered_map<NodeInfo, std::vector<NodeData::Key>, NodeInfoHasher>
         subscription_orders_map) {
   for (const auto &[node, sub_keys] : subscription_orders_map) {
-    auto it = cover_data_.find(node.getPeerInfo());
+    auto it = cover_data_.find(node.getLogicalNodeInfo());
 
     if (it == cover_data_.end()) {
       throw std::logic_error("subscribed node is not in cover data");
@@ -524,7 +526,7 @@ void DSNHandler::setPlacedUnsubscriptionOrders(
     std::unordered_map<NodeInfo, std::vector<NodeData::Key>, NodeInfoHasher>
         unsubscription_orders_map) {
   for (const auto &[node, unsub_keys] : unsubscription_orders_map) {
-    auto it = cover_data_.find(node.getPeerInfo());
+    auto it = cover_data_.find(node.getLogicalNodeInfo());
 
     if (it == cover_data_.end()) {
       throw std::logic_error("subscribed node is not in cover data");
@@ -539,7 +541,7 @@ void DSNHandler::setPlacedUnsubscriptionOrders(
 NodeData::Attributes DSNHandler::getNodeAttributes(const NodeInfo &node) {
   NodeData::Attributes attributes;
 
-  auto it = cover_data_.find(node.getPeerInfo());
+  auto it = cover_data_.find(node.getLogicalNodeInfo());
   if (it != cover_data_.end()) {
     for (auto &[key, value_timestamp_type] : it->second.getData()) {
       attributes.push_back({key, std::get<0>(value_timestamp_type)});
@@ -549,10 +551,11 @@ NodeData::Attributes DSNHandler::getNodeAttributes(const NodeInfo &node) {
   return attributes;
 }
 
-void DSNHandler::requestAttributeInformation(PeerInfo peer, const DistributedData &distr_data) {
+void DSNHandler::requestAttributeInformation(LogicalNodeInfo peer,
+                                             const DistributedData &distr_data) {
   if (distr_data.getNetworkInfo().isInitialized()) {
     NodeInfo request_node;
-    request_node.setPeerInfo(peer);
+    request_node.setLogicalNodeInfo(peer);
     request_node.setNetworkInfo(distr_data.getNetworkInfo());
 
     request_attribute_inquiry_callback_(request_node);

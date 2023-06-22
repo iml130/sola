@@ -225,8 +225,8 @@ TEST_CASE("JsonSerializer Serialize/Deserialize", "[JsonSerializer][Serialize/De
     header.setTarget(NodeInfo(3, 1, 5, "127.0.0.2", 2001));
     NodeInfo rem_pos_node(1, 2, 5, "127.0.0.12", 4321);
     NodeInfo repl_pos_node(1, 1, 5, "127.0.0.11", 4321);
-    PeerInfo new_peer(3, 2, 5);
-    MessageReplacementUpdate msg(header, rem_pos_node, repl_pos_node, new_peer);
+    LogicalNodeInfo new_l_node_info(3, 2, 5);
+    MessageReplacementUpdate msg(header, rem_pos_node, repl_pos_node, new_l_node_info);
     auto deserialized_msg = serialize_deserialize_message_and_check<MessageReplacementUpdate>(msg);
 
     // Message specific attributes

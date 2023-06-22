@@ -71,12 +71,12 @@ void MinhtonNodeNs3::setStaticBuildNeighbors(const minhton::NodeInfo &self_pos,
   minhton::FSMState init_state = minhton::FSMState::kConnected;
   node_.initFSM(init_state);
 
-  node_.getRoutingInformation()->setPosition(self_pos.getPeerInfo());
+  node_.getRoutingInformation()->setPosition(self_pos.getLogicalNodeInfo());
   if (self_pos.getLevel() != 0) {
-    const auto &peer_info = self_pos.getPeerInfo();
-    node_.getAccessContainer()->logger.logNode({peer_info.getUuid(), peer_info.getLevel(),
-                                                peer_info.getNumber(), peer_info.getFanout(),
-                                                peer_info.isInitialized()});
+    const auto &l_node_info = self_pos.getLogicalNodeInfo();
+    node_.getAccessContainer()->logger.logNode({l_node_info.getUuid(), l_node_info.getLevel(),
+                                                l_node_info.getNumber(), l_node_info.getFanout(),
+                                                l_node_info.isInitialized()});
   }
 
   if (adj_left.isInitialized()) {

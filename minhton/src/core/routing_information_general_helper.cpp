@@ -120,12 +120,12 @@ void RoutingInformation::updateRoutingTableNeighbor(minhton::NodeInfo routing_ta
 
   // if the iterator is at the right position
   if (it != this->routing_table_neighbors_.end() &&
-      it->getPeerInfo() == routing_table_neighbor.getPeerInfo()) {
+      it->getLogicalNodeInfo() == routing_table_neighbor.getLogicalNodeInfo()) {
     // if the network info to update is actually different
     if (it->getNetworkInfo() != routing_table_neighbor.getNetworkInfo()) {
       minhton::NodeInfo old_node = *it;
-      // Setting the PeerInfo is necessary because the UUID needs to be updated
-      it->setPeerInfo(routing_table_neighbor.getPeerInfo());
+      // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
+      it->setLogicalNodeInfo(routing_table_neighbor.getLogicalNodeInfo());
       it->setNetworkInfo(routing_table_neighbor.getNetworkInfo());
       this->notifyNeighborChange(*it, kRoutingTableNeighbor, ref_event_id,
                                  old_node);  // TODO Index
@@ -152,11 +152,11 @@ void RoutingInformation::updateRoutingTableNeighborChild(
       std::lower_bound(this->routing_table_neighbor_children_.begin(),
                        this->routing_table_neighbor_children_.end(), routing_table_neighbor_child);
   if (it != this->routing_table_neighbor_children_.end() &&
-      it->getPeerInfo() == routing_table_neighbor_child.getPeerInfo()) {
+      it->getLogicalNodeInfo() == routing_table_neighbor_child.getLogicalNodeInfo()) {
     // if the network info to update is actually different
     if (it->getNetworkInfo() != routing_table_neighbor_child.getNetworkInfo()) {
-      // Setting the PeerInfo is necessary because the UUID needs to be updated
-      it->setPeerInfo(routing_table_neighbor_child.getPeerInfo());
+      // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
+      it->setLogicalNodeInfo(routing_table_neighbor_child.getLogicalNodeInfo());
       it->setNetworkInfo(routing_table_neighbor_child.getNetworkInfo());
       this->notifyNeighborChange(routing_table_neighbor_child, kRoutingTableNeighborChild,
                                  ref_event_id);
@@ -167,13 +167,14 @@ void RoutingInformation::updateRoutingTableNeighborChild(
 void RoutingInformation::removeNeighbor(const minhton::NodeInfo &position_to_remove,
                                         uint64_t ref_event_id) {
   // we may not remove the parent. it wouldnt make sense! the whole tree would fall apart
-  if (this->parent_.getPeerInfo() == position_to_remove.getPeerInfo()) {
+  if (this->parent_.getLogicalNodeInfo() == position_to_remove.getLogicalNodeInfo()) {
     throw std::logic_error("Parent cannot be removed from routing information. Only updated.");
   }
 
-  if (this->adjacent_left_.getPeerInfo() == position_to_remove.getPeerInfo()) {
+  if (this->adjacent_left_.getLogicalNodeInfo() == position_to_remove.getLogicalNodeInfo()) {
     this->resetAdjacentLeft(ref_event_id);
-  } else if (this->adjacent_right_.getPeerInfo() == position_to_remove.getPeerInfo()) {
+  } else if (this->adjacent_right_.getLogicalNodeInfo() ==
+             position_to_remove.getLogicalNodeInfo()) {
     this->resetAdjacentRight(ref_event_id);
   }
 
@@ -190,13 +191,14 @@ void RoutingInformation::updateNeighbor(const minhton::NodeInfo &position_to_upd
     throw std::invalid_argument("Node to Update has to be initialized");
   }
 
-  if (this->adjacent_left_.getPeerInfo() == position_to_update.getPeerInfo()) {
+  if (this->adjacent_left_.getLogicalNodeInfo() == position_to_update.getLogicalNodeInfo()) {
     this->setAdjacentLeft(position_to_update, ref_event_id);
-  } else if (this->adjacent_right_.getPeerInfo() == position_to_update.getPeerInfo()) {
+  } else if (this->adjacent_right_.getLogicalNodeInfo() ==
+             position_to_update.getLogicalNodeInfo()) {
     this->setAdjacentRight(position_to_update, ref_event_id);
   }
 
-  if (this->parent_.getPeerInfo() == position_to_update.getPeerInfo()) {
+  if (this->parent_.getLogicalNodeInfo() == position_to_update.getLogicalNodeInfo()) {
     this->setParent(position_to_update, ref_event_id);
   }
 
@@ -353,9 +355,10 @@ std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDu
   auto result = v2;
 
   for (auto const &node1 : v1) {
-    auto same_pos_it = std::find_if(
-        result.begin(), result.end(),
-        [&](const minhton::NodeInfo &node) { return node1.getPeerInfo() == node.getPeerInfo(); });
+    auto same_pos_it =
+        std::find_if(result.begin(), result.end(), [&](const minhton::NodeInfo &node) {
+          return node1.getLogicalNodeInfo() == node.getLogicalNodeInfo();
+        });
 
     if (same_pos_it != result.end()) {
       minhton::NodeInfo same_pos_node_in_result = *same_pos_it;
@@ -442,7 +445,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueSymmetricalExisti
   if (this->adjacent_left_.isInitialized()) {
     bool adj_left_contained =
         std::any_of(neighbors.begin(), neighbors.end(), [=](const minhton::NodeInfo &node) {
-          return this->getAdjacentLeft().getPeerInfo() == node.getPeerInfo();
+          return this->getAdjacentLeft().getLogicalNodeInfo() == node.getLogicalNodeInfo();
         });
 
     if (!adj_left_contained) {
@@ -453,7 +456,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueSymmetricalExisti
   if (this->adjacent_right_.isInitialized()) {
     bool adj_right_contained =
         std::any_of(neighbors.begin(), neighbors.end(), [=](const minhton::NodeInfo &node) {
-          return this->getAdjacentRight().getPeerInfo() == node.getPeerInfo();
+          return this->getAdjacentRight().getLogicalNodeInfo() == node.getLogicalNodeInfo();
         });
 
     if (!adj_right_contained) {
@@ -491,20 +494,22 @@ minhton::NodeInfo RoutingInformation::getLowestNode() const {
 
   if (this->adjacent_left_.isInitialized()) {
     if (!lowest.isInitialized() ||
-        this->adjacent_left_.getPeerInfo().isDeeperThanOrSameLevel(lowest.getPeerInfo())) {
+        this->adjacent_left_.getLogicalNodeInfo().isDeeperThanOrSameLevel(
+            lowest.getLogicalNodeInfo())) {
       lowest = this->adjacent_left_;
     }
   }
 
   if (this->adjacent_right_.isInitialized()) {
     if (!lowest.isInitialized() ||
-        this->adjacent_right_.getPeerInfo().isDeeperThanOrSameLevel(lowest.getPeerInfo())) {
+        this->adjacent_right_.getLogicalNodeInfo().isDeeperThanOrSameLevel(
+            lowest.getLogicalNodeInfo())) {
       lowest = this->adjacent_right_;
     }
   }
 
   if (lowest.isInitialized() &&
-      lowest.getPeerInfo().isDeeperThan(this->self_node_info_.getPeerInfo())) {
+      lowest.getLogicalNodeInfo().isDeeperThan(this->self_node_info_.getLogicalNodeInfo())) {
     return lowest;
   }
 

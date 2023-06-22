@@ -13,8 +13,8 @@ using namespace minhton;
 TEST_CASE("NodeInfo Constructor", "[NodeInfo][Init]") {
   // empty constructor
   minhton::NodeInfo test;
-  REQUIRE(test.getPeerInfo().getLevel() == 0);
-  REQUIRE(test.getPeerInfo().getNumber() == 0);
+  REQUIRE(test.getLogicalNodeInfo().getLevel() == 0);
+  REQUIRE(test.getLogicalNodeInfo().getNumber() == 0);
   REQUIRE_FALSE(test.isValidPeer());
   REQUIRE(test.getNetworkInfo().getAddress() == "");
   REQUIRE(test.getNetworkInfo().getPort() == 0);
@@ -23,8 +23,8 @@ TEST_CASE("NodeInfo Constructor", "[NodeInfo][Init]") {
 
   // constructor with level and number
   minhton::NodeInfo test_2(1, 1, 2);
-  REQUIRE(test_2.getPeerInfo().getLevel() == 1);
-  REQUIRE(test_2.getPeerInfo().getNumber() == 1);
+  REQUIRE(test_2.getLogicalNodeInfo().getLevel() == 1);
+  REQUIRE(test_2.getLogicalNodeInfo().getNumber() == 1);
   REQUIRE(test_2.isValidPeer());
   REQUIRE(test_2.getNetworkInfo().getAddress() == "");
   REQUIRE(test_2.getNetworkInfo().getPort() == 0);
@@ -37,25 +37,26 @@ TEST_CASE("NodeInfo Constructor", "[NodeInfo][Init]") {
   REQUIRE_THROWS_AS(new minhton::NodeInfo(0, 1, 2), std::invalid_argument);
 }
 
-TEST_CASE("NodeInfo getPeerInfo setPeerInfo", "[NodeInfo][Method][getPeerInfo setPeerInfo") {
+TEST_CASE("NodeInfo getLogicalNodeInfo setLogicalNodeInfo",
+          "[NodeInfo][Method][getLogicalNodeInfo setLogicalNodeInfo") {
   minhton::NodeInfo test;
-  minhton::PeerInfo peer(2, 14, (uint16_t)5);
+  minhton::LogicalNodeInfo peer(2, 14, (uint16_t)5);
 
   // with initialized peer
-  test.setPeerInfo(peer);
-  REQUIRE(test.getPeerInfo().getLevel() == peer.getLevel());
-  REQUIRE(test.getPeerInfo().getNumber() == peer.getNumber());
-  REQUIRE(test.getPeerInfo().getFanout() == peer.getFanout());
+  test.setLogicalNodeInfo(peer);
+  REQUIRE(test.getLogicalNodeInfo().getLevel() == peer.getLevel());
+  REQUIRE(test.getLogicalNodeInfo().getNumber() == peer.getNumber());
+  REQUIRE(test.getLogicalNodeInfo().getFanout() == peer.getFanout());
   REQUIRE(test.isValidPeer() == peer.isInitialized());
   REQUIRE(test.isValidPeer() == peer.isInitialized());
 
   // with uninitialized peer
   minhton::NodeInfo test_2;
-  minhton::PeerInfo peer_2;
-  test_2.setPeerInfo(peer_2);
-  REQUIRE(test_2.getPeerInfo().getLevel() == peer_2.getLevel());
-  REQUIRE(test_2.getPeerInfo().getNumber() == peer_2.getNumber());
-  REQUIRE(test_2.getPeerInfo().getFanout() == peer_2.getFanout());
+  minhton::LogicalNodeInfo peer_2;
+  test_2.setLogicalNodeInfo(peer_2);
+  REQUIRE(test_2.getLogicalNodeInfo().getLevel() == peer_2.getLevel());
+  REQUIRE(test_2.getLogicalNodeInfo().getNumber() == peer_2.getNumber());
+  REQUIRE(test_2.getLogicalNodeInfo().getFanout() == peer_2.getFanout());
   REQUIRE(test_2.isValidPeer() == peer_2.isInitialized());
   REQUIRE(test_2.isValidPeer() == peer_2.isInitialized());
 }
@@ -88,29 +89,29 @@ TEST_CASE("NodeInfo isInitialized", "[NodeInfo][Method][isInitialized") {
   REQUIRE_FALSE(net_uninit.isInitialized());
   REQUIRE(net_init.isInitialized());
 
-  minhton::PeerInfo peer_uninit;
-  minhton::PeerInfo peer_init(1, 2, (uint16_t)3);
+  minhton::LogicalNodeInfo peer_uninit;
+  minhton::LogicalNodeInfo peer_init(1, 2, (uint16_t)3);
   REQUIRE_FALSE(peer_uninit.isInitialized());
   REQUIRE(peer_init.isInitialized());
 
   // uninit + uninit = uninit
   test.setNetworkInfo(net_uninit);
-  test.setPeerInfo(peer_uninit);
+  test.setLogicalNodeInfo(peer_uninit);
   REQUIRE_FALSE(test.isInitialized());
 
   // uninit + init = uninit
   test.setNetworkInfo(net_uninit);
-  test.setPeerInfo(peer_init);
+  test.setLogicalNodeInfo(peer_init);
   REQUIRE_FALSE(test.isInitialized());
 
   // init + uninit = uninit
   test.setNetworkInfo(net_init);
-  test.setPeerInfo(peer_uninit);
+  test.setLogicalNodeInfo(peer_uninit);
   REQUIRE_FALSE(test.isInitialized());
 
   // init + init = init
   test.setNetworkInfo(net_init);
-  test.setPeerInfo(peer_init);
+  test.setLogicalNodeInfo(peer_init);
   REQUIRE(test.isInitialized());
 }
 

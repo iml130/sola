@@ -9,8 +9,8 @@
 
 #include <string>
 
+#include "minhton/core/logical_node_info.h"
 #include "minhton/core/network_info.h"
-#include "minhton/core/peer_info.h"
 #include "minhton/message/serialize.h"
 
 namespace minhton {
@@ -18,8 +18,8 @@ namespace minhton {
 enum NodeStatus : uint8_t { kUninit = 0, kRunning = 1, kLeft = 2, kFailed = 3 };
 
 ///
-/// A NodeInfo is based on a PeerInfo and NetworkInfo. These two classes build the core of a node in
-/// our peer2peer network
+/// A NodeInfo is based on a LogicalNodeInfo and NetworkInfo. These two classes build the core of a
+/// node in our peer2peer network
 ///
 class NodeInfo {
 public:
@@ -46,16 +46,16 @@ public:
   NodeInfo(uint32_t level, uint32_t number, uint16_t fanout, const std::string &address,
            uint16_t port);
 
-  /// \returns A PeerInfo, which represents the position (Level/Number) of a peer within the p2p
-  /// network
-  minhton::PeerInfo getPeerInfo() const;
+  /// \returns A LogicalNodeInfo, which represents the position (Level/Number) of a peer within the
+  /// p2p network
+  minhton::LogicalNodeInfo getLogicalNodeInfo() const;
 
   ///
-  /// Sets the PeerInfo within the NodeInfo object
+  /// Sets the LogicalNodeInfo within the NodeInfo object
   ///
-  /// \param peer_info valid PeerInfo instance
+  /// \param l_node_info valid LogicalNodeInfo instance
   ///
-  void setPeerInfo(const minhton::PeerInfo &peer_info);
+  void setLogicalNodeInfo(const minhton::LogicalNodeInfo &l_node_info);
 
   /// \returns A NetworkInfo, which represents the remote host, by having a IPv4/IPv6 IP address and
   /// a port
@@ -64,7 +64,7 @@ public:
   ///
   /// Sets the NetworkInfo within the NodeInfo object
   ///
-  /// \param network_info valid PeerInfo instance
+  /// \param network_info valid LogicalNodeInfo instance
   ///
   void setNetworkInfo(const minhton::NetworkInfo &network_info);
 
@@ -73,7 +73,7 @@ public:
   ///
   /// Returns the current state of the node if the node is properly initialized.
   /// If a node is initialized, it exists.
-  /// This method depends on initialized state of the PeerInfo and NetworkInfo
+  /// This method depends on initialized state of the LogicalNodeInfo and NetworkInfo
   ///
   /// Typical usage:
   /// \code
@@ -83,24 +83,24 @@ public:
   /// \returns true if the node is proper initialized, otherwise false
   bool isInitialized() const;
 
-  // -------------- PeerInfo access Helper methods -------------------
+  // -------------- LogicalNodeInfo access Helper methods -------------------
 
-  /// Helper method, which sets the position for the internal PeerInfo object
+  /// Helper method, which sets the position for the internal LogicalNodeInfo object
   void setPosition(uint32_t level, uint32_t number);
 
-  /// Helper method, which sets the position for the internal PeerInfo object
-  void setPosition(PeerInfo other);
+  /// Helper method, which sets the position for the internal LogicalNodeInfo object
+  void setPosition(LogicalNodeInfo other);
 
-  /// Helper method, which sets the fanout for the internal PeerInfo object
+  /// Helper method, which sets the fanout for the internal LogicalNodeInfo object
   void setFanout(uint16_t fanout);
 
-  /// \returns the level of PeerInfo
+  /// \returns the level of LogicalNodeInfo
   uint32_t getLevel() const;
 
-  /// \returns the number of PeerInfo
+  /// \returns the number of LogicalNodeInfo
   uint32_t getNumber() const;
 
-  /// \returns the fanout of PeerInfo
+  /// \returns the fanout of LogicalNodeInfo
   uint16_t getFanout() const;
 
   /// \returns the status of the node
@@ -136,10 +136,10 @@ public:
   friend bool operator>(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
   friend bool operator>=(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
 
-  SERIALIZE(peer_info_, network_info_);
+  SERIALIZE(l_node_info_, network_info_);
 
 private:
-  minhton::PeerInfo peer_info_;
+  minhton::LogicalNodeInfo l_node_info_;
   minhton::NetworkInfo network_info_;
 
   NodeStatus status_{kUninit};
@@ -150,7 +150,7 @@ struct NodeInfoHasher {
     using std::hash;
     using std::size_t;
 
-    std::size_t peer_hash = minhton::PeerInfoHasher()(node.getPeerInfo());
+    std::size_t peer_hash = minhton::LogicalNodeInfoHasher()(node.getLogicalNodeInfo());
     std::size_t network_hash = minhton::NetworkInfoHasher()(node.getNetworkInfo());
 
     return peer_hash ^ network_hash;

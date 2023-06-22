@@ -101,8 +101,8 @@ MessageLoggingInfo MinhtonMessageHeader::getMessageLoggingInfo(bool receive) con
       receive ? MessageProcessingModes::kReceiving : MessageProcessingModes::kSending,
       getEventId(),
       getRefEventId(),
-      getSender().getPeerInfo().getUuid(),
-      getTarget().getPeerInfo().getUuid(),
+      getSender().getLogicalNodeInfo().getUuid(),
+      getTarget().getLogicalNodeInfo().getUuid(),
       getAdditionalLoggingInfo()};
   return logging_info;
 }

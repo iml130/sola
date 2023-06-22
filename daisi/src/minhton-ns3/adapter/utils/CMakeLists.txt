@@ -54,7 +54,7 @@ target_link_libraries(minhton_utils_procedure_info_sim
     minhton_algorithms_sim
     minhton_core_network_info
     minhton_core_node_info_sim
-    minhton_core_peer_info_sim
+    minhton_core_logical_node_info_sim
     minhton_core_definitions
   PRIVATE
     minhton_exception_algorithm

@@ -56,7 +56,7 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
 
     REQUIRE_FALSE(adj_left.isInitialized());
     REQUIRE(adj_right.isInitialized());
-    REQUIRE(adj_right.getPeerInfo() == node_2_0.getPeerInfo());
+    REQUIRE(adj_right.getLogicalNodeInfo() == node_2_0.getLogicalNodeInfo());
   }
 
   SECTION("Case 2") {
@@ -67,7 +67,7 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
 
     REQUIRE_FALSE(adj_right.isInitialized());
     REQUIRE(adj_left.isInitialized());
-    REQUIRE(adj_left.getPeerInfo() == node_2_3.getPeerInfo());
+    REQUIRE(adj_left.getLogicalNodeInfo() == node_2_3.getLogicalNodeInfo());
   }
 
   SECTION("Case 3") {
@@ -78,9 +78,9 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
     auto adj_right = leave_algo.getAdjacentRightFromVector(node_2_1, neighbors);
 
     REQUIRE(adj_right.isInitialized());
-    REQUIRE(adj_right.getPeerInfo() == node_0_0.getPeerInfo());
+    REQUIRE(adj_right.getLogicalNodeInfo() == node_0_0.getLogicalNodeInfo());
     REQUIRE(adj_left.isInitialized());
-    REQUIRE(adj_left.getPeerInfo() == node_3_2.getPeerInfo());
+    REQUIRE(adj_left.getLogicalNodeInfo() == node_3_2.getLogicalNodeInfo());
   }
 }
 
@@ -143,13 +143,13 @@ TEST_CASE("RoutingInformationJoinHelper getFurthestPNAtEndOfThisLevel",
   //   routing_info.updateNeighbor(node_4_8);
   //   REQUIRE(routing_info.getRoutingTableNeighbors()[2].isInitialized());
   //   furthest = routing_info.getFurthestPrioNodeAtEndOfThisLevel();
-  //   REQUIRE(furthest.getPeerInfo() == node_4_8.getPeerInfo());
+  //   REQUIRE(furthest.getLogicalNodeInfo() == node_4_8.getLogicalNodeInfo());
   //   REQUIRE(furthest.isInitialized());
 
   //   routing_info.updateNeighbor(node_4_2);
   //   REQUIRE(routing_info.getRoutingTableNeighbors()[0].isInitialized());
   //   furthest = routing_info.getFurthestPrioNodeAtEndOfThisLevel();
-  //   REQUIRE(furthest.getPeerInfo() == node_4_2.getPeerInfo());
+  //   REQUIRE(furthest.getLogicalNodeInfo() == node_4_2.getLogicalNodeInfo());
   //   REQUIRE(furthest.isInitialized());
   // }
 
@@ -164,13 +164,13 @@ TEST_CASE("RoutingInformationJoinHelper getFurthestPNAtEndOfThisLevel",
   //   routing_info.updateNeighbor(node_3_3);
   //   REQUIRE(routing_info.getRoutingTableNeighbors()[2].isInitialized());
   //   furthest = routing_info.getFurthestPrioNodeAtEndOfThisLevel();
-  //   REQUIRE(furthest.getPeerInfo() == node_3_3.getPeerInfo());
+  //   REQUIRE(furthest.getLogicalNodeInfo() == node_3_3.getLogicalNodeInfo());
   //   REQUIRE(furthest.isInitialized());
 
   //   routing_info.updateNeighbor(node_3_2);
   //   REQUIRE(routing_info.getRoutingTableNeighbors()[1].isInitialized());
   //   furthest = routing_info.getFurthestPrioNodeAtEndOfThisLevel();
-  //   REQUIRE(furthest.getPeerInfo() == node_3_3.getPeerInfo());
+  //   REQUIRE(furthest.getLogicalNodeInfo() == node_3_3.getLogicalNodeInfo());
   //   REQUIRE(furthest.isInitialized());
   // }
 }
@@ -227,8 +227,8 @@ TEST_CASE("RoutingInformationJoinHelper getLowestPrioNode",
   //   //   routing_info.setChild(node_1_1, 1);
 
   //   //   auto lowest = routing_info.getLowestPrioNode();
-  //   //   REQUIRE(lowest.getPeerInfo() == node_3_3.getPeerInfo());
-  //   //   REQUIRE(lowest.getPeerInfo().isPrioNode());
+  //   //   REQUIRE(lowest.getLogicalNodeInfo() == node_3_3.getLogicalNodeInfo());
+  //   //   REQUIRE(lowest.getLogicalNodeInfo().isPrioNode());
   //   //   REQUIRE(lowest.isInitialized());
   //   // }
 
@@ -251,7 +251,7 @@ TEST_CASE("RoutingInformationJoinHelper getLowestPrioNode",
   //   //   routing_info.updateNeighbor(node_4_9);
 
   //   //   auto lowest = routing_info.getLowestPrioNode();
-  //   //   REQUIRE(lowest.getPeerInfo().isPrioNode());
+  //   //   REQUIRE(lowest.getLogicalNodeInfo().isPrioNode());
   //   //   REQUIRE(lowest.isInitialized());
   //   //   REQUIRE(lowest.getLevel() == 4);
   //   // }
@@ -283,7 +283,7 @@ TEST_CASE("RoutingInformationJoinHelper getLowestPrioNode",
 
   //   //     auto lowest = routing_info.getLowestPrioNode();
   //   //     REQUIRE(lowest.isInitialized());
-  //   //     REQUIRE(lowest.getPeerInfo().isPrioNode());
+  //   //     REQUIRE(lowest.getLogicalNodeInfo().isPrioNode());
   //   //     REQUIRE(lowest.getLevel() == 4);
   //   //   }
   //   // }

@@ -36,8 +36,8 @@ void SearchExactAlgorithmGeneral::performSearchExact(const NodeInfo &destination
     throw std::invalid_argument("The Fanout of the destination node has to be set!");
   }
 
-  double self_value = getSelfNodeInfo().getPeerInfo().getHorizontalValue();
-  double dest_value = destination.getPeerInfo().getHorizontalValue();
+  double self_value = getSelfNodeInfo().getLogicalNodeInfo().getHorizontalValue();
+  double dest_value = destination.getLogicalNodeInfo().getHorizontalValue();
   MinhtonMessageHeader query_header =
       std::visit([](auto &&msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
 
@@ -64,7 +64,7 @@ void SearchExactAlgorithmGeneral::performSearchExact(const NodeInfo &destination
   auto closest_node = calcClosestRedirect(dest_value);
 
   // Special Case We are the closest Node, where it would be redirected next.
-  if (closest_node.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (closest_node.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
     if (query_header.getMessageType() == MessageType::kEmpty) {
       LOG_SEARCH_EXACT(SearchExactTestEntryTypes::kFailure, query_header.getEventId(),
                        query_header.getSender(), destination,
@@ -78,7 +78,7 @@ void SearchExactAlgorithmGeneral::performSearchExact(const NodeInfo &destination
   // forward the actual message to the next possible node
   LOG_INFO("Forwarding SRCH to " + closest_node.getString());
   if (query_header.getMessageType() == MessageType::kEmpty &&
-      query_header.getSender().getPeerInfo() != getSelfNodeInfo().getPeerInfo()) {
+      query_header.getSender().getLogicalNodeInfo() != getSelfNodeInfo().getLogicalNodeInfo()) {
     // hop and we are not the start
 
     LOG_SEARCH_EXACT(SearchExactTestEntryTypes::kHop, query_header.getEventId(),

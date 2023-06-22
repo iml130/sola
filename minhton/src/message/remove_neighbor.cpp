@@ -13,8 +13,8 @@ MessageRemoveNeighbor::MessageRemoveNeighbor(const MinhtonMessageHeader &header,
       removed_position_node_(std::move(removed_position_node)),
       acknowledge_(acknowledge) {
   header_.setMessageType(MessageType::kRemoveNeighbor);
-  MessageLoggingAdditionalInfo logging_info{getRemovedPositionNode().getPeerInfo().getUuid(), "",
-                                            ""};
+  MessageLoggingAdditionalInfo logging_info{getRemovedPositionNode().getLogicalNodeInfo().getUuid(),
+                                            "", ""};
   header_.setAdditionalLoggingInfo(logging_info);
   validate();
 }

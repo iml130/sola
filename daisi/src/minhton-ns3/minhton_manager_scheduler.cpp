@@ -351,7 +351,7 @@ void MinhtonManager::Scheduler::parseFindQuery(uint64_t &current_time,
   minhton::FindQuery query(query_string, scope);
 
   minhton::NodeInfo requesting_node;
-  requesting_node.setPeerInfo(minhton::PeerInfo(level, number));
+  requesting_node.setLogicalNodeInfo(minhton::LogicalNodeInfo(level, number));
   query.setRequestingNode(requesting_node);
 
   query.setValidityThreshold(validity_threshold);

@@ -136,7 +136,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -145,7 +145,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -154,7 +154,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -163,7 +163,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -172,7 +172,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -181,7 +181,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 6, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 6, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -190,7 +190,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 7, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 7, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -199,7 +199,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighborsAndChildren Left/Ri
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 8, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 8, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -217,7 +217,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighbors",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -226,7 +226,7 @@ TEST_CASE("RoutingInformation Getter getRoutingTableNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -246,7 +246,7 @@ TEST_CASE("RoutingInformation Getter getAllLeftRoutingTableNeighborsAndChildren"
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -255,7 +255,7 @@ TEST_CASE("RoutingInformation Getter getAllLeftRoutingTableNeighborsAndChildren"
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -264,7 +264,7 @@ TEST_CASE("RoutingInformation Getter getAllLeftRoutingTableNeighborsAndChildren"
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -273,7 +273,7 @@ TEST_CASE("RoutingInformation Getter getAllLeftRoutingTableNeighborsAndChildren"
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -293,7 +293,7 @@ TEST_CASE("RoutingInformation Getter getAllRightRTNsAndChildren",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -302,7 +302,7 @@ TEST_CASE("RoutingInformation Getter getAllRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 6, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 6, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -311,7 +311,7 @@ TEST_CASE("RoutingInformation Getter getAllRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 7, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 7, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -320,7 +320,7 @@ TEST_CASE("RoutingInformation Getter getAllRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 8, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 8, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -348,7 +348,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -357,7 +357,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -366,7 +366,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -375,7 +375,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -384,7 +384,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -393,7 +393,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 6, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 6, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -402,7 +402,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 7, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 7, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -411,7 +411,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRTNeighborChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 8, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 8, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -442,7 +442,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -451,7 +451,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -460,7 +460,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -469,7 +469,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -478,7 +478,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -487,7 +487,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 6, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 6, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -496,7 +496,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 7, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 7, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -505,7 +505,7 @@ TEST_CASE("RoutingInformation Getter getAllInitLeftRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 8, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 8, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -536,7 +536,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -545,7 +545,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(1, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(1, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -554,7 +554,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 0, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 0, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -563,7 +563,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -572,7 +572,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -581,7 +581,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 6, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 6, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -590,7 +590,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 7, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 7, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -599,7 +599,7 @@ TEST_CASE("RoutingInformation Getter getAllInitRightRTNsAndChildren",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 8, (uint16_t)3)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 8, (uint16_t)3)) {
       inside = true;
       break;
     }
@@ -1077,28 +1077,30 @@ TEST_CASE("RoutingInformationGeneralHelper removeNeighbor",
   REQUIRE(routing_info.getRoutingTableNeighbors()[2] == node_3_3);
   routing_info.removeNeighbor(node_3_3);
   REQUIRE_FALSE(routing_info.getRoutingTableNeighbors()[2].isInitialized());
-  REQUIRE(routing_info.getRoutingTableNeighbors()[2].getPeerInfo() == node_3_3.getPeerInfo());
+  REQUIRE(routing_info.getRoutingTableNeighbors()[2].getLogicalNodeInfo() ==
+          node_3_3.getLogicalNodeInfo());
 
   REQUIRE(routing_info.getRoutingTableNeighbors()[4].isInitialized());
   REQUIRE(routing_info.getRoutingTableNeighbors()[4] == node_3_6);
   routing_info.removeNeighbor(node_3_6);
   REQUIRE_FALSE(routing_info.getRoutingTableNeighbors()[4].isInitialized());
-  REQUIRE(routing_info.getRoutingTableNeighbors()[4].getPeerInfo() == node_3_6.getPeerInfo());
+  REQUIRE(routing_info.getRoutingTableNeighbors()[4].getLogicalNodeInfo() ==
+          node_3_6.getLogicalNodeInfo());
 
   // rt neighbor children
   REQUIRE(routing_info.getRoutingTableNeighborChildren()[1].isInitialized());
   REQUIRE(routing_info.getRoutingTableNeighborChildren()[1] == node_4_1);
   routing_info.removeNeighbor(node_4_1);
   REQUIRE_FALSE(routing_info.getRoutingTableNeighborChildren()[1].isInitialized());
-  REQUIRE(routing_info.getRoutingTableNeighborChildren()[1].getPeerInfo() ==
-          node_4_1.getPeerInfo());
+  REQUIRE(routing_info.getRoutingTableNeighborChildren()[1].getLogicalNodeInfo() ==
+          node_4_1.getLogicalNodeInfo());
 
   REQUIRE(routing_info.getRoutingTableNeighborChildren()[7].isInitialized());
   REQUIRE(routing_info.getRoutingTableNeighborChildren()[7] == node_4_11);
   routing_info.removeNeighbor(node_4_11);
   REQUIRE_FALSE(routing_info.getRoutingTableNeighborChildren()[7].isInitialized());
-  REQUIRE(routing_info.getRoutingTableNeighborChildren()[7].getPeerInfo() ==
-          node_4_11.getPeerInfo());
+  REQUIRE(routing_info.getRoutingTableNeighborChildren()[7].getLogicalNodeInfo() ==
+          node_4_11.getLogicalNodeInfo());
 }
 
 TEST_CASE("RoutingInformationGeneralHelper calcRTNeighborParents",
@@ -1113,7 +1115,7 @@ TEST_CASE("RoutingInformationGeneralHelper calcRTNeighborParents",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 1, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, fanout)) {
       inside = true;
       break;
     }
@@ -1122,7 +1124,7 @@ TEST_CASE("RoutingInformationGeneralHelper calcRTNeighborParents",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, fanout)) {
       inside = true;
       break;
     }
@@ -1157,7 +1159,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     bool inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_a_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_a_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1166,7 +1168,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_b_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_b_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1175,7 +1177,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_c_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_c_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1193,7 +1195,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     bool inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_a_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_a_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1202,7 +1204,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_b_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_b_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1211,7 +1213,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_c_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_c_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1228,7 +1230,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     bool inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_a_uninit.getPeerInfo()) {
+      if (n.getLogicalNodeInfo() == node_a_uninit.getLogicalNodeInfo()) {
         inside = true;
         break;
       }
@@ -1237,7 +1239,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_b_uninit.getPeerInfo()) {
+      if (n.getLogicalNodeInfo() == node_b_uninit.getLogicalNodeInfo()) {
         inside = true;
         break;
       }
@@ -1246,7 +1248,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_c_init.getPeerInfo() && n.isInitialized()) {
+      if (n.getLogicalNodeInfo() == node_c_init.getLogicalNodeInfo() && n.isInitialized()) {
         inside = true;
         break;
       }
@@ -1255,7 +1257,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
 
     inside = false;
     for (auto const &n : combi) {
-      if (n.getPeerInfo() == node_d_init.getPeerInfo()) {
+      if (n.getLogicalNodeInfo() == node_d_init.getLogicalNodeInfo()) {
         inside = true;
         break;
       }
@@ -1295,7 +1297,7 @@ TEST_CASE("RoutingInformationGeneralHelper getRoutingTableNeighborsAndChildren",
   bool inside = false;
   for (auto const &neighbor_node : neighbors) {
     if (neighbor_node.isInitialized() &&
-        neighbor_node.getPeerInfo() == minhton::PeerInfo(2, 1, fanout)) {
+        neighbor_node.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, fanout)) {
       inside = true;
     }
   }
@@ -1315,7 +1317,7 @@ TEST_CASE(
   routing_info.updateNeighbor(minhton::NodeInfo(2, 1, fanout, "1.2.3.4", 2000));
   auto neighbors = routing_info.getInitializedRoutingTableNeighborsAndChildren();
   REQUIRE(neighbors.size() == 1);
-  REQUIRE(neighbors[0].getPeerInfo() == minhton::PeerInfo(2, 1, fanout));
+  REQUIRE(neighbors[0].getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 1, fanout));
   REQUIRE(neighbors[0].isInitialized());
 
   routing_info.updateNeighbor(minhton::NodeInfo(3, 3, fanout, "1.2.3.4", 2000));
@@ -1438,7 +1440,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, fanout)) {
       inside = true;
       break;
     }
@@ -1447,7 +1449,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 0, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 0, fanout)) {
       inside = true;
       break;
     }
@@ -1456,7 +1458,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 2, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 2, fanout)) {
       inside = true;
       break;
     }
@@ -1465,7 +1467,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 3, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 3, fanout)) {
       inside = true;
       break;
     }
@@ -1474,7 +1476,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 5, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 5, fanout)) {
       inside = true;
       break;
     }
@@ -1483,7 +1485,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 6, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 6, fanout)) {
       inside = true;
       break;
     }
@@ -1492,7 +1494,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 0, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 0, fanout)) {
       inside = true;
       break;
     }
@@ -1501,7 +1503,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 1, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 1, fanout)) {
       inside = true;
       break;
     }
@@ -1510,7 +1512,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 4, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 4, fanout)) {
       inside = true;
       break;
     }
@@ -1519,7 +1521,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 5, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 5, fanout)) {
       inside = true;
       break;
     }
@@ -1528,7 +1530,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 6, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 6, fanout)) {
       inside = true;
       break;
     }
@@ -1537,7 +1539,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 7, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 7, fanout)) {
       inside = true;
       break;
     }
@@ -1546,7 +1548,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 8, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 8, fanout)) {
       inside = true;
       break;
     }
@@ -1555,7 +1557,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 9, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 9, fanout)) {
       inside = true;
       break;
     }
@@ -1564,7 +1566,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 10, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 10, fanout)) {
       inside = true;
       break;
     }
@@ -1573,7 +1575,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 11, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 11, fanout)) {
       inside = true;
       break;
     }
@@ -1582,7 +1584,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 12, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 12, fanout)) {
       inside = true;
       break;
     }
@@ -1591,7 +1593,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueKnownExistingNeighbors",
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 13, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 13, fanout)) {
       inside = true;
       break;
     }
@@ -1672,7 +1674,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   bool inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(2, 2, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(2, 2, fanout)) {
       inside = true;
       break;
     }
@@ -1681,7 +1683,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 0, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 0, fanout)) {
       inside = true;
       break;
     }
@@ -1690,7 +1692,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 2, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 2, fanout)) {
       inside = true;
       break;
     }
@@ -1699,7 +1701,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 3, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 3, fanout)) {
       inside = true;
       break;
     }
@@ -1708,7 +1710,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 5, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 5, fanout)) {
       inside = true;
       break;
     }
@@ -1717,7 +1719,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(3, 6, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(3, 6, fanout)) {
       inside = true;
       break;
     }
@@ -1726,7 +1728,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 8, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 8, fanout)) {
       inside = true;
       break;
     }
@@ -1735,7 +1737,7 @@ TEST_CASE("RoutingInformationLeaveHelper getAllUniqueSymmetricalExistingNeighbor
 
   inside = false;
   for (auto const &n : neighbors) {
-    if (n.getPeerInfo() == minhton::PeerInfo(4, 9, fanout)) {
+    if (n.getLogicalNodeInfo() == minhton::LogicalNodeInfo(4, 9, fanout)) {
       inside = true;
       break;
     }
@@ -1798,8 +1800,8 @@ TEST_CASE("RoutingInformationLeaveHelper getLowestNode",
     routing_info.setChild(node_1_1, 1);
 
     auto lowest = routing_info.getLowestNode();
-    REQUIRE((lowest.getPeerInfo() == node_3_3.getPeerInfo() ||
-             lowest.getPeerInfo() == node_3_4.getPeerInfo()));
+    REQUIRE((lowest.getLogicalNodeInfo() == node_3_3.getLogicalNodeInfo() ||
+             lowest.getLogicalNodeInfo() == node_3_4.getLogicalNodeInfo()));
     REQUIRE(lowest.isInitialized());
   }
 

@@ -70,7 +70,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
 minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
     const minhton::NodeInfo &entering_node) {
   minhton::NodeInfo best_node;
-  double target_value = entering_node.getPeerInfo().getHorizontalValue();
+  double target_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
 
   std::vector<minhton::NodeInfo> left_neighbors =
       getRoutingInfo()->getAllUniqueKnownExistingNeighbors();
@@ -78,7 +78,8 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
   // removing every neighbor which is to the right of the entering node
   left_neighbors.erase(std::remove_if(left_neighbors.begin(), left_neighbors.end(),
                                       [&, entering_node](const minhton::NodeInfo &node) {
-                                        return entering_node.getPeerInfo() < node.getPeerInfo();
+                                        return entering_node.getLogicalNodeInfo() <
+                                               node.getLogicalNodeInfo();
                                       }),
                        left_neighbors.end());
 
@@ -87,7 +88,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
 
   double best_value = -1;
   for (auto const &node : left_neighbors) {
-    double current_value = node.getPeerInfo().getHorizontalValue();
+    double current_value = node.getLogicalNodeInfo().getHorizontalValue();
     if (best_value < current_value && current_value < target_value) {
       best_value = current_value;
       best_node = node;
@@ -100,14 +101,15 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
 minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentRightOfNewChild(
     const minhton::NodeInfo &entering_node) {
   minhton::NodeInfo best_node;
-  double target_value = entering_node.getPeerInfo().getHorizontalValue();
+  double target_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
 
   auto right_neighbors = getRoutingInfo()->getAllUniqueKnownExistingNeighbors();
 
   // removing every neighbor which is to the left of the entering node
   right_neighbors.erase(std::remove_if(right_neighbors.begin(), right_neighbors.end(),
                                        [&, entering_node](const minhton::NodeInfo &node) {
-                                         return entering_node.getPeerInfo() > node.getPeerInfo();
+                                         return entering_node.getLogicalNodeInfo() >
+                                                node.getLogicalNodeInfo();
                                        }),
                         right_neighbors.end());
 
@@ -116,7 +118,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentRightOfNewChild(
 
   double best_value = k_TREEMAPPER_ROOT_VALUE * 2 + 1;
   for (auto const &node : right_neighbors) {
-    double current_value = node.getPeerInfo().getHorizontalValue();
+    double current_value = node.getLogicalNodeInfo().getHorizontalValue();
     if (target_value < current_value && current_value < best_value) {
       best_value = current_value;
       best_node = node;
@@ -134,7 +136,7 @@ bool JoinAlgorithmGeneral::mustSendUpdateLeft(
     return false;
   }
 
-  if (entering_node_adj_right.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (entering_node_adj_right.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
     return false;
   }
 
@@ -149,7 +151,7 @@ bool JoinAlgorithmGeneral::mustSendUpdateRight(
     return false;
   }
 
-  if (entering_node_adj_left.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+  if (entering_node_adj_left.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
     return false;
   }
 
@@ -162,7 +164,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcOurNewAdjacentLeft(
     const minhton::NodeInfo &entering_node,
     const minhton::NodeInfo &entering_node_adj_right) const {
   if (entering_node_adj_right.isValidPeer()) {
-    if (entering_node_adj_right.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+    if (entering_node_adj_right.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
       return entering_node;
     }
   }
@@ -175,7 +177,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcOurNewAdjacentLeft(
 minhton::NodeInfo JoinAlgorithmGeneral::calcOurNewAdjacentRight(
     const minhton::NodeInfo &entering_node, const minhton::NodeInfo &entering_node_adj_left) const {
   if (entering_node_adj_left.isValidPeer()) {
-    if (entering_node_adj_left.getPeerInfo() == getSelfNodeInfo().getPeerInfo()) {
+    if (entering_node_adj_left.getLogicalNodeInfo() == getSelfNodeInfo().getLogicalNodeInfo()) {
       return entering_node;
     }
   }
@@ -196,9 +198,10 @@ std::vector<minhton::NodeInfo> JoinAlgorithmGeneral::getRoutingTableNeighborsFor
   }
 
   auto children = getRoutingInfo()->getChildren();
-  bool entering_node_is_our_child = std::any_of(
-      children.begin(), children.end(),
-      [&](const minhton::NodeInfo &node) { return node.getPeerInfo() == new_child.getPeerInfo(); });
+  bool entering_node_is_our_child =
+      std::any_of(children.begin(), children.end(), [&](const minhton::NodeInfo &node) {
+        return node.getLogicalNodeInfo() == new_child.getLogicalNodeInfo();
+      });
 
   if (!entering_node_is_our_child) {
     throw std::logic_error("The entering node has to be one of our children");
@@ -233,8 +236,8 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
     return minhton::NodeInfo();
   }
 
-  double entering_node_value = entering_node.getPeerInfo().getHorizontalValue();
-  double alleged_adjacent_value = alleged_adjacent.getPeerInfo().getHorizontalValue();
+  double entering_node_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
+  double alleged_adjacent_value = alleged_adjacent.getLogicalNodeInfo().getHorizontalValue();
 
   // up until which node we must calculate the tree
   uint32_t lower_node_level = std::max(entering_node.getLevel(), alleged_adjacent.getLevel());
@@ -242,7 +245,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
 
   for (uint32_t level = 0; level <= lower_node_level; level++) {
     for (uint32_t number = 0; number < pow(getRoutingInfo()->getFanout(), level); number++) {
-      minhton::PeerInfo temp_peer(level, number, getRoutingInfo()->getFanout());
+      minhton::LogicalNodeInfo temp_peer(level, number, getRoutingInfo()->getFanout());
       double temp_val = temp_peer.getHorizontalValue();
 
       auto children = getRoutingInfo()->getChildren();
@@ -253,7 +256,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
 
           bool found_closer_node_is_our_child =
               std::any_of(children.begin(), children.end(), [&](const minhton::NodeInfo &child) {
-                return !child.isInitialized() && child.getPeerInfo() == temp_peer;
+                return !child.isInitialized() && child.getLogicalNodeInfo() == temp_peer;
               });
 
           if (!found_closer_node_is_our_child) {
@@ -267,7 +270,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
 
           bool found_closer_node_is_our_child =
               std::any_of(children.begin(), children.end(), [&](const minhton::NodeInfo &child) {
-                return !child.isInitialized() && child.getPeerInfo() == temp_peer;
+                return !child.isInitialized() && child.getLogicalNodeInfo() == temp_peer;
               });
 
           if (!found_closer_node_is_our_child) {

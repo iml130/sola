@@ -13,7 +13,8 @@ MessageSearchExactFailure::MessageSearchExactFailure(const MinhtonMessageHeader 
     : header_(header), destination_node_(std::move(destination_node)), query_(query) {
   header_.setMessageType(MessageType::kSearchExactFailure);
 
-  MessageLoggingAdditionalInfo logging_info{getDestinationNode().getPeerInfo().getUuid(), "", ""};
+  MessageLoggingAdditionalInfo logging_info{getDestinationNode().getLogicalNodeInfo().getUuid(), "",
+                                            ""};
   MessageType type = std::visit(
       [](auto &&msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
   logging_info.content = "failure_query_msg_type=" + getMessageTypeString(type);
