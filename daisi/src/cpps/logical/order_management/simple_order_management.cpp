@@ -28,14 +28,14 @@ Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; 
 
 daisi::util::Position SimpleOrderManagement::getExpectedEndPosition() const {
   if (!expected_end_position_.has_value()) {
-    throw std::logic_error("there must exist at least a position for the amr to start from");
+    throw std::logic_error("There must exist at least a position for the AMR to start from.");
   }
   return expected_end_position_.value();
 }
 
 void SimpleOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
-    throw std::invalid_argument("new time must be later than current time");
+    throw std::invalid_argument("New time must be later than current time.");
   }
   time_now_ = now;
 }
@@ -44,7 +44,7 @@ bool SimpleOrderManagement::hasTasks() const { return active_task_.has_value(); 
 
 Task SimpleOrderManagement::getCurrentTask() const {
   if (!hasTasks()) {
-    throw std::logic_error("no tasks available");
+    throw std::logic_error("No tasks available!");
   }
   return active_task_.value();
 }
@@ -70,7 +70,7 @@ bool SimpleOrderManagement::addTask(const Task &task) {
   // simply add all orders in the given order
   const auto orders = task.getOrders();
   if (orders.empty()) {
-    throw std::invalid_argument("Task must have at least one order");
+    throw std::invalid_argument("Task must have at least one order.");
   }
 
   queue_.push_back(task);
@@ -88,7 +88,7 @@ bool SimpleOrderManagement::addTask(const Task &task) {
     }
   }
   if (!final_order.has_value()) {
-    throw std::logic_error("Task must contain at least one TransportOrder or MoveOrder");
+    throw std::logic_error("Task must contain at least one TransportOrder or MoveOrder.");
   }
   auto end_location = OrderManagementHelper::getEndLocationOfOrder(final_order.value());
   expected_end_position_ = end_location->getPosition();
@@ -144,7 +144,7 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
 
   if (std::holds_alternative<MoveOrder>(order)) {
     if (order_index == 0) {
-      throw std::invalid_argument("move order should not be first");
+      throw std::invalid_argument("Move order should not be first.");
     }
     metrics.empty_travel_time += AmrMobilityHelper::estimateDuration(
         daisi::util::Pose{}, funcs, amr_description_, topology_, false);
@@ -162,7 +162,7 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
     metrics.action_time += AmrMobilityHelper::estimateDuration(daisi::util::Pose{}, funcs,
                                                                amr_description_, topology_, false);
   } else {
-    throw std::invalid_argument("Order type not supported");
+    throw std::invalid_argument("Order type not supported!");
   }
 }
 

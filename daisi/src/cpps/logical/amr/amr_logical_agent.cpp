@@ -17,7 +17,9 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
+#include "cpps/logical/algorithms/disposition/centralized_participant.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
+#include "cpps/logical/order_management/simple_order_management.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
 #include "solanet/uuid_generator.h"
@@ -50,18 +52,32 @@ void AmrLogicalAgent::initAlgorithms() {
 
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kIteartedAuctionDispositionParticipant:
-
-        order_management_ = std::make_shared<StnOrderManagement>(
+      case AlgorithmType::kIteratedAuctionDispositionParticipant: {
+        auto stn_order_management = std::make_shared<StnOrderManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
+        order_management_ = stn_order_management;
 
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
-            sola_, order_management_, description_));
+            sola_, stn_order_management, description_));
 
         order_management_->addNotifyTaskAssignmentCallback(
             [this]() { this->notifyTaskAssigned(); });
 
         break;
+      }
+      case AlgorithmType::kRoundRobinParticipant: {
+        auto simple_order_management = std::make_shared<SimpleOrderManagement>(
+            description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
+        order_management_ = simple_order_management;
+
+        algorithms_.push_back(
+            std::make_unique<CentralizedParticipant>(sola_, simple_order_management));
+
+        order_management_->addNotifyTaskAssignmentCallback(
+            [this]() { this->notifyTaskAssigned(); });
+
+        break;
+      }
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");
     }

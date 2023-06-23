@@ -17,6 +17,7 @@
 #include "material_flow_logical_agent.h"
 
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
+#include "cpps/logical/algorithms/disposition/round_robin_initiator.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 
@@ -30,7 +31,10 @@ MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
 
 void MaterialFlowLogicalAgent::init() { initCommunication(); }
 
-void MaterialFlowLogicalAgent::start() { initAlgorithms(); }
+void MaterialFlowLogicalAgent::start() {
+  setServices();
+  initAlgorithms();
+}
 
 void MaterialFlowLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
@@ -38,6 +42,9 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
       case AlgorithmType::kIteratedAuctionDispositionInitiator:
         algorithms_.push_back(
             std::make_unique<IteratedAuctionDispositionInitiator>(sola_, logger_));
+        break;
+      case AlgorithmType::kRoundRobinInitiator:
+        algorithms_.push_back(std::make_unique<RoundRobinInitiator>(sola_, logger_));
         break;
       default:
         throw std::invalid_argument(
@@ -62,6 +69,17 @@ bool MaterialFlowLogicalAgent::isBusy() { return !material_flows_.empty(); }
 
 bool MaterialFlowLogicalAgent::isFinished() const {
   return false;  // TODO
+}
+
+void MaterialFlowLogicalAgent::setServices() {
+  sola::Service service;
+  service.friendly_name = "service_material_flow_agent";
+  service.uuid = solanet::uuidToString(solanet::generateUUID());
+
+  service.key_values.insert({"servicetype", std::string("assignmentinitiator")});
+  service.key_values.insert({"mfuuid", uuid_});
+
+  sola_->addService(service);
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {

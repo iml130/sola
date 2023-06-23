@@ -22,11 +22,19 @@
 namespace daisi::cpps::logical {
 
 /// might need some revision / additions in the future
+// A request to the receiving central participant to send its current status.
 class StatusUpdateRequest {
 public:
   StatusUpdateRequest() = default;
+  explicit StatusUpdateRequest(std::string initiator_connection)
+      : initiator_connection_(std::move(initiator_connection)) {}
 
-  SERIALIZE();
+  const std::string &getInitiatorConnection() const { return initiator_connection_; }
+
+  SERIALIZE(initiator_connection_);
+
+private:
+  std::string initiator_connection_;
 };
 }  // namespace daisi::cpps::logical
 

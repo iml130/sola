@@ -70,6 +70,9 @@ protected:
   /// @brief Material flows that
   std::vector<std::shared_ptr<daisi::material_flow::MFDLScheduler>> material_flows_;
 
+  /// @brief make the mf agent discoverable for findService queries
+  void setServices();
+
 private:
   /// Simple flag to represent that the agent is still in the initialization process.
   bool waiting_for_start_ = false;

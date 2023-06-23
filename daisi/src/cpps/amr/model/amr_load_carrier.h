@@ -49,6 +49,7 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const LoadCarrier &l);
 
   std::string getTypeAsString() const;
+  bool isValid() const;
 
   SERIALIZE(type_);
 

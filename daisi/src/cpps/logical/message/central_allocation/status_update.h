@@ -25,25 +25,26 @@
 namespace daisi::cpps::logical {
 
 /// might need some revision / additions in the future
+// Message that consists information about a participant's status.
 class StatusUpdate {
 public:
   StatusUpdate() = default;
-  StatusUpdate(std::string participant_connection, const Metrics metrics,
-               const daisi::util::Position end_position)
+  StatusUpdate(std::string participant_connection, const Metrics &metrics,
+               const util::Position end_position)
       : participant_connection_(std::move(participant_connection)),
         metrics_(metrics),
         end_position_(end_position) {}
 
   const std::string &getParticipantConnection() const { return participant_connection_; }
   const Metrics &getMetrics() { return metrics_; }
-  const daisi::util::Position getEndPosition() { return end_position_; }
+  const util::Position getEndPosition() { return end_position_; }
 
   SERIALIZE(participant_connection_, metrics_, end_position_);
 
 private:
   std::string participant_connection_;
   Metrics metrics_;
-  daisi::util::Position end_position_;
+  util::Position end_position_;
 };
 }  // namespace daisi::cpps::logical
 

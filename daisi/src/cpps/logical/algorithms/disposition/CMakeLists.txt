@@ -86,3 +86,39 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_auction_particip
     daisi_material_flow_model_material_flow
     daisi_cpps_logical_order_management_auction_based_order_management
 )
+
+add_library(daisi_cpps_logical_algorithms_disposition_centralized_initiator STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_centralized_initiator
+    PUBLIC
+    centralized_initiator.h
+    centralized_initiator.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_centralized_initiator
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_initiator
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_centralized_participant STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_centralized_participant
+    PUBLIC
+    centralized_participant.h
+    centralized_participant.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_centralized_participant
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_disposition_participant
+)
+
+add_library(daisi_cpps_logical_algorithms_disposition_round_robin_initiator STATIC)
+target_sources(daisi_cpps_logical_algorithms_disposition_round_robin_initiator
+    PUBLIC
+    round_robin_initiator.h
+    round_robin_initiator.cpp
+)
+target_link_libraries(daisi_cpps_logical_algorithms_disposition_round_robin_initiator
+    PUBLIC
+    daisi_cpps_logical_algorithms_disposition_centralized_initiator
+    daisi_cpps_amr_model_amr_fleet
+    ns3::libcore
+    daisi_random_engine
+)

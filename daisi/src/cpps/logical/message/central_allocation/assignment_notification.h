@@ -21,17 +21,23 @@
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {
+
+/// @brief Notification by a central initiator that a task has been assigned to the receiving
+/// participant.
 class AssignmentNotification {
 public:
   AssignmentNotification() = default;
-  AssignmentNotification(daisi::material_flow::Task &task) : task_(task){};
+  AssignmentNotification(material_flow::Task task, std::string initiator_connection)
+      : task_(std::move(task)), initiator_connection_(std::move(initiator_connection)) {}
 
-  const daisi::material_flow::Task &getTask() const { return task_; }
+  const material_flow::Task &getTask() const { return task_; }
+  const std::string &getInitiatorConnection() const { return initiator_connection_; }
 
-  SERIALIZE(task_);
+  SERIALIZE(task_, initiator_connection_);
 
 private:
-  daisi::material_flow::Task task_;
+  material_flow::Task task_;
+  std::string initiator_connection_;
 };
 
 }  // namespace daisi::cpps::logical

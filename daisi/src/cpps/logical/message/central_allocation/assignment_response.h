@@ -23,16 +23,18 @@
 
 namespace daisi::cpps::logical {
 
+/// @brief Response of a central participant as a reaction of a task assignment. Consists of the
+/// task_uuid, the acception / rejection, its connection string and of the new current status.
 class AssignmentResponse {
 public:
   AssignmentResponse() = default;
-  AssignmentResponse(std::string task_uuid, bool accept, Metrics metrics, util::Position position,
-                     std::string participant_connection)
+  AssignmentResponse(std::string task_uuid, bool accept, const Metrics &metrics,
+                     util::Position position, std::string participant_connection)
       : task_uuid_(std::move(task_uuid)),
         accept_(accept),
         metrics_(metrics),
         end_position_(position),
-        participant_connection_(std::move(participant_connection)){};
+        participant_connection_(std::move(participant_connection)) {}
 
   const std::string &getTaskUuid() const { return task_uuid_; }
 
@@ -45,11 +47,12 @@ public:
 private:
   std::string task_uuid_;
 
-  std::string participant_connection_;
+  bool accept_;
+
   Metrics metrics_;
   util::Position end_position_;
 
-  bool accept_;
+  std::string participant_connection_;
 };
 
 }  // namespace daisi::cpps::logical
