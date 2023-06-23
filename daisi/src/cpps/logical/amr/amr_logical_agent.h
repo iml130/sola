@@ -87,6 +87,7 @@ private:
 
   void sendToPhysical(std::string payload);
 
+  /// @brief make the AMR agent discoverable for findService queries
   void setServices();
 
   AmrDescription description_;

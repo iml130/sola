@@ -42,5 +42,3 @@ target_link_libraries(daisi_cpps_logical_message_central_allocation_status_updat
     daisi_cpps_logical_order_management_metrics_composition
     daisi_structure_helpers
 )
-
-    

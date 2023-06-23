@@ -36,6 +36,7 @@ public:
 
   const LoadCarrier &getLoadCarrier() const;
   float getMaxPayloadWeight() const;
+  bool isValid() const;
 
   friend bool operator==(const AmrStaticAbility &a1, const AmrStaticAbility &a2);
   friend bool operator!=(const AmrStaticAbility &a1, const AmrStaticAbility &a2);

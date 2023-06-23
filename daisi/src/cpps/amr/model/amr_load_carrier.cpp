@@ -51,6 +51,8 @@ std::string LoadCarrier::getTypeAsString() const {
   return "invalid";
 }
 
+bool LoadCarrier::isValid() const { return type_ != LoadCarrier::Types::kNoLoadCarrierType; }
+
 LoadCarrier::Types LoadCarrier::getTypeFromString(const std::string &type_name) {
   if (LoadCarrier::string_to_type_.find(type_name) != LoadCarrier::string_to_type_.end()) {
     return LoadCarrier::string_to_type_.at(type_name);
