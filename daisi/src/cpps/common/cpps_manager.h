@@ -79,6 +79,8 @@ public:
   void executeMaterialFlow(int index, const std::string &friendly_name);
 
 private:
+  void initialSpawn();
+
   void setupNodes();
 
   void setupNetworkEthernet();
@@ -117,7 +119,7 @@ private:
   int width_ = 0;
   int height_ = 0;
   int depth_ = 0;
-  std::vector<AmrDescription> agv_device_properties_;
+  std::vector<AmrDescription> amr_descriptions_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> spawn_info_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> schedule_info_;
 

@@ -48,15 +48,14 @@ void AmrLogicalAgent::initAlgorithms() {
     throw std::runtime_error("Initialization not finished yet.");
   }
 
-  // TODO decide about chosen order management depending on algorithm config
-  order_management_ = std::make_shared<StnOrderManagement>(description_, topology_,
-                                                           daisi::util::Pose{current_position_});
-
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
       case AlgorithmType::kIteartedAuctionDispositionParticipant:
+
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
 
+        order_management_ = std::make_shared<StnOrderManagement>(
+            description_, topology_, daisi::util::Pose{current_position_});
         break;
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");
@@ -162,7 +161,9 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
 void AmrLogicalAgent::checkSendingNextTask() {
   // TODO check depending on AmrState and OrderState whether we are still busy or not
 
-  sendTaskToPhysical();
+  if (current_state_ == AmrState::kIdle && order_management_) {
+    sendTaskToPhysical();
+  }
 }
 
 void AmrLogicalAgent::logAmrInfos() {

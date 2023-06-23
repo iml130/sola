@@ -66,6 +66,7 @@ void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description
     throw std::runtime_error("mobility model not empty");
   }
 
+  // TODO: parse algorithm config from scenario file
   logical::AlgorithmConfig algorithm_config;
   algorithm_config.algorithm_types.push_back(
       logical::AlgorithmType::kIteartedAuctionDispositionParticipant);
@@ -73,7 +74,7 @@ void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description
   this->agvs_.Get(agv_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
   this->agvs_.Get(agv_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, false);
+      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, agv_index == 0);
 }
 
 void CppsManager::setup() {
@@ -96,110 +97,35 @@ void CppsManager::setup() {
   mob.SetMobilityModel("ns3::AmrMobilityModelNs3");
   mob.Install(agvs_);
 
-  // Intial spawning
-  {
-    // Filtering
-    std::vector<SpawnInfo> spawn_info;
-    while (!spawn_info_.empty() && spawn_info_.top().start_time == 0) {  // TODO: Only use AGVs
-      spawn_info.emplace_back(spawn_info_.top());
-      if (spawn_info_.top().type == "to") schedule_info_.emplace(spawn_info_.top());
-      spawn_info_.pop();
-    }
+  initialSpawn();
+}
 
-    bool all_prob_dist =
-        std::all_of(spawn_info.begin(), spawn_info.end(), [](const SpawnInfo &info) {
-          if (info.type == "agv") {
-            return std::holds_alternative<DistProb>(info.distribution);
-          }
-          return true;
-        });
+void CppsManager::initialSpawn() {
+  // TODO add option for relative distribution
 
-    bool all_abs_dist =
-        std::all_of(spawn_info.begin(), spawn_info.end(), [](const SpawnInfo &info) {
-          if (info.type == "agv") {
-            return std::holds_alternative<DistAbs>(info.distribution);
-          }
-          return true;
-        });
+  uint32_t previous_index = 0;
 
-    assert(all_prob_dist || all_abs_dist);
-    assert(!(all_prob_dist && all_abs_dist));
+  while (!spawn_info_.empty() && spawn_info_.top().start_time == 0) {
+    auto info = spawn_info_.top();
+    spawn_info_.pop();
 
-    std::vector<int> distribution;
-    if (all_prob_dist) {
-      double res = 0;
-      uint32_t count_agvs = 0;
-      for (auto &entry : spawn_info) {
-        if (entry.type == "agv") {
-          count_agvs++;
-          res += std::get<DistProb>(entry.distribution).prob;
-        }
+    if (info.type == "agv") {
+      uint32_t abs_number = std::get<DistAbs>(info.distribution).abs;
+      auto desc_it =
+          std::find_if(amr_descriptions_.begin(), amr_descriptions_.end(),
+                       [&](const AmrDescription &description) {
+                         return description.getProperties().getFriendlyName() == info.friendly_name;
+                       });
+      assert(desc_it != amr_descriptions_.end());
+
+      for (auto i = previous_index; i < previous_index + abs_number; i++) {
+        std::cout << "SPAWNING AGV " << info.friendly_name << std::endl;
+        auto topology = Topology(util::Dimensions(width_, height_, depth_));
+        spawnAGV(i, *desc_it, topology);
       }
 
-      assert(res > 0.99 && res < 1.01);  // HACK
-
-      // Create AGV distribution
-      distribution.resize(count_agvs);
-      for (auto i = 0U; i < count_agvs; i++) {
-        assert(spawn_info[i].type == "agv");
-        int previous = (i == 0 ? 0 : distribution[i - 1]);
-        distribution[i] = std::get<DistProb>(spawn_info[i].distribution).prob * 100 + previous;
-      }
-
-      for (auto i = 0U; i < count_agvs; i++) {
-        std::cout << spawn_info[i].friendly_name << " with " << distribution[i] << std::endl;
-      }
-
-      std::uniform_int_distribution<int> dist(0, 99);
-
-      for (auto i = 0U; i < number_agvs_initial_; i++) {
-        int result = dist(daisi::global_random_engine);
-
-        // Find matching index in distribution
-        int index = -1;
-        for (auto j = 0U; j < count_agvs; j++) {
-          int previous = (j == 0 ? 0 : distribution[j - 1]);
-          int current = distribution[j];
-          if (result < current && result >= previous) {
-            index = j;
-            break;
-          }
-        }
-        assert(index >= 0 && std::abs(index) < distribution.size());
-        std::cout << "SPAWNING AGV " << spawn_info[index].friendly_name << std::endl;
-
-        // Find matching properties
-        auto properties_it =
-            std::find_if(agv_device_properties_.begin(), agv_device_properties_.end(),
-                         [&](const AmrDescription &description) {
-                           return description.getProperties().getFriendlyName() ==
-                                  spawn_info[index].friendly_name;
-                         });
-        assert(properties_it != agv_device_properties_.end());
-        spawnAGV(i, *properties_it, topology);
-      }
+      previous_index += abs_number;
     } else {
-      uint32_t previous_index = 0;
-      for (auto &entry : spawn_info) {
-        if (entry.type == "agv") {
-          auto current_number = std::get<DistAbs>(entry.distribution).abs;
-
-          // Find matching properties
-          auto properties_it = std::find_if(
-              agv_device_properties_.begin(), agv_device_properties_.end(),
-              [&](const AmrDescription &description) {
-                return description.getProperties().getFriendlyName() == entry.friendly_name;
-              });
-
-          for (auto i = previous_index; i < previous_index + current_number; i++) {
-            std::cout << "SPAWNING AGV " << entry.friendly_name << std::endl;
-            assert(properties_it != agv_device_properties_.end());
-            spawnAGV(i, *properties_it, topology);
-          }
-
-          previous_index += current_number;
-        }
-      }
     }
   }
 }
@@ -225,14 +151,16 @@ void CppsManager::initAGV(uint32_t index) {
 }
 
 void CppsManager::connect(int index) {
-  auto agv = std::get<std::shared_ptr<AmrPhysicalAsset>>(
-      this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>()->application);
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+
+  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+  auto amr_physical_asset =
+      std::get<std::shared_ptr<AmrPhysicalAsset>>(cpps_app_physical->application);
 
   ns3::Ipv4Address other_ip = cpps_app_logical->local_ip_address_tcp;
   uint16_t other_port = cpps_app_logical->listening_port_tcp;
   InetSocketAddress address(other_ip, other_port);
-  agv->connect(address);
+  amr_physical_asset->connect(address);
 }
 
 void CppsManager::setupNodes() {
@@ -583,34 +511,42 @@ void CppsManager::parseAGVs() {
           ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("AGVs");
 
   // TODO rewrite parsing of amr description
-  // for (const auto &agv : agv_table) {
-  //   auto agv_inner = agv->content.begin()->second;
-  //   auto agv_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&agv_inner);
+  for (const auto &agv : agv_table) {
+    auto agv_inner = agv->content.begin()->second;
+    auto agv_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&agv_inner);
 
-  //   std::string device_type = agv_description->getRequired<std::string>("device_type");
-  //   std::string friendly_name = agv_description->getRequired<std::string>("friendly_name");
-  //   std::string model_name = agv_description->getRequired<std::string>("model_name");
+    std::string device_type = agv_description->getRequired<std::string>("device_type");
+    std::string friendly_name = agv_description->getRequired<std::string>("friendly_name");
+    std::string model_name = agv_description->getRequired<std::string>("model_name");
 
-  //   auto opt_manufacturer = agv_description->getOptional<std::string>("manufacturer");
-  //   std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
+    auto opt_manufacturer = agv_description->getOptional<std::string>("manufacturer");
+    std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
 
-  //   auto opt_model_number = agv_description->getOptional<uint64_t>("model_number");
-  //   uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
+    auto opt_model_number = agv_description->getOptional<uint64_t>("model_number");
+    uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
 
-  //   auto kinematics_description =
-  //       agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
-  //   auto ability_description =
-  //       agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
+    auto kinematics_description =
+        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
+    auto ability_description =
+        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
 
-  //   auto kinematics = parseKinematics(kinematics_description);
-  //   auto ability = parseAGVAbility(ability_description);
+    auto kinematics = parseKinematics(kinematics_description);
 
-  //   agv_infos.push_back({ability, kinematics});
+    uint64_t load_time = kinematics_description->getRequired<uint64_t>("load_time");
+    uint64_t unload_time = kinematics_description->getRequired<uint64_t>("unload_time");
 
-  //   agv_device_properties_.push_back(AmrDescription{
-  //       manufacturer, model_name, model_number, device_type, friendly_name, kinematics,
-  //       ability});
-  // }
+    auto ability = parseAGVAbility(ability_description);
+
+    agv_infos.push_back({ability, kinematics});
+
+    AmrProperties properties(manufacturer, model_name, model_number, device_type, friendly_name);
+    AmrPhysicalProperties physical_properties;
+    AmrLoadHandlingUnit load_handling_unit(load_time, unload_time, ability);
+
+    AmrDescription description(0, kinematics, properties, physical_properties, load_handling_unit);
+
+    amr_descriptions_.push_back(description);
+  }
 
   AmrFleet::init(agv_infos);
 }
@@ -693,10 +629,9 @@ void CppsManager::parseAgvSpawn(
   if (distribution == "prob" && start_time == 0) {
     float prob = spawn_description->getRequired<float>("prob");
     info.distribution = DistProb{prob};
-  } else if (distribution == "abs") {
+  } else if (distribution == "abs" && start_time == 0) {
     uint64_t abs = spawn_description->getRequired<uint64_t>("abs");
     info.distribution = DistAbs{abs};
-    number_agvs_later_ += abs;
   } else {
     throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
   }
@@ -721,7 +656,7 @@ void CppsManager::parseToSpawn(
   } else {
     throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
   }
-  spawn_info_.emplace(info);
+  schedule_info_.emplace(info);
 }
 
 AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Table> description) {
@@ -729,9 +664,6 @@ AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::T
   float min_velo = description->getRequired<float>("min_velo");
   float max_acc = description->getRequired<float>("max_acc");
   float min_acc = description->getRequired<float>("min_acc");
-
-  uint64_t load_time = description->getRequired<uint64_t>("load_time");
-  uint64_t unload_time = description->getRequired<uint64_t>("unload_time");
 
   return AmrKinematics(max_velo, min_velo, max_acc, min_acc);
 }
