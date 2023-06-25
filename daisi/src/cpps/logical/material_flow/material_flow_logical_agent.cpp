@@ -63,7 +63,14 @@ bool MaterialFlowLogicalAgent::isFinished() const {
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
-  // TODO integrate wrapper and add to material_flow_ vector
+  // TODO save scheduler somewhere?
+  auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
+
+  // TODO there could be multiple algorithm interfaces in the future
+  assert(algorithms_.size() == 1);
+
+  DispositionInitiator *tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
+  tmp->addMaterialFlow(scheduler);
 }
 
 }  // namespace daisi::cpps::logical

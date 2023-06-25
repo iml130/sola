@@ -72,8 +72,14 @@ class CppsManager : public daisi::Manager<CppsApplication> {
 public:
   explicit CppsManager(const std::string &scenario_config_file);
   virtual void setup() override;
-  void initAGV(uint32_t index);
-  void connect(int index);
+
+  void initAMR(uint32_t index);
+  void connectAMR(uint32_t index);
+  void startAMR(uint32_t index);
+
+  void initMF(uint32_t index);
+  void startMF(uint32_t index);
+
   void publishService(int index);
   void scheduleMaterialFlow(const SpawnInfo &info);
   void executeMaterialFlow(int index, const std::string &friendly_name);

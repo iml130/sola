@@ -142,25 +142,57 @@ void CppsManager::checkStarted(uint32_t index) {
   }
 }
 
-void CppsManager::initAGV(uint32_t index) {
-  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+void CppsManager::initAMR(uint32_t index) {
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
-  cpps_app_physical->start();
-  cpps_app_logical->start();
+  cpps_app_logical->init();
+  cpps_app_physical->init();
 }
 
-void CppsManager::connect(int index) {
+void CppsManager::connectAMR(uint32_t index) {
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-
   auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
-  auto amr_physical_asset =
-      std::get<std::shared_ptr<AmrPhysicalAsset>>(cpps_app_physical->application);
 
   ns3::Ipv4Address other_ip = cpps_app_logical->local_ip_address_tcp;
   uint16_t other_port = cpps_app_logical->listening_port_tcp;
   InetSocketAddress address(other_ip, other_port);
+
+  auto amr_physical_asset =
+      std::get<std::shared_ptr<AmrPhysicalAsset>>(cpps_app_physical->application);
   amr_physical_asset->connect(address);
+}
+
+void CppsManager::startAMR(uint32_t index) {
+  auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+
+  cpps_app_logical->start();
+  cpps_app_physical->start();
+}
+
+void CppsManager::initMF(uint32_t index) {
+  const uint32_t device_id = material_flows_.Get(index)->GetId();
+
+  logical::AlgorithmConfig mf_algorithm_config;
+  mf_algorithm_config.algorithm_types.push_back(
+      logical::AlgorithmType::kIteratedAuctionDispositionInitiator);
+
+  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application =
+      std::make_shared<logical::MaterialFlowLogicalAgent>(device_id, mf_algorithm_config, false);
+
+  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->init();
+  auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
+      this->material_flows_.Get(index)
+          ->GetApplication(0)
+          ->GetObject<CppsApplication>()
+          ->application);
+
+  mf_app->setWaitingForStart();
+}
+
+void CppsManager::startMF(uint32_t index) {
+  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->start();
 }
 
 void CppsManager::setupNodes() {
@@ -350,11 +382,11 @@ void CppsManager::setupNetworkWifi() {
 
 void CppsManager::executeMaterialFlow(int index, const std::string &friendly_name) {
   auto cpps_app = this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto to_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
+  auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
 
   // TODO MaterialFlowInfo info = material_flow_models_[friendly_name];
 
-  to_app->addMaterialFlow("todo");
+  mf_app->addMaterialFlow("todo");
 }
 
 void CppsManager::clearFinishedMaterialFlows() {
@@ -421,20 +453,9 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
   }
 
   if (init_application) {
-    const uint32_t device_id = material_flows_.Get(i)->GetId();
+    initAMR(i);
 
-    logical::AlgorithmConfig mf_algorithm_config;
-    mf_algorithm_config.algorithm_types.push_back(
-        logical::AlgorithmType::kIteratedAuctionDispositionInitiator);
-
-    this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->application =
-        std::make_shared<logical::MaterialFlowLogicalAgent>(device_id, mf_algorithm_config, false);
-
-    this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->start();
-
-    auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
-        this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>()->application);
-    mf_app->setWaitingForStart();
+    Simulator::Schedule(MilliSeconds(2), &CppsManager::startAMR, this, i);
   }
 
   Simulator::Schedule(MilliSeconds(4000), &CppsManager::executeMaterialFlow, this, i,
@@ -459,12 +480,17 @@ void CppsManager::scheduleEvents() {
   uint64_t delay = parser_.getParsedContent()->getRequired<uint64_t>("defaultDelay");
   for (auto i = 0U; i < number_agvs_initial_; i++) {
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::initAGV, this, i);
+    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::initAMR, this, i);
   }
 
   for (auto i = 0U; i < number_agvs_initial_; i++) {
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::connect, this, i);
+    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::connectAMR, this, i);
+  }
+
+  for (auto i = 0U; i < number_agvs_initial_; i++) {
+    current_time += delay;
+    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::startAMR, this, i);
   }
 
   while (!schedule_info_.empty()) {

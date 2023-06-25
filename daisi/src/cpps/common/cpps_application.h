@@ -38,6 +38,7 @@ extern std::deque<ns3::Ptr<ns3::Socket>> socket_global_;
 struct CppsApplication final : public ns3::Application {
   static ns3::TypeId GetTypeId();
 
+  void init();
   void start();
   void cleanup();
 

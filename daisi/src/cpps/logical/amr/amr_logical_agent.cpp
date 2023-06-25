@@ -71,7 +71,7 @@ void AmrLogicalAgent::messageReceiveFunction(const sola::Message &msg) {
 }
 
 void AmrLogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
-  // TODO add logging of topic message
+  // TODO add logging of topic message2
   this->LogicalAgent::topicMessageReceiveFunction(msg);
 }
 
@@ -101,6 +101,7 @@ void AmrLogicalAgent::readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket) {
 void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &description) {
   if (!description_set_) {
     description_ = description;
+    description_set_ = true;
   } else {
     throw std::runtime_error("AmrDescription attempted to be set twice.");
   }
