@@ -29,7 +29,7 @@ IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
   auto preparation_duration = prepareInteraction();
 
   ns3::Simulator::Schedule(ns3::Seconds(preparation_duration),
-                           &IteratedAuctionDispositionInitiator::startIteration, this);
+                           &IteratedAuctionDispositionInitiator::setPreparationFinished, this);
 }
 
 void IteratedAuctionDispositionInitiator::addMaterialFlow(
@@ -40,10 +40,15 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
   }
 
   layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler);
+  auction_initiator_state_ = std::make_unique<AuctionInitiatorState>(layered_precedence_graph_);
 
   auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();
   for (const auto &task : layered_precedence_graph_->getAuctionableTasks()) {
     layered_precedence_graph_->setEarliestValidStartTime(task.getUuid(), sim_time);
+  }
+
+  if (preparation_finished_) {
+    startIteration();
   }
 }
 
@@ -63,6 +68,8 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
 
   return delays_.subscribe_topic * topic_counter;
 }
+
+void IteratedAuctionDispositionInitiator::setPreparationFinished() { preparation_finished_ = true; }
 
 void IteratedAuctionDispositionInitiator::startIteration() {
   // Sending CallForProposal messages to initiate the auction.

@@ -24,6 +24,48 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
     std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler) {
   // TODO transform scheduler content to vertices and edges
 
+  // hard coded test tasks
+  {
+    material_flow::TransportOrderStep pickup1(
+        "tos11", {}, material_flow::Location("0x0", "type", util::Position(10, 10)));
+    material_flow::TransportOrderStep delivery1(
+        "tos12", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrder to1("to1", {pickup1}, delivery1);
+    material_flow::Task task1("task1", {to1}, {});
+
+    material_flow::TransportOrderStep pickup2(
+        "tos21", {}, material_flow::Location("0x0", "type", util::Position(20, 10)));
+    material_flow::TransportOrderStep delivery2(
+        "tos22", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrder to2("to2", {pickup2}, delivery2);
+    material_flow::Task task2("task2", {to2}, {});
+
+    material_flow::TransportOrderStep pickup3(
+        "tos31", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrderStep delivery3(
+        "tos32", {}, material_flow::Location("0x0", "type", util::Position(5, 5)));
+    material_flow::TransportOrder to3("to3", {pickup3}, delivery3);
+    material_flow::Task task3("task3", {to3}, {});
+
+    amr::AmrStaticAbility ability1(amr::LoadCarrier(amr::LoadCarrier::Types::kPackage), 20);
+    amr::AmrStaticAbility ability2(amr::LoadCarrier(amr::LoadCarrier::Types::kEuroBox), 20);
+
+    task1.setAbilityRequirement(ability1);
+    task2.setAbilityRequirement(ability2);
+    task2.setAbilityRequirement(ability1);
+
+    LPCVertex v1(task1);
+    LPCVertex v2(task2);
+    LPCVertex v3(task3);
+
+    addVertex(v1);
+    addVertex(v2);
+    addVertex(v3);
+
+    addEdge(v1, v3, std::monostate());
+    addEdge(v2, v3, std::monostate());
+  }
+
   initLayers();
 }
 

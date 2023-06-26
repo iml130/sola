@@ -31,7 +31,8 @@ AuctionParticipantState::AuctionParticipantState(
 
 AuctionParticipantTaskState AuctionParticipantState::pickBest() {
   if (task_state_mapping.empty()) {
-    throw std::runtime_error("If the task state mapping is empty, this method never be called.");
+    throw std::runtime_error(
+        "If the task state mapping is empty, this method should never be called.");
   }
 
   std::vector<AuctionParticipantTaskState> task_states;
@@ -53,5 +54,17 @@ AuctionParticipantTaskState AuctionParticipantState::pickBest() {
 
   return task_states.front();
 }
+
+void AuctionParticipantState::prune() {
+  for (auto it = task_state_mapping.begin(); it != task_state_mapping.end();) {
+    if (it->second.insertion_point == nullptr) {
+      it = task_state_mapping.erase(it);
+    } else {
+      it++;
+    }
+  }
+}
+
+bool AuctionParticipantState::hasEntries() const { return !task_state_mapping.empty(); }
 
 }  // namespace daisi::cpps::logical

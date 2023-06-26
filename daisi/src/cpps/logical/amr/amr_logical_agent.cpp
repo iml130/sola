@@ -52,10 +52,12 @@ void AmrLogicalAgent::initAlgorithms() {
     switch (algo_type) {
       case AlgorithmType::kIteartedAuctionDispositionParticipant:
 
-        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(sola_));
-
         order_management_ = std::make_shared<StnOrderManagement>(
             description_, topology_, daisi::util::Pose{current_position_});
+
+        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
+            sola_, order_management_, description_));
+
         break;
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");

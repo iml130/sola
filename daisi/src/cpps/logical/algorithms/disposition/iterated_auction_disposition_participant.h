@@ -35,7 +35,9 @@ namespace daisi::cpps::logical {
 /// infos it has submitted.
 class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
-  explicit IteratedAuctionDispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
+  explicit IteratedAuctionDispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+                                                 std::shared_ptr<OrderManagement> order_management,
+                                                 const AmrDescription &description);
 
   ~IteratedAuctionDispositionParticipant() = default;
 
@@ -66,13 +68,15 @@ private:
 
   /// @brief Calculating bids for each open task in a state.
   /// @param state Relevant auction state.
-  void calculateBids(const AuctionParticipantState &state);
+  void calculateBids(AuctionParticipantState &state);
 
   /// @brief Picking the best bid from the referring auction state and submitting it.
   /// If we already submitted the same bid previously, the submission is not sent to avoid overhead
   /// traffic.
   /// @param initiator_connection Key to referr to the correct auction participant state.
   void submitBid(const std::string &initiator_connection);
+
+  AmrDescription description_;
 };
 
 }  // namespace daisi::cpps::logical

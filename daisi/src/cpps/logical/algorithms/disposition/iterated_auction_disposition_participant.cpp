@@ -16,13 +16,21 @@
 
 #include "iterated_auction_disposition_participant.h"
 
+#include "cpps/amr/model/amr_fleet.h"
 #include "cpps/logical/message/auction_based/bid_submission.h"
 
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-    : DispositionParticipant(sola) {}
+    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+    std::shared_ptr<OrderManagement> order_management, const AmrDescription &description)
+    : DispositionParticipant(sola),
+      order_management_(
+          std::move(std::dynamic_pointer_cast<AuctionBasedOrderManagement>(order_management))),
+      description_(description) {
+  auto topic = AmrFleet::get().getTopicForAbility(description_.getLoadHandling().getAbility());
+  sola_->subscribeTopic(topic);
+}
 
 bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_for_proposal) {
   AuctionParticipantState state(call_for_proposal.getTasks());
@@ -36,9 +44,11 @@ bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_
 
   calculateBids(state);
 
-  initiator_auction_state_mapping_.emplace(initiator_connection, state);
+  if (state.hasEntries()) {
+    initiator_auction_state_mapping_.emplace(initiator_connection, state);
 
-  submitBid(initiator_connection);
+    submitBid(initiator_connection);
+  }
 
   return true;
 }
@@ -55,7 +65,7 @@ bool IteratedAuctionDispositionParticipant::process(
       state.task_state_mapping.erase(task_uuid);
     }
 
-    if (!state.task_state_mapping.empty()) {
+    if (state.hasEntries()) {
       submitBid(initiator_connection);
     } else {
       initiator_auction_state_mapping_.erase(it_auction_state);
@@ -121,7 +131,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
   return true;
 }
 
-void IteratedAuctionDispositionParticipant::calculateBids(const AuctionParticipantState &state) {
+void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
     auto task_state = pair.second;
@@ -130,14 +140,15 @@ void IteratedAuctionDispositionParticipant::calculateBids(const AuctionParticipa
       // Setting new calculated information if we can add the task
       auto result = order_management_->getLatestCalculatedInsertionInfo();
 
-      task_state.metrics_composition = result.first;
-      task_state.insertion_point = result.second;
+      pair.second.metrics_composition = result.first;
+      pair.second.insertion_point = result.second;
     } else {
       // Setting previous information to invalid because we cannot accept anymore
-      task_state.metrics_composition = std::nullopt;
-      task_state.insertion_point = nullptr;
+      pair.second.metrics_composition = std::nullopt;
+      pair.second.insertion_point = nullptr;
     }
   }
+  state.prune();
 }
 
 void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiator_connection) {
@@ -155,11 +166,8 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
   if (task_uuid != state.previously_submitted) {
     std::string participant_connection = sola_->getConectionString();
 
-    amr::AmrStaticAbility participant_ability(
-        amr::LoadCarrier(amr::LoadCarrier::Types::kNoLoadCarrierType),
-        0);  // TODO
-
-    BidSubmission bid_submission(task_uuid, participant_connection, participant_ability,
+    BidSubmission bid_submission(task_uuid, participant_connection,
+                                 description_.getLoadHandling().getAbility(),
                                  best_task_state.metrics_composition.value());
 
     sola_->sendData(serialize(bid_submission), sola::Endpoint(initiator_connection));

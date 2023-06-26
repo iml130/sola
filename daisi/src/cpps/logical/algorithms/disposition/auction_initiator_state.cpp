@@ -18,6 +18,10 @@
 
 namespace daisi::cpps::logical {
 
+AuctionInitiatorState::AuctionInitiatorState(
+    std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph)
+    : layered_precedence_graph_(std::move(layered_precedence_graph)) {}
+
 void AuctionInitiatorState::addBidSubmission(const BidSubmission &bid_submission) {
   bid_submissions_.push_back(bid_submission);
 }
@@ -108,7 +112,7 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
     auto best_bid = temp_bids.front();
     auto task_uuid = best_bid.getTaskUuid();
 
-    removeBidsForTask(bid_submissions_, task_uuid);
+    removeBidsForTask(temp_bids, task_uuid);
 
     if (!layered_precedence_graph_->isFreeTaskScheduled(task_uuid)) {
       daisi::util::Duration latest_finish_time =

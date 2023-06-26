@@ -49,8 +49,10 @@ CppsManager::CppsManager(const std::string &scenario_config_file)
   parse();
 }
 
-void CppsManager::spawnAGV(uint32_t agv_index, const AmrDescription &description,
+void CppsManager::spawnAMR(uint32_t agv_index, const AmrDescription &description,
                            const Topology &topology) {
+  std::cout << "Creating AMR " << description.getProperties().getFriendlyName() << std::endl;
+
   const uint32_t device_id = agvs_.Get(agv_index)->GetId();
 
   if (next_mobility_model != nullptr) {
@@ -119,9 +121,8 @@ void CppsManager::initialSpawn() {
       assert(desc_it != amr_descriptions_.end());
 
       for (auto i = previous_index; i < previous_index + abs_number; i++) {
-        std::cout << "SPAWNING AGV " << info.friendly_name << std::endl;
         auto topology = Topology(util::Dimensions(width_, height_, depth_));
-        spawnAGV(i, *desc_it, topology);
+        spawnAMR(i, *desc_it, topology);
       }
 
       previous_index += abs_number;
@@ -143,6 +144,8 @@ void CppsManager::checkStarted(uint32_t index) {
 }
 
 void CppsManager::initAMR(uint32_t index) {
+  std::cout << "Init AMR " << index << std::endl;
+
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
   auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
@@ -151,6 +154,8 @@ void CppsManager::initAMR(uint32_t index) {
 }
 
 void CppsManager::connectAMR(uint32_t index) {
+  std::cout << "Connect AMR " << index << std::endl;
+
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
   auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
@@ -164,6 +169,8 @@ void CppsManager::connectAMR(uint32_t index) {
 }
 
 void CppsManager::startAMR(uint32_t index) {
+  std::cout << "Start AMR " << index << std::endl;
+
   auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
   auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
@@ -178,8 +185,12 @@ void CppsManager::initMF(uint32_t index) {
   mf_algorithm_config.algorithm_types.push_back(
       logical::AlgorithmType::kIteratedAuctionDispositionInitiator);
 
+  std::cout << "Creating MF Logical Agent " << index << std::endl;
+
   this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application =
       std::make_shared<logical::MaterialFlowLogicalAgent>(device_id, mf_algorithm_config, false);
+
+  std::cout << "Init MF Logical Agent " << index << std::endl;
 
   this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->init();
   auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
@@ -192,6 +203,8 @@ void CppsManager::initMF(uint32_t index) {
 }
 
 void CppsManager::startMF(uint32_t index) {
+  std::cout << "Start MF Logical Agent " << index << std::endl;
+
   this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->start();
 }
 
@@ -453,9 +466,9 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
   }
 
   if (init_application) {
-    initAMR(i);
+    initMF(i);
 
-    Simulator::Schedule(MilliSeconds(2), &CppsManager::startAMR, this, i);
+    Simulator::Schedule(MilliSeconds(2), &CppsManager::startMF, this, i);
   }
 
   Simulator::Schedule(MilliSeconds(4000), &CppsManager::executeMaterialFlow, this, i,
@@ -565,7 +578,9 @@ void CppsManager::parseAGVs() {
 
     agv_infos.push_back({ability, kinematics});
 
-    AmrProperties properties(manufacturer, model_name, model_number, device_type, friendly_name);
+    AmrProperties properties(manufacturer, model_name, model_number, device_type, friendly_name,
+                             {FunctionalityType::kLoad, FunctionalityType::kMoveTo,
+                              FunctionalityType::kUnload, FunctionalityType::kNavigate});
     AmrPhysicalProperties physical_properties;
     AmrLoadHandlingUnit load_handling_unit(load_time, unload_time, ability);
 

@@ -37,7 +37,6 @@ public:
        const std::vector<std::string> &follow_up_tasks);
 
   const std::string &getUuid() const;
-
   const std::string &getName() const;
   const std::vector<Order> &getOrders() const;
   const std::vector<std::string> &getFollowUpTasks() const;
@@ -45,26 +44,31 @@ public:
   void setPrecedingTasks(const std::vector<std::string> &preceding_tasks);
   const std::vector<std::string> &getPrecedingTasks() const;
 
-  bool hasTimeWindow() const;
-
+  void setAbilityRequirement(const cpps::amr::AmrStaticAbility &ability);
   cpps::amr::AmrStaticAbility getAbilityRequirement() const;
 
-  bool operator<(const Task &other) const { return name_ < other.name_; }
+  bool hasTimeWindow() const;
 
-  bool operator==(const Task &other) const { return name_ == other.name_; }
+  bool operator<(const Task &other) const { return uuid_ < other.uuid_; }
 
-  bool operator!=(const Task &other) const { return name_ != other.name_; }
+  bool operator==(const Task &other) const { return uuid_ == other.uuid_; }
 
-  SERIALIZE(uuid_, name_, orders_, follow_up_tasks_, preceding_tasks_);
+  bool operator!=(const Task &other) const { return uuid_ != other.uuid_; }
+
+  SERIALIZE(uuid_, name_, orders_, follow_up_tasks_, preceding_tasks_, ability_requirement_);
 
 private:
-  std::string uuid_ = "TODO";
+  void generateUuid();
+
+  std::string uuid_;
 
   std::string name_;
   std::vector<Order> orders_;
   std::vector<std::string> follow_up_tasks_;
-
   std::vector<std::string> preceding_tasks_;
+
+  cpps::amr::AmrStaticAbility ability_requirement_ =
+      cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier(), 0);
 };
 
 }  // namespace daisi::material_flow

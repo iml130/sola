@@ -95,7 +95,7 @@ private:
   virtual uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
-  void spawnAGV(uint32_t agv_index, const AmrDescription &properties, const Topology &topology);
+  void spawnAMR(uint32_t agv_index, const AmrDescription &properties, const Topology &topology);
 
   void parse();
   void parseAGVs();

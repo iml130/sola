@@ -104,6 +104,7 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_material_flow_model_transport_order
     daisi_material_flow_model_move_order
     daisi_material_flow_model_action_order
+    daisi_cpps_amr_model_amr_static_ability
 
     PRIVATE
     solanet_serialize
