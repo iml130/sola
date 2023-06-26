@@ -20,7 +20,7 @@ namespace daisi::cpps::logical {
 
 AuctionInitiatorState::AuctionInitiatorState(
     std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph)
-    : layered_precedence_graph_(std::move(layered_precedence_graph)) {}
+    : layered_precedence_graph_(layered_precedence_graph) {}
 
 void AuctionInitiatorState::addBidSubmission(const BidSubmission &bid_submission) {
   bid_submissions_.push_back(bid_submission);
@@ -110,7 +110,7 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
               [](const auto &b1, const auto &b2) { return b1 > b2; });
 
     auto best_bid = temp_bids.front();
-    auto task_uuid = best_bid.getTaskUuid();
+    const auto task_uuid = best_bid.getTaskUuid();
 
     removeBidsForTask(temp_bids, task_uuid);
 

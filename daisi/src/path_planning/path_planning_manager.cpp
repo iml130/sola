@@ -579,8 +579,6 @@ void PathPlanningManager::parse() {
   auto min_velo = getParsed(float, "min_velo");
   auto max_acc = getParsed(float, "max_acc");
   auto min_acc = getParsed(float, "min_acc");
-  auto load_time_s = getParsed(float, "load_time_s");
-  auto unload_time_s = getParsed(float, "unload_time_s");
   kinematics_ = cpps::AmrKinematics(max_velo, min_velo, max_acc, min_acc);
 
   parseConsensusSettings();

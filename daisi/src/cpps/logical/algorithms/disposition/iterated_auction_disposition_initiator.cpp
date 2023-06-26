@@ -91,6 +91,9 @@ void IteratedAuctionDispositionInitiator::finishIteration() {
   // Starting next iteration if there are still tasks left to be scheduled
   if (!layered_precedence_graph_->areAllTasksScheduled()) {
     startIteration();
+  } else {
+    layered_precedence_graph_ = nullptr;
+    auction_initiator_state_ = nullptr;
   }
 }
 
@@ -99,7 +102,7 @@ void IteratedAuctionDispositionInitiator::bidProcessing() {
   auction_initiator_state_->countBidSubmissionProcessing();
 
   // Selecting winners
-  auto winners = auction_initiator_state_->selectWinner();
+  const auto winners = auction_initiator_state_->selectWinner();
   if (!winners.empty()) {
     // Sending WinnerResponse messages to winners
     notifyWinners(winners);

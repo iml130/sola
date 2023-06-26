@@ -52,7 +52,7 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
 
     task1.setAbilityRequirement(ability1);
     task2.setAbilityRequirement(ability2);
-    task2.setAbilityRequirement(ability1);
+    task3.setAbilityRequirement(ability1);
 
     LPCVertex v1(task1);
     LPCVertex v2(task2);

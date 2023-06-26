@@ -38,7 +38,7 @@ public:
     daisi::util::Duration latest_finish_time;
   };
 
-  AuctionInitiatorState(std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph);
+  explicit AuctionInitiatorState(std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph);
 
   /// @brief Counting how many times bid submissions were successful or not.
   /// Throwing an exception if there were no bid submissions too many times.
