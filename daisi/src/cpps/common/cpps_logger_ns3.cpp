@@ -36,7 +36,7 @@ TableDefinition kAmrHistory("AMRHistory", {DatabaseColumnInfo{"Id"},
 static const std::string kCreateAmrHistory = getCreateTableStatement(kAmrHistory);
 static bool amr_history_exists_ = false;
 
-void CppsLoggerNs3::logPositionUpdate(const AGVPositionLoggingInfo &logging_info) {
+void CppsLoggerNs3::logPositionUpdate(const AMRPositionLoggingInfo &logging_info) {
   if (!amr_history_exists_) {
     log_(kCreateAmrHistory);
     amr_history_exists_ = true;
@@ -78,7 +78,7 @@ TableDefinition kAutonomousMobileRobot("AutonomousMobileRobot",
 static const std::string kCreateAmr = getCreateTableStatement(kAutonomousMobileRobot);
 static bool amr_exists_ = false;
 
-void CppsLoggerNs3::logAGV(const AGVLoggingInfo &agv_info) {
+void CppsLoggerNs3::logAMR(const AMRLoggingInfo &amr_info) {
   if (!amr_exists_) {
     log_(kCreateAmr);
     amr_exists_ = true;
@@ -87,25 +87,25 @@ void CppsLoggerNs3::logAGV(const AGVLoggingInfo &agv_info) {
   auto t = std::make_tuple(
       /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
       /* ApplicationUuid */ uuid_.c_str(),
-      /* FriendlyName */ agv_info.friendly_name.c_str(),
-      /* ModelName */ agv_info.model_name.c_str(),
-      /* IpLogicalService */ agv_info.ip_logical_core.c_str(),
-      /* PortLogicalService */ agv_info.port_logical_core,
-      /* IpPhysicalAsset */ agv_info.ip_physical.c_str(),
-      /* PortPhysicalAsset */ agv_info.port_physical,
-      /* IpLocalAsset */ agv_info.ip_logical_asset.c_str(),
-      /* PortLocalAsset */ agv_info.port_logical_asset,
-      /* LoadTime_ms */ agv_info.load_time,
-      /* UnloadTime_ms */ agv_info.unload_time,
-      /* MaxWeight_kg */ agv_info.max_weight,
-      /* MaxVelocity_mps */ agv_info.max_velocity,
-      /* MinVelocity_mps */ agv_info.min_velocity,
-      /* MaxAcceleration_mpss */ agv_info.max_acceleration,
-      /* MaxDeceleration_mpss */ agv_info.min_acceleration);
+      /* FriendlyName */ amr_info.friendly_name.c_str(),
+      /* ModelName */ amr_info.model_name.c_str(),
+      /* IpLogicalService */ amr_info.ip_logical_core.c_str(),
+      /* PortLogicalService */ amr_info.port_logical_core,
+      /* IpPhysicalAsset */ amr_info.ip_physical.c_str(),
+      /* PortPhysicalAsset */ amr_info.port_physical,
+      /* IpLocalAsset */ amr_info.ip_logical_asset.c_str(),
+      /* PortLocalAsset */ amr_info.port_logical_asset,
+      /* LoadTime_ms */ amr_info.load_time,
+      /* UnloadTime_ms */ amr_info.unload_time,
+      /* MaxWeight_kg */ amr_info.max_weight,
+      /* MaxVelocity_mps */ amr_info.max_velocity,
+      /* MinVelocity_mps */ amr_info.min_velocity,
+      /* MaxAcceleration_mpss */ amr_info.max_acceleration,
+      /* MaxDeceleration_mpss */ amr_info.min_acceleration);
   log_(getInsertStatement(kAutonomousMobileRobot, t));
-  //     agv_info.manufacturer_.c_str(),
-  //     agv_info.model_name_.c_str(), agv_info.serial_number_,
-  //     agv_info.load_carrier_type_.c_str()
+  //     amr_info.manufacturer_.c_str(),
+  //     amr_info.model_name_.c_str(), amr_info.serial_number_,
+  //     amr_info.load_carrier_type_.c_str()
 }
 
 // * CppsTopicMessage
@@ -181,7 +181,7 @@ void CppsLoggerNs3::logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &
 
   auto t = std::make_tuple(
       /* OrderUuid */ logging_info.order.c_str(),
-      /* AgvUuid */ logging_info.agv.c_str(),
+      /* AMRUuid */ logging_info.amr.c_str(),
       /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
       /* ExpectedStartTime_ms */ logging_info.expected_start_time,
       /* ExecutionDuration_ms */ logging_info.execution_duration,
@@ -317,7 +317,7 @@ TableDefinition kServiceTransport("ServiceTransport",
                                    {"AmrId", "sql%u", true, "AutonomousMobileRobot(Id)"},
                                    {"LoadCarrierType", "%s", true},
                                    {"MaxWeightPayload_kg", "%f", true}});
-// PRIMARY KEY(service_uuid, agv_uuid, timestamp, state)
+// PRIMARY KEY(service_uuid, amr_uuid, timestamp, state)
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
 static bool service_exists_transport_ = false;
 
@@ -329,14 +329,14 @@ void CppsLoggerNs3::logTransportService(const sola::Service &service, bool activ
 
   // int state = (active ? 1 : 0);
   // auto load_carrier = std::any_cast<std::string>(service.key_values_.at("loadcarriertype"));
-  auto agv_uuid = std::any_cast<std::string>(service.key_values.at("agvuuid"));
+  auto amr_uuid = std::any_cast<std::string>(service.key_values.at("amruuid"));
   auto type = std::any_cast<std::string>(service.key_values.at("servicetype"));
   auto max_payload = std::any_cast<float>(service.key_values.at("maxpayload"));
 
   logService(service.uuid, 0);
   std::string uuid = service.uuid;
   std::string amr_id =
-      "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + agv_uuid + "')";
+      "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + amr_uuid + "')";
   auto t = std::make_tuple(
       /* Uuid */ uuid.c_str(),
       /* AmrId */ amr_id.c_str(),
@@ -512,7 +512,7 @@ static const std::string kCreateTransportOrderHistory =
 static bool transport_order_history_exists_ = false;
 
 void CppsLoggerNs3::logTransportOrderUpdate(const material_flow::Task &task,
-                                            const std::string &assigned_agv) {
+                                            const std::string &assigned_amr) {
   if (!transport_order_history_exists_) {
     log_(kCreateTransportOrderHistory);
     transport_order_history_exists_ = true;
@@ -526,9 +526,9 @@ void CppsLoggerNs3::logTransportOrderUpdate(const material_flow::Task &task,
       "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + task.getUuid() + "')";
 
   auto table = kTransportOrderHistory;
-  if (!assigned_agv.empty()) {
+  if (!assigned_amr.empty()) {
     std::string amr_id =
-        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_amr + "')";
     auto t = std::make_tuple(
         /* TransportOrderId */ transport_order_id.c_str(),
         /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
@@ -554,7 +554,7 @@ void CppsLoggerNs3::logTransportOrderUpdate(const material_flow::Task &task,
 }
 
 void CppsLoggerNs3::logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
-                                            const std::string &assigned_agv) {
+                                            const std::string &assigned_amr) {
   if (!transport_order_history_exists_) {
     log_(kCreateTransportOrderHistory);
     transport_order_history_exists_ = true;
@@ -564,9 +564,9 @@ void CppsLoggerNs3::logTransportOrderUpdate(const std::string &order_uuid, uint3
       "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + order_uuid + "')";
 
   auto table = kTransportOrderHistory;
-  if (!assigned_agv.empty()) {
+  if (!assigned_amr.empty()) {
     std::string amr_id =
-        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_amr + "')";
     auto t = std::make_tuple(
         /* TransportOrderId */ transport_order_id.c_str(),
         /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),

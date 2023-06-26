@@ -100,7 +100,7 @@ void AmrPhysicalAsset::readSocket(ns3::Ptr<ns3::Socket> socket) {
     else if (auto order_info = std::get_if<AmrOrderInfo>(&m))
       processMessageOrderInfo(*order_info);
     else
-      throw std::runtime_error("invalid packet type for physical agv");
+      throw std::runtime_error("invalid packet type for physical amr");
   }
 }
 

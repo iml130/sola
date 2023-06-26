@@ -170,7 +170,7 @@ void AmrLogicalAgent::checkSendingNextTask() {
 }
 
 void AmrLogicalAgent::logAmrInfos() {
-  daisi::cpps::AGVLoggingInfo info;  // TODO rename to AMR
+  daisi::cpps::AMRLoggingInfo info;
 
   // general
   info.friendly_name = description_.getProperties().getFriendlyName();
@@ -217,7 +217,7 @@ void AmrLogicalAgent::logAmrInfos() {
   info.ip_physical = physical_asset_ip;
   info.port_physical = physical_asset_port;
 
-  logger_->logAGV(info);  // TODO rename to AMR
+  logger_->logAMR(info);
 }
 
 }  // namespace daisi::cpps::logical

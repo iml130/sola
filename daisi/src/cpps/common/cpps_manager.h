@@ -95,12 +95,12 @@ private:
   virtual uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
-  void spawnAMR(uint32_t agv_index, const AmrDescription &description, const Topology &topology);
+  void spawnAMR(uint32_t amr_index, const AmrDescription &description, const Topology &topology);
 
   void parse();
-  void parseAGVs();
+  void parseAMRs();
   void parseTOs();
-  void parseAgvSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
+  void parseAMRSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseToSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseTopology();
   void parseScenarioSequence();
@@ -109,13 +109,13 @@ private:
   void clearFinishedMaterialFlows();
 
   AmrKinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
-  amr::AmrStaticAbility parseAGVAbility(
+  amr::AmrStaticAbility parseAMRAbility(
       std::shared_ptr<daisi::ScenariofileParser::Table> description);
 
   void checkStarted(uint32_t index);
 
-  uint64_t number_agvs_later_ = 0;
-  uint64_t number_agvs_initial_ = 0;
+  uint64_t number_amrs_later_ = 0;
+  uint64_t number_amrs_initial_ = 0;
   uint64_t number_material_flow_nodes_ = 0;
   uint64_t number_material_flows_ = 0;
   uint64_t number_material_flows_scheduled_for_execution_ = 0;

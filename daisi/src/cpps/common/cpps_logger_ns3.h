@@ -26,7 +26,7 @@
 
 namespace daisi::cpps {
 
-struct AGVLoggingInfo {
+struct AMRLoggingInfo {
   std::string friendly_name;
   std::string manufacturer;
   std::string model_name;
@@ -48,7 +48,7 @@ struct AGVLoggingInfo {
   double min_acceleration;
 };
 
-struct AGVPositionLoggingInfo {
+struct AMRPositionLoggingInfo {
   std::string uuid;
   double x;
   double y;
@@ -68,7 +68,7 @@ struct NegotiationTrafficLoggingInfo {
 
 struct ExecutedOrderUtilityLoggingInfo {
   std::string order;
-  std::string agv;
+  std::string amr;
   double expected_start_time;
 
   double execution_duration;
@@ -103,16 +103,16 @@ public:
                          uint32_t delivery_station_id);
   void logTransportOrder(const material_flow::Task &order, uint32_t pickup_station_id,
                          uint32_t delivery_station_id, const std::string &mf_uuid);
-  void logAGV(const AGVLoggingInfo &agv_info);
+  void logAMR(const AMRLoggingInfo &amr_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,
                   const std::vector<ns3::Vector2D> &additionalPositions = {});
   void logTransportOrderUpdate(const material_flow::Task &order,
-                               const std::string &assigned_agv = "");
+                               const std::string &assigned_amr = "");
   void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
-                               const std::string &assigned_agv);
+                               const std::string &assigned_amr);
   void logTransportService(const sola::Service &service, bool active);
   void logService(const std::string &uuid, uint8_t type);
-  void logPositionUpdate(const AGVPositionLoggingInfo &logging_info);
+  void logPositionUpdate(const AMRPositionLoggingInfo &logging_info);
   void logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info);
   void logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info);
   void logTopicMessage(const std::string &topic, const std::string &message_id,

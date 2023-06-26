@@ -49,18 +49,18 @@ CppsManager::CppsManager(const std::string &scenario_config_file)
   parse();
 }
 
-void CppsManager::spawnAMR(uint32_t agv_index, const AmrDescription &description,
+void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description,
                            const Topology &topology) {
   std::cout << "Creating AMR " << description.getProperties().getFriendlyName() << std::endl;
 
-  const uint32_t device_id = agvs_.Get(agv_index)->GetId();
+  const uint32_t device_id = agvs_.Get(amr_index)->GetId();
 
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
   }
 
   next_mobility_model =
-      DynamicCast<AmrMobilityModelNs3>(agvs_.Get(agv_index)->GetObject<MobilityModel>());
+      DynamicCast<AmrMobilityModelNs3>(agvs_.Get(amr_index)->GetObject<MobilityModel>());
 
   AmrAssetConnector connector(description, topology);
 
@@ -73,10 +73,10 @@ void CppsManager::spawnAMR(uint32_t agv_index, const AmrDescription &description
   algorithm_config.algorithm_types.push_back(
       logical::AlgorithmType::kIteartedAuctionDispositionParticipant);
 
-  this->agvs_.Get(agv_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
+  this->agvs_.Get(amr_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
-  this->agvs_.Get(agv_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, agv_index == 0);
+  this->agvs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
+      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, amr_index == 0);
 }
 
 void CppsManager::setup() {
@@ -87,8 +87,6 @@ void CppsManager::setup() {
 
   // Setup AGVs
   assert(this->nodeContainer_.GetN() == getNumberOfNodes());
-
-  auto topology = Topology(util::Dimensions(width_, height_, depth_));
 
   ns3::MobilityHelper mob;
   mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX", ns3::DoubleValue(width_ * 0.2),
@@ -132,7 +130,7 @@ void CppsManager::initialSpawn() {
 }
 
 uint64_t CppsManager::getNumberOfNodes() {
-  return number_agvs_initial_ + number_agvs_later_ + number_material_flow_nodes_;
+  return number_amrs_initial_ + number_amrs_later_ + number_material_flow_nodes_;
 }
 
 void CppsManager::checkStarted(uint32_t index) {
@@ -209,7 +207,7 @@ void CppsManager::startMF(uint32_t index) {
 }
 
 void CppsManager::setupNodes() {
-  agvs_.Create(number_agvs_initial_ + number_agvs_later_);
+  agvs_.Create(number_amrs_initial_ + number_amrs_later_);
   material_flows_.Create(number_material_flow_nodes_);
   setupNetworkEthernet();
   setupNetworkWifi();
@@ -491,17 +489,17 @@ void CppsManager::scheduleEvents() {
   Simulator::Schedule(MilliSeconds(1000), &CppsManager::clearFinishedMaterialFlows, this);
   uint64_t current_time = Simulator::Now().GetMilliSeconds();
   uint64_t delay = parser_.getParsedContent()->getRequired<uint64_t>("defaultDelay");
-  for (auto i = 0U; i < number_agvs_initial_; i++) {
+  for (auto i = 0U; i < number_amrs_initial_; i++) {
     current_time += delay;
     Simulator::Schedule(MilliSeconds(current_time), &CppsManager::initAMR, this, i);
   }
 
-  for (auto i = 0U; i < number_agvs_initial_; i++) {
+  for (auto i = 0U; i < number_amrs_initial_; i++) {
     current_time += delay;
     Simulator::Schedule(MilliSeconds(current_time), &CppsManager::connectAMR, this, i);
   }
 
-  for (auto i = 0U; i < number_agvs_initial_; i++) {
+  for (auto i = 0U; i < number_amrs_initial_; i++) {
     current_time += delay;
     Simulator::Schedule(MilliSeconds(current_time), &CppsManager::startAMR, this, i);
   }
@@ -517,7 +515,7 @@ void CppsManager::scheduleEvents() {
 }
 
 void CppsManager::parse() {
-  number_agvs_initial_ =
+  number_amrs_initial_ =
       parser_.getParsedContent()->getRequired<uint64_t>("initialNumberNodesAGVs");
   number_material_flow_nodes_ =
       parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlowNodes");
@@ -526,7 +524,7 @@ void CppsManager::parse() {
   material_flow_nodes_leave_after_finish_ = parser_.getParsedContent()->getRequired<std::string>(
                                                 "materialFlowNodesLeaveAfterFinish") == "on";
 
-  parseAGVs();
+  parseAMRs();
   parseTOs();
   parseTopology();
   parseScenarioSequence();
@@ -542,8 +540,8 @@ void CppsManager::parseTopology() {
   depth_ = topology->getRequired<uint64_t>("depth");
 }
 
-void CppsManager::parseAGVs() {
-  std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> agv_infos;
+void CppsManager::parseAMRs() {
+  std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> amr_infos;
 
   auto agv_table =
       parser_.getParsedContent()
@@ -574,9 +572,9 @@ void CppsManager::parseAGVs() {
     uint64_t load_time = kinematics_description->getRequired<uint64_t>("load_time");
     uint64_t unload_time = kinematics_description->getRequired<uint64_t>("unload_time");
 
-    auto ability = parseAGVAbility(ability_description);
+    auto ability = parseAMRAbility(ability_description);
 
-    agv_infos.push_back({ability, kinematics});
+    amr_infos.push_back({ability, kinematics});
 
     AmrProperties properties(manufacturer, model_name, model_number, device_type, friendly_name,
                              {FunctionalityType::kLoad, FunctionalityType::kMoveTo,
@@ -589,7 +587,7 @@ void CppsManager::parseAGVs() {
     amr_descriptions_.push_back(description);
   }
 
-  AmrFleet::init(agv_infos);
+  AmrFleet::init(amr_infos);
 }
 
 void CppsManager::parseTOs() {
@@ -650,7 +648,7 @@ void CppsManager::parseScenarioSequence() {
     std::string type = spawn_description->getRequired<std::string>("type");
 
     if (type == "agv") {
-      parseAgvSpawn(spawn_description);
+      parseAMRSpawn(spawn_description);
     } else if (type == "to") {
       parseToSpawn(spawn_description);
     } else {
@@ -659,7 +657,7 @@ void CppsManager::parseScenarioSequence() {
   }
 }
 
-void CppsManager::parseAgvSpawn(
+void CppsManager::parseAMRSpawn(
     const std::shared_ptr<ScenariofileParser::Table> &spawn_description) {
   std::string friendly_name = spawn_description->getRequired<std::string>("friendly_name");
   uint64_t start_time = spawn_description->getRequired<uint64_t>("start_time");
@@ -709,7 +707,7 @@ AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::T
   return AmrKinematics(max_velo, min_velo, max_acc, min_acc);
 }
 
-amr::AmrStaticAbility CppsManager::parseAGVAbility(
+amr::AmrStaticAbility CppsManager::parseAMRAbility(
     std::shared_ptr<ScenariofileParser::Table> description) {
   std::string load_carrier_type_string = description->getRequired<std::string>("load_carrier_type");
   float max_payload = description->getRequired<float>("max_payload");

@@ -58,7 +58,7 @@ void AGVLogical::processMessageDescription(const std::string &payload) {
   // stream >> data;
   kinematics_ = description.getKinematics();
 
-  logAGV();
+  logAMR();
   std::cout << "AGV logical registered" << std::endl;
 }
 
@@ -66,7 +66,7 @@ void AGVLogical::processMessageUpdate(const message::PositionUpdate &msg) {
   last_x_ = msg.x;
   last_y_ = msg.y;
 
-  daisi::cpps::AGVPositionLoggingInfo info;
+  daisi::cpps::AMRPositionLoggingInfo info;
   info.uuid = uuid_;
   info.x = msg.x;
   info.y = msg.y;
@@ -101,8 +101,8 @@ void AGVLogical::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::A
   socket_agv_->SetRecvCallback(MakeCallback(&AGVLogical::readFromSocket, this));
 }
 
-void AGVLogical::logAGV() const {
-  daisi::cpps::AGVLoggingInfo info;
+void AGVLogical::logAMR() const {
+  daisi::cpps::AMRLoggingInfo info;
   // info.friendly_name = data_model_.agv_properties.friendly_name;
   // info.manufacturer = data_model_.agv_properties.manufacturer;
   // info.model_name = data_model_.agv_properties.model_name;
@@ -125,7 +125,7 @@ void AGVLogical::logAGV() const {
   info.max_acceleration = 0;
   info.min_acceleration = 0;
 
-  logger_->logAGV(info);
+  logger_->logAMR(info);
 }
 
 void AGVLogical::init() {

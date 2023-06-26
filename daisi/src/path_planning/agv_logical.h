@@ -56,7 +56,7 @@ private:
   bool connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
   void newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
 
-  void logAGV() const;
+  void logAMR() const;
 
   void processMessageField(const message::FieldMessage &msg);
   void processMessageDescription(const std::string &payload);
