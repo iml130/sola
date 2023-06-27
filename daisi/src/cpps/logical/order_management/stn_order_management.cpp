@@ -123,6 +123,7 @@ bool StnOrderManagement::canAddTask(const Task &task) {
   latest_calculated_insertion_info_ = std::nullopt;
 
   StnOrderManagement copy(*this);
+  copy.clearNotifyTaskAssignmentCallback();
   if (copy.addTask(task)) {
     latest_calculated_insertion_info_ = copy.getLatestCalculatedInsertionInfo();
     return true;
@@ -175,6 +176,7 @@ bool StnOrderManagement::addTask(
     addPrecedenceConstraintBetweenTask(getVertexOfOrder(orders.front(), true), prec_task);
   }
 
+  bool added = false;
   if (insertion_point) {
     std::shared_ptr<StnOrderManagement::StnInsertionPoint> stn_insertion_point =
         std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(insertion_point);
@@ -186,15 +188,22 @@ bool StnOrderManagement::addTask(
     if (success) {
       MetricsComposition metrics = newest_task_insert_info_->metrics_composition;
       latest_calculated_insertion_info_ = std::make_pair(metrics, insertion_point);
-      return true;
+      added = true;
     }
 
   } else {
     auto result = addBestOrdering(info);
     if (result.has_value()) {
       latest_calculated_insertion_info_ = result.value();
-      return true;
+      added = true;
     }
+  }
+
+  if (added) {
+    for (auto &callback : task_assignment_callbacks_) {
+      callback();
+    }
+    return true;
   }
 
   return false;

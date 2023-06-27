@@ -42,6 +42,8 @@ public:
 
   virtual void start() override;
 
+  void notifyTaskAssigned();
+
 private:
   virtual void initAlgorithms() override;
 
@@ -69,7 +71,7 @@ private:
   void sendTopologyToPhysical();
   void sendTaskToPhysical();
 
-  void checkSendingNextTask();
+  void checkSendingNextTaskToPhysical();
 
   void logAmrInfos();
 

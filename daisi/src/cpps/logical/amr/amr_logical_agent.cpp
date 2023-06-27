@@ -59,11 +59,16 @@ void AmrLogicalAgent::initAlgorithms() {
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
             sola_, order_management_, description_));
 
+        order_management_->addNotifyTaskAssignmentCallback(
+            [this]() { this->notifyTaskAssigned(); });
+
         break;
       default:
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");
     }
   }
+
+  checkSendingNextTaskToPhysical();
 }
 
 void AmrLogicalAgent::start() { initAlgorithms(); }
@@ -128,13 +133,16 @@ void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &statu
   position_logging_info.state = static_cast<uint8_t>(current_state_);
   logger_->logPositionUpdate(position_logging_info);
 
-  checkSendingNextTask();
+  checkSendingNextTaskToPhysical();
 }
 
 void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update) {
   // TODO set current task state in order management
+  // TODO log order update
 
-  checkSendingNextTask();
+  if (order_update.getState() == OrderStates::kFinished) {
+    checkSendingNextTaskToPhysical();
+  }
 }
 
 // helper
@@ -153,16 +161,19 @@ void AmrLogicalAgent::sendTopologyToPhysical() {
 }
 
 void AmrLogicalAgent::sendTaskToPhysical() {
-  material_flow::Task task = order_management_->getCurrentTask();
+  order_management_->setNextTask();
+  if (order_management_->hasTasks()) {
+    material_flow::Task task = order_management_->getCurrentTask();
 
-  // TODO set ability
-  amr::AmrStaticAbility ability;
-  AmrOrderInfo amr_order_info(materialFlowToFunctionalities(task.getOrders(), current_position_),
-                              ability);
-  auto order_msg = amr::serialize(amr_order_info);
+    AmrOrderInfo amr_order_info(materialFlowToFunctionalities(task.getOrders(), current_position_),
+                                description_.getLoadHandling().getAbility());
+    auto order_msg = amr::serialize(amr_order_info);
 
-  sendToPhysical(order_msg);
+    sendToPhysical(order_msg);
+  }
 }
+
+void AmrLogicalAgent::notifyTaskAssigned() { checkSendingNextTaskToPhysical(); }
 
 bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr) {
   // Accept all requests
@@ -176,7 +187,7 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
   logAmrInfos();
 }
 
-void AmrLogicalAgent::checkSendingNextTask() {
+void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
   // TODO check depending on AmrState and OrderState whether we are still busy or not
 
   if (current_state_ == AmrState::kIdle && order_management_) {
