@@ -7,6 +7,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_init
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
     daisi_material_flow_model_material_flow
+    daisi_cpps_common_cpps_logger_ns3
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_disposition_participant INTERFACE)
@@ -59,6 +60,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_preceden
     PUBLIC
     daisi_datastructure_directed_graph
     daisi_material_flow_model_material_flow
+    daisi_cpps_common_cpps_logger_ns3
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_auction_initiator_state STATIC)

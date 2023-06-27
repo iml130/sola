@@ -20,6 +20,7 @@
 #include <memory>
 #include <optional>
 
+#include "cpps/common/cpps_logger_ns3.h"
 #include "datastructure/directed_graph.tpp"
 #include "layered_precedence_graph_components.h"
 #include "material_flow/model/material_flow.h"
@@ -38,7 +39,8 @@ namespace daisi::cpps::logical {
 /// autonomous agents & multiagent systems. 2016.
 class LayeredPrecedenceGraph : private datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
+  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler,
+                                  std::shared_ptr<CppsLoggerNs3> logger);
 
   ~LayeredPrecedenceGraph() = default;
 
@@ -107,6 +109,10 @@ private:
   std::vector<LPCVertex> getLayerVertices(PrecedenceGraphLayer layer) const;
 
   LPCVertex getVertex(const std::string &task_uuid) const;
+
+  void logContent();
+
+  std::shared_ptr<CppsLoggerNs3> logger_;
 };
 
 }  // namespace daisi::cpps::logical

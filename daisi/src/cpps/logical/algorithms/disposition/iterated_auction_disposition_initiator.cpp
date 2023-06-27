@@ -22,8 +22,8 @@
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-    : DispositionInitiator(sola) {
+    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola, std::shared_ptr<CppsLoggerNs3> logger)
+    : DispositionInitiator(sola, logger) {
   // assuming that sola is fully initialized at this point
 
   auto preparation_duration = prepareInteraction();
@@ -39,7 +39,7 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
                              "is not implemented yet.");
   }
 
-  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler);
+  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler, logger_);
   auction_initiator_state_ = std::make_unique<AuctionInitiatorState>(layered_precedence_graph_);
 
   auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();

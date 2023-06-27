@@ -17,6 +17,7 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
+#include "cpps/common/uuid_generator.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
@@ -104,6 +105,12 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
   if (!description_set_) {
     description_ = description;
     description_set_ = true;
+
+    setServices();
+
+    std::string endpoint = sola_->getConectionString();
+    std::string ip = endpoint.substr(0, endpoint.find(":"));
+    SolaNetworkUtils::get().createSockets(ip);
   } else {
     throw std::runtime_error("AmrDescription attempted to be set twice.");
   }
@@ -112,6 +119,14 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
 void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &status_update) {
   current_position_ = status_update.getPosition();
   current_state_ = status_update.getState();
+
+  AMRPositionLoggingInfo position_logging_info;
+  position_logging_info.uuid = uuid_;
+  position_logging_info.x = current_position_.x;
+  position_logging_info.y = current_position_.y;
+  position_logging_info.z = 0;
+  position_logging_info.state = static_cast<uint8_t>(current_state_);
+  logger_->logPositionUpdate(position_logging_info);
 
   checkSendingNextTask();
 }
@@ -218,6 +233,26 @@ void AmrLogicalAgent::logAmrInfos() {
   info.port_physical = physical_asset_port;
 
   logger_->logAMR(info);
+}
+
+void AmrLogicalAgent::setServices() {
+  sola::Service service;
+  service.friendly_name = "service_" + description_.getProperties().getFriendlyName();
+  service.uuid = UUIDGenerator::get()();
+
+  service.key_values.insert({"servicetype", std::string("transport")});
+
+  service.key_values.insert(
+      {"maxpayload", description_.getLoadHandling().getAbility().getMaxPayloadWeight()});
+
+  service.key_values.insert(
+      {"loadcarriertype",
+       description_.getLoadHandling().getAbility().getLoadCarrier().getTypeAsString()});
+
+  service.key_values.insert({"amruuid", uuid_});
+
+  logger_->logTransportService(service, true);
+  sola_->addService(service);
 }
 
 }  // namespace daisi::cpps::logical

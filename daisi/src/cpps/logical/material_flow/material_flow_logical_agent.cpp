@@ -35,7 +35,8 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
       case AlgorithmType::kIteratedAuctionDispositionInitiator:
-        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionInitiator>(sola_));
+        algorithms_.push_back(
+            std::make_unique<IteratedAuctionDispositionInitiator>(sola_, logger_));
         break;
       default:
         throw std::invalid_argument(
@@ -63,6 +64,8 @@ bool MaterialFlowLogicalAgent::isFinished() const {
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
+  logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+
   // TODO save scheduler somewhere?
   auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
 

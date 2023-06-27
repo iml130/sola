@@ -75,6 +75,8 @@ private:
 
   void sendToPhysical(std::string payload);
 
+  void setServices();
+
   AmrDescription description_;
   bool description_set_;  // to avoid overriding
 

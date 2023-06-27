@@ -21,7 +21,9 @@
 namespace daisi::cpps::logical {
 
 LayeredPrecedenceGraph::LayeredPrecedenceGraph(
-    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler) {
+    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler,
+    std::shared_ptr<CppsLoggerNs3> logger)
+    : logger_(std::move(logger)) {
   // TODO transform scheduler content to vertices and edges
 
   // hard coded test tasks
@@ -67,6 +69,8 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
   }
 
   initLayers();
+
+  logContent();
 }
 
 void LayeredPrecedenceGraph::initLayers() {
@@ -316,6 +320,18 @@ bool LayeredPrecedenceGraph::isFreeTaskScheduled(const std::string &task_uuid) c
   }
 
   return vertex.scheduled;
+}
+
+void LayeredPrecedenceGraph::logContent() {
+  for (const auto &vertex : vertices_) {
+    auto task = vertex.task;
+    // TODO log material flow task
+    for (const auto &order : task.getOrders()) {
+      // TODO log material flow orders
+
+      logger_->logMaterialFlowOrder(order);
+    }
+  }
 }
 
 }  // namespace daisi::cpps::logical

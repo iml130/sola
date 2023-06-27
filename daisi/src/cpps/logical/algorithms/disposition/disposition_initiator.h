@@ -21,6 +21,7 @@
 #include <variant>
 
 #include "../algorithm_interface.h"
+#include "cpps/common/cpps_logger_ns3.h"
 #include "material_flow/model/material_flow.h"
 
 namespace daisi::cpps::logical {
@@ -30,14 +31,19 @@ namespace daisi::cpps::logical {
 /// There always must be a corresponding derived class from DispositionParticipant.
 class DispositionInitiator : public AlgorithmInterface {
 public:
-  explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-      : AlgorithmInterface(sola){};
+  explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+                                std::shared_ptr<CppsLoggerNs3> logger)
+      : AlgorithmInterface(sola), logger_(std::move(logger)){};
 
   ~DispositionInitiator() = default;
 
   /// @brief Adding a material flow whose tasks should be allocated.
   /// @param scheduler MFDL Scheduler
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
+
+protected:
+  /// @brief For logging material flow tasks and orders
+  std::shared_ptr<CppsLoggerNs3> logger_;
 };
 
 }  // namespace daisi::cpps::logical

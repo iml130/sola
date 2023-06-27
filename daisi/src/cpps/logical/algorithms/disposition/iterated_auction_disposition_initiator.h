@@ -38,7 +38,8 @@ namespace daisi::cpps::logical {
 /// physical properties (abilities).
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
-  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
+  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+                                               std::shared_ptr<CppsLoggerNs3> logger);
 
   ~IteratedAuctionDispositionInitiator() = default;
 
@@ -108,7 +109,9 @@ private:
   std::unordered_map<amr::AmrStaticAbility, std::string, amr::AmrStaticAbilityHasher>
       ability_topic_mapping_;
 
+  /// @brief Flag to note whether the preparation of subscribing to topics has finished or not.
   bool preparation_finished_ = false;
+
 
   /// @brief Storing all delays in one place. The unit is seconds.
   struct {
