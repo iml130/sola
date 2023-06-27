@@ -49,6 +49,10 @@ public:
                                        uint32_t instance, uint32_t msg_type);
   void logRecvPathPlanningTopicTraffic(const std::string &topic, const std::string &node,
                                        uint32_t instance, uint32_t msg_type);
+
+  void logTransportOrderUpdate(const Task &order, const std::string &assigned_amr = "");
+  void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
+                               const std::string &assigned_amr);
 };
 }  // namespace daisi::path_planning
 

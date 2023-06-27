@@ -21,9 +21,7 @@
 namespace daisi::cpps::logical {
 
 LayeredPrecedenceGraph::LayeredPrecedenceGraph(
-    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler,
-    std::shared_ptr<CppsLoggerNs3> logger)
-    : logger_(std::move(logger)) {
+    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler) {
   // TODO transform scheduler content to vertices and edges
 
   // hard coded test tasks
@@ -69,8 +67,6 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
   }
 
   initLayers();
-
-  logContent();
 }
 
 void LayeredPrecedenceGraph::initLayers() {
@@ -214,6 +210,15 @@ std::vector<LPCVertex> LayeredPrecedenceGraph::getLayerVertices(PrecedenceGraphL
   return vertices_of_layer;
 }
 
+std::vector<material_flow::Task> LayeredPrecedenceGraph::getTasks() const {
+  std::vector<material_flow::Task> tasks;
+
+  std::transform(vertices_.begin(), vertices_.end(), std::back_inserter(tasks),
+                 [&](const auto &vertex) { return vertex.task; });
+
+  return tasks;
+}
+
 void LayeredPrecedenceGraph::setEarliestValidStartTime(const std::string &task_uuid,
                                                        const daisi::util::Duration &time) {
   auto it = std::find_if(vertices_.begin(), vertices_.end(),
@@ -320,18 +325,6 @@ bool LayeredPrecedenceGraph::isFreeTaskScheduled(const std::string &task_uuid) c
   }
 
   return vertex.scheduled;
-}
-
-void LayeredPrecedenceGraph::logContent() {
-  for (const auto &vertex : vertices_) {
-    auto task = vertex.task;
-    // TODO log material flow task
-    for (const auto &order : task.getOrders()) {
-      // TODO log material flow orders
-
-      logger_->logMaterialFlowOrder(order);
-    }
-  }
 }
 
 }  // namespace daisi::cpps::logical

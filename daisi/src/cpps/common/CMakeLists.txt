@@ -17,6 +17,8 @@ target_link_libraries(daisi_cpps_common_cpps_application
 add_library(daisi_cpps_common_cpps_logger_ns3 STATIC)
 target_sources(daisi_cpps_common_cpps_logger_ns3
         PRIVATE
+        cpps_logger_ns3_material_flow.cpp
+        cpps_logger_ns3_amr.cpp
         cpps_logger_ns3.cpp
         cpps_logger_ns3.h
 )

@@ -51,6 +51,8 @@ public:
 
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
 
+  virtual void logMaterialFlowContent(const std::string &material_flow_uuid) override;
+
 private:
   /// @brief Preparing interaction by subscribing to required topics for each ability.
   /// @return Duration needed to prepare interaction, to time the following interactions
@@ -111,7 +113,6 @@ private:
 
   /// @brief Flag to note whether the preparation of subscribing to topics has finished or not.
   bool preparation_finished_ = false;
-
 
   /// @brief Storing all delays in one place. The unit is seconds.
   struct {

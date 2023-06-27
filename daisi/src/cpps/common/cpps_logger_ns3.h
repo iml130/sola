@@ -97,19 +97,9 @@ public:
   ~CppsLoggerNs3();
 
   // cpps specific logging functions
-  void logMaterialFlow(const uint64_t &timestamp, const std::string &mf_uuid, const std::string &ip,
-                       uint16_t port, uint8_t state);
-  void logTransportOrder(const material_flow::Task &order, uint32_t pickup_station_id,
-                         uint32_t delivery_station_id);
-  void logTransportOrder(const material_flow::Task &order, uint32_t pickup_station_id,
-                         uint32_t delivery_station_id, const std::string &mf_uuid);
   void logAMR(const AMRLoggingInfo &amr_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,
                   const std::vector<ns3::Vector2D> &additionalPositions = {});
-  void logTransportOrderUpdate(const material_flow::Task &order,
-                               const std::string &assigned_amr = "");
-  void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
-                               const std::string &assigned_amr);
   void logTransportService(const sola::Service &service, bool active);
   void logService(const std::string &uuid, uint8_t type);
   void logPositionUpdate(const AMRPositionLoggingInfo &logging_info);
@@ -118,8 +108,12 @@ public:
   void logTopicMessage(const std::string &topic, const std::string &message_id,
                        const std::string &node, const std::string &message, bool receive);
   void logTopicEvent(const std::string &topic, const std::string &node, bool subscribe);
-
   void logCppsMessageTypes();
+
+  void logMaterialFlow(const std::string &mf_uuid, const std::string &ip, uint16_t port,
+                       uint8_t state);
+  void logMaterialFlowOrder(const material_flow::Order &order, const std::string &task_uuid);
+  void logMaterialFlowTask(const material_flow::Task &task, const std::string &material_flow_uuid);
 
   // Used for loggers which are initialized before node starts
   // TODO Refactor to other class

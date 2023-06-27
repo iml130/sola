@@ -39,7 +39,7 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
                              "is not implemented yet.");
   }
 
-  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler, logger_);
+  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler);
   auction_initiator_state_ = std::make_unique<AuctionInitiatorState>(layered_precedence_graph_);
 
   auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();
@@ -205,6 +205,17 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
   }
 
   return task_ability_mapping;
+}
+
+void IteratedAuctionDispositionInitiator::logMaterialFlowContent(
+    const std::string &material_flow_uuid) {
+  for (const auto &task : layered_precedence_graph_->getTasks()) {
+    logger_->logMaterialFlowTask(task, material_flow_uuid);
+
+    for (const auto &order : task.getOrders()) {
+      logger_->logMaterialFlowOrder(order, task.getUuid());
+    }
+  }
 }
 
 bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {

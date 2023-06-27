@@ -64,8 +64,6 @@ bool MaterialFlowLogicalAgent::isFinished() const {
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
-  logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
-
   // TODO save scheduler somewhere?
   auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
 
@@ -74,6 +72,9 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
 
   DispositionInitiator *tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);
+
+  logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+  tmp->logMaterialFlowContent(uuid_);
 }
 
 }  // namespace daisi::cpps::logical

@@ -232,6 +232,100 @@ void PathPlanningLoggerNs3::logPPTransportOrderUpdate(const std::string &order_u
   logTransportOrderUpdate(order_uuid, status, agv);
 }
 
+// * TransportOrderHistory
+TableDefinition kTransportOrderHistory("TransportOrderHistory",
+                                         {DatabaseColumnInfo{"Id"},
+                                          {"TransportOrderId", "sql%u", true, "TransportOrder(Id)"},
+                                          {"Timestamp_ms", "%u", true},
+                                          {"State", "%u", true},
+                                          {"PosX_m", "%f", true},
+                                          {"PosY_m", "%f", true},
+                                          {"AmrId", "sql%u", false, "AutonomousMobileRobot(Id)"}
+                                          /*{"TransportServiceId", "%u", false,
+                                           "TransportService(Id)"}*/});
+static const std::string kCreateTransportOrderHistory =
+    getCreateTableStatement(kTransportOrderHistory);
+static bool transport_order_history_exists_ = false;
+
+void PathPlanningLoggerNs3::logTransportOrderUpdate(const Task &order,
+                                                    const std::string &assigned_agv) {
+  if (!transport_order_history_exists_) {
+    log_(kCreateTransportOrderHistory);
+    transport_order_history_exists_ = true;
+  }
+
+  ns3::Vector pos = order.getCurrentPosition();
+  auto order_state = order.getOrderState();
+
+  std::string transport_order_id =
+      "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + order.getUuid() + "')";
+
+  auto table = kTransportOrderHistory;
+  if (!assigned_agv.empty()) {
+    std::string amr_id =
+        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+    auto t = std::make_tuple(
+        /* TransportOrderId */ transport_order_id.c_str(),
+        /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
+        /* State */ order_state,
+        /* PosX_m */ pos.x,
+        /* PosY_m */ pos.y,
+        /* AmrId */ amr_id.c_str()
+        // /* TransportServiceId */ 1  // TODO
+    );
+    log_(getInsertStatement(table, t));
+  } else {
+    table.columns[6] = {"AmrId", "NULL"};
+    auto t = std::make_tuple(
+        /* TransportOrderId */ transport_order_id.c_str(),
+        /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
+        /* State */ order_state,
+        /* PosX_m */ pos.x,
+        /* PosY_m */ pos.y
+        // /* TransportServiceId */ 1  // TODO
+    );
+    log_(getInsertStatement(table, t));
+  }
+}
+
+void PathPlanningLoggerNs3::logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
+                                                    const std::string &assigned_agv) {
+  if (!transport_order_history_exists_) {
+    log_(kCreateTransportOrderHistory);
+    transport_order_history_exists_ = true;
+  }
+
+  std::string transport_order_id =
+      "(SELECT Id FROM TransportOrder WHERE OrderUuid='" + order_uuid + "')";
+
+  auto table = kTransportOrderHistory;
+  if (!assigned_agv.empty()) {
+    std::string amr_id =
+        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+    auto t = std::make_tuple(
+        /* TransportOrderId */ transport_order_id.c_str(),
+        /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
+        /* State */ status,
+        /* PosX_m */ 0.0,
+        /* PosY_m */ 0.0,
+        /* AmrId */ amr_id.c_str()
+        // /* TransportServiceId */ 1  // TODO
+    );
+    log_(getInsertStatement(table, t));
+  } else {
+    table.columns[6] = {"AmrId", "NULL"};
+    auto t = std::make_tuple(
+        /* TransportOrderId */ transport_order_id.c_str(),
+        /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
+        /* State */ status,
+        /* PosX_m */ 0.0,
+        /* PosY_m */ 0.0
+        // /* TransportServiceId */ 1  // TODO
+    );
+    log_(getInsertStatement(table, t));
+  }
+}
+
 }  // namespace daisi::path_planning
 
 #undef TableDefinition

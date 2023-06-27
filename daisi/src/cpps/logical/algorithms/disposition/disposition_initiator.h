@@ -41,6 +41,8 @@ public:
   /// @param scheduler MFDL Scheduler
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) = 0;
 
+  virtual void logMaterialFlowContent(const std::string &material_flow_uuid) = 0;
+
 protected:
   /// @brief For logging material flow tasks and orders
   std::shared_ptr<CppsLoggerNs3> logger_;

@@ -39,8 +39,7 @@ namespace daisi::cpps::logical {
 /// autonomous agents & multiagent systems. 2016.
 class LayeredPrecedenceGraph : private datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler,
-                                  std::shared_ptr<CppsLoggerNs3> logger);
+  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
 
   ~LayeredPrecedenceGraph() = default;
 
@@ -90,6 +89,8 @@ public:
   /// @return True if the task is on the free layer and the scheduled flag is set
   bool isFreeTaskScheduled(const std::string &task_uuid) const;
 
+  std::vector<material_flow::Task> getTasks() const;
+
 private:
   /// @brief Initializing layers of the precedence graph based on set equations from the pIA
   /// algorithm.
@@ -109,10 +110,6 @@ private:
   std::vector<LPCVertex> getLayerVertices(PrecedenceGraphLayer layer) const;
 
   LPCVertex getVertex(const std::string &task_uuid) const;
-
-  void logContent();
-
-  std::shared_ptr<CppsLoggerNs3> logger_;
 };
 
 }  // namespace daisi::cpps::logical
