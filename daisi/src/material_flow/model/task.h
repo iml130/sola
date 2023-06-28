@@ -58,8 +58,6 @@ public:
   SERIALIZE(uuid_, name_, orders_, follow_up_tasks_, preceding_tasks_, ability_requirement_);
 
 private:
-  void generateUuid();
-
   std::string uuid_;
 
   std::string name_;

@@ -84,8 +84,16 @@ private:
 
   Topology topology_;
 
-  daisi::util::Position current_position_;
-  AmrState current_state_;
+  struct ExecutionState {
+    util::Position position;
+    AmrState amr_state = AmrState::kIdle;
+    material_flow::Task task;
+    int order_index = -1;
+    OrderStates order_state = OrderStates::kCreated;
+
+    void setNextOrder();
+    void setNextTask(const material_flow::Task &next_task);
+  } execution_state_;
 
   /// @brief For TCP communication with the AmrPhysicalAsset.
   /// The AmrLogicalAgent is acting as the server according to the TCP model.

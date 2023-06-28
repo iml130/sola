@@ -89,6 +89,8 @@ public:
   /// @return True if the task is on the free layer and the scheduled flag is set
   bool isFreeTaskScheduled(const std::string &task_uuid) const;
 
+  bool isTaskFree(const std::string &task_uuid) const;
+
   std::vector<material_flow::Task> getTasks() const;
 
 private:

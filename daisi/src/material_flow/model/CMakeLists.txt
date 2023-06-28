@@ -108,6 +108,7 @@ target_link_libraries(daisi_material_flow_model_task
 
     PRIVATE
     solanet_serialize
+    daisi_cpps_common_uuid_generator
 )
 
 add_library(daisi_material_flow_model_material_flow STATIC "")

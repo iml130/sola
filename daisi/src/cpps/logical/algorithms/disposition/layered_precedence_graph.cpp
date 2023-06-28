@@ -327,4 +327,10 @@ bool LayeredPrecedenceGraph::isFreeTaskScheduled(const std::string &task_uuid) c
   return vertex.scheduled;
 }
 
+bool LayeredPrecedenceGraph::isTaskFree(const std::string &task_uuid) const {
+  auto vertex = getVertex(task_uuid);
+
+  return vertex.layer == PrecedenceGraphLayer::kFree;
+}
+
 }  // namespace daisi::cpps::logical

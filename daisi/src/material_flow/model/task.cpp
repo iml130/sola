@@ -16,6 +16,8 @@
 
 #include "task.h"
 
+#include "cpps/common/uuid_generator.h"
+
 namespace daisi::material_flow {
 
 Task::Task(std::string name, const std::vector<Order> &orders,
@@ -25,29 +27,7 @@ Task::Task(std::string name, const std::vector<Order> &orders,
     throw std::invalid_argument("Orders cannot be empty.");
   }
 
-  generateUuid();
-}
-
-void Task::generateUuid() {
-  std::vector<std::string> order_uuids;
-  for (const auto &order : orders_) {
-    if (auto mo = std::get_if<MoveOrder>(&order)) {
-      order_uuids.push_back(mo->getUuid());
-    } else if (auto ao = std::get_if<ActionOrder>(&order)) {
-      order_uuids.push_back(ao->getUuid());
-    } else if (auto to = std::get_if<TransportOrder>(&order)) {
-      order_uuids.push_back(to->getUuid());
-    } else {
-      throw std::runtime_error("Order type not handled");
-    }
-  }
-
-  auto it = order_uuids.begin();
-  uuid_ = *it++;
-
-  for (; it != order_uuids.end(); it++) {
-    uuid_ += " " + *it;
-  }
+  uuid_ = UUIDGenerator::get()();
 }
 
 const std::string &Task::getUuid() const { return uuid_; }
