@@ -14,3 +14,7 @@ target_link_libraries(daisi_cpps_logical_amr_amr_logical_agent
     daisi_cpps_logical_order_management_stn_order_management
     daisi_utils
 )
+
+target_include_directories(daisi_cpps_amr_amr_description INTERFACE
+    ${DAISI_SOURCE_DIR}/src
+)

@@ -26,6 +26,8 @@
 #include "cpps/amr/amr_description.h"
 #include "cpps/amr/amr_topology.h"
 #include "material_flow/model/task.h"
+#include "metrics_composition.h"
+#include "order_management_helper.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
@@ -38,11 +40,20 @@ public:
 
   virtual ~OrderManagement() = default;
 
+  /// @brief check wether the order management has a current task assigned
   virtual bool hasTasks() const = 0;
+
+  /// @brief get the current task
   virtual daisi::material_flow::Task getCurrentTask() const = 0;
+
+  /// @brief replace the current task with the first task stored in the management's queue
   virtual bool setNextTask() = 0;
 
+  /// @brief check wether a new task can be added to the management's queue
   virtual bool canAddTask(const daisi::material_flow::Task &task) = 0;
+
+  /// @brief insert a task into the management's queue.
+  /// @return true if the insertion was successful, false otherwise
   virtual bool addTask(const daisi::material_flow::Task &task) = 0;
 
   void addNotifyTaskAssignmentCallback(std::function<void(void)> callback) {

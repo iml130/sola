@@ -162,7 +162,7 @@ bool StnOrderManagement::addTask(
 
     addDurationConstraints(start_curr, finish_curr, *orders_it, info);
 
-    auto end_location_of_order = getEndLocationOfOrder(*orders_it);
+    auto end_location_of_order = OrderManagementHelper::getEndLocationOfOrder(*orders_it);
     if (end_location_of_order.has_value()) {
       info.end_locations.push_back(end_location_of_order.value());
     } else {
@@ -401,23 +401,6 @@ void StnOrderManagement::addOrderingConstraintBetweenTasks(
 
     updateDurationConstraints(insertion_point.new_index + 1);
   }
-}
-
-std::optional<Location> StnOrderManagement::getEndLocationOfOrder(const Order &order) {
-  return std::visit(
-      [&](auto &&arg) -> std::optional<Location> {
-        using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, MoveOrder>) {
-          return std::get<MoveOrder>(order).getMoveOrderStep().getLocation();
-        } else if constexpr (std::is_same_v<T, TransportOrder>) {
-          return std::get<TransportOrder>(order).getDeliveryTransportOrderStep().getLocation();
-        } else if constexpr (std::is_same_v<T, ActionOrder>) {
-          return std::nullopt;
-        } else {
-          static_assert(kAlwaysFalseV<T>, "Order type not handled");
-        }
-      },
-      order);
 }
 
 daisi::util::Duration StnOrderManagement::calcOrderDurationForInsert(
