@@ -17,46 +17,12 @@ topology:
     depth:   0
 
 # required:
-initialNumberNodesAMRs: 30
+initialNumberNodesAMRs: 12
 numberMaterialFlows: 5
 numberMaterialFlowNodes: 5
 
 # on/off
 materialFlowNodesLeaveAfterFinish: off
-
-mrta_configuration:
-
-    # ContractNet_with_filter
-    # ContractNet_without_filter
-    # Iterated_Auction_Star _TePSSI_original
-    # Iterated_Auction_Star _TePSSI_modified
-    # Iterated_Auction_PubSub_TePSSI_original
-    # Iterated_Auction_PubSub_TePSSI_modified
-    interaction_protocol: Iterated_Auction_PubSub_TePSSI_original
-
-    # Basic_List
-    # Greedy_TSP_List
-    # SimpleTemporalNetwork
-    task_management: SimpleTemporalNetwork
-
-    # min_travel_time
-    # min_travel_time
-    # min_travel_distance
-    # min_makespan
-    # min_delay
-    # min_travel_time_makespan_alpha=0.5
-    # min_travel_time_delay_alpha=0.5
-    # min_travel_distance_makespan_alpha=0.5
-    # min_travel_distance_delay_alpha=0.5
-    # min_travel_distance_delay_relative_alpha=0.5
-    utility_evaluation: 
-      a1:
-        component: min_makespan
-        factor: 0.5
-      a2:
-        component: min_travel_time
-        factor: 0.5
-
 
 AGVs:
     - agv1:
@@ -212,19 +178,19 @@ scenarioSequence:
         friendly_name: "locus"
         start_time: 0
         distribution: abs
-        abs: 9
+        abs: 3
     - agv2:
         type: "agv"
         friendly_name: "ztf"
         start_time: 0
         distribution: abs
-        abs: 9
+        abs: 3
     - agv2:
         type: "agv"
         friendly_name: "ctv"
         start_time: 0
         distribution: abs
-        abs: 9
+        abs: 3
     - to1:
         type: "to"
         start_time: 0
