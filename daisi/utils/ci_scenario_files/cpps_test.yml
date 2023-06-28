@@ -17,7 +17,7 @@ topology:
     depth:   0
 
 # required:
-initialNumberNodesAGVs: 30
+initialNumberNodesAMRs: 30
 numberMaterialFlows: 5
 numberMaterialFlowNodes: 5
 
