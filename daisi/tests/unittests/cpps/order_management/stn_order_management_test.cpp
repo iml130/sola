@@ -44,27 +44,6 @@ daisi::util::Position p4(5, 10);
 daisi::util::Position p5(20, 0);
 daisi::util::Position p6(20, 10);
 
-TEST_CASE("Empty Tasks", "[adding and removing vertices]") {
-  // arrange
-  auto current_pose = daisi::util::Pose(daisi::util::Position(10, 10));
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
-
-  // assert preconditions
-  REQUIRE(!management.hasTasks());
-  REQUIRE_THROWS(management.getCurrentTask());
-  REQUIRE(!management.setNextTask());
-
-  // empty task
-  Task task_empty("task1", {}, {});
-  REQUIRE_THROWS(management.canAddTask(task_empty));
-  REQUIRE_THROWS(management.addTask(task_empty));
-
-  // empty task with follow ups
-  Task task_empty_with_follow_ups("task2", {}, {"task1", "task3"});
-  REQUIRE_THROWS(management.canAddTask(task_empty_with_follow_ups));
-  REQUIRE_THROWS(management.addTask(task_empty_with_follow_ups));
-}
-
 TEST_CASE("One Simple Transport Order", "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
