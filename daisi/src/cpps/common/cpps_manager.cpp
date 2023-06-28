@@ -516,7 +516,7 @@ void CppsManager::scheduleEvents() {
 
 void CppsManager::parse() {
   number_amrs_initial_ =
-      parser_.getParsedContent()->getRequired<uint64_t>("initialNumberNodesAGVs");
+      parser_.getParsedContent()->getRequired<uint64_t>("initialNumberNodesAMRs");
   number_material_flow_nodes_ =
       parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlowNodes");
 
