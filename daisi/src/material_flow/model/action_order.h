@@ -20,7 +20,6 @@
 #include "action_order_step.h"
 #include "solanet/serializer/serialize.h"
 
-
 namespace daisi::material_flow {
 
 class ActionOrder {

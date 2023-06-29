@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 #include "move_order.h"
+
 #include "cpps/common/uuid_generator.h"
 
 namespace daisi::material_flow {
