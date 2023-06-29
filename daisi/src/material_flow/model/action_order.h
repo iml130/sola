@@ -25,7 +25,7 @@ namespace daisi::material_flow {
 class ActionOrder {
 public:
   ActionOrder() = default;
-  ActionOrder(const ActionOrderStep &action_order_step);
+  explicit ActionOrder(const ActionOrderStep &action_order_step);
   ActionOrder(std::string uuid, const ActionOrderStep &action_order_step);
 
   const std::string &getUuid() const;
