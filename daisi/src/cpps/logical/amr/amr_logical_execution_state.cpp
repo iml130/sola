@@ -18,54 +18,54 @@
 
 namespace daisi::cpps::logical {
 
-const util::Position &AmrLogicalExecutionState::getPosition() const { return position; }
+const util::Position &AmrLogicalExecutionState::getPosition() const { return position_; }
 
-const AmrState &AmrLogicalExecutionState::getAmrState() const { return amr_state; }
+const AmrState &AmrLogicalExecutionState::getAmrState() const { return amr_state_; }
 
-const material_flow::Task &AmrLogicalExecutionState::getTask() const { return task; }
+const material_flow::Task &AmrLogicalExecutionState::getTask() const { return task_; }
 
-const int &AmrLogicalExecutionState::getOrderIndex() const { return order_index; }
+const int &AmrLogicalExecutionState::getOrderIndex() const { return order_index_; }
 
-const OrderStates &AmrLogicalExecutionState::getOrderState() const { return order_state; }
+const OrderStates &AmrLogicalExecutionState::getOrderState() const { return order_state_; }
 
 bool AmrLogicalExecutionState::shouldSendNextTaskToPhysical() const {
   return send_next_task_to_physical_;
 }
 
 void AmrLogicalExecutionState::processAmrStatusUpdate(const AmrStatusUpdate &amr_status_update) {
-  position = amr_status_update.getPosition();
-  amr_state = amr_status_update.getState();
+  position_ = amr_status_update.getPosition();
+  amr_state_ = amr_status_update.getState();
 
-  if (amr_state == AmrState::kIdle) {
+  if (amr_state_ == AmrState::kIdle) {
     send_next_task_to_physical_ = true;
   }
 }
 
 void AmrLogicalExecutionState::processAmrOrderUpdate(const AmrOrderUpdate &amr_order_update) {
-  position = amr_order_update.getPosition();
-  order_state = amr_order_update.getState();
+  position_ = amr_order_update.getPosition();
+  order_state_ = amr_order_update.getState();
 
-  if (order_state == OrderStates::kFinished) {
+  if (order_state_ == OrderStates::kFinished) {
     setNextOrder();
   }
 }
 
 void AmrLogicalExecutionState::setNextOrder() {
-  order_index++;
-  order_state = OrderStates::kCreated;
+  order_index_++;
+  order_state_ = OrderStates::kCreated;
 
-  if (task.getOrders().size() >= order_index) {
-    order_index = -1;
-    if (amr_state == AmrState::kIdle) {
+  if (task_.getOrders().size() >= order_index_) {
+    order_index_ = -1;
+    if (amr_state_ == AmrState::kIdle) {
       send_next_task_to_physical_ = true;
     }
   }
 }
 
 void AmrLogicalExecutionState::setNextTask(const material_flow::Task &next_task) {
-  task = next_task;
-  order_index = 0;
-  order_state = OrderStates::kCreated;
+  task_ = next_task;
+  order_index_ = 0;
+  order_state_ = OrderStates::kCreated;
 
   send_next_task_to_physical_ = false;
 }

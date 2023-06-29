@@ -40,11 +40,11 @@ public:
 private:
   void setNextOrder();
 
-  util::Position position;
-  AmrState amr_state = AmrState::kIdle;
-  material_flow::Task task;
-  int order_index = -1;
-  OrderStates order_state = OrderStates::kCreated;
+  util::Position position_;
+  AmrState amr_state_ = AmrState::kIdle;
+  material_flow::Task task_;
+  int order_index_ = -1;
+  OrderStates order_state_ = OrderStates::kCreated;
 
   bool send_next_task_to_physical_ = false;
 };

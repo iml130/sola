@@ -106,9 +106,6 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
   std::string participant_connection = sola_->getConectionString();
   if (accept) {
-    std::cout << "WinnerNotification " << task_uuid << " to " << participant_connection
-              << std::endl;
-
     bool success = order_management_->addTask(task_state.task, task_state.insertion_point);
 
     if (!success) {

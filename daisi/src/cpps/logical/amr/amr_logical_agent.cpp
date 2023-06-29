@@ -120,22 +120,12 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
 void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &status_update) {
   execution_state_.processAmrStatusUpdate(status_update);
   logPositionUpdate();
-
-  if (sola_->getConectionString() == "192.168.0.4:2000") {
-    std::string t;
-  }
-
   checkSendingNextTaskToPhysical();
 }
 
 void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update) {
   execution_state_.processAmrOrderUpdate(order_update);
   logOrderUpdate();
-
-  if (sola_->getConectionString() == "192.168.0.4:2000") {
-    std::string t;
-  }
-
   checkSendingNextTaskToPhysical();
 }
 
@@ -151,8 +141,6 @@ void AmrLogicalAgent::sendTaskToPhysical() {
     auto order_msg = amr::serialize(amr_order_info);
 
     sendToPhysical(order_msg);
-
-    std::cout << "sendTaskToPhysical " << task.getUuid() << std::endl;
   }
 }
 
