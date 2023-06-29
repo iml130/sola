@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 
+#include "amr_logical_execution_state.h"
 #include "cpps/amr/amr_description.h"
 #include "cpps/amr/amr_topology.h"
 #include "cpps/amr/message/amr_state.h"
@@ -74,6 +75,8 @@ private:
   void checkSendingNextTaskToPhysical();
 
   void logAmrInfos();
+  void logPositionUpdate();
+  void logOrderUpdate();
 
   void sendToPhysical(std::string payload);
 
@@ -84,16 +87,7 @@ private:
 
   Topology topology_;
 
-  struct ExecutionState {
-    util::Position position;
-    AmrState amr_state = AmrState::kIdle;
-    material_flow::Task task;
-    int order_index = -1;
-    OrderStates order_state = OrderStates::kCreated;
-
-    void setNextOrder();
-    void setNextTask(const material_flow::Task &next_task);
-  } execution_state_;
+  AmrLogicalExecutionState execution_state_;
 
   /// @brief For TCP communication with the AmrPhysicalAsset.
   /// The AmrLogicalAgent is acting as the server according to the TCP model.

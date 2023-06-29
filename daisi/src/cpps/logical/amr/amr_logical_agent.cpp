@@ -53,7 +53,7 @@ void AmrLogicalAgent::initAlgorithms() {
       case AlgorithmType::kIteartedAuctionDispositionParticipant:
 
         order_management_ = std::make_shared<StnOrderManagement>(
-            description_, topology_, daisi::util::Pose{execution_state_.position});
+            description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
 
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
             sola_, order_management_, description_));
@@ -66,8 +66,6 @@ void AmrLogicalAgent::initAlgorithms() {
         throw std::invalid_argument("Algorithm Type cannot be initiated on Amr Logical Agent.");
     }
   }
-
-  checkSendingNextTaskToPhysical();
 }
 
 void AmrLogicalAgent::start() { initAlgorithms(); }
@@ -120,37 +118,48 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
 }
 
 void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &status_update) {
-  execution_state_.position = status_update.getPosition();
-  execution_state_.amr_state = status_update.getState();
-
-  AMRPositionLoggingInfo position_logging_info;
-  position_logging_info.uuid = uuid_;
-  position_logging_info.x = execution_state_.position.x;
-  position_logging_info.y = execution_state_.position.y;
-  position_logging_info.z = 0;
-  position_logging_info.state = static_cast<uint8_t>(execution_state_.amr_state);
-  logger_->logPositionUpdate(position_logging_info);
+  execution_state_.processAmrStatusUpdate(status_update);
+  logPositionUpdate();
 
   checkSendingNextTaskToPhysical();
 }
 
 void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update) {
-  execution_state_.order_state = order_update.getState();
+  execution_state_.processAmrOrderUpdate(order_update);
+  logOrderUpdate();
 
-  MaterialFlowOrderUpdateLoggingInfo logging_info;
-  logging_info.amr_uuid = uuid_;
-  logging_info.amr_state = execution_state_.amr_state;
-  logging_info.order_state = execution_state_.order_state;
-  logging_info.task = execution_state_.task;
-  logging_info.order_index = execution_state_.order_index;
-  logging_info.position = execution_state_.position;
-
-  logger_->logMaterialFlowOrderUpdate(logging_info);
+  if (sola_->getConectionString() == "192.168.0.2:2000") {
+    std::string t;
+  }
 
   checkSendingNextTaskToPhysical();
 }
 
-// helper
+void AmrLogicalAgent::sendTaskToPhysical() {
+  order_management_->setNextTask();
+  if (order_management_->hasTasks()) {
+    material_flow::Task task = order_management_->getCurrentTask();
+    execution_state_.setNextTask(task);
+
+    AmrOrderInfo amr_order_info(
+        materialFlowToFunctionalities(task.getOrders(), execution_state_.getPosition()),
+        description_.getLoadHandling().getAbility());
+    auto order_msg = amr::serialize(amr_order_info);
+
+    sendToPhysical(order_msg);
+
+    std::cout << "sendTaskToPhysical " << task.getUuid() << std::endl;
+  }
+}
+
+void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
+  if (execution_state_.shouldSendNextTaskToPhysical()) {
+    if (order_management_) {
+      sendTaskToPhysical();
+    }
+  }
+}
+
 void AmrLogicalAgent::sendToPhysical(std::string payload) {
   daisi::cpps::CppsTCPMessage message;
   message.addMessage({payload, 0});
@@ -165,22 +174,6 @@ void AmrLogicalAgent::sendTopologyToPhysical() {
   sendToPhysical(topology_msg);
 }
 
-void AmrLogicalAgent::sendTaskToPhysical() {
-  order_management_->setNextTask();
-  if (order_management_->hasTasks()) {
-    material_flow::Task task = order_management_->getCurrentTask();
-
-    AmrOrderInfo amr_order_info(
-        materialFlowToFunctionalities(task.getOrders(), execution_state_.position),
-        description_.getLoadHandling().getAbility());
-    auto order_msg = amr::serialize(amr_order_info);
-
-    sendToPhysical(order_msg);
-
-    execution_state_.setNextTask(task);
-  }
-}
-
 void AmrLogicalAgent::notifyTaskAssigned() { checkSendingNextTaskToPhysical(); }
 
 bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr) {
@@ -193,19 +186,6 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
   physical_socket_->SetRecvCallback(MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
 
   logAmrInfos();
-}
-
-void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
-  if (order_management_) {
-    if (execution_state_.order_index == -1 ||
-        execution_state_.order_state == OrderStates::kFinished) {
-      if (execution_state_.amr_state == AmrState::kIdle) {
-        sendTaskToPhysical();
-      } else {
-        execution_state_.setNextOrder();
-      }
-    }
-  }
 }
 
 void AmrLogicalAgent::logAmrInfos() {
@@ -259,6 +239,27 @@ void AmrLogicalAgent::logAmrInfos() {
   logger_->logAMR(info);
 }
 
+void AmrLogicalAgent::logPositionUpdate() {
+  AMRPositionLoggingInfo position_logging_info;
+  position_logging_info.uuid = uuid_;
+  position_logging_info.x = execution_state_.getPosition().x;
+  position_logging_info.y = execution_state_.getPosition().y;
+  position_logging_info.z = 0;
+  position_logging_info.state = static_cast<uint8_t>(execution_state_.getAmrState());
+  logger_->logPositionUpdate(position_logging_info);
+}
+
+void AmrLogicalAgent::logOrderUpdate() {
+  MaterialFlowOrderUpdateLoggingInfo logging_info;
+  logging_info.amr_uuid = uuid_;
+  logging_info.amr_state = execution_state_.getAmrState();
+  logging_info.order_state = execution_state_.getOrderState();
+  logging_info.task = execution_state_.getTask();
+  logging_info.order_index = execution_state_.getOrderIndex();
+  logging_info.position = execution_state_.getPosition();
+  logger_->logMaterialFlowOrderUpdate(logging_info);
+}
+
 void AmrLogicalAgent::setServices() {
   sola::Service service;
   service.friendly_name = "service_" + description_.getProperties().getFriendlyName();
@@ -277,21 +278,6 @@ void AmrLogicalAgent::setServices() {
 
   logger_->logTransportService(service, true);
   sola_->addService(service);
-}
-
-void AmrLogicalAgent::ExecutionState::setNextOrder() {
-  order_index++;
-  order_state = OrderStates::kCreated;
-
-  if (task.getOrders().size() > order_index) {
-    order_index = -1;
-  }
-}
-
-void AmrLogicalAgent::ExecutionState::setNextTask(const material_flow::Task &next_task) {
-  task = next_task;
-  order_index = 0;
-  order_state = OrderStates::kCreated;
 }
 
 }  // namespace daisi::cpps::logical
