@@ -93,6 +93,9 @@ private:
 
   void setPreparationFinished();
 
+  void logMaterialFlowOrderStatesOfTask(const material_flow::Task &task,
+                                        const OrderStates &order_state);
+
   /// @brief Helper method to determine the relevant abilities to each task and mapping them.
   /// @param tasks Relevant tasks to be mapped
   std::unordered_map<amr::AmrStaticAbility, std::vector<daisi::material_flow::Task>,

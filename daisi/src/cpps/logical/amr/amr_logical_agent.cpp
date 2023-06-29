@@ -121,6 +121,10 @@ void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &statu
   execution_state_.processAmrStatusUpdate(status_update);
   logPositionUpdate();
 
+  if (sola_->getConectionString() == "192.168.0.4:2000") {
+    std::string t;
+  }
+
   checkSendingNextTaskToPhysical();
 }
 
@@ -128,7 +132,7 @@ void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_u
   execution_state_.processAmrOrderUpdate(order_update);
   logOrderUpdate();
 
-  if (sola_->getConectionString() == "192.168.0.2:2000") {
+  if (sola_->getConectionString() == "192.168.0.4:2000") {
     std::string t;
   }
 
@@ -253,10 +257,17 @@ void AmrLogicalAgent::logOrderUpdate() {
   MaterialFlowOrderUpdateLoggingInfo logging_info;
   logging_info.amr_uuid = uuid_;
   logging_info.amr_state = execution_state_.getAmrState();
-  logging_info.order_state = execution_state_.getOrderState();
   logging_info.task = execution_state_.getTask();
-  logging_info.order_index = execution_state_.getOrderIndex();
   logging_info.position = execution_state_.getPosition();
+
+  if (execution_state_.getOrderIndex() == -1) {
+    logging_info.order_state = OrderStates::kFinished;
+    logging_info.order_index = execution_state_.getTask().getOrders().size() - 1;
+  } else {
+    logging_info.order_state = execution_state_.getOrderState();
+    logging_info.order_index = execution_state_.getOrderIndex();
+  }
+
   logger_->logMaterialFlowOrderUpdate(logging_info);
 }
 

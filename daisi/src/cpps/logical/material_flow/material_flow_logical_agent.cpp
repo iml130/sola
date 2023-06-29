@@ -16,6 +16,7 @@
 
 #include "material_flow_logical_agent.h"
 
+#include "cpps/common/uuid_generator.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 
 namespace daisi::cpps::logical {
@@ -73,7 +74,12 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   DispositionInitiator *tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);
 
-  logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+  if (execution_counter_++ == 0) {
+    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+  } else {
+    uuid_ = UUIDGenerator::get()();
+    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 1);
+  }
   tmp->logMaterialFlowContent(uuid_);
 }
 

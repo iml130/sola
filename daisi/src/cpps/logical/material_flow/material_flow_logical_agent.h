@@ -73,6 +73,9 @@ protected:
 private:
   /// Simple flag to represent that the agent is still in the initialization process.
   bool waiting_for_start_;
+
+  /// @brief Counting number of executed material flows
+  uint16_t execution_counter_ = 0;
 };
 
 }  // namespace daisi::cpps::logical

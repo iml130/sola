@@ -54,9 +54,11 @@ void AmrLogicalExecutionState::setNextOrder() {
   order_index++;
   order_state = OrderStates::kCreated;
 
-  if (task.getOrders().size() > order_index) {
+  if (task.getOrders().size() >= order_index) {
     order_index = -1;
-    send_next_task_to_physical_ = true;
+    if (amr_state == AmrState::kIdle) {
+      send_next_task_to_physical_ = true;
+    }
   }
 }
 
@@ -64,6 +66,8 @@ void AmrLogicalExecutionState::setNextTask(const material_flow::Task &next_task)
   task = next_task;
   order_index = 0;
   order_state = OrderStates::kCreated;
+
+  send_next_task_to_physical_ = false;
 }
 
 }  // namespace daisi::cpps::logical

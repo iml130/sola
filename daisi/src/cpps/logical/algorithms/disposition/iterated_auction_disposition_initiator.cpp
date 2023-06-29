@@ -215,6 +215,20 @@ void IteratedAuctionDispositionInitiator::logMaterialFlowContent(
     for (const auto &order : task.getOrders()) {
       logger_->logMaterialFlowOrder(order, task.getUuid());
     }
+
+    logMaterialFlowOrderStatesOfTask(task, OrderStates::kCreated);
+  }
+}
+
+void IteratedAuctionDispositionInitiator::logMaterialFlowOrderStatesOfTask(
+    const material_flow::Task &task, const OrderStates &order_state) {
+  for (auto i = 0; i < task.getOrders().size(); i++) {
+    MaterialFlowOrderUpdateLoggingInfo logging_info;
+    logging_info.task = task;
+    logging_info.order_index = i;
+    logging_info.order_state = order_state;
+
+    logger_->logMaterialFlowOrderUpdate(logging_info);
   }
 }
 
@@ -224,7 +238,13 @@ bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submi
 }
 
 bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &winner_response) {
+  if (winner_response.doesAccept()) {
+    auto task = layered_precedence_graph_->getTask(winner_response.getTaskUuid());
+    logMaterialFlowOrderStatesOfTask(task, OrderStates::kQueued);
+  }
+
   auction_initiator_state_->addWinnerResponse(winner_response);
+
   return true;
 }
 

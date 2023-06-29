@@ -104,8 +104,11 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     }
   }
 
-  std::string participant_connecton = sola_->getConectionString();
+  std::string participant_connection = sola_->getConectionString();
   if (accept) {
+    std::cout << "WinnerNotification " << task_uuid << " to " << participant_connection
+              << std::endl;
+
     bool success = order_management_->addTask(task_state.task, task_state.insertion_point);
 
     if (!success) {
@@ -113,7 +116,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     }
 
     // Send winner response acception
-    WinnerResponse response(task_uuid, participant_connecton, true);
+    WinnerResponse response(task_uuid, participant_connection, true);
     sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
 
     // Update states
@@ -124,7 +127,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     task_state.insertion_point = nullptr;
 
     // Send winner response rejection
-    WinnerResponse response(task_uuid, participant_connecton, false);
+    WinnerResponse response(task_uuid, participant_connection, false);
     sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
   }
 

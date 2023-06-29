@@ -114,11 +114,10 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 }
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
-  // TODO add in future something like this:
-  // if (current_order_.order_state != OrderStates::kFinished &&
-  //     current_order_.order_state != OrderStates::kError) {
-  //   throw std::runtime_error("Order is not finished, before setting a new order.");
-  // }
+  if (amr_state_ != AmrState::kIdle || ((current_order_.order_state != OrderStates::kInvalid) &&
+                                        (current_order_.order_state != OrderStates::kFinished))) {
+    throw std::runtime_error("Still processsing another task. ");
+  }
 
   current_order_ = AmrOrder();
   current_order_.order_state = OrderStates::kCreated;
@@ -149,10 +148,15 @@ void AmrPhysicalAsset::continueOrder() {
     case OrderStates::kStarted:
       current_order_.order_state = OrderStates::kGoToPickUpLocation;
       sendOrderUpdateNs3();
-      DAISI_CHECK(std::holds_alternative<MoveTo>(functionality_queue_.front()),
-                  "unexpected functionality, expected MoveTo");
-      connector_.execute(functionality_queue_.front(),
-                         [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
+
+      if (std::holds_alternative<MoveTo>(functionality_queue_.front())) {
+        connector_.execute(functionality_queue_.front(),
+                           [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
+      } else {
+        // case that we are already at the starting position
+        // therefore we dont need to move and can load directly
+        continueOrder();
+      }
       return;
     case OrderStates::kGoToPickUpLocation:
       current_order_.order_state = OrderStates::kReachedPickUpLocation;
