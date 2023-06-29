@@ -3,7 +3,7 @@
 ## General notes
 
 * Every switch can handle up to ``kNumberOfAppNodesPerSwitch`` nodes.
-* Every WLAN AP can handle up to ``kMaxNumberAgvsPerAp`` nodes.
+* Every WLAN AP can handle up to ``kMaxNumberAmrsPerAp`` nodes.
 * The number of switches and routers are automatically scaled up with more nodes.
 
 ## Network structure (Logical AGV connected via Wireless)

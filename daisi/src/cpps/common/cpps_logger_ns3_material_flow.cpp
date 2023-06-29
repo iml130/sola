@@ -151,17 +151,17 @@ void CppsLoggerNs3::logMaterialFlowOrder(const material_flow::Order &order,
 }
 
 // * TransportOrderHistory
-TableDefinition kMaterialFlowOrderHistory("MaterialFlowOrderHistory",
-                                         {DatabaseColumnInfo{"Id"},
-                                          {"MaterialFlowOrderId", "sql%u", true, "MaterialFlowOrder(Id)"},
-                                          {"MaterialFlowTaskId", "sql%u", true, "MaterialFlowTask(Id)"},
-                                          {"AmrId", "sql%u", false, "AutonomousMobileRobot(Id)"},
-                                          {"Timestamp_ms", "%u", true},
-                                          {"State", "%u", true},
-                                          {"PosX_m", "%f", true},
-                                          {"PosY_m", "%f", true},
-                                          /*{"TransportServiceId", "%u", false,
-                                           "TransportService(Id)"}*/});
+TableDefinition kMaterialFlowOrderHistory(
+    "MaterialFlowOrderHistory", {
+                                    DatabaseColumnInfo{"Id"},
+                                    {"MaterialFlowOrderId", "sql%u", true, "MaterialFlowOrder(Id)"},
+                                    {"MaterialFlowTaskId", "sql%u", true, "MaterialFlowTask(Id)"},
+                                    {"AmrId", "sql%u", false, "AutonomousMobileRobot(Id)"},
+                                    {"Timestamp_ms", "%u", true},
+                                    {"State", "%u", true},
+                                    {"PosX_m", "%f", true},
+                                    {"PosY_m", "%f", true},
+                                });
 static const std::string kCreateMaterialFlowOrderHistory =
     getCreateTableStatement(kMaterialFlowOrderHistory);
 static bool material_flow_order_history_exists_ = false;

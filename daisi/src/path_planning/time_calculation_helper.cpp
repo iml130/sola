@@ -228,8 +228,9 @@ static DistanceToTimeFct calculateDistanceToTimeFct(const cpps::AmrKinematics &k
   return function_dist_to_time;
 }
 
-PointTimePairs calculateTimeTillPoints(const cpps::AmrKinematics &kinematics, ns3::Vector2D start,
-                                       ns3::Vector2D stop,
+PointTimePairs calculateTimeTillPoints(const cpps::AmrKinematics &kinematics,
+                                       const cpps::AmrLoadHandlingUnit &load_handling,
+                                       ns3::Vector2D start, ns3::Vector2D stop,
                                        const std::vector<ns3::Vector2D> &points) {
   DistanceToTimeFct fct = calculateDistanceToTimeFct(kinematics, start, stop);
 

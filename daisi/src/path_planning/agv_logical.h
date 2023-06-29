@@ -19,8 +19,9 @@
 
 #include <memory>
 
-#include "cpps/amr/amr_kinematics.h"
+#include "cpps/amr/amr_description.h"
 #include "cpps/amr/amr_topology.h"
+#include "cpps/amr/model/amr_static_ability.h"
 #include "logging/logger_manager.h"
 #include "ns3/socket.h"
 #include "path_planning/consensus/consensus_types.h"
@@ -78,7 +79,7 @@ private:
   double last_x_ = 0.0;
   double last_y_ = 0.0;
 
-  cpps::AmrKinematics kinematics_;
+  cpps::AmrDescription description_;
 
   void processTopicMessage(const sola::TopicMessage &msg);
   consensus::ConsensusSettings consensus_settings_;

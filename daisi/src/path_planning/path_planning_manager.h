@@ -123,7 +123,8 @@ private:
 
   consensus::ConsensusType consensus_type_ = consensus::ConsensusType::kNone;
   consensus::ConsensusSettings consensus_settings_;
-  cpps::AmrKinematics kinematics_;  //!< Kinematics of the simulated AGV
+
+  cpps::AmrDescription description_;  //!< Description of the simulated AGV
 };
 
 }  // namespace daisi::path_planning

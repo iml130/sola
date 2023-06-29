@@ -53,14 +53,14 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
                            const Topology &topology) {
   std::cout << "Creating AMR " << description.getProperties().getFriendlyName() << std::endl;
 
-  const uint32_t device_id = agvs_.Get(amr_index)->GetId();
+  const uint32_t device_id = amrs_.Get(amr_index)->GetId();
 
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
   }
 
   next_mobility_model =
-      DynamicCast<AmrMobilityModelNs3>(agvs_.Get(amr_index)->GetObject<MobilityModel>());
+      DynamicCast<AmrMobilityModelNs3>(amrs_.Get(amr_index)->GetObject<MobilityModel>());
 
   AmrAssetConnector connector(description, topology);
 
@@ -73,9 +73,9 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
   algorithm_config.algorithm_types.push_back(
       logical::AlgorithmType::kIteartedAuctionDispositionParticipant);
 
-  this->agvs_.Get(amr_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
+  this->amrs_.Get(amr_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
-  this->agvs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
+  this->amrs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
       std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, amr_index == 0);
 }
 
@@ -85,7 +85,7 @@ void CppsManager::setup() {
 
   setupNodes();
 
-  // Setup AGVs
+  // Setup AMRs
   assert(this->nodeContainer_.GetN() == getNumberOfNodes());
 
   ns3::MobilityHelper mob;
@@ -95,7 +95,7 @@ void CppsManager::setup() {
                            "LayoutType", ns3::StringValue("RowFirst"));
 
   mob.SetMobilityModel("ns3::AmrMobilityModelNs3");
-  mob.Install(agvs_);
+  mob.Install(amrs_);
 
   initialSpawn();
 }
@@ -109,7 +109,7 @@ void CppsManager::initialSpawn() {
     auto info = spawn_info_.top();
     spawn_info_.pop();
 
-    if (info.type == "agv") {
+    if (info.type == "amr") {
       uint32_t abs_number = std::get<DistAbs>(info.distribution).abs;
       auto desc_it =
           std::find_if(amr_descriptions_.begin(), amr_descriptions_.end(),
@@ -135,7 +135,7 @@ uint64_t CppsManager::getNumberOfNodes() {
 
 void CppsManager::checkStarted(uint32_t index) {
   auto cpps_app_logical = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(
-      this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
+      this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
   if (!cpps_app_logical->isRunning()) {
     throw std::runtime_error("storage instance not started yet");
   }
@@ -144,8 +144,8 @@ void CppsManager::checkStarted(uint32_t index) {
 void CppsManager::initAMR(uint32_t index) {
   std::cout << "Init AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
   cpps_app_logical->init();
   cpps_app_physical->init();
@@ -154,8 +154,8 @@ void CppsManager::initAMR(uint32_t index) {
 void CppsManager::connectAMR(uint32_t index) {
   std::cout << "Connect AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
   ns3::Ipv4Address other_ip = cpps_app_logical->local_ip_address_tcp;
   uint16_t other_port = cpps_app_logical->listening_port_tcp;
@@ -169,8 +169,8 @@ void CppsManager::connectAMR(uint32_t index) {
 void CppsManager::startAMR(uint32_t index) {
   std::cout << "Start AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->agvs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto cpps_app_physical = this->agvs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
+  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
 
   cpps_app_logical->start();
   cpps_app_physical->start();
@@ -207,25 +207,25 @@ void CppsManager::startMF(uint32_t index) {
 }
 
 void CppsManager::setupNodes() {
-  agvs_.Create(number_amrs_initial_ + number_amrs_later_);
+  amrs_.Create(number_amrs_initial_ + number_amrs_later_);
   material_flows_.Create(number_material_flow_nodes_);
   setupNetworkEthernet();
   setupNetworkWifi();
 
-  nodeContainer_ = NodeContainer(material_flows_, agvs_);
+  nodeContainer_ = NodeContainer(material_flows_, amrs_);
 
-  // All AGVs have a loopback address for communication betwee logical and physical agent
+  // All AMRs have a loopback address for communication betwee logical and physical agent
   for (auto i = material_flows_.GetN(); i < nodeContainer_.GetN(); i++) {
     addresses_[i].push_back("127.0.0.1");
   }
 
-  // Setting up TransportOrderApplications and one AGV application
+  // Setting up TransportOrderApplications and one AMR application
   setupApplication();
 
-  // Setup second applications for physical AGV
-  for (uint32_t i = 0; i < agvs_.GetN(); i++) {
+  // Setup second applications for physical AMR
+  for (uint32_t i = 0; i < amrs_.GetN(); i++) {
     SolaHelper<CppsApplication> helper({"127.0.0.1"}, 4000);
-    helper.install(this->agvs_.Get(i));
+    helper.install(this->amrs_.Get(i));
   }
 }
 
@@ -239,7 +239,7 @@ void CppsManager::setupNetworkEthernet() {
 
 void CppsManager::setupNetworkWifi() {
   // Setup APs
-  const uint32_t number_ap = std::ceil(agvs_.GetN() / (double)constants::kMaxNumberAgvsPerAp);
+  const uint32_t number_ap = std::ceil(amrs_.GetN() / (double)constants::kMaxNumberAmrsPerAp);
   access_points_.Create(number_ap);
 
   // Install APs all in middle of topology
@@ -257,18 +257,18 @@ void CppsManager::setupNetworkWifi() {
   wifi_phy.SetPcapDataLinkType(YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
   channel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
 
-  // Assign agvs to AP
-  std::vector<NodeContainer> agvs_per_ap;
-  agvs_per_ap.resize(number_ap);
-  for (uint32_t i = 0; i < agvs_.GetN(); i++) {
-    agvs_per_ap[i / constants::kMaxNumberAgvsPerAp].Add(agvs_.Get(i));
+  // Assign amrs to AP
+  std::vector<NodeContainer> amrs_per_ap;
+  amrs_per_ap.resize(number_ap);
+  for (uint32_t i = 0; i < amrs_.GetN(); i++) {
+    amrs_per_ap[i / constants::kMaxNumberAmrsPerAp].Add(amrs_.Get(i));
   }
 
   const uint32_t base_address = 3232235520;  // 192.168.0.0
 
   // Install internet
   InternetStackHelper stack;
-  stack.Install(agvs_);
+  stack.Install(amrs_);
 
   for (uint32_t i = 0; i < access_points_.GetN(); i++) {
     wifi_phy.SetChannel(channel.Create());
@@ -289,12 +289,12 @@ void CppsManager::setupNetworkWifi() {
     wifi_mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), "ActiveProbing",
                      BooleanValue(false), "WaitBeaconTimeout", TimeValue(Seconds(2.56)));
 
-    // Setup wifi on AGV
-    NetDeviceContainer agv_sta_dev_temp;
+    // Setup wifi on AMR
+    NetDeviceContainer amr_sta_dev_temp;
     wifi_phy.Set("TxPowerStart", DoubleValue(constants::kMaxPowerDBm));
     wifi_phy.Set("TxPowerEnd", DoubleValue(constants::kMaxPowerDBm));
-    agv_sta_dev_temp = wifi.Install(wifi_phy, wifi_mac, agvs_per_ap[i]);
-    agv_sta_dev_.Add(agv_sta_dev_temp);
+    amr_sta_dev_temp = wifi.Install(wifi_phy, wifi_mac, amrs_per_ap[i]);
+    amr_sta_dev_.Add(amr_sta_dev_temp);
 
     // set up the AP
     bool beacon_generation = true;
@@ -332,7 +332,7 @@ void CppsManager::setupNetworkWifi() {
     const uint32_t ip_address = base_address + 65536 * i;
     ip.SetBase(Ipv4Address(ip_address), "255.255.0.0");
     auto router_ip = ip.Assign(link.Get(1));
-    auto sta_interface = ip.Assign(agv_sta_dev_temp);
+    auto sta_interface = ip.Assign(amr_sta_dev_temp);
 
     ns3::Ipv4InterfaceContainer ips;
     ips.Add(router_ip);
@@ -361,14 +361,14 @@ void CppsManager::setupNetworkWifi() {
       interfaces_.Add(ip_container_[ip_container_.size() - 1].Get(j));
     }
 
-    for (uint32_t j = 0; j < agvs_per_ap[i].GetN(); j++) {
+    for (uint32_t j = 0; j < amrs_per_ap[i].GetN(); j++) {
       addresses_.push_back({sta_interface.GetAddress(j)});
     }
 
-    // set up ARP caches for AGV and core router
+    // set up ARP caches for AMR and core router
     // Might not working for wifi devices. (Ref #100)
     // See https://gitlab.com/nsnam/ns-3-dev/-/issues/664
-    NetDeviceContainer container(link.Get(1), agv_sta_dev_temp);
+    NetDeviceContainer container(link.Get(1), amr_sta_dev_temp);
     assert(ips.GetN() == container.GetN());
     for (int j = 0; j < container.GetN(); j++) {
       auto ip_j = ips.Get(j);
@@ -543,29 +543,29 @@ void CppsManager::parseTopology() {
 void CppsManager::parseAMRs() {
   std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> amr_infos;
 
-  auto agv_table =
+  auto amr_table =
       parser_.getParsedContent()
-          ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("AGVs");
+          ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("AMRs");
 
   // TODO rewrite parsing of amr description
-  for (const auto &agv : agv_table) {
-    auto agv_inner = agv->content.begin()->second;
-    auto agv_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&agv_inner);
+  for (const auto &amr : amr_table) {
+    auto amr_inner = amr->content.begin()->second;
+    auto amr_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&amr_inner);
 
-    std::string device_type = agv_description->getRequired<std::string>("device_type");
-    std::string friendly_name = agv_description->getRequired<std::string>("friendly_name");
-    std::string model_name = agv_description->getRequired<std::string>("model_name");
+    std::string device_type = amr_description->getRequired<std::string>("device_type");
+    std::string friendly_name = amr_description->getRequired<std::string>("friendly_name");
+    std::string model_name = amr_description->getRequired<std::string>("model_name");
 
-    auto opt_manufacturer = agv_description->getOptional<std::string>("manufacturer");
+    auto opt_manufacturer = amr_description->getOptional<std::string>("manufacturer");
     std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
 
-    auto opt_model_number = agv_description->getOptional<uint64_t>("model_number");
+    auto opt_model_number = amr_description->getOptional<uint64_t>("model_number");
     uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
 
     auto kinematics_description =
-        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
+        amr_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
     auto ability_description =
-        agv_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
+        amr_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
 
     auto kinematics = parseKinematics(kinematics_description);
 
@@ -647,7 +647,7 @@ void CppsManager::parseScenarioSequence() {
 
     std::string type = spawn_description->getRequired<std::string>("type");
 
-    if (type == "agv") {
+    if (type == "amr") {
       parseAMRSpawn(spawn_description);
     } else if (type == "to") {
       parseToSpawn(spawn_description);
@@ -663,7 +663,7 @@ void CppsManager::parseAMRSpawn(
   uint64_t start_time = spawn_description->getRequired<uint64_t>("start_time");
   std::string distribution = spawn_description->getRequired<std::string>("distribution");
 
-  SpawnInfo info{start_time, "agv", friendly_name};
+  SpawnInfo info{start_time, "amr", friendly_name};
 
   if (distribution == "prob" && start_time == 0) {
     float prob = spawn_description->getRequired<float>("prob");

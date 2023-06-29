@@ -27,7 +27,7 @@
 
 namespace daisi::cpps {
 
-struct AMRLoggingInfo {
+struct AmrLoggingInfo {
   std::string friendly_name;
   std::string manufacturer;
   std::string model_name;
@@ -49,7 +49,7 @@ struct AMRLoggingInfo {
   double min_acceleration;
 };
 
-struct AMRPositionLoggingInfo {
+struct AmrPositionLoggingInfo {
   std::string uuid;
   double x;
   double y;
@@ -107,12 +107,12 @@ public:
   ~CppsLoggerNs3();
 
   // cpps specific logging functions
-  void logAMR(const AMRLoggingInfo &amr_info);
+  void logAMR(const AmrLoggingInfo &amr_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,
                   const std::vector<ns3::Vector2D> &additionalPositions = {});
   void logTransportService(const sola::Service &service, bool active);
   void logService(const std::string &uuid, uint8_t type);
-  void logPositionUpdate(const AMRPositionLoggingInfo &logging_info);
+  void logPositionUpdate(const AmrPositionLoggingInfo &logging_info);
   void logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info);
   void logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info);
   void logTopicMessage(const std::string &topic, const std::string &message_id,

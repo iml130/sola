@@ -21,7 +21,7 @@
 #include <string>
 
 #include "agv_state.h"
-#include "cpps/amr/amr_kinematics.h"
+#include "cpps/amr/amr_description.h"
 #include "ns3/vector.h"
 #include "transport_order_info.h"
 
@@ -32,6 +32,7 @@ struct AGVInfo {
   std::string id;
   std::string ip;
   cpps::AmrKinematics kinematics;
+  cpps::AmrLoadHandlingUnit load_handling;
   ns3::Vector2D next_position;
   ns3::Vector2D last_position;
 

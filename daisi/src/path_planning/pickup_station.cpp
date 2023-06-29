@@ -98,7 +98,10 @@ void PickupStation::addToAGVOwnership(const message::NewAuthorityAGV &msg) {
   info.ip = msg.agv_ip;
   info.kinematics = {msg.max_velocity, msg.min_velocity, msg.max_acceleration,
                      msg.min_acceleration};
-  //, msg.load_time_s,  msg.unload_time_s};
+  info.load_handling = cpps::AmrLoadHandlingUnit(
+      msg.load_time_s, msg.unload_time_s,
+      cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::kEuroBox), 20));
+
   info.last_position = {msg.current_x, msg.current_y};
   info.next_station = info_.station_id;  // Is inbound to ourselves
   agv_ownership_.insert({msg.agv_uuid, info});
@@ -295,6 +298,7 @@ void PickupStation::initiateConsensus(const std::string &agv_id, RouteIdentifier
   assert(!current_consensus_.has_value());
 
   const cpps::AmrKinematics &kinematics = agv_ownership_.at(agv_id).kinematics;
+  const cpps::AmrLoadHandlingUnit &load_handling = agv_ownership_.at(agv_id).load_handling;
 
   ns3::Vector2D start = info_.routes[d].start;
   ns3::Vector2D end = info_.routes[d].end;
@@ -304,12 +308,13 @@ void PickupStation::initiateConsensus(const std::string &agv_id, RouteIdentifier
       info_.routes[d].intersections.begin(), info_.routes[d].intersections.end(),
       [&intersections](ns3::Vector2D intersection) { intersections.emplace_back(intersection); });
 
-  auto intersection_times = calculateTimeTillPoints(kinematics, start, end, intersections);
+  auto intersection_times =
+      calculateTimeTillPoints(kinematics, load_handling, start, end, intersections);
 
   current_consensus_.emplace(ConsensusData{agv_id, intersection_times});
 
   consensus_->findConsensus(
-      intersection_times, 42,  // kinematics.getLoadTime(),
+      intersection_times, load_handling.getLoadTime(),
       [this](uint32_t instance, double start_time) {
         assert(current_consensus_.has_value());
         retry_ = 1;

@@ -184,8 +184,7 @@ bool StnOrderManagement::addTask(
     addOrderingConstraintBetweenTasks(*stn_insertion_point, info);
 
     // double check if its still valid
-    bool success = solve();
-    if (success) {
+    if (solve()) {
       MetricsComposition metrics = newest_task_insert_info_->metrics_composition;
       latest_calculated_insertion_info_ = std::make_pair(metrics, insertion_point);
       added = true;

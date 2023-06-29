@@ -76,7 +76,7 @@ void AmrLogicalAgent::messageReceiveFunction(const sola::Message &msg) {
 }
 
 void AmrLogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
-  // TODO add logging of topic message2
+  // TODO add logging of topic message
   this->LogicalAgent::topicMessageReceiveFunction(msg);
 }
 
@@ -181,7 +181,7 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
 }
 
 void AmrLogicalAgent::logAmrInfos() {
-  daisi::cpps::AMRLoggingInfo info;
+  daisi::cpps::AmrLoggingInfo info;
 
   // general
   info.friendly_name = description_.getProperties().getFriendlyName();
@@ -232,7 +232,7 @@ void AmrLogicalAgent::logAmrInfos() {
 }
 
 void AmrLogicalAgent::logPositionUpdate() {
-  AMRPositionLoggingInfo position_logging_info;
+  AmrPositionLoggingInfo position_logging_info;
   position_logging_info.uuid = uuid_;
   position_logging_info.x = execution_state_.getPosition().x;
   position_logging_info.y = execution_state_.getPosition().y;

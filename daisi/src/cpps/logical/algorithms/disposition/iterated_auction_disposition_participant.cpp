@@ -134,9 +134,8 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
-    auto task_state = pair.second;
 
-    if (order_management_->canAddTask(task_state.task)) {
+    if (order_management_->canAddTask(pair.second.task)) {
       // Setting new calculated information if we can add the task
       auto result = order_management_->getLatestCalculatedInsertionInfo();
 

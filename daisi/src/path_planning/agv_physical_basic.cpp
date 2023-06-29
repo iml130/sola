@@ -31,8 +31,7 @@ AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &data_model, const Topol
   ns3::Vector size = topology.getSize();
   topology_ = Topology({size.x, size.y, size.z});
 
-  // AmrMobilityModelNs3
-  // mobility_ = data_model.agv_device_descr.mobility;
+  mobility_ = ns3::Create<AmrMobilityModelNs3>();
 
   socket_->SetRecvCallback(MakeCallback(&AGVPhysicalBasic::readFromSocket, this));
 }

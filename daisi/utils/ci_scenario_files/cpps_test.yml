@@ -24,9 +24,9 @@ numberMaterialFlowNodes: 5
 # on/off
 materialFlowNodesLeaveAfterFinish: off
 
-AGVs:
-    - agv1:
-        device_type: "agv"
+AMRs:
+    - amr1:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "LoadRunner"
         model_number: "1"
@@ -42,8 +42,8 @@ AGVs:
             load_carrier_type: "package"
             max_payload: 30.0
 
-    - agv2:
-        device_type: "agv"
+    - amr2:
+        device_type: "amr"
         manufacturer: "LocusBot"
         model_name: "LocusOrigin"
         model_number: "1"
@@ -59,8 +59,8 @@ AGVs:
             load_carrier_type: "package"
             max_payload: 45.0
 
-    - agv3:
-        device_type: "agv"
+    - amr3:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "ZTF"
         model_number: "44227"            
@@ -76,8 +76,8 @@ AGVs:
             load_carrier_type: "eurobox"
             max_payload: 30.0
 
-    - agv4:
-        device_type: "agv"
+    - amr4:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "Flip"
         model_number: "3"            
@@ -167,26 +167,26 @@ TOs:
             y: 20.0
 
 scenarioSequence: 
-    - agv1:
-        type: "agv"
+    - amr1:
+        type: "amr"
         friendly_name: "LR"
         start_time: 0
         distribution: abs
         abs: 3
-    - agv2:
-        type: "agv"
+    - amr2:
+        type: "amr"
         friendly_name: "locus"
         start_time: 0
         distribution: abs
         abs: 3
-    - agv2:
-        type: "agv"
+    - amr2:
+        type: "amr"
         friendly_name: "ztf"
         start_time: 0
         distribution: abs
         abs: 3
-    - agv2:
-        type: "agv"
+    - amr2:
+        type: "amr"
         friendly_name: "ctv"
         start_time: 0
         distribution: abs

@@ -32,7 +32,7 @@ TableDefinition kAmrHistory("AMRHistory", {DatabaseColumnInfo{"Id"},
 static const std::string kCreateAmrHistory = getCreateTableStatement(kAmrHistory);
 static bool amr_history_exists_ = false;
 
-void CppsLoggerNs3::logPositionUpdate(const AMRPositionLoggingInfo &logging_info) {
+void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info) {
   if (!amr_history_exists_) {
     log_(kCreateAmrHistory);
     amr_history_exists_ = true;
@@ -74,7 +74,7 @@ TableDefinition kAutonomousMobileRobot("AutonomousMobileRobot",
 static const std::string kCreateAmr = getCreateTableStatement(kAutonomousMobileRobot);
 static bool amr_exists_ = false;
 
-void CppsLoggerNs3::logAMR(const AMRLoggingInfo &amr_info) {
+void CppsLoggerNs3::logAMR(const AmrLoggingInfo &amr_info) {
   if (!amr_exists_) {
     log_(kCreateAmr);
     amr_exists_ = true;
@@ -99,9 +99,6 @@ void CppsLoggerNs3::logAMR(const AMRLoggingInfo &amr_info) {
       /* MaxAcceleration_mpss */ amr_info.max_acceleration,
       /* MaxDeceleration_mpss */ amr_info.min_acceleration);
   log_(getInsertStatement(kAutonomousMobileRobot, t));
-  //     amr_info.manufacturer_.c_str(),
-  //     amr_info.model_name_.c_str(), amr_info.serial_number_,
-  //     amr_info.load_carrier_type_.c_str()
 }
 
 // * Service
@@ -131,7 +128,6 @@ TableDefinition kServiceTransport("ServiceTransport",
                                    {"AmrId", "sql%u", true, "AutonomousMobileRobot(Id)"},
                                    {"LoadCarrierType", "%s", true},
                                    {"MaxWeightPayload_kg", "%f", true}});
-// PRIMARY KEY(service_uuid, amr_uuid, timestamp, state)
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
 static bool service_exists_transport_ = false;
 
@@ -141,8 +137,6 @@ void CppsLoggerNs3::logTransportService(const sola::Service &service, bool activ
     service_exists_transport_ = true;
   }
 
-  // int state = (active ? 1 : 0);
-  // auto load_carrier = std::any_cast<std::string>(service.key_values_.at("loadcarriertype"));
   auto amr_uuid = std::any_cast<std::string>(service.key_values.at("amruuid"));
   auto type = std::any_cast<std::string>(service.key_values.at("servicetype"));
   auto max_payload = std::any_cast<float>(service.key_values.at("maxpayload"));
@@ -157,7 +151,6 @@ void CppsLoggerNs3::logTransportService(const sola::Service &service, bool activ
       /* LoadCarrierType */ type.c_str(),  // TODO: Change to id based field?
       /* MaxWeightPayload_kg */ max_payload);
   log_(getInsertStatement(kServiceTransport, t));
-  // load_carrier.c_str(), state
 }
 
 }  // namespace daisi::cpps

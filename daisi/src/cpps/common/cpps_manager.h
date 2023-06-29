@@ -133,11 +133,11 @@ private:
   std::unordered_map<std::string, MaterialFlowInfo> material_flow_models_;
 
   // Nodes / Network
-  ns3::NodeContainer agvs_;
+  ns3::NodeContainer amrs_;
   ns3::NodeContainer material_flows_;
   ns3::NodeContainer access_points_;
 
-  ns3::NetDeviceContainer agv_sta_dev_;
+  ns3::NetDeviceContainer amr_sta_dev_;
 };
 
 }  // namespace daisi::cpps
