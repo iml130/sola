@@ -141,8 +141,11 @@ void PathPlanningManager::initAGV(uint32_t index) {
   cpps::AmrDescription description(index, kinematics, properties, physical_properties,
                                    load_handling_unit);
 
+  ns3::Ptr<cpps::AmrMobilityModelNs3> mobility =
+      DynamicCast<cpps::AmrMobilityModelNs3>(agvs_.Get(index)->GetObject<ns3::MobilityModel>());
+
   this->agvs_.Get(index)->GetApplication(1)->GetObject<PathPlanningApplication>()->initAGVPhysical(
-      description, index);
+      description, mobility, index);
   this->agvs_.Get(index)->GetApplication(0)->GetObject<PathPlanningApplication>()->initAGVLogical(
       consensus_settings_, index == 0);
 }

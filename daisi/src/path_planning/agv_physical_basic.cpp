@@ -24,14 +24,15 @@
 
 namespace daisi::cpps {
 
-AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &data_model, const Topology &topology,
+AGVPhysicalBasic::AGVPhysicalBasic(const AmrDescription &description, const Topology &topology,
+                                   ns3::Ptr<cpps::AmrMobilityModelNs3> mobility,
                                    int id_for_friendly, ns3::Ptr<ns3::Socket> socket)
-    : amr_description_(data_model), socket_(socket) {
+    : amr_description_(description), socket_(socket) {
   // Topology
   ns3::Vector size = topology.getSize();
   topology_ = Topology({size.x, size.y, size.z});
 
-  mobility_ = ns3::Create<AmrMobilityModelNs3>();
+  mobility_ = mobility;
 
   socket_->SetRecvCallback(MakeCallback(&AGVPhysicalBasic::readFromSocket, this));
 }

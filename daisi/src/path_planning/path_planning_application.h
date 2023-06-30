@@ -47,7 +47,8 @@ struct PathPlanningApplication final : public ns3::Application {
   void initDeliveryStation(const DeliveryStationInfo &info,
                            const consensus::ConsensusSettings &settings);
   void initAGVLogical(const consensus::ConsensusSettings &settings, bool first_node);
-  void initAGVPhysical(const cpps::AmrDescription &data_model, int id_friendly);
+  void initAGVPhysical(const cpps::AmrDescription &description,
+                       ns3::Ptr<cpps::AmrMobilityModelNs3> mobility, int id_friendly);
   void initConsensusCentralServer(const consensus::CentralSettings &settings);
 
   void postInit();
