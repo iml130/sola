@@ -26,7 +26,7 @@ namespace daisi::cpps {
 
 class AGVPhysicalBasic {
 public:
-  AGVPhysicalBasic(const AmrDescription &data_model, const Topology &topology,
+  AGVPhysicalBasic(const AmrDescription &description, const Topology &topology,
                    ns3::Ptr<cpps::AmrMobilityModelNs3> mobility, int id_for_friendly,
                    ns3::Ptr<ns3::Socket> socket);  // TODO WORKAROUND: id_for_friendly
 
