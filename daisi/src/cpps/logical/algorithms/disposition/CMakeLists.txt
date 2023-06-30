@@ -7,6 +7,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_init
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
     daisi_material_flow_model_material_flow
+    daisi_cpps_common_cpps_logger_ns3
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_disposition_participant INTERFACE)
@@ -32,7 +33,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
     daisi_cpps_logical_algorithms_disposition_auction_initiator_state
     daisi_structure_helpers
     ns3::libcore
-    daisi_cpps_model_agv_fleet
+    daisi_cpps_amr_model_amr_fleet
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
@@ -45,6 +46,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_participant
     daisi_cpps_logical_order_management_auction_based_order_management
+    daisi_cpps_logical_algorithms_disposition_auction_participant_state
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
@@ -52,11 +54,13 @@ target_sources(daisi_cpps_logical_algorithms_disposition_layered_precedence_grap
     PUBLIC
     layered_precedence_graph.h
     layered_precedence_graph.cpp
+    layered_precedence_graph_components.h
 )
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
     PUBLIC
     daisi_datastructure_directed_graph
     daisi_material_flow_model_material_flow
+    daisi_cpps_common_cpps_logger_ns3
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_auction_initiator_state STATIC)

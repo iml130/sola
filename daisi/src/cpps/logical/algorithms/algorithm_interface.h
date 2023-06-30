@@ -42,7 +42,7 @@ public:
   explicit AlgorithmInterface(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
       : sola_(std::move(sola)){};
 
-  virtual ~AlgorithmInterface() = 0;
+  virtual ~AlgorithmInterface(){};
 
   REGISTER_LOGICAL_MESSAGE(CallForProposal);
   REGISTER_LOGICAL_MESSAGE(BidSubmission);

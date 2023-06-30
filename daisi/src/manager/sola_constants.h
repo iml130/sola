@@ -22,7 +22,7 @@
 namespace daisi::constants {
 constexpr uint32_t kNumberOfAppNodesPerSwitch = 48;
 constexpr double kMaxPowerDBm = 28.0;
-constexpr uint32_t kMaxNumberAgvsPerAp = 10;
+constexpr uint32_t kMaxNumberAmrsPerAp = 10;
 }  // namespace daisi::constants
 
 #endif

@@ -16,11 +16,19 @@
 
 #include "task.h"
 
+#include "cpps/common/uuid_generator.h"
+
 namespace daisi::material_flow {
 
 Task::Task(std::string name, const std::vector<Order> &orders,
            const std::vector<std::string> &follow_up_tasks)
-    : name_(std::move(name)), orders_(orders), follow_up_tasks_(follow_up_tasks) {}
+    : name_(std::move(name)), orders_(orders), follow_up_tasks_(follow_up_tasks) {
+  if (orders.empty()) {
+    throw std::invalid_argument("Orders cannot be empty.");
+  }
+
+  uuid_ = UUIDGenerator::get()();
+}
 
 const std::string &Task::getUuid() const { return uuid_; }
 
@@ -40,11 +48,10 @@ bool Task::hasTimeWindow() const {
   return false;  // TODO integrate constraints
 }
 
-cpps::amr::AmrStaticAbility Task::getAbilityRequirement() const {
-  // TODO
-  cpps::amr::AmrStaticAbility ability(
-      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kNoLoadCarrierType), 0);
-  return ability;
+cpps::amr::AmrStaticAbility Task::getAbilityRequirement() const { return ability_requirement_; }
+
+void Task::setAbilityRequirement(const cpps::amr::AmrStaticAbility &ability) {
+  ability_requirement_ = ability;
 }
 
 }  // namespace daisi::material_flow

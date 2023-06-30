@@ -20,12 +20,12 @@
 #include <deque>
 #include <utility>
 
-#include "cpps/agv/agv_physical_basic.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "delivery_station.h"
 #include "ns3/applications-module.h"
 #include "ns3/network-module.h"
 #include "path_planning/agv_logical.h"
+#include "path_planning/agv_physical_basic.h"
 #include "path_planning/consensus/central/central_server.h"
 #include "path_planning/consensus/paxos/constants.h"
 #include "pickup_station.h"
@@ -47,12 +47,13 @@ struct PathPlanningApplication final : public ns3::Application {
   void initDeliveryStation(const DeliveryStationInfo &info,
                            const consensus::ConsensusSettings &settings);
   void initAGVLogical(const consensus::ConsensusSettings &settings, bool first_node);
-  void initAGVPhysical(const cpps::AgvDataModel &data_model, int id_friendly);
+  void initAGVPhysical(const cpps::AmrDescription &description,
+                       ns3::Ptr<cpps::AmrMobilityModelNs3> mobility, int id_friendly);
   void initConsensusCentralServer(const consensus::CentralSettings &settings);
 
   void postInit();
 
-  void setTopology(cpps::TopologyNs3 topology) { topology_ = std::move(topology); };
+  void setTopology(cpps::Topology topology) { topology_ = std::move(topology); };
 
   /**
    * Creating \p number sockets connected to the IP of this application and injects them into the
@@ -75,7 +76,7 @@ struct PathPlanningApplication final : public ns3::Application {
 
 private:
   bool initialized_ = false;
-  cpps::TopologyNs3 topology_;
+  cpps::Topology topology_;
 
   void checkInitialized();
 };

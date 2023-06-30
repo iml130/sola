@@ -19,7 +19,7 @@
 namespace daisi::cpps {
 
 Topology::Topology(const util::Dimensions &size) : size_(size) {
-  if (size.x <= 0 || size.y <= 0) throw std::invalid_argument("AmrTopology dimensions need to > 0");
+  if (size.x <= 0 || size.y <= 0) throw std::invalid_argument("Topology dimensions need to > 0");
 }
 
 util::Dimensions Topology::getSize() const { return size_; }

@@ -18,6 +18,10 @@
 
 namespace daisi::cpps::logical {
 
+AuctionInitiatorState::AuctionInitiatorState(
+    std::shared_ptr<LayeredPrecedenceGraph> layered_precedence_graph)
+    : layered_precedence_graph_(layered_precedence_graph) {}
+
 void AuctionInitiatorState::addBidSubmission(const BidSubmission &bid_submission) {
   bid_submissions_.push_back(bid_submission);
 }
@@ -106,11 +110,12 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
               [](const auto &b1, const auto &b2) { return b1 > b2; });
 
     auto best_bid = temp_bids.front();
-    auto task_uuid = best_bid.getTaskUuid();
+    const auto task_uuid = best_bid.getTaskUuid();
 
-    removeBidsForTask(bid_submissions_, task_uuid);
+    removeBidsForTask(temp_bids, task_uuid);
 
-    if (!layered_precedence_graph_->isFreeTaskScheduled(task_uuid)) {
+    if (layered_precedence_graph_->isTaskFree(task_uuid) &&
+        !layered_precedence_graph_->isFreeTaskScheduled(task_uuid)) {
       daisi::util::Duration latest_finish_time =
           best_bid.getMetricsComposition().getCurrentMetrics().getMakespan();
       layered_precedence_graph_->setLatestFinishTime(task_uuid, latest_finish_time);
@@ -118,12 +123,20 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
       layered_precedence_graph_->setTaskScheduled(task_uuid);
 
       winners.push_back({task_uuid, best_bid.getParticipantConnection(), latest_finish_time});
-    } else {
-      throw std::runtime_error("Received bid for scheduled task.");
     }
   }
 
   return winners;
+}
+
+void AuctionInitiatorState::clearIterationInfo() {
+  bid_submissions_.clear();
+  winner_acceptions_.clear();
+}
+
+void AuctionInitiatorState::clearWinnerAcceptions() {
+  bid_submissions_.clear();
+  winner_acceptions_.clear();
 }
 
 }  // namespace daisi::cpps::logical

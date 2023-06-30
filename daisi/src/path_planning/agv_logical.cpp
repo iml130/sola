@@ -19,7 +19,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "cpps/common/agv_description.h"
+#include "cpps/amr/amr_description.h"
 #include "cpps/common/uuid_generator.h"
 #include "cpps/packet.h"
 #include "minhton/utils/config_reader.h"
@@ -32,7 +32,7 @@
 
 namespace daisi::path_planning {
 
-AGVLogical::AGVLogical(cpps::TopologyNs3 topology, consensus::ConsensusSettings consensus_settings,
+AGVLogical::AGVLogical(cpps::Topology topology, consensus::ConsensusSettings consensus_settings,
                        bool first_node, const ns3::Ptr<ns3::Socket> &socket, uint32_t device_id)
     : device_id_(device_id),
       socket_(socket),
@@ -51,13 +51,11 @@ bool AGVLogical::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Addr
 }
 
 void AGVLogical::processMessageDescription(const std::string &payload) {
-  cpps::AgvDataModel data;
+  // TODO parse description from payload
+  // std::istringstream stream(payload);
+  // stream >> data;
 
-  std::istringstream stream(payload);
-  stream >> data;
-  kinematics_ = data.agv_properties.kinematic;
-
-  logAGV();
+  logAMR();
   std::cout << "AGV logical registered" << std::endl;
 }
 
@@ -65,7 +63,7 @@ void AGVLogical::processMessageUpdate(const message::PositionUpdate &msg) {
   last_x_ = msg.x;
   last_y_ = msg.y;
 
-  daisi::cpps::AGVPositionLoggingInfo info;
+  daisi::cpps::AmrPositionLoggingInfo info;
   info.uuid = uuid_;
   info.x = msg.x;
   info.y = msg.y;
@@ -100,8 +98,8 @@ void AGVLogical::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const ns3::A
   socket_agv_->SetRecvCallback(MakeCallback(&AGVLogical::readFromSocket, this));
 }
 
-void AGVLogical::logAGV() const {
-  daisi::cpps::AGVLoggingInfo info;
+void AGVLogical::logAMR() const {
+  daisi::cpps::AmrLoggingInfo info;
   // info.friendly_name = data_model_.agv_properties.friendly_name;
   // info.manufacturer = data_model_.agv_properties.manufacturer;
   // info.model_name = data_model_.agv_properties.model_name;
@@ -124,7 +122,7 @@ void AGVLogical::logAGV() const {
   info.max_acceleration = 0;
   info.min_acceleration = 0;
 
-  logger_->logAGV(info);
+  logger_->logAMR(info);
 }
 
 void AGVLogical::init() {
@@ -174,12 +172,12 @@ void AGVLogical::processTopicMessage(const sola::TopicMessage &msg) {
 void AGVLogical::registerByAuthority(const std::string &ip) {
   message::NewAuthorityAGV new_msg{sola_->getConectionString(),
                                    uuid_,
-                                   kinematics_.getMinAcceleration(),
-                                   kinematics_.getMaxAcceleration(),
-                                   kinematics_.getMinVelocity(),
-                                   kinematics_.getMaxVelocity(),
-                                   kinematics_.getLoadTime(),
-                                   kinematics_.getUnloadTime(),
+                                   description_.getKinematics().getMaxDeceleration(),
+                                   description_.getKinematics().getMaxAcceleration(),
+                                   description_.getKinematics().getMinVelocity(),
+                                   description_.getKinematics().getMaxVelocity(),
+                                   description_.getLoadHandling().getLoadTime(),
+                                   description_.getLoadHandling().getUnloadTime(),
                                    last_x_,
                                    last_y_};
   current_authority_ip_ = ip.substr(0, ip.find(':'));
@@ -260,12 +258,12 @@ void AGVLogical::processHandoverMessage(const message::HandoverMessage &msg) {
   // Introduce ourselves by new owner
   message::NewAuthorityAGV new_msg{sola_->getConectionString(),
                                    uuid_,
-                                   kinematics_.getMinAcceleration(),
-                                   kinematics_.getMaxAcceleration(),
-                                   kinematics_.getMinVelocity(),
-                                   kinematics_.getMaxVelocity(),
-                                   kinematics_.getLoadTime(),
-                                   kinematics_.getUnloadTime(),
+                                   description_.getKinematics().getMaxDeceleration(),
+                                   description_.getKinematics().getMaxAcceleration(),
+                                   description_.getKinematics().getMinVelocity(),
+                                   description_.getKinematics().getMaxVelocity(),
+                                   description_.getLoadHandling().getLoadTime(),
+                                   description_.getLoadHandling().getUnloadTime(),
                                    last_x_,
                                    last_y_};
   new_msg.initial = false;

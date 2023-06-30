@@ -38,7 +38,8 @@ namespace daisi::cpps::logical {
 /// physical properties (abilities).
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
-  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola);
+  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+                                               std::shared_ptr<CppsLoggerNs3> logger);
 
   ~IteratedAuctionDispositionInitiator() = default;
 
@@ -49,6 +50,8 @@ public:
   REGISTER_IMPLEMENTATION(WinnerResponse);
 
   virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
+
+  virtual void logMaterialFlowContent(const std::string &material_flow_uuid) override;
 
 private:
   /// @brief Preparing interaction by subscribing to required topics for each ability.
@@ -88,6 +91,11 @@ private:
   /// @param winners Previously calculated information about winners in the iteration.
   void notifyWinners(const std::vector<AuctionInitiatorState::Winner> &winners);
 
+  void setPreparationFinished();
+
+  void logMaterialFlowOrderStatesOfTask(const material_flow::Task &task,
+                                        const OrderStates &order_state);
+
   /// @brief Helper method to determine the relevant abilities to each task and mapping them.
   /// @param tasks Relevant tasks to be mapped
   std::unordered_map<amr::AmrStaticAbility, std::vector<daisi::material_flow::Task>,
@@ -105,6 +113,9 @@ private:
   /// IterationNotifiations.
   std::unordered_map<amr::AmrStaticAbility, std::string, amr::AmrStaticAbilityHasher>
       ability_topic_mapping_;
+
+  /// @brief Flag to note whether the preparation of subscribing to topics has finished or not.
+  bool preparation_finished_ = false;
 
   /// @brief Storing all delays in one place. The unit is seconds.
   struct {

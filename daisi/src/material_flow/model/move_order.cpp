@@ -16,8 +16,12 @@
 
 #include "move_order.h"
 
+#include "cpps/common/uuid_generator.h"
+
 namespace daisi::material_flow {
 
+MoveOrder::MoveOrder(const MoveOrderStep &move_order_step)
+    : uuid_(UUIDGenerator::get()()), move_order_step_(move_order_step) {}
 MoveOrder::MoveOrder(std::string uuid, const MoveOrderStep &move_order_step)
     : uuid_(std::move(uuid)), move_order_step_(move_order_step) {}
 

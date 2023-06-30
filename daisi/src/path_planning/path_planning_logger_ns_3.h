@@ -19,6 +19,7 @@
 
 #include "cpps/common/cpps_logger_ns3.h"
 #include "logging/definitions.h"
+#include "task.h"
 
 namespace daisi::path_planning {
 //! SQLite logger for path planning which extends \c daisi::cpps::CppsLoggerNs3 and its database
@@ -48,6 +49,10 @@ public:
                                        uint32_t instance, uint32_t msg_type);
   void logRecvPathPlanningTopicTraffic(const std::string &topic, const std::string &node,
                                        uint32_t instance, uint32_t msg_type);
+
+  void logTransportOrderUpdate(const Task &order, const std::string &assigned_agv = "");
+  void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
+                               const std::string &assigned_agv);
 };
 }  // namespace daisi::path_planning
 

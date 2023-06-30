@@ -16,6 +16,7 @@
 
 #include "material_flow_logical_agent.h"
 
+#include "cpps/common/uuid_generator.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 
 namespace daisi::cpps::logical {
@@ -35,7 +36,8 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
       case AlgorithmType::kIteratedAuctionDispositionInitiator:
-        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionInitiator>(sola_));
+        algorithms_.push_back(
+            std::make_unique<IteratedAuctionDispositionInitiator>(sola_, logger_));
         break;
       default:
         throw std::invalid_argument(
@@ -58,8 +60,27 @@ void MaterialFlowLogicalAgent::setWaitingForStart() { waiting_for_start_ = true;
 
 bool MaterialFlowLogicalAgent::isBusy() { return !material_flows_.empty(); }
 
+bool MaterialFlowLogicalAgent::isFinished() const {
+  return false;  // TODO
+}
+
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
-  // TODO integrate wrapper and add to material_flow_ vector
+  // TODO save scheduler somewhere?
+  auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
+
+  // TODO there could be multiple algorithm interfaces in the future
+  assert(algorithms_.size() == 1);
+
+  DispositionInitiator *tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
+  tmp->addMaterialFlow(scheduler);
+
+  if (execution_counter_++ == 0) {
+    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+  } else {
+    uuid_ = UUIDGenerator::get()();
+    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 1);
+  }
+  tmp->logMaterialFlowContent(uuid_);
 }
 
 }  // namespace daisi::cpps::logical

@@ -60,27 +60,34 @@ void CppsApplication::cleanup() {
   SolaNetworkUtils::get().unregisterNode(local_ip_address);
 }
 
-void CppsApplication::start() {
-  if (std::holds_alternative<std::shared_ptr<AgvLogicalNs3>>(application)) {
+void CppsApplication::init() {
+  if (auto amr_logical_agent =
+          std::get_if<std::shared_ptr<logical::AmrLogicalAgent>>(&application)) {
     generateUDPSockets();
     auto tcp_socket = generateTCPSocket();
     tcp_socket->Bind(InetSocketAddress(local_ip_address_tcp, listening_port_tcp));
-    auto ptr = std::get<std::shared_ptr<AgvLogicalNs3>>(application);
-    if (ptr) ptr->init(tcp_socket);
-  }
-
-  if (std::holds_alternative<std::shared_ptr<TransportOrderApplicationNs3>>(application)) {
+    (*amr_logical_agent)->init(tcp_socket);
+  } else if (auto mf_logical_agent =
+                 std::get_if<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(&application)) {
     generateUDPSockets();
-    auto ptr = std::get<std::shared_ptr<TransportOrderApplicationNs3>>(application);
-    if (ptr) ptr->init();
-  }
-
-  if (std::holds_alternative<std::shared_ptr<AmrPhysicalAsset>>(application)) {
+    (*mf_logical_agent)->init();
+  } else if (auto amr_physical_asset =
+                 std::get_if<std::shared_ptr<AmrPhysicalAsset>>(&application)) {
     auto tcp_socket = generateTCPSocket();
     tcp_socket->Bind(InetSocketAddress(
         local_ip_address, listening_port));  // Intentionally not using the address_tcp_ field
-    auto ptr = std::get<std::shared_ptr<AmrPhysicalAsset>>(application);
-    ptr->init(tcp_socket);
+    (*amr_physical_asset)->init(tcp_socket);
   }
 }
+
+void CppsApplication::start() {
+  if (auto amr_logical_agent =
+          std::get_if<std::shared_ptr<logical::AmrLogicalAgent>>(&application)) {
+    (*amr_logical_agent)->start();
+  } else if (auto mf_logical_agent =
+                 std::get_if<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(&application)) {
+    (*mf_logical_agent)->start();
+  }
+}
+
 }  // namespace daisi::cpps

@@ -3,22 +3,22 @@ target_sources(daisi_sola_sola_ns3_wrapper
         PRIVATE
         sola_ns3_wrapper.cpp
         sola_ns3_wrapper.h
-        )
+)
 target_link_libraries(daisi_sola_sola_ns3_wrapper
         PUBLIC
-            SOLA
-            daisi_logger_manager
-            ManagementOverlayMINHTONSim
-            EventDisseminationMinhcastSim
-            daisi_cpps_common_cpps_logger_ns3
-        )
+        SOLA
+        daisi_logger_manager
+        ManagementOverlayMINHTONSim
+        EventDisseminationMinhcastSim
+        daisi_cpps_common_cpps_logger_ns3
+)
 
 add_library(daisi_sola_application STATIC)
 target_sources(daisi_sola_application
         PRIVATE
         sola_application.h
         sola_application.cpp
-        )
+)
 target_link_libraries(daisi_sola_application
         PUBLIC
         ns3::libcore
@@ -27,21 +27,22 @@ target_link_libraries(daisi_sola_application
         PRIVATE
         daisi_utils
         minhton_utils_config_reader
-        )
+)
 
 add_library(daisi_sola_logger_ns3 STATIC)
 target_sources(daisi_sola_logger_ns3
         PRIVATE
         sola_logger_ns3.h
         sola_logger_ns3.cpp
-        )
+)
 target_link_libraries(daisi_sola_logger_ns3
         PUBLIC
         daisi_logging_sqlite_helper
         daisi_cpps_common_cpps_logger_ns3
         PRIVATE
         ns3::libcore
-        )
+        solanet_serializer
+)
 
 add_library(daisi_sola_manager STATIC)
 target_sources(daisi_sola_manager
@@ -49,13 +50,13 @@ target_sources(daisi_sola_manager
         sola_manager.cpp
         sola_manager.h
         sola_manager_scheduler.cpp
-        )
+)
 target_link_libraries(daisi_sola_manager
         PUBLIC
         daisi_manager
         daisi_sola_application
         daisi_sola_logger_ns3
-        )
+)
 target_include_directories(daisi_sola_manager
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src

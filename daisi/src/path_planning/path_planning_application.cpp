@@ -100,7 +100,8 @@ void PathPlanningApplication::checkInitialized() {
   initialized_ = true;
 }
 
-void PathPlanningApplication::initAGVPhysical(const cpps::AgvDataModel &data_model,
+void PathPlanningApplication::initAGVPhysical(const cpps::AmrDescription &description,
+                                              ns3::Ptr<cpps::AmrMobilityModelNs3> mobility,
                                               int id_friendly) {
   checkInitialized();
   auto tcp_socket = generateTCPSocket();
@@ -108,7 +109,8 @@ void PathPlanningApplication::initAGVPhysical(const cpps::AgvDataModel &data_mod
   // Intentionally not using the address_tcp_ field!
   tcp_socket->Bind(InetSocketAddress(local_ip_address, listening_port));
 
-  application.emplace<cpps::AGVPhysicalBasic>(data_model, topology_, id_friendly, tcp_socket);
+  application.emplace<cpps::AGVPhysicalBasic>(description, topology_, mobility, id_friendly,
+                                              tcp_socket);
 }
 
 void PathPlanningApplication::initConsensusCentralServer(

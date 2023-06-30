@@ -11,7 +11,7 @@ target_sources(daisi_cpps_logical_logical_agent
     logical_agent.h
 )
 target_link_libraries(daisi_cpps_logical_logical_agent
-    STATIC
+    PUBLIC
     daisi_cpps_logical_algorithms_algorithm_interface
     daisi_sola_sola_ns3_wrapper
     daisi_cpps_logical_message_serializer

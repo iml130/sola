@@ -18,6 +18,7 @@
 #define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_H_
 
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <optional>
 #include <utility>
@@ -55,7 +56,15 @@ public:
   /// @return true if the insertion was successful, false otherwise
   virtual bool addTask(const daisi::material_flow::Task &task) = 0;
 
+  void addNotifyTaskAssignmentCallback(std::function<void(void)> callback) {
+    task_assignment_callbacks_.push_back(callback);
+  }
+
+  void clearNotifyTaskAssignmentCallback() { task_assignment_callbacks_.clear(); }
+
 protected:
+  std::vector<std::function<void(void)>> task_assignment_callbacks_;
+
   AmrDescription amr_description_;
   Topology topology_;
   daisi::util::Pose current_pose_;

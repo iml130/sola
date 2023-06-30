@@ -32,7 +32,7 @@ public:
   AmrProperties(const std::string &manufacturer, const std::string &model_name,
                 const uint32_t &model_number, const std::string &device_type,
                 const std::string &friendly_name,
-                const std::set<FunctionalityType> &functionalities)
+                const std::set<FunctionalityType> &functionalities = {})
       : device_type_(device_type),
         friendly_name_(friendly_name),
         functionalities_(functionalities),

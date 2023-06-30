@@ -19,7 +19,7 @@
 
 #include <optional>
 
-#include "weighted_directed_graph.h"
+#include "weighted_directed_graph.tpp"
 
 namespace daisi::datastructure {
 

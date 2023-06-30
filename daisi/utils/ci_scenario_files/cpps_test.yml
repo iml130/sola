@@ -17,50 +17,16 @@ topology:
     depth:   0
 
 # required:
-initialNumberNodesAGVs: 30
+initialNumberNodesAMRs: 12
 numberMaterialFlows: 5
 numberMaterialFlowNodes: 5
 
 # on/off
 materialFlowNodesLeaveAfterFinish: off
 
-mrta_configuration:
-
-    # ContractNet_with_filter
-    # ContractNet_without_filter
-    # Iterated_Auction_Star _TePSSI_original
-    # Iterated_Auction_Star _TePSSI_modified
-    # Iterated_Auction_PubSub_TePSSI_original
-    # Iterated_Auction_PubSub_TePSSI_modified
-    interaction_protocol: Iterated_Auction_PubSub_TePSSI_original
-
-    # Basic_List
-    # Greedy_TSP_List
-    # SimpleTemporalNetwork
-    task_management: SimpleTemporalNetwork
-
-    # min_travel_time
-    # min_travel_time
-    # min_travel_distance
-    # min_makespan
-    # min_delay
-    # min_travel_time_makespan_alpha=0.5
-    # min_travel_time_delay_alpha=0.5
-    # min_travel_distance_makespan_alpha=0.5
-    # min_travel_distance_delay_alpha=0.5
-    # min_travel_distance_delay_relative_alpha=0.5
-    utility_evaluation: 
-      a1:
-        component: min_makespan
-        factor: 0.5
-      a2:
-        component: min_travel_time
-        factor: 0.5
-
-
-AGVs:
-    - agv1:
-        device_type: "agv"
+AMRs:
+    - amr1:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "LoadRunner"
         model_number: "1"
@@ -76,8 +42,8 @@ AGVs:
             load_carrier_type: "package"
             max_payload: 30.0
 
-    - agv2:
-        device_type: "agv"
+    - amr2:
+        device_type: "amr"
         manufacturer: "LocusBot"
         model_name: "LocusOrigin"
         model_number: "1"
@@ -93,8 +59,8 @@ AGVs:
             load_carrier_type: "package"
             max_payload: 45.0
 
-    - agv3:
-        device_type: "agv"
+    - amr3:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "ZTF"
         model_number: "44227"            
@@ -110,8 +76,8 @@ AGVs:
             load_carrier_type: "eurobox"
             max_payload: 30.0
 
-    - agv4:
-        device_type: "agv"
+    - amr4:
+        device_type: "amr"
         manufacturer: "FhG_IML"
         model_name: "Flip"
         model_number: "3"            
@@ -201,30 +167,30 @@ TOs:
             y: 20.0
 
 scenarioSequence: 
-    - agv1:
-        type: "agv"
+    - amr1:
+        type: "amr"
         friendly_name: "LR"
         start_time: 0
         distribution: abs
         abs: 3
-    - agv2:
-        type: "agv"
+    - amr2:
+        type: "amr"
         friendly_name: "locus"
         start_time: 0
         distribution: abs
-        abs: 9
-    - agv2:
-        type: "agv"
+        abs: 3
+    - amr2:
+        type: "amr"
         friendly_name: "ztf"
         start_time: 0
         distribution: abs
-        abs: 9
-    - agv2:
-        type: "agv"
+        abs: 3
+    - amr2:
+        type: "amr"
         friendly_name: "ctv"
         start_time: 0
         distribution: abs
-        abs: 9
+        abs: 3
     - to1:
         type: "to"
         start_time: 0

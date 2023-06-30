@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 
+#include "amr_logical_execution_state.h"
 #include "cpps/amr/amr_description.h"
 #include "cpps/amr/amr_topology.h"
 #include "cpps/amr/message/amr_state.h"
@@ -41,6 +42,8 @@ public:
   virtual void init(ns3::Ptr<ns3::Socket> tcp_socket);
 
   virtual void start() override;
+
+  void notifyTaskAssigned();
 
 private:
   virtual void initAlgorithms() override;
@@ -69,19 +72,22 @@ private:
   void sendTopologyToPhysical();
   void sendTaskToPhysical();
 
-  void checkSendingNextTask();
+  void checkSendingNextTaskToPhysical();
 
   void logAmrInfos();
+  void logPositionUpdate();
+  void logOrderUpdate();
 
   void sendToPhysical(std::string payload);
+
+  void setServices();
 
   AmrDescription description_;
   bool description_set_;  // to avoid overriding
 
   Topology topology_;
 
-  daisi::util::Position current_position_;
-  AmrState current_state_;
+  AmrLogicalExecutionState execution_state_;
 
   /// @brief For TCP communication with the AmrPhysicalAsset.
   /// The AmrLogicalAgent is acting as the server according to the TCP model.

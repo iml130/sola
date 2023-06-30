@@ -19,6 +19,7 @@
 #include <utility>
 
 #include "constants.h"
+#include "ns3/simulator.h"
 #include "path_planning/consensus/paxos/message/prepare_message.h"
 #include "path_planning/consensus/route_calculation_helper.h"
 #include "path_planning/intersection_set.h"

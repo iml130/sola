@@ -18,7 +18,7 @@
 
 #include <cassert>
 
-#include "cpps/agv/agv_logical.h"
+#include "cpps/amr/model/amr_fleet.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/common/uuid_generator.h"
 #include "delivery_station.h"
@@ -45,14 +45,13 @@ PathPlanningManager::PathPlanningManager(const std::string &scenario_config_file
 
   parse();
 
-  topology_ = cpps::TopologyNs3(
+  topology_ = cpps::Topology(
       {6 + 6 + static_cast<double>(number_delivery_stations_) / 2 * delta_stations_,
        1 + 5 + (static_cast<double>(number_pickup_stations_) / 2 * delta_stations_) + 1 + 5, 0});
 
   // TODO Workaround - Simple task for logging should not depend on possible AGV kinematics
-  cpps::amr::AmrStaticAbility ability(
-      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 100.0F);
-  cpps::AGVFleet::init({{ability, kinematics_}});
+  cpps::AmrFleet::init(
+      {{description_.getLoadHandling().getAbility(), description_.getKinematics()}});
 }
 
 void PathPlanningManager::setup() {
@@ -61,7 +60,7 @@ void PathPlanningManager::setup() {
 
   setupNodes();
 
-  // Setup AGVs
+  // Setup AMRs
   assert(this->nodeContainer_.GetN() == getNumberOfNodes());
 
   if (number_pickup_stations_ % 2 != 0 || number_delivery_stations_ % 2 != 0) {
@@ -100,7 +99,7 @@ void PathPlanningManager::setup() {
   mob.SetMobilityModel("ns3::ConstantPositionMobilityModel");
   mob.Install(delivery_stations_);
 
-  // Spawn AGVs
+  // Spawn AMRs
   // AMRs are initially filled to increasing pickup station numbers
   // Dummy, will be overwritten later
   mob.SetPositionAllocator("ns3::RandomBoxPositionAllocator", "X",
@@ -135,25 +134,18 @@ uint64_t PathPlanningManager::getNumberOfNodes() {
 }
 
 void PathPlanningManager::initAGV(uint32_t index) {
-  cpps::AgvDeviceDescription desc;
-  desc.serial_number = index;
-  auto mobility =
+  cpps::AmrProperties properties("agv");
+  cpps::AmrPhysicalProperties physical_properties;
+  cpps::AmrLoadHandlingUnit load_handling_unit;
+  cpps::AmrKinematics kinematics;
+  cpps::AmrDescription description(index, kinematics, properties, physical_properties,
+                                   load_handling_unit);
+
+  ns3::Ptr<cpps::AmrMobilityModelNs3> mobility =
       DynamicCast<cpps::AmrMobilityModelNs3>(agvs_.Get(index)->GetObject<ns3::MobilityModel>());
-  desc.mobility = mobility;
-
-  cpps::AgvDeviceProperties properties;
-  properties.device_type = "AGV";
-  properties.model_name = "Mk42";
-  properties.model_number = 0;
-  properties.manufacturer = "FhG";
-
-  // Set dummy ability
-  properties.ability = cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier("package"), 100);
-
-  properties.kinematic = kinematics_;
 
   this->agvs_.Get(index)->GetApplication(1)->GetObject<PathPlanningApplication>()->initAGVPhysical(
-      cpps::AgvDataModel{desc, properties}, index);
+      description, mobility, index);
   this->agvs_.Get(index)->GetApplication(0)->GetObject<PathPlanningApplication>()->initAGVLogical(
       consensus_settings_, index == 0);
 }
@@ -307,7 +299,7 @@ void PathPlanningManager::setupNetworkWifi() {
 
   // Create APs
   const uint32_t number_ap =
-      std::ceil(wifi_participants.GetN() / (double)constants::kMaxNumberAgvsPerAp);
+      std::ceil(wifi_participants.GetN() / (double)constants::kMaxNumberAmrsPerAp);
   access_points_.Create(number_ap);
 
   // Install APs all in middle of topology
@@ -332,7 +324,7 @@ void PathPlanningManager::setupNetworkWifi() {
   std::vector<NodeContainer> participants_per_ap;
   participants_per_ap.resize(number_ap);
   for (uint32_t i = 0; i < wifi_participants.GetN(); i++) {
-    participants_per_ap[i / constants::kMaxNumberAgvsPerAp].Add(wifi_participants.Get(i));
+    participants_per_ap[i / constants::kMaxNumberAmrsPerAp].Add(wifi_participants.Get(i));
   }
 
   const uint32_t base_address = 3232235520;  // 192.168.0.0
@@ -583,16 +575,23 @@ void PathPlanningManager::parse() {
   // TODO Check that parsed arguments fit into uint32_t
   number_pickup_stations_ = getParsed(uint64_t, "pickupStations");
   number_delivery_stations_ = getParsed(uint64_t, "deliveryStations");
-
   number_agvs_ = getParsed(uint64_t, "agvs");
 
   auto max_velo = getParsed(float, "max_velo");
   auto min_velo = getParsed(float, "min_velo");
   auto max_acc = getParsed(float, "max_acc");
   auto min_acc = getParsed(float, "min_acc");
-  auto load_time_s = getParsed(float, "load_time_s");
-  auto unload_time_s = getParsed(float, "unload_time_s");
-  kinematics_ = cpps::Kinematics(max_velo, min_velo, max_acc, min_acc, load_time_s, unload_time_s);
+  auto load_time = getParsed(float, "load_time");
+  auto unload_time = getParsed(float, "unload_time");
+
+  cpps::AmrKinematics kinematics(max_velo, min_velo, max_acc, min_acc);
+  cpps::AmrProperties properties;
+  cpps::AmrPhysicalProperties physical_properties;
+  cpps::amr::AmrStaticAbility ability(
+      cpps::amr::LoadCarrier(cpps::amr::LoadCarrier::Types::kEuroBox), 20);
+  cpps::AmrLoadHandlingUnit load_handling_unit(load_time, unload_time, ability);
+  description_ =
+      cpps::AmrDescription(0, kinematics, properties, physical_properties, load_handling_unit);
 
   parseConsensusSettings();
   parseScenarioSequence();

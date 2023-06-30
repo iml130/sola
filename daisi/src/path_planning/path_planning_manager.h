@@ -22,11 +22,9 @@
 #include <unordered_map>
 #include <utility>
 
-#include "cpps/common/agv_description.h"
-#include "cpps/common/boundaries.h"
+#include "agv_physical_basic.h"
+#include "cpps/amr/amr_kinematics.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/kinematics.h"
-#include "cpps/negotiation/mrta_configuration.h"
 #include "manager/manager.h"
 #include "minhton/logging/logger_interface.h"
 #include "ns3/bridge-helper.h"
@@ -105,7 +103,7 @@ private:
   uint32_t number_pickup_stations_ = 0;
   uint32_t number_delivery_stations_ = 0;
   uint64_t number_agvs_ = 0;
-  cpps::TopologyNs3 topology_;
+  cpps::Topology topology_;
   uint64_t to_spawn_duration_ms_ = 0;
 
   // TODO Pack to topology
@@ -125,7 +123,8 @@ private:
 
   consensus::ConsensusType consensus_type_ = consensus::ConsensusType::kNone;
   consensus::ConsensusSettings consensus_settings_;
-  cpps::Kinematics kinematics_;  //!< Kinematics of the simulated AGV
+
+  cpps::AmrDescription description_;  //!< Description of the simulated AGV
 };
 
 }  // namespace daisi::path_planning

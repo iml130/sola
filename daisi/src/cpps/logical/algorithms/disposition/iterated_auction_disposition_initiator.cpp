@@ -16,20 +16,20 @@
 
 #include "iterated_auction_disposition_initiator.h"
 
-#include "cpps/model/agv_fleet.h"
+#include "cpps/amr/model/amr_fleet.h"
 #include "ns3/simulator.h"
 
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-    : DispositionInitiator(sola) {
+    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola, std::shared_ptr<CppsLoggerNs3> logger)
+    : DispositionInitiator(sola, logger) {
   // assuming that sola is fully initialized at this point
 
   auto preparation_duration = prepareInteraction();
 
   ns3::Simulator::Schedule(ns3::Seconds(preparation_duration),
-                           &IteratedAuctionDispositionInitiator::startIteration, this);
+                           &IteratedAuctionDispositionInitiator::setPreparationFinished, this);
 }
 
 void IteratedAuctionDispositionInitiator::addMaterialFlow(
@@ -40,19 +40,24 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
   }
 
   layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(scheduler);
+  auction_initiator_state_ = std::make_unique<AuctionInitiatorState>(layered_precedence_graph_);
 
   auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();
   for (const auto &task : layered_precedence_graph_->getAuctionableTasks()) {
     layered_precedence_graph_->setEarliestValidStartTime(task.getUuid(), sim_time);
   }
+
+  if (preparation_finished_) {
+    startIteration();
+  }
 }
 
 daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() {
-  auto available_abilities = AGVFleet::get().getAllExistingAbilities();
+  auto available_abilities = AmrFleet::get().getAllExistingAbilities();
   uint8_t topic_counter = 0;
 
   for (const auto &ability : available_abilities) {
-    std::string topic_for_ability = AGVFleet::get().getTopicForAbility(ability);
+    std::string topic_for_ability = AmrFleet::get().getTopicForAbility(ability);
 
     ability_topic_mapping_[ability] = topic_for_ability;
 
@@ -63,6 +68,8 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
 
   return delays_.subscribe_topic * topic_counter;
 }
+
+void IteratedAuctionDispositionInitiator::setPreparationFinished() { preparation_finished_ = true; }
 
 void IteratedAuctionDispositionInitiator::startIteration() {
   // Sending CallForProposal messages to initiate the auction.
@@ -84,6 +91,9 @@ void IteratedAuctionDispositionInitiator::finishIteration() {
   // Starting next iteration if there are still tasks left to be scheduled
   if (!layered_precedence_graph_->areAllTasksScheduled()) {
     startIteration();
+  } else {
+    layered_precedence_graph_ = nullptr;
+    auction_initiator_state_ = nullptr;
   }
 }
 
@@ -92,7 +102,7 @@ void IteratedAuctionDispositionInitiator::bidProcessing() {
   auction_initiator_state_->countBidSubmissionProcessing();
 
   // Selecting winners
-  auto winners = auction_initiator_state_->selectWinner();
+  const auto winners = auction_initiator_state_->selectWinner();
   if (!winners.empty()) {
     // Sending WinnerResponse messages to winners
     notifyWinners(winners);
@@ -188,7 +198,7 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
 
   for (const auto &task : tasks) {
     auto fitting_abilities =
-        AGVFleet::get().getFittingExistingAbilities(task.getAbilityRequirement());
+        AmrFleet::get().getFittingExistingAbilities(task.getAbilityRequirement());
     for (const auto &ability : fitting_abilities) {
       task_ability_mapping[ability].push_back(task);
     }
@@ -197,13 +207,44 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
   return task_ability_mapping;
 }
 
+void IteratedAuctionDispositionInitiator::logMaterialFlowContent(
+    const std::string &material_flow_uuid) {
+  for (const auto &task : layered_precedence_graph_->getTasks()) {
+    logger_->logMaterialFlowTask(task, material_flow_uuid);
+
+    for (const auto &order : task.getOrders()) {
+      logger_->logMaterialFlowOrder(order, task.getUuid());
+    }
+
+    logMaterialFlowOrderStatesOfTask(task, OrderStates::kCreated);
+  }
+}
+
+void IteratedAuctionDispositionInitiator::logMaterialFlowOrderStatesOfTask(
+    const material_flow::Task &task, const OrderStates &order_state) {
+  for (auto i = 0; i < task.getOrders().size(); i++) {
+    MaterialFlowOrderUpdateLoggingInfo logging_info;
+    logging_info.task = task;
+    logging_info.order_index = i;
+    logging_info.order_state = order_state;
+
+    logger_->logMaterialFlowOrderUpdate(logging_info);
+  }
+}
+
 bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {
   auction_initiator_state_->addBidSubmission(bid_submission);
   return true;
 }
 
 bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &winner_response) {
+  if (winner_response.doesAccept()) {
+    auto task = layered_precedence_graph_->getTask(winner_response.getTaskUuid());
+    logMaterialFlowOrderStatesOfTask(task, OrderStates::kQueued);
+  }
+
   auction_initiator_state_->addWinnerResponse(winner_response);
+
   return true;
 }
 

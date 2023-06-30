@@ -24,6 +24,48 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
     std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler) {
   // TODO transform scheduler content to vertices and edges
 
+  // hard coded test tasks
+  {
+    material_flow::TransportOrderStep pickup1(
+        "tos11", {}, material_flow::Location("0x0", "type", util::Position(10, 10)));
+    material_flow::TransportOrderStep delivery1(
+        "tos12", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrder to1({pickup1}, delivery1);
+    material_flow::Task task1("task1", {to1}, {});
+
+    material_flow::TransportOrderStep pickup2(
+        "tos21", {}, material_flow::Location("0x0", "type", util::Position(20, 10)));
+    material_flow::TransportOrderStep delivery2(
+        "tos22", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrder to2({pickup2}, delivery2);
+    material_flow::Task task2("task2", {to2}, {});
+
+    material_flow::TransportOrderStep pickup3(
+        "tos31", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
+    material_flow::TransportOrderStep delivery3(
+        "tos32", {}, material_flow::Location("0x0", "type", util::Position(5, 5)));
+    material_flow::TransportOrder to3({pickup3}, delivery3);
+    material_flow::Task task3("task3", {to3}, {});
+
+    amr::AmrStaticAbility ability1(amr::LoadCarrier(amr::LoadCarrier::Types::kPackage), 20);
+    amr::AmrStaticAbility ability2(amr::LoadCarrier(amr::LoadCarrier::Types::kEuroBox), 20);
+
+    task1.setAbilityRequirement(ability1);
+    task2.setAbilityRequirement(ability2);
+    task3.setAbilityRequirement(ability1);
+
+    LPCVertex v1(task1);
+    LPCVertex v2(task2);
+    LPCVertex v3(task3);
+
+    addVertex(v1);
+    addVertex(v2);
+    addVertex(v3);
+
+    addEdge(v1, v3, std::monostate());
+    addEdge(v2, v3, std::monostate());
+  }
+
   initLayers();
 }
 
@@ -45,7 +87,7 @@ void LayeredPrecedenceGraph::initLayers() {
   for (const auto &free_vertex : temp_free_layer_vertices) {
     for (auto &vertex : vertices_) {
       if (free_vertex != vertex) {
-        if (hasEdge(free_vertex, vertex)) {
+        if (this->hasEdge(free_vertex, vertex)) {
           if (vertex.layer == PrecedenceGraphLayer::kFree) {
             throw std::runtime_error("Conceptionally, the algorithm should not allow this state.");
           }
@@ -94,8 +136,8 @@ void LayeredPrecedenceGraph::updateLayersSecondToFree(const LPCVertex &t) {
   // if a child of a free task is in the second layer, it could move to the free layer next
 
   for (auto &t_dash : vertices_) {
-    if (t_dash.layer == PrecedenceGraphLayer::kSecond && hasEdge(t, t_dash)) {
-      auto parents_of_t_dash = getIncomingEdges(t_dash);
+    if (t_dash.layer == PrecedenceGraphLayer::kSecond && this->hasEdge(t, t_dash)) {
+      auto parents_of_t_dash = this->getIncomingEdges(t_dash);
       bool parents_of_t_dash_are_subset = std::all_of(
           parents_of_t_dash.begin(), parents_of_t_dash.end(), [](const auto &parent_and_edge) {
             return parent_and_edge.first.layer == PrecedenceGraphLayer::kScheduled;
@@ -129,9 +171,9 @@ void LayeredPrecedenceGraph::updateLayersHiddenToSecond(const LPCVertex &t_dash)
   for (auto &t_dash_dash : vertices_) {
     // 6: for all t' in (T_H intersection children(t')) do
     // t' is free now, therefore children from hidden layer can go to the second layer
-    if (t_dash_dash.layer == PrecedenceGraphLayer::kHidden && hasEdge(t_dash, t_dash_dash)) {
+    if (t_dash_dash.layer == PrecedenceGraphLayer::kHidden && this->hasEdge(t_dash, t_dash_dash)) {
       // 7: if parents(t'') subset (T_S union T_F) then
-      auto parents_of_t_dash_dash = getIncomingEdges(t_dash_dash);
+      auto parents_of_t_dash_dash = this->getIncomingEdges(t_dash_dash);
       bool parents_of_t_dash_dash_are_subset =
           std::all_of(parents_of_t_dash_dash.begin(), parents_of_t_dash_dash.end(),
                       [](const auto &parent_and_edge) {
@@ -166,6 +208,15 @@ std::vector<LPCVertex> LayeredPrecedenceGraph::getLayerVertices(PrecedenceGraphL
                [&layer](const auto &vertex) { return vertex.layer == layer; });
 
   return vertices_of_layer;
+}
+
+std::vector<material_flow::Task> LayeredPrecedenceGraph::getTasks() const {
+  std::vector<material_flow::Task> tasks;
+
+  std::transform(vertices_.begin(), vertices_.end(), std::back_inserter(tasks),
+                 [&](const auto &vertex) { return vertex.task; });
+
+  return tasks;
 }
 
 void LayeredPrecedenceGraph::setEarliestValidStartTime(const std::string &task_uuid,
@@ -274,6 +325,12 @@ bool LayeredPrecedenceGraph::isFreeTaskScheduled(const std::string &task_uuid) c
   }
 
   return vertex.scheduled;
+}
+
+bool LayeredPrecedenceGraph::isTaskFree(const std::string &task_uuid) const {
+  auto vertex = getVertex(task_uuid);
+
+  return vertex.layer == PrecedenceGraphLayer::kFree;
 }
 
 }  // namespace daisi::cpps::logical

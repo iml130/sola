@@ -22,18 +22,12 @@
 #include <queue>
 #include <unordered_map>
 
+#include "cpps/amr/amr_topology.h"
 #include "cpps/amr/model/amr_static_ability.h"
-#include "cpps/common/agv_description.h"
-#include "cpps/common/boundaries.h"
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/model/kinematics.h"
-#include "cpps/negotiation/mrta_configuration.h"
+#include "cpps/logical/material_flow/material_flow_logical_agent.h"
 #include "manager/manager.h"
-#include "minhton/logging/logger.h"
-#include "minhton/logging/logger_interface.h"
-#include "natter-ns3/natter_logger_ns3.h"
-#include "natter/logger_interface.h"
 #include "ns3/bridge-helper.h"
 #include "ns3/csma-helper.h"
 #include "ns3/internet-stack-helper.h"
@@ -78,13 +72,21 @@ class CppsManager : public daisi::Manager<CppsApplication> {
 public:
   explicit CppsManager(const std::string &scenario_config_file);
   virtual void setup() override;
-  void initAGV(uint32_t index);
-  void connect(int index);
+
+  void initAMR(uint32_t index);
+  void connectAMR(uint32_t index);
+  void startAMR(uint32_t index);
+
+  void initMF(uint32_t index);
+  void startMF(uint32_t index);
+
   void publishService(int index);
   void scheduleMaterialFlow(const SpawnInfo &info);
   void executeMaterialFlow(int index, const std::string &friendly_name);
 
 private:
+  void initialSpawn();
+
   void setupNodes();
 
   void setupNetworkEthernet();
@@ -93,39 +95,27 @@ private:
   virtual uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
-  void spawnAGV(uint32_t agv_index, const AgvDeviceProperties &properties,
-                const TopologyNs3 &topology);
+  void spawnAMR(uint32_t amr_index, const AmrDescription &description, const Topology &topology);
 
   void parse();
-  void parseAGVs();
+  void parseAMRs();
   void parseTOs();
-  void parseAgvSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
+  void parseAMRSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseToSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
   void parseTopology();
   void parseScenarioSequence();
-  void parseMaterialFlowModel(const std::shared_ptr<MaterialFlowModel> &model,
-                              const std::shared_ptr<ScenariofileParser::Table> &model_description);
-
-  void parseMRTAConfiguration();
-  static std::unordered_map<std::string, InteractionProtocolType> interaction_protocol_types_map_;
-  static std::unordered_map<std::string, TaskManagementType> task_management_types_map_;
-  static std::unordered_map<std::string, UtilityEvaluationComponents>
-      utility_evaluation_components_map_;
 
   // Initiates shutdown of finished TOs
   void clearFinishedMaterialFlows();
 
-  Kinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
-  amr::AmrStaticAbility parseAGVAbility(
+  AmrKinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
+  amr::AmrStaticAbility parseAMRAbility(
       std::shared_ptr<daisi::ScenariofileParser::Table> description);
 
-  MRTAConfig mrta_config_;
-
-  Boundaries parseBoundaries(const std::shared_ptr<ScenariofileParser::Table> &description);
   void checkStarted(uint32_t index);
 
-  uint64_t number_agvs_later_ = 0;
-  uint64_t number_agvs_initial_ = 0;
+  uint64_t number_amrs_later_ = 0;
+  uint64_t number_amrs_initial_ = 0;
   uint64_t number_material_flow_nodes_ = 0;
   uint64_t number_material_flows_ = 0;
   uint64_t number_material_flows_scheduled_for_execution_ = 0;
@@ -135,7 +125,7 @@ private:
   int width_ = 0;
   int height_ = 0;
   int depth_ = 0;
-  std::vector<AgvDeviceProperties> agv_device_properties_;
+  std::vector<AmrDescription> amr_descriptions_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> spawn_info_;
   std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> schedule_info_;
 
@@ -143,11 +133,11 @@ private:
   std::unordered_map<std::string, MaterialFlowInfo> material_flow_models_;
 
   // Nodes / Network
-  ns3::NodeContainer agvs_;
+  ns3::NodeContainer amrs_;
   ns3::NodeContainer material_flows_;
   ns3::NodeContainer access_points_;
 
-  ns3::NetDeviceContainer agv_sta_dev_;
+  ns3::NetDeviceContainer amr_sta_dev_;
 };
 
 }  // namespace daisi::cpps

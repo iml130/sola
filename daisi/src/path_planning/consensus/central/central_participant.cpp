@@ -18,6 +18,7 @@
 
 #include <utility>
 
+#include "ns3/simulator.h"
 #include "path_planning/message/serializer.h"
 #include "utils/sola_utils.h"
 

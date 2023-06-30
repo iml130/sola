@@ -61,6 +61,10 @@ struct AuctionParticipantState {
   /// depending on stored metrics.
   /// @return
   AuctionParticipantTaskState pickBest();
+
+  void prune();
+
+  bool hasEntries() const;
 };
 
 }  // namespace daisi::cpps::logical

@@ -19,10 +19,10 @@
 
 #include <deque>
 
-#include "cpps/agv/agv_logical.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
 #include "cpps/common/cpps_logger_ns3.h"
-#include "cpps/to/transport_order.h"
+#include "cpps/logical/amr/amr_logical_agent.h"
+#include "cpps/logical/material_flow/material_flow_logical_agent.h"
 #include "logging/logger_manager.h"
 #include "minhton/logging/logger.h"
 #include "minhton/logging/logger_interface.h"
@@ -38,6 +38,7 @@ extern std::deque<ns3::Ptr<ns3::Socket>> socket_global_;
 struct CppsApplication final : public ns3::Application {
   static ns3::TypeId GetTypeId();
 
+  void init();
   void start();
   void cleanup();
 
@@ -49,7 +50,8 @@ struct CppsApplication final : public ns3::Application {
   uint16_t listening_port_tcp;
   std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger;
   std::variant<std::monostate, std::shared_ptr<AmrPhysicalAsset>,
-               std::shared_ptr<TransportOrderApplicationNs3>, std::shared_ptr<AgvLogicalNs3>>
+               std::shared_ptr<logical::MaterialFlowLogicalAgent>,
+               std::shared_ptr<logical::AmrLogicalAgent>>
       application;
 };
 }  // namespace daisi::cpps

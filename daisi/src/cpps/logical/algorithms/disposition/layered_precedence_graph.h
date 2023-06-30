@@ -20,46 +20,13 @@
 #include <memory>
 #include <optional>
 
-#include "datastructure/directed_graph.h"
+#include "cpps/common/cpps_logger_ns3.h"
+#include "datastructure/directed_graph.tpp"
+#include "layered_precedence_graph_components.h"
 #include "material_flow/model/material_flow.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
-
-/// @brief Enum to represent the different layers tasks can be on in this precedence graph.
-/// The free layer is also referred to as T_F, the second layer as T_L, the hidden layer as T_H, and
-/// the scheduled layer as T_S.
-enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
-
-struct LPCVertex {
-  /// @brief Initializing the vertex by setting the task and everything else as invalid.
-  /// @param task The task this vertex represents.
-  explicit LPCVertex(const daisi::material_flow::Task &task) : task(task){};
-
-  /// @brief The task this vertex represents by giving it additional information for auction and
-  /// about the layer.
-  daisi::material_flow::Task task;
-
-  /// @brief Assigning a layer to the task as presented by the set formulations in pIA.
-  PrecedenceGraphLayer layer = PrecedenceGraphLayer::kNone;
-
-  /// @brief F[t] in pIA; latest finish time of tasks that have been scheduled.
-  /// std::nullopt otherwise
-  std::optional<daisi::util::Duration> latest_finish = std::nullopt;
-
-  /// @brief PC[t] in pIA; earliest valid start time of tasks whose predecessors have been
-  /// scheduled. Tasks initially in T_F can be started at any time. If predecessors are not
-  /// scheduled, std::nullopt is set.
-  std::optional<daisi::util::Duration> earliest_valid_start = std::nullopt;
-
-  /// @brief Flag representing that a free task has been already scheduled.
-  /// The flag is not used outside of free layer tasks and disregarded on further layers.
-  bool scheduled = false;
-
-  friend bool operator==(const LPCVertex &v1, const LPCVertex &v2) { return v1.task == v2.task; }
-
-  friend bool operator!=(const LPCVertex &v1, const LPCVertex &v2) { return v1.task != v2.task; }
-};
 
 /// @brief Helper class to implement the pIA algorithm.
 /// A directed graph is layered into a free, second, and hidden layer.
@@ -70,10 +37,9 @@ struct LPCVertex {
 /// McIntire, Mitchell, Ernesto Nunes, and Maria Gini. "Iterated multi-robot auctions for
 /// precedence-constrained task scheduling." Proceedings of the 2016 international conference on
 /// autonomous agents & multiagent systems. 2016.
-class LayeredPrecedenceGraph
-    : private daisi::datastructure::DirectedGraph<LPCVertex, std::monostate> {
+class LayeredPrecedenceGraph : private datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  explicit LayeredPrecedenceGraph(std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler);
+  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
 
   ~LayeredPrecedenceGraph() = default;
 
@@ -85,23 +51,23 @@ public:
   /// @brief In this modification of pIA we do not consider prioritizations yet. Therefore, all free
   /// tasks are auctionable.
   /// @return Vector of all free tasks.
-  std::vector<daisi::material_flow::Task> getAuctionableTasks();
+  std::vector<material_flow::Task> getAuctionableTasks();
 
   /// @brief Setting the earliest valid start time, in pIA represented as PC[t], of a task.
   /// @param task Task to search for the according vertex
   /// @param time Earliest valid start time
-  void setEarliestValidStartTime(const std::string &task_uuid, const daisi::util::Duration &time);
+  void setEarliestValidStartTime(const std::string &task_uuid, const util::Duration &time);
 
   /// @brief Setting the latest finish time, in pIA represented as F[t], of a task.
   /// @param task Task to search for the according vertex
   /// @param time Earliest valid start time
-  void setLatestFinishTime(const std::string &task_uuid, const daisi::util::Duration &time);
+  void setLatestFinishTime(const std::string &task_uuid, const util::Duration &time);
 
-  daisi::util::Duration getEarliestValidStartTime(const std::string &task_uuid) const;
+  util::Duration getEarliestValidStartTime(const std::string &task_uuid) const;
 
-  daisi::util::Duration getLatestFinishTime(const std::string &task_uuid) const;
+  util::Duration getLatestFinishTime(const std::string &task_uuid) const;
 
-  daisi::material_flow::Task getTask(const std::string &task_uuid) const;
+  material_flow::Task getTask(const std::string &task_uuid) const;
 
   /// @brief Checks whether all tasks are on the scheduled layer. The scheduled flag is not
   /// considered in this.
@@ -122,6 +88,10 @@ public:
   /// @param task_uuid Uuid of the task we refer to
   /// @return True if the task is on the free layer and the scheduled flag is set
   bool isFreeTaskScheduled(const std::string &task_uuid) const;
+
+  bool isTaskFree(const std::string &task_uuid) const;
+
+  std::vector<material_flow::Task> getTasks() const;
 
 private:
   /// @brief Initializing layers of the precedence graph based on set equations from the pIA

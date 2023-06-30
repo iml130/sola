@@ -20,6 +20,7 @@
 #include <functional>
 #include <memory>
 
+#include "ns3/event-id.h"
 #include "path_planning/consensus/paxos/message/ok_message.h"
 #include "path_planning/consensus/paxos/message/promise_message.h"
 #include "path_planning/consensus/paxos/message/response_message.h"

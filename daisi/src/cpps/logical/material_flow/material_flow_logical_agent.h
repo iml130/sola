@@ -50,6 +50,8 @@ public:
   /// @return status whether the agent is busy or not
   bool isBusy();
 
+  bool isFinished() const;
+
 protected:
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed for a material flow agent.
@@ -71,6 +73,9 @@ protected:
 private:
   /// Simple flag to represent that the agent is still in the initialization process.
   bool waiting_for_start_;
+
+  /// @brief Counting number of executed material flows
+  uint16_t execution_counter_ = 0;
 };
 
 }  // namespace daisi::cpps::logical

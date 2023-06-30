@@ -20,12 +20,14 @@
 #include <ctime>
 
 #include "SOLA/service.h"
-#include "cpps/model/task.h"
+#include "cpps/amr/message/amr_state.h"
+#include "cpps/model/order_states.h"
 #include "logging/definitions.h"
+#include "material_flow/model/task.h"
 
 namespace daisi::cpps {
 
-struct AGVLoggingInfo {
+struct AmrLoggingInfo {
   std::string friendly_name;
   std::string manufacturer;
   std::string model_name;
@@ -47,7 +49,7 @@ struct AGVLoggingInfo {
   double min_acceleration;
 };
 
-struct AGVPositionLoggingInfo {
+struct AmrPositionLoggingInfo {
   std::string uuid;
   double x;
   double y;
@@ -67,7 +69,7 @@ struct NegotiationTrafficLoggingInfo {
 
 struct ExecutedOrderUtilityLoggingInfo {
   std::string order;
-  std::string agv;
+  std::string amr;
   double expected_start_time;
 
   double execution_duration;
@@ -89,6 +91,15 @@ struct ExecutedOrderUtilityLoggingInfo {
   double utility;
 };
 
+struct MaterialFlowOrderUpdateLoggingInfo {
+  std::string amr_uuid;
+  AmrState amr_state = AmrState::kIdle;
+  OrderStates order_state = OrderStates::kCreated;
+  material_flow::Task task;
+  uint8_t order_index = 0;
+  util::Position position;
+};
+
 class CppsLoggerNs3 {
 public:
   CppsLoggerNs3() = delete;
@@ -96,28 +107,24 @@ public:
   ~CppsLoggerNs3();
 
   // cpps specific logging functions
-  void logMaterialFlow(const uint64_t &timestamp, const std::string &mf_uuid, const std::string &ip,
-                       uint16_t port, uint8_t state);
-  void logTransportOrder(const Task &order, uint32_t pickup_station_id,
-                         uint32_t delivery_station_id);
-  void logTransportOrder(const Task &order, uint32_t pickup_station_id,
-                         uint32_t delivery_station_id, const std::string &mf_uuid);
-  void logAGV(const AGVLoggingInfo &agv_info);
+  void logAMR(const AmrLoggingInfo &amr_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,
                   const std::vector<ns3::Vector2D> &additionalPositions = {});
-  void logTransportOrderUpdate(const Task &order, const std::string &assigned_agv = "");
-  void logTransportOrderUpdate(const std::string &order_uuid, uint32_t status,
-                               const std::string &assigned_agv);
   void logTransportService(const sola::Service &service, bool active);
   void logService(const std::string &uuid, uint8_t type);
-  void logPositionUpdate(const AGVPositionLoggingInfo &logging_info);
+  void logPositionUpdate(const AmrPositionLoggingInfo &logging_info);
   void logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info);
   void logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info);
   void logTopicMessage(const std::string &topic, const std::string &message_id,
                        const std::string &node, const std::string &message, bool receive);
   void logTopicEvent(const std::string &topic, const std::string &node, bool subscribe);
-
   void logCppsMessageTypes();
+
+  void logMaterialFlow(const std::string &mf_uuid, const std::string &ip, uint16_t port,
+                       uint8_t state);
+  void logMaterialFlowOrder(const material_flow::Order &order, const std::string &task_uuid);
+  void logMaterialFlowTask(const material_flow::Task &task, const std::string &material_flow_uuid);
+  void logMaterialFlowOrderUpdate(const MaterialFlowOrderUpdateLoggingInfo &logging_info);
 
   // Used for loggers which are initialized before node starts
   // TODO Refactor to other class
