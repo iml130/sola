@@ -60,6 +60,7 @@ target_link_libraries(PathPlanning
     daisi_cpps_common_cpps_logger_ns3
     daisi_sola_sola_ns3_wrapper
     daisi_logging_sqlite_helper
+    daisi_cpps_amr_amr_kinematics
     Cereal
     PRIVATE
     daisi_logger_manager
