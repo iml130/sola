@@ -23,8 +23,6 @@ target_sources(PathPlanning
     time_calculation_helper.h
     task.h
     task.cpp
-    agv_logical.cpp
-    agv_logical.h
     agv_physical_basic.cpp
     agv_physical_basic.h
     message/serializer.cpp
