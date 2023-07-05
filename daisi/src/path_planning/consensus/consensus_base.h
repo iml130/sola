@@ -18,6 +18,7 @@
 #define DAISI_PATH_PLANNING_CONSENSUS_CONSENSUS_BASE_H_
 
 #include <functional>
+#include <memory>
 
 #include "path_planning/constants.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
