@@ -1,3 +1,7 @@
+==============================================================================
+The main part of the SOLA project is licensed under the MIT License
+==============================================================================
+
 MIT License
 
 Copyright (c) The SOLA Contributors
@@ -19,3 +23,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+==============================================================================
+DAISI and software from third parties included in the SOLA project
+==============================================================================
+
+The DAISI subproject (located in `daisi`) is licensed under the GNU General
+Public License v2.0 only, see the license file `daisi/LICENSE`.
+
+The SOLA project further in-cooperates third party software for which other
+licenses may apply. Such third party software is located in subfolders named
+`third_party`.
