@@ -32,6 +32,7 @@
 #include "ns3/core-module.h"
 #include "ns3/mobility-helper.h"
 #include "ns3/wifi-module.h"
+#include "scenariofile/cpps_scenariofile.h"
 #include "utils/random_engine.h"
 #include "utils/sola_utils.h"
 
@@ -43,10 +44,29 @@ namespace daisi::cpps {
 extern ns3::Ptr<daisi::cpps::AmrMobilityModelNs3> next_mobility_model;
 
 CppsManager::CppsManager(const std::string &scenario_config_file)
-    : Manager<CppsApplication>(scenario_config_file) {
+    : Manager<CppsApplication>(scenario_config_file), scenario_(scenario_config_file) {
   Manager::initLogger();
 
-  parse();
+  scenario_.parse();
+
+  amr_descriptions_ = scenario_.getAmrDescriptions();
+  material_flow_descriptions_ = scenario_.getMaterialFlowDescriptions();
+
+  for (const auto &info : scenario_.scenario_sequence) {
+    if (info.isAmr()) {
+      spawn_info_.push(info);
+    } else if (info.isMaterialFlow()) {
+      schedule_info_.push(info);
+    }
+  }
+
+  std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> amr_infos;
+  std::transform(amr_descriptions_.begin(), amr_descriptions_.end(), std::back_inserter(amr_infos),
+                 [](const auto &pair) {
+                   return std::make_pair(pair.second.getLoadHandling().getAbility(),
+                                         pair.second.getKinematics());
+                 });
+  AmrFleet::init(amr_infos);
 }
 
 void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description,
@@ -68,15 +88,11 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
     throw std::runtime_error("mobility model not empty");
   }
 
-  // TODO: parse algorithm config from scenario file
-  logical::AlgorithmConfig algorithm_config;
-  algorithm_config.algorithm_types.push_back(
-      logical::AlgorithmType::kIteartedAuctionDispositionParticipant);
-
   this->amrs_.Get(amr_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
   this->amrs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::AmrLogicalAgent>(device_id, algorithm_config, amr_index == 0);
+      std::make_shared<logical::AmrLogicalAgent>(
+          device_id, scenario_.algorithm.getParticipantAlgorithmConfig(), amr_index == 0);
 }
 
 void CppsManager::setup() {
@@ -89,10 +105,11 @@ void CppsManager::setup() {
   assert(this->node_container_.GetN() == getNumberOfNodes());
 
   ns3::MobilityHelper mob;
-  mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX", ns3::DoubleValue(width_ * 0.2),
-                           "MinY", ns3::DoubleValue(height_ * 0.3), "DeltaX", ns3::DoubleValue(2.5),
-                           "DeltaY", ns3::DoubleValue(2), "GridWidth", ns3::UintegerValue(12),
-                           "LayoutType", ns3::StringValue("RowFirst"));
+  mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX",
+                           ns3::DoubleValue(scenario_.topology.width * 0.2), "MinY",
+                           ns3::DoubleValue(scenario_.topology.height * 0.3), "DeltaX",
+                           ns3::DoubleValue(2.5), "DeltaY", ns3::DoubleValue(2), "GridWidth",
+                           ns3::UintegerValue(12), "LayoutType", ns3::StringValue("RowFirst"));
 
   mob.SetMobilityModel("ns3::AmrMobilityModelNs3");
   mob.Install(amrs_);
@@ -101,36 +118,32 @@ void CppsManager::setup() {
 }
 
 void CppsManager::initialSpawn() {
-  // TODO add option for relative distribution
-
   uint32_t previous_index = 0;
 
   while (!spawn_info_.empty() && spawn_info_.top().start_time == 0) {
     auto info = spawn_info_.top();
     spawn_info_.pop();
 
-    if (info.type == "amr") {
-      uint32_t abs_number = std::get<DistAbs>(info.distribution).abs;
-      auto desc_it =
-          std::find_if(amr_descriptions_.begin(), amr_descriptions_.end(),
-                       [&](const AmrDescription &description) {
-                         return description.getProperties().getFriendlyName() == info.friendly_name;
-                       });
-      assert(desc_it != amr_descriptions_.end());
-
-      for (auto i = previous_index; i < previous_index + abs_number; i++) {
-        auto topology = Topology(util::Dimensions(width_, height_, depth_));
-        spawnAMR(i, *desc_it, topology);
+    if (info.isAmr()) {
+      if (!info.spawn_distribution.isAbsolute()) {
+        // TODO add option for relative distribution
+        throw std::runtime_error("Other distributions not supported yet.");
       }
 
-      previous_index += abs_number;
+      auto description = amr_descriptions_[info.friendly_name];
+      for (auto i = previous_index; i < previous_index + info.spawn_distribution.number; i++) {
+        auto topology = scenario_.topology.getTopology();
+        spawnAMR(i, description, topology);
+      }
+
+      previous_index += info.spawn_distribution.number;
     } else {
     }
   }
 }
 
 uint64_t CppsManager::getNumberOfNodes() {
-  return number_amrs_initial_ + number_amrs_later_ + number_material_flow_nodes_;
+  return scenario_.initial_number_of_amrs + scenario_.number_of_material_flow_agents;
 }
 
 void CppsManager::checkStarted(uint32_t index) {
@@ -179,14 +192,11 @@ void CppsManager::startAMR(uint32_t index) {
 void CppsManager::initMF(uint32_t index) {
   const uint32_t device_id = material_flows_.Get(index)->GetId();
 
-  logical::AlgorithmConfig mf_algorithm_config;
-  mf_algorithm_config.algorithm_types.push_back(
-      logical::AlgorithmType::kIteratedAuctionDispositionInitiator);
-
   std::cout << "Creating MF Logical Agent " << index << std::endl;
 
   this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::MaterialFlowLogicalAgent>(device_id, mf_algorithm_config, false);
+      std::make_shared<logical::MaterialFlowLogicalAgent>(
+          device_id, scenario_.algorithm.getInitiatorAlgorithmConfig(), false);
 
   std::cout << "Init MF Logical Agent " << index << std::endl;
 
@@ -207,8 +217,8 @@ void CppsManager::startMF(uint32_t index) {
 }
 
 void CppsManager::setupNodes() {
-  amrs_.Create(number_amrs_initial_ + number_amrs_later_);
-  material_flows_.Create(number_material_flow_nodes_);
+  amrs_.Create(scenario_.initial_number_of_amrs);
+  material_flows_.Create(scenario_.number_of_material_flow_agents);
   setupNetworkEthernet();
   setupNetworkWifi();
 
@@ -244,9 +254,10 @@ void CppsManager::setupNetworkWifi() {
 
   // Install APs all in middle of topology
   MobilityHelper mob;
-  mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX", DoubleValue(width_ / 2.0), "MinY",
-                           DoubleValue(height_ / 2.0), "Z", DoubleValue(8.0), "DeltaX",
-                           DoubleValue(0.0), "DeltaY", DoubleValue(0.0), "GridWidth",
+  mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX",
+                           DoubleValue(scenario_.topology.width / 2.0), "MinY",
+                           DoubleValue(scenario_.topology.height / 2.0), "Z", DoubleValue(8.0),
+                           "DeltaX", DoubleValue(0.0), "DeltaY", DoubleValue(0.0), "GridWidth",
                            UintegerValue(20), "LayoutType", StringValue("RowFirst"));
   mob.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 
@@ -393,7 +404,7 @@ void CppsManager::executeMaterialFlow(int index, const std::string &friendly_nam
   auto cpps_app = this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
   auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
 
-  // TODO MaterialFlowInfo info = material_flow_models_[friendly_name];
+  // TODO MaterialFlowDescriptionScenario info = material_flow_descriptions_[friendly_name];
 
   mf_app->addMaterialFlow("todo");
 }
@@ -408,7 +419,7 @@ void CppsManager::clearFinishedMaterialFlows() {
       auto to_app =
           std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
       if (to_app) {
-        if (material_flow_nodes_leave_after_finish_ && to_app->canStop()) {
+        if (scenario_.do_material_flow_agents_leave_after_finish && to_app->canStop()) {
           found_running_matrial_flow_app = true;
           cpps_app->cleanup();
 
@@ -416,7 +427,7 @@ void CppsManager::clearFinishedMaterialFlows() {
           number_material_flows_finished_++;
           found_running_matrial_flow_app = true;
 
-          if (material_flow_nodes_leave_after_finish_) {
+          if (scenario_.do_material_flow_agents_leave_after_finish) {
             to_app->prepareStop();
           }
         }
@@ -424,17 +435,19 @@ void CppsManager::clearFinishedMaterialFlows() {
     }
   }
 
-  bool all_material_flows_executed = number_material_flows_finished_ == number_material_flows_;
+  bool all_material_flows_executed =
+      number_material_flows_finished_ == scenario_.number_of_material_flow_agents;
 
   if (!found_running_matrial_flow_app && all_material_flows_executed) {
     ns3::Simulator::Stop();
   } else {
-    ns3::Simulator::Schedule(MilliSeconds(10000), &CppsManager::clearFinishedMaterialFlows, this);
+    ns3::Simulator::Schedule(Seconds(10), &CppsManager::clearFinishedMaterialFlows, this);
   }
 }
 
-void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
-  if (number_material_flows_ == number_material_flows_scheduled_for_execution_) return;
+void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
+  if (scenario_.number_of_material_flow_agents == number_material_flows_scheduled_for_execution_)
+    return;
 
   // Search for next free index
   uint32_t i = 0;
@@ -464,254 +477,58 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
   if (init_application) {
     initMF(i);
 
-    Simulator::Schedule(MilliSeconds(2), &CppsManager::startMF, this, i);
+    Simulator::Schedule(Seconds(2), &CppsManager::startMF, this, i);
   }
 
-  Simulator::Schedule(MilliSeconds(4000), &CppsManager::executeMaterialFlow, this, i,
-                      info.friendly_name);
+  Simulator::Schedule(Seconds(4), &CppsManager::executeMaterialFlow, this, i, info.friendly_name);
 
   // Schedule next call
-  auto dist = std::get<DistGaussian>(info.distribution).dist;
+
+  if (!info.spawn_distribution.isGaussian()) {
+    throw std::invalid_argument("Only gaussian distribution supported.");
+  }
+
+  auto dist =
+      std::normal_distribution<>(info.spawn_distribution.mean, info.spawn_distribution.sigma);
   double next = dist(daisi::global_random_engine);
   next = std::max(0.0, next);
 
   std::cout << "[" << number_material_flows_scheduled_for_execution_ << "] SCHEDULE TO TYPE "
             << info.friendly_name << ". NEXT IN " << next << std::endl;
 
-  Simulator::Schedule(MilliSeconds(next), &CppsManager::scheduleMaterialFlow, this, info);
+  Simulator::Schedule(Seconds(next), &CppsManager::scheduleMaterialFlow, this, info);
 
   number_material_flows_scheduled_for_execution_++;
 }
 
 void CppsManager::scheduleEvents() {
-  Simulator::Schedule(MilliSeconds(1000), &CppsManager::clearFinishedMaterialFlows, this);
-  uint64_t current_time = Simulator::Now().GetMilliSeconds();
-  auto delay = parser_.getParsedContent()->getRequired<uint64_t>("defaultDelay");
-  for (auto i = 0U; i < number_amrs_initial_; i++) {
+  Simulator::Schedule(Seconds(1), &CppsManager::clearFinishedMaterialFlows, this);
+  uint64_t current_time = Simulator::Now().GetSeconds();
+  uint64_t delay = scenario_.default_delay;
+
+  for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::initAMR, this, i);
+    Simulator::Schedule(Seconds(current_time), &CppsManager::initAMR, this, i);
   }
 
-  for (auto i = 0U; i < number_amrs_initial_; i++) {
+  for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::connectAMR, this, i);
+    Simulator::Schedule(Seconds(current_time), &CppsManager::connectAMR, this, i);
   }
 
-  for (auto i = 0U; i < number_amrs_initial_; i++) {
+  for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time), &CppsManager::startAMR, this, i);
+    Simulator::Schedule(Seconds(current_time), &CppsManager::startAMR, this, i);
   }
 
   while (!schedule_info_.empty()) {
-    assert(schedule_info_.top().type == "to");
+    assert(schedule_info_.top().isMaterialFlow());
     auto info = schedule_info_.top();
     schedule_info_.pop();
     current_time += delay;
-    Simulator::Schedule(MilliSeconds(current_time + info.start_time),
-                        &CppsManager::scheduleMaterialFlow, this, info);
+    Simulator::Schedule(Seconds(current_time + info.start_time), &CppsManager::scheduleMaterialFlow,
+                        this, info);
   }
-}
-
-void CppsManager::parse() {
-  number_amrs_initial_ =
-      parser_.getParsedContent()->getRequired<uint64_t>("initialNumberNodesAMRs");
-  number_material_flow_nodes_ =
-      parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlowNodes");
-
-  number_material_flows_ = parser_.getParsedContent()->getRequired<uint64_t>("numberMaterialFlows");
-  material_flow_nodes_leave_after_finish_ = parser_.getParsedContent()->getRequired<std::string>(
-                                                "materialFlowNodesLeaveAfterFinish") == "on";
-
-  parseAMRs();
-  parseTOs();
-  parseTopology();
-  parseScenarioSequence();
-}
-
-void CppsManager::parseTopology() {
-  auto topology =
-      parser_.getParsedContent()->getRequired<std::shared_ptr<ScenariofileParser::Table>>(
-          "topology");
-
-  width_ = topology->getRequired<uint64_t>("width");
-  height_ = topology->getRequired<uint64_t>("height");
-  depth_ = topology->getRequired<uint64_t>("depth");
-}
-
-void CppsManager::parseAMRs() {
-  std::vector<std::pair<amr::AmrStaticAbility, AmrKinematics>> amr_infos;
-
-  auto amr_table =
-      parser_.getParsedContent()
-          ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("AMRs");
-
-  // TODO rewrite parsing of amr description
-  for (const auto &amr : amr_table) {
-    auto amr_inner = amr->content.begin()->second;
-    auto amr_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&amr_inner);
-
-    auto device_type = amr_description->getRequired<std::string>("device_type");
-    auto friendly_name = amr_description->getRequired<std::string>("friendly_name");
-    auto model_name = amr_description->getRequired<std::string>("model_name");
-
-    auto opt_manufacturer = amr_description->getOptional<std::string>("manufacturer");
-    std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
-
-    auto opt_model_number = amr_description->getOptional<uint64_t>("model_number");
-    uint32_t model_number = opt_model_number ? opt_model_number.value() : 0;
-
-    auto kinematics_description =
-        amr_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("kinematics");
-    auto ability_description =
-        amr_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("ability");
-
-    auto kinematics = parseKinematics(kinematics_description);
-
-    auto load_time = kinematics_description->getRequired<uint64_t>("load_time");
-    auto unload_time = kinematics_description->getRequired<uint64_t>("unload_time");
-
-    auto ability = parseAMRAbility(ability_description);
-
-    amr_infos.push_back({ability, kinematics});
-
-    AmrProperties properties(manufacturer, model_name, model_number, device_type, friendly_name,
-                             {FunctionalityType::kLoad, FunctionalityType::kMoveTo,
-                              FunctionalityType::kUnload, FunctionalityType::kNavigate});
-    AmrPhysicalProperties physical_properties;
-    AmrLoadHandlingUnit load_handling_unit(load_time, unload_time, ability);
-
-    AmrDescription description(0, kinematics, properties, physical_properties, load_handling_unit);
-
-    amr_descriptions_.push_back(description);
-  }
-
-  AmrFleet::init(amr_infos);
-}
-
-void CppsManager::parseTOs() {
-  auto tos_table =
-      parser_.getParsedContent()
-          ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>("TOs");
-
-  for (const auto &to : tos_table) {
-    auto to_inner = to->content.begin()->second;
-    auto to_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&to_inner);
-
-    if (to_description) {
-      auto friendly_name = to_description->getRequired<std::string>("friendly_name");
-
-      auto locations_description =
-          to_description->getOptional<std::shared_ptr<ScenariofileParser::Table>>("locations");
-      std::vector<Vector> locations;
-      if (locations_description) {
-        for (auto &loc : locations_description->get()->content) {
-          auto inner_loc =
-              locations_description->get()->getRequired<std::shared_ptr<ScenariofileParser::Table>>(
-                  loc.first);
-          Vector location_coordinates(inner_loc->getRequired<float>("x"),
-                                      inner_loc->getRequired<float>("y"), 0.0);
-
-          locations.push_back(location_coordinates);
-        }
-      }
-
-      MaterialFlowInfo info;
-      info.locations = locations;
-
-      auto graphs_description =
-          to_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("graphs");
-
-      for (auto &graph : graphs_description->content) {
-        auto graph_description =
-            graphs_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>(
-                graph.first);
-        info.descriptions.push_back(graph_description);
-      }
-
-      material_flow_models_[friendly_name] = info;
-    }
-  }
-}
-
-void CppsManager::parseScenarioSequence() {
-  auto scenario_sequence =
-      parser_.getParsedContent()
-          ->getRequired<std::vector<std::shared_ptr<ScenariofileParser::Table>>>(
-              "scenarioSequence");
-
-  for (const auto &spawn : scenario_sequence) {
-    auto spawn_inner = spawn->content.begin()->second;
-    auto spawn_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&spawn_inner);
-
-    auto type = spawn_description->getRequired<std::string>("type");
-
-    if (type == "amr") {
-      parseAMRSpawn(spawn_description);
-    } else if (type == "to") {
-      parseToSpawn(spawn_description);
-    } else {
-      throw std::runtime_error("Encountered invalid type while parsing scenario sequence!");
-    }
-  }
-}
-
-void CppsManager::parseAMRSpawn(
-    const std::shared_ptr<ScenariofileParser::Table> &spawn_description) {
-  auto friendly_name = spawn_description->getRequired<std::string>("friendly_name");
-  auto start_time = spawn_description->getRequired<uint64_t>("start_time");
-  auto distribution = spawn_description->getRequired<std::string>("distribution");
-
-  SpawnInfo info{start_time, "amr", friendly_name};
-
-  if (distribution == "prob" && start_time == 0) {
-    auto prob = spawn_description->getRequired<float>("prob");
-    info.distribution = DistProb{prob};
-  } else if (distribution == "abs" && start_time == 0) {
-    auto abs = spawn_description->getRequired<uint64_t>("abs");
-    info.distribution = DistAbs{abs};
-  } else {
-    throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
-  }
-  spawn_info_.emplace(info);
-}
-
-void CppsManager::parseToSpawn(
-    const std::shared_ptr<ScenariofileParser::Table> &spawn_description) {
-  auto friendly_name = spawn_description->getRequired<std::string>("friendly_name");
-  auto start_time = spawn_description->getRequired<uint64_t>("start_time");
-
-  auto spawn_behavior =
-      spawn_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("spawn_behavior");
-  auto distribution = spawn_behavior->getRequired<std::string>("distribution");
-
-  SpawnInfo info{start_time, "to", friendly_name};
-
-  if (distribution == "gaussian") {
-    auto mean = spawn_behavior->getRequired<uint64_t>("mean");
-    auto sigma = spawn_behavior->getRequired<uint64_t>("sigma");
-    info.distribution = DistGaussian{std::normal_distribution<>(mean, sigma)};
-  } else {
-    throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
-  }
-  schedule_info_.emplace(info);
-}
-
-AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Table> description) {
-  auto max_velo = description->getRequired<float>("max_velo");
-  auto min_velo = description->getRequired<float>("min_velo");
-  auto max_acc = description->getRequired<float>("max_acc");
-  auto min_acc = description->getRequired<float>("min_acc");
-
-  return {max_velo, min_velo, max_acc, min_acc};
-}
-
-amr::AmrStaticAbility CppsManager::parseAMRAbility(
-    std::shared_ptr<ScenariofileParser::Table> description) {
-  auto load_carrier_type_string = description->getRequired<std::string>("load_carrier_type");
-  auto max_payload = description->getRequired<float>("max_payload");
-
-  amr::LoadCarrier load_carrier(load_carrier_type_string);
-  return {load_carrier, max_payload};
 }
 
 std::string CppsManager::getDatabaseFilename() {

@@ -115,14 +115,15 @@ bool StnOrderManagement::setNextTask() {
   return false;
 }
 
-bool StnOrderManagement::canAddTask(const Task &task) {
+bool StnOrderManagement::canAddTask(const Task &task,
+                                    std::shared_ptr<InsertionPoint> insertion_point) {
   // TODO first checking whether we have the ability to execute the task
 
   latest_calculated_insertion_info_ = std::nullopt;
 
   StnOrderManagement copy(*this);
   copy.clearNotifyTaskAssignmentCallback();
-  if (copy.addTask(task)) {
+  if (copy.addTask(task, insertion_point)) {
     latest_calculated_insertion_info_ = copy.getLatestCalculatedInsertionInfo();
     return true;
   }

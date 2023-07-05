@@ -95,7 +95,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
   bool accept = false;
   if (task_state.metrics_composition.has_value() &&
-      order_management_->canAddTask(task_state.task)) {
+      order_management_->canAddTask(task_state.task, task_state.insertion_point)) {
     auto result = order_management_->getLatestCalculatedInsertionInfo();
     auto metrics_comp = result.first;
 
@@ -135,7 +135,7 @@ void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantStat
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
-    if (order_management_->canAddTask(pair.second.task)) {
+    if (order_management_->canAddTask(pair.second.task, nullptr)) {
       // Setting new calculated information if we can add the task
       auto result = order_management_->getLatestCalculatedInsertionInfo();
 

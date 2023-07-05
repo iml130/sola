@@ -37,6 +37,13 @@ public:
 
   bool addTask(const daisi::material_flow::Task &task) final { return addTask(task, nullptr); }
 
+  virtual bool canAddTask(const daisi::material_flow::Task &task,
+                          std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;
+
+  bool canAddTask(const daisi::material_flow::Task &task) final {
+    return canAddTask(task, nullptr);
+  }
+
   virtual std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>
   getLatestCalculatedInsertionInfo() const = 0;
 };
