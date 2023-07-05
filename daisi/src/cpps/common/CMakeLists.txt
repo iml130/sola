@@ -1,3 +1,5 @@
+add_subdirectory(scenariofile)
+
 add_library(daisi_cpps_common_cpps_application STATIC)
 target_sources(daisi_cpps_common_cpps_application
         PRIVATE
@@ -61,6 +63,7 @@ target_link_libraries(daisi_cpps_common_cpps_manager
         ns3::libinternet
         daisi_utils
         daisi_random_engine
+        daisi_cpps_common_scenariofile_cpps_scenariofile
 )
 
 if(DAISI_DISABLE_NETWORK_SIMULATION)

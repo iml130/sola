@@ -55,8 +55,10 @@ public:
 
   /// @brief check wether a new task can be assigned to the management
   /// @param task the task to be assigned
+  /// @param insertion_point the position in the managements queue where the task should be inserted
   /// @return true if the assignment can be made
-  bool canAddTask(const daisi::material_flow::Task &task) override;
+  bool canAddTask(const daisi::material_flow::Task &task,
+                  std::shared_ptr<InsertionPoint> insertion_point = nullptr) override;
 
   /// @brief assign a new task to the management
   /// @param task the task to be assigned

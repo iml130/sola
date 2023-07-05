@@ -36,37 +36,9 @@
 #include "ns3/net-device-container.h"
 #include "ns3/nstime.h"
 #include "ns3/simulator.h"
+#include "scenariofile/cpps_scenariofile.h"
 
 namespace daisi::cpps {
-
-struct DistAbs {
-  uint64_t abs;
-};
-
-struct DistProb {
-  float prob;
-};
-
-struct DistGaussian {
-  std::normal_distribution<> dist;
-};
-
-struct MaterialFlowInfo {
-  std::vector<std::shared_ptr<ScenariofileParser::Table>> descriptions;
-
-  std::vector<ns3::Vector> locations;
-};
-
-struct SpawnInfo {
-  uint64_t start_time = 0;
-  std::string type;
-  std::string friendly_name;
-  std::variant<DistAbs, DistProb, DistGaussian> distribution = {};
-
-  bool operator>(const SpawnInfo &other) const {
-    return this->start_time > other.start_time || this->friendly_name > other.friendly_name;
-  }
-};
 
 class CppsManager : public daisi::Manager<CppsApplication> {
 public:
@@ -80,57 +52,41 @@ public:
   void initMF(uint32_t index);
   void startMF(uint32_t index);
 
-  void publishService(int index);
-  void scheduleMaterialFlow(const SpawnInfo &info);
+  void scheduleMaterialFlow(const SpawnInfoScenario &info);
   void executeMaterialFlow(int index, const std::string &friendly_name);
 
 private:
   void initialSpawn();
 
   void setupNodes();
-
   void setupNetworkEthernet();
   void setupNetworkWifi();
+
   void scheduleEvents() override;
+
   uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
   void spawnAMR(uint32_t amr_index, const AmrDescription &description, const Topology &topology);
 
-  void parse();
-  void parseAMRs();
-  void parseTOs();
-  void parseAMRSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
-  void parseToSpawn(const std::shared_ptr<ScenariofileParser::Table> &spawn_description);
-  void parseTopology();
-  void parseScenarioSequence();
-
   // Initiates shutdown of finished TOs
   void clearFinishedMaterialFlows();
 
-  AmrKinematics parseKinematics(std::shared_ptr<daisi::ScenariofileParser::Table> description);
-  amr::AmrStaticAbility parseAMRAbility(
-      std::shared_ptr<daisi::ScenariofileParser::Table> description);
-
   void checkStarted(uint32_t index);
 
-  uint64_t number_amrs_later_ = 0;
-  uint64_t number_amrs_initial_ = 0;
-  uint64_t number_material_flow_nodes_ = 0;
-  uint64_t number_material_flows_ = 0;
+  CppsScenariofile scenario_;
+
+  std::unordered_map<std::string, AmrDescription> amr_descriptions_;
+  std::unordered_map<std::string, MaterialFlowDescriptionScenario> material_flow_descriptions_;
+
+  std::priority_queue<SpawnInfoScenario, std::vector<SpawnInfoScenario>, std::greater<>>
+      spawn_info_;
+  std::priority_queue<SpawnInfoScenario, std::vector<SpawnInfoScenario>, std::greater<>>
+      schedule_info_;
+
+  // counters for scheduling
   uint64_t number_material_flows_scheduled_for_execution_ = 0;
   uint64_t number_material_flows_finished_ = 0;
-
-  bool material_flow_nodes_leave_after_finish_ = true;
-  int width_ = 0;
-  int height_ = 0;
-  int depth_ = 0;
-  std::vector<AmrDescription> amr_descriptions_;
-  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<>> spawn_info_;
-  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<>> schedule_info_;
-
-  // friendly name -> model
-  std::unordered_map<std::string, MaterialFlowInfo> material_flow_models_;
 
   // Nodes / Network
   ns3::NodeContainer amrs_;
