@@ -53,8 +53,6 @@ private:
 
   std::unique_ptr<SOLAWrapperNs3> sola_;
 
-  ns3::Ptr<ns3::Socket> socket_;
-
   ns3::Ipv4Address local_ip_address_;
 
   uint16_t listening_port_ = 0;
