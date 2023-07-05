@@ -20,7 +20,8 @@
 #include <memory>
 #include <variant>
 
-#include "../algorithm_interface.h"
+#include "cpps/logical/algorithms/algorithm_interface.h"
+
 namespace daisi::cpps::logical {
 
 /// @brief Algorithm for disposing tasks from a material flow to fitting AMRs.
