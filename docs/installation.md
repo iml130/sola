@@ -1,6 +1,7 @@
-# Installation Manual
+# Installation
 
-After the [required dependencies](#required-dependencies) are met, you can [build DAISI](#build-daisi) and [other components](#build-single-libraries).
+<!-- TODO: elaborate here ... -->
+SOLA depends on few requirements.
 
 ## Required dependencies
 
@@ -24,7 +25,11 @@ Loaded as libraries in CMake (`find_library`):
 
 A ★ means that this dependency is required from the specified component.
 
-### Install ns-3
+### SOLA stand-alone
+
+After the [required dependencies](#required-dependencies) are met, you can [build DAISI](#build-daisi) and [other components](#build-single-libraries).
+
+### SOLA with ns-3
 
 Please refer to the [ns-3 documentation](https://www.nsnam.org/docs/installation/html/quick-start.html) and make sure the ns-3 prerequisites are met.
 

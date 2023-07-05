@@ -12,61 +12,64 @@ edit_uri: ""
 nav:
   - Introduction:
     - Introduction: index.md
-    - SOLA API: sola_api.md
-    - Main Features: main_features.md
+
+    - Project Structure: highlevel.md
+    - Installation: installation.md
     - Contributing: contributing.md
-  - Installation:
-    - Installation Manual: installation.md
   - SOLA:
     - SOLA: sola/index.md
-    - Environments: sola/environments.md
+    - SOLA API: sola_api.md
     - Logging: sola/logging.md
-    - Management Overlay (MINHTON):
-      - MINHTON: minhton_lib/index.md
-      # - User manual:
-      # TODO
-      - Programmers Manual:
-        - Core: minhton_lib/programmers/core.md
-        - Messages: minhton_lib/programmers/messages.md
-        - Logging: minhton_lib/programmers/logging.md
-        - FSM: minhton_lib/programmers/fsm.md
-      - Algorithms:
-        - Introduction: minhton_lib/algorithms/introduction.md
-        - Join: minhton_lib/algorithms/join.md
-        - Join Accept: minhton_lib/algorithms/join_accept.md
-        - Leave: minhton_lib/algorithms/leave.md
-        - Concurrent Leave: minhton_lib/algorithms/leave_concurrent.md
-        - Bootstrap: minhton_lib/algorithms/bootstrap.md
-        - TreeMapper: minhton_lib/algorithms/treemapper.md
-      - Other:
-        - Glossary: minhton_lib/other/glossary.md
-    - Event Dissemination (natter):
-      - natter: natter_lib/index.md
-      # - User manual:
-      # TODO
-      - Programmers Manual:
-        - Architecture: natter_lib/programmers/architecture.md
-        - Messages: natter_lib/programmers/messages.md
-        - Logging: natter_lib/programmers/logging.md
-      - Other:
-        # - Glossary: natter_lib/other/glossary.md
-        - Known Limitations: natter_lib/other/known-limitations.md
-    - Applications:
-      - Applications: daisi_lib/applications/index.md
-      - CPPS: daisi_lib/applications/cpps/index.md
-      - Path Planning: daisi_lib/applications/path-planning/index.md
-  - ns-3 Integration:
-    - Integration into ns-3: ns-3/index.md
+    - Programmers Manual:
+      - TBD: tbd.md
+    - Glossary: sola/glossary.md
+  - MINHTON: 
+    - MINHTON: management_overlay/index.md
+    - Programmers Manual:
+      - Core: management_overlay/programmers/core.md
+      - Messages: management_overlay/programmers/messages.md
+      - Logging: management_overlay/programmers/logging.md
+      - FSM: management_overlay/programmers/fsm.md
+    - Algorithms:
+      - Introduction: management_overlay/algorithms/introduction.md
+      - Join: management_overlay/algorithms/join.md
+      - Join Accept: management_overlay/algorithms/join_accept.md
+      - Leave: management_overlay/algorithms/leave.md
+      - Concurrent Leave: management_overlay/algorithms/leave_concurrent.md
+      - Bootstrap: management_overlay/algorithms/bootstrap.md
+      - TreeMapper: management_overlay/algorithms/treemapper.md
+    - Glossary: management_overlay/glossary.md
+  - NATTER: 
+    - natter: natter_lib/index.md
+    - Programmers Manual:
+      - Architecture: natter_lib/programmers/architecture.md
+      - Messages: natter_lib/programmers/messages.md
+      - Logging: natter_lib/programmers/logging.md
+    - Other:
+      # - Glossary: natter_lib/other/glossary.md
+      - Known Limitations: natter_lib/other/known-limitations.md
+    - Glossary: natter_lib/glossary.md
+  - Applications: daisi/index.md
+  - ns-3 Integration: 
+    - Getting started: daisi/index.md
+    - SOLA in ns-3:
+      - Environments: sola/environments.md
     - Messages: ns-3/messages.md
     - Scenario Files: ns-3/scenario_files.md
     - Events: ns-3/events.md
     - Network: ns-3/network.md
-    - natter-ns3:
-      - Scenariofile: daisi_lib/natter-ns3/event-distribution.md
-    - minhton-ns3:
-      - Scenariofile: daisi_lib/minhton-ns3/management-overlay.md
-      - ESearch: daisi_lib/minhton-ns3/esearch.md
+    - MINHTON in ns-3:
+      - Scenariofile: daisi/minhton-ns3/management-overlay.md
+      - ESearch: daisi/minhton-ns3/esearch.md    
+    - NATTER in ns-3:
+      - Scenariofile: daisi/natter-ns3/event-distribution.md
+    - Use-Cases:
+      - Getting started: ns-3/index.md
+      - Intralogistics: daisi/natter-ns3/event-distribution.md
+      - (Path Planning): daisi/applications/path-planning/index.md
+    - Glossary: daisi/glossary.md
   - Doxygen: doxygen/index.html
+  - Glossary: glossary.md
 
 theme:
   name: material

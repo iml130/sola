@@ -1,5 +1,6 @@
 # Run Environments
 
+<!-- TODO: WHAT ARE THE ENVIRONMENTS? DO THEY HAVE TO DEPEND ON THE CPPS? -->
 The currently available environments (with an example command to run each) are:
 
 - `minhton`
