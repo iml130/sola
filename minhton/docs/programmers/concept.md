@@ -1,4 +1,7 @@
-# Core
+# Programmers Manual
+
+
+*TODO*: UML-class Figure of Node/Peer/... what information is included
 
 ## NodeInfo
 
@@ -81,6 +84,7 @@ Additionally we are storing the children of those routing table neighbors. This 
 
 Because NodeInfo uses the comparison operators of PeerInfo, we can use functions like std::find to efficiently execute operations on those vectors without needing to iterate over them with a for-loop.
 
+TODO: Port Figure to Draw.io and use an simpler example 
 ![Figure 1](../img/example_routing_table.png "Routing Table Example")
 
 ### Using getters and setters (and resetters)

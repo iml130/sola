@@ -1,4 +1,5 @@
-# SOLA API
+# Getting Started
+
 
 ## Creating a SOLA instance
 

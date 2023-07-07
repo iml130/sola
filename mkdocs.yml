@@ -13,61 +13,74 @@ nav:
   - Introduction:
     - Introduction: index.md
 
-    - Project Structure: highlevel.md
-    - Installation: installation.md
-    - Contributing: contributing.md
+    # - Project Structure: highlevel.md
+    # - Installation: installation.md
+    # - Contributing: contributing.md
   - SOLA:
-    - SOLA: sola/index.md
-    - SOLA API: sola_api.md
-    - Logging: sola/logging.md
-    - Programmers Manual:
-      - TBD: tbd.md
+    - Introduction: sola/introduction.md
+    - Getting Started: getting_started.md
     - Glossary: sola/glossary.md
   - MINHTON: 
-    - MINHTON: management_overlay/index.md
+    - Introduction: management_overlay/introduction.md
+    - Getting Started: management_overlay/getting_started.md
     - Programmers Manual:
-      - Core: management_overlay/programmers/core.md
+      - Concept: management_overlay/programmers/concept.md
       - Messages: management_overlay/programmers/messages.md
       - Logging: management_overlay/programmers/logging.md
+      - Algorithms:
+        - Introduction: management_overlay/algorithms/index.md
+        - Join: management_overlay/algorithms/join.md
+        - Join Accept: management_overlay/algorithms/join_accept.md
+        - Leave: management_overlay/algorithms/leave.md
+        - Concurrent Leave: management_overlay/algorithms/leave_concurrent.md
+        - Bootstrap: management_overlay/algorithms/bootstrap.md
+        - TreeMapper: management_overlay/algorithms/treemapper.md
       - FSM: management_overlay/programmers/fsm.md
-    - Algorithms:
-      - Introduction: management_overlay/algorithms/introduction.md
-      - Join: management_overlay/algorithms/join.md
-      - Join Accept: management_overlay/algorithms/join_accept.md
-      - Leave: management_overlay/algorithms/leave.md
-      - Concurrent Leave: management_overlay/algorithms/leave_concurrent.md
-      - Bootstrap: management_overlay/algorithms/bootstrap.md
-      - TreeMapper: management_overlay/algorithms/treemapper.md
     - Glossary: management_overlay/glossary.md
   - NATTER: 
-    - natter: natter_lib/index.md
+    - Introduction: natter_lib/introduction.md
+    - Getting Started: natter_lib/getting_started.md
     - Programmers Manual:
       - Architecture: natter_lib/programmers/architecture.md
-      - Messages: natter_lib/programmers/messages.md
       - Logging: natter_lib/programmers/logging.md
-    - Other:
-      # - Glossary: natter_lib/other/glossary.md
-      - Known Limitations: natter_lib/other/known-limitations.md
+      - Algorithms:
+        - MINHCAST: natter_lib/programmers/minhcast.md
+    - Known Limitations: natter_lib/known-limitations.md
     - Glossary: natter_lib/glossary.md
-  - Applications: daisi/index.md
+  - Applications: 
+    - Introduction: applications/getting_started.md
+    - OptiMaFlow: 
+      - Getting Started: applications/optimaflow/getting_started.md
+      - Participants:
+        - Material Flow: applications/optimaflow/material_flow.md
+        - AMR/AGV: applications/optimaflow/amr_agv.md
+        - Optimizer: applications/optimaflow/optimization.md
+      - Algorithms:
+        - ContractNet: applications/optimaflow/contract_net.md
+        - RoundRobin: applications/optimaflow/round_robin.md
+        
+      - Logging: applications/optimaflow/logging.md 
+    - Glossary: applications/glossary.md
+      
   - ns-3 Integration: 
     - Getting started: daisi/index.md
-    - SOLA in ns-3:
+    - Logging: daisi/logging.md
+    - SOLA:
       - Environments: sola/environments.md
-    - Messages: ns-3/messages.md
+      - Messages: ns-3/messages.md
     - Scenario Files: ns-3/scenario_files.md
     - Events: ns-3/events.md
     - Network: ns-3/network.md
-    - MINHTON in ns-3:
+    - MINHTON:
       - Scenariofile: daisi/minhton-ns3/management-overlay.md
       - ESearch: daisi/minhton-ns3/esearch.md    
-    - NATTER in ns-3:
+    - NATTER:
       - Scenariofile: daisi/natter-ns3/event-distribution.md
-    - Use-Cases:
-      - Getting started: ns-3/index.md
-      - Intralogistics: daisi/natter-ns3/event-distribution.md
-      - (Path Planning): daisi/applications/path-planning/index.md
-    - Glossary: daisi/glossary.md
+    # - Use-Cases:
+    #   - Getting started: ns-3/index.md
+    #   - Intralogistics: daisi/natter-ns3/event-distribution.md
+    #   - (Path Planning): daisi/applications/path-planning/index.md
+    # - Glossary: daisi/glossary.md
   - Doxygen: doxygen/index.html
   - Glossary: glossary.md
 
@@ -110,4 +123,4 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
-copyright: Copyright &copy; Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
+copyright: Copyright &copy; The SOLA authors

@@ -50,7 +50,7 @@ See ``CONTRIBUTING.md`` for further information.
 
 ## Academic Attribution
 
-If you use it for research, please include one of the following references in any resulting publication.
+If you use it for research, please include the following reference in any resulting publication.
 
 ```plain
 @inproceedings{detznerSOLADecentralizedCommunication2023,
