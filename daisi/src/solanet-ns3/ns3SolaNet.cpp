@@ -142,7 +142,7 @@ std::string Network::Impl::getIP() const { return ip_; }
 uint16_t Network::Impl::getPort() const { return port_; }
 
 ////////////////////////////////////
-////// PIMP IMPLEMENTATION /////////
+////// PIMPL IMPLEMENTATION ////////
 ////////////////////////////////////
 
 Network::Network(const std::function<void(const Message &)> &callback)
