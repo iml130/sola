@@ -228,7 +228,7 @@ If you use SOLA for research (or any other purposes), please include one of the 
 
 ```plain
 @inproceedings{detznerSOLADecentralizedCommunication2023,
-  title = {{{SOLA}}: {{A Decentralized Communication Middleware Developed}} with Ns-3},
+  title = {{{SOLA}}: {{A Decentralized Communication Middleware Developed}} with ns-3},
   shorttitle = {{{SOLA}}},
   booktitle = {Proceedings of the 2023 {{Workshop}} on ns-3},
   author = {Detzner, Peter and Gödeke, Jana and Tönning, Lars and Laskowski, Patrick and Hörstrup, Maximilian and Stolz, Oliver and Brehler, Marius and Kerner, Sören},
