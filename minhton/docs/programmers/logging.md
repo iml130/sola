@@ -1,4 +1,4 @@
-# **TODO: Move to ns-3 Integration mostely** Logging
+# **TODO: Move to ns-3 Integration mostly** Logging
 
 We are using a single sqlite database while running simulations with ns-3. Here the logging messages from each peer get put into one sqlite database from a given simulation run.
 There is also the option to use a mysql database.
