@@ -4,7 +4,9 @@ Each message class is first and foremost made up of a header class. The header c
 
 Additionally, the message header contains an event id and ref event id to identify events the message is initiating, respectively events the message is referring to. E.g., a join message is initiating a join procedure event and all originating update messages of that join procedure contain the join message's event id as their ref event id.
 
-## Message Types
+## Message Types -> **Do not maintain by hand! Link to DoxyGen Enum**
+
+Todo: Link to Doxygen, remove all content (maintenance threshold is to high)
 
 | Message Type                                              | Value |
 |-----------------------------------------------------------|------:|
@@ -49,7 +51,9 @@ Additionally, the message header contains an event id and ref event id to identi
 
 These values can still change.
 
-## Adding a new message type
+## Adding a new message type 
+
+**Todo: can remain here, explain **
 
 What needs to be done for adding a new message type:
 
@@ -71,13 +75,15 @@ What needs to be done for adding a new message type:
 
 ## Using the message types
 
+**TODO: Requires more explanaition**
+
 1. Create a MinhtonMessageHeader with the sender and target NodeInfos as well as the ref event id.
 2. Create the specific message with the header as the first parameter, followed by the parameters for the message type. (**Do not use the default constructor except for test cases!**)
 3. Send the message.
 4. The message is sent over the network using the NetworkFacade.
 5. The message arrives at the target, where it is processed by the specified algorithm or handled by the `node.cpp`.
 
-## Message Descriptions
+## Message Descriptions **Do not maintain by hand! Link to DoxyGen Enum**
 
 ### Init
 

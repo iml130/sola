@@ -12,61 +12,73 @@ edit_uri: ""
 nav:
   - Introduction:
     - Introduction: index.md
-    - SOLA API: sola_api.md
-    - Main Features: main_features.md
-    - Contributing: contributing.md
-  - Installation:
-    - Installation Manual: installation.md
   - SOLA:
-    - SOLA: sola/index.md
-    - Environments: sola/environments.md
-    - Logging: sola/logging.md
-    - Management Overlay (MINHTON):
-      - MINHTON: minhton_lib/index.md
-      # - User manual:
-      # TODO
-      - Programmers Manual:
-        - Core: minhton_lib/programmers/core.md
-        - Messages: minhton_lib/programmers/messages.md
-        - Logging: minhton_lib/programmers/logging.md
-        - FSM: minhton_lib/programmers/fsm.md
+    - Introduction: sola/introduction.md
+    - Getting Started: getting_started.md
+    - Glossary: sola/glossary.md
+  - MINHTON: 
+    - Introduction: management_overlay/introduction.md
+    - Getting Started: management_overlay/getting_started.md
+    - Programmers Manual:
+      - Concept: management_overlay/programmers/concept.md
+      - Messages: management_overlay/programmers/messages.md
+      - Logging: management_overlay/programmers/logging.md
       - Algorithms:
-        - Introduction: minhton_lib/algorithms/introduction.md
-        - Join: minhton_lib/algorithms/join.md
-        - Join Accept: minhton_lib/algorithms/join_accept.md
-        - Leave: minhton_lib/algorithms/leave.md
-        - Concurrent Leave: minhton_lib/algorithms/leave_concurrent.md
-        - Bootstrap: minhton_lib/algorithms/bootstrap.md
-        - TreeMapper: minhton_lib/algorithms/treemapper.md
-      - Other:
-        - Glossary: minhton_lib/other/glossary.md
-    - Event Dissemination (natter):
-      - natter: natter_lib/index.md
-      # - User manual:
-      # TODO
-      - Programmers Manual:
-        - Architecture: natter_lib/programmers/architecture.md
-        - Messages: natter_lib/programmers/messages.md
-        - Logging: natter_lib/programmers/logging.md
-      - Other:
-        # - Glossary: natter_lib/other/glossary.md
-        - Known Limitations: natter_lib/other/known-limitations.md
-    - Applications:
-      - Applications: daisi_lib/applications/index.md
-      - CPPS: daisi_lib/applications/cpps/index.md
-      - Path Planning: daisi_lib/applications/path-planning/index.md
-  - ns-3 Integration:
-    - Integration into ns-3: ns-3/index.md
-    - Messages: ns-3/messages.md
-    - Scenario Files: ns-3/scenario_files.md
-    - Events: ns-3/events.md
-    - Network: ns-3/network.md
-    - natter-ns3:
-      - Scenariofile: daisi_lib/natter-ns3/event-distribution.md
-    - minhton-ns3:
-      - Scenariofile: daisi_lib/minhton-ns3/management-overlay.md
-      - ESearch: daisi_lib/minhton-ns3/esearch.md
+        - Introduction: management_overlay/algorithms/index.md
+        - Join: management_overlay/algorithms/join.md
+        - Join Accept: management_overlay/algorithms/join_accept.md
+        - Leave: management_overlay/algorithms/leave.md
+        - Concurrent Leave: management_overlay/algorithms/leave_concurrent.md
+        - Bootstrap: management_overlay/algorithms/bootstrap.md
+        - TreeMapper: management_overlay/algorithms/treemapper.md
+      - FSM: management_overlay/programmers/fsm.md
+    - Glossary: management_overlay/glossary.md
+  - NATTER: 
+    - Introduction: natter_lib/introduction.md
+    - Getting Started: natter_lib/getting_started.md
+    - Programmers Manual:
+      - Architecture: natter_lib/programmers/architecture.md
+      - Logging: natter_lib/programmers/logging.md
+      - Algorithms:
+        - MINHCAST: natter_lib/programmers/minhcast.md
+    - Known Limitations: natter_lib/known-limitations.md
+    - Glossary: natter_lib/glossary.md
+  - Applications: 
+    - Introduction: applications/getting_started.md
+    - OptiMaFlow: 
+      - Getting Started: applications/optimaflow/getting_started.md
+      - Participants:
+        - Material Flow: applications/optimaflow/material_flow.md
+        - AMR/AGV: applications/optimaflow/amr_agv.md
+        - Optimization: applications/optimaflow/optimization.md
+      - Task Assignment:
+        - ContractNet: applications/optimaflow/contract_net.md
+        - RoundRobin: applications/optimaflow/round_robin.md       
+      - Logging: applications/optimaflow/logging.md 
+    - Glossary: applications/glossary.md
+      
+  - ns-3 Integration: 
+    - Introduction: daisi/introduction.md
+    - Getting started: daisi/getting_started.md
+    - Logging: daisi/logging.md 
+    - Network: daisi/network.md
+    - SOLA:
+      - Scenariofile: daisi/sola-ns3/scenario_files.md
+      - Environments: daisi/sola-ns3/environments.md
+      - Logging: daisi/sola-ns3/logging.md
+    - MINHTON:
+      - Scenariofile: daisi/minhton-ns3/scenariofile.md
+      - Logging: daisi/minhton-ns3/logging.md
+      - ESearch: daisi/minhton-ns3/esearch.md    
+    - NATTER:
+      - Scenariofile: daisi/natter-ns3/scenariofile.md
+      - Logging: daisi/natter-ns3/logging.md
+    - OptiMaFlow:
+      - Scenariofile: daisi/optimaflow-ns3/scenariofile.md
+      - Logging: daisi/optimaflow-ns3/logging.md
+
   - Doxygen: doxygen/index.html
+  - Glossary: glossary.md
 
 theme:
   name: material
@@ -107,4 +119,4 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
-copyright: Copyright &copy; Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V.
+copyright: Copyright &copy; The SOLA authors

@@ -1,11 +1,20 @@
-# Cyber-Physical Production System (CPPS)
+# Intralogistics
 
 Industry 4.0 (I4.0), the fourth industrial revolution, is the unification of the physical (hardware) world with cyber-applications (software) [[1]](#references).
 New technologies and applications emerge in the intelligent manufacturing environment, also known as smart factories or cyber-physical production systems (CPPSs) [[2]](#references).
 These I4.0-scenarios are built on the design principles such as interconnectivity, information transparency (open interfaces and standards), decentralized decision-making, and technical assistance [[3]](#references).
 For instance, a production order (PO) becomes digital and gains access to information of all devices and services of the CPPS.
 
-An example for a scenario file for simulation configuration can be found in the [default.yml for CPPS](https://github.com/iml130/sola/blob/main/daisi/scenarios/cpps/default.yml).
+# Entities within a CPPS
+
+TODO: Figure
+
+## Agent-based Approach
+- Material Flow
+- Logical Agent
+
+# Use-Case:
+TODO: Figure
 
 ## References
 

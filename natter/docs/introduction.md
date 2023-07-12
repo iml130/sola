@@ -1,5 +1,3 @@
-# natter
-
 <p align="center">
 <img src="img/natter_Logo_separated.svg" class="logo" width="200px" alt="natter Logo">
 </p>
