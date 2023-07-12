@@ -1,5 +1,7 @@
 # Logging
 
+AGNOSTIC Logging...
+
 DAISI implements loggers for ns-3 simulations that create a single SQLite database.
 Independent of the simulation environment, a global logger manager (defined in `daisi/src/logging/logger_manager.h`) is created at the start of the simulation.
 The `LoggerManager` also provides methods for creating the specific loggers (MINHTON, natter, Autonomous Mobile Robot (AMR), Transport Order (TO), Path Planning, and SOLA).

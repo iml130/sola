@@ -1,15 +1,3 @@
-# ns-3 Integration
-
-- what is ns-3 
-- why ns-3 (testing, verification, holistic simulation, ...)
-- modular testing of
-    - SOLA
-    - MINHTON
-    - NATTER
-    - Applications
-
-
-
 After you have built the simulation executable, you can run the DAISI simulation.
 We assume that we are at the root level of the repository folder now.
 `daisi_exec` is located there if you used the commands from the [installation guide for the terminal](../installation.md#terminal).

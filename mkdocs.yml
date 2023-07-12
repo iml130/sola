@@ -12,10 +12,6 @@ edit_uri: ""
 nav:
   - Introduction:
     - Introduction: index.md
-
-    # - Project Structure: highlevel.md
-    # - Installation: installation.md
-    # - Contributing: contributing.md
   - SOLA:
     - Introduction: sola/introduction.md
     - Getting Started: getting_started.md
@@ -54,33 +50,33 @@ nav:
       - Participants:
         - Material Flow: applications/optimaflow/material_flow.md
         - AMR/AGV: applications/optimaflow/amr_agv.md
-        - Optimizer: applications/optimaflow/optimization.md
-      - Algorithms:
+        - Optimization: applications/optimaflow/optimization.md
+      - Task Assignment:
         - ContractNet: applications/optimaflow/contract_net.md
-        - RoundRobin: applications/optimaflow/round_robin.md
-        
+        - RoundRobin: applications/optimaflow/round_robin.md       
       - Logging: applications/optimaflow/logging.md 
     - Glossary: applications/glossary.md
       
   - ns-3 Integration: 
-    - Getting started: daisi/index.md
-    - Logging: daisi/logging.md
+    - Introduction: daisi/introduction.md
+    - Getting started: daisi/getting_started.md
+    - Logging: daisi/logging.md 
+    - Network: daisi/network.md
     - SOLA:
-      - Environments: sola/environments.md
-      - Messages: ns-3/messages.md
-    - Scenario Files: ns-3/scenario_files.md
-    - Events: ns-3/events.md
-    - Network: ns-3/network.md
+      - Scenariofile: daisi/sola-ns3/scenario_files.md
+      - Environments: daisi/sola-ns3/environments.md
+      - Logging: daisi/sola-ns3/logging.md
     - MINHTON:
-      - Scenariofile: daisi/minhton-ns3/management-overlay.md
+      - Scenariofile: daisi/minhton-ns3/scenariofile.md
+      - Logging: daisi/minhton-ns3/logging.md
       - ESearch: daisi/minhton-ns3/esearch.md    
     - NATTER:
-      - Scenariofile: daisi/natter-ns3/event-distribution.md
-    # - Use-Cases:
-    #   - Getting started: ns-3/index.md
-    #   - Intralogistics: daisi/natter-ns3/event-distribution.md
-    #   - (Path Planning): daisi/applications/path-planning/index.md
-    # - Glossary: daisi/glossary.md
+      - Scenariofile: daisi/natter-ns3/scenariofile.md
+      - Logging: daisi/natter-ns3/logging.md
+    - OptiMaFlow:
+      - Scenariofile: daisi/optimaflow-ns3/scenariofile.md
+      - Logging: daisi/optimaflow-ns3/logging.md
+
   - Doxygen: doxygen/index.html
   - Glossary: glossary.md
 
