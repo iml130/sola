@@ -56,7 +56,7 @@ If you use it for research, please include the following reference in any result
 @inproceedings{detznerSOLADecentralizedCommunication2023,
   title = {{{SOLA}}: {{A Decentralized Communication Middleware Developed}} with ns-3},
   shorttitle = {{{SOLA}}},
-  booktitle = {Proceedings of the 2023 {{Workshop}} on Ns-3},
+  booktitle = {Proceedings of the 2023 {{Workshop}} on ns-3},
   author = {Detzner, Peter and Gödeke, Jana and Tönning, Lars and Laskowski, Patrick and Hörstrup, Maximilian and Stolz, Oliver and Brehler, Marius and Kerner, Sören},
   date = {2023-06-28},
   series = {{{WNS3}} '23},
