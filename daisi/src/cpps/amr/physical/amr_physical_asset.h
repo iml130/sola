@@ -117,7 +117,6 @@ private:
 
   using s = OrderStates;
 
-  // TODO refactor OrderStates to use Charge and enable more complex tasks
   using transition_table = table<
       // kFinished
       mem_fn_row<s::kFinished, ReceivedOrder, s::kGoToPickUpLocation, &m::execute,

@@ -81,8 +81,9 @@ void AmrPhysicalAsset::sendVehicleStatusUpdateNs3(bool force) {
   socket_->Send(packet);
 }
 
-/// @brief
-/// @return
+/// @brief Collect current and silently transitioned states since last call and and remember the
+/// most recent state
+/// @return array of OrderStates to be sent to the logical agent
 std::vector<OrderStates> AmrPhysicalAsset::getCurrentAndTransitionedStates() {
   using s = OrderStates;
   std::vector<OrderStates> ret;
@@ -205,7 +206,7 @@ template <typename T> void AmrPhysicalAsset::execute(const T &t) {
 
 template <typename T> void AmrPhysicalAsset::finish(const T &t) {
   if constexpr (std::is_same_v<ReceivedOrder, T>) {
-    std::__throw_invalid_argument("empty task");
+    throw std::invalid_argument("empty task");
   }
   stopVehicleStatusUpdatesNs3();
   amr_state_ = AmrState::kIdle;

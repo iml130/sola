@@ -79,7 +79,7 @@ util::Duration AmrMobilityHelper::estimateDuration(const util::Pose &start_pose,
   if (auto charge = std::get_if<Charge>(&functionality)) {
     if (check_positioning && calculateDistance(start_pose.position, *charge) != 0)
       throw std::invalid_argument("start_pose is invalid for destination of Charge");
-    return 30.0;  // TODO use battery capacity instead
+    return 30.0;
   }
   return -1;
 }
