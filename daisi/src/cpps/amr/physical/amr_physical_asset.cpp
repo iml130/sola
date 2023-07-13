@@ -29,7 +29,6 @@ static constexpr uint32_t kUpdateFrequencyHz = 10;
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector, const Topology &topology)
     : fsm(OrderStates::kFinished),
-      last_order_states_(OrderStates::kFinished),
       connector_(std::move(connector)) {  // always initialize to kFinished since it is
                                           // equivalent to having no task/being idle
   connector_.setTopology(topology);
@@ -37,7 +36,6 @@ AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector, const Topology &
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector)
     : fsm(OrderStates::kFinished),
-      last_order_states_(OrderStates::kFinished),
       connector_(std::move(connector)) {
 }  // always initialize to kFinished since it is equivalent to having no task/being idle
 
@@ -81,44 +79,11 @@ void AmrPhysicalAsset::sendVehicleStatusUpdateNs3(bool force) {
   socket_->Send(packet);
 }
 
-/// @brief Collect current and silently transitioned states since last call and and remember the
-/// most recent state
-/// @return array of OrderStates to be sent to the logical agent
-std::vector<OrderStates> AmrPhysicalAsset::getCurrentAndTransitionedStates() {
-  using s = OrderStates;
-  std::vector<OrderStates> ret;
-  switch (current_state()) {
-    case s::kGoToPickUpLocation:
-      ret = last_order_states_ == s::kFinished ? std::vector<s>{s::kStarted, s::kGoToPickUpLocation}
-                                               : std::vector<s>{s::kGoToPickUpLocation};
-      break;
-    case s::kGoToDeliveryLocation:
-      ret = {s::kLoaded, s::kGoToDeliveryLocation};
-      break;
-    case s::kLoad:
-      ret = {s::kReachedPickUpLocation, s::kLoad};
-      break;
-    case s::kUnload:
-      ret = {s::kReachedDeliveryLocation, s::kUnload};
-      break;
-    case s::kFinished:
-      ret = last_order_states_ == s::kUnload ? std::vector<s>{s::kUnloaded, s::kFinished}
-                                             : std::vector<s>{s::kFinished};
-      break;
-    default:
-      ret = {current_state()};
-  }
-  last_order_states_ = current_state();
-  return ret;
-}
-
 /// @brief send current OrderState to corresponding logical agent
 void AmrPhysicalAsset::sendOrderUpdateNs3() {
   daisi::cpps::CppsTCPMessage message;
-  for (OrderStates state : getCurrentAndTransitionedStates()) {
-    AmrOrderUpdate task_update(state, getPosition());
-    message.addMessage({amr::serialize(task_update), 0});
-  }
+  AmrOrderUpdate task_update(current_state(), getPosition());
+  message.addMessage({amr::serialize(task_update), 0});
   ns3::Ptr<ns3::Packet> packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
   socket_->Send(packet);

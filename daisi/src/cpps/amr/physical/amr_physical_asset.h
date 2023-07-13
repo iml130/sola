@@ -66,10 +66,6 @@ public:
   using state_type = OrderStates;
 
 private:
-  // OrderStates workaround
-  OrderStates last_order_states_;
-  std::vector<OrderStates> getCurrentAndTransitionedStates();
-
   // communication with Logical
   ns3::Ptr<ns3::Socket> socket_;
   /// @brief Get position and send it to corresponding logical agent
@@ -103,6 +99,20 @@ private:
   template <typename T> void execute(const T &t);
   template <typename T> void finish(const T &t);
 
+#define MAKE_SKIP_HANDLE_FUNC_PAIR(FCLASS)                                                     \
+  void handleSkip##FCLASS(const FCLASS &t) {                                                   \
+    process_event(FCLASS());                                                                   \
+    sendOrderUpdateNs3();                                                                      \
+  }                                                                                            \
+                                                                                               \
+  void skip(const FCLASS &t) {                                                                 \
+    ns3::Simulator::Schedule(ns3::Seconds(0), &AmrPhysicalAsset::handleSkip##FCLASS, this, t); \
+  }
+  MAKE_SKIP_HANDLE_FUNC_PAIR(ReceivedOrder)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(ReachedTarget)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(LoadedPayload)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(UnloadedPayload)
+
   // fsmlite guards
   template <typename T> bool isMoveToLoad(const T &t) const;
   template <typename T> bool isMoveToUnload(const T &t) const;
@@ -119,21 +129,30 @@ private:
 
   using transition_table = table<
       // kFinished
-      mem_fn_row<s::kFinished, ReceivedOrder, s::kGoToPickUpLocation, &m::execute,
-                 &m::isMoveToLoad>,
+      mem_fn_row<s::kFinished, ReceivedOrder, s::kStarted, &m::skip>,
+      // kStarted
+      mem_fn_row<s::kStarted, ReceivedOrder, s::kGoToPickUpLocation, &m::execute, &m::isMoveToLoad>,
       // kMoveToPickUp
-      mem_fn_row<s::kGoToPickUpLocation, ReachedTarget, s::kLoad, &m::execute, &m::isLoad>,
+      mem_fn_row<s::kGoToPickUpLocation, ReachedTarget, s::kReachedPickUpLocation, &m::skip>,
+      // kReachedPickUpLocation
+      mem_fn_row<s::kReachedPickUpLocation, ReachedTarget, s::kLoad, &m::execute, &m::isLoad>,
       // kMoveToDelivery
-      mem_fn_row<s::kGoToDeliveryLocation, ReachedTarget, s::kUnload, &m::execute, &m::isUnload>,
+      mem_fn_row<s::kGoToDeliveryLocation, ReachedTarget, s::kReachedDeliveryLocation, &m::skip>,
+      // kReachedDeliveryLocation
+      mem_fn_row<s::kReachedDeliveryLocation, ReachedTarget, s::kUnload, &m::execute, &m::isUnload>,
       // kLoad
-      mem_fn_row<s::kLoad, LoadedPayload, s::kGoToPickUpLocation, &m::execute, &m::isMoveToLoad>,
-      mem_fn_row<s::kLoad, LoadedPayload, s::kGoToDeliveryLocation, &m::execute,
+      mem_fn_row<s::kLoad, LoadedPayload, s::kLoaded, &m::skip>,
+      // kLoaded
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kGoToPickUpLocation, &m::execute, &m::isMoveToLoad>,
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kGoToDeliveryLocation, &m::execute,
                  &m::isMoveToUnload>,
-      mem_fn_row<s::kLoad, LoadedPayload, s::kFinished, &m::finish, &m::isFinish>,
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kFinished, &m::finish, &m::isFinish>,
       // kUnload
-      mem_fn_row<s::kUnload, UnloadedPayload, s::kGoToPickUpLocation, &m::execute,
+      mem_fn_row<s::kUnload, UnloadedPayload, s::kUnloaded, &m::skip>,
+      // kUnloaded
+      mem_fn_row<s::kUnloaded, UnloadedPayload, s::kGoToPickUpLocation, &m::execute,
                  &m::isMoveToLoad>,
-      mem_fn_row<s::kUnload, UnloadedPayload, s::kFinished, &m::finish, &m::isFinish>>;
+      mem_fn_row<s::kUnloaded, UnloadedPayload, s::kFinished, &m::finish, &m::isFinish>>;
 };
 }  // namespace daisi::cpps
 #endif
