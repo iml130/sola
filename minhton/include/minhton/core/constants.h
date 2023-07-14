@@ -17,10 +17,6 @@
 
 namespace minhton {
 
-// Forward declaration
-constexpr long int operator""_KB(unsigned long long int kb);
-#define KILOBYTE_TO_BYTE 1024
-
 #define k_TREEMAPPER_ROOT_VALUE 100
 
 const uint16_t kFanoutMinimum = 2;
@@ -128,8 +124,5 @@ enum ResponseAlgorithms {
 enum BootstrapAlgorithms {
   kBootstrapGeneral,
 };
-
-constexpr long int operator""_KB(unsigned long long int kb) { return kb * KILOBYTE_TO_BYTE; }
-
 }  // namespace minhton
 #endif
