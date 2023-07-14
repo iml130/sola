@@ -51,10 +51,10 @@ public:
   /// \param self_node_info reference to the own node information
   /// \param logger reference to the logger instance
   ///
-  RoutingInformation(const minhton::NodeInfo &self_node_info, const Logger &logger);
+  RoutingInformation(minhton::NodeInfo self_node_info, Logger logger);
 
   /// Destructor
-  ~RoutingInformation() {}
+  ~RoutingInformation() = default;
 
   void resetPosition(uint64_t event_id);
 

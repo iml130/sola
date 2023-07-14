@@ -41,7 +41,7 @@ public:
 
   void setMode(NatterMode mode);
 
-  virtual void StopApplication() override;
+  void StopApplication() override;
 
   void setLevelNumber(std::pair<uint32_t, uint32_t> level_number);
   std::pair<uint32_t, uint32_t> getLevelNumber() const { return level_number_; }
@@ -51,10 +51,10 @@ public:
   std::string getIP() const;
 
 protected:
-  virtual void DoDispose() override;
+  void DoDispose() override;
 
 private:
-  virtual void StartApplication() final;
+  void StartApplication() final;
 
   void logSelfToDB(std::pair<uint32_t, uint32_t> level_number);
 

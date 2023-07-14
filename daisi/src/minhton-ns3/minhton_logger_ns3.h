@@ -29,8 +29,8 @@ namespace minhton {
 
 class MinhtonLoggerNs3 : public LoggerInterface {
 public:
-  MinhtonLoggerNs3(LogDeviceApp log_device_application, LogFunction log, LogEvent &log_event);
-  ~MinhtonLoggerNs3();
+  MinhtonLoggerNs3(LogDeviceApp log_device_application, LogFunction log, LogEvent log_event);
+  ~MinhtonLoggerNs3() override;
 
   void logCritical(const std::string &msg) const final;
   void logWarning(const std::string &msg) const final;

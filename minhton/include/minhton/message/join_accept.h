@@ -17,7 +17,7 @@ namespace minhton {
 /// network's fanout.
 class MessageJoinAccept : public MinhtonMessage<MessageJoinAccept> {
 public:
-  MessageJoinAccept(const MinhtonMessageHeader &header, uint16_t fanout, NodeInfo adjacent_left,
+  MessageJoinAccept(MinhtonMessageHeader header, uint16_t fanout, NodeInfo adjacent_left,
                     NodeInfo adjacent_right, std::vector<NodeInfo> routing_table_neighbors);
 
   uint16_t getFanout() const;

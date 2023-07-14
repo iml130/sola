@@ -8,12 +8,12 @@
 
 namespace minhton {
 
-MessageReplacementUpdate::MessageReplacementUpdate(const MinhtonMessageHeader &header,
+MessageReplacementUpdate::MessageReplacementUpdate(MinhtonMessageHeader header,
                                                    NodeInfo removed_position_node,
                                                    NodeInfo replaced_position_node,
                                                    LogicalNodeInfo new_l_node_info,
                                                    bool should_acknowledge)
-    : header_(header),
+    : header_(std::move(header)),
       removed_position_node_(std::move(removed_position_node)),
       replaced_position_node_(std::move(replaced_position_node)),
       new_l_node_info_(new_l_node_info),

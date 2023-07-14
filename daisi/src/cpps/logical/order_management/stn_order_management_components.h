@@ -27,7 +27,7 @@
 namespace daisi::cpps::logical {
 
 struct StnOrderManagementVertex {
-  StnOrderManagementVertex(const daisi::material_flow::Order &order, bool is_start);
+  StnOrderManagementVertex(daisi::material_flow::Order order, bool is_start);
 
   static StnOrderManagementVertex createOrigin();
 
@@ -47,7 +47,7 @@ struct StnOrderManagementVertex {
 private:
   daisi::material_flow::Order order_;
   bool is_start_;  // otherwise is finish
-  bool is_origin_;
+  bool is_origin_ = false;
   daisi::util::Position position_;
 };
 

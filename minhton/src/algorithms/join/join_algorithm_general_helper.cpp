@@ -4,7 +4,7 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#include <math.h>
+#include <cmath>
 
 #include "minhton/algorithms/join/join_algorithm_general.h"
 #include "minhton/exception/algorithm_exception.h"
@@ -64,7 +64,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
     return new_child;
   }
 
-  return minhton::NodeInfo();
+  return {};
 }
 
 minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
@@ -233,7 +233,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
   // check first if alleged_adj is initialized
 
   if (!alleged_adjacent.isInitialized()) {
-    return minhton::NodeInfo();
+    return {};
   }
 
   double entering_node_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
@@ -260,7 +260,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
               });
 
           if (!found_closer_node_is_our_child) {
-            return minhton::NodeInfo(level, number, getRoutingInfo()->getFanout());
+            return {level, number, getRoutingInfo()->getFanout()};
           }
         }
 
@@ -274,14 +274,14 @@ minhton::NodeInfo JoinAlgorithmGeneral::getCloserAdjacent(
               });
 
           if (!found_closer_node_is_our_child) {
-            return minhton::NodeInfo(level, number, getRoutingInfo()->getFanout());
+            return {level, number, getRoutingInfo()->getFanout()};
           }
         }
       }
     }
   }
 
-  return minhton::NodeInfo();
+  return {};
 }
 
 }  // namespace minhton

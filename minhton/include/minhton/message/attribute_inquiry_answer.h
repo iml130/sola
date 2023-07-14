@@ -17,7 +17,7 @@ namespace minhton {
 class MessageAttributeInquiryAnswer : public MinhtonMessage<MessageAttributeInquiryAnswer> {
 public:
   MessageAttributeInquiryAnswer(
-      const MinhtonMessageHeader &header, NodeInfo inquired_node,
+      MinhtonMessageHeader header, NodeInfo inquired_node,
       std::unordered_map<std::string, NodeData::ValueAndType> attribute_values_and_types = {},
       std::vector<std::string> removed_attribute_keys = {});
 

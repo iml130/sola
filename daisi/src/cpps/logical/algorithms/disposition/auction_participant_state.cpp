@@ -18,8 +18,8 @@
 
 namespace daisi::cpps::logical {
 
-AuctionParticipantTaskState::AuctionParticipantTaskState(const daisi::material_flow::Task &task)
-    : task(task) {}
+AuctionParticipantTaskState::AuctionParticipantTaskState(daisi::material_flow::Task task)
+    : task(std::move(task)) {}
 
 AuctionParticipantState::AuctionParticipantState(
     const std::vector<daisi::material_flow::Task> &tasks) {

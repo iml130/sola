@@ -62,9 +62,11 @@ std::string getMessageTypeString(MessageType type) {
   return type_string->second;
 }
 
-MinhtonMessageHeader::MinhtonMessageHeader(const NodeInfo &sender, const NodeInfo &target,
-                                           uint64_t ref_event_id)
-    : sender_(sender), target_(target), ref_event_id_(ref_event_id), event_id_(generateEventId()) {}
+MinhtonMessageHeader::MinhtonMessageHeader(NodeInfo sender, NodeInfo target, uint64_t ref_event_id)
+    : sender_(std::move(sender)),
+      target_(std::move(target)),
+      ref_event_id_(ref_event_id),
+      event_id_(generateEventId()) {}
 
 void MinhtonMessageHeader::setEventId(const uint64_t event_id) {
   if (event_id == 0) {

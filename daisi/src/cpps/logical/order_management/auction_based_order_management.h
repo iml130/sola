@@ -30,14 +30,12 @@ public:
                               const daisi::util::Pose &pose)
       : OrderManagement(amr_description, topology, pose) {}
 
-  virtual ~AuctionBasedOrderManagement() = default;
+  ~AuctionBasedOrderManagement() override = default;
 
   virtual bool addTask(const daisi::material_flow::Task &task,
                        std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;
 
-  virtual bool addTask(const daisi::material_flow::Task &task) final {
-    return addTask(task, nullptr);
-  }
+  bool addTask(const daisi::material_flow::Task &task) final { return addTask(task, nullptr); }
 
   virtual std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>
   getLatestCalculatedInsertionInfo() const = 0;

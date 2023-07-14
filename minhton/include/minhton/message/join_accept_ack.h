@@ -17,7 +17,7 @@ namespace minhton {
 /// the other neighbors about the joined node.
 class MessageJoinAcceptAck : public MinhtonMessage<MessageJoinAcceptAck> {
 public:
-  explicit MessageJoinAcceptAck(const MinhtonMessageHeader &header);
+  explicit MessageJoinAcceptAck(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

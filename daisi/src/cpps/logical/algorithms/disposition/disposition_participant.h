@@ -32,7 +32,7 @@ public:
   explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
       : AlgorithmInterface(sola){};
 
-  ~DispositionParticipant() = default;
+  ~DispositionParticipant() override = default;
 };
 
 }  // namespace daisi::cpps::logical

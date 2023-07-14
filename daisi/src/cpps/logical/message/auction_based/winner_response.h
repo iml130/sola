@@ -42,7 +42,7 @@ private:
 
   std::string participant_connection_;
 
-  bool accept_;
+  bool accept_ = false;
 };
 
 }  // namespace daisi::cpps::logical

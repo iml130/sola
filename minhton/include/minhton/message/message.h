@@ -60,7 +60,7 @@ private:
   bool validateHeader(const MinhtonMessageHeader &header) const;
 };
 
-template <typename T> MinhtonMessage<T>::MinhtonMessage() {}
+template <typename T> MinhtonMessage<T>::MinhtonMessage() = default;
 
 template <typename T> MinhtonMessageHeader MinhtonMessage<T>::getHeader() const {
   return static_cast<const T *>(this)->header_;

@@ -111,7 +111,7 @@ std::vector<daisi::cpps::AmrMobilityStatus> AmrMobilityHelper::calculatePhases(
     return calculatePhases(start_timestamp, start_pose.position, charge->destination, {0, 0, 0},
                            description.getLoadHandling().getUnloadTime(), description);
   }
-  return std::vector<AmrMobilityStatus>();
+  return {};
 }
 
 AmrMobilityStatus AmrMobilityHelper::calculateMobilityStatus(

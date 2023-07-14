@@ -27,9 +27,8 @@ namespace daisi::material_flow {
 
 struct TransportOrderStep {
   TransportOrderStep() = default;
-  TransportOrderStep(std::string name,
-                     const std::unordered_map<std::string, std::string> &parameters,
-                     const Location &location);
+  TransportOrderStep(std::string name, std::unordered_map<std::string, std::string> parameters,
+                     Location location);
 
   const std::string &getName() const;
   const std::unordered_map<std::string, std::string> &getParameters() const;

@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageLockNeighborRequest : public MinhtonMessage<MessageLockNeighborRequest> {
 public:
-  explicit MessageLockNeighborRequest(const MinhtonMessageHeader &header);
+  explicit MessageLockNeighborRequest(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

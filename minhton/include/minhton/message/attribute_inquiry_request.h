@@ -15,8 +15,7 @@
 namespace minhton {
 class MessageAttributeInquiryRequest : public MinhtonMessage<MessageAttributeInquiryRequest> {
 public:
-  explicit MessageAttributeInquiryRequest(const MinhtonMessageHeader &header,
-                                          bool inquire_all = false,
+  explicit MessageAttributeInquiryRequest(MinhtonMessageHeader header, bool inquire_all = false,
                                           std::vector<std::string> missing_keys = {});
 
   bool getInquireAll() const;

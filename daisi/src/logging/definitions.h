@@ -100,8 +100,8 @@ public:
   // TODO: Declare as explicit(false) for implicit conversion in C++20
   /// @brief Constructor for primary key id column
   /// @param name Column name
-  explicit DatabaseColumnInfo(const std::string &name)
-      : name(name), format("NULL"), is_id(true), data_type("INTEGER"){};
+  explicit DatabaseColumnInfo(std::string name)
+      : name(std::move(name)), format("NULL"), is_id(true), data_type("INTEGER"){};
 
   /// @brief Constructor for regular and foreign key column
   /// @param name Column name
@@ -111,12 +111,12 @@ public:
   /// @param not_null If true, the column will be restricted to be not null
   /// @param foreign_key If set, the foreign key reference will be included, e.g., "Event(Id)"
   /// @param is_primary_key If true, the column will be set as the primary key
-  DatabaseColumnInfo(const std::string &name, const std::string &format, bool not_null = false,
-                     const std::string &foreign_key = "", bool is_primary_key = false)
-      : name(name),
-        format(format),
+  DatabaseColumnInfo(std::string name, std::string format, bool not_null = false,
+                     std::string foreign_key = "", bool is_primary_key = false)
+      : name(std::move(name)),
+        format(std::move(format)),
         not_null(not_null),
-        foreign_key(foreign_key),
+        foreign_key(std::move(foreign_key)),
         is_primary_key(is_primary_key) {
     setDataType();
   };
@@ -133,10 +133,11 @@ public:
   /// @param columns Column definitions of this table
   /// @param additional_constraints Will be appended at the end. Use this for unique of multiple
   /// columns or join definitions
-  explicit DatabaseTable(const std::string &name,
-                         const std::vector<DatabaseColumnInfo> &columns = {},
-                         const std::string &additional_constraints = "")
-      : name(name), columns(columns), additional_constraints(additional_constraints){};
+  explicit DatabaseTable(std::string name, std::vector<DatabaseColumnInfo> columns = {},
+                         std::string additional_constraints = "")
+      : name(std::move(name)),
+        columns(std::move(columns)),
+        additional_constraints(std::move(additional_constraints)){};
 };
 
 /// @brief Generate a string containing a SQL Create Table Statement based on the table argument

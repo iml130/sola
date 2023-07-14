@@ -34,7 +34,7 @@ enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
 struct LPCVertex {
   /// @brief Initializing the vertex by setting the task and everything else as invalid.
   /// @param task The task this vertex represents.
-  explicit LPCVertex(const material_flow::Task &task) : task(task){};
+  explicit LPCVertex(material_flow::Task task) : task(std::move(task)){};
 
   /// @brief The task this vertex represents by giving it additional information for auction and
   /// about the layer.

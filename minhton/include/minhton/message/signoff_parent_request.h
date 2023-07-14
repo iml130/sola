@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageSignoffParentRequest : public MinhtonMessage<MessageSignoffParentRequest> {
 public:
-  explicit MessageSignoffParentRequest(const MinhtonMessageHeader &header);
+  explicit MessageSignoffParentRequest(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

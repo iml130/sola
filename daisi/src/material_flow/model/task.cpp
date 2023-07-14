@@ -21,8 +21,8 @@
 namespace daisi::material_flow {
 
 Task::Task(std::string name, const std::vector<Order> &orders,
-           const std::vector<std::string> &follow_up_tasks)
-    : name_(std::move(name)), orders_(orders), follow_up_tasks_(follow_up_tasks) {
+           std::vector<std::string> follow_up_tasks)
+    : name_(std::move(name)), orders_(orders), follow_up_tasks_(std::move(follow_up_tasks)) {
   if (orders.empty()) {
     throw std::invalid_argument("Orders cannot be empty.");
   }

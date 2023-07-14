@@ -18,7 +18,7 @@ namespace minhton {
 /// forwarded (similar to Join messages) until a fitting node to replace is found.
 class MessageFindReplacement : public MinhtonMessage<MessageFindReplacement> {
 public:
-  MessageFindReplacement(const MinhtonMessageHeader &header, NodeInfo node_to_replace,
+  MessageFindReplacement(MinhtonMessageHeader header, NodeInfo node_to_replace,
                          SearchProgress search_progress = SearchProgress::kNone);
 
   NodeInfo getNodeToReplace() const;

@@ -15,7 +15,7 @@ namespace minhton {
 /// requested relationships and/or network information. The node sends the message back.
 class MessageInformAboutNeighbors : public MinhtonMessage<MessageInformAboutNeighbors> {
 public:
-  MessageInformAboutNeighbors(const MinhtonMessageHeader &header, std::vector<NodeInfo> neighbors);
+  MessageInformAboutNeighbors(MinhtonMessageHeader header, std::vector<NodeInfo> neighbors);
 
   std::vector<NodeInfo> getRequestedNeighbors() const;
 

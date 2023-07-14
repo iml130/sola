@@ -19,9 +19,9 @@ class LeaveAlgorithmInterface : public AlgorithmInterface {
 public:
   LeaveAlgorithmInterface(std::shared_ptr<AccessContainer> access) : AlgorithmInterface(access){};
 
-  virtual ~LeaveAlgorithmInterface(){};
+  ~LeaveAlgorithmInterface() override = default;
 
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
   virtual void initiateSelfDeparture() = 0;
   virtual bool canLeaveWithoutReplacement() = 0;
 

@@ -8,9 +8,9 @@
 
 namespace minhton {
 
-MessageBootstrapDiscover::MessageBootstrapDiscover(const MinhtonMessageHeader &header,
+MessageBootstrapDiscover::MessageBootstrapDiscover(MinhtonMessageHeader header,
                                                    std::string discovery_msg)
-    : header_(header), discovery_msg_(std::move(discovery_msg)) {
+    : header_(std::move(header)), discovery_msg_(std::move(discovery_msg)) {
   header_.setMessageType(MessageType::kBootstrapDiscover);
   MessageLoggingAdditionalInfo logging_info;
   logging_info.content = "discovery_message=" + this->getDiscoveryMessage();

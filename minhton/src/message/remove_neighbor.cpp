@@ -7,9 +7,9 @@
 #include "minhton/message/remove_neighbor.h"
 namespace minhton {
 
-MessageRemoveNeighbor::MessageRemoveNeighbor(const MinhtonMessageHeader &header,
+MessageRemoveNeighbor::MessageRemoveNeighbor(MinhtonMessageHeader header,
                                              NodeInfo removed_position_node, bool acknowledge)
-    : header_(header),
+    : header_(std::move(header)),
       removed_position_node_(std::move(removed_position_node)),
       acknowledge_(acknowledge) {
   header_.setMessageType(MessageType::kRemoveNeighbor);

@@ -18,8 +18,8 @@ namespace minhton {
 class InvalidMessageException : public std::exception {
 public:
   explicit InvalidMessageException(const MinhtonMessageHeader &header) noexcept;
-  virtual ~InvalidMessageException() = default;
-  virtual const char *what() const noexcept override;
+  ~InvalidMessageException() override = default;
+  const char *what() const noexcept override;
 
 private:
   MessageType message_type_;

@@ -25,8 +25,8 @@
 namespace daisi::cpps {
 class Navigate {
 public:
-  Navigate() {}
-  explicit Navigate(const std::vector<util::Position> &waypoints) : waypoints(waypoints) {}
+  Navigate() = default;
+  explicit Navigate(std::vector<util::Position> waypoints) : waypoints(std::move(waypoints)) {}
 
   SERIALIZE(waypoints);
 

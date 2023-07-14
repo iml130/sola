@@ -19,9 +19,9 @@ public:
   BootstrapAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
 
-  virtual ~BootstrapAlgorithmInterface(){};
+  ~BootstrapAlgorithmInterface() override = default;
 
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
   virtual void initiateJoin(const PhysicalNodeInfo &p_node_info) = 0;
 
   virtual void processBootstrapResponseTimeout() = 0;

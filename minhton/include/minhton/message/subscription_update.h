@@ -14,8 +14,7 @@
 namespace minhton {
 class MessageSubscriptionUpdate : public MinhtonMessage<MessageSubscriptionUpdate> {
 public:
-  MessageSubscriptionUpdate(const MinhtonMessageHeader &header, NodeData::Key key,
-                            NodeData::Value value);
+  MessageSubscriptionUpdate(MinhtonMessageHeader header, NodeData::Key key, NodeData::Value value);
 
   NodeData::Key getKey() const;
   NodeData::Value getValue() const;

@@ -19,10 +19,10 @@ class ResponseAlgorithmInterface : public AlgorithmInterface {
 public:
   ResponseAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
   virtual void waitForAcks(uint32_t number, std::function<void()> cb) = 0;
 
-  virtual ~ResponseAlgorithmInterface(){};
+  ~ResponseAlgorithmInterface() override = default;
 
   static std::vector<minhton::MessageType> getSupportedMessageTypes() {
     return {

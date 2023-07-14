@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageLockNeighborResponse : public MinhtonMessage<MessageLockNeighborResponse> {
 public:
-  explicit MessageLockNeighborResponse(const MinhtonMessageHeader &header, bool successful = false);
+  explicit MessageLockNeighborResponse(MinhtonMessageHeader header, bool successful = false);
 
   bool wasSuccessful() const;
 

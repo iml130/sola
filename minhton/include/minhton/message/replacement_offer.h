@@ -15,7 +15,7 @@ namespace minhton {
 /// Replacement Offer to the leaving node to initiate the replacement process.
 class MessageReplacementOffer : public MinhtonMessage<MessageReplacementOffer> {
 public:
-  explicit MessageReplacementOffer(const MinhtonMessageHeader &header);
+  explicit MessageReplacementOffer(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

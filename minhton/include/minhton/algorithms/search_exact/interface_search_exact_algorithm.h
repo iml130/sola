@@ -21,9 +21,9 @@ public:
   SearchExactAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
 
-  virtual ~SearchExactAlgorithmInterface(){};
+  ~SearchExactAlgorithmInterface() override = default;
 
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
   virtual void performSearchExact(const minhton::NodeInfo &destination,
                                   std::shared_ptr<MessageSEVariant> query) = 0;
 

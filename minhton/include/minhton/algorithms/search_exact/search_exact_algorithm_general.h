@@ -22,7 +22,7 @@ public:
   SearchExactAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
       : SearchExactAlgorithmInterface(access){};
 
-  virtual ~SearchExactAlgorithmGeneral(){};
+  ~SearchExactAlgorithmGeneral() override = default;
 
   void process(const MessageVariant &msg) override;
 

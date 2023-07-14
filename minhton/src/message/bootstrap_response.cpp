@@ -8,9 +8,9 @@
 
 namespace minhton {
 
-MessageBootstrapResponse::MessageBootstrapResponse(const MinhtonMessageHeader &header,
+MessageBootstrapResponse::MessageBootstrapResponse(MinhtonMessageHeader header,
                                                    NodeInfo node_to_join)
-    : header_(header), node_to_join_(std::move(node_to_join)) {
+    : header_(std::move(header)), node_to_join_(std::move(node_to_join)) {
   header_.setMessageType(MessageType::kBootstrapResponse);
   MessageLoggingAdditionalInfo logging_info{getNodeToJoin().getLogicalNodeInfo().getUuid(), "", ""};
   header_.setAdditionalLoggingInfo(logging_info);

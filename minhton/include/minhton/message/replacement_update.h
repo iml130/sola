@@ -17,7 +17,7 @@ namespace minhton {
 /// remove the removed position from their information if they also have it as their neighbor.
 class MessageReplacementUpdate : public MinhtonMessage<MessageReplacementUpdate> {
 public:
-  MessageReplacementUpdate(const MinhtonMessageHeader &header, NodeInfo removed_position_node,
+  MessageReplacementUpdate(MinhtonMessageHeader header, NodeInfo removed_position_node,
                            NodeInfo replaced_position_node, LogicalNodeInfo new_l_node_info,
                            bool should_acknowledge = false);
 

@@ -22,8 +22,8 @@ public:
     bool locked_right;
     bool locked_left;
   };
-  MessageReplacementAck(const MinhtonMessageHeader &header,
-                        std::vector<minhton::NodeInfo> neighbors, LockedStates lockedStates);
+  MessageReplacementAck(MinhtonMessageHeader header, std::vector<minhton::NodeInfo> neighbors,
+                        LockedStates lockedStates);
 
   std::vector<minhton::NodeInfo> getNeighbors() const;
   LockedStates getLockedStates() const;

@@ -27,7 +27,7 @@ public:
   SimpleOrderManagement(const AmrDescription &amr_description, const Topology &topology,
                         const daisi::util::Pose &pose);
 
-  ~SimpleOrderManagement() = default;
+  ~SimpleOrderManagement() override = default;
 
   /// @brief return the metrics of the final order contained in the last task that has been added to
   /// the management
@@ -82,7 +82,7 @@ private:
   std::optional<daisi::util::Position> expected_end_position_;
 
   /// @brief the current time
-  daisi::util::Duration time_now_;
+  daisi::util::Duration time_now_ = 0;
 };
 
 }  // namespace daisi::cpps::logical

@@ -325,11 +325,11 @@ void NatterLoggerNs3::logSend(const std::string &topic, const std::string &ip) {
 
 // * Constructor & Other methods
 NatterLoggerNs3::NatterLoggerNs3(LogDeviceApp log_device_application, LogFunction log,
-                                 LogEvent &log_event)
+                                 LogEvent log_event)
     : LoggerInterface("NOT-KNOWN-YET"),
       log_device_application_(log_device_application),
       log_(std::move(log)),
-      log_event_(log_event) {}
+      log_event_(std::move(log_event)) {}
 
 NatterLoggerNs3::~NatterLoggerNs3() {
   auto current_time = ns3::Simulator::Now().GetMilliSeconds();

@@ -8,10 +8,9 @@
 
 namespace minhton {
 
-MessageGetNeighbors::MessageGetNeighbors(const MinhtonMessageHeader &header,
-                                         NodeInfo send_back_to_node,
+MessageGetNeighbors::MessageGetNeighbors(MinhtonMessageHeader header, NodeInfo send_back_to_node,
                                          std::vector<NeighborRelationship> relationships)
-    : header_(header),
+    : header_(std::move(header)),
       send_back_to_node_(std::move(send_back_to_node)),
       relationships_(std::move(relationships)) {
   header_.setMessageType(kGetNeighbors);

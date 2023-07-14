@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageSignoffParentAnswer : public MinhtonMessage<MessageSignoffParentAnswer> {
 public:
-  explicit MessageSignoffParentAnswer(const MinhtonMessageHeader &header, bool successful = false);
+  explicit MessageSignoffParentAnswer(MinhtonMessageHeader header, bool successful = false);
 
   bool wasSuccessful() const;
 

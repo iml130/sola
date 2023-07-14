@@ -7,13 +7,12 @@
 #include "minhton/message/search_exact.h"
 
 namespace minhton {
-MessageSearchExact::MessageSearchExact(const MinhtonMessageHeader &header,
-                                       NodeInfo destination_node,
+MessageSearchExact::MessageSearchExact(MinhtonMessageHeader header, NodeInfo destination_node,
                                        std::shared_ptr<MessageSEVariant> query,
                                        bool notify_about_failure)
-    : header_(header),
+    : header_(std::move(header)),
       destination_node_(std::move(destination_node)),
-      query_(query),
+      query_(std::move(query)),
       notify_about_failure_(notify_about_failure) {
   header_.setMessageType(MessageType::kSearchExact);
 

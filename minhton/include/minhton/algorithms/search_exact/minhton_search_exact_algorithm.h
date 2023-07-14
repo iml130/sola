@@ -20,7 +20,7 @@ public:
   explicit MinhtonSearchExactAlgorithm(std::shared_ptr<AccessContainer> access)
       : SearchExactAlgorithmGeneral(access){};
 
-  ~MinhtonSearchExactAlgorithm(){};
+  ~MinhtonSearchExactAlgorithm() override = default;
 
   ///
   /// Helper method for Search Exact procedure,

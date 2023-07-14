@@ -69,7 +69,7 @@ std::set<Network::Impl *> Network::Impl::network_interfaces_;
 #endif
 
 Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> callback)
-    : callback_(callback) {
+    : callback_(std::move(callback)) {
   assert(!daisi::solanet_ns3::socket_global_.empty());
 
   // Hacky way to get the next free ns3 socket

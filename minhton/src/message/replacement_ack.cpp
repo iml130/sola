@@ -10,10 +10,10 @@
 
 namespace minhton {
 
-MessageReplacementAck::MessageReplacementAck(const MinhtonMessageHeader &header,
+MessageReplacementAck::MessageReplacementAck(MinhtonMessageHeader header,
                                              std::vector<NodeInfo> neighbors,
                                              LockedStates lockedStates)
-    : header_(header), neighbors_(neighbors) {
+    : header_(std::move(header)), neighbors_(std::move(neighbors)) {
   locked_ = lockedStates.locked;
   locked_right_ = lockedStates.locked_right;
   locked_left_ = lockedStates.locked_left;

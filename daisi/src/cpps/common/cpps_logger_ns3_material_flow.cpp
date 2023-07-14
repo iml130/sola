@@ -84,8 +84,8 @@ static bool material_flow_order_exists_ = false;
 std::string parametersToString(const std::unordered_map<std::string, std::string> &parameters) {
   std::string s;
 
-  for (auto it = parameters.begin(); it != parameters.end(); it++) {
-    s += "{ " + it->first + ": " + it->second + "} ";
+  for (const auto &entry : parameters) {
+    s += "{ " + entry.first + ": " + entry.second + "} ";
   }
 
   return s;

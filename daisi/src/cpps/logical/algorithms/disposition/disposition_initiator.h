@@ -35,7 +35,7 @@ public:
                                 std::shared_ptr<CppsLoggerNs3> logger)
       : AlgorithmInterface(sola), logger_(std::move(logger)){};
 
-  ~DispositionInitiator() = default;
+  ~DispositionInitiator() override = default;
 
   /// @brief Adding a material flow whose tasks should be allocated.
   /// @param scheduler MFDL Scheduler

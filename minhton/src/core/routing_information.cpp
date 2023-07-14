@@ -6,18 +6,16 @@
 
 #include "minhton/core/routing_information.h"
 
-#include <math.h>
-
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 
 #include "minhton/logging/logging.h"
 
 namespace minhton {
 
-RoutingInformation::RoutingInformation(const minhton::NodeInfo &self_node_info,
-                                       const Logger &logger)
-    : self_node_info_(self_node_info), logger_(logger) {
+RoutingInformation::RoutingInformation(minhton::NodeInfo self_node_info, Logger logger)
+    : self_node_info_(std::move(self_node_info)), logger_(std::move(logger)) {
   if (self_node_info_.isValidPeer()) {
     initParentAndChildren();
     initRoutingTableNeighbors();

@@ -381,8 +381,6 @@ void CppsManager::setupNetworkWifi() {
         auto other_mac = container.Get(k)->GetAddress();
         ns3::ArpCache::Entry *arp_entry = arpcache->Add(other_ip);
         arp_entry->SetMacAddress(Mac48Address::ConvertFrom(other_mac));
-        uint8_t buff[6];
-        Mac48Address::ConvertFrom(other_mac).CopyTo(buff);
         arp_entry->MarkPermanent();
       }
     }
@@ -488,7 +486,7 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfo &info) {
 void CppsManager::scheduleEvents() {
   Simulator::Schedule(MilliSeconds(1000), &CppsManager::clearFinishedMaterialFlows, this);
   uint64_t current_time = Simulator::Now().GetMilliSeconds();
-  uint64_t delay = parser_.getParsedContent()->getRequired<uint64_t>("defaultDelay");
+  auto delay = parser_.getParsedContent()->getRequired<uint64_t>("defaultDelay");
   for (auto i = 0U; i < number_amrs_initial_; i++) {
     current_time += delay;
     Simulator::Schedule(MilliSeconds(current_time), &CppsManager::initAMR, this, i);
@@ -552,9 +550,9 @@ void CppsManager::parseAMRs() {
     auto amr_inner = amr->content.begin()->second;
     auto amr_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&amr_inner);
 
-    std::string device_type = amr_description->getRequired<std::string>("device_type");
-    std::string friendly_name = amr_description->getRequired<std::string>("friendly_name");
-    std::string model_name = amr_description->getRequired<std::string>("model_name");
+    auto device_type = amr_description->getRequired<std::string>("device_type");
+    auto friendly_name = amr_description->getRequired<std::string>("friendly_name");
+    auto model_name = amr_description->getRequired<std::string>("model_name");
 
     auto opt_manufacturer = amr_description->getOptional<std::string>("manufacturer");
     std::string manufacturer = opt_manufacturer ? opt_manufacturer.value() : "";
@@ -569,8 +567,8 @@ void CppsManager::parseAMRs() {
 
     auto kinematics = parseKinematics(kinematics_description);
 
-    uint64_t load_time = kinematics_description->getRequired<uint64_t>("load_time");
-    uint64_t unload_time = kinematics_description->getRequired<uint64_t>("unload_time");
+    auto load_time = kinematics_description->getRequired<uint64_t>("load_time");
+    auto unload_time = kinematics_description->getRequired<uint64_t>("unload_time");
 
     auto ability = parseAMRAbility(ability_description);
 
@@ -645,7 +643,7 @@ void CppsManager::parseScenarioSequence() {
     auto spawn_inner = spawn->content.begin()->second;
     auto spawn_description = *std::get_if<std::shared_ptr<ScenariofileParser::Table>>(&spawn_inner);
 
-    std::string type = spawn_description->getRequired<std::string>("type");
+    auto type = spawn_description->getRequired<std::string>("type");
 
     if (type == "amr") {
       parseAMRSpawn(spawn_description);
@@ -659,17 +657,17 @@ void CppsManager::parseScenarioSequence() {
 
 void CppsManager::parseAMRSpawn(
     const std::shared_ptr<ScenariofileParser::Table> &spawn_description) {
-  std::string friendly_name = spawn_description->getRequired<std::string>("friendly_name");
-  uint64_t start_time = spawn_description->getRequired<uint64_t>("start_time");
-  std::string distribution = spawn_description->getRequired<std::string>("distribution");
+  auto friendly_name = spawn_description->getRequired<std::string>("friendly_name");
+  auto start_time = spawn_description->getRequired<uint64_t>("start_time");
+  auto distribution = spawn_description->getRequired<std::string>("distribution");
 
   SpawnInfo info{start_time, "amr", friendly_name};
 
   if (distribution == "prob" && start_time == 0) {
-    float prob = spawn_description->getRequired<float>("prob");
+    auto prob = spawn_description->getRequired<float>("prob");
     info.distribution = DistProb{prob};
   } else if (distribution == "abs" && start_time == 0) {
-    uint64_t abs = spawn_description->getRequired<uint64_t>("abs");
+    auto abs = spawn_description->getRequired<uint64_t>("abs");
     info.distribution = DistAbs{abs};
   } else {
     throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
@@ -679,18 +677,18 @@ void CppsManager::parseAMRSpawn(
 
 void CppsManager::parseToSpawn(
     const std::shared_ptr<ScenariofileParser::Table> &spawn_description) {
-  std::string friendly_name = spawn_description->getRequired<std::string>("friendly_name");
-  uint64_t start_time = spawn_description->getRequired<uint64_t>("start_time");
+  auto friendly_name = spawn_description->getRequired<std::string>("friendly_name");
+  auto start_time = spawn_description->getRequired<uint64_t>("start_time");
 
   auto spawn_behavior =
       spawn_description->getRequired<std::shared_ptr<ScenariofileParser::Table>>("spawn_behavior");
-  std::string distribution = spawn_behavior->getRequired<std::string>("distribution");
+  auto distribution = spawn_behavior->getRequired<std::string>("distribution");
 
   SpawnInfo info{start_time, "to", friendly_name};
 
   if (distribution == "gaussian") {
-    uint64_t mean = spawn_behavior->getRequired<uint64_t>("mean");
-    uint64_t sigma = spawn_behavior->getRequired<uint64_t>("sigma");
+    auto mean = spawn_behavior->getRequired<uint64_t>("mean");
+    auto sigma = spawn_behavior->getRequired<uint64_t>("sigma");
     info.distribution = DistGaussian{std::normal_distribution<>(mean, sigma)};
   } else {
     throw std::runtime_error("Encountered invalid distribution while parsing scenario sequence!");
@@ -699,21 +697,21 @@ void CppsManager::parseToSpawn(
 }
 
 AmrKinematics CppsManager::parseKinematics(std::shared_ptr<ScenariofileParser::Table> description) {
-  float max_velo = description->getRequired<float>("max_velo");
-  float min_velo = description->getRequired<float>("min_velo");
-  float max_acc = description->getRequired<float>("max_acc");
-  float min_acc = description->getRequired<float>("min_acc");
+  auto max_velo = description->getRequired<float>("max_velo");
+  auto min_velo = description->getRequired<float>("min_velo");
+  auto max_acc = description->getRequired<float>("max_acc");
+  auto min_acc = description->getRequired<float>("min_acc");
 
-  return AmrKinematics(max_velo, min_velo, max_acc, min_acc);
+  return {max_velo, min_velo, max_acc, min_acc};
 }
 
 amr::AmrStaticAbility CppsManager::parseAMRAbility(
     std::shared_ptr<ScenariofileParser::Table> description) {
-  std::string load_carrier_type_string = description->getRequired<std::string>("load_carrier_type");
-  float max_payload = description->getRequired<float>("max_payload");
+  auto load_carrier_type_string = description->getRequired<std::string>("load_carrier_type");
+  auto max_payload = description->getRequired<float>("max_payload");
 
   amr::LoadCarrier load_carrier(load_carrier_type_string);
-  return amr::AmrStaticAbility(load_carrier, max_payload);
+  return {load_carrier, max_payload};
 }
 
 std::string CppsManager::getDatabaseFilename() {

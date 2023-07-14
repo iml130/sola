@@ -19,8 +19,8 @@ namespace minhton {
 /// procedure. The relationship of how to update the node has to be given.
 class MessageUpdateNeighbors : public MinhtonMessage<MessageUpdateNeighbors> {
 public:
-  MessageUpdateNeighbors(const MinhtonMessageHeader &header,
-                         const NeighborsAndRelationships &neighbors_and_relationships,
+  MessageUpdateNeighbors(MinhtonMessageHeader header,
+                         NeighborsAndRelationships neighbors_and_relationships,
                          bool should_acknowledge = false);
 
   NeighborsAndRelationships getNeighborsToUpdate() const;

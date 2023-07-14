@@ -20,7 +20,7 @@ LogicalNodeInfo::LogicalNodeInfo(uint16_t fanout) { this->setFanout(fanout); }
 /// the position will get verified this way.
 /// Therefore we can set the position directly without setPosition
 LogicalNodeInfo::LogicalNodeInfo(uint32_t p_level, uint32_t p_number)
-    : level_(p_level), number_(p_number), initialized_(false) {}
+    : level_(p_level), number_(p_number) {}
 
 /// The validity of the fanout will get checked in setPosition.
 /// There is no need to call setFanout.

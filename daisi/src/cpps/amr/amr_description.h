@@ -27,14 +27,14 @@ namespace daisi::cpps {
 class AmrDescription {
 public:
   AmrDescription() = default;
-  AmrDescription(uint32_t serial_number, const AmrKinematics &kinematics,
-                 const AmrProperties &properties, const AmrPhysicalProperties &physical_properties,
+  AmrDescription(uint32_t serial_number, const AmrKinematics &kinematics, AmrProperties properties,
+                 AmrPhysicalProperties physical_properties,
                  const AmrLoadHandlingUnit &load_handling)
       : serial_number_(serial_number),
         kinematics_(kinematics),
         load_handling_(load_handling),
-        properties_(properties),
-        physical_properties_(physical_properties) {}
+        properties_(std::move(properties)),
+        physical_properties_(std::move(physical_properties)) {}
   uint32_t getSerialNumber() const { return serial_number_; }
   AmrKinematics getKinematics() const { return kinematics_; }
   AmrProperties getProperties() const { return properties_; }

@@ -8,6 +8,7 @@
 
 #include <ifaddrs.h>
 
+#include <array>
 #include <thread>
 #include <utility>
 
@@ -147,11 +148,11 @@ std::string Network::Impl::readIPFromInterfaces() {
       // Ignore loopback and non-internet addresses
       continue;
     }
-    char ip[NI_MAXHOST];
-    int res = getnameinfo(address->ifa_addr, sizeof(struct sockaddr_in), ip, NI_MAXHOST, nullptr, 0,
-                          NI_NUMERICHOST);
+    std::array<char, NI_MAXHOST> ip;
+    int res = getnameinfo(address->ifa_addr, sizeof(struct sockaddr_in), ip.data(), NI_MAXHOST,
+                          nullptr, 0, NI_NUMERICHOST);
     if (res != 0) throw std::runtime_error("unable to get IP address");
-    ip_addr = ip;
+    ip_addr = ip.data();
   }
   freeifaddrs(addresses);
 

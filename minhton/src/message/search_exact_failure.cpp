@@ -7,10 +7,12 @@
 #include "minhton/message/search_exact_failure.h"
 
 namespace minhton {
-MessageSearchExactFailure::MessageSearchExactFailure(const MinhtonMessageHeader &header,
+MessageSearchExactFailure::MessageSearchExactFailure(MinhtonMessageHeader header,
                                                      NodeInfo destination_node,
                                                      std::shared_ptr<MessageSEVariant> query)
-    : header_(header), destination_node_(std::move(destination_node)), query_(query) {
+    : header_(std::move(header)),
+      destination_node_(std::move(destination_node)),
+      query_(std::move(query)) {
   header_.setMessageType(MessageType::kSearchExactFailure);
 
   MessageLoggingAdditionalInfo logging_info{getDestinationNode().getLogicalNodeInfo().getUuid(), "",

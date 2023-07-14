@@ -15,8 +15,7 @@
 namespace minhton {
 class MessageRemoveAndUpdateNeighbors : public MinhtonMessage<MessageRemoveAndUpdateNeighbors> {
 public:
-  MessageRemoveAndUpdateNeighbors(const MinhtonMessageHeader &header,
-                                  MessageRemoveNeighbor remove_msg,
+  MessageRemoveAndUpdateNeighbors(MinhtonMessageHeader header, MessageRemoveNeighbor remove_msg,
                                   MessageUpdateNeighbors update_msg,
                                   bool should_acknowledge = false);
 

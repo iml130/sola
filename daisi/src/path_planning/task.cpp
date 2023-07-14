@@ -31,8 +31,8 @@ std::ostream &operator<<(std::ostream &os, const Task &task) {
 Task::Task(const ns3::Vector &from, const ns3::Vector &to)
     : Task(UUIDGenerator::get()(), from, to) {}
 
-Task::Task(const std::string &uuid, const ns3::Vector &from, const ns3::Vector &to)
-    : uuid_(uuid), current_pos_(from) {
+Task::Task(std::string uuid, const ns3::Vector &from, const ns3::Vector &to)
+    : uuid_(std::move(uuid)), current_pos_(from) {
   from_x_ = from.x;
   from_y_ = from.y;
 
@@ -46,9 +46,9 @@ cpps::OrderStates Task::getOrderState() const { return order_state_; }
 
 void Task::setOrderState(const cpps::OrderStates &state) { order_state_ = state; }
 
-ns3::Vector Task::getPickupLocation() const { return ns3::Vector(from_x_, from_y_, 0); }
+ns3::Vector Task::getPickupLocation() const { return {from_x_, from_y_, 0}; }
 
-ns3::Vector Task::getDeliveryLocation() const { return ns3::Vector(to_x_, to_y_, 0); }
+ns3::Vector Task::getDeliveryLocation() const { return {to_x_, to_y_, 0}; }
 
 ns3::Vector Task::getCurrentPosition() const { return current_pos_; };
 

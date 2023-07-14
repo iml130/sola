@@ -8,9 +8,9 @@
 
 namespace minhton {
 
-MessageInformAboutNeighbors::MessageInformAboutNeighbors(const MinhtonMessageHeader &header,
+MessageInformAboutNeighbors::MessageInformAboutNeighbors(MinhtonMessageHeader header,
                                                          std::vector<NodeInfo> neighbors)
-    : header_(header), neighbors_(std::move(neighbors)) {
+    : header_(std::move(header)), neighbors_(std::move(neighbors)) {
   header_.setMessageType(MessageType::kInformAboutNeighbors);
 
   MessageLoggingAdditionalInfo logging_info;

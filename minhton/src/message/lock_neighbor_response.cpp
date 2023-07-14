@@ -9,9 +9,9 @@
 #include <algorithm>
 namespace minhton {
 
-MessageLockNeighborResponse::MessageLockNeighborResponse(const MinhtonMessageHeader &header,
+MessageLockNeighborResponse::MessageLockNeighborResponse(MinhtonMessageHeader header,
                                                          bool successful)
-    : header_(header), successful_(successful) {
+    : header_(std::move(header)), successful_(successful) {
   header_.setMessageType(MessageType::kLockNeighborResponse);
   validate();
 }

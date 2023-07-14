@@ -40,12 +40,12 @@ public:
   CppsTCPMessage();
 
   static ns3::TypeId GetTypeId();
-  ns3::TypeId GetInstanceTypeId() const;
+  ns3::TypeId GetInstanceTypeId() const override;
 
-  void Print(std::ostream &os) const;
-  uint32_t GetSerializedSize() const;
-  void Serialize(ns3::Buffer::Iterator start) const;
-  uint32_t Deserialize(ns3::Buffer::Iterator start);
+  void Print(std::ostream &os) const override;
+  uint32_t GetSerializedSize() const override;
+  void Serialize(ns3::Buffer::Iterator start) const override;
+  uint32_t Deserialize(ns3::Buffer::Iterator start) override;
 
   void addMessage(const FieldMessageCpps &msg);
   std::vector<FieldMessageCpps> getMessages() const;

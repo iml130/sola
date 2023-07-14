@@ -20,8 +20,8 @@ using namespace daisi::material_flow;
 
 namespace daisi::cpps::logical {
 
-StnOrderManagementVertex::StnOrderManagementVertex(const Order &order, const bool is_start)
-    : order_(order), is_start_(is_start), is_origin_(false) {}
+StnOrderManagementVertex::StnOrderManagementVertex(Order order, const bool is_start)
+    : order_(std::move(order)), is_start_(is_start) {}
 
 StnOrderManagementVertex StnOrderManagementVertex::createOrigin() {
   MoveOrder tmp(

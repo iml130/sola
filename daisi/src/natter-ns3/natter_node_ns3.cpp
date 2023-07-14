@@ -27,7 +27,7 @@ namespace daisi::natter_ns3 {
 
 NatterNodeNs3::NatterNodeNs3(std::shared_ptr<natter::logging::NatterLoggerNs3> logger,
                              NatterMode mode)
-    : logger_(logger) {
+    : logger_(std::move(logger)) {
   std::vector<natter::logging::LoggerPtr> logger_list{logger_};
   if (mode == NatterMode::kMinhcast) {
     natter_minhcast_ = std::make_unique<natter::minhcast::NatterMinhcast>(

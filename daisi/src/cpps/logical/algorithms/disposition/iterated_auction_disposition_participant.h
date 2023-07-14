@@ -37,9 +37,9 @@ class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
   explicit IteratedAuctionDispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
                                                  std::shared_ptr<OrderManagement> order_management,
-                                                 const AmrDescription &description);
+                                                 AmrDescription description);
 
-  ~IteratedAuctionDispositionParticipant() = default;
+  ~IteratedAuctionDispositionParticipant() override = default;
 
   /// @brief To process a CallForProposal we need to initiate AuctionParticipantState for this
   /// auction process, initially calculate possible bids for each open task, and consequently submit

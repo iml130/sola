@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageUnlockNeighbor : public MinhtonMessage<MessageUnlockNeighbor> {
 public:
-  explicit MessageUnlockNeighbor(const MinhtonMessageHeader &header);
+  explicit MessageUnlockNeighbor(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

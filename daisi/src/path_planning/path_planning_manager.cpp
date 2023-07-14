@@ -452,8 +452,6 @@ void PathPlanningManager::setupArp(const ns3::NetDeviceContainer &devices,
       auto other_mac = devices.Get(k)->GetAddress();
       ns3::ArpCache::Entry *arp_entry = arpcache->Add(other_ip);
       arp_entry->SetMacAddress(Mac48Address::ConvertFrom(other_mac));
-      uint8_t buff[6];
-      Mac48Address::ConvertFrom(other_mac).CopyTo(buff);
       arp_entry->MarkPermanent();
     }
   }

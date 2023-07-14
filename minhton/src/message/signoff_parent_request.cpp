@@ -8,8 +8,8 @@
 
 namespace minhton {
 
-MessageSignoffParentRequest::MessageSignoffParentRequest(const MinhtonMessageHeader &header)
-    : header_(header) {
+MessageSignoffParentRequest::MessageSignoffParentRequest(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kSignOffParentRequest);
   validate();
 }

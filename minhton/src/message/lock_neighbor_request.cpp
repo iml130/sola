@@ -8,8 +8,8 @@
 
 namespace minhton {
 
-MessageLockNeighborRequest::MessageLockNeighborRequest(const MinhtonMessageHeader &header)
-    : header_(header) {
+MessageLockNeighborRequest::MessageLockNeighborRequest(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kLockNeighborRequest);
   validate();
 }

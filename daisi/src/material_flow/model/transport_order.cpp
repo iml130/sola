@@ -20,18 +20,18 @@
 
 namespace daisi::material_flow {
 
-TransportOrder::TransportOrder(const std::vector<TransportOrderStep> &pickup_transport_order_steps,
-                               const TransportOrderStep &delivery_transport_order_step)
+TransportOrder::TransportOrder(std::vector<TransportOrderStep> pickup_transport_order_steps,
+                               TransportOrderStep delivery_transport_order_step)
     : uuid_(UUIDGenerator::get()()),
-      pickup_transport_order_steps_(pickup_transport_order_steps),
-      delivery_transport_order_step_(delivery_transport_order_step) {}
+      pickup_transport_order_steps_(std::move(pickup_transport_order_steps)),
+      delivery_transport_order_step_(std::move(delivery_transport_order_step)) {}
 
 TransportOrder::TransportOrder(std::string uuid,
-                               const std::vector<TransportOrderStep> &pickup_transport_order_steps,
-                               const TransportOrderStep &delivery_transport_order_step)
+                               std::vector<TransportOrderStep> pickup_transport_order_steps,
+                               TransportOrderStep delivery_transport_order_step)
     : uuid_(std::move(uuid)),
-      pickup_transport_order_steps_(pickup_transport_order_steps),
-      delivery_transport_order_step_(delivery_transport_order_step) {}
+      pickup_transport_order_steps_(std::move(pickup_transport_order_steps)),
+      delivery_transport_order_step_(std::move(delivery_transport_order_step)) {}
 
 const std::string &TransportOrder::getUuid() const { return uuid_; }
 

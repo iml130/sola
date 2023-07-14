@@ -24,21 +24,17 @@ namespace daisi::cpps::logical {
 
 class MetricsComposition {
 public:
-  MetricsComposition() : insertion_metrics_set_(false), diff_insertion_metrics_set_(false){};
+  MetricsComposition() = default;
 
   explicit MetricsComposition(const Metrics &current_metrics)
-      : current_metrics_(current_metrics),
-        insertion_metrics_(current_metrics),
-        insertion_metrics_set_(false),
-        diff_insertion_metrics_set_(false) {}
+      : current_metrics_(current_metrics), insertion_metrics_(current_metrics) {}
 
   MetricsComposition(const Metrics &current_metrics, const Metrics &insertion_metrics,
                      const Metrics &diff_insertion_metrics)
       : current_metrics_(current_metrics),
         insertion_metrics_(insertion_metrics),
         insertion_metrics_set_(true),
-        diff_insertion_metrics_(diff_insertion_metrics),
-        diff_insertion_metrics_set_(false) {}
+        diff_insertion_metrics_(diff_insertion_metrics) {}
 
   const Metrics &getCurrentMetrics() const { return current_metrics_; }
 
@@ -111,11 +107,11 @@ private:
 
   // metrics when the task got inserted
   Metrics insertion_metrics_;
-  bool insertion_metrics_set_;
+  bool insertion_metrics_set_ = false;
 
   // metric difference when the task got inserted
   Metrics diff_insertion_metrics_;
-  bool diff_insertion_metrics_set_;
+  bool diff_insertion_metrics_set_ = false;
 };
 
 }  // namespace daisi::cpps::logical

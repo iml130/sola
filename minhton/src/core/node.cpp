@@ -66,19 +66,19 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
   acc->logger = std::move(log);
   access_ = acc;
 
-  acc->send = [&](const MessageVariant &msg) { send(msg); };
-  acc->recv = [&](const MessageVariant &msg) { recv(msg); };
+  acc->send = [this](const MessageVariant &msg) { send(msg); };
+  acc->recv = [this](const MessageVariant &msg) { recv(msg); };
 
-  acc->set_timeout = std::bind(&minhton::MinhtonNode::setTimeout, this, std::placeholders::_1);
+  acc->set_timeout = [this](TimeoutType type) -> void { this->setTimeout(type); };
 
-  acc->cancel_timeout = [&](TimeoutType timeoutType) { watchdog_.cancelJob(timeoutType); };
+  acc->cancel_timeout = [this](TimeoutType timeoutType) { watchdog_.cancelJob(timeoutType); };
 
-  acc->get_fsm_state = std::bind(&minhton::MinhtonNode::getFsmState, this);
+  acc->get_fsm_state = [this]() -> FSMState { return this->getFsmState(); };
   acc->set_new_fsm = [this](minhton::FiniteStateMachine new_fsm) { fsm_ = new_fsm; };
 
-  acc->get_timestamp = [&]() { return minhton::getCurrentTime(); };
+  acc->get_timestamp = []() { return minhton::getCurrentTime(); };
 
-  acc->get_timeout_length = [&](minhton::TimeoutType timeout_type) {
+  acc->get_timeout_length = [this](minhton::TimeoutType timeout_type) {
     return getTimeoutLength(timeout_type);
   };
 
@@ -158,7 +158,7 @@ void MinhtonNode::processSignal(Signal signal) {
     signal.can_leave_position = logic_->canLeaveWithoutReplacement();
   }
 
-  FSMState state = FSMState(fsm_.current_state());
+  auto state = FSMState(fsm_.current_state());
   fsm_.process_event(signal);
 
   if (!fsm_.isActionValid()) {
@@ -190,7 +190,7 @@ void MinhtonNode::prepareSending(const MessageVariant &msg_variant) {
           throw InvalidMessageException(header);
         }
 
-        FSMState state = FSMState(fsm_.current_state());
+        auto state = FSMState(fsm_.current_state());
         SendMessage fsm_event{header.getMessageType()};
         fsm_.process_event(fsm_event);
 
@@ -225,7 +225,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         LOG_INFO("recv " + getMessageTypeString(header.getMessageType()) + " from " +
                  header.getSender().getString());
 
-        FSMState state = FSMState(fsm_.current_state());
+        auto state = FSMState(fsm_.current_state());
         ReceiveMessage fsm_event{header.getMessageType()};
 
         // If a find_replacement msg reaches the node that wants to leave and is chosen as the
@@ -334,12 +334,12 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
 }
 
 void MinhtonNode::triggerTimeout(const TimeoutType &timeout_type) {
-  Timeout timeout_event = Timeout{timeout_type, false};
+  auto timeout_event = Timeout{timeout_type, false};
   if (timeout_type == TimeoutType::kBootstrapResponseTimeout) {
     timeout_event.valid_bootstrap_response = logic_->isBootstrapResponseValid();
   }
 
-  FSMState state = FSMState(fsm_.current_state());
+  auto state = FSMState(fsm_.current_state());
   fsm_.process_event(timeout_event);
 
   if (!fsm_.isActionValid()) {
@@ -401,7 +401,7 @@ uint16_t MinhtonNode::getTimeoutLength(const TimeoutType &timeout_type) const {
 
 FSMState MinhtonNode::getFsmState() {
   int state_int = fsm_.current_state();
-  FSMState state = static_cast<FSMState>(state_int);
+  auto state = static_cast<FSMState>(state_int);
   return state;
 }
 

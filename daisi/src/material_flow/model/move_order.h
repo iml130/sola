@@ -26,8 +26,8 @@ class MoveOrder {
 public:
   MoveOrder() = default;
 
-  explicit MoveOrder(const MoveOrderStep &move_order_step);
-  MoveOrder(std::string uuid, const MoveOrderStep &move_order_step);
+  explicit MoveOrder(MoveOrderStep move_order_step);
+  MoveOrder(std::string uuid, MoveOrderStep move_order_step);
 
   const std::string &getUuid() const;
   const MoveOrderStep &getMoveOrderStep() const;

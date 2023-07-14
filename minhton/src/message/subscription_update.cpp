@@ -7,9 +7,9 @@
 #include "minhton/message/subscription_update.h"
 namespace minhton {
 
-MessageSubscriptionUpdate::MessageSubscriptionUpdate(const MinhtonMessageHeader &header,
-                                                     NodeData::Key key, NodeData::Value value)
-    : header_(header), key_(std::move(key)), value_(value) {
+MessageSubscriptionUpdate::MessageSubscriptionUpdate(MinhtonMessageHeader header, NodeData::Key key,
+                                                     NodeData::Value value)
+    : header_(std::move(header)), key_(std::move(key)), value_(std::move(value)) {
   header_.setMessageType(MessageType::kSubscriptionUpdate);
   MessageLoggingAdditionalInfo logging_info;
   logging_info.content = "key=" + key_;

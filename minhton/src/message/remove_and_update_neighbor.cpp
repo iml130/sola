@@ -8,11 +8,11 @@
 
 namespace minhton {
 
-MessageRemoveAndUpdateNeighbors::MessageRemoveAndUpdateNeighbors(const MinhtonMessageHeader &header,
+MessageRemoveAndUpdateNeighbors::MessageRemoveAndUpdateNeighbors(MinhtonMessageHeader header,
                                                                  MessageRemoveNeighbor remove_msg,
                                                                  MessageUpdateNeighbors update_msg,
                                                                  bool should_acknowledge)
-    : header_(header),
+    : header_(std::move(header)),
       remove_msg_(std::move(remove_msg)),
       update_msg_(std::move(update_msg)),
       should_acknowledge_(should_acknowledge) {

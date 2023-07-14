@@ -8,7 +8,7 @@
 
 namespace minhton {
 
-MessageEmpty::MessageEmpty(const MinhtonMessageHeader &header) : header_(header) {
+MessageEmpty::MessageEmpty(MinhtonMessageHeader header) : header_(std::move(header)) {
   header_.setMessageType(MessageType::kEmpty);
   validate();
 }

@@ -17,7 +17,7 @@ namespace minhton {
 /// the target forwards the message with the set entering node further.
 class MessageJoin : public MinhtonMessage<MessageJoin> {
 public:
-  MessageJoin(const MinhtonMessageHeader &header, NodeInfo entering_node,
+  MessageJoin(MinhtonMessageHeader header, NodeInfo entering_node,
               SearchProgress search_progress = SearchProgress::kNone);
 
   NodeInfo getEnteringNode() const;

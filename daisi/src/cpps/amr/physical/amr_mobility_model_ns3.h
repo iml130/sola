@@ -35,12 +35,12 @@ class AmrMobilityModelNs3 : public ns3::MobilityModel {
 public:
   AmrMobilityModelNs3() { phases_.push_back(AmrMobilityStatus()); }
 
-  virtual ~AmrMobilityModelNs3() = default;
+  ~AmrMobilityModelNs3() override = default;
 
   /// @brief used by ns3
   static ns3::TypeId GetTypeId();
 
-  virtual ns3::TypeId GetInstanceTypeId() const;
+  ns3::TypeId GetInstanceTypeId() const override;
 
   void execute(const FunctionalityVariant &functionality, const AmrDescription &description,
                const Topology &topology, FunctionalityDoneCallback notifyDone);
@@ -54,11 +54,11 @@ public:
 
 private:
   /// @brief implements ns3::MobilityModel::DoGetPosition
-  virtual ns3::Vector DoGetPosition() const;
+  ns3::Vector DoGetPosition() const override;
   /// @brief implements ns3::MobilityModel::DoSetPosition
-  virtual void DoSetPosition(const ns3::Vector &position);
+  void DoSetPosition(const ns3::Vector &position) override;
   /// @brief implements ns3::MobilityModel::DoGetVelocity
-  virtual ns3::Vector DoGetVelocity() const;
+  ns3::Vector DoGetVelocity() const override;
 
   AmrMobilityStatus getStatus() {
     return AmrMobilityHelper::calculateMobilityStatus(phases_.front(), now());

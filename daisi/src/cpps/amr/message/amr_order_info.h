@@ -27,9 +27,9 @@ namespace daisi::cpps {
 class AmrOrderInfo {
 public:
   AmrOrderInfo() = default;
-  AmrOrderInfo(const std::vector<FunctionalityVariant> &functionalities,
+  AmrOrderInfo(std::vector<FunctionalityVariant> functionalities,
                const amr::AmrStaticAbility &ability_requirement)
-      : functionalities_(functionalities), ability_requirement_(ability_requirement) {}
+      : functionalities_(std::move(functionalities)), ability_requirement_(ability_requirement) {}
 
   std::vector<FunctionalityVariant> getFunctionalities() const { return functionalities_; }
   amr::AmrStaticAbility getAbilityRequirement() const { return ability_requirement_; }

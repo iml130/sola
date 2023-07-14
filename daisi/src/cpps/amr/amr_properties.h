@@ -29,15 +29,14 @@ class AmrProperties {
 public:
   AmrProperties() = default;
 
-  AmrProperties(const std::string &manufacturer, const std::string &model_name,
-                const uint32_t &model_number, const std::string &device_type,
-                const std::string &friendly_name,
-                const std::set<FunctionalityType> &functionalities = {})
-      : device_type_(device_type),
-        friendly_name_(friendly_name),
-        functionalities_(functionalities),
-        manufacturer_(manufacturer),
-        model_name_(model_name),
+  AmrProperties(std::string manufacturer, std::string model_name, uint32_t model_number,
+                std::string device_type, std::string friendly_name,
+                std::set<FunctionalityType> functionalities = {})
+      : device_type_(std::move(device_type)),
+        friendly_name_(std::move(friendly_name)),
+        functionalities_(std::move(functionalities)),
+        manufacturer_(std::move(manufacturer)),
+        model_name_(std::move(model_name)),
         model_number_(model_number) {}
 
   explicit AmrProperties(std::string friendly_name) : friendly_name_(std::move(friendly_name)) {}

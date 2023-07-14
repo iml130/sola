@@ -29,10 +29,10 @@ namespace daisi::minhton_ns3 {
 class MinhtonNodeNs3 : public ns3::Object {
 public:
   explicit MinhtonNodeNs3(const minhton::ConfigNode &config);
-  ~MinhtonNodeNs3() = default;
+  ~MinhtonNodeNs3() override = default;
 
   static ns3::TypeId GetTypeId();
-  ns3::TypeId GetInstanceTypeId() const;
+  ns3::TypeId GetInstanceTypeId() const override;
 
   void processSignal(const minhton::Signal &signal);
 

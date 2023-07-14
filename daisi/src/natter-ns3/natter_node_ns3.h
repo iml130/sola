@@ -34,7 +34,7 @@ public:
   NatterNodeNs3(std::shared_ptr<natter::logging::NatterLoggerNs3> logger, NatterMode mode);
 
   static ns3::TypeId GetTypeId();
-  ns3::TypeId GetInstanceTypeId() const;
+  ns3::TypeId GetInstanceTypeId() const override;
 
   // Natter functions wrapper
   void addPeer(const std::string &topic, natter::UUID uuid, const std::string &ip, uint16_t port,

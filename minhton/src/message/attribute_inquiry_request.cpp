@@ -9,8 +9,10 @@
 namespace minhton {
 
 MessageAttributeInquiryRequest::MessageAttributeInquiryRequest(
-    const MinhtonMessageHeader &header, bool inquire_all, std::vector<std::string> missing_keys)
-    : header_(header), inquire_all_(inquire_all), missing_keys_(std::move(missing_keys)) {
+    MinhtonMessageHeader header, bool inquire_all, std::vector<std::string> missing_keys)
+    : header_(std::move(header)),
+      inquire_all_(inquire_all),
+      missing_keys_(std::move(missing_keys)) {
   header_.setMessageType(MessageType::kAttributeInquiryRequest);
 
   MessageLoggingAdditionalInfo logging_info;

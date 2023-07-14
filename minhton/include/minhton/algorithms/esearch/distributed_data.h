@@ -25,9 +25,9 @@ public:
   void setPhysicalNodeInfo(const PhysicalNodeInfo &p_node_info);
   PhysicalNodeInfo getPhysicalNodeInfo() const;
 
-  virtual bool insert(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
-  virtual bool update(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
-  virtual void remove(Key key) override;
+  bool insert(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
+  bool update(Key key, NodeData::ValueTimestampAndType value_timestamp_and_type) override;
+  void remove(Key key) override;
 
   void addSubscriptionOrderKey(NodeData::Key key);
   void removeSubscriptionOrderKey(NodeData::Key key);
@@ -37,12 +37,11 @@ public:
 
   bool isKeySubscribed(NodeData::Key key);
 
-  virtual bool isValueUpToDate(NodeData::Key key,
-                               const uint64_t &validity_threshold_timestamp) override;
+  bool isValueUpToDate(NodeData::Key key, const uint64_t &validity_threshold_timestamp) override;
 
   uint8_t getTimestampStorageLimit() const;
 
-  virtual bool isLocal() const override;
+  bool isLocal() const override;
 
 private:
   PhysicalNodeInfo p_node_info_;

@@ -43,7 +43,7 @@ public:
   SOLA(const typename StorageT::Config &storage_config,
        const typename EventDisseminationT::Config &event_dissemination_config,
        MessageReceiveFct receive_fct, TopicMessageReceiveFct topic_recv)
-      : receive_fct_(receive_fct),
+      : receive_fct_(std::move(receive_fct)),
         network_(std::make_unique<solanet::Network>([&](const solanet::Message &msg) {
           receive_fct_({msg.getIp(), msg.getMessage()});
         })),

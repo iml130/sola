@@ -14,7 +14,7 @@
 namespace minhton {
 class MessageSubscriptionOrder : public MinhtonMessage<MessageSubscriptionOrder> {
 public:
-  MessageSubscriptionOrder(const MinhtonMessageHeader &header, std::vector<NodeData::Key> keys,
+  MessageSubscriptionOrder(MinhtonMessageHeader header, std::vector<NodeData::Key> keys,
                            bool subscribe = false);
 
   std::vector<NodeData::Key> getKeys() const;
