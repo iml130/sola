@@ -1,5 +1,0 @@
-# Central
-
-## Concept
-
-## Interaction

@@ -19,7 +19,7 @@ nav:
       - "Example: Decentralized Communication": sola/decentralized_communication.md
       - Logging: sola/logging.md
       - Glossary: sola/glossary.md
-  - MINHTON: 
+  - MINHTON:
     - Introduction: management_overlay/introduction.md
     - Getting Started: management_overlay/getting_started.md
     - Programmers Manual:
@@ -47,24 +47,22 @@ nav:
         - MINHCAST: natter/programmers/minhcast.md
     - Known Limitations: natter/known-limitations.md
     - Glossary: natter/glossary.md
-  - Applications: 
-    - Introduction: applications/getting_started.md
-    - OptiMaFlow: 
-      - Getting Started: applications/optimaflow/getting_started.md
-      - Participants:
-        - Material Flow: applications/optimaflow/material_flow.md
-        - AMR/AGV: applications/optimaflow/amr_agv.md
-        - Optimization: applications/optimaflow/optimization.md
-      - Task Assignment:
-        - ContractNet: applications/optimaflow/contract_net.md
-        - RoundRobin: applications/optimaflow/round_robin.md       
-      - Logging: applications/optimaflow/logging.md 
-    - Glossary: applications/glossary.md
-      
-  - ns-3 Integration: 
+  - OptiMaFlow:
+    - Introduction: optimaflow/introduction.md
+    - Participants:
+      - Overview: optimaflow/participants/overview.md
+      - Material Flow: optimaflow/participants/material_flow.md
+      - AMR: optimaflow/participants/amr.md
+    - Task Assignment:
+      - Decentralized: optimaflow/task_assignment/decentralized.md
+      - Centralized: optimaflow/task_assignment/round_robin.md
+    - Logging: optimaflow/logging.md
+    - Glossary: optimaflow/glossary.md
+
+  - ns-3 Integration:
     - Introduction: daisi/introduction.md
     - Getting started: daisi/getting_started.md
-    - Logging: daisi/logging.md 
+    - Logging: daisi/logging.md
     - Network: daisi/network.md
     - SOLA:
       - Scenariofile: daisi/sola-ns3/scenario_files.md
@@ -73,7 +71,7 @@ nav:
     - MINHTON:
       - Scenariofile: daisi/minhton-ns3/scenariofile.md
       - Logging: daisi/minhton-ns3/logging.md
-      - ESearch: daisi/minhton-ns3/esearch.md    
+      - ESearch: daisi/minhton-ns3/esearch.md
     - NATTER:
       - Scenariofile: daisi/natter-ns3/scenariofile.md
       - Logging: daisi/natter-ns3/logging.md
@@ -112,7 +110,7 @@ theme:
   search_index_only: true
 
 extra_css:
-    - stylesheets/extra.css
+  - stylesheets/extra.css
 
 markdown_extensions:
   - md_in_html
@@ -128,6 +126,5 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-
 
 copyright: Copyright &copy; The SOLA authors

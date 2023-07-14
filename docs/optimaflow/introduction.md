@@ -1,20 +1,24 @@
-# Intralogistics
+!!!danger "This is work in progress!"
+
+# Introduction
+
+## Getting started
+
+To run OptiMaFlow please download and build the repository as described [here](../../docs/getting_started.md).
+Afterwards follow the instructions for [OptiMaFlow](../../daisi/docs/optimaflow-ns3/introduction.md) in the ns3-Integration tab.
+
+### Intralogistics
 
 Industry 4.0 (I4.0), the fourth industrial revolution, is the unification of the physical (hardware) world with cyber-applications (software) [[1]](#references).
 New technologies and applications emerge in the intelligent manufacturing environment, also known as smart factories or cyber-physical production systems (CPPSs) [[2]](#references).
 These I4.0-scenarios are built on the design principles such as interconnectivity, information transparency (open interfaces and standards), decentralized decision-making, and technical assistance [[3]](#references).
 For instance, a production order (PO) becomes digital and gains access to information of all devices and services of the CPPS.
 
-# Entities within a CPPS
+### Entities within a CPPS, Agent-based Approach, Participants Overview
 
-TODO: Figure
+## What is OptiMaFlow?
 
-## Agent-based Approach
-- Material Flow
-- Logical Agent
-
-# Use-Case:
-TODO: Figure
+## Interfaces are important
 
 ## References
 
