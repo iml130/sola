@@ -524,7 +524,7 @@ uint64_t MinhtonManager::Scheduler::getRootIndex() {
 }
 
 void MinhtonManager::Scheduler::scheduleValidateLeave(uint64_t delay) {
-  for (uint16_t i = 0; i < manager_.getNumberOfNodes(); i++) {
+  for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
     Ptr<MinhtonNodeNs3> node = manager_.nodeContainer_.Get(i)
                                    ->GetApplication(0)
                                    ->GetObject<MinhtonApplication>()
@@ -563,7 +563,7 @@ MinhtonManager::Scheduler::getExistingPositions() {
 }
 
 Ptr<MinhtonNodeNs3> MinhtonManager::Scheduler::getNodeAtPosition(uint16_t level, uint16_t number) {
-  for (uint16_t i = 0; i < manager_.getNumberOfNodes(); i++) {
+  for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
     Ptr<MinhtonNodeNs3> node = manager_.nodeContainer_.Get(i)
                                    ->GetApplication(0)
                                    ->GetObject<MinhtonApplication>()
