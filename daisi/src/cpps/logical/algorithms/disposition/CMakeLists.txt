@@ -22,7 +22,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_part
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator STATIC)
 target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator
-    PUBLIC
+    PRIVATE
     iterated_auction_disposition_initiator.h
     iterated_auction_disposition_initiator.cpp
 )
@@ -38,7 +38,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
 target_sources(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant
-    PUBLIC
+    PRIVATE
     iterated_auction_disposition_participant.h
     iterated_auction_disposition_participant.cpp
 )
@@ -51,7 +51,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
 
 add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
 target_sources(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph
-    PUBLIC
+    PRIVATE
     layered_precedence_graph.h
     layered_precedence_graph.cpp
     layered_precedence_graph_components.h
@@ -65,7 +65,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_layered_preceden
 
 add_library(daisi_cpps_logical_algorithms_disposition_auction_initiator_state STATIC)
 target_sources(daisi_cpps_logical_algorithms_disposition_auction_initiator_state
-    PUBLIC
+    PRIVATE
     auction_initiator_state.h
     auction_initiator_state.cpp
 )
@@ -77,7 +77,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_auction_initiato
 
 add_library(daisi_cpps_logical_algorithms_disposition_auction_participant_state STATIC)
 target_sources(daisi_cpps_logical_algorithms_disposition_auction_participant_state
-    PUBLIC
+    PRIVATE
     auction_participant_state.h
     auction_participant_state.cpp
 )

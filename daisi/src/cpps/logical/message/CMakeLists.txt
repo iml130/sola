@@ -2,7 +2,7 @@ add_subdirectory(auction_based)
 
 add_library(daisi_cpps_logical_message_serializer STATIC)
 target_sources(daisi_cpps_logical_message_serializer
-    PUBLIC
+    PRIVATE
     serializer.cpp
     serializer.h
 )

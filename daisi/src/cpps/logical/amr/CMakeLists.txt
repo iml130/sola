@@ -1,5 +1,5 @@
 add_library(daisi_cpps_logical_amr_amr_logical_agent STATIC)
-target_sources(daisi_cpps_logical_amr_amr_logical_agent PUBLIC
+target_sources(daisi_cpps_logical_amr_amr_logical_agent PRIVATE
     amr_logical_agent.cpp
     amr_logical_agent.h
     amr_logical_execution_state.cpp
