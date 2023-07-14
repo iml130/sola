@@ -50,7 +50,7 @@ LogicContainer::LogicContainer(std::shared_ptr<AccessContainer> access,
 
   entity_search_algo_ = std::make_unique<MinhtonEntitySearchAlgorithm>(access);
 
-  access->replace_myself = [this](NodeInfo node_to_replace,
+  access->replace_myself = [this](const NodeInfo &node_to_replace,
                                   std::vector<NodeInfo> neighbors_of_node_to_replace) -> void {
     leave_algo_->replaceMyself(node_to_replace, neighbors_of_node_to_replace);
   };

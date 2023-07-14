@@ -51,7 +51,7 @@ public:
 
   std::unordered_map<Key, ValueTimestampAndType> getData();
 
-  virtual bool isValueUpToDate(NodeData::Key key, const uint64_t &validity_threshold_timestamp);
+  virtual bool isValueUpToDate(const NodeData::Key &key, uint64_t validity_threshold_timestamp);
 
   virtual bool isLocal() const = 0;
 

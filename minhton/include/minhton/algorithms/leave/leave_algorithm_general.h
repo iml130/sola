@@ -264,7 +264,7 @@ protected:
   /// \param neighbors_of_node_to_replace every neighbor the node to replace knew of
   ///
   /// TODO  sts
-  void replaceMyself(minhton::NodeInfo node_to_replace,
+  void replaceMyself(const minhton::NodeInfo &node_to_replace,
                      std::vector<minhton::NodeInfo> neighbors_of_node_to_replace) override;
 
   /// This method is called after we received all acknowledgements from our neighbors and adjacents
