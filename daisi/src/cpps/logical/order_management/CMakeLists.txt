@@ -1,6 +1,6 @@
 add_library(daisi_cpps_logical_order_management_order_management_helper STATIC)
 target_sources(daisi_cpps_logical_order_management_order_management_helper
-    PUBLIC
+    PRIVATE
     order_management_helper.h
     order_management_helper.cpp
 )
@@ -22,7 +22,7 @@ target_link_libraries(daisi_cpps_logical_order_management_order_management
 
 add_library(daisi_cpps_logical_order_management_metrics_composition STATIC)
 target_sources(daisi_cpps_logical_order_management_metrics_composition
-    PUBLIC
+    PRIVATE
     metrics.h
     metrics.cpp
     metrics_composition.h
@@ -46,7 +46,7 @@ target_link_libraries(daisi_cpps_logical_order_management_auction_based_order_ma
 
 add_library(daisi_cpps_logical_order_management_stn_order_management STATIC)
 target_sources(daisi_cpps_logical_order_management_stn_order_management
-    PUBLIC
+    PRIVATE
     stn_order_management.h
     stn_order_management.cpp
     stn_order_management_components.h
@@ -60,7 +60,7 @@ target_link_libraries(daisi_cpps_logical_order_management_stn_order_management
 )
 add_library(daisi_cpps_logical_order_management_simple_order_management STATIC)
 target_sources(daisi_cpps_logical_order_management_simple_order_management
-    PUBLIC
+    PRIVATE
     simple_order_management.h
     simple_order_management.cpp
 )

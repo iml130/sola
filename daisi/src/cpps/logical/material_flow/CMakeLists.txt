@@ -1,6 +1,6 @@
 add_library(daisi_cpps_logical_material_flow_material_flow_logical_agent STATIC)
 target_sources(daisi_cpps_logical_material_flow_material_flow_logical_agent
-    PUBLIC
+    PRIVATE
     material_flow_logical_agent.cpp
     material_flow_logical_agent.h
 )

@@ -163,7 +163,7 @@ target_link_libraries(daisi_cpps_amr_unload
 
 add_library(daisi_cpps_amr_physical_material_flow_functionality_mapping STATIC)
 target_sources(daisi_cpps_amr_physical_material_flow_functionality_mapping
-    PUBLIC
+    PRIVATE
     material_flow_functionality_mapping.cpp
     material_flow_functionality_mapping.h
 )
