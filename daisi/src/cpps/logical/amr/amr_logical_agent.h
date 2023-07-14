@@ -36,25 +36,25 @@ class AmrLogicalAgent : public LogicalAgent {
 public:
   AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &config, bool first_node);
 
-  ~AmrLogicalAgent() = default;
+  ~AmrLogicalAgent() override = default;
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init(ns3::Ptr<ns3::Socket> tcp_socket);
 
-  virtual void start() override;
+  void start() override;
 
   void notifyTaskAssigned();
 
 private:
-  virtual void initAlgorithms() override;
+  void initAlgorithms() override;
 
   /// @brief Method being called by sola when we receive a 1-to-1 message
   /// @param m received message
-  virtual void messageReceiveFunction(const sola::Message &msg) override;
+  void messageReceiveFunction(const sola::Message &msg) override;
 
   /// @brief Method being called by sola when we receive a message via a topic
   /// @param m received message
-  virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) override;
+  void topicMessageReceiveFunction(const sola::TopicMessage &msg) override;
 
   /// @brief We always accept an incoming connection.
   bool connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr);
@@ -83,7 +83,7 @@ private:
   void setServices();
 
   AmrDescription description_;
-  bool description_set_;  // to avoid overriding
+  bool description_set_ = false;  // to avoid overriding
 
   Topology topology_;
 

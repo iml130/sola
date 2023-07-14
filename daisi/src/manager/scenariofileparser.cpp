@@ -58,12 +58,12 @@ std::shared_ptr<ScenariofileParser::Table> ScenariofileParser::parseRecursive(YA
   auto table = std::make_shared<ScenariofileParser::Table>();
 
   for (auto const &it : node) {
-    std::string key = it.first.as<std::string>();
+    auto key = it.first.as<std::string>();
     if (it.second.IsScalar()) {
       try {
         table->content[key] = it.second.as<uint64_t>();
       } catch (const YAML::BadConversion &e) {
-        std::string str = it.second.as<std::string>();
+        auto str = it.second.as<std::string>();
 
         try {
           float val = std::stof(str);
@@ -82,8 +82,8 @@ std::shared_ptr<ScenariofileParser::Table> ScenariofileParser::parseRecursive(YA
       std::vector<std::shared_ptr<ScenariofileParser::Table>> temp_vec;
       temp_vec.reserve(it.second.size());
 
-      for (std::size_t i = 0; i < it.second.size(); i++) {
-        temp_vec.push_back(parseRecursive(it.second[i]));
+      for (const auto &i : it.second) {
+        temp_vec.push_back(parseRecursive(i));
       }
 
       table->content[key] = temp_vec;

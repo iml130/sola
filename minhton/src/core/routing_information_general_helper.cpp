@@ -309,7 +309,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::getAllInitializedRoutingTable
 minhton::NodeInfo RoutingInformation::getDirectLeftNeighbor() const {
   std::vector<minhton::NodeInfo> left_neighbors = getLeftRoutingTableNeighborsLeftToRight();
   if (left_neighbors.empty()) {
-    return NodeInfo();
+    return {};
   }
   return left_neighbors.back();
 }
@@ -317,7 +317,7 @@ minhton::NodeInfo RoutingInformation::getDirectLeftNeighbor() const {
 minhton::NodeInfo RoutingInformation::getDirectRightNeighbor() const {
   std::vector<minhton::NodeInfo> right_neighbors = getRightRoutingTableNeighborsLeftToRight();
   if (right_neighbors.empty()) {
-    return NodeInfo();
+    return {};
   }
   return right_neighbors.front();
 }
@@ -325,7 +325,7 @@ minhton::NodeInfo RoutingInformation::getDirectRightNeighbor() const {
 minhton::NodeInfo RoutingInformation::getLeftmostNeighbor() const {
   std::vector<minhton::NodeInfo> left_neighbors = getLeftRoutingTableNeighborsLeftToRight();
   if (left_neighbors.empty()) {
-    return NodeInfo();
+    return {};
   }
   return left_neighbors.front();
 }
@@ -333,7 +333,7 @@ minhton::NodeInfo RoutingInformation::getLeftmostNeighbor() const {
 minhton::NodeInfo RoutingInformation::getRightmostNeighbor() const {
   std::vector<minhton::NodeInfo> right_neighbors = getRightRoutingTableNeighborsLeftToRight();
   if (right_neighbors.empty()) {
-    return NodeInfo();
+    return {};
   }
   return right_neighbors.back();
 }
@@ -342,7 +342,7 @@ minhton::NodeInfo RoutingInformation::getLeftmostNeighborChild() const {
   std::vector<minhton::NodeInfo> left_neighbor_children =
       getLeftRoutingTableNeighborChildrenLeftToRight();
   if (left_neighbor_children.empty()) {
-    return NodeInfo();
+    return {};
   }
   return left_neighbor_children.front();
 }
@@ -408,7 +408,7 @@ minhton::NodeInfo RoutingInformation::getNodeInfoByPosition(uint32_t level, uint
     return *same_pos_it;
   }
 
-  return minhton::NodeInfo();
+  return {};
 }
 
 std::vector<minhton::NodeInfo> RoutingInformation::removeRoutingTableNeighborChildrenFromVector(
@@ -556,7 +556,7 @@ minhton::NodeInfo RoutingInformation::getLowestNode() const {
   }
 
   // no initialized node that is lower
-  return minhton::NodeInfo();
+  return {};
 }
 
 bool RoutingInformation::areWeDSN() {
@@ -604,7 +604,7 @@ NodeInfo RoutingInformation::getCoveringDSNOrTempDSN() {
 
   // if we are on the level below, the covering dsn has to exist anyways
   if (self_node_info_.getLevel() != covering_level) {
-    return NodeInfo(covering_level, covering_number, fanout);
+    return {covering_level, covering_number, fanout};
   }
 
   auto dsn_set = getDSNSet(covering_level, fanout);
@@ -614,14 +614,14 @@ NodeInfo RoutingInformation::getCoveringDSNOrTempDSN() {
   // parent of dsn
   if (covering_dsn_is_first) {
     auto const [parent_level, parent_number] = calcParent(covering_level, covering_number, fanout);
-    return NodeInfo(parent_level, parent_number, fanout);
+    return {parent_level, parent_number, fanout};
   }
 
   // if covering dsn is not first on level
   // dsn before
 
   auto it = std::lower_bound(dsn_set.begin(), dsn_set.end(), covering_number - 1);
-  return NodeInfo(covering_level, *it, fanout);
+  return {covering_level, *it, fanout};
 }
 
 bool RoutingInformation::nextDSNExists() {
@@ -641,7 +641,7 @@ NodeInfo RoutingInformation::getNextDSN() {
 
   if (*it == dsn_set[dsn_set.size() - 1]) {
     // if we are last dsn
-    return NodeInfo();
+    return {};
   }
 
   auto next_dsn_number = *std::next(it, 1);

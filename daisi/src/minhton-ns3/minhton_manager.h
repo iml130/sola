@@ -28,13 +28,13 @@ public:
   class Scheduler;
 
   explicit MinhtonManager(const std::string &scenariofile_path);
-  virtual void setup() override;
+  void setup() override;
 
 private:
   void initNode(uint32_t id, minhton::ConfigNode config);
   void setupNodeConfigurations();
-  virtual uint64_t getNumberOfNodes() override;
-  virtual void scheduleEvents() override;
+  uint64_t getNumberOfNodes() override;
+  void scheduleEvents() override;
   std::string getDatabaseFilename() override;
 
   std::shared_ptr<Scheduler> scheduler_;

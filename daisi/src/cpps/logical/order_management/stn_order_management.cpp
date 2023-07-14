@@ -33,8 +33,6 @@ StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
                                        const Topology &topology, const daisi::util::Pose &pose)
     : AuctionBasedOrderManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
-      current_task_expected_finish_time_(0),
-      time_now_(0),
       latest_calculated_insertion_info_(std::nullopt) {}
 
 void StnOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
@@ -71,7 +69,7 @@ void StnOrderManagement::updateOriginConstraints(const daisi::util::Duration &ti
 
   // update [0] with offset_difference
   // update [1] with travel time of new position
-  for (size_t i = 0; i < adjacency_matrix_.size(); ++i) {
+  for (size_t i = 0; i < adjacency_matrix_.size(); ++i) {  // NOLINT(modernize-loop-convert)
     auto &edge = adjacency_matrix_[i][0];
     if (edge.has_value()) {
       auto weight = edge->getWeight();

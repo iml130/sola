@@ -8,8 +8,8 @@
 
 namespace minhton {
 
-MessageRemoveNeighborAck::MessageRemoveNeighborAck(const MinhtonMessageHeader &header)
-    : header_(header) {
+MessageRemoveNeighborAck::MessageRemoveNeighborAck(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kRemoveNeighborAck);
   validate();
 }

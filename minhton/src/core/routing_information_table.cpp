@@ -61,10 +61,9 @@ std::vector<minhton::NodeInfo> RoutingInformation::getRoutingTableNeighborChildr
 }
 
 std::vector<minhton::NodeInfo> RoutingInformation::getLeftRoutingTableNeighborsLeftToRight() const {
-  std::vector<minhton::NodeInfo>::const_iterator it_begin = this->routing_table_neighbors_.begin();
+  auto it_begin = this->routing_table_neighbors_.cbegin();
 
-  std::vector<minhton::NodeInfo>::const_iterator it_last_left =
-      this->routing_table_neighbors_.begin();
+  auto it_last_left = this->routing_table_neighbors_.cbegin();
   std::advance(it_last_left, this->right_table_neighbor_start_index_);
 
   std::vector<minhton::NodeInfo> left_neighbors(it_begin, it_last_left);
@@ -73,11 +72,10 @@ std::vector<minhton::NodeInfo> RoutingInformation::getLeftRoutingTableNeighborsL
 
 std::vector<minhton::NodeInfo> RoutingInformation::getRightRoutingTableNeighborsLeftToRight()
     const {
-  std::vector<minhton::NodeInfo>::const_iterator it_first_right =
-      this->routing_table_neighbors_.begin();
+  auto it_first_right = this->routing_table_neighbors_.cbegin();
   std::advance(it_first_right, this->right_table_neighbor_start_index_);
 
-  std::vector<minhton::NodeInfo>::const_iterator it_last = this->routing_table_neighbors_.end();
+  auto it_last = this->routing_table_neighbors_.cend();
 
   std::vector<minhton::NodeInfo> right_neighbors(it_first_right, it_last);
   return right_neighbors;
@@ -85,11 +83,9 @@ std::vector<minhton::NodeInfo> RoutingInformation::getRightRoutingTableNeighbors
 
 std::vector<minhton::NodeInfo> RoutingInformation::getLeftRoutingTableNeighborChildrenLeftToRight()
     const {
-  std::vector<minhton::NodeInfo>::const_iterator it_begin =
-      this->routing_table_neighbor_children_.begin();
+  auto it_begin = this->routing_table_neighbor_children_.cbegin();
 
-  std::vector<minhton::NodeInfo>::const_iterator it_last_left =
-      this->routing_table_neighbor_children_.begin();
+  auto it_last_left = this->routing_table_neighbor_children_.cbegin();
   std::advance(it_last_left,
                this->right_table_neighbor_start_index_ * this->self_node_info_.getFanout());
 
@@ -99,13 +95,11 @@ std::vector<minhton::NodeInfo> RoutingInformation::getLeftRoutingTableNeighborCh
 
 std::vector<minhton::NodeInfo> RoutingInformation::getRightRoutingTableNeighborChildrenLeftToRight()
     const {
-  std::vector<minhton::NodeInfo>::const_iterator it_first_right =
-      this->routing_table_neighbor_children_.begin();
+  auto it_first_right = this->routing_table_neighbor_children_.cbegin();
   std::advance(it_first_right,
                this->right_table_neighbor_start_index_ * this->self_node_info_.getFanout());
 
-  std::vector<minhton::NodeInfo>::const_iterator it_last =
-      this->routing_table_neighbor_children_.end();
+  auto it_last = this->routing_table_neighbor_children_.cend();
 
   std::vector<minhton::NodeInfo> right_neighbor_children(it_first_right, it_last);
   return right_neighbor_children;

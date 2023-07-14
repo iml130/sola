@@ -25,8 +25,7 @@ MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
                                                    const AlgorithmConfig &config_algo,
                                                    bool first_node)
     : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo,
-                   first_node),
-      waiting_for_start_(false) {}
+                   first_node) {}
 
 void MaterialFlowLogicalAgent::init() { initCommunication(); }
 
@@ -71,7 +70,7 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   // TODO there could be multiple algorithm interfaces in the future
   assert(algorithms_.size() == 1);
 
-  DispositionInitiator *tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
+  auto tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);
 
   if (execution_counter_++ == 0) {

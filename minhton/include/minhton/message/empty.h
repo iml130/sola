@@ -15,7 +15,7 @@ namespace minhton {
 /// used outside of Search Exact Tests.
 class MessageEmpty : public MinhtonMessage<MessageEmpty> {
 public:
-  explicit MessageEmpty(const MinhtonMessageHeader &header);
+  explicit MessageEmpty(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

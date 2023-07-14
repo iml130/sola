@@ -27,14 +27,14 @@ public:
   MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo, bool first_node);
 
   /// @brief Includes leaving Sola.
-  ~MaterialFlowLogicalAgent() = default;  // TODO
+  ~MaterialFlowLogicalAgent() override = default;  // TODO
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
   virtual void init();
 
   /// @brief Starting operations by initalizing components which require the finished initialization
   /// of Sola.
-  virtual void start() override;
+  void start() override;
 
   /// @brief Adding a material flow in the form of the pure string.
   /// Processing can be started as soon as the mfdl program is set and initialization is finished.
@@ -55,24 +55,24 @@ public:
 protected:
   /// @brief Initializing algorithm interfaces depending on information from algorithm_config_.
   /// Only a part of the available interfaces might be allowed for a material flow agent.
-  virtual void initAlgorithms() override;
+  void initAlgorithms() override;
 
   /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
-  virtual void messageReceiveFunction(const sola::Message &m) override;
+  void messageReceiveFunction(const sola::Message &m) override;
 
   /// @brief Method being called by sola when we receive a message via a topic. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface
   /// @param m received message
-  virtual void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
+  void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
 
   /// @brief Material flows that
   std::vector<std::shared_ptr<daisi::material_flow::MFDLScheduler>> material_flows_;
 
 private:
   /// Simple flag to represent that the agent is still in the initialization process.
-  bool waiting_for_start_;
+  bool waiting_for_start_ = false;
 
   /// @brief Counting number of executed material flows
   uint16_t execution_counter_ = 0;

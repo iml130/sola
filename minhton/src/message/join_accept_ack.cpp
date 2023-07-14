@@ -7,7 +7,8 @@
 #include "minhton/message/join_accept_ack.h"
 namespace minhton {
 
-MessageJoinAcceptAck::MessageJoinAcceptAck(const MinhtonMessageHeader &header) : header_(header) {
+MessageJoinAcceptAck::MessageJoinAcceptAck(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kJoinAcceptAck);
   validate();
 }

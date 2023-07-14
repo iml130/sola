@@ -85,7 +85,7 @@ uint64_t MinhtonManager::getNumberOfNodes() {
 
     auto it_join_many = map.find("join-many");
     if (it_join_many != map.end()) {
-      uint64_t cnodes = INNER_TABLE(it_join_many)->getRequired<uint64_t>("number");
+      auto cnodes = INNER_TABLE(it_join_many)->getRequired<uint64_t>("number");
       current_number_of_nodes += cnodes;
 
       max_num = std::max(max_num, current_number_of_nodes);
@@ -94,7 +94,7 @@ uint64_t MinhtonManager::getNumberOfNodes() {
 
     auto it_build_static = map.find("static-build");
     if (it_build_static != map.end()) {
-      uint64_t cnodes = INNER_TABLE(it_build_static)->getRequired<uint64_t>("number");
+      auto cnodes = INNER_TABLE(it_build_static)->getRequired<uint64_t>("number");
       current_number_of_nodes += cnodes;
 
       max_num = std::max(max_num, current_number_of_nodes);
@@ -111,7 +111,7 @@ uint64_t MinhtonManager::getNumberOfNodes() {
 
     auto it_leave_many = map.find("leave-many");
     if (it_leave_many != map.end()) {
-      uint64_t cnodes = INNER_TABLE(it_leave_many)->getRequired<uint64_t>("number");
+      auto cnodes = INNER_TABLE(it_leave_many)->getRequired<uint64_t>("number");
       current_number_of_nodes -= cnodes;
 
       min_num = std::min(min_num, current_number_of_nodes);
@@ -128,8 +128,8 @@ uint64_t MinhtonManager::getNumberOfNodes() {
 
     auto it_mixed_execution = map.find("mixed-execution");
     if (it_mixed_execution != map.end()) {
-      uint64_t leave_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("leave-number");
-      uint64_t join_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("join-number");
+      auto leave_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("leave-number");
+      auto join_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("join-number");
 
       min_num = std::min(min_num, current_number_of_nodes - leave_nodes);
       max_num = std::max(max_num, current_number_of_nodes - join_nodes);

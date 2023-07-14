@@ -9,10 +9,10 @@
 namespace minhton {
 
 MessageUpdateNeighbors::MessageUpdateNeighbors(
-    const MinhtonMessageHeader &header,
-    const NeighborsAndRelationships &neighbors_and_relationships, bool should_acknowledge)
-    : header_(header),
-      neighbors_and_relationships_(neighbors_and_relationships),
+    MinhtonMessageHeader header, NeighborsAndRelationships neighbors_and_relationships,
+    bool should_acknowledge)
+    : header_(std::move(header)),
+      neighbors_and_relationships_(std::move(neighbors_and_relationships)),
       should_acknowledge_(should_acknowledge) {
   header_.setMessageType(MessageType::kUpdateNeighbors);
 

@@ -24,10 +24,10 @@
 namespace daisi::cpps::logical {
 
 LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-                           const AlgorithmConfig &config_algo, bool first_node)
+                           AlgorithmConfig config_algo, bool first_node)
     : device_id_(device_id),
       logger_(std::move(logger)),
-      algorithm_config_(config_algo),
+      algorithm_config_(std::move(config_algo)),
       first_node_(first_node) {}
 
 void LogicalAgent::initCommunication() {
@@ -46,10 +46,10 @@ void LogicalAgent::initCommunication() {
   uuid_ = UUIDGenerator::get()();
   logger_->setApplicationUUID(uuid_);
 
-  auto message_recv_fct =
-      std::bind(&LogicalAgent::messageReceiveFunction, this, std::placeholders::_1);
-  auto topic_message_recv_fct =
-      std::bind(&LogicalAgent::topicMessageReceiveFunction, this, std::placeholders::_1);
+  auto message_recv_fct = [this](const sola::Message &msg) { this->messageReceiveFunction(msg); };
+  auto topic_message_recv_fct = [this](const sola::TopicMessage &msg) {
+    this->topicMessageReceiveFunction(msg);
+  };
 
   sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(
       config_mo, config_ed, message_recv_fct, topic_message_recv_fct, logger_, uuid_, device_id_);

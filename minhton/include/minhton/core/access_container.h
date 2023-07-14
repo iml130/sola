@@ -43,7 +43,7 @@ struct AccessContainer {
 
   std::function<void(uint32_t number, std::function<void()> cb)> wait_for_acks;
 
-  std::function<void(const minhton::NodeInfo, std::vector<minhton::NodeInfo>, bool)> replace_myself;
+  std::function<void(const minhton::NodeInfo, std::vector<minhton::NodeInfo>)> replace_myself;
 
   std::function<uint64_t()> get_timestamp;
 

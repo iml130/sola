@@ -22,9 +22,9 @@ class EntitySearchAlgorithmInterface : public AlgorithmInterface {
 public:
   EntitySearchAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
 
-  virtual ~EntitySearchAlgorithmInterface(){};
+  ~EntitySearchAlgorithmInterface() override = default;
 
   virtual std::future<FindResult> find(FindQuery query) = 0;
 

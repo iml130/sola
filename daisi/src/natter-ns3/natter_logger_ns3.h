@@ -28,7 +28,7 @@ namespace natter::logging {
 
 class NatterLoggerNs3 : public LoggerInterface {
 public:
-  NatterLoggerNs3(LogDeviceApp log_device_application, LogFunction log, const LogEvent &log_event);
+  NatterLoggerNs3(LogDeviceApp log_device_application, LogFunction log, LogEvent log_event);
 
   // natter-ns3 specific logging functions
   void logNewNetworkPeer(UUID uuid, const std::string &ip, uint16_t port, int level,
@@ -47,7 +47,7 @@ public:
     log_device_application_(uuid_);
   }
 
-  ~NatterLoggerNs3();
+  ~NatterLoggerNs3() override;
 
 private:
   enum class Mode : uint16_t { kReceive, kSend };

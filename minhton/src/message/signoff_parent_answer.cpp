@@ -9,9 +9,8 @@
 #include <algorithm>
 namespace minhton {
 
-MessageSignoffParentAnswer::MessageSignoffParentAnswer(const MinhtonMessageHeader &header,
-                                                       bool successful)
-    : header_(header), successful_(successful) {
+MessageSignoffParentAnswer::MessageSignoffParentAnswer(MinhtonMessageHeader header, bool successful)
+    : header_(std::move(header)), successful_(successful) {
   header_.setMessageType(MessageType::kSignOffParentAnswer);
   validate();
 }

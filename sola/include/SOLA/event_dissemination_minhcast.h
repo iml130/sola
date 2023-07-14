@@ -41,8 +41,8 @@ public:
   using Logger = natter::logging::LoggerPtr;
 
   EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct, std::shared_ptr<Storage> storage_,
-                             const std::string &ip, const Config &config);
-  ~EventDisseminationMinhcast() = default;
+                             std::string ip, const Config &config);
+  ~EventDisseminationMinhcast() override = default;
   void publish(const std::string &topic, const std::string &message) final;
   void subscribe(const std::string &topic, std::vector<minhton::Logger::LoggerPtr> logger) final;
   void unsubscribe(const std::string &topic) final;

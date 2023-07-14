@@ -18,7 +18,7 @@ class JoinAlgorithmGeneral : public JoinAlgorithmInterface {
 public:
   JoinAlgorithmGeneral(std::shared_ptr<AccessContainer> access) : JoinAlgorithmInterface(access){};
 
-  virtual ~JoinAlgorithmGeneral(){};
+  ~JoinAlgorithmGeneral() override = default;
 
   void process(const MessageVariant &msg) override;
 

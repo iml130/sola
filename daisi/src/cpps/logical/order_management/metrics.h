@@ -27,7 +27,7 @@ namespace daisi::cpps::logical {
 
 class Metrics {
 public:
-  Metrics();
+  Metrics() = default;
 
   Metrics(daisi::util::Duration empty_travel_time, daisi::util::Duration loaded_travel_time,
           daisi::util::Duration action_time, daisi::util::Distance empty_travel_distance,
@@ -58,11 +58,11 @@ public:
 
   static std::function<double(const Metrics &)> utility_function_;
 
-  daisi::util::Duration empty_travel_time;
-  daisi::util::Duration loaded_travel_time;
-  daisi::util::Duration action_time;
-  daisi::util::Distance empty_travel_distance;
-  daisi::util::Distance loaded_travel_distance;
+  daisi::util::Duration empty_travel_time = 0.0;
+  daisi::util::Duration loaded_travel_time = 0.0;
+  daisi::util::Duration action_time = 0.0;
+  daisi::util::Distance empty_travel_distance = 0.0;
+  daisi::util::Distance loaded_travel_distance = 0.0;
 
   SERIALIZE(empty_travel_time, loaded_travel_time, action_time, empty_travel_distance,
             loaded_travel_distance, makespan_, start_time_);

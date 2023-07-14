@@ -19,9 +19,9 @@
 namespace daisi::material_flow {
 
 MoveOrderStep::MoveOrderStep(std::string name,
-                             const std::unordered_map<std::string, std::string> &parameters,
-                             const Location &location)
-    : name_(std::move(name)), parameters_(parameters), location_(location) {}
+                             std::unordered_map<std::string, std::string> parameters,
+                             Location location)
+    : name_(std::move(name)), parameters_(std::move(parameters)), location_(std::move(location)) {}
 
 const std::string &MoveOrderStep::getName() const { return name_; }
 

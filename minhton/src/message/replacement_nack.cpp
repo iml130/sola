@@ -8,8 +8,8 @@
 
 namespace minhton {
 
-MessageReplacementNack::MessageReplacementNack(const MinhtonMessageHeader &header)
-    : header_(header) {
+MessageReplacementNack::MessageReplacementNack(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kReplacementNack);
   validate();
 }

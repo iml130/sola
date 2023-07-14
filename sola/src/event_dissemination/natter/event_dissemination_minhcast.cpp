@@ -13,14 +13,14 @@
 namespace sola {
 EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct,
                                                        std::shared_ptr<Storage> storage,
-                                                       const std::string &ip, const Config &config)
+                                                       std::string ip, const Config &config)
     : minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
           [=](const natter::Message &m) {
             msgRecvFct({m.topic, natter::uuidToString(m.sender_id), m.content, m.message_id});
           },
           [](const std::string & /*unused*/) {}, config.logger)),
-      ip_(ip),
-      storage_(storage) {}
+      ip_(std::move(ip)),
+      storage_(std::move(storage)) {}
 
 void EventDisseminationMinhcast::publish(const std::string &topic, const std::string &message) {
   if (stopping_) throw std::runtime_error("already stopping!");

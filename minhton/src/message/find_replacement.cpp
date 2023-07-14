@@ -9,10 +9,10 @@
 #include <string>
 
 namespace minhton {
-MessageFindReplacement::MessageFindReplacement(const MinhtonMessageHeader &header,
+MessageFindReplacement::MessageFindReplacement(MinhtonMessageHeader header,
                                                NodeInfo node_to_replace,
                                                SearchProgress search_progress)
-    : header_(header),
+    : header_(std::move(header)),
       node_to_replace_(std::move(node_to_replace)),
       search_progress_(search_progress) {
   header_.setMessageType(MessageType::kFindReplacement);

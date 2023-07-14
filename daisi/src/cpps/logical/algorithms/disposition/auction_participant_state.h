@@ -31,7 +31,7 @@ namespace daisi::cpps::logical {
 /// AuctionParticipantState, to store information related to exactly one task.
 /// This includes the previously calculated bids (metrics) and insertion points.
 struct AuctionParticipantTaskState {
-  explicit AuctionParticipantTaskState(const daisi::material_flow::Task &task);
+  explicit AuctionParticipantTaskState(daisi::material_flow::Task task);
 
   daisi::material_flow::Task task;
 

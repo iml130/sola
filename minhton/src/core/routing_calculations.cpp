@@ -6,8 +6,6 @@
 
 #include "minhton/core/routing_calculations.h"
 
-#include <math.h>
-
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -96,11 +94,11 @@ std::vector<std::tuple<uint32_t, uint32_t>> calcLeftRT(uint32_t level, uint32_t 
   std::vector<uint32_t> seq = calcRoutingSequence(level, fanout);
   std::vector<std::tuple<uint32_t, uint32_t>> lrt;
 
-  for (std::vector<uint32_t>::size_type i = 0; i != seq.size(); i++) {
-    if (seq[i] > number) {
+  for (const unsigned int i : seq) {
+    if (i > number) {
       break;
     }
-    lrt.push_back(std::make_tuple(level, number - seq[i]));
+    lrt.push_back(std::make_tuple(level, number - i));
   }
 
   return lrt;
@@ -120,8 +118,8 @@ std::vector<std::tuple<uint32_t, uint32_t>> calcRightRT(uint32_t level, uint32_t
   uint64_t i_level = level;
   uint64_t max_number = pow(i_fanout, i_level);
 
-  for (std::vector<uint32_t>::size_type i = 0; i != seq.size(); i++) {
-    uint32_t k = number + seq[i];
+  for (const unsigned int i : seq) {
+    uint32_t k = number + i;
     if (k >= max_number) {
       break;
     }
@@ -290,7 +288,7 @@ std::vector<std::tuple<uint32_t, uint32_t>> getCoverArea(uint32_t level, uint32_
     }
   } else {
     uint32_t prior = dsn_set[index - 1];
-    uint32_t our_gap = (uint32_t)ceil((number - prior) / 2);
+    auto our_gap = (uint32_t)ceil((number - prior) / 2);
     for (uint32_t i = number - our_gap + 1; i < number; i++) {
       area.push_back(std::make_tuple(level, i));
     }
@@ -302,7 +300,7 @@ std::vector<std::tuple<uint32_t, uint32_t>> getCoverArea(uint32_t level, uint32_
     }
   } else {
     uint32_t after = dsn_set[index + 1];
-    uint32_t our_gap = (uint32_t)floor((after - number) / 2);
+    auto our_gap = (uint32_t)floor((after - number) / 2);
     for (uint32_t i = number + 1; i < number + our_gap + 1; i++) {
       area.push_back(std::make_tuple(level, i));
     }

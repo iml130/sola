@@ -9,10 +9,10 @@
 namespace minhton {
 
 MessageAttributeInquiryAnswer::MessageAttributeInquiryAnswer(
-    const MinhtonMessageHeader &header, NodeInfo inquired_node,
+    MinhtonMessageHeader header, NodeInfo inquired_node,
     std::unordered_map<std::string, NodeData::ValueAndType> attribute_values_and_types,
     std::vector<std::string> removed_attribute_keys)
-    : header_(header),
+    : header_(std::move(header)),
       inquired_node_(std::move(inquired_node)),
       attribute_values_and_types_(std::move(attribute_values_and_types)),
       removed_attribute_keys_(std::move(removed_attribute_keys)) {

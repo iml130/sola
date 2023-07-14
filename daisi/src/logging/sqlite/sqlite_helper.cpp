@@ -78,15 +78,15 @@ void SQLiteHelper::connect() {
 
   // Setting these PRAGMAs improves performance
   // See also https://www.sqlite.org/pragma.html
-  rc = sqlite3_exec(db_, "PRAGMA synchronous = OFF", NULL, NULL, NULL);
+  rc = sqlite3_exec(db_, "PRAGMA synchronous = OFF", nullptr, nullptr, nullptr);
   if (rc != 0) {
     std::cout << "Failed to set PRAGMA synchronous = OFF" << std::endl;
   }
-  rc = sqlite3_exec(db_, "PRAGMA journal_mode = MEMORY", NULL, NULL, NULL);
+  rc = sqlite3_exec(db_, "PRAGMA journal_mode = MEMORY", nullptr, nullptr, nullptr);
   if (rc != 0) {
     std::cout << "Failed to set PRAGMA journal_mode = MEMORY" << std::endl;
   }
-  rc = sqlite3_exec(db_, "PRAGMA page_size = 65536", NULL, NULL, NULL);
+  rc = sqlite3_exec(db_, "PRAGMA page_size = 65536", nullptr, nullptr, nullptr);
   if (rc != 0) {
     std::cout << "Failed to set PRAGMA page_size = 65536" << std::endl;
   }
@@ -163,7 +163,7 @@ void SQLiteHelper::execute(const std::string &query) {
 void SQLiteHelper::executeSql(const char *query) {
   if (db_ == nullptr) throw std::runtime_error("Not connected to database!");
 
-  char *err_msg_ptr = 0;
+  char *err_msg_ptr = nullptr;
   int rc = sqlite3_exec(db_, query, nullptr, nullptr, &err_msg_ptr);
 
   if (rc != SQLITE_OK) {

@@ -24,8 +24,8 @@ public:
   FSMException(FSMState previous_state, Signal event, const std::string &message) noexcept;
   FSMException(FSMState previous_state, Timeout event, const std::string &message) noexcept;
 
-  virtual ~FSMException() = default;
-  virtual const char *what() const noexcept override;
+  ~FSMException() override = default;
+  const char *what() const noexcept override;
 
 private:
   std::string error_message_;

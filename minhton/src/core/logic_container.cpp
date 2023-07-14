@@ -50,18 +50,22 @@ LogicContainer::LogicContainer(std::shared_ptr<AccessContainer> access,
 
   entity_search_algo_ = std::make_unique<MinhtonEntitySearchAlgorithm>(access);
 
-  access->replace_myself = std::bind(&LeaveAlgorithmInterface::replaceMyself, leave_algo_.get(),
-                                     std::placeholders::_1, std::placeholders::_2);
+  access->replace_myself = [this](NodeInfo node_to_replace,
+                                  std::vector<NodeInfo> neighbors_of_node_to_replace) -> void {
+    leave_algo_->replaceMyself(node_to_replace, neighbors_of_node_to_replace);
+  };
 
   access->continue_accept_child_procedure =
-      std::bind(&JoinAlgorithmInterface::continueAcceptChildProcedure, join_algo_.get(),
-                std::placeholders::_1);
+      [this](const minhton::MessageInformAboutNeighbors &message) -> void {
+    join_algo_->continueAcceptChildProcedure(message);
+  };
 
-  access->perform_search_exact =
-      std::bind(&SearchExactAlgorithmInterface::performSearchExact, search_exact_algo_.get(),
-                std::placeholders::_1, std::placeholders::_2);
+  access->perform_search_exact = [this](const minhton::NodeInfo &destination,
+                                        std::shared_ptr<MessageSEVariant> query) -> void {
+    search_exact_algo_->performSearchExact(destination, query);
+  };
 
-  access->wait_for_acks = [this](uint32_t number, std::function<void()> cb) {
+  access->wait_for_acks = [this](uint32_t number, std::function<void()> cb) -> void {
     response_algo_->waitForAcks(number, cb);
   };
 

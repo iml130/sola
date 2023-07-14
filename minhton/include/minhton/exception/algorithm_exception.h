@@ -24,8 +24,8 @@ class AlgorithmException : public std::exception {
 public:
   explicit AlgorithmException(const std::string &message) noexcept;
   AlgorithmException(AlgorithmType type, const std::string &message) noexcept;
-  virtual ~AlgorithmException() = default;
-  virtual const char *what() const noexcept override;
+  ~AlgorithmException() override = default;
+  const char *what() const noexcept override;
   static std::string getAlgorithmTypeString(AlgorithmType type);
 
 private:

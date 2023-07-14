@@ -65,7 +65,7 @@ struct Pose {
   Pose() = default;
   Pose(Position position_m, double orientation_rad)
       : position(position_m), orientation(orientation_rad) {}
-  explicit Pose(Position position_m) : position(position_m), orientation(0) {}
+  explicit Pose(Position position_m) : position(position_m) {}
 
   Position position;
   double orientation = 0.0;

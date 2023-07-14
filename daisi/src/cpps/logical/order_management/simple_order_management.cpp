@@ -22,9 +22,7 @@ namespace daisi::cpps::logical {
 SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_description,
                                              const Topology &topology,
                                              const daisi::util::Pose &pose)
-    : OrderManagement(amr_description, topology, pose),
-      expected_end_position_(pose.position),
-      time_now_(0) {}
+    : OrderManagement(amr_description, topology, pose), expected_end_position_(pose.position) {}
 
 Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; }
 
@@ -100,9 +98,8 @@ void SimpleOrderManagement::updateFinalMetrics() {
   auto orders = new_task.getOrders();
 
   // iterate through orders to find the correct start time for the final order
-  for (auto it = orders.begin(); it != orders.end(); it++) {
+  for (const auto &order : orders) {
     new_current_metrics = Metrics();
-    auto order = *it;
     insertOrderPropertiesIntoMetrics(order, new_current_metrics, new_task, start_time);
     start_time = new_current_metrics.getMakespan();
   }

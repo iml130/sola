@@ -71,7 +71,7 @@ struct SpawnInfo {
 class CppsManager : public daisi::Manager<CppsApplication> {
 public:
   explicit CppsManager(const std::string &scenario_config_file);
-  virtual void setup() override;
+  void setup() override;
 
   void initAMR(uint32_t index);
   void connectAMR(uint32_t index);
@@ -91,8 +91,8 @@ private:
 
   void setupNetworkEthernet();
   void setupNetworkWifi();
-  virtual void scheduleEvents() override;
-  virtual uint64_t getNumberOfNodes() override;
+  void scheduleEvents() override;
+  uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
   void spawnAMR(uint32_t amr_index, const AmrDescription &description, const Topology &topology);
@@ -126,8 +126,8 @@ private:
   int height_ = 0;
   int depth_ = 0;
   std::vector<AmrDescription> amr_descriptions_;
-  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> spawn_info_;
-  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<SpawnInfo>> schedule_info_;
+  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<>> spawn_info_;
+  std::priority_queue<SpawnInfo, std::vector<SpawnInfo>, std::greater<>> schedule_info_;
 
   // friendly name -> model
   std::unordered_map<std::string, MaterialFlowInfo> material_flow_models_;

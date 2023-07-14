@@ -440,11 +440,11 @@ void MinhtonLoggerNs3::logNeighbor(const LoggerInfoAddNeighbor &info) {
 
 // * Constructor & Other methods
 MinhtonLoggerNs3::MinhtonLoggerNs3(LogDeviceApp log_device_application, LogFunction log,
-                                   LogEvent &log_event)
+                                   LogEvent log_event)
     : LoggerInterface("NOT-KNOWN-YET"),
       log_device_application_(log_device_application),
       log_(std::move(log)),
-      log_event_(log_event) {}
+      log_event_(std::move(log_event)) {}
 
 MinhtonLoggerNs3::~MinhtonLoggerNs3() {
   auto current_time = ns3::Simulator::Now().GetMilliSeconds();

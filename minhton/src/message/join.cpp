@@ -10,9 +10,11 @@
 
 namespace minhton {
 
-MessageJoin::MessageJoin(const MinhtonMessageHeader &header, minhton::NodeInfo entering_node,
+MessageJoin::MessageJoin(MinhtonMessageHeader header, minhton::NodeInfo entering_node,
                          SearchProgress search_progress)
-    : header_(header), entering_node_(std::move(entering_node)), search_progress_(search_progress) {
+    : header_(std::move(header)),
+      entering_node_(std::move(entering_node)),
+      search_progress_(search_progress) {
   header_.setMessageType(MessageType::kJoin);
   MessageLoggingAdditionalInfo logging_info{getEnteringNode().getLogicalNodeInfo().getUuid(), "",
                                             "Prog: " + std::to_string(search_progress)};

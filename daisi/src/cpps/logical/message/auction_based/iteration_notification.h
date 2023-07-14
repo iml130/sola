@@ -24,9 +24,9 @@ namespace daisi::cpps::logical {
 class IterationNotification {
 public:
   IterationNotification() = default;
-  IterationNotification(std::string initiator_connection,
-                        const std::vector<std::string> &task_uuids)
-      : initiator_connection_(std::move(initiator_connection)), task_uuids_(task_uuids) {}
+  IterationNotification(std::string initiator_connection, std::vector<std::string> task_uuids)
+      : initiator_connection_(std::move(initiator_connection)),
+        task_uuids_(std::move(task_uuids)) {}
 
   const std::string &getInitiatorConnection() const { return initiator_connection_; }
 

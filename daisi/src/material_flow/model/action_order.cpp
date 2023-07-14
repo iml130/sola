@@ -20,11 +20,11 @@
 
 namespace daisi::material_flow {
 
-ActionOrder::ActionOrder(const ActionOrderStep &action_order_step)
-    : uuid_(UUIDGenerator::get()()), action_order_step_(action_order_step) {}
+ActionOrder::ActionOrder(ActionOrderStep action_order_step)
+    : uuid_(UUIDGenerator::get()()), action_order_step_(std::move(action_order_step)) {}
 
-ActionOrder::ActionOrder(std::string uuid, const ActionOrderStep &action_order_step)
-    : uuid_(std::move(uuid)), action_order_step_(action_order_step) {}
+ActionOrder::ActionOrder(std::string uuid, ActionOrderStep action_order_step)
+    : uuid_(std::move(uuid)), action_order_step_(std::move(action_order_step)) {}
 
 const std::string &ActionOrder::getUuid() const { return uuid_; }
 

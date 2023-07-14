@@ -18,7 +18,7 @@ namespace minhton {
 /// direction until it reaches its destination.
 class MessageSearchExact : public MinhtonMessage<MessageSearchExact> {
 public:
-  MessageSearchExact(const MinhtonMessageHeader &header, NodeInfo destination_node,
+  MessageSearchExact(MinhtonMessageHeader header, NodeInfo destination_node,
                      std::shared_ptr<MessageSEVariant> query, bool notify_about_failure = false);
 
   minhton::NodeInfo getDestinationNode() const;

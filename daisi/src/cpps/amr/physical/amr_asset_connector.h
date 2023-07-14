@@ -33,7 +33,7 @@ namespace daisi::cpps {
 class AmrAssetConnector {
 public:
   // Constructor
-  AmrAssetConnector(const AmrDescription &description, const Topology &topology);
+  AmrAssetConnector(AmrDescription description, Topology topology);
   AmrAssetConnector();
   ~AmrAssetConnector();
 

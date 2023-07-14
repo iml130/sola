@@ -17,7 +17,7 @@
 #ifndef DAISI_SOLA_NS3_SOLA_NS3_WRAPPER_H_
 #define DAISI_SOLA_NS3_SOLA_NS3_WRAPPER_H_
 
-#include <string.h>
+#include <cstring>
 
 #include "SOLA/event_dissemination_minhcast.h"
 #include "SOLA/management_overlay_minhton.h"
@@ -33,7 +33,7 @@ public:
   SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &config_mo,
                  const sola::EventDisseminationMinhcast::Config &config_ed,
                  sola::MessageReceiveFct receive_fct, sola::TopicMessageReceiveFct topic_recv,
-                 std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger, const std::string &node_name_,
+                 std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger, std::string node_name_,
                  uint32_t device_id);
 
   void subscribeTopic(const std::string &topic);

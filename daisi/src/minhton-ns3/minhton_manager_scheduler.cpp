@@ -147,8 +147,8 @@ void MinhtonManager::Scheduler::schedule() {
 
 void MinhtonManager::Scheduler::parseJoinMany(uint64_t &current_time, const uint64_t &default_delay,
                                               ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t nodes_to_join = INNER_TABLE(it)->getRequired<uint64_t>("number");
-  std::string mode = INNER_TABLE(it)->getRequired<std::string>("mode");
+  auto nodes_to_join = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto mode = INNER_TABLE(it)->getRequired<std::string>("mode");
 
   std::optional<uint64_t> optional_delay = INNER_TABLE(it)->getOptional<uint64_t>("delay");
   uint64_t join_many_delay = optional_delay ? default_delay + *optional_delay : default_delay;
@@ -202,8 +202,8 @@ void MinhtonManager::Scheduler::parseJoinOne(uint64_t &current_time, const uint6
 void MinhtonManager::Scheduler::parseLeaveMany(uint64_t &current_time,
                                                const uint64_t &default_delay,
                                                ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t nodes_to_leave = INNER_TABLE(it)->getRequired<uint64_t>("number");
-  std::string mode = INNER_TABLE(it)->getRequired<std::string>("mode");
+  auto nodes_to_leave = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto mode = INNER_TABLE(it)->getRequired<std::string>("mode");
 
   std::optional<uint64_t> optional_delay = INNER_TABLE(it)->getOptional<uint64_t>("delay");
   uint64_t leave_many_delay = optional_delay ? default_delay + *optional_delay : default_delay;
@@ -263,7 +263,7 @@ void MinhtonManager::Scheduler::parseSearchAll(uint64_t &current_time,
 void MinhtonManager::Scheduler::parseSearchMany(uint64_t &current_time,
                                                 const uint64_t &default_delay,
                                                 ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t number_of_searches = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto number_of_searches = INNER_TABLE(it)->getRequired<uint64_t>("number");
 
   std::optional<uint64_t> optional_delay = INNER_TABLE(it)->getOptional<uint64_t>("delay");
   uint64_t search_many_delay = optional_delay ? default_delay + *optional_delay : default_delay;
@@ -294,7 +294,7 @@ void MinhtonManager::Scheduler::parseFailMany(uint64_t &current_time, const uint
 
 void MinhtonManager::Scheduler::parseFailOne(uint64_t &current_time, const uint64_t &default_delay,
                                              ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t nodes_to_fail = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto nodes_to_fail = INNER_TABLE(it)->getRequired<uint64_t>("number");
 
   std::optional<uint64_t> optional_delay = INNER_TABLE(it)->getOptional<uint64_t>("delay");
   uint64_t fail_many_delay = optional_delay ? default_delay + *optional_delay : default_delay;
@@ -314,9 +314,9 @@ void MinhtonManager::Scheduler::parseMixedExecution(
   std::optional<uint64_t> optional_delay = INNER_TABLE(it)->getOptional<uint64_t>("delay");
   uint64_t mixed_execution_delay = optional_delay ? default_delay + *optional_delay : default_delay;
 
-  uint64_t join_number = INNER_TABLE(it)->getRequired<uint64_t>("join-number");
-  uint64_t leave_number = INNER_TABLE(it)->getRequired<uint64_t>("leave-number");
-  uint64_t search_number = INNER_TABLE(it)->getRequired<uint64_t>("search-number");
+  auto join_number = INNER_TABLE(it)->getRequired<uint64_t>("join-number");
+  auto leave_number = INNER_TABLE(it)->getRequired<uint64_t>("leave-number");
+  auto search_number = INNER_TABLE(it)->getRequired<uint64_t>("search-number");
 
   this->scheduleMixedExecution(join_number, leave_number, search_number, current_time,
                                mixed_execution_delay);
@@ -342,11 +342,11 @@ void MinhtonManager::Scheduler::parseValidateLeave(
 void MinhtonManager::Scheduler::parseFindQuery(uint64_t &current_time,
                                                const uint64_t &default_delay,
                                                ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t level = INNER_TABLE(it)->getRequired<uint64_t>("level");
-  uint64_t number = INNER_TABLE(it)->getRequired<uint64_t>("number");
-  std::string scope = INNER_TABLE(it)->getRequired<std::string>("scope");
-  std::string query_string = INNER_TABLE(it)->getRequired<std::string>("query");
-  uint64_t validity_threshold = INNER_TABLE(it)->getRequired<uint64_t>("validity-threshold");
+  auto level = INNER_TABLE(it)->getRequired<uint64_t>("level");
+  auto number = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto scope = INNER_TABLE(it)->getRequired<std::string>("scope");
+  auto query_string = INNER_TABLE(it)->getRequired<std::string>("query");
+  auto validity_threshold = INNER_TABLE(it)->getRequired<uint64_t>("validity-threshold");
 
   minhton::FindQuery query(query_string, scope);
 
@@ -374,7 +374,7 @@ void MinhtonManager::Scheduler::parseRequestCountdown(
 void MinhtonManager::Scheduler::parseStaticBuild(uint64_t &current_time,
                                                  const uint64_t &default_delay,
                                                  ScenariofileParser::Table::TableMap::iterator it) {
-  uint64_t number = INNER_TABLE(it)->getRequired<uint64_t>("number");
+  auto number = INNER_TABLE(it)->getRequired<uint64_t>("number");
 
   Simulator::Schedule(MilliSeconds(current_time),
                       &MinhtonManager::Scheduler::executeStaticNetworkBuild, this, number);
@@ -389,7 +389,7 @@ void MinhtonManager::Scheduler::parseRequests() {
 
   requests_off_ = false;
   try {
-    std::string requ_off = env->getRequired<std::string>("requests");
+    auto requ_off = env->getRequired<std::string>("requests");
     if (requ_off == "off") {
       requests_off_ = true;
       return;
@@ -418,12 +418,12 @@ void MinhtonManager::Scheduler::parseRequests() {
   auto freq_cmd = requests->getRequired<std::shared_ptr<ScenariofileParser::Table>>("frequency");
   auto freq_type = freq_cmd->getRequired<std::string>("type");
   if (freq_type == "static") {
-    uint64_t time_ms = freq_cmd->getRequired<uint64_t>("time");
+    auto time_ms = freq_cmd->getRequired<uint64_t>("time");
     requests_.request_delay_distribution.dist = time_ms;
 
   } else if (freq_type == "gaussian") {
-    uint64_t mean_value = freq_cmd->getRequired<uint64_t>("mean");
-    uint64_t sigma_value = freq_cmd->getRequired<uint64_t>("sigma");
+    auto mean_value = freq_cmd->getRequired<uint64_t>("mean");
+    auto sigma_value = freq_cmd->getRequired<uint64_t>("sigma");
 
     requests_.request_delay_distribution.dist =
         std::normal_distribution<double>(mean_value, (sigma_value));
@@ -434,13 +434,13 @@ void MinhtonManager::Scheduler::parseRequests() {
   auto depth_cmd = requests->getRequired<std::shared_ptr<ScenariofileParser::Table>>("depth");
   auto depth_type = depth_cmd->getRequired<std::string>("type");
   if (depth_type == "uniform") {
-    uint64_t min_value = depth_cmd->getRequired<uint64_t>("min");
-    uint64_t max_value = depth_cmd->getRequired<uint64_t>("max");
+    auto min_value = depth_cmd->getRequired<uint64_t>("min");
+    auto max_value = depth_cmd->getRequired<uint64_t>("max");
     requests_.query_depth_distribution.dist =
         std::uniform_int_distribution<uint8_t>(min_value, max_value);
 
   } else if (depth_type == "static") {
-    uint64_t value = freq_cmd->getRequired<uint64_t>("value");
+    auto value = freq_cmd->getRequired<uint64_t>("value");
     requests_.query_depth_distribution.dist = (uint8_t)value;
   } else {
     throw std::logic_error("not implemented");
@@ -450,7 +450,7 @@ void MinhtonManager::Scheduler::parseRequests() {
       requests->getRequired<std::shared_ptr<ScenariofileParser::Table>>("validity-threshold");
   auto validity_type = validity_cmd->getRequired<std::string>("type");
   if (validity_type == "constant") {
-    uint64_t time_value = validity_cmd->getRequired<uint64_t>("time");
+    auto time_value = validity_cmd->getRequired<uint64_t>("time");
 
     requests_.validity_threshold_distribution.dist = time_value;
   } else {
@@ -481,7 +481,7 @@ void MinhtonManager::Scheduler::parseNodeAttributes() {
 
   attributes_off_ = false;
   try {
-    std::string attr_off = env->getRequired<std::string>("attributes");
+    auto attr_off = env->getRequired<std::string>("attributes");
     if (attr_off == "off") {
       attributes_off_ = true;
       return;
@@ -513,8 +513,8 @@ void MinhtonManager::Scheduler::parseNodeAttributes() {
     auto content_type = content_behavior_cmd->getRequired<std::string>("type");
 
     if (content_type == "uniform") {
-      uint64_t min_value = content_behavior_cmd->getRequired<uint64_t>("min");
-      uint64_t max_value = content_behavior_cmd->getRequired<uint64_t>("max");
+      auto min_value = content_behavior_cmd->getRequired<uint64_t>("min");
+      auto max_value = content_behavior_cmd->getRequired<uint64_t>("max");
 
       node_attribute.content_distribution = CreateObject<UniformRandomVariable>();
       node_attribute.content_distribution->SetAttribute("Min", ns3::DoubleValue(min_value));
@@ -523,8 +523,8 @@ void MinhtonManager::Scheduler::parseNodeAttributes() {
       node_attribute.content_is_numerical = true;
 
     } else if (content_type == "gaussian") {
-      uint64_t mean_value = content_behavior_cmd->getRequired<uint64_t>("mean");
-      uint64_t sigma_value = content_behavior_cmd->getRequired<uint64_t>("sigma");
+      auto mean_value = content_behavior_cmd->getRequired<uint64_t>("mean");
+      auto sigma_value = content_behavior_cmd->getRequired<uint64_t>("sigma");
 
       node_attribute.content_distribution = CreateObject<NormalRandomVariable>();
       node_attribute.content_distribution->SetAttribute("Mean", ns3::DoubleValue(mean_value));
@@ -597,14 +597,14 @@ void MinhtonManager::Scheduler::parseNodeAttributes() {
 
     auto update_type = update_behavior_cmd->getRequired<std::string>("type");
     if (update_type == "constant") {
-      uint64_t time_ms = update_behavior_cmd->getRequired<uint64_t>("value");
+      auto time_ms = update_behavior_cmd->getRequired<uint64_t>("value");
       node_attribute.update_delay_distribution.dist = time_ms;
 
       node_attribute.value_type = minhton::NodeData::ValueType::kValueDynamic;
 
     } else if (update_type == "gaussian") {
-      uint64_t mean_value = update_behavior_cmd->getRequired<uint64_t>("mean");
-      uint64_t sigma_value = update_behavior_cmd->getRequired<uint64_t>("sigma");
+      auto mean_value = update_behavior_cmd->getRequired<uint64_t>("mean");
+      auto sigma_value = update_behavior_cmd->getRequired<uint64_t>("sigma");
 
       node_attribute.update_delay_distribution.dist =
           std::normal_distribution<double>(mean_value, (sigma_value));
@@ -612,8 +612,8 @@ void MinhtonManager::Scheduler::parseNodeAttributes() {
       node_attribute.value_type = minhton::NodeData::ValueType::kValueDynamic;
 
     } else if (update_type == "uniform") {
-      uint64_t min_value = update_behavior_cmd->getRequired<uint64_t>("min");
-      uint64_t max_value = update_behavior_cmd->getRequired<uint64_t>("max");
+      auto min_value = update_behavior_cmd->getRequired<uint64_t>("min");
+      auto max_value = update_behavior_cmd->getRequired<uint64_t>("max");
 
       node_attribute.update_delay_distribution.dist =
           std::uniform_int_distribution<uint64_t>(min_value, max_value);

@@ -33,7 +33,7 @@ public:
   ~Task() = default;
 
   Task(const ns3::Vector &from, const ns3::Vector &to);
-  Task(const std::string &uuid, const ns3::Vector &from, const ns3::Vector &to);
+  Task(std::string uuid, const ns3::Vector &from, const ns3::Vector &to);
 
   ns3::Vector getPickupLocation() const;
   ns3::Vector getDeliveryLocation() const;

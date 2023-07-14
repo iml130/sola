@@ -17,9 +17,10 @@ namespace minhton {
 
 class AlgorithmInterface {
 public:
-  explicit AlgorithmInterface(std::shared_ptr<AccessContainer> access) : access_(access){};
+  explicit AlgorithmInterface(std::shared_ptr<AccessContainer> access)
+      : access_(std::move(access)){};
 
-  virtual ~AlgorithmInterface(){};
+  virtual ~AlgorithmInterface() = default;
 
   virtual void process(const MessageVariant &msg) = 0;
 

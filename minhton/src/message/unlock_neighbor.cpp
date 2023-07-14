@@ -8,7 +8,8 @@
 
 namespace minhton {
 
-MessageUnlockNeighbor::MessageUnlockNeighbor(const MinhtonMessageHeader &header) : header_(header) {
+MessageUnlockNeighbor::MessageUnlockNeighbor(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kUnlockNeighbor);
   validate();
 }

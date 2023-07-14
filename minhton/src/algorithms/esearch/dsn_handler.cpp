@@ -15,7 +15,7 @@ namespace minhton {
 DSNHandler::DSNHandler(std::shared_ptr<RoutingInformation> routing_info,
                        std::function<void(const NodeInfo &)> request_attribute_inquiry_callback)
     : routing_info_(routing_info),
-      request_attribute_inquiry_callback_(request_attribute_inquiry_callback) {
+      request_attribute_inquiry_callback_(std::move(request_attribute_inquiry_callback)) {
   auto neighbor_change_callback =
       [&](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
           [[maybe_unused]] const minhton::NodeInfo &old_node, [[maybe_unused]] uint16_t position) {

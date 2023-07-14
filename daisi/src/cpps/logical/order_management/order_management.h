@@ -34,9 +34,11 @@ namespace daisi::cpps::logical {
 
 class OrderManagement {
 public:
-  explicit OrderManagement(const AmrDescription &amr_description, const Topology &topology,
+  explicit OrderManagement(AmrDescription amr_description, Topology topology,
                            const daisi::util::Pose &pose)
-      : amr_description_(amr_description), topology_(topology), current_pose_(pose) {}
+      : amr_description_(std::move(amr_description)),
+        topology_(std::move(topology)),
+        current_pose_(pose) {}
 
   virtual ~OrderManagement() = default;
 

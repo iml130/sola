@@ -156,7 +156,7 @@ void MinhtonEntitySearchAlgorithm::performFindQueryForwarding(const MessageFindQ
     for (; it != right_interval.end(); it++) {
       auto it_next = std::next(it);
       uint32_t lower_interval_limit = it->getNumber();
-      uint32_t upper_interval_limit = (uint32_t)pow(fanout, level);
+      auto upper_interval_limit = (uint32_t)pow(fanout, level);
 
       if (it_next != right_interval.end()) {
         upper_interval_limit = it_next->getNumber();

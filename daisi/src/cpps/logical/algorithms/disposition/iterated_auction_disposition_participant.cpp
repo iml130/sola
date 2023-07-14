@@ -23,11 +23,11 @@ namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
     std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
-    std::shared_ptr<OrderManagement> order_management, const AmrDescription &description)
+    std::shared_ptr<OrderManagement> order_management, AmrDescription description)
     : DispositionParticipant(sola),
       order_management_(
           std::move(std::dynamic_pointer_cast<AuctionBasedOrderManagement>(order_management))),
-      description_(description) {
+      description_(std::move(description)) {
   auto topic = AmrFleet::get().getTopicForAbility(description_.getLoadHandling().getAbility());
   sola_->subscribeTopic(topic);
 }

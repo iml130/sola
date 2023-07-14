@@ -43,9 +43,9 @@ public:
 // AmrAssetConnector //
 ///////////////////////
 
-AmrAssetConnector::AmrAssetConnector(const AmrDescription &description, const Topology &topology)
-    : description_(description),
-      topology_(topology),
+AmrAssetConnector::AmrAssetConnector(AmrDescription description, Topology topology)
+    : description_(std::move(description)),
+      topology_(std::move(topology)),
       pimpl_(std::make_unique<AmrAssetConnectorImpl>()) {}
 
 AmrAssetConnector::~AmrAssetConnector() = default;

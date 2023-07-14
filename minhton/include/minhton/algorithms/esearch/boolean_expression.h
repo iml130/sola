@@ -28,7 +28,7 @@ enum ComparisonTypes {
 
 class BooleanExpression {
 public:
-  virtual ~BooleanExpression(){};
+  virtual ~BooleanExpression() = default;
   virtual FuzzyValue evaluate(NodeData &data, const EvaluationInformation &eval_info) = 0;
 
   virtual std::vector<NodeData::Key> evaluateMissingAttributes(
@@ -44,9 +44,9 @@ public:
 
 class AtomicBooleanExpression : public BooleanExpression {
 public:
-  explicit AtomicBooleanExpression(const NodeData::Key &key) : key_(key){};
+  explicit AtomicBooleanExpression(NodeData::Key key) : key_(std::move(key)){};
 
-  ~AtomicBooleanExpression(){};
+  ~AtomicBooleanExpression() override = default;
 
   std::vector<NodeData::Key> evaluateMissingAttributes(
       NodeData &data, const EvaluationInformation &eval_info) const override {
@@ -131,7 +131,7 @@ public:
                         std::shared_ptr<BooleanExpression> expr2)
       : expr1_(std::move(expr1)), expr2_(std::move(expr2)){};
 
-  ~OrExpression(){};
+  ~OrExpression() override = default;
 
   FuzzyValue evaluate(NodeData &data, const EvaluationInformation &eval_info) override {
     return expr1_->evaluate(data, eval_info) || expr2_->evaluate(data, eval_info);
@@ -186,7 +186,7 @@ public:
                          std::shared_ptr<BooleanExpression> expr2)
       : expr1_(std::move(expr1)), expr2_(std::move(expr2)){};
 
-  ~AndExpression(){};
+  ~AndExpression() override = default;
 
   FuzzyValue evaluate(NodeData &data, const EvaluationInformation &eval_info) override {
     return expr1_->evaluate(data, eval_info) && expr2_->evaluate(data, eval_info);
@@ -229,7 +229,7 @@ class NotExpression : public BooleanExpression {
 public:
   explicit NotExpression(std::shared_ptr<BooleanExpression> expr) : expr_(std::move(expr)){};
 
-  ~NotExpression(){};
+  ~NotExpression() override = default;
 
   FuzzyValue evaluate(NodeData &data, const EvaluationInformation &eval_info) override {
     auto val_pos = expr_->evaluate(data, eval_info);
@@ -259,7 +259,7 @@ class PresenceExpression : public AtomicBooleanExpression {
 public:
   explicit PresenceExpression(const NodeData::Key &key) : AtomicBooleanExpression(key){};
 
-  ~PresenceExpression(){};
+  ~PresenceExpression() override = default;
 
   FuzzyValue evaluateExisting(NodeData &data,
                               [[maybe_unused]] const EvaluationInformation &eval_info) override {
@@ -284,10 +284,10 @@ public:
 
 class StringEqualityExpression : public AtomicBooleanExpression {
 public:
-  explicit StringEqualityExpression(const NodeData::Key &key, const std::string &value)
-      : AtomicBooleanExpression(key), value_(value){};
+  explicit StringEqualityExpression(const NodeData::Key &key, std::string value)
+      : AtomicBooleanExpression(key), value_(std::move(value)){};
 
-  ~StringEqualityExpression(){};
+  ~StringEqualityExpression() override = default;
 
   FuzzyValue evaluateExisting(NodeData &data,
                               [[maybe_unused]] const EvaluationInformation &eval_info) override {
@@ -325,7 +325,7 @@ public:
     this->comparison_value_ = comparison_value;
   };
 
-  ~NumericComparisonExpression(){};
+  ~NumericComparisonExpression() override = default;
 
   FuzzyValue evaluateExisting(NodeData &data,
                               [[maybe_unused]] const EvaluationInformation &eval_info) override {
@@ -424,8 +424,8 @@ private:
 
 class EmptyExpression : public BooleanExpression {
 public:
-  explicit EmptyExpression(){};
-  ~EmptyExpression(){};
+  explicit EmptyExpression() = default;
+  ~EmptyExpression() override = default;
 
   FuzzyValue evaluate([[maybe_unused]] NodeData &data,
                       [[maybe_unused]] const EvaluationInformation &eval_info) override {

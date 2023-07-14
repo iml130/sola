@@ -4,9 +4,9 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
-#include <stdio.h> /* defines FILENAME_MAX */
 #include <unistd.h>
 
+#include <cstdio> /* defines FILENAME_MAX */
 #include <string>
 #define GetCurrentDir getcwd
 
@@ -51,12 +51,12 @@ minhton::ConfigNode readConfig(std::string path_to_file) {
     config.setTreemapper(config_file["treemapper"].as<uint16_t>(k_TREEMAPPER_ROOT_VALUE));
     config.setIsRoot(config_file["root"].as<bool>(false));
 
-    std::string join_mode = readRequired<std::string>("join_mode", config_file);
+    auto join_mode = readRequired<std::string>("join_mode", config_file);
     if (join_mode == "none") {
       config.setJoinInfo({JoinInfo::kNone, ""});
     } else if (join_mode == "ip") {
-      std::string ip = readRequired<std::string>("join_ip", config_file);
-      uint16_t port = readRequired<uint16_t>("join_port", config_file);
+      auto ip = readRequired<std::string>("join_ip", config_file);
+      auto port = readRequired<uint16_t>("join_port", config_file);
       config.setJoinInfo({JoinInfo::kIp, ip, port});
     } else if (join_mode == "discovery") {
       config.setJoinInfo({JoinInfo::kDiscovery, ""});

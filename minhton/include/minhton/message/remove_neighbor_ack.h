@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageRemoveNeighborAck : public MinhtonMessage<MessageRemoveNeighborAck> {
 public:
-  explicit MessageRemoveNeighborAck(const MinhtonMessageHeader &header);
+  explicit MessageRemoveNeighborAck(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

@@ -13,7 +13,7 @@
 namespace minhton {
 class MessageReplacementNack : public MinhtonMessage<MessageReplacementNack> {
 public:
-  explicit MessageReplacementNack(const MinhtonMessageHeader &header);
+  explicit MessageReplacementNack(MinhtonMessageHeader header);
 
   SERIALIZE(header_);
 

@@ -16,7 +16,7 @@ namespace minhton {
 /// to discover a node's network information.
 class MessageBootstrapDiscover : public MinhtonMessage<MessageBootstrapDiscover> {
 public:
-  explicit MessageBootstrapDiscover(const MinhtonMessageHeader &header,
+  explicit MessageBootstrapDiscover(MinhtonMessageHeader header,
                                     std::string discovery_msg = "Hello");
 
   std::string getDiscoveryMessage() const;

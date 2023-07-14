@@ -41,7 +41,7 @@ public:
   explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
                                                std::shared_ptr<CppsLoggerNs3> logger);
 
-  ~IteratedAuctionDispositionInitiator() = default;
+  ~IteratedAuctionDispositionInitiator() override = default;
 
   /// @brief Storing bid submission information in a helper class to determine winners.
   REGISTER_IMPLEMENTATION(BidSubmission);
@@ -49,9 +49,9 @@ public:
   /// @brief Storing winner response notification in a helper class to determine outdated bids.
   REGISTER_IMPLEMENTATION(WinnerResponse);
 
-  virtual void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
+  void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
 
-  virtual void logMaterialFlowContent(const std::string &material_flow_uuid) override;
+  void logMaterialFlowContent(const std::string &material_flow_uuid) override;
 
 private:
   /// @brief Preparing interaction by subscribing to required topics for each ability.

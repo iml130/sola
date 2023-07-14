@@ -41,7 +41,7 @@ public:
   ns3::ApplicationContainer install(ns3::Ptr<ns3::Node> node) const {
     ns3::Ptr<ns3::Application> app = factory_.Create<T>();
     node->AddApplication(app);
-    return ns3::ApplicationContainer(app);
+    return {app};
   }
 
 private:

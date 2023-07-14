@@ -7,9 +7,9 @@
 #include "minhton/message/subscription_order.h"
 namespace minhton {
 
-MessageSubscriptionOrder::MessageSubscriptionOrder(const MinhtonMessageHeader &header,
+MessageSubscriptionOrder::MessageSubscriptionOrder(MinhtonMessageHeader header,
                                                    std::vector<NodeData::Key> keys, bool subscribe)
-    : header_(header), keys_(std::move(keys)), subscribe_(subscribe) {
+    : header_(std::move(header)), keys_(std::move(keys)), subscribe_(subscribe) {
   header_.setMessageType(MessageType::kSubscriptionOrder);
   MessageLoggingAdditionalInfo logging_info;
   logging_info.content =

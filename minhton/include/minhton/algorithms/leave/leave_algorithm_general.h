@@ -33,7 +33,7 @@ public:
   LeaveAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
       : LeaveAlgorithmInterface(access){};
 
-  virtual ~LeaveAlgorithmGeneral(){};
+  ~LeaveAlgorithmGeneral() override = default;
 
   void process(const MessageVariant &msg) override;
 
@@ -47,7 +47,7 @@ public:
   ///   node->initiateSelfDeparture();
   /// \endcode
   ///
-  virtual void initiateSelfDeparture() override = 0;
+  void initiateSelfDeparture() override = 0;
 
 protected:
   /// This method will be called when we receive a FIND_REPLACEMENT message.

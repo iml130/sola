@@ -18,15 +18,6 @@
 
 namespace daisi::cpps::logical {
 
-Metrics::Metrics()
-    : empty_travel_time(0.0),
-      loaded_travel_time(0.0),
-      action_time(0.0),
-      empty_travel_distance(0.0),
-      loaded_travel_distance(0.0),
-      makespan_(0.0),
-      start_time_(0.0) {}
-
 Metrics::Metrics(daisi::util::Duration empty_travel_time, daisi::util::Duration loaded_travel_time,
                  daisi::util::Duration action_time, daisi::util::Distance empty_travel_distance,
                  daisi::util::Distance loaded_travel_distance)
@@ -34,9 +25,7 @@ Metrics::Metrics(daisi::util::Duration empty_travel_time, daisi::util::Duration 
       loaded_travel_time(loaded_travel_time),
       action_time(action_time),
       empty_travel_distance(empty_travel_distance),
-      loaded_travel_distance(loaded_travel_distance),
-      makespan_(0.0),
-      start_time_(0.0) {}
+      loaded_travel_distance(loaded_travel_distance) {}
 
 void Metrics::setMakespan(const daisi::util::Duration &makespan) {
   if (!isStartTimeSet()) {

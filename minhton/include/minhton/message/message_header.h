@@ -24,7 +24,7 @@ namespace minhton {
 class MinhtonMessageHeader {
 public:
   MinhtonMessageHeader() = default;
-  MinhtonMessageHeader(const NodeInfo &sender, const NodeInfo &target, uint64_t ref_event_id = 0);
+  MinhtonMessageHeader(NodeInfo sender, NodeInfo target, uint64_t ref_event_id = 0);
   uint64_t getEventId() const;
   uint64_t getRefEventId() const;
   NodeInfo getSender() const;

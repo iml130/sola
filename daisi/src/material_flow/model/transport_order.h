@@ -28,11 +28,11 @@ class TransportOrder {
 public:
   TransportOrder() = default;
 
-  TransportOrder(const std::vector<TransportOrderStep> &pickup_transport_order_steps,
-                 const TransportOrderStep &delivery_transport_order_step);
-  TransportOrder(std::string uuid,
-                 const std::vector<TransportOrderStep> &pickup_transport_order_steps,
-                 const TransportOrderStep &delivery_transport_order_step);
+  TransportOrder(std::vector<TransportOrderStep> pickup_transport_order_steps,
+                 TransportOrderStep delivery_transport_order_step);
+
+  TransportOrder(std::string uuid, std::vector<TransportOrderStep> pickup_transport_order_steps,
+                 TransportOrderStep delivery_transport_order_step);
 
   const std::string &getUuid() const;
 

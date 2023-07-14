@@ -27,7 +27,7 @@ namespace daisi::material_flow {
 struct ActionOrderStep {
   ActionOrderStep() = default;
 
-  ActionOrderStep(std::string name, const std::unordered_map<std::string, std::string> &parameters);
+  ActionOrderStep(std::string name, std::unordered_map<std::string, std::string> parameters);
 
   const std::string &getName() const;
   const std::unordered_map<std::string, std::string> &getParameters() const;

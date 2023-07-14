@@ -7,8 +7,8 @@
 #include "minhton/message/replacement_offer.h"
 namespace minhton {
 
-MessageReplacementOffer::MessageReplacementOffer(const MinhtonMessageHeader &header)
-    : header_(header) {
+MessageReplacementOffer::MessageReplacementOffer(MinhtonMessageHeader header)
+    : header_(std::move(header)) {
   header_.setMessageType(MessageType::kReplacementOffer);
   validate();
 }

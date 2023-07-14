@@ -155,7 +155,7 @@ public:
     std::string content = parser_.getScenariofileContent();
     if (content.size() > max_size) content.resize(max_size);
 
-    uint32_t fanout;
+    uint32_t fanout = 0;
     try {
       fanout = (uint32_t)parser_.getFanout();
     } catch (const std::invalid_argument &e) {

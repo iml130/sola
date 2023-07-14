@@ -7,14 +7,13 @@
 #include "minhton/message/find_query_request.h"
 namespace minhton {
 
-MessageFindQueryRequest::MessageFindQueryRequest(const MinhtonMessageHeader &header,
-                                                 FindQuery query,
+MessageFindQueryRequest::MessageFindQueryRequest(MinhtonMessageHeader header, FindQuery query,
                                                  ForwardingDirection forwarding_direction,
                                                  std::pair<uint32_t, uint32_t> interval)
-    : header_(header),
+    : header_(std::move(header)),
       query_(std::move(query)),
       forwarding_direction_(forwarding_direction),
-      interval_(interval) {
+      interval_(std::move(interval)) {
   header_.setMessageType(MessageType::kFindQueryRequest);
 
   MessageLoggingAdditionalInfo logging_info;

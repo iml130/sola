@@ -22,7 +22,7 @@ public:
     kDirectionRight,
   };
 
-  MessageFindQueryRequest(const MinhtonMessageHeader &header, FindQuery query,
+  MessageFindQueryRequest(MinhtonMessageHeader header, FindQuery query,
                           ForwardingDirection forwarding_direction,
                           std::pair<uint32_t, uint32_t> interval);
 

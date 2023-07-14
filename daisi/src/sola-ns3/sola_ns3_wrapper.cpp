@@ -39,12 +39,12 @@ SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &con
                                sola::MessageReceiveFct receive_fct,
                                sola::TopicMessageReceiveFct topic_recv,
                                std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger,
-                               const std::string &node_name, uint32_t device_id)
+                               std::string node_name, uint32_t device_id)
     : SOLA(addLogger(config_mo, device_id), addLogger(config_ed, device_id), receive_fct,
            topic_recv),
       device_id_(device_id),
-      logger_(logger),
-      node_name_(node_name) {}
+      logger_(std::move(logger)),
+      node_name_(std::move(node_name)) {}
 
 void SOLAWrapperNs3::subscribeTopic(const std::string &topic) {
   if (!isSubscribed(topic)) {

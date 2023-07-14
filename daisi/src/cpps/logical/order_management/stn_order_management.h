@@ -41,7 +41,7 @@ public:
   StnOrderManagement(const AmrDescription &amr_description, const Topology &topology,
                      const daisi::util::Pose &pose);
 
-  ~StnOrderManagement() = default;
+  ~StnOrderManagement() override = default;
 
   /// @brief check wether the order management has a current task assigned
   bool hasTasks() const override;
@@ -94,7 +94,7 @@ protected:
 
   std::optional<daisi::material_flow::Location> current_task_end_location_;
 
-  daisi::util::Duration current_task_expected_finish_time_;
+  daisi::util::Duration current_task_expected_finish_time_ = 0.0;
 
   std::vector<TaskInsertInfo> current_ordering_;
 
@@ -102,12 +102,12 @@ protected:
 
   std::vector<TaskInsertInfo>::iterator newest_task_insert_info_;
 
-  daisi::util::Duration time_now_;
+  daisi::util::Duration time_now_ = 0;
 
   std::optional<std::pair<MetricsComposition, std::shared_ptr<InsertionPoint>>>
       latest_calculated_insertion_info_;
 
-  virtual bool solve() override;
+  bool solve() override;
 
   void addPrecedenceConstraintBetweenTask(const StnOrderManagementVertex &start_vertex,
                                           const std::string &precedence_task_name);

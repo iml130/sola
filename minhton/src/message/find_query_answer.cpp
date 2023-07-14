@@ -8,9 +8,9 @@
 
 namespace minhton {
 
-MessageFindQueryAnswer::MessageFindQueryAnswer(const MinhtonMessageHeader &header,
+MessageFindQueryAnswer::MessageFindQueryAnswer(MinhtonMessageHeader header,
                                                NodeData::NodesWithAttributes nodes_with_attributes)
-    : header_(header), nodes_with_attributes_(std::move(nodes_with_attributes)) {
+    : header_(std::move(header)), nodes_with_attributes_(std::move(nodes_with_attributes)) {
   header_.setMessageType(MessageType::kFindQueryAnswer);
   validate();
 }

@@ -16,7 +16,7 @@ namespace minhton {
 
 class MessageRemoveNeighbor : public MinhtonMessage<MessageRemoveNeighbor> {
 public:
-  MessageRemoveNeighbor(const MinhtonMessageHeader &header, NodeInfo removed_position_node,
+  MessageRemoveNeighbor(MinhtonMessageHeader header, NodeInfo removed_position_node,
                         bool acknowledge = false);
 
   NodeInfo getRemovedPositionNode() const;

@@ -16,8 +16,7 @@
 
 #include "time_calculation_helper.h"
 
-#include <math.h>
-
+#include <cmath>
 #include <functional>
 
 #include "utils/daisi_check.h"

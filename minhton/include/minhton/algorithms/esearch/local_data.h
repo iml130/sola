@@ -18,10 +18,9 @@ public:
   void addKeySubscriber(NodeData::Key key, NodeInfo &subscriber);
   void removeKeySubscriber(const NodeData::Key &key, NodeInfo &unsubscriber);
 
-  virtual bool isValueUpToDate(NodeData::Key key,
-                               const uint64_t &validity_threshold_timestamp) override;
+  bool isValueUpToDate(NodeData::Key key, const uint64_t &validity_threshold_timestamp) override;
 
-  virtual bool isLocal() const override;
+  bool isLocal() const override;
 
 private:
   std::unordered_map<NodeData::Key, std::vector<NodeInfo>> key_subscribers_;

@@ -17,7 +17,7 @@ namespace minhton {
 /// InformAboutNeighbors message.
 class MessageGetNeighbors : public MinhtonMessage<MessageGetNeighbors> {
 public:
-  MessageGetNeighbors(const MinhtonMessageHeader &header, NodeInfo send_back_to_node,
+  MessageGetNeighbors(MinhtonMessageHeader header, NodeInfo send_back_to_node,
                       std::vector<NeighborRelationship> relationships);
 
   NodeInfo getSendBackToNode() const;

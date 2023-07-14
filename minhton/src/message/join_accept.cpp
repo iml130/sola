@@ -12,10 +12,10 @@
 #include "minhton/core/routing_calculations.h"
 namespace minhton {
 
-MessageJoinAccept::MessageJoinAccept(const MinhtonMessageHeader &header, uint16_t fanout,
+MessageJoinAccept::MessageJoinAccept(MinhtonMessageHeader header, uint16_t fanout,
                                      NodeInfo adjacent_left, NodeInfo adjacent_right,
                                      std::vector<NodeInfo> routing_table_neighbors)
-    : header_(header),
+    : header_(std::move(header)),
       fanout_(fanout),
       adjacent_left_(std::move(adjacent_left)),
       adjacent_right_(std::move(adjacent_right)),

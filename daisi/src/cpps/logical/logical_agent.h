@@ -31,7 +31,7 @@ namespace daisi::cpps::logical {
 class LogicalAgent {
 public:
   LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-               const AlgorithmConfig &config_algo, bool first_node);
+               AlgorithmConfig config_algo, bool first_node);
 
   virtual ~LogicalAgent() = default;
 

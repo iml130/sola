@@ -18,7 +18,7 @@
 namespace minhton {
 class MessageFindQueryAnswer : public MinhtonMessage<MessageFindQueryAnswer> {
 public:
-  MessageFindQueryAnswer(const MinhtonMessageHeader &header,
+  MessageFindQueryAnswer(MinhtonMessageHeader header,
                          NodeData::NodesWithAttributes nodes_with_attributes);
 
   NodeData::NodesWithAttributes getFulfillingNodesWithAttributes() const;

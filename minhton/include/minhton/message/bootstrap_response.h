@@ -15,7 +15,7 @@ namespace minhton {
 /// Bootstrap Response message, in case the node is in a connected state and a fitting join parent.
 class MessageBootstrapResponse : public MinhtonMessage<MessageBootstrapResponse> {
 public:
-  MessageBootstrapResponse(const MinhtonMessageHeader &header, NodeInfo node_to_join);
+  MessageBootstrapResponse(MinhtonMessageHeader header, NodeInfo node_to_join);
 
   minhton::NodeInfo getNodeToJoin() const;
 

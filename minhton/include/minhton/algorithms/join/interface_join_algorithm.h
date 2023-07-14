@@ -19,9 +19,9 @@ class JoinAlgorithmInterface : public AlgorithmInterface {
 public:
   JoinAlgorithmInterface(std::shared_ptr<AccessContainer> access) : AlgorithmInterface(access){};
 
-  virtual ~JoinAlgorithmInterface(){};
+  ~JoinAlgorithmInterface() override = default;
 
-  virtual void process(const MessageVariant &msg) override = 0;
+  void process(const MessageVariant &msg) override = 0;
   virtual void initiateJoin(NodeInfo &node_info) = 0;
   virtual void initiateJoin(const PhysicalNodeInfo &p_node_info) = 0;
 
