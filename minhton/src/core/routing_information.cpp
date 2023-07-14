@@ -101,7 +101,7 @@ std::string RoutingInformation::getString() const {
       "\t\tParent: " + (this->parent_.isInitialized() ? this->parent_.getString() : " --- ") + "\n";
 
   text = text + "\t\tchildren: \n";
-  for (uint16_t i = 0; i < this->children_.size(); i++) {
+  for (size_t i = 0; i < this->children_.size(); i++) {
     text = text + "\t\t\tChild " + std::to_string(i) + ": " +
            (this->children_[i].isInitialized() ? this->children_[i].getString() : " --- ") + "\n";
   }
