@@ -59,8 +59,8 @@ std::unordered_map<NodeData::Key, NodeData::ValueTimestampAndType> NodeData::get
   return data_;
 }
 
-bool NodeData::isValueUpToDate(NodeData::Key key,
-                               [[maybe_unused]] const uint64_t &validity_threshold_timestamp) {
+bool NodeData::isValueUpToDate(const NodeData::Key &key,
+                               [[maybe_unused]] uint64_t validity_threshold_timestamp) {
   return hasKey(key);
 }
 

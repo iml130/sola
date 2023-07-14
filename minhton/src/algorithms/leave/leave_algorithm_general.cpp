@@ -634,7 +634,7 @@ void LeaveAlgorithmGeneral::forwardFindReplacementMessage(NodeInfo forward_to,
   send(message_find_replacement);
 }
 
-void LeaveAlgorithmGeneral::replaceMyself(NodeInfo node_to_replace,
+void LeaveAlgorithmGeneral::replaceMyself(const NodeInfo &node_to_replace,
                                           std::vector<NodeInfo> neighbors_of_node_to_replace) {
   auto ref_event_id = access_->procedure_info->loadEventId(ProcedureKey::kLeaveProcedure);
   auto old_self_node_info = getSelfNodeInfo();

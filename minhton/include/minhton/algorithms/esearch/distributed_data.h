@@ -37,7 +37,7 @@ public:
 
   bool isKeySubscribed(NodeData::Key key);
 
-  bool isValueUpToDate(NodeData::Key key, const uint64_t &validity_threshold_timestamp) override;
+  bool isValueUpToDate(const NodeData::Key &key, uint64_t validity_threshold_timestamp) override;
 
   uint8_t getTimestampStorageLimit() const;
 

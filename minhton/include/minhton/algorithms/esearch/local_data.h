@@ -18,7 +18,7 @@ public:
   void addKeySubscriber(NodeData::Key key, NodeInfo &subscriber);
   void removeKeySubscriber(const NodeData::Key &key, NodeInfo &unsubscriber);
 
-  bool isValueUpToDate(NodeData::Key key, const uint64_t &validity_threshold_timestamp) override;
+  bool isValueUpToDate(const NodeData::Key &key, uint64_t validity_threshold_timestamp) override;
 
   bool isLocal() const override;
 

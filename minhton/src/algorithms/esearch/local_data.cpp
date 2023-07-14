@@ -38,8 +38,8 @@ void LocalData::removeKeySubscriber(const NodeData::Key &key, NodeInfo &unsubscr
   }
 }
 
-bool LocalData::isValueUpToDate(NodeData::Key key,
-                                [[maybe_unused]] const uint64_t &validity_threshold_timestamp) {
+bool LocalData::isValueUpToDate(const NodeData::Key &key,
+                                [[maybe_unused]] uint64_t validity_threshold_timestamp) {
   return hasKey(key);
 }
 

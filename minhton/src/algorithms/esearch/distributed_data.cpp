@@ -99,8 +99,8 @@ bool DistributedData::isKeySubscribed(NodeData::Key key) {
          subscription_ordered_keys_.end();
 }
 
-bool DistributedData::isValueUpToDate(NodeData::Key key,
-                                      const uint64_t &validity_threshold_timestamp) {
+bool DistributedData::isValueUpToDate(const NodeData::Key &key,
+                                      uint64_t validity_threshold_timestamp) {
   if (!hasKey(key)) {
     throw std::logic_error("This method should not be called if the key is unknown");
   }

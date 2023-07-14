@@ -25,7 +25,7 @@ public:
   virtual void initiateSelfDeparture() = 0;
   virtual bool canLeaveWithoutReplacement() = 0;
 
-  virtual void replaceMyself(NodeInfo node_to_replace,
+  virtual void replaceMyself(const NodeInfo &node_to_replace,
                              std::vector<NodeInfo> neighbors_of_node_to_replace) = 0;
 
   static std::vector<MessageType> getSupportedMessageTypes() {
