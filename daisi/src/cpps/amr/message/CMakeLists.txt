@@ -19,7 +19,6 @@ target_sources(daisi_cpps_amr_message_amr_status_update
 target_link_libraries(daisi_cpps_amr_message_amr_status_update INTERFACE
     solanet_serialize
     daisi_structure_helpers
-    daisi_cpps_model_order_states
 )
 
 add_library(daisi_cpps_amr_message_amr_order_info INTERFACE)

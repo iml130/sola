@@ -41,3 +41,5 @@ add_subdirectory(../ ${CMAKE_CURRENT_BINARY_DIR}/sola_mono)
 add_subdirectory(src)
 
 add_subdirectory(tests/unittests)
+
+add_subdirectory(third_party)

@@ -35,10 +35,6 @@ bool AmrLogicalExecutionState::shouldSendNextTaskToPhysical() const {
 void AmrLogicalExecutionState::processAmrStatusUpdate(const AmrStatusUpdate &amr_status_update) {
   position_ = amr_status_update.getPosition();
   amr_state_ = amr_status_update.getState();
-
-  if (amr_state_ == AmrState::kIdle) {
-    send_next_task_to_physical_ = true;
-  }
 }
 
 void AmrLogicalExecutionState::processAmrOrderUpdate(const AmrOrderUpdate &amr_order_update) {
@@ -56,9 +52,7 @@ void AmrLogicalExecutionState::setNextOrder() {
 
   if (task_.getOrders().size() >= order_index_) {
     order_index_ = -1;
-    if (amr_state_ == AmrState::kIdle) {
-      send_next_task_to_physical_ = true;
-    }
+    send_next_task_to_physical_ = true;
   }
 }
 

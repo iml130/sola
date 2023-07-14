@@ -14,28 +14,21 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MODEL_ORDER_STATES_H_
-#define DAISI_MODEL_ORDER_STATES_H_
+#ifndef DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
+#define DAISI_CPPS_AMR_PHYSICAL_CHARGE_H_
+
+#include "solanet/serializer/serialize.h"
+#include "utils/structure_helpers.h"
 
 namespace daisi::cpps {
+class Charge {
+public:
+  Charge() = default;
+  explicit Charge(const util::Position &destination) : destination(destination) {}
 
-enum class OrderStates {
-  kCreated = 0,
-  kQueued = 1,
-  kStarted = 2,
-  kGoToPickUpLocation = 3,
-  kReachedPickUpLocation = 4,
-  kLoad = 5,
-  kLoaded = 6,
-  kGoToDeliveryLocation = 7,
-  kReachedDeliveryLocation = 8,
-  kUnload = 9,
-  kUnloaded = 10,
-  kFinished = 11,
-  kError = 12,
-  kInvalid = 13,
+  SERIALIZE(destination);
+
+  util::Position destination;
 };
-
 }  // namespace daisi::cpps
-
 #endif

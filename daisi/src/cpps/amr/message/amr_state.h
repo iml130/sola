@@ -19,7 +19,8 @@
 
 namespace daisi::cpps {
 
+/// @brief used for surveillance purposes only
 enum class AmrState { kIdle, kWorking, kCharging, kError };
-}
+}  // namespace daisi::cpps
 
 #endif

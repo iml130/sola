@@ -46,7 +46,7 @@ private:
   int order_index_ = -1;
   OrderStates order_state_ = OrderStates::kCreated;
 
-  bool send_next_task_to_physical_ = false;
+  bool send_next_task_to_physical_ = true;
 };
 
 }  // namespace daisi::cpps::logical

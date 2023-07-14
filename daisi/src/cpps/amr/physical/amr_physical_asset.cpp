@@ -28,12 +28,16 @@ namespace daisi::cpps {
 static constexpr uint32_t kUpdateFrequencyHz = 10;
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector, const Topology &topology)
-    : connector_(std::move(connector)) {
+    : fsm(OrderStates::kFinished),
+      connector_(std::move(connector)) {  // always initialize to kFinished since it is
+                                          // equivalent to having no task/being idle
   connector_.setTopology(topology);
 }
 
 AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector)
-    : connector_(std::move(connector)) {}
+    : fsm(OrderStates::kFinished),
+      connector_(std::move(connector)) {
+}  // always initialize to kFinished since it is equivalent to having no task/being idle
 
 void AmrPhysicalAsset::init(const ns3::Ptr<ns3::Socket> &socket) {
   socket_ = socket;
@@ -49,8 +53,16 @@ void AmrPhysicalAsset::connect(const ns3::InetSocketAddress &endpoint) {
 void AmrPhysicalAsset::updateFunctionality(const FunctionalityVariant &functionality) {
   if (functionality.index() != functionality_queue_.front().index())
     throw std::runtime_error("functionalities don't match");
-  functionality_queue_.pop();
-  continueOrder();
+  functionality_queue_.pop_front();
+  if (holdsMoveType(functionality))
+    process_event(ReachedTarget());
+  else if (std::holds_alternative<Load>(functionality))
+    process_event(LoadedPayload());
+  else if (std::holds_alternative<Unload>(functionality))
+    process_event(UnloadedPayload());
+  else if (std::holds_alternative<Charge>(functionality))
+    process_event(ChargedBattery());
+  sendOrderUpdateNs3();
 }
 
 // communication with Logical
@@ -69,8 +81,8 @@ void AmrPhysicalAsset::sendVehicleStatusUpdateNs3(bool force) {
 
 /// @brief send current OrderState to corresponding logical agent
 void AmrPhysicalAsset::sendOrderUpdateNs3() {
-  AmrOrderUpdate task_update(current_order_.order_state, getPosition());
   daisi::cpps::CppsTCPMessage message;
+  AmrOrderUpdate task_update(current_state(), getPosition());
   message.addMessage({amr::serialize(task_update), 0});
   ns3::Ptr<ns3::Packet> packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
@@ -114,110 +126,96 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 }
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
-  if (amr_state_ != AmrState::kIdle || ((current_order_.order_state != OrderStates::kInvalid) &&
-                                        (current_order_.order_state != OrderStates::kFinished))) {
-    throw std::runtime_error("Still processsing another task. ");
-  }
-
-  current_order_ = AmrOrder();
-  current_order_.order_state = OrderStates::kCreated;
-
-  for (const auto &func : order_info.getFunctionalities()) {
-    functionality_queue_.push(func);
-  }
-
-  continueOrder();
-}
-
-void AmrPhysicalAsset::continueOrder() {
-  // 1. update state
-  // 2. send new state
-  // 3. start doing stuff
-  switch (current_order_.order_state) {
-    case OrderStates::kCreated:
-      current_order_.order_state = OrderStates::kQueued;
-      continueOrder();
-      break;
-    case OrderStates::kQueued:
-      amr_state_ = AmrState::kWorking;
-      current_order_.order_state = OrderStates::kStarted;
-      sendOrderUpdateNs3();
-      startVehicleStatusUpdates();
-      continueOrder();
-      break;
-    case OrderStates::kStarted:
-      current_order_.order_state = OrderStates::kGoToPickUpLocation;
-      sendOrderUpdateNs3();
-
-      if (std::holds_alternative<MoveTo>(functionality_queue_.front())) {
-        connector_.execute(functionality_queue_.front(),
-                           [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
-      } else {
-        // case that we are already at the starting position
-        // therefore we dont need to move and can load directly
-        continueOrder();
-      }
-      return;
-    case OrderStates::kGoToPickUpLocation:
-      current_order_.order_state = OrderStates::kReachedPickUpLocation;
-      sendOrderUpdateNs3();
-      continueOrder();
-      break;
-    case OrderStates::kReachedPickUpLocation:
-      current_order_.order_state = OrderStates::kLoad;
-      sendOrderUpdateNs3();
-      DAISI_CHECK(std::holds_alternative<Load>(functionality_queue_.front()),
-                  "unexpected functionality, expected Load");
-      connector_.execute(functionality_queue_.front(),
-                         [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
-      return;
-    case OrderStates::kLoad: {
-      current_order_.order_state = OrderStates::kLoaded;
-      sendOrderUpdateNs3();
-      continueOrder();
-      break;
-    }
-    case OrderStates::kLoaded:
-      current_order_.order_state = OrderStates::kGoToDeliveryLocation;
-      sendOrderUpdateNs3();
-      DAISI_CHECK(std::holds_alternative<MoveTo>(functionality_queue_.front()),
-                  "unexpected functionality, expected MoveTo");
-      connector_.execute(functionality_queue_.front(),
-                         [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
-      return;
-    case OrderStates::kGoToDeliveryLocation:
-      current_order_.order_state = OrderStates::kReachedDeliveryLocation;
-      sendOrderUpdateNs3();
-      continueOrder();
-      break;
-    case OrderStates::kReachedDeliveryLocation:
-      current_order_.order_state = OrderStates::kUnload;
-      sendOrderUpdateNs3();
-      DAISI_CHECK(std::holds_alternative<Unload>(functionality_queue_.front()),
-                  "unexpected functionality, expected Unload");
-      connector_.execute(functionality_queue_.front(),
-                         [this](const FunctionalityVariant &f) { this->updateFunctionality(f); });
-      return;
-    case OrderStates::kUnload: {
-      current_order_.order_state = OrderStates::kUnloaded;
-      sendOrderUpdateNs3();
-      continueOrder();
-      break;
-    }
-    case OrderStates::kUnloaded:
-      current_order_.order_state = OrderStates::kFinished;
-      sendOrderUpdateNs3();
-      continueOrder();
-      break;
-    case OrderStates::kFinished:
-      stopVehicleStatusUpdatesNs3();
-      amr_state_ = AmrState::kIdle;
-      sendVehicleStatusUpdateNs3(true);
-      return;
-    default:
-      break;
-  }
+  DAISI_CHECK(functionality_queue_.empty(), "Should not get new task before last task is finished");
+  for (auto &functionality : order_info.getFunctionalities())
+    functionality_queue_.push_back(functionality);
+  process_event(ReceivedOrder());
+  sendOrderUpdateNs3();
 }
 
 util::Position AmrPhysicalAsset::getPosition() const { return connector_.getPosition(); }
+
+/////////////////////
+// flmlite helpers //
+/////////////////////
+
+void AmrPhysicalAsset::executeFrontFunctionality() {
+  connector_.execute(functionality_queue_.front(), [this](FunctionalityVariant f) {
+    ns3::Simulator::Schedule(ns3::Seconds(0), &AmrPhysicalAsset::updateFunctionality, this, f);
+  });
+}
+
+bool AmrPhysicalAsset::holdsMoveType(const FunctionalityVariant &f) const {
+  return (std::holds_alternative<MoveTo>(f) || std::holds_alternative<Navigate>(f));
+}
+
+/////////////////////
+// fsmlite actions //
+/////////////////////
+
+template <typename T> void AmrPhysicalAsset::charge(const T &t) {
+  amr_state_ = AmrState::kCharging;
+  executeFrontFunctionality();
+  if constexpr (std::is_same_v<ReceivedOrder, T>) {
+    startVehicleStatusUpdates();
+  }
+}
+
+template <typename T> void AmrPhysicalAsset::execute(const T &t) {
+  amr_state_ = AmrState::kWorking;
+  executeFrontFunctionality();
+  if constexpr (std::is_same_v<ReceivedOrder, T>) {
+    startVehicleStatusUpdates();
+  }
+}
+
+template <typename T> void AmrPhysicalAsset::finish(const T &t) {
+  if constexpr (std::is_same_v<ReceivedOrder, T>) {
+    throw std::invalid_argument("empty task");
+  }
+  stopVehicleStatusUpdatesNs3();
+  amr_state_ = AmrState::kIdle;
+  sendVehicleStatusUpdateNs3(true);
+}
+
+////////////////////
+// fsmlite guards //
+////////////////////
+
+template <typename T> bool AmrPhysicalAsset::isMoveToLoad(const T &t) const {
+  return holdsMoveType(functionality_queue_.front()) &&
+         std::holds_alternative<Load>(functionality_queue_.at(1));
+}
+
+template <typename T> bool AmrPhysicalAsset::isMoveToUnload(const T &t) const {
+  return holdsMoveType(functionality_queue_.front()) &&
+         std::holds_alternative<Unload>(functionality_queue_.at(1));
+}
+
+template <typename T> bool AmrPhysicalAsset::isMoveToCharge(const T &t) const {
+  return holdsMoveType(functionality_queue_.front()) &&
+         std::holds_alternative<Charge>(functionality_queue_.at(1));
+}
+
+template <typename T> bool AmrPhysicalAsset::isMove(const T &t) const {
+  return holdsMoveType(functionality_queue_.front()) &&
+         (functionality_queue_.size() == 1 || holdsMoveType(functionality_queue_.at(1)));
+}
+
+template <typename T> bool AmrPhysicalAsset::isLoad(const T &t) const {
+  return std::holds_alternative<Load>(functionality_queue_.front());
+}
+
+template <typename T> bool AmrPhysicalAsset::isUnload(const T &t) const {
+  return std::holds_alternative<Unload>(functionality_queue_.front());
+}
+
+// template <typename T> bool AmrPhysicalAsset::isCharge(const T &t) const {
+//   return std::holds_alternative<Charge>(functionality_queue_.front());
+// }
+
+template <typename T> bool AmrPhysicalAsset::isFinish(const T &t) const {
+  return functionality_queue_.empty();
+}
+
 }  // namespace daisi::cpps

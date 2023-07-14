@@ -17,8 +17,8 @@
 #ifndef DAISI_CPPS_AMR_PHYSICAL_AMR_PHYSICAL_ASSET_H_
 #define DAISI_CPPS_AMR_PHYSICAL_AMR_PHYSICAL_ASSET_H_
 
+#include <deque>
 #include <functional>
-#include <queue>
 #include <random>
 #include <vector>
 
@@ -26,6 +26,9 @@
 #include "cpps/amr/message/amr_state.h"
 #include "cpps/amr/physical/amr_asset_connector.h"
 #include "cpps/amr/physical/amr_order.h"
+#include "cpps/amr/physical/functionality.h"
+#include "cpps/model/order_states.h"
+#include "fsmlite/fsm.h"
 #include "ns3/application.h"
 #include "ns3/event-id.h"
 #include "ns3/object.h"
@@ -35,9 +38,18 @@
 
 namespace daisi::cpps {
 
+// fsmlite events
+struct ReceivedOrder {};
+struct ReachedTarget {};
+struct LoadedPayload {};
+struct UnloadedPayload {};
+struct ChargedBattery {};
+
 /// @brief Manages communication with the corresponding logical agent and execution of transport
 /// orders
-class AmrPhysicalAsset {
+class AmrPhysicalAsset : public fsmlite::fsm<AmrPhysicalAsset, OrderStates> {
+  friend class fsm;  // base class needs access to transition_table
+
 public:
   AmrPhysicalAsset(AmrAssetConnector connector, const Topology &topology);
   explicit AmrPhysicalAsset(AmrAssetConnector connector);
@@ -48,7 +60,10 @@ public:
 
   /// @brief When a functionality is finished, it will be deleted from the vector and the next one
   /// will be started.
-  void updateFunctionality(const FunctionalityVariant &functionality);
+  void updateFunctionality(const FunctionalityVariant &functionality);  // TODO can this be private?
+
+  using event = int;
+  using state_type = OrderStates;
 
 private:
   // communication with Logical
@@ -67,15 +82,77 @@ private:
   ns3::EventId next_update_event_;
 
   void processMessageOrderInfo(const AmrOrderInfo &order_info);
-  void continueOrder();
 
   util::Position getPosition() const;
 
   AmrAssetConnector connector_;
-  AmrOrder current_order_;
-  std::queue<FunctionalityVariant> functionality_queue_;
+  std::deque<FunctionalityVariant> functionality_queue_;
   util::Position last_sent_position_;
   AmrState amr_state_ = AmrState::kIdle;
+
+  // fsmlite helpers
+  void executeFrontFunctionality();
+  bool holdsMoveType(const FunctionalityVariant &f) const;
+
+  // fsmlite actions
+  template <typename T> void charge(const T &t);
+  template <typename T> void execute(const T &t);
+  template <typename T> void finish(const T &t);
+
+#define MAKE_SKIP_HANDLE_FUNC_PAIR(FCLASS)                                                     \
+  void handleSkip##FCLASS(const FCLASS &t) {                                                   \
+    process_event(FCLASS());                                                                   \
+    sendOrderUpdateNs3();                                                                      \
+  }                                                                                            \
+                                                                                               \
+  void skip(const FCLASS &t) {                                                                 \
+    ns3::Simulator::Schedule(ns3::Seconds(0), &AmrPhysicalAsset::handleSkip##FCLASS, this, t); \
+  }
+  MAKE_SKIP_HANDLE_FUNC_PAIR(ReceivedOrder)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(ReachedTarget)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(LoadedPayload)
+  MAKE_SKIP_HANDLE_FUNC_PAIR(UnloadedPayload)
+
+  // fsmlite guards
+  template <typename T> bool isMoveToLoad(const T &t) const;
+  template <typename T> bool isMoveToUnload(const T &t) const;
+  template <typename T> bool isMoveToCharge(const T &t) const;
+  template <typename T> bool isMove(const T &t) const;
+  template <typename T> bool isLoad(const T &t) const;
+  template <typename T> bool isUnload(const T &t) const;
+  template <typename T> bool isCharge(const T &t) const;
+  template <typename T> bool isFinish(const T &t) const;
+
+  using m = AmrPhysicalAsset;
+
+  using s = OrderStates;
+
+  using transition_table = table<
+      // kFinished
+      mem_fn_row<s::kFinished, ReceivedOrder, s::kStarted, &m::skip>,
+      // kStarted
+      mem_fn_row<s::kStarted, ReceivedOrder, s::kGoToPickUpLocation, &m::execute, &m::isMoveToLoad>,
+      // kMoveToPickUp
+      mem_fn_row<s::kGoToPickUpLocation, ReachedTarget, s::kReachedPickUpLocation, &m::skip>,
+      // kReachedPickUpLocation
+      mem_fn_row<s::kReachedPickUpLocation, ReachedTarget, s::kLoad, &m::execute, &m::isLoad>,
+      // kMoveToDelivery
+      mem_fn_row<s::kGoToDeliveryLocation, ReachedTarget, s::kReachedDeliveryLocation, &m::skip>,
+      // kReachedDeliveryLocation
+      mem_fn_row<s::kReachedDeliveryLocation, ReachedTarget, s::kUnload, &m::execute, &m::isUnload>,
+      // kLoad
+      mem_fn_row<s::kLoad, LoadedPayload, s::kLoaded, &m::skip>,
+      // kLoaded
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kGoToPickUpLocation, &m::execute, &m::isMoveToLoad>,
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kGoToDeliveryLocation, &m::execute,
+                 &m::isMoveToUnload>,
+      mem_fn_row<s::kLoaded, LoadedPayload, s::kFinished, &m::finish, &m::isFinish>,
+      // kUnload
+      mem_fn_row<s::kUnload, UnloadedPayload, s::kUnloaded, &m::skip>,
+      // kUnloaded
+      mem_fn_row<s::kUnloaded, UnloadedPayload, s::kGoToPickUpLocation, &m::execute,
+                 &m::isMoveToLoad>,
+      mem_fn_row<s::kUnloaded, UnloadedPayload, s::kFinished, &m::finish, &m::isFinish>>;
 };
 }  // namespace daisi::cpps
 #endif

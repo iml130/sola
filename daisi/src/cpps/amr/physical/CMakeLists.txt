@@ -1,10 +1,10 @@
-add_library(daisi_cpps_amr_pysical_amr_asset_connector STATIC)
-target_sources(daisi_cpps_amr_pysical_amr_asset_connector
+add_library(daisi_cpps_amr_physical_amr_asset_connector STATIC)
+target_sources(daisi_cpps_amr_physical_amr_asset_connector
     PRIVATE
     amr_asset_connector.h
     amr_asset_connector_ns3.cpp
 )
-target_link_libraries(daisi_cpps_amr_pysical_amr_asset_connector
+target_link_libraries(daisi_cpps_amr_physical_amr_asset_connector
     PUBLIC
     daisi_cpps_amr_amr_description
     daisi_cpps_amr_amr_mobility_helper
@@ -17,7 +17,7 @@ target_link_libraries(daisi_cpps_amr_pysical_amr_asset_connector
     daisi_cpps_amr_physical_functionality
     daisi_structure_helpers
 )
-target_include_directories(daisi_cpps_amr_pysical_amr_asset_connector
+target_include_directories(daisi_cpps_amr_physical_amr_asset_connector
     PUBLIC
     ${DAISI_SOURCE_DIR}/src
 )
@@ -64,9 +64,12 @@ target_sources(daisi_cpps_amr_physical_amr_physical_asset
 )
 target_link_libraries(daisi_cpps_amr_physical_amr_physical_asset
     PUBLIC
-    daisi_cpps_amr_pysical_amr_asset_connector
+    daisi_cpps_amr_physical_amr_asset_connector
+    daisi_cpps_amr_physical_functionality
     daisi_cpps_amr_message_amr_order_info
+    daisi_cpps_model_order_states
     ns3::libcore
+    daisi_fsmlite
     PRIVATE
     daisi_cpps_amr_message_amr_state
     daisi_cpps_amr_message_serializer
@@ -90,6 +93,16 @@ target_link_libraries(daisi_cpps_amr_physical_amr_order
     solanet_serialize
 )
 
+add_library(daisi_cpps_amr_physical_charge INTERFACE)
+target_sources(daisi_cpps_amr_physical_charge
+    INTERFACE
+    charge.h
+)
+target_link_libraries(daisi_cpps_amr_physical_charge
+    INTERFACE
+    daisi_structure_helpers
+)
+
 add_library(daisi_cpps_amr_physical_functionality INTERFACE)
 target_sources(daisi_cpps_amr_physical_functionality
     INTERFACE
@@ -97,6 +110,7 @@ target_sources(daisi_cpps_amr_physical_functionality
 )
 target_link_libraries(daisi_cpps_amr_physical_functionality
     INTERFACE
+    daisi_cpps_amr_physical_charge
     daisi_cpps_amr_physical_load
     daisi_cpps_amr_physical_move_to
     daisi_cpps_amr_physical_navigate
