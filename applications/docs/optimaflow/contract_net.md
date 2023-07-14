@@ -1,5 +1,0 @@
-# Decentral
-
-## Concept
-
-## Interaction
