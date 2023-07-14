@@ -74,8 +74,6 @@ public:
   /// level:number or fanout
   LogicalNodeInfo(uint32_t level, uint32_t number, uint16_t fanout);
 
-  ~LogicalNodeInfo();
-
   /// \returns the level of this peer within MINHTON tree
   uint32_t getLevel() const;
 

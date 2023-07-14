@@ -29,13 +29,6 @@ LogicalNodeInfo::LogicalNodeInfo(uint32_t p_level, uint32_t p_number, uint16_t p
   this->setPosition(p_level, p_number);
 }
 
-LogicalNodeInfo::~LogicalNodeInfo() {
-  this->level_ = 0;
-  this->number_ = 0;
-  this->fanout_ = 0;
-  this->initialized_ = false;
-}
-
 LogicalNodeInfo::LogicalNodeInfo() {
   this->level_ = 0;
   this->number_ = 0;
