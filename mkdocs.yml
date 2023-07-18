@@ -52,7 +52,7 @@ nav:
       - Getting Started: applications/optimaflow/getting_started.md
       - Participants:
         - Material Flow: applications/optimaflow/material_flow.md
-        - AMR/AGV: applications/optimaflow/amr_agv.md
+        - AMR/AGV: applications/optimaflow/amr.md
         - Optimization: applications/optimaflow/optimization.md
       - Task Assignment:
         - ContractNet: applications/optimaflow/contract_net.md
@@ -111,9 +111,10 @@ theme:
   search_index_only: true
 
 extra_css:
-    - stylesheets/extra.css
+  - stylesheets/extra.css
 
 markdown_extensions:
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
