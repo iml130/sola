@@ -23,15 +23,19 @@ For our purposes they are able to follow a predefined path or even navigate by t
 
 To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
 
-<!-- using md_in_html extension -->
+<!-- using md_in_html extension. Note preview will not display this correctly -->
 <figure markdown>
   ![Components and messages](../img/amr_logical_physical_overview.drawio.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
 
-<!-- caption/label can also be placed directly above the figure if pure markdown is used. This will place the caption above the figure. Note that preview will place it arbitrarily-->
+<!-- caption/label can also be placed directly above the figure if pure markdown is used. This will place the caption above the figure. Note that preview will place it arbitrarily -->
 <!-- **Figure 1:** Components and messages
 ![Components and messages](../img/amr_logical_physical_overview.drawio.png) -->
+
+<!-- Third option would be to use a newline "  " between caption and figure -->
+<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)<!--newline--><!-- Spaces "  " have to be added again -->
+<!-- **Figure 1:** Components and messages  -->
 
 ## Logical
 
@@ -42,7 +46,7 @@ It is the AMR's interface to SOLA and will
 - aquire [Tasks](../glossary.md#t) using specified [Algorithms](optimization.md),
 - report the status of Task execution to the corresponding [Material Flow Agent](material_flow.md),
 - report the AMR's state and position to other agents and the [Management Overlay](../../../minthon/docs/) and
-- handle [Path Planning]()
+<!-- - handle [Path Planning]() -->
 - Send TransportOrderSteps, MoveOrderSteps and ActionSteps to the AMR Physical Asset
 
 As shown in **Figure 1**
@@ -63,7 +67,7 @@ As shown in **Figure 1**.
 
 ## Managing Transport Orders
 
-Each Transport Order will traverse the following states:
+Each Transport Order will traverse the following states:<!-- TODO: what do they mean? -->
 
 1. kCreated
 2. kQueued
