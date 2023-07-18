@@ -3,27 +3,29 @@
 ## A
 
 **AMR (Autonomous Mobile Robot)**:<!--newline-->  
-AMRs are transport vehicles in a logistics context.
-They have extended onboard sensors and capabilites that enable autonomous path finding and evasion and also autonomous execution of tasks.
-(See [Autonomous Mobile Robot](./optimaflow/amr.md#autonomous-mobile-robot-amr))
+See [Autonomous Mobile Robot](./optimaflow/amr.md#autonomous-mobile-robot-amr)
 
 ## M
 
 **Map**:<!--newline-->  
-TBD (->Topology)
+See [Topology](#t)
 
 **Material Flow**:<!--newline-->  
-TBD
-
-## O
-
-**Order Step**:<!--newline-->  
-TBD
+See [Material Flow](./optimaflow/material_flow.md)
 
 ## T
 
+**Task**:<!--newline-->  
+See [Task](./optimaflow/material_flow.md#task)
+
 **Topology**:<!--newline-->  
-TBD
+A Topology is used for navigation.
+It consists of a graph and 2D-dimensions.
+The dimensions are the borders of the traversable area.
+The nodes of the graph are positions on the traversable area.
 
 **Transport Order**:<!--newline-->  
-TBD
+See [Transport Order](./optimaflow/material_flow.md#transport-order)
+
+**Transport Order Step**:<!--newline-->  
+See [Transport Order](./optimaflow/material_flow.md#transport-order)
