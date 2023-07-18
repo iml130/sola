@@ -17,7 +17,6 @@ MINHTON provides efficient protocols for node Join and Departure in logarithmic 
 ![Figure 1](img/cpps.png "An interconnected cyber-physical production system, representing an P2P network")
 <a name="fig1"></a>**Figure 1:** An interconnected cyber-physical production system, representing a P2P network.
 
-
 ## Academic Attribution
 
 If you use it for research, please include one of the following references in any resulting publication.
@@ -42,33 +41,37 @@ If you use it for research, please include one of the following references in an
 
 MINHTON is based on few other publications:
 
-```plain
-@inproceedings{detznerPeerDiscoveryTreeStructured2022,
-  title = {Peer {{Discovery}} in {{Tree-Structured P2P Overlay Networks}} by {{Means}} of {{Connected Dominating Sets}}},
-  booktitle = {2022 {{IEEE}} 47th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
-  author = {Detzner, Peter and Gödeke, Jana and Bondorf, Steffen},
-  date = {2022-09},
-  pages = {447--454},
-  issn = {0742-1303},
-  abstract = {A Peer-to-Peer (P2P) network consists of a large number of nodes, where each node may have different capabilities and properties. Finding peers with specific capabilities and properties is challenging. Thus, we propose a practical solution to the problem of peer discovery, which is finding peers in the network according to a specified query. We contribute a peer discovery for an m-ary tree-structured P2P network by utilizing a connected dominating set (CDS), a technique that is typically used in unstructured networks. Our approach of constructing the CDS requires no additional communication cost, while nodes can insert, update and remove data within \textbackslash mathcalO(1). Each node of the CDS – a dominating set node – maintains only a limited number of nodes. We confirm the properties of our proposed solution by using the ns-3 discrete-event simulator. This includes, besides the degree of decentralism of the peer discovery, also the heterogeneity of peers.},
-  eventtitle = {2022 {{IEEE}} 47th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
-  keywords = {connected dominating set,Costs,overlay network,Overlay networks,peer discovery,peer-to-peer,Peer-to-peer computing,Runtime,tree-structured,Upper bound}
-}
+<details>
+  <summary>Peer Discovery in Tree-Structured P2P Overlay Networks by Means of Connected Dominating Sets</summary>
+  ```plain
+  @inproceedings{detznerPeerDiscoveryTreeStructured2022,
+    title = {Peer {{Discovery}} in {{Tree-Structured P2P Overlay Networks}} by {{Means}} of {{Connected Dominating Sets}}},
+    booktitle = {2022 {{IEEE}} 47th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
+    author = {Detzner, Peter and Gödeke, Jana and Bondorf, Steffen},
+    date = {2022-09},
+    pages = {447--454},
+    issn = {0742-1303},
+    abstract = {A Peer-to-Peer (P2P) network consists of a large number of nodes, where each node may have different capabilities and properties. Finding peers with specific capabilities and properties is challenging. Thus, we propose a practical solution to the problem of peer discovery, which is finding peers in the network according to a specified query. We contribute a peer discovery for an m-ary tree-structured P2P network by utilizing a connected dominating set (CDS), a technique that is typically used in unstructured networks. Our approach of constructing the CDS requires no additional communication cost, while nodes can insert, update and remove data within \textbackslash mathcalO(1). Each node of the CDS – a dominating set node – maintains only a limited number of nodes. We confirm the properties of our proposed solution by using the ns-3 discrete-event simulator. This includes, besides the degree of decentralism of the peer discovery, also the heterogeneity of peers.},
+    eventtitle = {2022 {{IEEE}} 47th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
+    keywords = {connected dominating set,Costs,overlay network,Overlay networks,peer discovery,peer-to-peer,Peer-to-peer computing,Runtime,tree-structured,Upper bound}
+  }
+  ```
+</details>
 
-```
-
-```plain
-@inproceedings{detznerLowCostSearchTreeStructured2021,
-  title = {Low-{{Cost Search}} in {{Tree-Structured P2P Overlays}}: {{The Null-Balance Benefit}}},
-  shorttitle = {Low-{{Cost Search}} in {{Tree-Structured P2P Overlays}}},
-  booktitle = {2021 {{IEEE}} 46th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
-  author = {Detzner, Peter and Gödeke, Jana and Bondorf, Steffen},
-  date = {2021-10},
-  pages = {613--620},
-  issn = {0742-1303},
-  abstract = {Peer-to-Peer (P2P) networks are one way to create large-scale distributed systems. A single peer has only a limited view on other peers. Thus, efficient searching for other peers or their content is a key performance indicator. In this paper, we investigate the search efficiency in an m-ary tree-structured P2P overlay. While previous work aimed for balancing the maximum height of a node's sub-trees, we show that keeping the height balanced throughout the overall network – a property called null-balance – will increase search performance considerably. Simulations using the ns-3 discrete-event simulator show 50\% better performance w.r.t. required routing hops in these null-balanced trees. Therefore, we develop algorithms that keep a tree null-balanced if a node joins or departures. I.e., we prevent the need for restructuring. As we show, the cost of our efficient structure-preserving algorithms is easily set off by a relatively small number of search operations.},
-  eventtitle = {2021 {{IEEE}} 46th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
-  keywords = {balanced tree,Conferences,Key performance indicator,overlay networks,peer-to-peer,Peer-to-peer computing,Routing,Vegetation}
-}
-
-```
+<details>
+  <summary>Low-Cost Search in Tree-Structured P2P Overlays: The Null-Balance Benefit</summary>
+  ```plain
+  @inproceedings{detznerLowCostSearchTreeStructured2021,
+    title = {Low-{{Cost Search}} in {{Tree-Structured P2P Overlays}}: {{The Null-Balance Benefit}}},
+    shorttitle = {Low-{{Cost Search}} in {{Tree-Structured P2P Overlays}}},
+    booktitle = {2021 {{IEEE}} 46th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
+    author = {Detzner, Peter and Gödeke, Jana and Bondorf, Steffen},
+    date = {2021-10},
+    pages = {613--620},
+    issn = {0742-1303},
+    abstract = {Peer-to-Peer (P2P) networks are one way to create large-scale distributed systems. A single peer has only a limited view on other peers. Thus, efficient searching for other peers or their content is a key performance indicator. In this paper, we investigate the search efficiency in an m-ary tree-structured P2P overlay. While previous work aimed for balancing the maximum height of a node's sub-trees, we show that keeping the height balanced throughout the overall network – a property called null-balance – will increase search performance considerably. Simulations using the ns-3 discrete-event simulator show 50\% better performance w.r.t. required routing hops in these null-balanced trees. Therefore, we develop algorithms that keep a tree null-balanced if a node joins or departures. I.e., we prevent the need for restructuring. As we show, the cost of our efficient structure-preserving algorithms is easily set off by a relatively small number of search operations.},
+    eventtitle = {2021 {{IEEE}} 46th {{Conference}} on {{Local Computer Networks}} ({{LCN}})},
+    keywords = {balanced tree,Conferences,Key performance indicator,overlay networks,peer-to-peer,Peer-to-peer computing,Routing,Vegetation}
+  }
+  ```
+</details>
