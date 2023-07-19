@@ -41,7 +41,7 @@ void MinhtonManager::setup() {
 
 void MinhtonManager::initNode(uint32_t id, minhton::ConfigNode config) {
   Ptr<MinhtonApplication> app =
-      this->nodeContainer_.Get(id)->GetApplication(0)->GetObject<MinhtonApplication>();
+      this->node_container_.Get(id)->GetApplication(0)->GetObject<MinhtonApplication>();
 
   app->initializeNode(config);
 }

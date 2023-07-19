@@ -86,7 +86,7 @@ void CppsManager::setup() {
   setupNodes();
 
   // Setup AMRs
-  assert(this->nodeContainer_.GetN() == getNumberOfNodes());
+  assert(this->node_container_.GetN() == getNumberOfNodes());
 
   ns3::MobilityHelper mob;
   mob.SetPositionAllocator("ns3::GridPositionAllocator", "MinX", ns3::DoubleValue(width_ * 0.2),
@@ -212,10 +212,10 @@ void CppsManager::setupNodes() {
   setupNetworkEthernet();
   setupNetworkWifi();
 
-  nodeContainer_ = NodeContainer(material_flows_, amrs_);
+  node_container_ = NodeContainer(material_flows_, amrs_);
 
   // All AMRs have a loopback address for communication betwee logical and physical agent
-  for (auto i = material_flows_.GetN(); i < nodeContainer_.GetN(); i++) {
+  for (auto i = material_flows_.GetN(); i < node_container_.GetN(); i++) {
     addresses_[i].push_back("127.0.0.1");
   }
 
@@ -232,7 +232,7 @@ void CppsManager::setupNodes() {
 void CppsManager::setupNetworkEthernet() {
   // Use the manager to set up ethernet between specific nodes only
   // Rest of exclusive network setup for cpps is handled here.
-  nodeContainer_ = NodeContainer(material_flows_);
+  node_container_ = NodeContainer(material_flows_);
 
   setupNetwork();
 }
