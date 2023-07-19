@@ -1,4 +1,3 @@
-add_subdirectory(agv)
 add_subdirectory(amr)
 add_subdirectory(model)
 add_subdirectory(common)
