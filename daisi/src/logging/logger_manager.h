@@ -25,7 +25,7 @@
 #include "definitions.h"
 #include "minhton-ns3/minhton_logger_ns3.h"
 #include "natter-ns3/natter_logger_ns3.h"
-#include "path_planning/path_planning_logger_ns_3.h"
+// #include "path_planning/path_planning_logger_ns_3.h"
 #include "sola-ns3/sola_logger_ns3.h"
 #include "sqlite/sqlite_helper.h"
 
@@ -65,8 +65,8 @@ public:
   std::shared_ptr<natter::logging::NatterLoggerNs3> createNatterLogger(uint32_t device_id);
   std::shared_ptr<daisi::cpps::CppsLoggerNs3> createAMRLogger(uint32_t device_id);
   std::shared_ptr<daisi::cpps::CppsLoggerNs3> createTOLogger(uint32_t device_id);
-  std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3> createPathPlanningLogger(
-      uint32_t device_id, const std::string &device_type = "");
+  // std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3> createPathPlanningLogger(
+  //     uint32_t device_id, const std::string &device_type = "");
   std::shared_ptr<sola_ns3::SolaLoggerNs3> createSolaLogger(uint32_t device_id);
 
 private:

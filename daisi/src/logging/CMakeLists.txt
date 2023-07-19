@@ -31,7 +31,7 @@ target_link_libraries(daisi_logger_manager
     daisi_minhton_logger_ns3
     daisi_natter_logger_ns3
     daisi_cpps_common_cpps_logger_ns3
-    PathPlanning
+    #PathPlanning
     daisi_sola_logger_ns3
     PRIVATE
     ns3::libcore

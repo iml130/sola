@@ -237,17 +237,18 @@ std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createTOLogger(uint32
       log_dev_app, [this](const std::string &sql) -> void { this->sqlite_helper_.execute(sql); });
 }
 
-std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3>
-LoggerManager::createPathPlanningLogger(uint32_t device_id, const std::string &device_type) {
-  auto log_dev_app = [this, device_id, device_type](const std::string &application_uuid) {
-    const std::string app_name =
-        device_type.empty() ? "PathPlanning" : "PathPlanning " + device_type;
-    this->logDeviceApplication(application_uuid, app_name, device_id);
-  };
+// std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3>
+// LoggerManager::createPathPlanningLogger(uint32_t device_id, const std::string &device_type) {
+//   auto log_dev_app = [this, device_id, device_type](const std::string &application_uuid) {
+//     const std::string app_name =
+//         device_type.empty() ? "PathPlanning" : "PathPlanning " + device_type;
+//     this->logDeviceApplication(application_uuid, app_name, device_id);
+//   };
 
-  return std::make_shared<daisi::path_planning::PathPlanningLoggerNs3>(
-      log_dev_app, [this](const std::string &sql) -> void { this->sqlite_helper_.execute(sql); });
-}
+//   return std::make_shared<daisi::path_planning::PathPlanningLoggerNs3>(
+//       log_dev_app, [this](const std::string &sql) -> void { this->sqlite_helper_.execute(sql);
+//       });
+// }
 
 std::shared_ptr<sola_ns3::SolaLoggerNs3> LoggerManager::createSolaLogger(uint32_t device_id) {
   auto log_dev_app = [this, device_id](const std::string &application_uuid) {
