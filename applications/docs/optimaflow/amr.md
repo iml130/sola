@@ -30,12 +30,13 @@ To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical
 </figure>
 
 <!-- caption/label can also be placed directly above the figure if pure markdown is used. This will place the caption above the figure. Note that preview will place it arbitrarily -->
-<!-- **Figure 1:** Components and messages
-![Components and messages](../img/amr_logical_physical_overview.drawio.png) -->
 
-<!-- Third option would be to use a newline "  " between caption and figure -->
-<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)<!--newline--><!-- Spaces "  " have to be added again -->
-<!-- **Figure 1:** Components and messages  -->
+<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)
+**Figure 1:** Components and messages -->
+
+<!-- Third option would be to use a newline between caption and figure -->
+<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)<br />
+**Figure 1:** Components and messages -->
 
 ## Logical
 
@@ -67,7 +68,7 @@ As shown in **Figure 1**.
 
 ## Managing Transport Orders
 
-Each Transport Order will traverse the following states:<!-- TODO: what do they mean? -->
+Each Transport Order will traverse the following states:
 
 1. kCreated: Transport Orders are created with the Material Flow and Task they are a part of.
    The creation is performed by the Material Flow Logical Agent.
@@ -153,8 +154,8 @@ Physical sends
 Logical sends
 
 - Transport Order Steps if
-  - a new Task is aquired and no Order is currently executed or
-  - an Order is finished and another Order is queued for execution
+    - a new Task is aquired and no Order is currently executed or
+    - an Order is finished and another Order is queued for execution
 
 ### AMR Physical Asset and real or simulated robot
 
