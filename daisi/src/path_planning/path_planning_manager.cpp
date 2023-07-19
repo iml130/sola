@@ -61,7 +61,7 @@ void PathPlanningManager::setup() {
   setupNodes();
 
   // Setup AMRs
-  assert(this->nodeContainer_.GetN() == getNumberOfNodes());
+  assert(this->node_container_.GetN() == getNumberOfNodes());
 
   if (number_pickup_stations_ % 2 != 0 || number_delivery_stations_ % 2 != 0) {
     throw std::runtime_error("number stations must be even");
@@ -119,7 +119,7 @@ void PathPlanningManager::setup() {
   }
 
   // Install general information for application
-  std::for_each(nodeContainer_.Begin(), nodeContainer_.End(), [this](ns3::Ptr<Node> node) {
+  std::for_each(node_container_.Begin(), node_container_.End(), [this](ns3::Ptr<Node> node) {
     for (int i = 0; i < node->GetNApplications(); i++) {
       node->GetApplication(i)->GetObject<PathPlanningApplication>()->setTopology(topology_);
     }
@@ -251,10 +251,10 @@ void PathPlanningManager::setupNodes() {
   setupNetworkEthernet();
   setupNetworkWifi();
 
-  nodeContainer_ =
+  node_container_ =
       NodeContainer(NodeContainer(pickup_stations_, delivery_stations_, central_consensus_), agvs_);
   for (auto i = pickup_stations_.GetN() + delivery_stations_.GetN() + central_consensus_.GetN();
-       i < nodeContainer_.GetN(); i++) {
+       i < node_container_.GetN(); i++) {
     addresses_[i].push_back("127.0.0.1");
   }
 
@@ -271,7 +271,7 @@ void PathPlanningManager::setupNodes() {
 void PathPlanningManager::setupNetworkEthernet() {
   // Use the manager to set up ethernet between specific nodes only
   // Rest of exclusive network setup for cpps is handled here.
-  nodeContainer_ = NodeContainer(pickup_stations_, delivery_stations_, central_consensus_);
+  node_container_ = NodeContainer(pickup_stations_, delivery_stations_, central_consensus_);
 
   setupNetwork();
 

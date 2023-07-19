@@ -178,7 +178,7 @@ protected:
   void setupNetwork() {
     using namespace ns3;
 
-    uint64_t number_of_app_nodes = nodeContainer_.GetN();
+    uint64_t number_of_app_nodes = node_container_.GetN();
     auto number_of_subnets = static_cast<uint64_t>(
         std::ceil((float)number_of_app_nodes / constants::kNumberOfAppNodesPerSwitch));
     assert(number_of_subnets < 255 * 256 - 2);  // Approx. maximum restricted by subnet
@@ -189,7 +189,7 @@ protected:
 
     // Install internet
     InternetStackHelper internet;
-    internet.Install(nodeContainer_);
+    internet.Install(node_container_);
     internet.Install(core_router_);
 
     // Create switches
@@ -210,7 +210,7 @@ protected:
     for (uint64_t i = 0; i < number_of_app_nodes; i++) {
       uint32_t network_index = i / constants::kNumberOfAppNodesPerSwitch;
       auto link =
-          csma.Install(NodeContainer(nodeContainer_.Get(i), switchContainer_.Get(network_index)));
+          csma.Install(NodeContainer(node_container_.Get(i), switchContainer_.Get(network_index)));
       app_node_devices[network_index].Add(link.Get(0));
       link.Get(0)->TraceConnectWithoutContext("MacTxDrop", MakeCallback(&handleNodeMacTxDrop));
       link.Get(0)->TraceConnectWithoutContext("PhyRxDrop", MakeCallback(&handleNodePhyRxDrop));
@@ -276,9 +276,9 @@ protected:
 
     // Enable logging of network traffic in pcap files
     // csma.EnablePcapAll("wireshark");
-    addresses_.resize(nodeContainer_.GetN());
+    addresses_.resize(node_container_.GetN());
 
-    for (auto i = 0U; i < nodeContainer_.GetN(); i++) {
+    for (auto i = 0U; i < node_container_.GetN(); i++) {
       addresses_[i].push_back(interfaces_.GetAddress(i));
     }
 
@@ -309,14 +309,14 @@ protected:
   }
 
   void setupApplication() {
-    for (uint64_t i = 0; i < nodeContainer_.GetN(); i++) {
+    for (uint64_t i = 0; i < node_container_.GetN(); i++) {
       std::vector<ns3::Ipv4Address> address = addresses_[i];
 
       SolaHelper<ConcreteApplication> helper(address, 2000);
-      ns3::ApplicationContainer app_container = helper.install(this->nodeContainer_.Get(i));
+      ns3::ApplicationContainer app_container = helper.install(this->node_container_.Get(i));
       app_container.Start(ns3::MilliSeconds(0));
 
-      this->nodeContainer_.Get(i)->GetApplication(0)->template GetObject<ConcreteApplication>();
+      this->node_container_.Get(i)->GetApplication(0)->template GetObject<ConcreteApplication>();
     }
   }
 
@@ -326,7 +326,7 @@ protected:
 
   ScenariofileParser parser_;
 
-  ns3::NodeContainer nodeContainer_{};
+  ns3::NodeContainer node_container_{};
   ns3::NodeContainer switchContainer_{};
   ns3::NodeContainer core_router_{};
   ns3::Ipv4InterfaceContainer interfaces_{};
@@ -335,8 +335,8 @@ protected:
 
 private:
   void createNodes() {
-    nodeContainer_.Create(getNumberOfNodes());
-    // for (auto it = nodeContainer_.Begin(); it != nodeContainer_.End(); it++) {
+    node_container_.Create(getNumberOfNodes());
+    // for (auto it = node_container_.Begin(); it != node_container_.End(); it++) {
     //   daisi::global_logger_manager->logDevice((*it)->GetId());
     // }
   }

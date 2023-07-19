@@ -40,14 +40,14 @@ void NatterManager::setup() {
   Manager<NatterApplication>::setup();
 
   // Set natter mode
-  for (auto node = nodeContainer_.Begin(); node != nodeContainer_.End(); node++) {
+  for (auto node = node_container_.Begin(); node != node_container_.End(); node++) {
     (*node)->GetApplication(0)->GetObject<NatterApplication>()->setMode(mode_);
   }
 }
 
 std::pair<ns3::Ptr<NatterNodeNs3>, ns3::Ptr<NatterApplication>> NatterManager::getNodes(
     uint32_t id) const {
-  auto app = nodeContainer_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
+  auto app = node_container_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
   return {app->getNatterNode(), app};
 }
 
@@ -196,7 +196,7 @@ void NatterManager::publish(uint32_t message_size, uint32_t publishing_node) {
 
   std::cout << "PUBLISH AT " << Simulator::Now().GetMicroSeconds() << " FROM " << publishing_node
             << std::endl;
-  this->nodeContainer_.Get(publishing_node)
+  this->node_container_.Get(publishing_node)
       ->GetApplication(0)
       ->GetObject<NatterApplication>()
       ->getNatterNode()

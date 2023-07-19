@@ -45,14 +45,14 @@ void SolaManager::setup() {
   daisi::global_logger_manager->logMinhtonConfigFile("configurations/join.yml");
 
   // Set ID for all applications/nodes
-  for (uint32_t i = 0; i < nodeContainer_.GetN(); i++) {
+  for (uint32_t i = 0; i < node_container_.GetN(); i++) {
     auto app = getApplication(i);
     app->SetAttribute("ID", ns3::UintegerValue(i));
   }
 }
 
 ns3::Ptr<SolaApplication> SolaManager::getApplication(uint32_t id) const {
-  return nodeContainer_.Get(id)->GetApplication(0)->GetObject<SolaApplication>();
+  return node_container_.Get(id)->GetApplication(0)->GetObject<SolaApplication>();
 }
 
 void SolaManager::scheduleEvents() {
