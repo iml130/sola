@@ -28,36 +28,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ns3/ipv4-address.h"
-#include "ns3/node.h"
+#include "ns3/network-module.h"
 
 namespace daisi {
-
-struct NodeNetworkInfo {
-  ns3::Ptr<ns3::Node> node;
-  uint16_t next_free_port;
-};
-
-class SolaNetworkUtils {
-public:
-  static SolaNetworkUtils &get() {
-    static SolaNetworkUtils utils;
-    return utils;
-  }
-
-  void createSockets(const std::string &ip, uint32_t amount = 1);
-
-  void registerNode(ns3::Ipv4Address address, const ns3::Ptr<ns3::Node> &node,
-                    uint16_t next_free_port);
-
-  // Unregister as active node
-  void unregisterNode(ns3::Ipv4Address address);
-
-private:
-  SolaNetworkUtils() = default;
-
-  std::unordered_map<std::string, NodeNetworkInfo> nodes_;
-};
 
 std::string getScenariofilePath(std::string scenariofile_name);
 int getTestFile(std::string &scenariofile_name, std::string &scenariofile_string,
@@ -72,6 +45,9 @@ std::string generateDBNameWithMinhtonInfo(const std::string &app_name, uint16_t 
 
 std::string generateDBName(const std::string &app_name);
 std::string generateDBName(const std::string &app_name, const std::string &identification_string);
+
+std::vector<ns3::Ipv4Address> getAddressesForNode(const ns3::NodeContainer &container,
+                                                  uint32_t node_container_idx);
 
 }  // namespace daisi
 #endif

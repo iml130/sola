@@ -21,6 +21,8 @@
 #include "ns3/socket.h"
 #include "sola_message_ns3.h"
 #include "solanet/network_udp/network_udp.h"
+#include "utils/daisi_check.h"
+#include "utils/socket_manager.h"
 #include "utils/sola_utils.h"
 
 #ifdef DAISI_SOLANET_NS3_DISABLE_NETWORKING
@@ -29,15 +31,9 @@
 #include "ns3/simulator.h"
 #endif
 
-namespace daisi::solanet_ns3 {
-// HACK: For passing socket to network interface without letting application know
-std::deque<ns3::Ptr<ns3::Socket>> socket_global_;
-}  // namespace daisi::solanet_ns3
-
 using namespace solanet;
 using namespace ns3;
 
-std::unordered_map<std::string, int> map;  // HACK See Network::Impl ctor
 class Network::Impl {
 public:
   Impl(const std::string &ip, std::function<void(const Message &)> callback);
@@ -69,61 +65,8 @@ std::set<Network::Impl *> Network::Impl::network_interfaces_;
 #endif
 
 Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> callback)
-    : callback_(std::move(callback)) {
-  assert(!daisi::solanet_ns3::socket_global_.empty());
-
-  // Hacky way to get the next free ns3 socket
-  // This problem only arises in our ns3 simulation because the application can freely fetch new
-  // sockets (e.g. by starting topic trees). But the low-level application (minhton, natter, sola,
-  // ...) does not know that it is running on a ns3 node. Therefore we need to pass the ns3 socket
-  // "around" the application to the ns3 network interface. And the network interface needs to
-  // choose the correct socket.
-
-  if (ip.empty()) {
-    // Case 1 - Fetching next free socket
-
-    int i = 0;
-    for (; i < daisi::solanet_ns3::socket_global_.size(); i++) {
-      auto ptr = daisi::solanet_ns3::socket_global_[i];
-      // https://groups.google.com/g/ns-3-users/c/tZmjq_KoCfo/m/x1xBvn-H31gJ
-      Address addr;
-      daisi::solanet_ns3::socket_global_[i]->GetSockName(addr);
-      InetSocketAddress iaddr = InetSocketAddress::ConvertFrom(addr);
-      std::string socket_ip = daisi::getIpv4AddressString(iaddr.GetIpv4());
-
-      // Only use socket is it is used less than 3 times already
-      // If it is used >=3 times this IP is already in use for another SOLA instance
-      if (map[socket_ip] < 3) {
-        map[socket_ip]++;
-        break;
-      }
-    }
-
-    assert(i < daisi::solanet_ns3::socket_global_.size());
-    socket_ = daisi::solanet_ns3::socket_global_[i];
-    daisi::solanet_ns3::socket_global_.erase(daisi::solanet_ns3::socket_global_.begin() + i);
-  } else {
-    // Case 2 - Fetching socket with same IP
-
-    int i = 0;
-    for (; i < daisi::solanet_ns3::socket_global_.size(); i++) {
-      auto ptr = daisi::solanet_ns3::socket_global_[i];
-      // https://groups.google.com/g/ns-3-users/c/tZmjq_KoCfo/m/x1xBvn-H31gJ
-      Address addr;
-      daisi::solanet_ns3::socket_global_[i]->GetSockName(addr);
-      InetSocketAddress iaddr = InetSocketAddress::ConvertFrom(addr);
-      std::string socket_ip = daisi::getIpv4AddressString(iaddr.GetIpv4());
-      if (socket_ip == ip) {
-        break;
-      }
-    }
-    map.at(ip)++;
-
-    assert(i < daisi::solanet_ns3::socket_global_.size());
-    socket_ = daisi::solanet_ns3::socket_global_[i];
-    daisi::solanet_ns3::socket_global_.erase(daisi::solanet_ns3::socket_global_.begin() + i);
-  }
-
+    : socket_(daisi::SocketManager::get().createSocket(daisi::SocketType::kUDP)),
+      callback_(std::move(callback)) {
   socket_->SetRecvCallback(MakeCallback(&Impl::processUdpPacket, this));
 
   // https://groups.google.com/g/ns-3-users/c/tZmjq_KoCfo/m/x1xBvn-H31gJ
@@ -134,6 +77,10 @@ Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> 
   ip_ = daisi::getIpv4AddressString(iaddr.GetIpv4());
   port_ = iaddr.GetPort();
 
+  if (!ip.empty() && ip != ip_) {
+    throw std::runtime_error("IP requested from application does not match socket IP");
+  }
+
 #ifdef DAISI_SOLANET_NS3_DISABLE_NETWORKING
   Network::Impl::network_interfaces_.insert(this);
 #endif
@@ -143,11 +90,6 @@ Network::Impl::~Impl() {
   socket_->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
   socket_->Close();
   socket_ = nullptr;
-
-  map.at(ip_)--;
-  if (map.at(ip_) == 0) {
-    map.erase(ip_);
-  }
 }
 
 void Network::Impl::processPacket(Ptr<Packet> packet) {
@@ -188,6 +130,7 @@ void Network::Impl::send(const Message &msg) {
   if (interface == Network::Impl::network_interfaces_.end()) {
     throw std::runtime_error("no interface found for message");
   }
+#error "Not implemented with contexts"
   ns3::Simulator::Schedule(ns3::MilliSeconds(2), &Network::Impl::processPacket, *interface, packet);
 #else
   socket_->SendTo(packet, 0, InetSocketAddress(Ipv4Address(msg.getIp().c_str()), msg.getPort()));

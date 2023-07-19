@@ -40,6 +40,7 @@
 #include "sola_constants.h"
 #include "sola_helper.h"
 #include "utils/random_engine.h"
+#include "utils/socket_manager.h"
 #include "utils/sola_utils.h"
 
 namespace daisi {
@@ -276,11 +277,6 @@ protected:
 
     // Enable logging of network traffic in pcap files
     // csma.EnablePcapAll("wireshark");
-    addresses_.resize(node_container_.GetN());
-
-    for (auto i = 0U; i < node_container_.GetN(); i++) {
-      addresses_[i].push_back(interfaces_.GetAddress(i));
-    }
 
     // Setup ARP caches
     for (int i = 0; i < number_of_subnets; i++) {
@@ -310,13 +306,12 @@ protected:
 
   void setupApplication() {
     for (uint64_t i = 0; i < node_container_.GetN(); i++) {
-      std::vector<ns3::Ipv4Address> address = addresses_[i];
+      std::vector<ns3::Ipv4Address> addresses = daisi::getAddressesForNode(node_container_, i);
 
-      SolaHelper<ConcreteApplication> helper(address, 2000);
-      ns3::ApplicationContainer app_container = helper.install(this->node_container_.Get(i));
-      app_container.Start(ns3::MilliSeconds(0));
+      SocketManager::get().registerNode(addresses, node_container_.Get(i), 2000);
 
-      this->node_container_.Get(i)->GetApplication(0)->template GetObject<ConcreteApplication>();
+      installApplication<ConcreteApplication>(this->node_container_.Get(i));
+      this->node_container_.Get(i)->GetApplication(0)->SetStartTime(ns3::MilliSeconds(0));
     }
   }
 
@@ -330,7 +325,6 @@ protected:
   ns3::NodeContainer switchContainer_{};
   ns3::NodeContainer core_router_{};
   ns3::Ipv4InterfaceContainer interfaces_{};
-  std::vector<std::vector<ns3::Ipv4Address>> addresses_;
   std::vector<ns3::Ipv4InterfaceContainer> ip_container_;
 
 private:

@@ -28,43 +28,11 @@
 #include <string>
 
 #include "daisi_check.h"
+#include "ns3/ipv4.h"
+#include "ns3/simulator.h"
 #include "ns3/socket.h"
 
-namespace daisi::solanet_ns3 {
-
-extern std::deque<ns3::Ptr<ns3::Socket>> socket_global_;  // HACK
-}
-
 namespace daisi {
-
-void SolaNetworkUtils::createSockets(const std::string &ip, uint32_t amount) {
-  ns3::TypeId tid = ns3::TypeId::LookupByName("ns3::UdpSocketFactory");
-
-  for (auto i = 0U; i < amount; i++) {
-    auto socket = ns3::Socket::CreateSocket(nodes_.at(ip).node, tid);
-    ns3::InetSocketAddress local_address =
-        ns3::InetSocketAddress(ip.c_str(), nodes_.at(ip).next_free_port);
-    nodes_.at(ip).next_free_port++;
-    socket->Bind(local_address);
-
-    if (socket->GetErrno() != ns3::Socket::ERROR_NOTERROR) {
-      throw std::runtime_error("failed to open socket");
-    }
-
-    daisi::solanet_ns3::socket_global_.push_back(socket);
-  }
-}
-
-void SolaNetworkUtils::registerNode(ns3::Ipv4Address address, const ns3::Ptr<ns3::Node> &node,
-                                    uint16_t next_free_port) {
-  std::string addr = getIpv4AddressString(address);
-  assert(nodes_.find(addr) == nodes_.end());
-  nodes_[addr] = {node, next_free_port};
-}
-
-void SolaNetworkUtils::unregisterNode(ns3::Ipv4Address address) {
-  nodes_.erase(getIpv4AddressString(address));
-}
 
 std::string getIpv4AddressString(ns3::Ipv4Address address) {
   std::ostringstream os;
@@ -187,6 +155,27 @@ std::string generateDBName(const std::string &app_name, const std::string &ident
 
 std::string generateDBName(const std::string &app_name) {
   return generateDBName(app_name, generateRandomString());
+}
+
+std::vector<ns3::Ipv4Address> getAddressesForNode(const ns3::NodeContainer &container,
+                                                  uint32_t node_container_idx) {
+  // Normally contains one loopback and one real NetDevice
+  std::vector<ns3::Ipv4Address> addresses;
+
+  for (int i = 0; i < container.Get(node_container_idx)->GetNDevices(); i++) {
+    const ns3::Ptr<ns3::NetDevice> dev = container.Get(node_container_idx)->GetDevice(i);
+
+    const ns3::Ptr<ns3::Ipv4> ipv4 = container.Get(node_container_idx)->GetObject<ns3::Ipv4>();
+    const int32_t interface = ipv4->GetInterfaceForDevice(dev);
+
+    // We only use a single address per interface
+    assert(ipv4->GetNAddresses(interface) == 1);
+
+    ns3::Ipv4Address addr = ipv4->GetAddress(interface, 0).GetAddress();
+    addresses.push_back(addr);
+  }
+
+  return addresses;
 }
 
 }  // namespace daisi

@@ -48,9 +48,6 @@ SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &con
 
 void SOLAWrapperNs3::subscribeTopic(const std::string &topic) {
   if (!isSubscribed(topic)) {
-    std::string ip = getIP();
-
-    SolaNetworkUtils::get().createSockets(ip);
     logger_->logTopicEvent(topic, node_name_, true);
     const std::string postfix = "ED:" + topic;
     std::vector<sola::ManagementOverlayMinhton::Logger> logger_list{

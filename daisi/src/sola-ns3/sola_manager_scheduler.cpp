@@ -25,7 +25,9 @@ void SolaManager::scheduleSOLAStart(scenario_it it, uint64_t &current_time) {
   assert(nodes == "all");
 
   for (uint32_t i = 0; i < number_nodes_; i++) {
-    ns3::Simulator::Schedule(ns3::MilliSeconds(current_time), &SolaManager::startSOLA, this, i);
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
+                                        ns3::MilliSeconds(current_time), &SolaManager::startSOLA,
+                                        this, i);
     current_time += delay;
   }
   current_time -= delay;  // No delay at end (should be default delay)
@@ -39,8 +41,9 @@ void SolaManager::scheduleSubscribeTopic(SolaManager::scenario_it it, uint64_t &
   assert(nodes == "all");
 
   for (uint32_t i = 0; i < number_nodes_; i++) {
-    ns3::Simulator::Schedule(ns3::MilliSeconds(current_time), &SolaManager::subscribeTopic, this,
-                             topic, i);
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
+                                        ns3::MilliSeconds(current_time),
+                                        &SolaManager::subscribeTopic, this, topic, i);
     current_time += delay;
   }
   current_time -= delay;  // No delay at end (should be default delay)
@@ -57,8 +60,9 @@ void SolaManager::schedulePublish(scenario_it it, uint64_t &current_time) {
   try {
     //    uint32_t node_number = std::stoi(nodes);
     uint32_t node_number = nodes;
-    ns3::Simulator::Schedule(ns3::MilliSeconds(current_time), &SolaManager::publishTopic, this,
-                             node_number, topic, msg_size);
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(node_number)->GetId(),
+                                        ns3::MilliSeconds(current_time), &SolaManager::publishTopic,
+                                        this, node_number, topic, msg_size);
   } catch (...) {
     std::cerr << "failed node conversion" << std::endl;
     throw;

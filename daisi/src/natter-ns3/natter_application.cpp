@@ -25,15 +25,7 @@ namespace daisi::natter_ns3 {
 
 TypeId NatterApplication::GetTypeId() {
   static TypeId tid =
-      TypeId("NatterApp")
-          .SetParent<Application>()
-          .AddConstructor<NatterApplication>()
-          .AddAttribute("LocalIpAddress", "LocalIpAddress", Ipv4AddressValue(),
-                        MakeIpv4AddressAccessor(&NatterApplication::local_ip_address_),
-                        MakeIpv4AddressChecker())
-          .AddAttribute("ListeningPort", "ListeningPort", UintegerValue(0),
-                        MakeUintegerAccessor(&NatterApplication::listening_port_),
-                        MakeUintegerChecker<uint16_t>());
+      TypeId("NatterApp").SetParent<Application>().AddConstructor<NatterApplication>();
   return tid;
 }
 
@@ -45,9 +37,6 @@ void NatterApplication::DoDispose() {
 }
 
 void NatterApplication::StartApplication() {
-  SolaNetworkUtils::get().registerNode(local_ip_address_, GetNode(), listening_port_);
-  SolaNetworkUtils::get().createSockets(getIpv4AddressString(local_ip_address_));
-
   logger_ = daisi::global_logger_manager->createNatterLogger(GetNode()->GetId());
 
   natter_node_ = Create<NatterNodeNs3>(logger_, mode_);
@@ -63,18 +52,18 @@ void NatterApplication::setLevelNumber(std::pair<uint32_t, uint32_t> level_numbe
   logger_->logNatterEvent(1, natter::utils::generateUUID());
 }
 
-uint16_t NatterApplication::getPort() const { return listening_port_; }
+uint16_t NatterApplication::getPort() const {
+  if (!natter_node_) throw std::runtime_error("natter not initialized");
+  return natter_node_->getNetworkInfo().port;
+}
 
 std::string NatterApplication::getIP() const {
-  std::stringstream ss;
-  local_ip_address_.Print(ss);
-  return ss.str();
+  if (!natter_node_) throw std::runtime_error("natter not initialized");
+  return natter_node_->getNetworkInfo().ip;
 }
 
 void NatterApplication::logSelfToDB(std::pair<uint32_t, uint32_t> level_number) {
   const auto [level, number] = level_number;
-  std::stringstream ss;
-  local_ip_address_.Print(ss);
-  logger_->logNewNetworkPeer(natter_node_->getUUID(), ss.str(), listening_port_, level, number);
+  logger_->logNewNetworkPeer(natter_node_->getUUID(), getIP(), getPort(), level, number);
 }
 }  // namespace daisi::natter_ns3

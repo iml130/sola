@@ -14,6 +14,8 @@ target_link_libraries(daisi_cpps_common_cpps_application
         daisi_cpps_logical_amr_amr_logical_agent
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_logical_material_flow_material_flow_logical_agent
+        PRIVATE
+        daisi_socket_manager
 )
 
 add_library(daisi_cpps_common_cpps_logger_ns3 STATIC)

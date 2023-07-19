@@ -64,10 +64,6 @@ private:
 
   ns3::Ptr<ns3::Socket> socket_;
 
-  ns3::Ipv4Address local_ip_address_;
-
-  uint16_t listening_port_ = 0;
-
   std::pair<uint32_t, uint32_t> level_number_;
 
   NatterMode mode_ = NatterMode::kNone;

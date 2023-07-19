@@ -57,9 +57,6 @@ std::string SolaApplication::getIP() const {
 }
 
 void SolaApplication::startSOLA() {
-  SolaNetworkUtils::get().registerNode(local_ip_address_, GetNode(), listening_port_);
-  SolaNetworkUtils::get().createSockets(getIpv4AddressString(local_ip_address_), 3);
-
   thread_local static uint32_t number_created = 0;
 
   const std::string config_file =

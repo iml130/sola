@@ -22,6 +22,7 @@
 #include "ns3/mobility-module.h"
 #include "ns3/object.h"
 #include "utils/daisi_check.h"
+#include "utils/socket_manager.h"
 
 namespace daisi::cpps {
 
@@ -39,8 +40,8 @@ AmrPhysicalAsset::AmrPhysicalAsset(AmrAssetConnector connector)
       connector_(std::move(connector)) {
 }  // always initialize to kFinished since it is equivalent to having no task/being idle
 
-void AmrPhysicalAsset::init(const ns3::Ptr<ns3::Socket> &socket) {
-  socket_ = socket;
+void AmrPhysicalAsset::init() {
+  socket_ = SocketManager::get().createSocket(SocketType::kTCP, true);
   socket_->SetRecvCallback(MakeCallback(&AmrPhysicalAsset::readSocket, this));
 }
 

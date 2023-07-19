@@ -24,33 +24,12 @@
 
 namespace daisi {
 
-template <typename T> class SolaHelper {
-public:
-  SolaHelper(std::vector<ns3::Ipv4Address> local_ip_address, uint16_t listening_port) {
-    assert(!local_ip_address.empty() && local_ip_address.size() <= 2);
-    factory_.SetTypeId(T::GetTypeId());
-    setAttribute("LocalIpAddress", ns3::Ipv4AddressValue(local_ip_address[0]));
-    setAttribute("ListeningPort", ns3::UintegerValue(listening_port));
-
-    if (local_ip_address.size() == 2) {
-      setAttribute("LocalIpAddressTCP", ns3::Ipv4AddressValue(local_ip_address[1]));
-      setAttribute("ListeningPortTCP", ns3::UintegerValue(3000));
-    }
-  }
-
-  ns3::ApplicationContainer install(ns3::Ptr<ns3::Node> node) const {
-    ns3::Ptr<ns3::Application> app = factory_.Create<T>();
-    node->AddApplication(app);
-    return {app};
-  }
-
-private:
-  void setAttribute(std::string name, const ns3::AttributeValue &value) {
-    factory_.Set(name, value);
-  }
-
-  ns3::ObjectFactory factory_;
-};
+template <typename T> void installApplication(ns3::Ptr<ns3::Node> node) {
+  ns3::ObjectFactory factory;
+  factory.SetTypeId(T::GetTypeId());
+  ns3::Ptr<ns3::Application> app = factory.Create<T>();
+  node->AddApplication(app);
+}
 
 }  // namespace daisi
 #endif

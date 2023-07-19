@@ -40,3 +40,18 @@ target_include_directories(daisi_structure_helpers
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src
 )
+
+add_library(daisi_socket_manager STATIC)
+target_sources(daisi_socket_manager
+        PRIVATE
+        socket_manager.cpp
+        socket_manager.h
+)
+target_link_libraries(daisi_socket_manager
+        PUBLIC
+        ns3::libcore
+)
+target_include_directories(daisi_socket_manager
+        PUBLIC
+        ${PROJECT_SOURCE_DIR}/src
+)
