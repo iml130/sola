@@ -107,10 +107,6 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
     description_set_ = true;
 
     setServices();
-
-    std::string endpoint = sola_->getConectionString();
-    std::string ip = endpoint.substr(0, endpoint.find(":"));
-    SolaNetworkUtils::get().createSockets(ip);
   } else {
     throw std::runtime_error("AmrDescription attempted to be set twice.");
   }
