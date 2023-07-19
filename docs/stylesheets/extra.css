@@ -20,3 +20,7 @@
     display: block;
     margin: 0 auto;
 }
+
+.md-typeset figcaption {
+    font-style: normal;
+}
