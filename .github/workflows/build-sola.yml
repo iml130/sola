@@ -16,7 +16,7 @@ jobs:
     - name: Check commit messages
       run: |
         pip install gitlint
-        gitlint --commits b11d7f0...HEAD
+        gitlint --commits 3fb83ef...HEAD
     - name: Check newlines and license
       run: scripts/check_license_and_newline/check_license_and_newline.sh
     - name: Check formatting
