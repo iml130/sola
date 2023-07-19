@@ -6,7 +6,13 @@ target_sources(NetworkUDPSim
     ns3SolaNet.cpp
 )
 
-target_link_libraries(NetworkUDPSim PRIVATE ns3::libcore daisi_utils daisi_solanet_message_ns3)
+target_link_libraries(NetworkUDPSim
+    PRIVATE
+    ns3::libcore
+    daisi_utils
+    daisi_solanet_message_ns3
+    daisi_socket_manager
+)
 target_include_directories(NetworkUDPSim
     PUBLIC
     ${SolaNet_SOURCE_DIR}/include/)

@@ -48,10 +48,6 @@ private:
 
   ns3::Ptr<MinhtonNodeNs3> minhton_node_;
 
-  ns3::Ipv4Address local_ip_address_;
-
-  uint16_t listening_port_ = 0;
-
   std::shared_ptr<minhton::MinhtonLoggerNs3> logger_;
 };
 }  // namespace daisi::minhton_ns3

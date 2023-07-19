@@ -17,66 +17,32 @@
 #include "cpps/common/cpps_application.h"
 
 #include "../src/logging/logger.h"  // WORKAROUND: private header
-#include "utils/sola_utils.h"
+#include "utils/socket_manager.h"
 
 using namespace ns3;
 
 namespace daisi::cpps {
 ns3::TypeId CppsApplication::GetTypeId() {
   static TypeId tid =
-      TypeId("CppsApplication")
-          .SetParent<Application>()
-          .AddConstructor<CppsApplication>()
-          .AddAttribute("LocalIpAddress", "LocalIpAddress", Ipv4AddressValue(),
-                        MakeIpv4AddressAccessor(&CppsApplication::local_ip_address),
-                        MakeIpv4AddressChecker())
-          .AddAttribute("ListeningPort", "ListeningPort", UintegerValue(0),
-                        MakeUintegerAccessor(&CppsApplication::listening_port),
-                        MakeUintegerChecker<uint16_t>())
-          .AddAttribute("LocalIpAddressTCP", "LocalIpAddressTCP", Ipv4AddressValue(),
-                        MakeIpv4AddressAccessor(&CppsApplication::local_ip_address_tcp),
-                        MakeIpv4AddressChecker())
-          .AddAttribute("ListeningPortTCP", "ListeningPortTCP", UintegerValue(0),
-                        MakeUintegerAccessor(&CppsApplication::listening_port_tcp),
-                        MakeUintegerChecker<uint16_t>());
+      TypeId("CppsApplication").SetParent<Application>().AddConstructor<CppsApplication>();
   return tid;
-}
-
-void CppsApplication::generateUDPSockets() {
-  SolaNetworkUtils::get().registerNode(local_ip_address, GetNode(), listening_port);
-  SolaNetworkUtils::get().createSockets(getIpv4AddressString(local_ip_address), 3);
-  // own_sockets_.push_back(socket);
-}
-
-ns3::Ptr<ns3::Socket> CppsApplication::generateTCPSocket() {
-  TypeId tid = TypeId::LookupByName("ns3::TcpSocketFactory");
-  auto socket = Socket::CreateSocket(GetNode(), tid);
-  return socket;
 }
 
 void CppsApplication::cleanup() {
   application = std::monostate{};
-  // We do not clear the IP address. IPs are reused
-  SolaNetworkUtils::get().unregisterNode(local_ip_address);
+  SocketManager::get().unregisterNode(GetNode());
 }
 
 void CppsApplication::init() {
   if (auto amr_logical_agent =
           std::get_if<std::shared_ptr<logical::AmrLogicalAgent>>(&application)) {
-    generateUDPSockets();
-    auto tcp_socket = generateTCPSocket();
-    tcp_socket->Bind(InetSocketAddress(local_ip_address_tcp, listening_port_tcp));
-    (*amr_logical_agent)->init(tcp_socket);
+    (*amr_logical_agent)->init();
   } else if (auto mf_logical_agent =
                  std::get_if<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(&application)) {
-    generateUDPSockets();
     (*mf_logical_agent)->init();
   } else if (auto amr_physical_asset =
                  std::get_if<std::shared_ptr<AmrPhysicalAsset>>(&application)) {
-    auto tcp_socket = generateTCPSocket();
-    tcp_socket->Bind(InetSocketAddress(
-        local_ip_address, listening_port));  // Intentionally not using the address_tcp_ field
-    (*amr_physical_asset)->init(tcp_socket);
+    (*amr_physical_asset)->init();
   }
 }
 

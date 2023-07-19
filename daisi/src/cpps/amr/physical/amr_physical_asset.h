@@ -54,7 +54,7 @@ public:
   AmrPhysicalAsset(AmrAssetConnector connector, const Topology &topology);
   explicit AmrPhysicalAsset(AmrAssetConnector connector);
 
-  void init(const ns3::Ptr<ns3::Socket> &socket);
+  void init();
 
   void connect(const ns3::InetSocketAddress &endpoint);
 

@@ -39,11 +39,18 @@ public:
   ~AmrLogicalAgent() override = default;
 
   /// @brief Method called by the container on start. Initializing components such as Sola.
-  virtual void init(ns3::Ptr<ns3::Socket> tcp_socket);
+  virtual void init();
 
   void start() override;
 
   void notifyTaskAssigned();
+
+  /// Get address from TCP socket listening on connections from AmrPhysicalAsset
+  ns3::InetSocketAddress getServerAddress() const {
+    ns3::Address addr;
+    server_socket_->GetSockName(addr);
+    return ns3::InetSocketAddress::ConvertFrom(addr);
+  }
 
 private:
   void initAlgorithms() override;

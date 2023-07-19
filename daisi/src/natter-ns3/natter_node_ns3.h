@@ -48,6 +48,11 @@ public:
                       uint32_t own_fanout);
   void unsubscribeTopic(const std::string &topic);
 
+  natter::NetworkInfoIPv4 getNetworkInfo() const {
+    if (!natter_minhcast_) throw std::runtime_error("natter not initialized");
+    return natter_minhcast_->getNetworkInfo();
+  }
+
 private:
   std::unique_ptr<natter::minhcast::NatterMinhcast> natter_minhcast_;
   std::shared_ptr<natter::logging::NatterLoggerNs3> logger_;

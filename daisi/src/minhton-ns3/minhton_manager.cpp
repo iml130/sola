@@ -70,7 +70,8 @@ void MinhtonManager::setupNodeConfigurations() {
     node_config.setTimeoutLengthsContainer(timeout_lengths_container);
 
     // Init after starting simulation
-    ns3::Simulator::Schedule(ns3::MilliSeconds(1), &MinhtonManager::initNode, this, i, node_config);
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(), ns3::MilliSeconds(1),
+                                        &MinhtonManager::initNode, this, i, node_config);
   }
 }
 

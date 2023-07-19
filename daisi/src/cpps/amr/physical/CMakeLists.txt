@@ -74,6 +74,7 @@ target_link_libraries(daisi_cpps_amr_physical_amr_physical_asset
     daisi_cpps_amr_message_amr_state
     daisi_cpps_amr_message_serializer
     daisi_cpps_packet
+    daisi_socket_manager
 )
 target_include_directories(daisi_cpps_amr_physical_amr_physical_asset
     PUBLIC

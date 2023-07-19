@@ -29,6 +29,7 @@ target_link_libraries(daisi_manager
     ns3::libcsma
     ns3::libinternet
     daisi_random_engine
+    daisi_socket_manager
 )
 
 target_include_directories(daisi_manager

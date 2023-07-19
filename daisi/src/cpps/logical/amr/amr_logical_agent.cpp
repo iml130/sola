@@ -21,6 +21,8 @@
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
+#include "utils/daisi_check.h"
+#include "utils/socket_manager.h"
 #include "utils/sola_utils.h"
 
 namespace daisi::cpps::logical {
@@ -31,10 +33,10 @@ AmrLogicalAgent::AmrLogicalAgent(uint32_t device_id, const AlgorithmConfig &conf
       topology_(daisi::util::Dimensions(50, 20, 0))  // TODO placeholder
 {}
 
-void AmrLogicalAgent::init(ns3::Ptr<ns3::Socket> tcp_socket) {
+void AmrLogicalAgent::init() {
   initCommunication();
 
-  server_socket_ = tcp_socket;
+  server_socket_ = SocketManager::get().createSocket(SocketType::kTCP, true);
   server_socket_->Listen();
 
   server_socket_->SetAcceptCallback(

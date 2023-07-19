@@ -167,16 +167,16 @@ void CppsManager::initAMR(uint32_t index) {
 void CppsManager::connectAMR(uint32_t index) {
   std::cout << "Connect AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
+  // Get address from logical
+  auto logical_agent = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(
+      this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
+  const ns3::InetSocketAddress logical_addr = logical_agent->getServerAddress();
+
+  // Let physical connect to logical
   auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
-
-  ns3::Ipv4Address other_ip = cpps_app_logical->local_ip_address_tcp;
-  uint16_t other_port = cpps_app_logical->listening_port_tcp;
-  InetSocketAddress address(other_ip, other_port);
-
   auto amr_physical_asset =
       std::get<std::shared_ptr<AmrPhysicalAsset>>(cpps_app_physical->application);
-  amr_physical_asset->connect(address);
+  amr_physical_asset->connect(logical_addr);
 }
 
 void CppsManager::startAMR(uint32_t index) {
@@ -224,18 +224,12 @@ void CppsManager::setupNodes() {
 
   node_container_ = NodeContainer(material_flows_, amrs_);
 
-  // All AMRs have a loopback address for communication betwee logical and physical agent
-  for (auto i = material_flows_.GetN(); i < node_container_.GetN(); i++) {
-    addresses_[i].push_back("127.0.0.1");
-  }
-
   // Setting up TransportOrderApplications and one AMR application
   setupApplication();
 
   // Setup second applications for physical AMR
   for (uint32_t i = 0; i < amrs_.GetN(); i++) {
-    SolaHelper<CppsApplication> helper({"127.0.0.1"}, 4000);
-    helper.install(this->amrs_.Get(i));
+    installApplication<CppsApplication>(this->amrs_.Get(i));
   }
 }
 
@@ -372,10 +366,6 @@ void CppsManager::setupNetworkWifi() {
       interfaces_.Add(ip_container_[ip_container_.size() - 1].Get(j));
     }
 
-    for (uint32_t j = 0; j < amrs_per_ap[i].GetN(); j++) {
-      addresses_.push_back({sta_interface.GetAddress(j)});
-    }
-
     // set up ARP caches for AMR and core router
     // Might not working for wifi devices. (Ref #100)
     // See https://gitlab.com/nsnam/ns-3-dev/-/issues/664
@@ -475,12 +465,15 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
   }
 
   if (init_application) {
-    initMF(i);
+    Simulator::ScheduleWithContext(material_flows_.Get(i)->GetId(), Seconds(0),
+                                   &CppsManager::initMF, this, i);
 
-    Simulator::Schedule(Seconds(2), &CppsManager::startMF, this, i);
+    Simulator::ScheduleWithContext(material_flows_.Get(i)->GetId(), Seconds(2),
+                                   &CppsManager::startMF, this, i);
   }
 
-  Simulator::Schedule(Seconds(4), &CppsManager::executeMaterialFlow, this, i, info.friendly_name);
+  Simulator::ScheduleWithContext(material_flows_.Get(i)->GetId(), Seconds(4),
+                                 &CppsManager::executeMaterialFlow, this, i, info.friendly_name);
 
   // Schedule next call
 
@@ -508,17 +501,20 @@ void CppsManager::scheduleEvents() {
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(Seconds(current_time), &CppsManager::initAMR, this, i);
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
+                                   &CppsManager::initAMR, this, i);
   }
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(Seconds(current_time), &CppsManager::connectAMR, this, i);
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
+                                   &CppsManager::connectAMR, this, i);
   }
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::Schedule(Seconds(current_time), &CppsManager::startAMR, this, i);
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
+                                   &CppsManager::startAMR, this, i);
   }
 
   while (!schedule_info_.empty()) {
