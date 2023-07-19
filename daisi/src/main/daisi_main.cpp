@@ -23,7 +23,7 @@
 #include "minhton-ns3/minhton_manager.h"
 #include "natter-ns3/natter_manager.h"
 #include "ns3/core-module.h"
-#include "path_planning/path_planning_manager.h"
+// #include "path_planning/path_planning_manager.h"
 #include "sola-ns3/sola_manager.h"
 #include "utils/sola_utils.h"
 
@@ -97,8 +97,8 @@ int main(int argc, char *argv[]) {
     res = execute<daisi::natter_ns3::NatterManager>(test_file, disable_catch);
   } else if (param_environment == "cpps") {
     res = execute<daisi::cpps::CppsManager>(test_file, disable_catch);
-  } else if (param_environment == "path_planning") {
-    res = execute<daisi::path_planning::PathPlanningManager>(test_file, disable_catch);
+    // } else if (param_environment == "path_planning") {
+    //   res = execute<daisi::path_planning::PathPlanningManager>(test_file, disable_catch);
   } else if (param_environment == "sola") {
     res = execute<daisi::sola_ns3::SolaManager>(test_file, disable_catch);
   } else {

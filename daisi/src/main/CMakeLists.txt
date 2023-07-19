@@ -7,6 +7,6 @@ target_link_libraries(Main
             daisi_natter_manager
             daisi_utils
             daisi_cpps_common_cpps_manager
-            PathPlanning
+            #PathPlanning
             daisi_sola_manager
 )
