@@ -158,7 +158,7 @@ void MinhtonNode::processSignal(Signal signal) {
     signal.can_leave_position = logic_->canLeaveWithoutReplacement();
   }
 
-  auto state = FSMState(fsm_.current_state());
+  FSMState state = getFsmState();
   fsm_.process_event(signal);
 
   if (!fsm_.isActionValid()) {
@@ -190,7 +190,7 @@ void MinhtonNode::prepareSending(const MessageVariant &msg_variant) {
           throw InvalidMessageException(header);
         }
 
-        auto state = FSMState(fsm_.current_state());
+        FSMState state = getFsmState();
         SendMessage fsm_event{header.getMessageType()};
         fsm_.process_event(fsm_event);
 
@@ -225,7 +225,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         LOG_INFO("recv " + getMessageTypeString(header.getMessageType()) + " from " +
                  header.getSender().getString());
 
-        auto state = FSMState(fsm_.current_state());
+        FSMState state = getFsmState();
         ReceiveMessage fsm_event{header.getMessageType()};
 
         // If a find_replacement msg reaches the node that wants to leave and is chosen as the
@@ -339,7 +339,7 @@ void MinhtonNode::triggerTimeout(const TimeoutType &timeout_type) {
     timeout_event.valid_bootstrap_response = logic_->isBootstrapResponseValid();
   }
 
-  auto state = FSMState(fsm_.current_state());
+  FSMState state = getFsmState();
   fsm_.process_event(timeout_event);
 
   if (!fsm_.isActionValid()) {
@@ -399,11 +399,7 @@ uint16_t MinhtonNode::getTimeoutLength(const TimeoutType &timeout_type) const {
   return 0;
 }
 
-FSMState MinhtonNode::getFsmState() {
-  int state_int = fsm_.current_state();
-  auto state = static_cast<FSMState>(state_int);
-  return state;
-}
+FSMState MinhtonNode::getFsmState() { return FSMState{fsm_.current_state()}; }
 
 void MinhtonNode::initFSM(minhton::FSMState &init_state) {
   fsm_ = minhton::FiniteStateMachine(init_state);

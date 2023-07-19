@@ -89,7 +89,7 @@ enum TimeoutType : uint8_t {
 };
 
 // for fsm
-enum FSMState {
+enum FSMState : int {
   kIdle,
   kWaitForBootstrapResponse,
   kWaitForJoinAccept,
