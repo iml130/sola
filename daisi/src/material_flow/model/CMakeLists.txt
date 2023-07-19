@@ -19,8 +19,8 @@ target_sources(daisi_material_flow_model_action_order_step
     action_order_step.cpp
 )
 target_link_libraries(daisi_material_flow_model_action_order_step
-    PRIVATE
-    solanet_serializer
+    PUBLIC
+    solanet_serialize
 )
 
 add_library(daisi_material_flow_model_action_order STATIC)
@@ -108,9 +108,9 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_material_flow_model_move_order
     daisi_material_flow_model_action_order
     daisi_cpps_amr_model_amr_static_ability
+    solanet_serialize
 
     PRIVATE
-    solanet_serialize
     daisi_cpps_common_uuid_generator
 )
 
