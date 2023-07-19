@@ -14,8 +14,6 @@ Hierarchy
 - multiple AMRs
 - multiple Loading Stations and Unloading Stations -->
 
-<!-- Main Title, will not be shown in toc. Only titles marked ## and their subsections will show. -->
-
 # Autonomous Mobile Robot (AMR)
 
 AMRs are mobile robots that can execute tasks in a logistics context without human interaction.
@@ -28,15 +26,6 @@ To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical
   ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.drawio.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
-
-<!-- caption/label can also be placed directly above the figure if pure markdown is used. This will place the caption above the figure. Note that preview will place it arbitrarily -->
-
-<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)
-**Figure 1:** Components and messages -->
-
-<!-- Third option would be to use a newline between caption and figure -->
-<!-- ![Components and messages](../img/amr_logical_physical_overview.drawio.png)<br />
-**Figure 1:** Components and messages -->
 
 ## Logical
 
@@ -57,22 +46,23 @@ As shown in **Figure 1**
 The AMR Physical Asset is the representative of the real AMR.
 It is the [AMR Logical Agent](#logical)'s interface to the real AMR and will
 
-- send information regarding kinematics, general vehicle properties and special abilities to the AMR Logical Agent
-- report the AMR's state and position to the AMR Logical Agent
+- send the vehicles Description containing information about kinematics, general vehicle properties and special abilities to the AMR Logical Agent
+- report AMR Status Updates consiting of the AMR's state (idle, working, error) and position to the AMR Logical Agent<br />
+  TODO Where will those be sent to? -> Management Overlay?
 - manage the execution of one [Transport Order](../glossary.md#t) at a time.
   Transport Orders are described in [Material Flow](./material_flow.md).
-- report events that occurred related to the execution of an Order to the AMR Logical Agent
+- report AMR Transport Order Updates, which are events that occurred related to the execution of Transport Order, to the AMR Logical Agent
 - relay Transport Order Steps to execute to the real AMR
 
 As shown in **Figure 1**.
 
-## Managing Transport Orders
+## Transport Order Lifecycle
 
 Each Transport Order will traverse the following states:
 
 1. kCreated: Transport Orders are created with the Material Flow and Task they are a part of.
    The creation is performed by the Material Flow Logical Agent.
-2. kQueued: Once an AMR is selected for the execution of a Task, it queues Task and its contained Transport Orders.
+2. kQueued: Once an AMR is selected for the execution of a Task, it queues the Task and its contained Transport Orders.
    The queueing is performed by the AMR Logical Agent.
 3. kStarted: Once the Transport Order is sent to the AMR Physical Asset it will start execution the first Transport Order Step.
 4. kGoToPickupLocation: The first Transport Order Step is always to go to a pickup location.
@@ -92,7 +82,7 @@ Each Transport Order will traverse the following states:
     <!-- - the AMR is not able to execute the Transport Order because it is not designed to handle the payload (VDA 5050) -->
     - the AMR has a technical problem and enters an error state
 
-A Transport Order is created in a Material Flow Logical Agent, will be queued in a AMR Logical Agent and will traverse all other states in a AMR Physical Asset as shown in **Figure 2**.
+A Transport Order is created in a Material Flow Logical Agent, will be queued in an AMR Logical Agent and will traverse all other states in an AMR Physical Asset as shown in **Figure 2**.
 All state changes will be reported upwards to the Material Flow Logical Agent.
 
 <figure markdown>
