@@ -91,14 +91,15 @@ If you want to build other targets than DAISI you can replace the `target` param
 In case VS Code shows the problem of a too large workspace, the file limit has to be [adjusted in /etc/sysctl.conf with root rights](https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc).
 This problem only appears on [Linux kernels prior to version 5.11 or low-performance systems](https://github.com/torvalds/linux/commit/92890123749bafc317bbfacbe0a62ce08d78efb7).
 
-## Using SOLA with ns-3
+## Using SOLA with ns-3 (Environments?)
 
-Several environments can be built and used.
+* Several environments can be built and used. 
+  Reference environments here?
 
 
-### Optimaflow/CPPS
+### Optimaflow <!--CPPS-->
 
-- "implementation highlights" -> [Optimaflow Introduction](./optimaflow-ns3/introduction.md)
+- "implementation highlights" -> [Mobility Model](./optimaflow-ns3/mobility_model.md)
     - Mobility Model
     - Networking
     - Threading
@@ -134,16 +135,16 @@ Another option is `disable-catch`, which disables catching fatal errors if set t
 
 - run it
 - make new scenarios
-    - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
+    - refer to [Szenarios](./sola-ns3/scenariofile.md)
 
 ### NATTER
 
 - run it
 - make new scenarios
-    - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
+    - refer to [Szenarios](./natter-ns3/scenariofile.md)
 
 ### MINHTON
 
 - run it
 - make new scenarios
-    - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
+    - refer to [Szenarios](./minhton-ns3/scenariofile.md)
