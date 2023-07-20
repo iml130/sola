@@ -1,6 +1,8 @@
 # Run Environments
 
 <!-- TODO: WHAT ARE THE ENVIRONMENTS? DO THEY HAVE TO DEPEND ON THE CPPS? -->
+<!-- TODO: shouldn't this be moved up one level to docs folder, not sola-ns3? -->
+<!-- getting_started "Using SOLA with ns-3" chapter could be merged into this -->
 The currently available environments (with an example command to run each) are:
 
 - `minhton`

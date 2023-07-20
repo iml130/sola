@@ -3,9 +3,9 @@
 
 <!-- TODO: Figure of SOLA, what is it, deep dive, ... -->
 
-## Concept
+## Concept <!-- Sola section? -->
 
-## Installation
+## Installation <!-- Top level Getting started? -->
 
 ## Usage
 
@@ -13,7 +13,7 @@
 
 SOLA uses the [management overlay MINHTON](../minhton_lib/index.md) and the [event dissemination natter](../natter_lib/index.md).
 
-## Getting Started
+## Getting Started <!-- Build it, run it, one level above? -->
 TODO: add conent ;) 
 
 
