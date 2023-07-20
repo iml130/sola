@@ -6,9 +6,11 @@
 
 ### Install ns-3
 
-Please refer to the [ns-3 documentation](https://www.nsnam.org/docs/installation/html/quick-start.html) and make sure the ns-3 prerequisites are met.
+Please refer to the [ns-3 documentation](https://www.nsnam.org/documentation/) and make sure the ns-3 prerequisites are met.
 
-Download the current [ns-3 version](https://www.nsnam.org/releases/latest/).
+<!-- either refer or write it down -->
+
+<!-- Download the current [ns-3 version](https://www.nsnam.org/releases/latest/).
 Then, build and install ns-3.
 You may do all of this in the following way, exemplarily shown for ns-3 version 3.38 on Ubuntu:
 
@@ -38,7 +40,7 @@ apt install libyaml-cpp-dev libsqlite3-dev uuid-dev libevent-dev
 ```
 
 Otherwise, please use `dpkg`, `pacman` or install the dependencies from sources.
-Of course, you can also install only the required dependencies for the specific library if you don't want to build DAISI.
+Of course, you can also install only the required dependencies for the specific library if you don't want to build DAISI. -->
 
 ## Build 
 
@@ -91,29 +93,21 @@ This problem only appears on [Linux kernels prior to version 5.11 or low-perform
 
 ## Using SOLA with ns-3
 
-After DAISI was successfully built, you can check out the [Getting Started Guide](sola/index.md).
-
-### Build single libraries
-
-If you only want to build a single library, you can just navigate to the respective folder and build it with CMake.
-For example, building natter as a library works like this:
-
-```sh
-cd natter
-mkdir build && cd build
-cmake ..
-cmake --build .
-```
+Several environments can be built and used.
 
 
 ### Optimaflow/CPPS
 
-- build it?
+- "implementation highlights" -> [Optimaflow Introduction](./optimaflow-ns3/introduction.md)
+    - Mobility Model
+    - Networking
+    - Threading
 - run it
 - make new scenarios
     - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
+- read 
 
-After you have built the simulation executable, you can run the DAISI simulation.
+<!-- After you have built the simulation executable, you can run the DAISI simulation.
 We assume that we are at the root level of the repository folder now.
 `daisi_exec` is located there if you used the commands from the [installation guide for the terminal](../installation.md#terminal).
 Otherwise, please replace `daisi_exec` with the respective simulation executable or simply run DAISI from VS Code.
@@ -133,26 +127,23 @@ It is required to set an `environment` and a corresponding `scenario` as paramet
 ```
 
 You can replace the `scenario` option with `scenariostring` if you want to include the whole scenario content as an argument.
-Another option is `disable-catch`, which disables catching fatal errors if set to `true`.
+Another option is `disable-catch`, which disables catching fatal errors if set to `true`. -->
 
 
 ### SOLA
 
-- build it?
 - run it
 - make new scenarios
     - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
 
 ### NATTER
 
-- build it?
 - run it
 - make new scenarios
     - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
 
 ### MINHTON
 
-- build it?
 - run it
 - make new scenarios
     - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
