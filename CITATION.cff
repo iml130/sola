@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+title: "SOLA"
+authors:
+- family-names: "Detzner"
+  given-names: "Peter"
+- family-names: "Gödeke"
+  given-names: "Jana"
+- family-names: "Tönning"
+  given-names: "Lars"
+- family-names: "Laskowski"
+  given-names: "Patrick"
+- family-names: "Hörstrup"
+  given-names: "Maximilian"
+- family-names: "Stolz"
+  given-names: "Oliver"
+- family-names: "Brehler"
+  given-names: "Marius"
+- family-names: "Kerner"
+  given-names: "Sören"
+date-released: "2023-06-02"
+preferred-citation:
+  type: conference-paper
+  title: "SOLA: A Decentralized Communication Middleware Developed with ns-3"
+  authors:
+  - family-names: "Detzner"
+    given-names: "Peter"
+  - family-names: "Gödeke"
+    given-names: "Jana"
+  - family-names: "Tönning"
+    given-names: "Lars"
+  - family-names: "Laskowski"
+    given-names: "Patrick"
+  - family-names: "Hörstrup"
+    given-names: "Maximilian"
+  - family-names: "Stolz"
+    given-names: "Oliver"
+  - family-names: "Brehler"
+    given-names: "Marius"
+  - family-names: "Kerner"
+    given-names: "Sören"
+  doi: 10.1145/3592149.3592151
+  isbn: "9798400707476"
+  pages: 8
+  publisher:
+    name: "Association for Computing Machinery"
+  collection-title: "Proceedings of the 2023 Workshop on ns-3"
+  year: 2023
+  month: 6
+  conference:
+    name: "WNS3 2023: 2023 Workshop on ns-3"
