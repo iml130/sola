@@ -106,6 +106,9 @@ private:
   /// This socket is used to communicate with the physical, for both sending and receiving messages.
   ns3::Ptr<ns3::Socket> physical_socket_;
 
+  /// @brief The address of the AmrPhysicalAsset after it connected to AmrLogicalAgent.
+  ns3::Address physical_address_;
+
   std::shared_ptr<OrderManagement> order_management_;
 };
 }  // namespace daisi::cpps::logical

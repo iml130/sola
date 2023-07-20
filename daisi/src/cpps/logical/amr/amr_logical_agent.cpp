@@ -190,6 +190,8 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
   physical_socket_ = socket;
   physical_socket_->SetRecvCallback(MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
 
+  physical_address_ = addr;
+
   logAmrInfos();
 }
 
@@ -219,10 +221,8 @@ void AmrLogicalAgent::logAmrInfos() {
   // network
 
   // retrieve physical info
-  ns3::Address physical_address;
-  physical_socket_->GetSockName(physical_address);
-
-  ns3::InetSocketAddress i_physical_address = ns3::InetSocketAddress::ConvertFrom(physical_address);
+  ns3::InetSocketAddress i_physical_address =
+      ns3::InetSocketAddress::ConvertFrom(physical_address_);
   std::string physical_asset_ip = daisi::getIpv4AddressString(i_physical_address.GetIpv4());
   uint16_t physical_asset_port = i_physical_address.GetPort();
 
