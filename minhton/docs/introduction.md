@@ -1,6 +1,6 @@
 # Minimal Height Tree Overlay Network (MINHTON)
 
-<p align="center">
+<p class="center">
 <img src="img/minhtonLogo.svg" class="logo" width="200px" alt="MINHTON Logo">
 </p>
 
@@ -15,7 +15,7 @@ The minimal height guarantees a global tree balance, yet, it must be retained at
 MINHTON provides efficient protocols for node Join and Departure in logarithmic order, comparable to tree overlays with less strict structural guarantees, both retaining a minimal height tree.
 
 ![Figure 1](img/cpps.png "An interconnected cyber-physical production system, representing an P2P network")
-<a name="fig1"></a>**Figure 1:** An interconnected cyber-physical production system, representing a P2P network.
+<a id="fig1"></a>**Figure 1:** An interconnected cyber-physical production system, representing a P2P network.
 
 ## Academic Attribution
 

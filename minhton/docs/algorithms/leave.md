@@ -5,11 +5,17 @@ It nay need a successor, which it can find using FindReplacement messages.
 FindReplacement messages are directed in an equivalent way as described for the [join algorithm](join.md#finding-the-correct-position).
 
 When a node notices that it can leave its position without any violations, it sends a ReplacementOffer message to the leaving node.
-The leaving node accepts the offer by sending back a ReplacementAck to the replacing node. This message contains all routing information about the leaving node, so that the replacing node can reconstruct the routing information without any additional messages.
+The leaving node accepts the offer by sending back a ReplacementAck to the replacing node.
+This message contains all routing information about the leaving node, so that the replacing node can reconstruct the routing information without any additional messages.
 
-As soon as the ReplacementAck message was sent, the leaving node has no reponsibilities anymore and has officially left the network. Then the replacing node has the reponsibility to rebuild everything by firstly leaving its own position and then to take in the position of the left node.
+As soon as the ReplacementAck message was sent, the leaving node has no reponsibilities anymore and has officially left the network.
+Then the replacing node has the reponsibility to rebuild everything by firstly leaving its own position and then to take in the position of the left node.
 
-![Figure 1](../img/leave_with_replacement_sequence.png "Leave with Replacement Sequence")
+<figure markdown>
+  <a id="fig_leave_sequence"></a>
+  ![Leave with Replacement Sequence](../img/leave_with_replacement_sequence.png)
+  <figcaption markdown>**Figure 1:** Leave with Replacement Sequence</figcaption>
+</figure>
 
 ## Message sequence for a successful leave procedure (MINHTON Algorithm)
 
@@ -52,18 +58,29 @@ As soon as the ReplacementAck message was sent, the leaving node has no reponsib
 
 ## Updating Network for Leave without Replacement
 
-The leaving node must handle the updating of the network itself. For this the node has to send RemoveNeighbor messages to each neighbor who knows the node (not its routing table neighbor children, but also its routing table neighbor parents). To the routing table neighbor parents has to be sent via SearchExact, because the network information are not known.
+The leaving node must handle the updating of the network itself. For this the node has to send RemoveNeighbor messages to each neighbor who knows the node (not its routing table neighbor children, but also its routing table neighbor parents).
+To the routing table neighbor parents has to be sent via SearchExact, because the network information is not known.
 
 After that the adjacent information has to be updated by linking the adjacent left and adjacent right of the leaving node together.
 
 ## Updating Network for Leave with Replacement
 
-The replacing node must handle the updating of the network. For this the nodes who know the replacing position and those who know the removing position are crucial.
-Firstly we need to send RemoveNeighbor messages to those nodes who know the removing position, but not the replacing position. They only need to remove their entry of the removing position.
+The replacing node must handle the updating of the network.
+For this the nodes who know the replacing position and those who know the removing position are crucial.
+Firstly we need to send RemoveNeighbor messages to those nodes who know the removing position, but not the replacing position.
+They only need to remove their entry of the removing position.
 
-The nodes two know the leaving node and those who know both need to get ReplacementUpdate messages. They contain information about the removing and replacing position.
-The nodes who know only the leaving node only need to update their Network Information with those of the replacing node. Those who know both need to update their Network Information and at the same time remove the entry of the removing position from their routing information.
+The nodes two know the leaving node and those who know both need to get ReplacementUpdate messages.
+They contain information about the removing and replacing position.
+The nodes who know only the leaving node only need to update their Network Information with those of the replacing node.
+Those who know both need to update their Network Information and at the same time remove the entry of the removing position from their routing information.
 
-After that the adjacent information has to be updated. For the adjacents of the removed position the adjacent left and adjacent right need to be linked together. We do not need to update the adjacents of the replaced position separately, because this will already be done throught the ReplacementUpdate messages.
+After that the adjacent information has to be updated.
+For the adjacents of the removed position the adjacent left and adjacent right need to be linked together.
+We do not need to update the adjacents of the replaced position separately, because this will already be done throught the ReplacementUpdate messages.
 
-![Figure 2](../img/leave_example_01.png "Leave with Replacement Example")
+<figure markdown>
+  <a id="fig_leave_example"></a>
+  ![Leave with Replacement Example](../img/leave_example_01.png)
+  <figcaption markdown>**Figure 2:** Leave with Replacement Example</figcaption>
+</figure>

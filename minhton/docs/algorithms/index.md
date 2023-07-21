@@ -11,8 +11,11 @@ Each node has links to its related nodes like parent, children, adjacent nodes, 
 Since a joining node can contact any node to join, it is possible to exploit the structure and create a network as depicted in [Fig. 1](#fig1).
 We will later present you how to avoid this kind of created tree.
 
-<a name="fig1"></a>![Figure 1](../user/img/baton.png "BATON tree structure")  
-**Figure 1:** *Exploited BATON/BATON\* Network (height balanced). Level 4 (5) has 64 (18) (bidirectional) in-level links*
+<figure markdown>
+  <a id="fig1"></a>
+  ![BATON tree structure](../user/img/baton.png)
+  <figcaption markdown>**Figure 1:** Exploited BATON/BATON\* Network (height balanced). Level 4 (5) has 64 (18) (bidirectional) in-level links.</figcaption>
+</figure>
 
 ## nBATON\*
 
@@ -32,8 +35,11 @@ The proposed adjustments are applicable on the original BATON as well as on BATO
 As can be seen the structure remains the same, including the links between nodes, while the procedures have been changed.
 The figure also illustrates the DSNs which have a link to each node in the whole tree, allowing to route the *Join* messages in a specific way to keep a null-balanced tree.
 
-<a name="fig2"></a>![Figure 2](../user/img/nbaton.png "nBATON* tree structure")  
-**Figure 2:** *(Null-) balanced BATON network (nBATON\*). Level 4 (5) has 98 (4) (bidirectional) in-level links*
+<figure markdown>
+  <a id="fig2"></a>
+  ![nBATON* tree structure](../user/img/nbaton.png)
+  <figcaption markdown>**Figure 2:** (Null-) balanced BATON network (nBATON\*). Level 4 (5) has 98 (4) (bidirectional) in-level links.</figcaption>
+</figure>
 
 ## MINHTON
 
@@ -54,8 +60,11 @@ The leave process works equivalent, whereas only the last node of the tree (high
 
 This algorithm is also capable of handling concurrent operations like multiple leave requests at once.
 
-<a name="fig3"></a>![Figure 3](../user/img/minhton.png "MINHTON tree structure")  
-**Figure 3:** *Minimal height tree overlay network (Minhton) with complete balance. Level 4 (5) has 98 (6) (bidirectional) in-level links*
+<figure markdown>
+  <a id="fig3"></a>
+  ![MINHTON tree structure](../user/img/minhton.png)
+  <figcaption markdown>**Figure 3:** Minimal height tree overlay network (MINHTON) with complete balance. Level 4 (5) has 98 (6) (bidirectional) in-level links.</figcaption>
+</figure>
 
 ## References
 
