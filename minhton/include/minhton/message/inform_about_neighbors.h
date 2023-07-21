@@ -12,7 +12,7 @@
 
 namespace minhton {
 /// @brief * **Usage:** This message is an answer to a MessageGetNeighbors. It contains the node
-/// informations about the requested relationships and/or network information. The node sends the
+/// information about the requested relationships and/or network information. The node sends the
 /// message back.
 /// * **Algorithm Association:** Updates & Response.
 class MessageInformAboutNeighbors : public MinhtonMessage<MessageInformAboutNeighbors> {
@@ -37,7 +37,7 @@ protected:
   bool validateImpl() const;
 
 private:
-  /// Vector of the node informations.
+  /// Vector of the node information.
   std::vector<NodeInfo> neighbors_;
 };
 }  // namespace minhton

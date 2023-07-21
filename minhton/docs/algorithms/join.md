@@ -17,9 +17,12 @@ Additional hops may be necessary to finish this process.
 Third and last, the last hops to the end of the tree occur.
 For the join procedure this means reaching the node which is the first one from top to bottom, then left to right, able to become the parent of a new node.
 
-![Figure 1](../img/flow_diagram.svg#gh-light-mode-only "Flow diagram of the algorithm")
-![Figure 1](../img/flow_diagram_dark.svg#gh-dark-mode-only "Flow diagram of the algorithm")  
-**Figure 1:** Flow diagram of the algorithm responsible for finding the correct join position
+<figure markdown>
+  <a id="fig_flow_diagram_join"></a>
+  ![Flow diagram of the algorithm](../img/flow_diagram.svg#gh-light-mode-only)
+  ![Flow diagram of the algorithm](../img/flow_diagram_dark.svg#gh-dark-mode-only)
+  <figcaption markdown>**Figure 1:** Flow diagram of the algorithm responsible for finding the correct join position.</figcaption>
+</figure>
 
 ## Message sequence for a successful join procedure
 

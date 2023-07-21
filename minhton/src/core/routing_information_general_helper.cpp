@@ -166,7 +166,7 @@ void RoutingInformation::updateRoutingTableNeighborChild(
 
 void RoutingInformation::removeNeighbor(const minhton::NodeInfo &position_to_remove,
                                         uint64_t ref_event_id) {
-  // we may not remove the parent. it wouldnt make sense! the whole tree would fall apart
+  // we may not remove the parent. it wouldn't make sense! the whole tree would fall apart
   if (this->parent_.getLogicalNodeInfo() == position_to_remove.getLogicalNodeInfo()) {
     throw std::logic_error("Parent cannot be removed from routing information. Only updated.");
   }
@@ -348,7 +348,7 @@ minhton::NodeInfo RoutingInformation::getLeftmostNeighborChild() const {
 }
 
 ///
-/// If there is a duplicate, we will chose the node where PhysicalNodeInfo is initialized
+/// If there is a duplicate, we will choose the node where PhysicalNodeInfo is initialized
 ///
 std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDuplicate(
     std::vector<minhton::NodeInfo> v1, const std::vector<minhton::NodeInfo> &v2) {
@@ -366,7 +366,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDu
       if (same_pos_node_in_result.isValidPeer() &&
           !same_pos_node_in_result.getPhysicalNodeInfo().isInitialized() &&
           node1.getPhysicalNodeInfo().isInitialized()) {
-        // updaing node in result with network info
+        // updating node in result with PhysicalNodeInfo
         same_pos_it->setPhysicalNodeInfo(node1.getPhysicalNodeInfo());
       }
 
@@ -515,7 +515,7 @@ minhton::NodeInfo RoutingInformation::getLowestNode() const {
 
   auto is_initialized = [](const minhton::NodeInfo &node) { return node.isInitialized(); };
 
-  // Case lowest is on same level then we are -> search for children
+  // Case lowest is on same level as we are -> search for children
 
   // check left routing table neighbor children
   auto left_rt_neighbor_children = this->getLeftRoutingTableNeighborChildrenRightToLeft();
@@ -580,7 +580,7 @@ bool RoutingInformation::areWeTempDSN() {
     bool child_is_dsn = std::find(dsn_set_level_below.begin(), dsn_set_level_below.end(),
                                   child.getNumber()) != dsn_set_level_below.end();
     if (child_is_dsn && !child.isInitialized()) {
-      // is there anybody on the level below?
+      // is there any node on the level below?
       auto lowest_node = this->getLowestNode();
       if (lowest_node.getLevel() > self_node_info_.getLevel()) {
         return true;

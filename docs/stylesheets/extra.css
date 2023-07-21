@@ -8,6 +8,12 @@
     --md-accent-fg-color: #872271;
 }
 
+/* Hide dark images in light mode */
+[data-md-color-scheme="sola"] img[src$="#only-dark"],
+[data-md-color-scheme="sola"] img[src$="#gh-dark-mode-only"] {
+    display: none;
+}
+
 .center {
     text-align: center;
 }

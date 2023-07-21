@@ -25,7 +25,6 @@ nav:
     - Programmers Manual:
       - Concept: management_overlay/programmers/concept.md
       - Messages: management_overlay/programmers/messages.md
-      - Logging: management_overlay/programmers/logging.md
       - Algorithms:
         - Introduction: management_overlay/algorithms/index.md
         - Join: management_overlay/algorithms/join.md
@@ -97,6 +96,7 @@ theme:
     - navigation.top # back to top button visible
     - navigation.tracking
     - content.code.annotate
+    - content.code.copy
     - content.tooltips
     - search.highlight
     - search.share

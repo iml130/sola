@@ -6,9 +6,7 @@ Additionally, the message header contains an event id and ref event id to identi
 
 ## Message Types
 
-**TODO: Update doxygen links**
-
-Please take a look at [the MessageType enum](doxygen/namespaceminhton.html#enum-members) and [the MessageVariant and MessageSEVariant definitions](doxygen/namespaceminhton.html#typedef-members) for more information.
+Please take a look at [the MessageType enum](https://iml130.github.io/sola/doxygen/namespaceminhton.html#enum-members) and [the MessageVariant and MessageSEVariant definitions](https://iml130.github.io/sola/doxygen/namespaceminhton.html#typedef-members) for more information.
 The MessageType enum simply maps each message type to a number, where related message types have numbers closeby.
 The MessageVariant and MessageSEVariant definitions include every message type class respectively every message type class that can be used in a Search Exact query.
 
@@ -34,10 +32,9 @@ What needs to be done for adding a new message type:
 
 ## Using the message types
 
-**TODO: Requires more explanaition**
-
-1. Create a MinhtonMessageHeader with the sender and target NodeInfos as well as the ref event id.
-2. Create the specific message with the header as the first parameter, followed by the parameters for the message type. (**Do not use the default constructor except for test cases!**)
-3. Send the message.
-4. The message is sent over the network using the NetworkFacade.
-5. The message arrives at the target, where it is processed by the specified algorithm or handled by the `node.cpp`.
+1. Include the relevant message type, e.g.: `#!cpp #include "minhton/message/join.h"`.
+2. Create a MinhtonMessageHeader with the sender and target (of type `NodeInfo`) and optionally the ref event id if there is an existing event we want to reference: `#!cpp MinhtonMessageHeader header(getRoutingInfo()->getSelfNodeInfo(), target_node_info, ref_event_id);`.
+3. Create the specific message with the header as the first parameter, followed by the parameters for the message type (**Do not use the default constructor except for test cases!**) like this: `#!cpp MessageJoin msg(header, getRoutingInfo()->getSelfNodeInfo());`.
+4. Send the message with `#!cpp this->send(msg);`
+5. Then the message is sent over the network using the NetworkFacade.
+6. Finally, the message arrives at the target, where it is processed by the specified algorithm or handled by the `node.cpp`.
