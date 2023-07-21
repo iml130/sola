@@ -220,7 +220,7 @@ void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID /*msg_id*/, uint32_t /*
 }
 
 // * TopicMessage
-TableDefinition kTopicMessage("DeliveredTopicMessage",
+TableDefinition kTopicMessage("NatterDeliveredTopicMessage",
                               {DatabaseColumnInfo{"Id"},
                                {"Timestamp_us", "%lu", true},
                                {"NodeId", "sql%u", true, "NatterNode(Id)"},
@@ -239,9 +239,9 @@ ViewDefinition kTopicMessageReplacements = {
     {"MessageId", "M.Uuid AS MessageUuid, M.Topic AS Topic"}};
 static const std::string kCreateViewTopicMessage = getCreateViewStatement(
     kTopicMessage, kTopicMessageReplacements,
-    {"LEFT JOIN NatterNode AS N1 ON TopicMessage.NodeId = N1.Id",
-     "LEFT JOIN NatterNode AS N2 ON TopicMessage.InitialSenderNodeId = N2.Id",
-     "LEFT JOIN NatterMessage AS M ON TopicMessage.MessageId = M.Id"});
+    {"LEFT JOIN NatterNode AS N1 ON NatterDeliveredTopicMessage.NodeId = N1.Id",
+     "LEFT JOIN NatterNode AS N2 ON NatterDeliveredTopicMessage.InitialSenderNodeId = N2.Id",
+     "LEFT JOIN NatterMessage AS M ON NatterDeliveredTopicMessage.MessageId = M.Id"});
 
 void NatterLoggerNs3::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
                                           solanet::UUID message, uint32_t round) {
