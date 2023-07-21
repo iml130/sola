@@ -29,13 +29,14 @@ To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical
 
 ## Logical
 
-The AMR Logical Agent is a participant in the [CPPS](../intralogistics.md).
+The AMR Logical Agent is a smart participant in the [CPPS](../intralogistics.md).
 It is the AMR's interface to SOLA and will
 
-- aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
+- STN (Simple Temporal Network)
 - aquire [Tasks](../glossary.md#t) using specified [Algorithms](optimization.md),
-- report the status of Task execution to the corresponding [Material Flow Agent](material_flow.md),
-- report the AMR's state and position to other agents and the [Management Overlay](../../../minthon/docs/) and
+- report the status of Task execution to the corresponding [Material Flow Logical Agent](material_flow.md),and other participants
+- aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
+- report the AMR's state and position to other agents (cpps) and
 - Send [Transport Orders](../glossary.md#t) in form of a list of [Transport Order Steps](../glossary.md#t) to the AMR Physical Asset
 <!-- - handle [Path Planning]() -->
 
@@ -46,17 +47,21 @@ As shown in **Figure 1**
 The AMR Physical Asset is the representative of the real AMR.
 It is the [AMR Logical Agent](#logical)'s interface to the real AMR and will
 
+- simple
+- only one Transport Order at a time, no queuing
 - send the vehicles Description containing information about kinematics, general vehicle properties and special abilities to the AMR Logical Agent
 - report AMR Status Updates consiting of the AMR's state (idle, working, error) and position to the AMR Logical Agent<br />
-  TODO Where will those be sent to? -> Management Overlay?
+  will be offered other participants
 - manage the execution of one [Transport Order](../glossary.md#t) at a time.
   Transport Orders are described in [Material Flow](./material_flow.md).
 - report AMR Transport Order Updates, which are events that occurred related to the execution of Transport Order, to the AMR Logical Agent
-- relay Transport Order Steps to execute to the real AMR
+- forward Transport Order Steps to execute to the real AMR -> TODO Asset Connector Picture
 
 As shown in **Figure 1**.
 
-## Transport Order Lifecycle
+## Transport Order Lifecycle -> Material Flow Page
+
+- TODO Link to Mterial Flow Page here
 
 Each Transport Order will traverse the following states:
 
