@@ -16,8 +16,13 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** A DSN sends a MessageFindQueryAnswer back to the requesting node (that sent
+/// this DSN a MessageFindQueryRequest) with the data that was aquired.
+/// * **Algorithm Association:** Entity Search.
 class MessageFindQueryAnswer : public MinhtonMessage<MessageFindQueryAnswer> {
 public:
+  /// @param nodes_with_attributes Mapping NodeInfos to Attributes. The attributes consist of
+  /// multiple NoteDatas. NodeDatas have a string key and a corresponding value of varying types.
   MessageFindQueryAnswer(MinhtonMessageHeader header,
                          NodeData::NodesWithAttributes nodes_with_attributes);
 

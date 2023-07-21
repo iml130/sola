@@ -11,10 +11,14 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// After receiving a Boostrap Discover message, the node receiving the message might answer with a
-/// Bootstrap Response message, in case the node is in a connected state and a fitting join parent.
+/// @brief * **Usage:** After receiving a MessageBootstrapDiscover, the node receiving the message
+/// might answer with a MessageBootstrapResponse, in case the node is in a connected state and a
+/// fitting join parent.
+/// * **Algorithm Association:** Bootstrap.
 class MessageBootstrapResponse : public MinhtonMessage<MessageBootstrapResponse> {
 public:
+  /// @param node_to_join The node information the sender of the MessageBootstrapDiscover may join
+  /// to.
   MessageBootstrapResponse(MinhtonMessageHeader header, NodeInfo node_to_join);
 
   minhton::NodeInfo getNodeToJoin() const;

@@ -14,8 +14,16 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** The message that the node which received a MessageAttributeInquiryRequest
+/// sends back.
+/// * **Algorithm Association:** Entity Search.
 class MessageAttributeInquiryAnswer : public MinhtonMessage<MessageAttributeInquiryAnswer> {
 public:
+  /// @param inquired_node NodeInfo of the current node that received the Attribute Inquiry Request
+  /// @param attribute_values_and_types A map including the local data with timestamps and the
+  /// information whether a value is static or dynamic.
+  /// @param removed_attribute_keys A vector of the keys for which their distributed data shall be
+  /// removed.
   MessageAttributeInquiryAnswer(
       MinhtonMessageHeader header, NodeInfo inquired_node,
       std::unordered_map<std::string, NodeData::ValueAndType> attribute_values_and_types = {},

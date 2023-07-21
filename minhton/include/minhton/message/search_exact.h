@@ -12,12 +12,18 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-
-/// A node wants to send a message to another node in the network, but does not know the physical
-/// address, only the tree position. The Search Exact message gets forwarded into the right
-/// direction until it reaches its destination.
+/// @brief * **Usage:** A node wants to send a message to another node in the network, but does not
+/// know the physical address, only the tree position. The Search Exact message gets forwarded into
+/// the right direction until it reaches its destination.
+/// * **Algorithm Association:** Search Exact.
 class MessageSearchExact : public MinhtonMessage<MessageSearchExact> {
 public:
+  /// @param destination_node The destination node of the message. (This is not the target node. The
+  /// target is only the node the message gets forwarded to.)
+  /// @param query Another internal message of any other message type which the inital sender wants
+  /// to send to the destination node. Within the query message, the sender is the inital sender and
+  /// the target the destination node.
+  /// @param notify_about_failure Currently unused
   MessageSearchExact(MinhtonMessageHeader header, NodeInfo destination_node,
                      std::shared_ptr<MessageSEVariant> query, bool notify_about_failure = false);
 

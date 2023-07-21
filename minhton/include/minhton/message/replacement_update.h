@@ -11,12 +11,20 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// During the replacement process, the neighbor nodes of the leaving node / the replaced position
-/// need to get an update about the network information of the replaced position. Through the
-/// information in this message the neighbors can update the network information and eventually also
-/// remove the removed position from their information if they also have it as their neighbor.
+/// @brief * **Usage:** During the replacement process, the neighbor nodes of the leaving node / the
+/// replaced position need to get an update about the network information of the replaced position.
+/// Through the information in this message the neighbors can update the network information and
+/// eventually also remove the removed position from their information if they also have it as their
+/// neighbor.
+/// * **Algorithm Association:** Updates & Response.
 class MessageReplacementUpdate : public MinhtonMessage<MessageReplacementUpdate> {
 public:
+  /// @param removed_position_node The node who is replacing and who's position will be empty
+  /// afterwards.
+  /// @param replaced_position_node The node who is leaving the network and who's position will be
+  /// replaced by the replacing node afterwards.
+  /// @param new_l_node_info The LogicalNodeInfo that has the replaced position and a new uuid.
+  /// @param should_acknowledge Whether an acknowledgement should be sent back.
   MessageReplacementUpdate(MinhtonMessageHeader header, NodeInfo removed_position_node,
                            NodeInfo replaced_position_node, LogicalNodeInfo new_l_node_info,
                            bool should_acknowledge = false);

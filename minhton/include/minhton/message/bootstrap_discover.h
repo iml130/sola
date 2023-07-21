@@ -11,11 +11,13 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A node wants to join the network but does not have access to a node's network information to
-/// send the initial Join message to. Therefore a Bootstrap Discover gets send through a Multicast
-/// to discover a node's network information.
+/// @brief * **Usage:** A node wants to join the network but does not have access to a node's
+/// network information to send the initial Join message to. Therefore a MessageBootstrapDiscover
+/// gets send through a Multicast to discover a node's network information.
+/// * **Algorithm Association:** Bootstrap.
 class MessageBootstrapDiscover : public MinhtonMessage<MessageBootstrapDiscover> {
 public:
+  /// @param discovery_msg A string.
   explicit MessageBootstrapDiscover(MinhtonMessageHeader header,
                                     std::string discovery_msg = "Hello");
 

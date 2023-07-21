@@ -11,8 +11,10 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A Find Replacement Message reached a node that can replace the leaving node. The node sends a
-/// Replacement Offer to the leaving node to initiate the replacement process.
+/// @brief * **Usage:** A MessageFindReplacement reached a node that can replace the leaving node.
+/// The node sends a MessageReplacementOffer to the leaving node to initiate the replacement
+/// process.
+/// * **Algorithm Association:** Leave.
 class MessageReplacementOffer : public MinhtonMessage<MessageReplacementOffer> {
 public:
   explicit MessageReplacementOffer(MinhtonMessageHeader header);

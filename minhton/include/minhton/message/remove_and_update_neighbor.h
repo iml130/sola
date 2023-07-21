@@ -13,8 +13,17 @@
 #include "minhton/message/update_neighbors.h"
 
 namespace minhton {
+/// @brief * **Usage:** Used in the leave and response algorithms for updating the routing
+/// information.
+/// * **Algorithm Association:** Leave.
 class MessageRemoveAndUpdateNeighbors : public MinhtonMessage<MessageRemoveAndUpdateNeighbors> {
 public:
+  /// @param remove_msg A MessageRemoveNeighbor with information about which neighbor needs to be
+  /// removed from the routing information.
+  /// @param update_msg A MessageUpdateNeighbors with information about which neighbors needs to be
+  /// updated from the routing information.
+  /// @param should_acknowledge Whether the receiving node needs to answer with an acknowledgement
+  /// or not.
   MessageRemoveAndUpdateNeighbors(MinhtonMessageHeader header, MessageRemoveNeighbor remove_msg,
                                   MessageUpdateNeighbors update_msg,
                                   bool should_acknowledge = false);

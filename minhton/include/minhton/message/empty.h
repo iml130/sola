@@ -11,8 +11,9 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A helper message type for the Search Exact Test. It has no functionality by itself. Not to be
-/// used outside of Search Exact Tests.
+/// @brief * **Usage:** A helper message type for the Search Exact Test. It has no functionality by
+/// itself. Not to be used outside of Search Exact Tests.
+/// * **Algorithm Association:** Search Exact.
 class MessageEmpty : public MinhtonMessage<MessageEmpty> {
 public:
   explicit MessageEmpty(MinhtonMessageHeader header);

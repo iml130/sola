@@ -12,11 +12,15 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// When a node wants to join the network, it sends a join message to one node in the network. If
-/// the fitting join position has been found, the target accepts the node as a new child. Otherwise,
-/// the target forwards the message with the set entering node further.
+/// @brief * **Usage:** When a node wants to join the network, it sends a MessageJoin to one node in
+/// the network. If the fitting join position has been found, the target accepts the node as a new
+/// child. Otherwise, the target forwards the message with the set entering node further.
+/// * **Algorithm Association:** Join.
 class MessageJoin : public MinhtonMessage<MessageJoin> {
 public:
+  /// @param entering_node The node that wants to enter the network. NetworkInfo must be set
+  /// appropriately.
+  /// @param search_progress Represents the procedure progress for differentiating the phases.
   MessageJoin(MinhtonMessageHeader header, NodeInfo entering_node,
               SearchProgress search_progress = SearchProgress::kNone);
 

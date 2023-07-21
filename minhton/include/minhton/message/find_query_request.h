@@ -14,6 +14,9 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** A node that wants to find data in the network can call the Entity Search
+/// Algorithm, which sends MessageFindQueryRequests to the requesting node's DSNs.
+/// * **Algorithm Association:** Entity Search.
 class MessageFindQueryRequest : public MinhtonMessage<MessageFindQueryRequest> {
 public:
   enum ForwardingDirection : uint8_t {
@@ -22,6 +25,9 @@ public:
     kDirectionRight,
   };
 
+  /// @param query Defines what kind of data the requesting node wants to aquire.
+  /// @param forwarding_direction Can be either none, left, or right.
+  /// @param interval A pair defining the start and end number of relevant nodes (both exclusive).
   MessageFindQueryRequest(MinhtonMessageHeader header, FindQuery query,
                           ForwardingDirection forwarding_direction,
                           std::pair<uint32_t, uint32_t> interval);

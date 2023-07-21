@@ -13,8 +13,16 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** A node that is not a DSN may receive a MessageAttributeInquiryRequest during
+/// an ongoing Entity Search. A MessageAttributeInquiryRequest always comes from a DSN, which can
+/// also be the requesting node itself.
+/// * **Algorithm Association:** Entity Search.
 class MessageAttributeInquiryRequest : public MinhtonMessage<MessageAttributeInquiryRequest> {
 public:
+  /// @param inquire_all If set to true, all existing local data is added to the answer message,
+  /// ignoring the missing_keys property.
+  /// @param missing_keys The keys for which the node looks up its own local data. The corresponding
+  /// value with a timestamp is added to the MessageAttributeInquiryAnswer if it is present.
   explicit MessageAttributeInquiryRequest(MinhtonMessageHeader header, bool inquire_all = false,
                                           std::vector<std::string> missing_keys = {});
 
