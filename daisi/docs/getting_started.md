@@ -1,18 +1,15 @@
 # Getting started
 
-## Required dependencies
+## Quickstart (if we want to)
 
-- Refer to [Required dependencies](../../docs/index.md#required-dependencies).
+- Install, build and run cpps on Ubuntu 22.04 or using apt
+- find logfile
 
-### Install ns-3
+- **TO BE TESTED**
 
-Please refer to the [ns-3 documentation](https://www.nsnam.org/documentation/) and make sure the ns-3 prerequisites are met.
+### Install dependencies
 
-<!-- either refer or write it down -->
-
-<!-- Download the current [ns-3 version](https://www.nsnam.org/releases/latest/).
-Then, build and install ns-3.
-You may do all of this in the following way, exemplarily shown for ns-3 version 3.38 on Ubuntu:
+ns-3
 
 ```sh
 apt install g++ python3 cmake ninja-build git ccache
@@ -24,23 +21,65 @@ cmake ns-3.38/ -DCMAKE_BUILD_TYPE=Release -DNS3_ENABLED_MODULES="core;mobility;a
 make && make install
 ```
 
-Feel free to change the parameter for the `DCMAKE_INSTALL_PREFIX` option that specifies the installation location of ns-3, but keep in mind to adjust the later commands in this case.
-
-### Install other dependencies
-
-<a name="install-libyaml"></a>
-<a name="install-sqlite3"></a>
-<a name="install-libuuid"></a>
-<a name="install-libevent"></a>
-
-If apt is available on your distribution, you can install the other dependencies with:
+Other dependencies
 
 ```sh
 apt install libyaml-cpp-dev libsqlite3-dev uuid-dev libevent-dev
 ```
 
-Otherwise, please use `dpkg`, `pacman` or install the dependencies from sources.
-Of course, you can also install only the required dependencies for the specific library if you don't want to build DAISI. -->
+### Build
+
+First you need to checkout the repository with its submodules and open it:
+
+```sh
+git clone git@github.com:iml130/sola.git --recurse-submodules
+cd sola
+```
+
+Build DAISI as a normal CMake project.
+Make sure to pass ``-Dns3_DIR="PATH_TO_YOUR_NS3_INSTALL"`` so that CMake can find ns3.
+The `PATH_TO_YOUR_NS3_INSTALL` should look similar to `/work/ns3/ns3_installs/ns3_3_38_release_stripped/lib/cmake/ns3`.
+
+```sh
+mkdir build && cd build
+cmake ../daisi -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -Dns3_DIR="PATH_TO_YOUR_NS3_INSTALL"
+cmake --build . --target Main
+```
+
+Then, the main executable can be found at `BUILD_FOLDER/src/main/Main`.
+The default `BUILD_FOLDER` is `build/daisi/` inside the folder of the repository.
+We recommend copying the executable to the root folder of the repository for easier access:
+
+```sh
+cp daisi/src/main/Main ../daisi_exec
+```
+
+A requirement is to set the environment variables, at least the `LD_LIBRARY_PATH`, while running cpps or sola (standalone) additionally require setting the `MINHTONDIR`:
+
+```sh
+export LD_LIBRARY_PATH=/work/ns3/ns3_installs/ns3_3_38_release_stripped/lib
+export MINHTONDIR=`pwd`/minhton
+```
+
+### Run
+
+```sh
+./daisi_exec --environment=cpps --scenario=daisi/scenarios/cpps/default.yml
+```
+
+- Read the logfile
+    - find filename
+    - open with sqlite
+    - open with 
+
+
+## Required dependencies
+
+- Refer to [Required dependencies](../../docs/index.md#required-dependencies).
+
+### Install ns-3
+
+Please refer to the [ns-3 documentation](https://www.nsnam.org/documentation/) and make sure the ns-3 prerequisites are met.
 
 ## Build 
 
@@ -91,60 +130,10 @@ If you want to build other targets than DAISI you can replace the `target` param
 In case VS Code shows the problem of a too large workspace, the file limit has to be [adjusted in /etc/sysctl.conf with root rights](https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc).
 This problem only appears on [Linux kernels prior to version 5.11 or low-performance systems](https://github.com/torvalds/linux/commit/92890123749bafc317bbfacbe0a62ce08d78efb7).
 
-## Using SOLA with ns-3 (Environments?)
+## Using Environments
 
-* Several environments can be built and used. 
-  Reference environments here?
-
-
-### Optimaflow <!--CPPS-->
-
-- "implementation highlights" -> [Mobility Model](./optimaflow-ns3/mobility_model.md)
-    - Mobility Model
-    - Networking
-    - Threading
-- run it
-- make new scenarios
-    - refer to [Optimaflow Szenarios](./optimaflow-ns3/scenariofile.md)
-- read 
-
-<!-- After you have built the simulation executable, you can run the DAISI simulation.
-We assume that we are at the root level of the repository folder now.
-`daisi_exec` is located there if you used the commands from the [installation guide for the terminal](../installation.md#terminal).
-Otherwise, please replace `daisi_exec` with the respective simulation executable or simply run DAISI from VS Code.
-A requirement is to set the environment variables, at least the `LD_LIBRARY_PATH`, while running cpps or sola (standalone) additionally require setting the `MINHTONDIR`:
-
-```sh
-export LD_LIBRARY_PATH=/work/ns3/ns3_installs/ns3_3_38_release_stripped/lib
-export MINHTONDIR=`pwd`/minhton
-```
-
-Please make sure to adjust the specified `LD_LIBRARY_PATH` with your ns-3 installation location.
-
-It is required to set an `environment` and a corresponding `scenario` as parameters like in the following example:
-
-```sh
-./daisi_exec --environment=cpps --scenario=daisi/scenarios/cpps/default.yml
-```
-
-You can replace the `scenario` option with `scenariostring` if you want to include the whole scenario content as an argument.
-Another option is `disable-catch`, which disables catching fatal errors if set to `true`. -->
-
-
-### SOLA
-
-- run it
-- make new scenarios
-    - refer to [Szenarios](./sola-ns3/scenariofile.md)
-
-### NATTER
-
-- run it
-- make new scenarios
-    - refer to [Szenarios](./natter-ns3/scenariofile.md)
-
-### MINHTON
-
-- run it
-- make new scenarios
-    - refer to [Szenarios](./minhton-ns3/scenariofile.md)
+- Several environments can be built and used. 
+    - [SOLA](./sola-ns3/using.md)
+    - [MINHTON](./minhton-ns3/using.md)
+    - [NATTER](./natter-ns3/using.md)
+    - [OptiMaFlow](./optimaflow-ns3/using.md)
