@@ -11,10 +11,11 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// After receiving a Join Accept message, the new child must send a Join Accept Ack back to the
-/// new parent. It is needed to make sure the entering node still wants to join. Only after
-/// receiving this message, the parent node will send update messages through the network to inform
-/// the other neighbors about the joined node.
+/// @brief * **Usage:** After receiving a MessageJoinAccept, the new child must send a
+/// MessageJoinAcceptAck back to the new parent. It is needed to make sure the entering node still
+/// wants to join. Only after receiving this message, the parent node will send update messages
+/// through the network to inform the other neighbors about the joined node.
+/// * **Algorithm Association:** Join.
 class MessageJoinAcceptAck : public MinhtonMessage<MessageJoinAcceptAck> {
 public:
   explicit MessageJoinAcceptAck(MinhtonMessageHeader header);

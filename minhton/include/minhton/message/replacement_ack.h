@@ -11,10 +11,11 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// The node that wants to leave the network receives a Replacement Offer from a node that is
-/// willing to replace its position. As a response, the leaving node sends all of its necessary
-/// information in the Replacement Ack message to the replacing node. After this message was sent,
-/// the node can finally leave the network.
+/// @brief * **Usage:** The node that wants to leave the network receives a MessageReplacementOffer
+/// from a node that is willing to replace its position. As a response, the leaving node sends all
+/// of its necessary information in the MessageReplacementAck to the replacing node. After this
+/// message was sent, the node can finally leave the network.
+/// * **Algorithm Association:** Leave.
 class MessageReplacementAck : public MinhtonMessage<MessageReplacementAck> {
 public:
   struct LockedStates {
@@ -22,6 +23,10 @@ public:
     bool locked_right;
     bool locked_left;
   };
+
+  /// @param neighbors A vector of all neighbors the leaving node has information about.
+  /// @param lockedStates A struct tracking the lock state of this node, its right neighbor, and its
+  /// left neighbor.
   MessageReplacementAck(MinhtonMessageHeader header, std::vector<minhton::NodeInfo> neighbors,
                         LockedStates lockedStates);
 

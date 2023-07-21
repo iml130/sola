@@ -12,8 +12,13 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** A node can send a MessageSubscriptionOrder to subscribe or unsubscribe
+/// itself from the data another node maintains for the specified keys.
+/// * **Algorithm Association:** Entity Search.
 class MessageSubscriptionOrder : public MinhtonMessage<MessageSubscriptionOrder> {
 public:
+  /// @param keys Multiple keys for which the node wants to change its subscription.
+  /// @param subscribe True subscribes the node to the specified keys, False unsubscribes the node.
   MessageSubscriptionOrder(MinhtonMessageHeader header, std::vector<NodeData::Key> keys,
                            bool subscribe = false);
 

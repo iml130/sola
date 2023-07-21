@@ -12,12 +12,16 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A node wants to leave the network, but cannot leave the position directly because it would
-/// violate the trees balancing conditions. Another node that can leave the position has to be found
-/// to replace the position of the leaving node. For this, the Find Replacement Message gets
-/// forwarded (similar to Join messages) until a fitting node to replace is found.
+/// @brief * **Usage:** A node wants to leave the network, but cannot leave the position directly
+/// because it would violate the trees balancing conditions. Another node that can leave the
+/// position has to be found to replace the position of the leaving node. For this, the
+/// MessageFindReplacement gets forwarded (similar to Join messages) until a fitting node to replace
+/// is found.
+/// * **Algorithm Association:** Leave.
 class MessageFindReplacement : public MinhtonMessage<MessageFindReplacement> {
 public:
+  /// @param node_to_replace The node that wants to leave the network.
+  /// @param search_progress Represents the procedure progress for differentiating the phases.
   MessageFindReplacement(MinhtonMessageHeader header, NodeInfo node_to_replace,
                          SearchProgress search_progress = SearchProgress::kNone);
 

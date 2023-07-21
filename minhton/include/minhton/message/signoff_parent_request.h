@@ -11,6 +11,10 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** The last node of the network, the chosen successor, sends a
+/// MessageSignoffParentRequest to its parent. The parent later answers with a
+/// MessageSignoffParentAnswer to notify the successor if the leave is allowed to continue.
+/// * **Algorithm Association:** Leave.
 class MessageSignoffParentRequest : public MinhtonMessage<MessageSignoffParentRequest> {
 public:
   explicit MessageSignoffParentRequest(MinhtonMessageHeader header);

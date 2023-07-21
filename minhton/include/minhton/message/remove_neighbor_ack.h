@@ -11,6 +11,9 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** Is sent as a reply to either a MessageReplacementUpdate or
+/// MessageRemoveAndUpdateNeighbor to acknowledge the update of the routing information.
+/// * **Algorithm Association:** Updates & Response.
 class MessageRemoveNeighborAck : public MinhtonMessage<MessageRemoveNeighborAck> {
 public:
   explicit MessageRemoveNeighborAck(MinhtonMessageHeader header);

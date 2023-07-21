@@ -11,6 +11,9 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** Used for unlocking nodes after they were locked during a concurrent
+/// operation like leave.
+/// * **Algorithm Association:** Leave.
 class MessageUnlockNeighbor : public MinhtonMessage<MessageUnlockNeighbor> {
 public:
   explicit MessageUnlockNeighbor(MinhtonMessageHeader header);

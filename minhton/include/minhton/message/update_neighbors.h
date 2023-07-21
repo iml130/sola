@@ -14,11 +14,13 @@ using NeighborsAndRelationships =
     std::vector<std::tuple<minhton::NodeInfo, minhton::NeighborRelationship>>;
 
 namespace minhton {
-
-/// Informing a node about a new or updated neighbor. Used mainly in the join accept and leave
-/// procedure. The relationship of how to update the node has to be given.
+/// @brief * **Usage:** Informing a node about a new or updated neighbor. Used mainly in the join
+/// accept and leave procedure. The relationship of how to update the node has to be given.
+/// * **Algorithm Association:** Updates & Response.
 class MessageUpdateNeighbors : public MinhtonMessage<MessageUpdateNeighbors> {
 public:
+  /// @param neighbors_and_relationships Vector of tuples of nodes and their neighbor relationship.
+  /// @param should_acknowledge Whether an acknowledgement should be sent back.
   MessageUpdateNeighbors(MinhtonMessageHeader header,
                          NeighborsAndRelationships neighbors_and_relationships,
                          bool should_acknowledge = false);

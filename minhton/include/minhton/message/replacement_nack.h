@@ -11,6 +11,11 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** A MessageReplacementNack is sent back to the node to replace in case of a
+/// failure during the leave process. A failure can occur when the chosen successor is already
+/// replacing enother node or a MessageSignOffParentAnswer informed the current node about an
+/// unsucessful sign off from the parent.
+/// * **Algorithm Association:** Leave.
 class MessageReplacementNack : public MinhtonMessage<MessageReplacementNack> {
 public:
   explicit MessageReplacementNack(MinhtonMessageHeader header);

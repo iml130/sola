@@ -11,11 +11,13 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A node is leaving the network. This is a notification to remove the given node from the routing
-/// information.
-
+/// @brief * **Usage:** A node is leaving the network. This is a notification to remove the given
+/// node from the routing information.
+/// * **Algorithm Association:** Updates & Response.
 class MessageRemoveNeighbor : public MinhtonMessage<MessageRemoveNeighbor> {
 public:
+  /// @param removed_position_node The position of the node to remove.
+  /// @param acknowledge Whether an acknowledgement should be sent back.
   MessageRemoveNeighbor(MinhtonMessageHeader header, NodeInfo removed_position_node,
                         bool acknowledge = false);
 

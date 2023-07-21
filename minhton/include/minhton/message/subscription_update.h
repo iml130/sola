@@ -12,8 +12,13 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** If a node's local data is modified (inserted, updated or removed), it will
+/// send a subscription update the the subscribers of the key.
+/// * **Algorithm Association:** Entity Search.
 class MessageSubscriptionUpdate : public MinhtonMessage<MessageSubscriptionUpdate> {
 public:
+  /// @param key Key of the modified data
+  /// @param value Value of the modified data
   MessageSubscriptionUpdate(MinhtonMessageHeader header, NodeData::Key key, NodeData::Value value);
 
   NodeData::Key getKey() const;

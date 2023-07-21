@@ -11,12 +11,20 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// A fitting join position has been found by forwarding the join message appropriately. The target
-/// of the last join message sends a Join Accept message to the entering node (new child). This
-/// message contains all information the entering node needs about its new neighbors and the
-/// network's fanout.
+/// @brief * **Usage:** A fitting join position has been found by forwarding the MessageJoin
+/// appropriately. The target of the last MessageJoin sends a MessageJoinAccept to the entering node
+/// (new child). This message contains all information the entering node needs about its new
+/// neighbors and the network's fanout.
+/// * **Algorithm Association:** Join.
 class MessageJoinAccept : public MinhtonMessage<MessageJoinAccept> {
 public:
+  /// @param fanout Fanout of the entire network.
+  /// @param adjacent_left Adjacent left neighbor of the new child. Might be left empty if the new
+  /// child has no adjacent left.
+  /// @param adjacent_right Adjacent right neighbor of the new child. Might be left empty if the new
+  /// child has no adjacent right.
+  /// @param routing_table_neighbors A vector of all existing routing table neighbors on the same
+  /// level.
   MessageJoinAccept(MinhtonMessageHeader header, uint16_t fanout, NodeInfo adjacent_left,
                     NodeInfo adjacent_right, std::vector<NodeInfo> routing_table_neighbors);
 

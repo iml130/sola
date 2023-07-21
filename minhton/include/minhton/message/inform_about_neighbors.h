@@ -11,10 +11,14 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
-/// This message is an answer to a GetNeighbors message. It contains the node informations about the
-/// requested relationships and/or network information. The node sends the message back.
+/// @brief * **Usage:** This message is an answer to a MessageGetNeighbors. It contains the node
+/// informations about the requested relationships and/or network information. The node sends the
+/// message back.
+/// * **Algorithm Association:** Updates & Response.
 class MessageInformAboutNeighbors : public MinhtonMessage<MessageInformAboutNeighbors> {
 public:
+  /// @param neighbors Vector of the information about the requested relationships and/or network
+  /// information.
   MessageInformAboutNeighbors(MinhtonMessageHeader header, std::vector<NodeInfo> neighbors);
 
   std::vector<NodeInfo> getRequestedNeighbors() const;

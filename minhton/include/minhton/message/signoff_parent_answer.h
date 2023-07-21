@@ -11,8 +11,12 @@
 #include "minhton/message/serialize.h"
 
 namespace minhton {
+/// @brief * **Usage:** The successor node waits for the MessageSignoffParentAnswer from its parent
+/// after sending a MessageSignoffParentRequest to it.
+/// * **Algorithm Association:** Leave.
 class MessageSignoffParentAnswer : public MinhtonMessage<MessageSignoffParentAnswer> {
 public:
+  /// @param successful Indicates whether the leave process is allowed to continue.
   explicit MessageSignoffParentAnswer(MinhtonMessageHeader header, bool successful = false);
 
   bool wasSuccessful() const;
