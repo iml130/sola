@@ -1,5 +1,5 @@
 # Getting started
-
+<!-- 
 ## Quickstart (if we want to)
 
 - Install, build and run cpps on Ubuntu 22.04 or using apt
@@ -70,7 +70,7 @@ export MINHTONDIR=`pwd`/minhton
 - Read the logfile
     - find filename
     - open with sqlite
-    - open with 
+    - open with  -->
 
 
 ## Required dependencies
