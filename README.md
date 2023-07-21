@@ -45,6 +45,7 @@ Please refer to the [documentation](https://iml130.github.io/sola/) for an in de
 
 If you want to get involved, feel free to ask questions, bring ideas to discuss, or anything else.
 We are open-source and we like open thoughts!
+Just [open an issue](https://github.com/iml130/sola/issues/new) or [start a discussion](https://github.com/iml130/sola/discussions/new/choose)!
 
 See ``CONTRIBUTING.md`` for further information.
 
