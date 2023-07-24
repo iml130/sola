@@ -4,5 +4,9 @@
 
 ## SQLite
 
+- Tables
+- Identifiers/References
+- Schema-Diagram?
+
 ## File
 
