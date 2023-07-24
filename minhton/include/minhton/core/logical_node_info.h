@@ -10,7 +10,8 @@
 #include <string>
 
 #include "minhton/message/serialize.h"
-#include "minhton/utils/uuid.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace minhton
 
@@ -90,7 +91,7 @@ public:
   std::string getUuid() const;
 
   /// \returns the uuid of this peer
-  minhton::UUID getRawUuid() const;
+  solanet::UUID getRawUuid() const;
 
   /// \returns the horizontal value defined by the TreeMapper of this peer
   double getHorizontalValue() const;
@@ -225,7 +226,7 @@ private:
   uint32_t level_ = 0;
   uint32_t number_ = 0;
   uint16_t fanout_ = 0;
-  minhton::UUID uuid_ = generateUUID();
+  solanet::UUID uuid_ = solanet::generateUUID();
   bool initialized_ = false;
 };
 

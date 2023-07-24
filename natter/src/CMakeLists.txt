@@ -35,6 +35,7 @@ target_include_directories(natterMessage
   INTERFACE
     ${natter_SOURCE_DIR}/include
 )
+target_link_libraries(natterMessage INTERFACE solanet_uuid)
 
 add_library(natterLoggerInterface INTERFACE)
 target_sources(natterLoggerInterface
@@ -44,6 +45,10 @@ target_sources(natterLoggerInterface
 target_include_directories(natterLoggerInterface
   INTERFACE
     ${natter_SOURCE_DIR}/include
+)
+target_link_libraries(natterLoggerInterface
+  INTERFACE
+  solanet_uuid  
 )
 
 #set(PUBLIC_HEADERS

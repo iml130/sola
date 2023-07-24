@@ -28,6 +28,11 @@ find_package(SQLite3 REQUIRED)
 
 find_package(Threads REQUIRED)
 
+find_library(LIBUUID Names uuid PATHS /lib /lib64)
+if(NOT LIBUUID)
+  message(FATAL_ERROR "libuuid not found!")
+endif()
+
 # Add subprojects from monorepository folder
 if(NOT EXISTS ../natter OR NOT EXISTS ../minhton OR NOT EXISTS ../sola)
     message(FATAL_ERROR "DAISI folder must be within monorepository folder")

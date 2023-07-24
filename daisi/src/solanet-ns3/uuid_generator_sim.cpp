@@ -18,10 +18,10 @@
 #include <cstring>
 #include <random>
 
-#include "utils.h"
+#include "solanet/uuid_generator.h"
 #include "utils/random_engine.h"
 
-namespace natter::utils {
+namespace solanet {
 
 UUID generateUUID() {
   // Use for simulation only! This joins two random uint64_ts but is not as random as a proper 128
@@ -31,9 +31,10 @@ UUID generateUUID() {
   uint64_t first_part = dist(daisi::global_random_engine);
   uint64_t second_part = dist(daisi::global_random_engine);
   UUID uuid{};
+  static_assert(uuid.size() == sizeof(uint64_t) * 2);
   std::memcpy(uuid.data(), &first_part, sizeof(uint64_t));
   std::memcpy(uuid.data() + uuid.size() / 2 * sizeof(uint8_t), &second_part, sizeof(uint64_t));
   return uuid;
 }
 
-}  // namespace natter::utils
+}  // namespace solanet

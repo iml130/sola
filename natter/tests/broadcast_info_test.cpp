@@ -8,7 +8,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "utils/utils.h"
+#include "solanet/uuid_generator.h"
 
 TEST_CASE("[MINHCAST] ForwardingLimit", "MINHCAST") {
   using namespace natter::minhcast;
@@ -23,15 +23,14 @@ TEST_CASE("[MINHCAST] ForwardingLimit", "MINHCAST") {
 
 TEST_CASE("[MINHCAST] BroadcastInfo NotInitialSender", "MINHCAST") {
   using namespace natter::minhcast;
-  using namespace natter::utils;
 
   BroadcastInfo bc{
-      .own_node = {generateUUID(), {2, 0, 3}},
-      .last_node = {generateUUID(), {1, 0, 3}},
-      .initial_node = {generateUUID(), {0, 0, 3}},
+      .own_node = {solanet::generateUUID(), {2, 0, 3}},
+      .last_node = {solanet::generateUUID(), {1, 0, 3}},
+      .initial_node = {solanet::generateUUID(), {0, 0, 3}},
       .forwarding_limit{2, std::numeric_limits<Level>::max()},
       .topic = "TOPIC",
-      .msg_id = generateUUID(),
+      .msg_id = solanet::generateUUID(),
       .content = "CONTENT",
       .current_round = 3,
   };

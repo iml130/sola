@@ -17,11 +17,10 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "cpps/common/uuid_generator.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
-#include "utils/daisi_check.h"
+#include "solanet/uuid_generator.h"
 #include "utils/socket_manager.h"
 #include "utils/sola_utils.h"
 
@@ -259,7 +258,7 @@ void AmrLogicalAgent::logOrderUpdate() {
 void AmrLogicalAgent::setServices() {
   sola::Service service;
   service.friendly_name = "service_" + description_.getProperties().getFriendlyName();
-  service.uuid = UUIDGenerator::get()();
+  service.uuid = solanet::uuidToString(solanet::generateUUID());
 
   service.key_values.insert({"servicetype", std::string("transport")});
 

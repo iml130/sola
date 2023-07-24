@@ -12,7 +12,6 @@
 #include "minhton/logging/logging.h"
 #include "minhton/message/attribute_inquiry_request.h"
 #include "minhton/message/search_exact.h"
-#include "minhton/utils/uuid.h"
 
 namespace minhton {
 

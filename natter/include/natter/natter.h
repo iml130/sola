@@ -13,7 +13,7 @@
 
 #include "message.h"
 #include "network_info_ipv4.h"
-#include "uuid.h"
+#include "solanet/uuid.h"
 
 namespace natter {
 
@@ -42,7 +42,7 @@ public:
    * only.
    * @return the message id
    */
-  UUID publish(const std::string &topic, const std::string &msg_content) {
+  solanet::UUID publish(const std::string &topic, const std::string &msg_content) {
     return static_cast<T *>(this)->publishImpl(topic, msg_content);
   }
 
@@ -99,7 +99,7 @@ public:
    * Returns UUID of this natter node
    * @return node uuid
    */
-  UUID getUUID() const { return static_cast<const T *>(this)->getUUIDImpl(); }
+  solanet::UUID getUUID() const { return static_cast<const T *>(this)->getUUIDImpl(); }
 
   /**
    * Returns the node info for a given topic of this natter instance
@@ -123,14 +123,14 @@ public:
   friend Natter;                                                                       \
   class Impl;                                                                          \
   std::unique_ptr<Impl> pimpl_;                                                        \
-  UUID publishImpl(const std::string &topic, const std::string &msg_content);          \
+  solanet::UUID publishImpl(const std::string &topic, const std::string &msg_content); \
   bool addPeerImpl(const std::string &topic, const NodeInfo &info);                    \
   bool removePeerImpl(const std::string &topic, const std::string &ip, uint16_t port); \
   void subscribeTopicImpl(const std::string &topic, const NodeInfo &info);             \
   bool isSubscribedToTopicImpl(const std::string &topic) const;                        \
   void unsubscribeTopicImpl(const std::string &topic);                                 \
   NodeInfo getOwnNodeInfoImpl(const std::string &topic) const;                         \
-  UUID getUUIDImpl() const;                                                            \
+  solanet::UUID getUUIDImpl() const;                                                   \
   NetworkInfoIPv4 getNetworkInfoImpl() const;
 
 #define DEFINE_CRTP_METHODS(C)                                                                \
@@ -140,9 +140,9 @@ public:
        const std::vector<logging::LoggerPtr> &logger)                                         \
       : pimpl_(std::make_unique<Impl>(recv_callback, missing_callback, logger)) {}            \
   C::C(MsgReceiveFct recv_callback, MsgMissingFct missing_callback,                           \
-       const std::vector<logging::LoggerPtr> &logger, UUID uuid)                              \
+       const std::vector<logging::LoggerPtr> &logger, solanet::UUID uuid)                     \
       : pimpl_(std::make_unique<Impl>(recv_callback, missing_callback, logger, uuid)) {}      \
-  UUID C::publishImpl(const std::string &topic, const std::string &msg_content) {             \
+  solanet::UUID C::publishImpl(const std::string &topic, const std::string &msg_content) {    \
     return pimpl_->publish(topic, msg_content);                                               \
   }                                                                                           \
   bool C::addPeerImpl(const std::string &topic, const C::NodeInfo &info) {                    \
@@ -162,7 +162,7 @@ public:
     return pimpl_->getOwnNodeInfo(topic);                                                     \
   }                                                                                           \
   C::~C() = default;                                                                          \
-  UUID C::getUUIDImpl() const { return pimpl_->getUUID(); }                                   \
+  solanet::UUID C::getUUIDImpl() const { return pimpl_->getUUID(); }                          \
   NetworkInfoIPv4 C::getNetworkInfoImpl() const { return pimpl_->getNetworkInfo(); }
 
 }  // namespace natter

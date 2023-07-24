@@ -1,19 +1,3 @@
-# UUID generator sim
-add_library(minhton_utils_uuid_sim STATIC
-  ${MINHTON_SOURCE_DIR}/include/minhton/utils/uuid.h
-  ${MINHTON_SOURCE_DIR}/src/utils/uuid_tools.cpp
-  uuid_generator_sim.cpp
-)
-target_link_libraries(minhton_utils_uuid_sim 
-  PRIVATE
-    ${LIBUUID}
-    daisi_random_engine
-) 
-target_include_directories(minhton_utils_uuid_sim
-        PUBLIC
-          ${MINHTON_SOURCE_DIR}/include
-)
-
 # FSM
 add_library(minhton_fsm_sim STATIC ${MINHTON_SOURCE_DIR}/src/utils/fsm.cpp)
 target_include_directories(minhton_fsm_sim PUBLIC

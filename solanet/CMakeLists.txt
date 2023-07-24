@@ -18,6 +18,11 @@ option(SOLANET_ENABLE_TESTS "Enable tests" ON)
 
 find_package(Threads REQUIRED)
 
+find_library(LIBUUID Names uuid PATHS /lib /lib64)
+if(NOT LIBUUID)
+	  message(FATAL_ERROR "libuuid not found!")
+endif()
+
 add_subdirectory(build_tools/third_party/asio/ EXCLUDE_FROM_ALL)
 add_subdirectory(build_tools/third_party/cereal EXCLUDE_FROM_ALL)
 

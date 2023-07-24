@@ -16,7 +16,8 @@
 
 #include "task.h"
 
-#include "cpps/common/uuid_generator.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::material_flow {
 
@@ -27,7 +28,7 @@ Task::Task(std::string name, const std::vector<Order> &orders,
     throw std::invalid_argument("Orders cannot be empty.");
   }
 
-  uuid_ = UUIDGenerator::get()();
+  uuid_ = solanet::uuidToString(solanet::generateUUID());
 }
 
 const std::string &Task::getUuid() const { return uuid_; }

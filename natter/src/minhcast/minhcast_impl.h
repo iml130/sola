@@ -21,7 +21,8 @@
 #include "natter/logger_interface.h"
 #include "natter/minhcast_level_number.h"
 #include "natter/natter_minhcast.h"
-#include "utils/utils.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace natter::minhcast {
 
@@ -30,10 +31,10 @@ class MinhcastMessage;
 class NatterMinhcast::Impl {
 public:
   Impl(MsgReceiveFct recv, MsgMissingFct miss, std::vector<logging::LoggerPtr> logger = {},
-       UUID uuid = utils::generateUUID());
+       solanet::UUID uuid = solanet::generateUUID());
 
   // Publish message, returns message_id if everything went successfull
-  UUID publish(const std::string &topic, const std::string &msg_content);
+  solanet::UUID publish(const std::string &topic, const std::string &msg_content);
 
   bool addPeer(const std::string &topic, const NodeInfo &info);
 
@@ -47,7 +48,7 @@ public:
 
   NodeInfo getOwnNodeInfo(const std::string &topic) const { return own_node_info_.at(topic); }
 
-  UUID getUUID() const { return uuid_; }
+  solanet::UUID getUUID() const { return uuid_; }
 
   NetworkInfoIPv4 getNetworkInfo() const { return network_.getNetworkInfo(); }
 
@@ -147,14 +148,14 @@ private:
   using Topic = std::string;
   std::unordered_map<Topic, NodeInfo> own_node_info_;
   std::unordered_map<Topic, std::set<NodeInfo>> other_peers_;
-  UUID uuid_;
+  solanet::UUID uuid_;
   natter::logging::Logger logger_;
   MsgReceiveFct msg_recv_callback_;
   core::NetworkFacade<MinhcastMessage> network_;
 
 #ifndef NDEBUG
   // To keep track of possible received duplicate messages
-  std::set<UUID> received_messages_;
+  std::set<solanet::UUID> received_messages_;
 #endif
 };
 }  // namespace natter::minhcast

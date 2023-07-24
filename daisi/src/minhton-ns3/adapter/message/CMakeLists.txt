@@ -42,5 +42,5 @@ target_link_libraries(minhton_message_sim
   PRIVATE
     minhton_exception_algorithm
     minhton_core_routing_calculations
-    minhton_utils_uuid_sim
+    solanet_uuid_generator_sim
 )

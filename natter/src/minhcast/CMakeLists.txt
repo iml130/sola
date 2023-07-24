@@ -43,5 +43,7 @@ target_link_libraries(natter_minhcast
         PUBLIC
             natter_interface
             solanet_serialize
+            solanet_uuid
+            solanet_uuid_generator
 )
 

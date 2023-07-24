@@ -13,7 +13,6 @@
 #include "minhton/logging/logging.h"
 #include "minhton/message/remove_and_update_neighbor.h"
 #include "minhton/message/search_exact.h"
-#include "minhton/utils/uuid.h"
 
 namespace minhton {
 

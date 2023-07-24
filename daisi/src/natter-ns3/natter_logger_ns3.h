@@ -31,19 +31,20 @@ public:
   NatterLoggerNs3(LogDeviceApp log_device_application, LogFunction log, LogEvent log_event);
 
   // natter-ns3 specific logging functions
-  void logNewNetworkPeer(UUID uuid, const std::string &ip, uint16_t port, int level,
+  void logNewNetworkPeer(solanet::UUID uuid, const std::string &ip, uint16_t port, int level,
                          int number) final;
 
-  void logNs3PeerConnection(uint64_t timestamp, bool active, UUID node_uuid, UUID new_node_uuid);
+  void logNs3PeerConnection(uint64_t timestamp, bool active, solanet::UUID node_uuid,
+                            solanet::UUID new_node_uuid);
 
-  void logReceivedMessages(UUID node_uuid, UUID initial_sender, UUID message,
-                           uint32_t round_) final;
+  void logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
+                           solanet::UUID message, uint32_t round_) final;
 
-  void logNatterEvent(uint16_t event_type, UUID event_id);
+  void logNatterEvent(uint16_t event_type, solanet::UUID event_id);
 
   // TODO Refactor to other class
-  void setApplicationUUID(const UUID &app_uuid) final {
-    LoggerInterface::uuid_ = uuidToString(app_uuid);
+  void setApplicationUUID(const solanet::UUID &app_uuid) final {
+    LoggerInterface::uuid_ = solanet::uuidToString(app_uuid);
     log_device_application_(uuid_);
   }
 
@@ -62,26 +63,29 @@ private:
 
   void logDebug(const std::string &msg) const final;
 
-  void logNewPeer(const std::string &ip, uint16_t port, UUID uuid,
+  void logNewPeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                   const std::string &topic) const final;
 
-  void logRemovePeer(const std::string &ip, uint16_t port, UUID uuid,
+  void logRemovePeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                      const std::string &topic) const final;
 
-  void logNewMessage(const std::string &topic, const std::string &msg, UUID msg_uuid) final;
+  void logNewMessage(const std::string &topic, const std::string &msg,
+                     solanet::UUID msg_uuid) final;
 
-  void logSendFullMsg(UUID msg_uuid, UUID uuid, UUID own_uuid) final;
+  void logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid, solanet::UUID own_uuid) final;
 
-  void logReceiveFullMsg(UUID msg_uuid, UUID sender, UUID own_uuid) final;
+  void logReceiveFullMsg(solanet::UUID msg_uuid, solanet::UUID sender,
+                         solanet::UUID own_uuid) final;
 
-  void logSendReceive(UUID msg_uuid, UUID sender, UUID own_uuid, MsgType type, Mode mode);
+  void logSendReceive(solanet::UUID msg_uuid, solanet::UUID sender, solanet::UUID own_uuid,
+                      MsgType type, Mode mode);
 
   [[maybe_unused]] void logReceive(const std::string &topic, const std::string &ip);
 
   [[maybe_unused]] void logSend(const std::string &topic, const std::string &ip);
 
-  void logMinhcastBroadcast(UUID msg_id, uint32_t level, uint32_t number, uint32_t forward_up_limit,
-                            uint32_t forward_down_limit) final;
+  void logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
+                            uint32_t forward_up_limit, uint32_t forward_down_limit) final;
 
   // TODO Refactor to other class
   LogDeviceApp log_device_application_;

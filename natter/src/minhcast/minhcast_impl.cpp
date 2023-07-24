@@ -34,7 +34,7 @@ inline static bool contains(const T &container, const typename T::key_type &key)
 
 NatterMinhcast::Impl::Impl(MsgReceiveFct recv_callback,
                            [[maybe_unused]] MsgMissingFct missing_callback,
-                           std::vector<logging::LoggerPtr> logger, UUID node_uuid)
+                           std::vector<logging::LoggerPtr> logger, solanet::UUID node_uuid)
     : uuid_(node_uuid),
       msg_recv_callback_(std::move(recv_callback)),
       network_([this](const MinhcastMessage &msg) -> void { processMessage(msg); }) {
@@ -628,13 +628,14 @@ void NatterMinhcast::Impl::unsubscribeTopic(const std::string &topic) {
   own_node_info_.erase(topic);
 }
 
-UUID NatterMinhcast::Impl::publish(const std::string &topic, const std::string &msg_content) {
+solanet::UUID NatterMinhcast::Impl::publish(const std::string &topic,
+                                            const std::string &msg_content) {
   if (!contains(own_node_info_, topic)) {
     // Not subscribed to topic. Cannot publish
     throw std::runtime_error("not subscribed to topic");
   }
 
-  Message msg(topic, uuid_, utils::generateUUID(), msg_content, 1);
+  Message msg(topic, uuid_, solanet::generateUUID(), msg_content, 1);
 
   logger_.logNewMessage(msg.topic, msg.content, msg.message_id);
 

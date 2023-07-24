@@ -16,7 +16,7 @@
 
 #include "natter_application.h"
 
-#include "../src/utils/utils.h"  // WORKAROUND: private header
+#include "solanet/uuid_generator.h"
 #include "utils/sola_utils.h"
 
 using namespace ns3;
@@ -49,7 +49,7 @@ void NatterApplication::setMode(NatterMode mode) { mode_ = mode; }
 void NatterApplication::setLevelNumber(std::pair<uint32_t, uint32_t> level_number) {
   std::swap(level_number_, level_number);
   logSelfToDB(level_number_);
-  logger_->logNatterEvent(1, natter::utils::generateUUID());
+  logger_->logNatterEvent(1, solanet::generateUUID());
 }
 
 uint16_t NatterApplication::getPort() const {

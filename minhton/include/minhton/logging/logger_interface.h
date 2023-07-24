@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "minhton/message/message_logging.h"
-#include "minhton/utils/uuid.h"
+#include "solanet/uuid.h"
 
 namespace minhton {
 
@@ -93,7 +93,7 @@ public:
   virtual void logDebug(const std::string &msg) const = 0;
 
   // Used for loggers which are initialized before node starts
-  virtual void setApplicationUUID(const minhton::UUID &app_uuid) = 0;
+  virtual void setApplicationUUID(const solanet::UUID &app_uuid) = 0;
 
   virtual void logNodeUninit(const LoggerInfoNodeState &info) = 0;
   virtual void logNodeRunning(const LoggerInfoNodeState &info) = 0;

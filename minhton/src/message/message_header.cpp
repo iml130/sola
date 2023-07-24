@@ -6,10 +6,10 @@
 
 #include "minhton/message/message_header.h"
 
+#include <cstring>
 #include <stdexcept>
 
-#include "minhton/utils/uuid.h"
-
+#include "solanet/uuid_generator.h"
 namespace minhton {
 
 // adding a key-value map to get the string for easier debugging purposes
@@ -63,10 +63,10 @@ std::string getMessageTypeString(MessageType type) {
 }
 
 MinhtonMessageHeader::MinhtonMessageHeader(NodeInfo sender, NodeInfo target, uint64_t ref_event_id)
-    : sender_(std::move(sender)),
-      target_(std::move(target)),
-      ref_event_id_(ref_event_id),
-      event_id_(generateEventId()) {}
+    : sender_(std::move(sender)), target_(std::move(target)), ref_event_id_(ref_event_id) {
+  solanet::UUID id = solanet::generateUUID();
+  std::memcpy(&event_id_, id.data(), 8);
+}
 
 void MinhtonMessageHeader::setEventId(const uint64_t event_id) {
   if (event_id == 0) {

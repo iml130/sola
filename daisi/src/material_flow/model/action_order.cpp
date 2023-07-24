@@ -16,12 +16,14 @@
 
 #include "action_order.h"
 
-#include "cpps/common/uuid_generator.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::material_flow {
 
 ActionOrder::ActionOrder(ActionOrderStep action_order_step)
-    : uuid_(UUIDGenerator::get()()), action_order_step_(std::move(action_order_step)) {}
+    : uuid_(solanet::uuidToString(solanet::generateUUID())),
+      action_order_step_(std::move(action_order_step)) {}
 
 ActionOrder::ActionOrder(std::string uuid, ActionOrderStep action_order_step)
     : uuid_(std::move(uuid)), action_order_step_(std::move(action_order_step)) {}

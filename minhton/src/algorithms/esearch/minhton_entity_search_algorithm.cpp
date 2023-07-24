@@ -8,13 +8,14 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <iostream>
 
 #include "minhton/exception/algorithm_exception.h"
 #include "minhton/logging/logging.h"
 #include "minhton/message/attribute_inquiry_request.h"
 #include "minhton/message/se_types.h"
-#include "minhton/utils/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace minhton {
 
@@ -58,7 +59,9 @@ std::future<FindResult> MinhtonEntitySearchAlgorithm::find(FindQuery query) {
   std::cout << "\tFind Query at " << access_->get_timestamp() << ": "
             << query.serializeBooleanExpression() << std::endl;
 
-  uint64_t ref_event_id = minhton::generateEventId();
+  solanet::UUID id = solanet::generateUUID();
+  uint64_t ref_event_id = 0;
+  std::memcpy(&ref_event_id, id.data(), 8);
   access_->procedure_info->saveFindQuery(ref_event_id, query);
   access_->procedure_info->saveFindQueryPreliminaryResults(ref_event_id, {});
 

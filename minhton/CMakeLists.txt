@@ -30,11 +30,6 @@ find_package(Threads REQUIRED)
 add_subdirectory(build_tools/third_party/peglib)
 add_subdirectory(build_tools/third_party/fsmlite)
 
-find_library(LIBUUID Names uuid PATHS /lib /lib64)
-if(NOT LIBUUID)
-	  message(FATAL_ERROR "libuuid not found!")
-endif()
-
 if(MINHTON_ENABLE_TESTS AND NOT TARGET Catch2::Catch2WithMain)
   message(FATAL_ERROR "Catch2 not provided from monorepository")
 endif()

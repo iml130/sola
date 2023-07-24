@@ -43,7 +43,7 @@ target_link_libraries(minhton_message
   PRIVATE
     minhton_exception_algorithm
     minhton_core_routing_calculations
-    minhton_utils_uuid
+    solanet_uuid_generator
 )
 
 add_library(minhton_message_serialize INTERFACE ${MINHTON_SOURCE_DIR}/include/minhton/message/serialize.h)

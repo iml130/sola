@@ -34,3 +34,15 @@ target_include_directories(daisi_solanet_message_ns3
 if(DAISI_DISABLE_NETWORK_SIMULATION)
     target_compile_definitions(NetworkUDPSim PRIVATE DAISI_SOLANET_NS3_DISABLE_NETWORKING)
 endif()
+
+add_library(solanet_uuid_generator_sim STATIC)
+target_sources(solanet_uuid_generator_sim
+  PRIVATE
+  ${SolaNet_SOURCE_DIR}/include/solanet/uuid_generator.h
+  uuid_generator_sim.cpp
+)
+target_link_libraries(solanet_uuid_generator_sim PRIVATE daisi_random_engine ${LIBUUID})
+target_include_directories(solanet_uuid_generator_sim
+        PRIVATE
+            ${SolaNet_SOURCE_DIR}/include
+)

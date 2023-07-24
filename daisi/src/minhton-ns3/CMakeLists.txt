@@ -28,6 +28,7 @@ target_link_libraries(daisi_minhton_logger_ns3
             minhton_core_node_info_sim
             minhton_message_sim
             minhton_logging
+            solanet_uuid
         PRIVATE
             ns3::libcore
         )
@@ -45,7 +46,6 @@ target_link_libraries(daisi_minhton_node_ns3
             ns3::libcore
             daisi_solanet_message_ns3
         PRIVATE
-            minhton_utils_uuid_sim
             minhton_logging
         )
 

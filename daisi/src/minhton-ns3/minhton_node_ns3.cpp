@@ -21,7 +21,6 @@
 #include "minhton/logging/logging.h"
 #include "minhton/message/empty.h"
 #include "minhton/message/se_types.h"
-#include "minhton/utils/uuid.h"
 
 using namespace ns3;
 namespace daisi::minhton_ns3 {

@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "uuid.h"
+#include "solanet/uuid.h"
 
 namespace natter::logging {
 
@@ -58,7 +58,7 @@ public:
    * @param uuid uuid of new peer
    * @param topic topic the peer was added to
    */
-  virtual void logNewPeer(const std::string &ip, uint16_t port, UUID uuid,
+  virtual void logNewPeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                           const std::string &topic) const = 0;
 
   /**
@@ -68,7 +68,7 @@ public:
    * @param uuid uuid of removed peer
    * @param topic topic the peer was removed from
    */
-  virtual void logRemovePeer(const std::string &ip, uint16_t port, UUID uuid,
+  virtual void logRemovePeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                              const std::string &topic) const = 0;
 
   /**
@@ -76,7 +76,8 @@ public:
    * @param msg message content
    * @param msg_uuid message uuid
    */
-  virtual void logNewMessage(const std::string &topic, const std::string &msg, UUID msg_uuid) = 0;
+  virtual void logNewMessage(const std::string &topic, const std::string &msg,
+                             solanet::UUID msg_uuid) = 0;
 
   /**
    * Log sending full message
@@ -84,7 +85,8 @@ public:
    * @param uuid target node uuid
    * @param own_uuid own node uuid
    */
-  virtual void logSendFullMsg(UUID msg_uuid, UUID uuid, UUID own_uuid) = 0;
+  virtual void logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid,
+                              solanet::UUID own_uuid) = 0;
 
   /**
    * Log receiving full message
@@ -92,23 +94,24 @@ public:
    * @param sender sender node uuid
    * @param own_uuid own node uuid
    */
-  virtual void logReceiveFullMsg(UUID msg_uuid, UUID sender, UUID own_uuid) = 0;
+  virtual void logReceiveFullMsg(solanet::UUID msg_uuid, solanet::UUID sender,
+                                 solanet::UUID own_uuid) = 0;
 
-  virtual void logMinhcastBroadcast(UUID msg_id, uint32_t level, uint32_t number,
+  virtual void logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
                                     uint32_t forward_up_limit, uint32_t forward_down_limit) = 0;
 
-  virtual void logNewNetworkPeer(UUID uuid, const std::string &ip, uint16_t port, int level,
-                                 int number) = 0;
+  virtual void logNewNetworkPeer(solanet::UUID uuid, const std::string &ip, uint16_t port,
+                                 int level, int number) = 0;
 
-  virtual void logReceivedMessages(UUID node_uuid, UUID initial_sender, UUID message,
-                                   uint32_t round) = 0;
+  virtual void logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
+                                   solanet::UUID message, uint32_t round) = 0;
 
   /**
    * Set the UUID used for identifying application nodes.
    * Used for loggers which are initialized before node starts.
    * @param app_uuid application uuid
    */
-  virtual void setApplicationUUID(const UUID &app_uuid) = 0;
+  virtual void setApplicationUUID(const solanet::UUID &app_uuid) = 0;
 
 protected:
   std::string uuid_;

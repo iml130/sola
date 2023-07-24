@@ -13,13 +13,14 @@
 #include "natter/minhcast_level_number.h"
 #include "natter/natter.h"
 #include "natter/network_info_ipv4.h"
+#include "solanet/uuid.h"
 
 namespace natter::minhcast {
 
 struct MinhcastNodeInfo {
   LevelNumber position;
   NetworkInfoIPv4 network_info = {};
-  UUID uuid = {};
+  solanet::UUID uuid = {};
 
   bool operator<(const MinhcastNodeInfo &other) const {
     // Only comparing position. All information for Minhcast is based on node position
@@ -45,7 +46,7 @@ public:
    * @param node_uuid uuid for created instance
    */
   NatterMinhcast(MsgReceiveFct recv_callback, MsgMissingFct missing_callback,
-                 const std::vector<logging::LoggerPtr> &logger, UUID node_uuid);
+                 const std::vector<logging::LoggerPtr> &logger, solanet::UUID node_uuid);
 
   /**
    * Create natter instance with random uuid

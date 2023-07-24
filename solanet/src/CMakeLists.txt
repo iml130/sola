@@ -1,4 +1,5 @@
 add_subdirectory(network_udp)
+add_subdirectory(uuid)
 
 add_library(solanet_serializer INTERFACE)
 target_sources(solanet_serializer

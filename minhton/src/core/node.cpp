@@ -17,7 +17,8 @@
 #include "minhton/exception/invalid_message_exception.h"
 #include "minhton/utils/serializer_cereal.h"
 #include "minhton/utils/timestamp_helper.h"
-#include "minhton/utils/uuid.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace minhton {
 
@@ -55,7 +56,7 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
   Logger log;
 
   // TODO Temporary UUID generator. Should go to Node/L/P/NodeInfo
-  minhton::UUID uuid = minhton::generateUUID();
+  solanet::UUID uuid = solanet::generateUUID();
   for (const Logger::LoggerPtr &logger : config.getLogger()) {
     logger->setApplicationUUID(uuid);
     log.addLogger(logger);

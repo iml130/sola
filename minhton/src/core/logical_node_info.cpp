@@ -40,7 +40,7 @@ void LogicalNodeInfo::setPosition(uint32_t level, uint32_t number) {
   if (isPositionValid(level, number, this->fanout_)) {
     this->number_ = number;
     this->level_ = level;
-    this->uuid_ = generateUUID();  // TODO Make object const
+    this->uuid_ = solanet::generateUUID();  // TODO Make object const
   } else {
     throw std::invalid_argument("Invalid Parameter Level or Number");
   }
@@ -60,7 +60,7 @@ void LogicalNodeInfo::setPosition(LogicalNodeInfo other) {
 
 std::string LogicalNodeInfo::getString() const {
   return std::to_string(this->level_) + ":" + std::to_string(this->number_) +
-         " | m=" + std::to_string(this->fanout_) + " | " + minhton::uuidToString(this->uuid_);
+         " | m=" + std::to_string(this->fanout_) + " | " + solanet::uuidToString(this->uuid_);
 }
 
 uint32_t LogicalNodeInfo::getLevel() const { return this->level_; }
@@ -126,9 +126,9 @@ bool LogicalNodeInfo::isPrioNode() const {
   return this->isInitialized() && isNodePartOfPrioSet(this->level_, this->number_, this->fanout_);
 }
 
-std::string LogicalNodeInfo::getUuid() const { return minhton::uuidToString(this->uuid_); }
+std::string LogicalNodeInfo::getUuid() const { return solanet::uuidToString(this->uuid_); }
 
-minhton::UUID LogicalNodeInfo::getRawUuid() const { return this->uuid_; }
+solanet::UUID LogicalNodeInfo::getRawUuid() const { return this->uuid_; }
 
 double LogicalNodeInfo::getHorizontalValue() const {
   double value = treeMapper(this->level_, this->number_, this->fanout_, k_TREEMAPPER_ROOT_VALUE);

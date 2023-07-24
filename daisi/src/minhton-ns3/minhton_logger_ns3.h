@@ -24,6 +24,7 @@
 #include "minhton/core/node_info.h"
 #include "minhton/logging/logger_interface.h"
 #include "minhton/message/message.h"
+#include "solanet/uuid.h"
 
 namespace minhton {
 
@@ -51,8 +52,8 @@ public:
   void logFindQueryResult(const LoggerInfoAddFindQueryResult &info) final;
 
   // TODO Refactor to other class
-  void setApplicationUUID(const minhton::UUID &app_uuid) final {
-    LoggerInterface::uuid_ = minhton::uuidToString(app_uuid);
+  void setApplicationUUID(const solanet::UUID &app_uuid) final {
+    LoggerInterface::uuid_ = solanet::uuidToString(app_uuid);
     log_device_application_(uuid_);
   }
 

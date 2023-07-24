@@ -15,6 +15,9 @@ target_link_libraries(daisi_cpps_logical_amr_amr_logical_agent
     daisi_cpps_logical_order_management_order_management
     daisi_cpps_logical_order_management_stn_order_management
     daisi_utils
+    PRIVATE
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 target_include_directories(daisi_cpps_amr_amr_description INTERFACE
