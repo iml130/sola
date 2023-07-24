@@ -23,7 +23,6 @@
 #include "service.h"
 #include "solanet/network_udp/network_udp.h"
 #include "storage/storage.h"
-#include "uuid.h"
 
 namespace sola {
 
@@ -78,8 +77,6 @@ public:
 
     storage_->insert(entry);
   }
-  void updateService(UUID uuid, Service service);
-  void removeService(UUID uuid){};
 
   std::future<minhton::FindResult> findService(Request r) { return storage_->find(r); }
 
