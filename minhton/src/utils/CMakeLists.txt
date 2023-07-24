@@ -48,23 +48,12 @@ target_include_directories(minhton_utils_config_reader
 )
 target_link_libraries(minhton_utils_config_reader
   PUBLIC
+    minhton_logging
     minhton_core_constants
     minhton_utils_timeout_lengths_container
     minhton_utils_algorithm_types_container
   PRIVATE
     yaml-cpp
-)
-
-# UUID generator
-add_library(minhton_utils_uuid STATIC
-  ${MINHTON_SOURCE_DIR}/include/minhton/utils/uuid.h
-  uuid_tools.cpp
-  uuid_generator.cpp
-)
-target_link_libraries(minhton_utils_uuid ${LIBUUID}) 
-target_include_directories(minhton_utils_uuid
-        PUBLIC
-          ${MINHTON_SOURCE_DIR}/include
 )
 
 # Cereal serializer

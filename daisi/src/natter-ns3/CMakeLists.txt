@@ -13,29 +13,11 @@ target_include_directories(natter_minhcast_sim
 target_link_libraries(natter_minhcast_sim
         PRIVATE
             natter_network_facade_sim
-            natter_utils_sim
+            natter_utils
             natter_logging
         PUBLIC
             natter_interface
-)
-
-# Utils
-add_library(natter_utils_sim STATIC)
-target_sources(natter_utils_sim
-  PRIVATE
-  $<TARGET_OBJECTS:natter_utils_obj>
-  ${natter_SOURCE_DIR}/include/natter/uuid.h
-  uuid_generator_sim.cpp
-)
-target_link_libraries(natter_utils_sim
-        PUBLIC
-            natter_utils_obj
-        PRIVATE
-            daisi_random_engine
-)
-target_include_directories(natter_utils_sim
-        PRIVATE
-            ${natter_SOURCE_DIR}/src/utils
+            solanet_uuid_generator_sim
 )
 
 # Network facade
@@ -67,6 +49,7 @@ target_link_libraries(daisi_natter_application
         PRIVATE
         daisi_utils
         natter_logging # Private natter target
+        solanet_uuid_generator_sim
 )
 
 add_library(daisi_natter_logger_ns3 STATIC)
@@ -94,6 +77,7 @@ target_link_libraries(daisi_natter_node_ns3
             natter_minhcast_sim
             ns3::libcore
             daisi_natter_logger_ns3
+            solanet_uuid
 )
 
 

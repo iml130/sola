@@ -42,11 +42,6 @@ if(NOT LIBEVENT_PTHREADS)
   message(FATAL_ERROR "libevent_pthreads not found!")
 endif()
 
-find_library(LIBUUID Names uuid PATHS /lib /lib64)
-if(NOT LIBUUID)
-  message(FATAL_ERROR "libuuid not found!")
-endif()
-
 if(NOT TARGET NetworkUDP)
   message(FATAL_ERROR "SolaNet NetworkUDP not provided from mono repository")
 endif()

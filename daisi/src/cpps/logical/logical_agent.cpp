@@ -18,8 +18,9 @@
 
 #include <functional>
 
-#include "cpps/common/uuid_generator.h"
 #include "minhton/utils/config_reader.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -43,7 +44,7 @@ void LogicalAgent::initCommunication() {
   // Nothing to configure (yet)
   sola::EventDisseminationMinhcast::Config config_ed;
 
-  uuid_ = UUIDGenerator::get()();
+  uuid_ = solanet::uuidToString(solanet::generateUUID());
   logger_->setApplicationUUID(uuid_);
 
   auto message_recv_fct = [this](const sola::Message &msg) { this->messageReceiveFunction(msg); };

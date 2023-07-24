@@ -28,7 +28,7 @@ target_link_libraries(minhton_core_node_sim
         minhton_core_access_container_sim
         minhton_exception_fsm_sim
         minhton_exception_invalid_message_sim
-        minhton_utils_uuid_sim
+        solanet_uuid_generator_sim
         minhton_utils_serializer_cereal_sim
         minhton_timestamp_helper_sim
 )
@@ -100,7 +100,8 @@ target_include_directories(minhton_core_logical_node_info_sim
 target_link_libraries(minhton_core_logical_node_info_sim
   PUBLIC
     minhton_message_serialize
-    minhton_utils_uuid_sim
+    solanet_uuid
+    solanet_uuid_generator_sim
   PRIVATE
     minhton_core_constants
     minhton_core_routing_calculations

@@ -15,14 +15,15 @@
 #include "forwarding_limit.h"
 #include "natter/minhcast_level_number.h"
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
 
 namespace natter::minhcast {
 class MinhcastMessage {
 public:
   MinhcastMessage() = default;
-  MinhcastMessage(std::string topic, UUID message_id,
-                  std::tuple<UUID, minhcast::LevelNumber> initial_node,
-                  std::tuple<UUID, minhcast::LevelNumber> last_node, std::string content,
+  MinhcastMessage(std::string topic, solanet::UUID message_id,
+                  std::tuple<solanet::UUID, minhcast::LevelNumber> initial_node,
+                  std::tuple<solanet::UUID, minhcast::LevelNumber> last_node, std::string content,
                   uint32_t round, ForwardingLimit forwarding_limit, bool inner = false)
       : topic_(std::move(topic)),
         message_id_(std::move(message_id)),
@@ -34,9 +35,9 @@ public:
         inner_(inner) {}
 
   std::string getTopic() const { return topic_; }
-  UUID getMessageID() const { return message_id_; }
-  UUID getInitialNodeUUID() const { return std::get<0>(initial_node_); }
-  UUID getLastNodeUUID() const { return std::get<0>(last_node_); }
+  solanet::UUID getMessageID() const { return message_id_; }
+  solanet::UUID getInitialNodeUUID() const { return std::get<0>(initial_node_); }
+  solanet::UUID getLastNodeUUID() const { return std::get<0>(last_node_); }
   minhcast::LevelNumber getInitialNodePos() const { return std::get<1>(initial_node_); }
   minhcast::LevelNumber getLastNodePos() const { return std::get<1>(last_node_); }
   std::string getContent() const { return content_; }
@@ -49,9 +50,9 @@ public:
 
 private:
   std::string topic_;
-  UUID message_id_;
-  std::tuple<UUID, minhcast::LevelNumber> initial_node_;
-  std::tuple<UUID, minhcast::LevelNumber> last_node_;
+  solanet::UUID message_id_;
+  std::tuple<solanet::UUID, minhcast::LevelNumber> initial_node_;
+  std::tuple<solanet::UUID, minhcast::LevelNumber> last_node_;
   std::string content_;
   uint32_t round_ = 0;
   ForwardingLimit forwarding_limit_;

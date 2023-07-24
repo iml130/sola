@@ -18,12 +18,12 @@
 #define DAISI_NATTER_NS3_NODE_NS3_H_
 
 #include "natter/natter_minhcast.h"
-#include "natter/uuid.h"
 #include "natter_logger_ns3.h"
 #include "natter_mode.h"
 #include "ns3/object.h"
 #include "ns3/packet.h"
 #include "ns3/simulator.h"
+#include "solanet/uuid.h"
 
 namespace daisi::natter_ns3 {
 
@@ -37,11 +37,11 @@ public:
   ns3::TypeId GetInstanceTypeId() const override;
 
   // Natter functions wrapper
-  void addPeer(const std::string &topic, natter::UUID uuid, const std::string &ip, uint16_t port,
+  void addPeer(const std::string &topic, solanet::UUID uuid, const std::string &ip, uint16_t port,
                uint32_t level, uint32_t number, uint32_t fanout);
   void removePeer(const std::string &topic, const std::string &uuid);
 
-  natter::UUID getUUID() const;
+  solanet::UUID getUUID() const;
 
   void publish(const std::string &topic, const std::string &msg);
   void subscribeTopic(const std::string &topic, uint32_t own_level, uint32_t own_number,

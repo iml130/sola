@@ -45,6 +45,6 @@ target_link_libraries(minhton_algorithms_sim
   PRIVATE
     minhton_core_routing_calculations
     minhton_logging
-    minhton_utils_uuid_sim
+    solanet_uuid_generator_sim
     minhton_exception_algorithm
 )

@@ -16,8 +16,9 @@
 
 #include "material_flow_logical_agent.h"
 
-#include "cpps/common/uuid_generator.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -76,7 +77,7 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   if (execution_counter_++ == 0) {
     logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
   } else {
-    uuid_ = UUIDGenerator::get()();
+    uuid_ = solanet::uuidToString(solanet::generateUUID());
     logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 1);
   }
   tmp->logMaterialFlowContent(uuid_);

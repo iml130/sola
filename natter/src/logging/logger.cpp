@@ -34,34 +34,36 @@ void Logger::logDebug(const std::string &msg) const {
   if (log_level_ <= LogLevel::kDebug) log([&](const LoggerPtr &logger) { logger->logDebug(msg); });
 }
 
-void Logger::logNewPeer(const std::string &ip, uint16_t port, UUID uuid,
+void Logger::logNewPeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                         const std::string &topic) const {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logNewPeer(ip, port, uuid, topic); });
 }
 
-void Logger::logRemovePeer(const std::string &ip, uint16_t port, UUID uuid,
+void Logger::logRemovePeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                            const std::string &topic) const {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logRemovePeer(ip, port, uuid, topic); });
 }
 
-void Logger::logNewMessage(const std::string &topic, const std::string &msg, UUID msg_uuid) {
+void Logger::logNewMessage(const std::string &topic, const std::string &msg,
+                           solanet::UUID msg_uuid) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logNewMessage(topic, msg, msg_uuid); });
 }
 
-void Logger::logSendFullMsg(UUID msg_uuid, UUID uuid, UUID own_uuid) {
+void Logger::logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid, solanet::UUID own_uuid) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logSendFullMsg(msg_uuid, uuid, own_uuid); });
 }
 
-void Logger::logReceiveFullMsg(UUID msg_uuid, UUID sender, UUID own_uuid) {
+void Logger::logReceiveFullMsg(solanet::UUID msg_uuid, solanet::UUID sender,
+                               solanet::UUID own_uuid) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logReceiveFullMsg(msg_uuid, sender, own_uuid); });
 }
 
-void Logger::logMinhcastBroadcast(UUID msg_id, uint32_t level, uint32_t number,
+void Logger::logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
                                   uint32_t forward_up_limit, uint32_t forward_down_limit) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) {
@@ -69,14 +71,14 @@ void Logger::logMinhcastBroadcast(UUID msg_id, uint32_t level, uint32_t number,
     });
 }
 
-void Logger::logNewNetworkPeer(UUID uuid, const std::string &ip, uint16_t port, int level,
+void Logger::logNewNetworkPeer(solanet::UUID uuid, const std::string &ip, uint16_t port, int level,
                                int number) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) { logger->logNewNetworkPeer(uuid, ip, port, level, number); });
 }
 
-void Logger::logReceivedMessages(UUID node_uuid, UUID initial_sender, UUID message,
-                                 uint32_t round) {
+void Logger::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
+                                 solanet::UUID message, uint32_t round) {
   if (log_strings_)
     log([&](const LoggerPtr &logger) {
       logger->logReceivedMessages(node_uuid, initial_sender, message, round);

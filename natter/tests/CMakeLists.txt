@@ -1,9 +1,8 @@
 include(natter_tests)
 
 add_natter_test(TEST tree_helper_test SOURCE tree_helper_test.cpp LINKING natter_utils)
-add_natter_test(TEST utils_test SOURCE utils_test.cpp LINKING natter_utils)
 add_natter_test(TEST network_info_test SOURCE network_info_test.cpp LINKING natter_network_info)
-add_natter_test(TEST minhcast_broadcast_info_test SOURCE broadcast_info_test.cpp LINKING natter_minhcast)
+add_natter_test(TEST minhcast_broadcast_info_test SOURCE broadcast_info_test.cpp LINKING natter_minhcast solanet_uuid_generator)
 
 
 if (NATTER_BUILD_SINGLE_TEST_BINARY)

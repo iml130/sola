@@ -34,7 +34,7 @@ public:
 private:
   struct NodeInfo {
     const uint64_t fanout;
-    const natter::UUID own_uuid;
+    const solanet::UUID own_uuid;
     const std::string ip;
     const uint16_t port;
     const uint32_t own_level;

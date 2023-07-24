@@ -16,7 +16,7 @@ EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct ms
                                                        std::string ip, const Config &config)
     : minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
           [=](const natter::Message &m) {
-            msgRecvFct({m.topic, natter::uuidToString(m.sender_id), m.content, m.message_id});
+            msgRecvFct({m.topic, solanet::uuidToString(m.sender_id), m.content, m.message_id});
           },
           [](const std::string & /*unused*/) {}, config.logger)),
       ip_(std::move(ip)),

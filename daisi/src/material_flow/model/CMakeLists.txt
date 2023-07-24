@@ -35,7 +35,8 @@ target_link_libraries(daisi_material_flow_model_action_order
 
     PRIVATE
     solanet_serialize
-    daisi_cpps_common_uuid_generator
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_material_flow_model_move_order_step STATIC)
@@ -61,10 +62,10 @@ target_sources(daisi_material_flow_model_move_order
 target_link_libraries(daisi_material_flow_model_move_order
     PUBLIC
     daisi_material_flow_model_move_order_step
-
     PRIVATE
     solanet_serialize
-    daisi_cpps_common_uuid_generator
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_material_flow_model_transport_order_step STATIC "")
@@ -90,10 +91,10 @@ target_sources(daisi_material_flow_model_transport_order
 target_link_libraries(daisi_material_flow_model_transport_order
     PUBLIC
     daisi_material_flow_model_transport_order_step
-
     PRIVATE
     solanet_serialize
-    daisi_cpps_common_uuid_generator
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_material_flow_model_task STATIC "")
@@ -111,7 +112,8 @@ target_link_libraries(daisi_material_flow_model_task
     solanet_serialize
 
     PRIVATE
-    daisi_cpps_common_uuid_generator
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_material_flow_model_material_flow STATIC "")

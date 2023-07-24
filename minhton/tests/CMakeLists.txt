@@ -1,6 +1,6 @@
 include(minhton_tests)
 
-add_minhton_test(TEST message_header_test SOURCE message_header_test.cpp LINKING minhton_message minhton_utils_uuid)
+add_minhton_test(TEST message_header_test SOURCE message_header_test.cpp LINKING minhton_message)
 # addTest(TEST logging_test SOURCE logging_test.cpp LINKING minhton_logging dl pthread minhton_exception)
 add_minhton_test(TEST message_test SOURCE message_test.cpp LINKING minhton_message)
 add_minhton_test(TEST physical_node_info_test SOURCE physical_node_info_test.cpp LINKING minhton_core_physical_node_info)
@@ -23,7 +23,6 @@ add_minhton_test(TEST algorithm_join_accept_test SOURCE algorithm_join_accept_te
 add_minhton_test(TEST algorithm_leave_helper_test SOURCE algorithm_leave_helper_test.cpp LINKING minhton_algorithms minhton_message)
 add_minhton_test(TEST algorithm_bootstrap_test SOURCE algorithm_bootstrap_test.cpp LINKING minhton_algorithms)
 add_minhton_test(TEST algorithm_response_test SOURCE algorithm_response_test.cpp LINKING minhton_algorithms)
-#addTest(TEST utils_event_id_test SOURCE utils_generate_event_id.cpp LINKING Message Utils Core)
 
 if (MINHTON_BUILD_SINGLE_TEST_BINARY)
     set(test_sources "")

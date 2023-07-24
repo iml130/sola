@@ -9,6 +9,7 @@
 
 #include "natter/minhcast_level_number.h"
 #include "natter/natter_minhcast.h"
+#include "solanet/uuid.h"
 
 #define TOPIC "mytopic"
 
@@ -55,7 +56,8 @@ public:
   Application()
       : natter_(
             [&](const natter::Message &msg) {
-              std::cout << "[" << uuidToString(msg.sender_id) << "]: " << msg.content << std::endl;
+              std::cout << "[" << solanet::uuidToString(msg.sender_id) << "]: " << msg.content
+                        << std::endl;
             },
             [&](const std::string &msg_id) {}) {}
 

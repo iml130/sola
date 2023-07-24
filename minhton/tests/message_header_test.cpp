@@ -8,7 +8,6 @@
 
 #include "message/message.h"
 #include "message/types_all.h"
-#include "utils/uuid.h"
 
 using namespace minhton;
 

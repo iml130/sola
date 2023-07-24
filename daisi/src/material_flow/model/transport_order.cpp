@@ -16,13 +16,14 @@
 
 #include "transport_order.h"
 
-#include "cpps/common/uuid_generator.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::material_flow {
 
 TransportOrder::TransportOrder(std::vector<TransportOrderStep> pickup_transport_order_steps,
                                TransportOrderStep delivery_transport_order_step)
-    : uuid_(UUIDGenerator::get()()),
+    : uuid_(solanet::uuidToString(solanet::generateUUID())),
       pickup_transport_order_steps_(std::move(pickup_transport_order_steps)),
       delivery_transport_order_step_(std::move(delivery_transport_order_step)) {}
 

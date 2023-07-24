@@ -12,17 +12,17 @@
 
 #include "forwarding_limit.h"
 #include "natter/minhcast_level_number.h"
-#include "natter/uuid.h"
+#include "solanet/uuid.h"
 #include "utils/tree_helper.h"
 
 namespace natter::minhcast {
 struct BroadcastInfo {
-  const std::tuple<UUID, LevelNumber> own_node;
-  const std::tuple<UUID, LevelNumber> last_node;
-  const std::tuple<UUID, LevelNumber> initial_node;
+  const std::tuple<solanet::UUID, LevelNumber> own_node;
+  const std::tuple<solanet::UUID, LevelNumber> last_node;
+  const std::tuple<solanet::UUID, LevelNumber> initial_node;
   const ForwardingLimit forwarding_limit;
   const std::string topic;
-  const UUID msg_id;
+  const solanet::UUID msg_id;
   const std::string content;
   const uint32_t current_round;
 

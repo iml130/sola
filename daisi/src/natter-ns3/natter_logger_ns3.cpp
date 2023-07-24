@@ -30,8 +30,8 @@ namespace natter::logging {
 //! Don't forget to use .c_str() to convert std::string into a char array
 
 // * Event
-void NatterLoggerNs3::logNatterEvent(uint16_t event_type, UUID event_id) {
-  auto event = uuidToString(event_id);
+void NatterLoggerNs3::logNatterEvent(uint16_t event_type, solanet::UUID event_id) {
+  auto event = solanet::uuidToString(event_id);
   log_event_(event, event_type, uuid_);
 }
 
@@ -57,18 +57,18 @@ static const std::string kCreateViewNatterConnection =
                            {"LEFT JOIN NatterNode AS N1 ON NatterConnection.NodeId = N1.Id",
                             "LEFT JOIN NatterNode AS N2 ON NatterConnection.NewNodeId = N2.Id"});
 
-void NatterLoggerNs3::logNs3PeerConnection(uint64_t timestamp, bool active, UUID node_uuid,
-                                           UUID new_node_uuid) {
+void NatterLoggerNs3::logNs3PeerConnection(uint64_t timestamp, bool active, solanet::UUID node_uuid,
+                                           solanet::UUID new_node_uuid) {
   if (!natter_connection_exists_) {
     log_(kCreateNatterConnection);
     log_(kCreateViewNatterConnection);
     natter_connection_exists_ = true;
   }
 
-  std::string node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(node_uuid) + "')";
-  std::string new_node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(new_node_uuid) + "')";
+  std::string node_id = "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" +
+                        solanet::uuidToString(node_uuid) + "')";
+  std::string new_node_id = "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" +
+                            solanet::uuidToString(new_node_uuid) + "')";
   auto t = std::make_tuple(
       /* Timestamp_ms */ timestamp,
       /* Active */ active ? 1 : 0,
@@ -86,13 +86,13 @@ static bool message_exists_ = false;
 
 // TODO: Enable Content after passing unserialized string?
 void NatterLoggerNs3::logNewMessage(const std::string &topic, const std::string &msg,
-                                    UUID msg_uuid) {
+                                    solanet::UUID msg_uuid) {
   if (!message_exists_) {
     log_(kCreateMessage);
     message_exists_ = true;
   }
 
-  auto uuid_string = uuidToString(msg_uuid);
+  auto uuid_string = solanet::uuidToString(msg_uuid);
   auto t = std::make_tuple(
       /* Uuid */ uuid_string.c_str(),
       // /* Content */ msg.c_str(),
@@ -113,24 +113,24 @@ TableDefinition kNatterNode("NatterNode",
 static const std::string kCreateNatterNode = getCreateTableStatement(kNatterNode);
 static bool natter_node_exists_ = false;
 
-void NatterLoggerNs3::logNewPeer(const std::string &ip, uint16_t port, UUID uuid,
+void NatterLoggerNs3::logNewPeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                                  const std::string &topic) const {
   // TODO: LOG
 }
 
-void NatterLoggerNs3::logRemovePeer(const std::string &ip, uint16_t port, UUID uuid,
+void NatterLoggerNs3::logRemovePeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
                                     const std::string &topic) const {
   // TODO: LOG
 }
 
-void NatterLoggerNs3::logNewNetworkPeer(UUID uuid, const std::string &ip, uint16_t port, int level,
-                                        int number) {
+void NatterLoggerNs3::logNewNetworkPeer(solanet::UUID uuid, const std::string &ip, uint16_t port,
+                                        int level, int number) {
   if (!natter_node_exists_) {
     log_(kCreateNatterNode);
     natter_node_exists_ = true;
   }
 
-  auto uuid_string = uuidToString(uuid);
+  auto uuid_string = solanet::uuidToString(uuid);
   auto t = std::make_tuple(/* ApplicationUuid */ uuid_string.c_str(),
                            /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
                            /* Level */ level,
@@ -168,8 +168,8 @@ static const std::string kCreateViewNatterTraffic = getCreateViewStatement(
      "LEFT JOIN NatterNode AS TN ON NatterControlMessage.TargetNodeId = TN.Id",
      "LEFT JOIN NatterMessage AS M ON NatterControlMessage.MessageId = M.Id"});
 
-void NatterLoggerNs3::logSendReceive(UUID msg_uuid, UUID sender, UUID own_uuid, MsgType type,
-                                     Mode mode) {
+void NatterLoggerNs3::logSendReceive(solanet::UUID msg_uuid, solanet::UUID sender,
+                                     solanet::UUID own_uuid, MsgType type, Mode mode) {
   if (!natter_ctrl_msg_exists_) {
     log_(kCreateTrafficForward);
     log_(kCreateViewNatterTraffic);
@@ -183,13 +183,13 @@ void NatterLoggerNs3::logSendReceive(UUID msg_uuid, UUID sender, UUID own_uuid, 
 
   // TODO: own_uuid is minhton posUUID sometimes when used from cpps
   std::string sender_node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(sender) + "')";
+      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + solanet::uuidToString(sender) + "')";
   std::string target_node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(own_uuid) + "')";
-  std::string message_str = uuidToString(msg_uuid);
+      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + solanet::uuidToString(own_uuid) + "')";
+  std::string message_str = solanet::uuidToString(msg_uuid);
 
   auto table = kNatterCtrlMsg;
-  if (message_str == uuidToString(UUID{})) {
+  if (message_str == solanet::uuidToString(solanet::UUID{})) {
     table.columns[6] = {"MessageId", "NULL"};
     auto t = std::make_tuple(/* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
                              /* Type */ type,
@@ -224,12 +224,12 @@ void NatterLoggerNs3::logSendReceive(UUID msg_uuid, UUID sender, UUID own_uuid, 
 //     "forward_up_limit	INTEGER NOT NULL,"
 //     "forward_down_limit	INTEGER NOT NULL);";
 
-void NatterLoggerNs3::logMinhcastBroadcast(UUID msg_id, uint32_t level, uint32_t number,
+void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
                                            uint32_t forward_up_limit, uint32_t forward_down_limit) {
   // log_(toSQL("INSERT INTO minhcast_broadcast VALUES (NULL, %lu, (SELECT id FROM "
   //            "message_ids WHERE message_id='%s'), %u, %u, %u, %u);",
-  //            ns3::Simulator::Now().GetMicroSeconds(), uuidToString(msg_id).c_str(), level,
-  //            number, forward_up_limit, forward_down_limit));
+  //            ns3::Simulator::Now().GetMicroSeconds(), solanet::uuidToString(msg_id).c_str(),
+  //            level, number, forward_up_limit, forward_down_limit));
 }
 
 // * TopicMessage
@@ -257,22 +257,22 @@ static const std::string kCreateViewTopicMessage = getCreateViewStatement(
      "LEFT JOIN NatterNode AS N2 ON TopicMessage.InitialSenderNodeId = N2.Id",
      "LEFT JOIN NatterMessage AS M ON TopicMessage.MessageId = M.Id"});
 
-void NatterLoggerNs3::logReceivedMessages(UUID node_uuid, UUID initial_sender, UUID message,
-                                          uint32_t round) {
+void NatterLoggerNs3::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
+                                          solanet::UUID message, uint32_t round) {
   if (!topic_message_exists_) {
     log_(kCreateTopicMessage);
     log_(kCreateViewTopicMessage);
     topic_message_exists_ = true;
   }
 
-  // TODO: Messages should always identified by peer_uuid. Position can change, UUID not.
+  // TODO: Messages should always identified by peer_uuid. Position can change, solanet::UUID not.
   // TODO: Node was a material flow or agv
-  std::string node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(node_uuid) + "')";
-  std::string initial_sender_node_id =
-      "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + uuidToString(initial_sender) + "')";
+  std::string node_id = "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" +
+                        solanet::uuidToString(node_uuid) + "')";
+  std::string initial_sender_node_id = "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" +
+                                       solanet::uuidToString(initial_sender) + "')";
   std::string message_id =
-      "(SELECT Id FROM NatterMessage WHERE Uuid='" + uuidToString(message) + "')";
+      "(SELECT Id FROM NatterMessage WHERE Uuid='" + solanet::uuidToString(message) + "')";
   auto t = std::make_tuple(
       /* Timestamp_us */ ns3::Simulator::Now().GetMicroSeconds(),
       /* NodeId */ node_id.c_str(),
@@ -342,11 +342,13 @@ void NatterLoggerNs3::logWarning(const std::string &msg) const {}
 void NatterLoggerNs3::logInfo(const std::string &msg) const {}
 void NatterLoggerNs3::logDebug(const std::string &msg) const {}
 
-void NatterLoggerNs3::logSendFullMsg(UUID msg_uuid, UUID uuid, UUID own_uuid) {
+void NatterLoggerNs3::logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid,
+                                     solanet::UUID own_uuid) {
   logSendReceive(msg_uuid, own_uuid, uuid, MsgType::kFullMsg, Mode::kSend);
 }
 
-void NatterLoggerNs3::logReceiveFullMsg(UUID msg_uuid, UUID sender, UUID own_uuid) {
+void NatterLoggerNs3::logReceiveFullMsg(solanet::UUID msg_uuid, solanet::UUID sender,
+                                        solanet::UUID own_uuid) {
   logSendReceive(msg_uuid, sender, own_uuid, MsgType::kFullMsg, Mode::kReceive);
 }
 

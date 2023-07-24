@@ -7,10 +7,10 @@
 #include "minhton/algorithms/leave/minhton_leave_algorithm.h"
 
 #include <cassert>
+#include <cstring>
 
 #include "minhton/exception/algorithm_exception.h"
 #include "minhton/logging/logging.h"
-#include "minhton/utils/uuid.h"
 
 namespace minhton {
 
@@ -39,7 +39,9 @@ bool MinhtonLeaveAlgorithm::canLeaveWithoutReplacement() {
 
 void MinhtonLeaveAlgorithm::initiateSelfDeparture() {
   if (canLeaveWithoutReplacement()) {
-    uint64_t event_id = minhton::generateEventId();
+    solanet::UUID id = solanet::generateUUID();
+    uint64_t event_id = 0;
+    std::memcpy(&event_id, id.data(), 8);
     this->access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
     LOG_EVENT(minhton::EventType::kLeaveEvent, event_id);
     this->performLeaveWithoutReplacement();

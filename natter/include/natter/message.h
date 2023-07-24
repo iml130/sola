@@ -9,7 +9,7 @@
 
 #include <string>
 
-#include "uuid.h"
+#include "solanet/uuid.h"
 
 namespace natter {
 
@@ -17,7 +17,8 @@ namespace natter {
  * Class encapsulating a single message
  */
 struct Message {
-  Message(std::string topic, UUID sender_id, UUID message_id, std::string content, uint32_t round)
+  Message(std::string topic, solanet::UUID sender_id, solanet::UUID message_id, std::string content,
+          uint32_t round)
       : topic(std::move(topic)),
         sender_id(sender_id),
         message_id(message_id),
@@ -25,8 +26,8 @@ struct Message {
         round(round) {}
 
   std::string topic{};
-  UUID sender_id{};
-  UUID message_id{};
+  solanet::UUID sender_id{};
+  solanet::UUID message_id{};
   std::string content{};
   uint32_t round{};
 

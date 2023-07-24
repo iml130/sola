@@ -20,7 +20,8 @@ target_include_directories(minhton_core_logical_node_info
 target_link_libraries(minhton_core_logical_node_info
   PUBLIC
     minhton_message_serialize
-    minhton_utils_uuid
+    solanet_uuid
+    solanet_uuid_generator
   PRIVATE
     minhton_core_constants
     minhton_core_routing_calculations
@@ -163,7 +164,8 @@ target_link_libraries(minhton_core_node
         minhton_core_access_container
         minhton_exception_fsm
         minhton_exception_invalid_message
-        minhton_utils_uuid
+        solanet_uuid
+        solanet_uuid_generator
         minhton_utils_serializer_cereal
         minhton_timestamp_helper
 )

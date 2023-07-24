@@ -18,7 +18,7 @@
 
 #include <cassert>
 
-#include "../src/utils/utils.h"  // WORKAROUND: private header
+#include "solanet/uuid.h"
 
 using namespace ns3;
 using namespace std::placeholders;
@@ -46,7 +46,7 @@ TypeId NatterNodeNs3::GetTypeId() {
 
 TypeId NatterNodeNs3::GetInstanceTypeId() const { return GetTypeId(); }
 
-void NatterNodeNs3::addPeer(const std::string &topic, natter::UUID uuid, const std::string &ip,
+void NatterNodeNs3::addPeer(const std::string &topic, solanet::UUID uuid, const std::string &ip,
                             uint16_t port, uint32_t level, uint32_t number, uint32_t fanout) {
   if (natter_minhcast_)
     natter_minhcast_->addPeer(topic, {{level, number, fanout}, {ip, port}, uuid});
@@ -57,13 +57,13 @@ void NatterNodeNs3::removePeer(const std::string &topic, const std::string &uuid
   throw std::runtime_error("not implemented yet");
 }
 
-natter::UUID NatterNodeNs3::getUUID() const {
+solanet::UUID NatterNodeNs3::getUUID() const {
   if (natter_minhcast_) return natter_minhcast_->getUUID();
-  return natter::UUID{};
+  return solanet::UUID{};
 }
 
 void NatterNodeNs3::publish(const std::string &topic, const std::string &msg) {
-  natter::UUID res;
+  solanet::UUID res;
   if (natter_minhcast_) res = natter_minhcast_->publish(topic, msg);
 
   logger_->logNatterEvent(2, res);
@@ -80,7 +80,7 @@ void NatterNodeNs3::unsubscribeTopic(const std::string &topic) {
 }
 
 void NatterNodeNs3::logReceivedMessage(const natter::Message &m) {
-  // natter::UUID own_uuid = getUUID();
+  // solanet::UUID own_uuid = getUUID();
   // logger_->logReceivedMessages(own_uuid, m.sender_id_,
   //                                 m.message_id_, m.round_);
 }
