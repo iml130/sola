@@ -141,7 +141,7 @@ TableDefinition kMinhtonNodeState("MinhtonNodeState",
                                    {"PositionUuid", "%s", true, "MinhtonNode(PositionUuid)"},
                                    {"Timestamp_ms", "%u", true},
                                    {"State", "%u", true},
-                                   {"EventId", "%u", true, "Event(Id)"}},
+                                   {"EventId", "%lu", true, "Event(Id)"}},
                                   "UNIQUE(PositionUuid, State)");
 static const std::string kCreateMinhtonNodeState = getCreateTableStatement(kMinhtonNodeState);
 static bool minhton_node_state_exists_ = false;
