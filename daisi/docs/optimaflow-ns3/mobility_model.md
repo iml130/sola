@@ -1,6 +1,6 @@
 # Mobility Model
 
-## What dow it do
+## What does it do
 
 - AMR Movement
 

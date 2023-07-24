@@ -2,7 +2,7 @@
 
 - Chapter structure suggested
 - TODO: All content is to be regarded a placeholder.
-- "implementation highlights" -> [Mobility Model](./optimaflow-ns3/mobility_model.md)
+- "implementation highlights" -> [Mobility Model](./mobility_model.md)
     - Mobility Model
     - Networking
     - Threading
