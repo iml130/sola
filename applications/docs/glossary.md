@@ -5,6 +5,16 @@
 **Autonomous Mobile Robot (AMR)**:<br />
 See [Autonomous Mobile Robot](./optimaflow/amr.md#autonomous-mobile-robot-amr)
 
+## C
+
+**Cyber Physical Production System (CPPS)**:<br />
+
+- dual system (physical, logical)
+- each physical element has a logical counterpart
+- cooperative
+- connected (network)
+- [Intralogistics](./intralogistics.md)
+
 ## M
 
 **Map**:<br />
@@ -25,7 +35,7 @@ The dimensions are the borders of the traversable area.
 The nodes of the graph are positions on the traversable area.
 
 **Transport Order**:<br />
-See [Transport Order](./optimaflow/material_flow.md#transport-order)
+See [Material Flow](./optimaflow/material_flow.md#structure)
 
 **Transport Order Step**:<br />
-See [Transport Order](./optimaflow/material_flow.md#transport-order)
+See [Material Flow](./optimaflow/material_flow.md#structure)
