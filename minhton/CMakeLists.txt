@@ -27,6 +27,16 @@ find_package(yaml-cpp REQUIRED)
 
 find_package(Threads REQUIRED)
 
+find_library(LIBEVENT NAMES event)
+if(NOT LIBEVENT)
+  message(FATAL_ERROR "libevent not found!")
+endif()
+
+find_library(LIBEVENT_PTHREADS NAMES event_pthreads)
+if(NOT LIBEVENT_PTHREADS)
+  message(FATAL_ERROR "libevent_pthreads not found!")
+endif()
+
 add_subdirectory(build_tools/third_party/peglib)
 add_subdirectory(build_tools/third_party/fsmlite)
 
