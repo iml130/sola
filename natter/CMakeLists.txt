@@ -32,16 +32,6 @@ list(APPEND CMAKE_MODULE_PATH ${natter_SOURCE_DIR}/build_tools)
 
 find_package(Threads REQUIRED)
 
-find_library(LIBEVENT NAMES event)
-if(NOT LIBEVENT)
-  message(FATAL_ERROR "libevent not found!")
-endif()
-
-find_library(LIBEVENT_PTHREADS NAMES event_pthreads)
-if(NOT LIBEVENT_PTHREADS)
-  message(FATAL_ERROR "libevent_pthreads not found!")
-endif()
-
 if(NOT TARGET NetworkUDP)
   message(FATAL_ERROR "SolaNet NetworkUDP not provided from mono repository")
 endif()
