@@ -10,12 +10,15 @@ repo_url: https://github.com/iml130/sola
 edit_uri: ""
 
 nav:
-  - Introduction:
-    - Introduction: index.md
-  - SOLA:
-    - Introduction: sola/introduction.md
+  - Home:
+    - Introduction: introduction.md
     - Getting Started: getting_started.md
-    - Glossary: sola/glossary.md
+    - SOLA:
+      - Using SOLA: sola/usage.md
+      - Component Implementations: sola/component_implementations.md
+      - Decentralized Communication: sola/decentralized_communication.md
+      - Logging: sola/logging.md
+      - Glossary: sola/glossary.md
   - MINHTON: 
     - Introduction: management_overlay/introduction.md
     - Getting Started: management_overlay/getting_started.md
@@ -118,5 +121,11 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - admonition
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
 
 copyright: Copyright &copy; The SOLA authors
