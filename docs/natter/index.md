@@ -1,8 +1,10 @@
+# Introduction
+
 <p align="center">
 <img src="img/natter_Logo_separated.svg" class="logo" width="200px" alt="natter Logo">
 </p>
 
-**natter** is a fully decentralized topic-based publish/subscribe framework.
+**natter** is a topic-based publish/subscribe framework for decentralized Pub-Sub by using peer-to-peer connections.
 It allows sending a message to all nodes interested in a particular topic using unicast messages between these nodes.
 ***natter*** allows implementing different algorithms to specify how every node should forward a message to other nodes.
 These algorithms are called broadcast algorithms because they broadcast the message to all nodes in the group of interested participants.
@@ -11,10 +13,9 @@ Connected nodes are passed to the broadcast algorithm instances together with th
 Hence ***natter*** is network-structure agnostic and could support structures like rings, grids or trees by providing a suitable algorithm. 
 
 We used ***natter*** to develop the **MINHCAST** algorithm.
-***MINHCAST*** uses the **MINHTON** tree structure, which is based on the nBATON\* structure [1].
-For every topic, a separate MINHTON tree is created.
-***MINHCAST*** forwards the message to all nodes of a MINHTON tree deterministically in a way, that every node receives the message only once.
-A detailed description of ***MINHCAST*** will be provided soon.
+MINHCAST uses the **MINHTON** tree structure.
+MINHCAST forwards the message to all nodes of a MINHTON tree deterministically in a way, that every node receives the message only once.
+The MINHCAST algorithm is described [here](programmers/minhcast.md).
 
 With this library, we address the following design goals:
 
@@ -23,8 +24,5 @@ With this library, we address the following design goals:
 - Ease the development of broadcast algorithms for different network-structures
 - Supporting up to millions of nodes - in theory ;-)
 
-A good starting point to get familiary with the library is the chat example at ``examples/chat``.
+For a practical example or instructions how to develop your own algorithm for your P2P network structure, visit [Using natter](using.md).
 
-## References
-[1] Detzner, Peter, Jana Gödeke, and Steffen Bondorf. “Low-Cost Search in Tree-Structured P2P Overlays: The Null-Balance Benefit.” In 2021 IEEE 46th Conference on Local Computer Networks (LCN) (LCN 2021). Edmonton, Canada, 2021.
-[https://doi.org/10.1109/LCN52139.2021.9525004](https://doi.org/10.1109/LCN52139.2021.9525004)
