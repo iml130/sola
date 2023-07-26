@@ -35,7 +35,7 @@ nav:
     - Glossary: management_overlay/glossary.md
   - NATTER: 
     - Introduction: natter_lib/introduction.md
-    - Getting Started: natter_lib/getting_started.md
+    - Using natter: natter_lib/using.md
     - Programmers Manual:
       - Architecture: natter_lib/programmers/architecture.md
       - Logging: natter_lib/programmers/logging.md
