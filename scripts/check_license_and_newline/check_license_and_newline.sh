@@ -12,8 +12,29 @@
 
 failed=0
 
+check_newline() {
+    file_failed=0
+
+    # Skip image files
+    if [[ `basename $1` =~ \.(png|svg|jpg)$ ]]; then
+        return
+    fi
+
+    # Newline check
+    last=$(tail $1 -c 1) # Get last char in file
+    if [ "$last" !=  "" ]; then
+        echo MISSING NEWLINE: $1
+        file_failed=$((file_failed+1))
+    fi
+
+    # Add to global variable if failed
+    if [ $file_failed -ge 1 ]; then
+        failed=$((failed+1))
+    fi
+}
+
 # $1 = File path, $2 = License path, $3 License length
-check_license_and_newline () {
+check_license () {
     file_failed=0
 
     # Skip image files
@@ -30,13 +51,6 @@ check_license_and_newline () {
         fi
     fi
 
-    # Newline check
-    last=$(tail $1 -c 1) # Get last char in file
-    if [ "$last" !=  "" ]; then
-        echo MISSING NEWLINE: $1
-        file_failed=$((file_failed+1))
-    fi
-
     # Add to global variable if failed
     if [ $file_failed -ge 1 ]; then
         failed=$((failed+1))
@@ -45,31 +59,35 @@ check_license_and_newline () {
 
 # DAISI
 for file in `find daisi -path daisi/third_party -prune -type f -o -name "*.*"`; do
-    check_license_and_newline $file "scripts/check_license_and_newline/gpl.txt" 16
+    check_license $file "scripts/check_license_and_newline/gpl.txt" 16
 done
 
 # natter
 for file in `find natter -path natter/third_party -prune -type f -o -name "*.*"` ; do
-    check_license_and_newline $file "scripts/check_license_and_newline/mit.txt" 6
+    check_license $file "scripts/check_license_and_newline/mit.txt" 6
 done
 
 # MINHTON
 for file in `find minhton -path minhton/third_party -prune -type f -o -name "*.*"` ; do
-    check_license_and_newline $file "scripts/check_license_and_newline/mit.txt" 6
+    check_license $file "scripts/check_license_and_newline/mit.txt" 6
 done
 
 # SOLA
 for file in `find sola -path sola/third_party -prune -type f -o -name "*.*"` ; do
-    check_license_and_newline $file "scripts/check_license_and_newline/mit.txt" 6
+    check_license $file "scripts/check_license_and_newline/mit.txt" 6
 done
 
 # SOLANet
 for file in `find solanet -path solanet/third_party -prune -type f -o -name "*.*"` ; do
-    check_license_and_newline $file "scripts/check_license_and_newline/mit.txt" 6
+    check_license $file "scripts/check_license_and_newline/mit.txt" 6
+done
+
+# Check newlines
+for file in `fd -E "third_party" -t file` ; do
+    check_newline $file
 done
 
 if [ $failed -ne 0 ]; then
-    echo Failed files: $failed
     exit 1
 fi
 exit 0

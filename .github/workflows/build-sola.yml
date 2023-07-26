@@ -18,7 +18,11 @@ jobs:
         pip install gitlint
         gitlint --commits 3fb83ef...HEAD
     - name: Check newlines and license
-      run: scripts/check_license_and_newline/check_license_and_newline.sh
+      # For Ubuntu, symlink fdfind to fd (https://github.com/sharkdp/fd#on-ubuntu)
+      run: |
+        sudo apt-get install -y fd-find
+        ln -s $(which fdfind) ~/.local/bin/fd
+        scripts/check_license_and_newline/check_license_and_newline.sh
     - name: Check formatting
       run: |
         find daisi -path daisi/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
