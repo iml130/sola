@@ -27,7 +27,7 @@ autonomous_mobile_robots:
     properties:
       device_type: amr
       manufacturer: FhG_IML
-      model_name: LoadRunner<
+      model_name: LoadRunner
       friendly_name: LR
       model_number: 1
     kinematics:
