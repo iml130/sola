@@ -36,16 +36,17 @@ nav:
         - TreeMapper: management_overlay/algorithms/treemapper.md
       - FSM: management_overlay/programmers/fsm.md
     - Glossary: management_overlay/glossary.md
-  - NATTER: 
-    - Introduction: natter_lib/introduction.md
-    - Getting Started: natter_lib/getting_started.md
+  - NATTER:
+    - Index: natter/index.md
+    - Introduction: natter/index.md
+    - Using natter: natter/using.md
     - Programmers Manual:
-      - Architecture: natter_lib/programmers/architecture.md
-      - Logging: natter_lib/programmers/logging.md
+      - Architecture: natter/programmers/architecture.md
+      - Logging: natter/programmers/logging.md
       - Algorithms:
-        - MINHCAST: natter_lib/programmers/minhcast.md
-    - Known Limitations: natter_lib/known-limitations.md
-    - Glossary: natter_lib/glossary.md
+        - MINHCAST: natter/programmers/minhcast.md
+    - Known Limitations: natter/known-limitations.md
+    - Glossary: natter/glossary.md
   - Applications: 
     - Introduction: applications/getting_started.md
     - OptiMaFlow: 
