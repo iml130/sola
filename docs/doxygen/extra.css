@@ -1,0 +1,30 @@
+/* Don't show projectname */
+div#projectname {
+	display: none;
+}
+
+/* Crop SOLA logo in header based on light/dark mode */
+div#titlearea img[alt="Logo"] {
+	height: 56px;
+	object-fit: cover;
+	width: 72px;
+}
+
+html.light-mode div#titlearea img[alt="Logo"] {
+	object-position: 0% 0%;
+}
+
+html.dark-mode div#titlearea img[alt="Logo"] {
+	object-position: 100% 0%;
+}
+
+/* Don't show SOLA logo from README */
+#md_README ~ img[alt="SOLA"] {
+	display: none;
+}
+
+/* Change effect for hovering over breadcrumbs */
+div.navpath li.navelem a:hover {
+	text-decoration: underline;
+	text-shadow: none;
+}
