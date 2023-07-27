@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_MANAGER_AMR_DESCRIPTION_SCENARIO_H_
 #define DAISI_CPPS_MANAGER_AMR_DESCRIPTION_SCENARIO_H_
 
+#include "cpps/amr/amr_description.h"
 #include "manager/scenariofile_component.h"
 
 namespace daisi::cpps {

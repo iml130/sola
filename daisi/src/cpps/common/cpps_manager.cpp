@@ -125,11 +125,6 @@ void CppsManager::initialSpawn() {
     spawn_info_.pop();
 
     if (info.isAmr()) {
-      if (!info.spawn_distribution.isAbsolute()) {
-        // TODO add option for relative distribution
-        throw std::runtime_error("Other distributions not supported yet.");
-      }
-
       auto description = amr_descriptions_[info.friendly_name];
       for (auto i = previous_index; i < previous_index + info.spawn_distribution.number; i++) {
         auto topology = scenario_.topology.getTopology();
@@ -137,7 +132,6 @@ void CppsManager::initialSpawn() {
       }
 
       previous_index += info.spawn_distribution.number;
-    } else {
     }
   }
 }
