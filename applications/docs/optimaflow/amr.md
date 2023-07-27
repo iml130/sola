@@ -22,7 +22,7 @@ For our purposes they are able to follow a predefined path and also execute spec
 To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
 
 <figure markdown>
-  ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.drawio.png)
+  ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
 
@@ -54,9 +54,15 @@ It can be run either on the robot's hardware or on a server.
 
 ## Physical
 
-The AMR Physical Asset is the representative of the real AMR.
-It is the [AMR Logical Agent](#logical)'s interface to the real AMR and will
+The AMR Physical Asset is the [AMR Logical Agent](#logical)'s interface to the real AMR.
+It will receive Orders from and send informations to the AMR Logical Agent through the TCP Connection.
+The AMR Physical Asset can handle one Order at a time.
+The Order will be represented by a series of [Functionalities](#functionality).
 
+To manage Orders the AMR Physical Asset uses a finite state machine (FSM).
+The FSM relays the Order Steps through the Asset Connector and handles progress updates the AMR Physical Asset receives whenever a Functionality is finished.
+
+<!--
 - simple
 - only one Transport Order at a time, no queuing
 - send the vehicles Description containing information about kinematics, general vehicle properties and special abilities to the AMR Logical Agent
@@ -66,22 +72,32 @@ It is the [AMR Logical Agent](#logical)'s interface to the real AMR and will
   Transport Orders are described in [Material Flow](./material_flow.md).
 - report AMR Transport Order Updates, which are events that occurred related to the execution of Transport Order, to the AMR Logical Agent
 - forward Transport Order Steps to execute to the real AMR as described in [Communication with real or simulated robot](#communication-with-real-or-simulated-robot)
+-->
 
-As shown in **Figure 1**.
+<figure markdown>
+  ![**Figure 1:** AMR Physical Asset's Components](../img/amr_physical_asset.png)
+  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
+</figure>
 
 ### Functionality
 
-- AMR Physical Asset uses Functionalities to execute Transport Order Steps, Action Order Steps and Move Order Steps.
-- 4 Types of Functionalities
-    - **Move To**: Move to a position.
-      This does not differentiate between empty movement and transporting a payload.
-      Used to execute a Transport Order Step or Move Order Step.
-    - **Load**: Load a payload at the current position.
-      Used to execute a Transport Order Step or Action Order Step.
-    - **Unload**: Unload a payload at the current position.
-      Used to execute a Transport Order Step or Action Order Step.
-    - **Navigate**: Move sequentially to multiple waypoints.
-      This does not differentiate between empty movement and transporting a payload.
+A Functionality is a simple representation of an action the robot can perform.
+There are 4 types of Functionalities that are used to execute Order Steps:
+
+- **Move To**: Move to a position.
+  This does not differentiate between empty movement and transporting a payload and is used to execute a Transport Order Step or Move Order Step.
+- **Load**: Load a payload at the current position and is used to execute a Transport Order Step or Action Order Step.
+- **Unload**: Unload a payload at the current position and is used to execute a Transport Order Step or Action Order Step.
+<!-- TODO Navigate is unused. Delete? -->
+- **Navigate**: Move sequentially to multiple waypoints.
+  This does not differentiate between empty movement and transporting a payload.
+
+### Finite State Machine (FSM)
+
+<figure markdown>
+  ![**Figure 2:** Finite State Machine (FSM)](../img/amr_physical_asset_fsm_current.png)
+  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
+</figure>
 
 ### Communication with AMR Logical Agent
 
@@ -112,10 +128,16 @@ Logical sends
 
 ### Communication with real or simulated robot
 
+- AMR Asset Connector
 - The interface has to be implemented
 - AMR Physical Asset will send Order Steps to the implementation and expect to receive a completion message
 - TODO Asset Connector Picture
 <!-- * error messages currently not available/planned -->
+
+<figure markdown>
+  ![**Figure 3:** AMR Asset Connector](../img/amr_asset_connector.png)
+  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
+</figure>
 
 ## Mobility
 
