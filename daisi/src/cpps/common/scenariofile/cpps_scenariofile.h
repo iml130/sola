@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_COMMON_SCENARIOFILE_CPPS_SCENARIOFILE_H_
 #define DAISI_CPPS_COMMON_SCENARIOFILE_CPPS_SCENARIOFILE_H_
 
+#include <numeric>
 #include <string>
 
 #include "amr_description_scenario.h"
@@ -79,6 +80,19 @@ struct AlgorithmScenario {
 struct CppsScenariofile : public GeneralScenariofile {
   explicit CppsScenariofile(const std::string &path_to_file) : GeneralScenariofile(path_to_file) {}
 
+  uint16_t initial_number_of_amrs = 0;
+  uint16_t number_of_material_flows = 0;
+  uint16_t number_of_material_flow_agents = 0;
+
+  bool do_material_flow_agents_leave_after_finish = false;
+
+  AlgorithmScenario algorithm;
+  TopologyScenario topology;
+
+  std::vector<AmrDescriptionScenario> autonomous_mobile_robots;
+  std::vector<MaterialFlowDescriptionScenario> material_flows;
+  std::vector<SpawnInfoScenario> scenario_sequence;
+
   void parse() override {
     GeneralScenariofile::parse();
 
@@ -93,37 +107,20 @@ struct CppsScenariofile : public GeneralScenariofile {
     SERIALIZE_VAR(autonomous_mobile_robots);
     SERIALIZE_VAR(material_flows);
     SERIALIZE_VAR(scenario_sequence);
+
+    verifyScenarioSequenceOfMaterialFlows();
+    verifyScenarioSequenceOfAmrs();
+    calcNumbersOfRelativeAmrDistribution();
   }
 
-  std::unordered_map<std::string, AmrDescription> getAmrDescriptions() const {
-    std::unordered_map<std::string, AmrDescription> descriptions;
-    for (const auto &amr : autonomous_mobile_robots) {
-      descriptions[amr.properties.friendly_name] = amr.getAmrDescription();
-    }
-    return descriptions;
-  }
-
+  std::unordered_map<std::string, AmrDescription> getAmrDescriptions() const;
   std::unordered_map<std::string, MaterialFlowDescriptionScenario> getMaterialFlowDescriptions()
-      const {
-    std::unordered_map<std::string, MaterialFlowDescriptionScenario> descriptions;
-    for (const auto &mf : material_flows) {
-      descriptions[mf.friendly_name] = mf;
-    }
-    return descriptions;
-  }
+      const;
 
-  uint16_t initial_number_of_amrs = 0;
-  uint16_t number_of_material_flows = 0;
-  uint16_t number_of_material_flow_agents = 0;
-
-  bool do_material_flow_agents_leave_after_finish = false;
-
-  AlgorithmScenario algorithm;
-  TopologyScenario topology;
-
-  std::vector<AmrDescriptionScenario> autonomous_mobile_robots;
-  std::vector<MaterialFlowDescriptionScenario> material_flows;
-  std::vector<SpawnInfoScenario> scenario_sequence;
+private:
+  void verifyScenarioSequenceOfMaterialFlows() const;
+  void verifyScenarioSequenceOfAmrs() const;
+  void calcNumbersOfRelativeAmrDistribution();
 };
 }  // namespace daisi::cpps
 #endif

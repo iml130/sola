@@ -1,10 +1,11 @@
-add_library(daisi_cpps_common_scenariofile_cpps_scenariofile INTERFACE)
+add_library(daisi_cpps_common_scenariofile_cpps_scenariofile STATIC)
 target_sources(daisi_cpps_common_scenariofile_cpps_scenariofile
-    INTERFACE
+    PRIVATE
     cpps_scenariofile.h
+    cpps_scenariofile.cpp
 )
 target_link_libraries(daisi_cpps_common_scenariofile_cpps_scenariofile
-    INTERFACE
+    PUBLIC
     daisi_manager_general_scenariofile
     daisi_cpps_common_scenariofile_amr_description_scenario
     daisi_cpps_common_scenariofile_material_flow_description_scenario
