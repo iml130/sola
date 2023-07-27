@@ -42,4 +42,13 @@ Our application runs on top of the [ns-3](https://www.nsnam.org/) network simula
 ## Getting started
 
 - Install [required dependencies from SOLA indroduction](../../docs/index.md#getting-started) first?
-- Refer to [Getting Started](./getting_started.md)
+- Try [Using OptiMaFlow](./optimaflow-ns3/using.md)
+- Or use other environments
+### Using Environments
+
+- Several environments can be built and used. 
+    - [SOLA](./sola-ns3/using.md)
+    - [MINHTON](./minhton-ns3/using.md)
+    - [NATTER](./natter-ns3/using.md)
+    - [OptiMaFlow](./optimaflow-ns3/using.md)
+

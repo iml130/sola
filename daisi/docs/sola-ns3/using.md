@@ -3,10 +3,17 @@
 - Chapter structure suggested
 - TODO: All content is to be regarded a placeholder.
 
-## Quickstart
+## Run it
 
-- `sola`
+- `cpps`
     - `./daisi_exec --environment=sola --scenario=daisi/scenarios/sola/default.yml`
+
+- command
+    - `./daisi_exec`
+    - `--environment`
+    - `--scenario`
+        - scenario from file
+        - scenario from command line
 
 Each example command assumes that the simulation executable is located in the main folder, but can of course be adapted to other names and locations.
 The default location is `build/daisi/src/main/Main`.
@@ -50,22 +57,6 @@ The optional fields include `defaultDelay` for the delay between each simulation
 
 Below those mentioned fields the `scenarioSequence` is required, but what it can contain differs based on the run environment. Please refer to the specific components for details about the `scenarioSequence` ([MINHTON](../daisi_lib/minhton-ns3/management-overlay.md), [natter](../daisi_lib/natter-ns3/event-distribution.md), [CPPS](../daisi_lib/applications/cpps/index.md), [Path Planning](../daisi_lib/applications/path-planning/index.md)).
 
-## Run it
-
-- `cpps`
-    - `./daisi_exec --environment=sola --scenario=daisi/scenarios/sola/default.yml`
-
-- command
-    - `./daisi_exec`
-    - `--environment`
-    - `--scenario`
-        - scenario from file
-        - scenario from command line
-
-Each example command assumes that the simulation executable is located in the main folder, but can of course be adapted to other names and locations.
-The default location is `build/daisi/src/main/Main`.
-As shown, the environment for a simulation run can be selected with the `environment` parameter.
-Additionally, a scenario has to be defined with the `scenario` parameter.
 ## Academic Attribution
 
 If you use SOLA for research (or any other purposes), please include one of the following references in any resulting publication.

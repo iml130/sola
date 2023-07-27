@@ -3,10 +3,17 @@
 - Chapter structure suggested
 - TODO: All content is to be regarded a placeholder.
 
-## Quickstart
+## Run it
 
-- `minhton`
-    - `./daisi_exec --environment=minhton --scenario=daisi/scenarios/minhton/default.yml`
+- `cpps`
+    - `./daisi_exec --environment=cpps --scenario=daisi/scenarios/cpps/default.yml`
+
+- command
+    - `./daisi_exec`
+    - `--environment`
+    - `--scenario`
+        - scenario from file
+        - scenario from command line
 
 Each example command assumes that the simulation executable is located in the main folder, but can of course be adapted to other names and locations.
 The default location is `build/daisi/src/main/Main`.
@@ -133,23 +140,6 @@ The event timestamp cannot be 0 - therefore you need to increase the time by a l
     mode: random
     delay: 1000
 ```
-
-## Run it
-
-- `cpps`
-    - `./daisi_exec --environment=cpps --scenario=daisi/scenarios/cpps/default.yml`
-
-- command
-    - `./daisi_exec`
-    - `--environment`
-    - `--scenario`
-        - scenario from file
-        - scenario from command line
-
-Each example command assumes that the simulation executable is located in the main folder, but can of course be adapted to other names and locations.
-The default location is `build/daisi/src/main/Main`.
-As shown, the environment for a simulation run can be selected with the `environment` parameter.
-Additionally, a scenario has to be defined with the `scenario` parameter.
 
 ## References
 
