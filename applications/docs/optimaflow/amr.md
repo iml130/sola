@@ -21,12 +21,10 @@ For our purposes they are able to follow a predefined path and also execute spec
 
 To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
 
-<!-- using md_in_html extension. Note preview will not display this correctly -->
 <figure markdown>
   ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.drawio.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
-<!-- TODO Top Level is CPPS/CPPS Agents -->
 
 ## Logical
 
@@ -39,18 +37,8 @@ It is the AMR's interface to SOLA and will
 - aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
 - report the AMR's state and position to other agents (cpps) and
 - Send [Transport Orders](../glossary.md#t) in form of a list of [Transport Order Steps](../glossary.md#t) to the AMR Physical Asset
-<!-- - handle [Path Planning]() -->
 
 As shown in **Figure 1**
-
-
-<!-- ### AMR Logical Agent and Path Planning Module
-
-Currently not available.
-
-#### Centralized
-
-#### Decentralized -->
 
 ### Communication with Material Flow Logical Agent
 
@@ -82,6 +70,18 @@ It is the [AMR Logical Agent](#logical)'s interface to the real AMR and will
 As shown in **Figure 1**.
 
 ### Functionality
+
+- AMR Physical Asset uses Functionalities to execute Transport Order Steps, Action Order Steps and Move Order Steps.
+- 4 Types of Functionalities
+    - **Move To**: Move to a position.
+      This does not differentiate between empty movement and transporting a payload.
+      Used to execute a Transport Order Step or Move Order Step.
+    - **Load**: Load a payload at the current position.
+      Used to execute a Transport Order Step or Action Order Step.
+    - **Unload**: Unload a payload at the current position.
+      Used to execute a Transport Order Step or Action Order Step.
+    - **Navigate**: Move sequentially to multiple waypoints.
+      This does not differentiate between empty movement and transporting a payload.
 
 ### Communication with AMR Logical Agent
 

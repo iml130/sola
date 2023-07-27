@@ -1,11 +1,10 @@
-# Getting started
+# Introduction
 <!-- Isn't this "Introduction"? -->
 
-## Introduction
+## Getting started
 
-- Getting started with a code example
-    - Full setup -> Link full getting started
-    - OptiMaFlow -> Link OptiMaFlow-ns3
+To run OptiMaFlow please download and build the repository as described [here](../../../docs/getting_started.md).
+Afterwards follow the instructions for [OptiMaFlow](../../../daisi/docs/optimaflow-ns3/introduction.md) in the ns3-Integration tab.
 
 ### Intralogistics
 
@@ -28,6 +27,7 @@ TODO: Figure
 - concept
 - CPPS
     - logical agents
+- scenario, problem description
 
 
 ## Interfaces are important
