@@ -1,30 +1,9 @@
-<!--# TODO löschen: Material Flow
-
-Hierarchy
-
-- Material Flow
-- Task
-- Transport Order, Move Order, Action Order
-- Transport Order Step, Move Order Step, Action Order Step
-
-# Optimaflow
-
-- application of sola and surrounding algorithms
-- multiple [Material Flows](./material_flow.md)
-- multiple AMRs
-- multiple Loading Stations and Unloading Stations -->
-
 # Autonomous Mobile Robot (AMR)
 
 AMRs are mobile robots that can execute tasks in a logistics context without human interaction.
 For our purposes they are able to follow a predefined path and also execute special actions they are designed for.
 
 To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
-<!-- 
-<figure markdown>
-  ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.png)
-  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
-</figure> -->
 
 ## Logical
 
@@ -36,7 +15,7 @@ It will
 - report the status of Task execution to the corresponding [Material Flow Logical Agent](material_flow.md),and other participants
 - aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
 - report the AMR's state and position to other agents (cpps) and
-- Send [Transport Orders](../glossary.md#t) in form of a list of [Transport Order Steps](../glossary.md#t) to the AMR Physical Asset
+- Send [Orders](../glossary.md#o) in form of a list of [Functionlities](#functionality) to the AMR Physical Asset
 
 - STN (Simple Temporal Network)
 
@@ -61,18 +40,6 @@ The Order will be represented by a series of [Functionalities](#functionality).
 
 To manage an Order's state during execution the AMR Physical Asset uses a finite state machine (FSM).
 The FSM relays the Functionalities through the Asset Connector and handles progress updates the AMR Physical Asset receives whenever a Functionality is finished.
-
-<!--
-- simple
-- only one Transport Order at a time, no queuing
-- send the vehicles Description containing information about kinematics, general vehicle properties and special abilities to the AMR Logical Agent
-- report AMR Status Updates consiting of the AMR's state (idle, working, error) and position to the AMR Logical Agent<br />
-  will be offered other participants
-- manage the execution of one [Transport Order](../glossary.md#t) at a time.
-  Transport Orders are described in [Material Flow](./material_flow.md).
-- report AMR Transport Order Updates, which are events that occurred related to the execution of Transport Order, to the AMR Logical Agent
-- forward Transport Order Steps to execute to the real AMR as described in [Communication with real or simulated robot](#communication-with-real-or-simulated-robot)
--->
 
 <figure markdown>
   ![**Figure 1:** AMR Physical Asset's Components](../img/amr_physical_asset.png)
