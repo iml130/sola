@@ -59,8 +59,8 @@ It will receive Orders from and send informations to the AMR Logical Agent throu
 The AMR Physical Asset can handle one Order at a time.
 The Order will be represented by a series of [Functionalities](#functionality).
 
-To manage Orders the AMR Physical Asset uses a finite state machine (FSM).
-The FSM relays the Order Steps through the Asset Connector and handles progress updates the AMR Physical Asset receives whenever a Functionality is finished.
+To manage an Order's state during execution the AMR Physical Asset uses a finite state machine (FSM).
+The FSM relays the Functionalities through the Asset Connector and handles progress updates the AMR Physical Asset receives whenever a Functionality is finished.
 
 <!--
 - simple
@@ -129,46 +129,67 @@ There are extra transitions between:
 
 ### Communication with AMR Logical Agent
 
+#### Message Types
 
-- TCP connection
-- Opened by AMR Logical Agent
-- Connected to by AMR Physical Asset
-- AMR Logical Agent can run on robot Hardware using a direct connection
-- AMR Logical Agent can run on a server using a wifi connection
-- AMR Logical Agent's address has to be configured in advance?
+For the communication between the following message types are used:
+
+- **AMR Description** contains information about kinematics, general vehicle properties and special abilities
+- **AMR Status Update** contains the AMR State and position
+- **Topology** contains the borders of the navigatable space
+- **AMR Order Info** contains a series of [Functionalities](#functionality) and the Ability requiement to execute the Order
+- **AMR Order Update** contains the current Order State and the AMR's position
 
 #### Handshake
 
-1. Physical sends Description
-2. Logical sends Map/Topology
+The AMR Logical Agent opens a TCP socket.
+As soon as the AMR Physical Asset knows the socket it connects to it and sends the AMR Description and an AMR Status Update (_1 Started_).
+<!-- AMR Logical Agent sends nothing back -->
+
+<figure markdown>
+  ![**Figure 3:** Handshake between AMR Logical Agent and AMR Physical Asset](../img/amr_physical_logical_handshake.png)
+  <figcaption markdown>**Figure 1:** Handshake between AMR Logical Agent and AMR Physical Asset</figcaption>
+</figure>
 
 #### Regular and periodic Communication
 
-Physical sends
+If
 
-- AMR Status Update (AMR State and Position) on Position or AMR State change
-- AMR Transport Order Update (Transport Order State and Position) on Transport Order State change
+- the AMR Physical Asset is not executing an Order and the AMR Logical Agent is assigned a new Task **or**
+- the AMR Physical Asset finished excecuting an Order and the AMR Logical Agent has another Order queued for execution
 
-Logical sends
+the AMR Logical Agent sends an Order to the AMR Physical Asset.
+The AMR Physical Asset will then start to send AMR Status Updates periodically to announce position changes and start executing the Order.
+Each time the AMR Physical Asset's FSM changes states it will send an AMR Order Update to the AMR Logical Agent.
+The first AMR Order Update will contain the _1 Started_ state from the transition from _11 Finished_.
 
-- Transport Order Steps if
-    - a new Task is aquired and no Order is currently executed or
-    - an Order is finished and another Order is queued for execution
+If the AMR Logical Agent is assigned another Task while an Order is beeing executed it will queue the Task.
 
-### Communication with real or simulated robot
+<figure markdown>
+  ![**Figure 3:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset](../img/amr_physical_logical_order_execution.png)
+  <figcaption markdown>**Figure 1:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset</figcaption>
+</figure>
 
-- AMR Asset Connector
-- The interface has to be implemented
-- AMR Physical Asset will send Order Steps to the implementation and expect to receive a completion message
-- TODO Asset Connector Picture
-<!-- * error messages currently not available/planned -->
+### AMR Asset Connector
+
+The AMR Asset Connector is used to communicate with real or simulated robot.
+It is an interface to be implemented depending on the underlying system using the PImpl programming technique (see [cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)) to hide the implementation.
+It offers the following functions:
+
+- **execute**: execute a Functionality and call the callback function on completion.
+  Both Functionality and callback function are given in its parameters.
+- **get Position**: get the AMR's position
+- **get Pose**: get the AMR's pose <!-- TODO Glossary Pose: position and orientation -->
+- **get Velocity**: get the AMR's velocity vector
+- **get Acceleration**: get the AMR's acceleration vector
+- **get / set Topology**: get / set the underlying system's Topology or Map
+- **get Description**: get the AMR's Description (see [AMR Description](#message-types))
 
 <figure markdown>
   ![**Figure 3:** AMR Asset Connector](../img/amr_asset_connector.png)
-  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
+  <figcaption markdown>**Figure 1:** AMR Asset Connector</figcaption>
 </figure>
 
-## Mobility
+## AMR Mobility Helper
 
 - calculated in AMR Logical Agent
 - trapezoid model
