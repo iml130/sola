@@ -94,12 +94,41 @@ There are 4 types of Functionalities that are used to execute Order Steps:
 
 ### Finite State Machine (FSM)
 
+The Finite State Machine represents the state of the current Order.
+It will start in state _10 Finished_, which corresponds to the AMR's idle state.
+The Finite State Machine assumes to process a Transport Order that is part of a Material Flow created by a Material Flow Logical Agent and was already queued by the AMR Logical Agent.
+Therefore the first state it enters is _1 Started_.
+
 <figure markdown>
   ![**Figure 2:** Finite State Machine (FSM)](../img/amr_physical_asset_fsm_current.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
 
+The AMR executes Functionalities in states:
+
+- _2 GoToPickUpLocation:_ MoveTo pickup location
+- _4 Load:_ Load payload at pickup location
+- _6 GoToDeliveryLocation:_ MoveTo delivery location
+- _8 Unload:_ Unload payload at delivery location
+
+Some states will only be used to notify the AMR Logical Agent and then be traversed to the next state that executes a functionality.
+Those are:
+
+- _1 Started:_ Order execution has started
+- _3 ReachedPickUpLocation:_ MoveTo has finished, pickup location reached
+- _5 Loaded:_ Load payload has finished
+- _7 ReachedDeliveryLocation:_ MoveTo has finished, delivery location reached
+- _9 Unloaded:_ Unload has finished
+- _10 Finished:_ Order execution has finished, the AMR is idle and can execute the next Order
+
+All states are transitioned in order from 1 Started to 10 Finished for a Transport Order.
+There are extra transitions between:
+
+- _5 Loaded_ and _2 GoToPickUpLocation:_ because a Transport Order can load payload multiple times
+- _10 Finished_ and _1 Started:_ because the FSM will remain in _10 Finished_ for the last executed Order until another Order to execute is received
+
 ### Communication with AMR Logical Agent
+
 
 - TCP connection
 - Opened by AMR Logical Agent
