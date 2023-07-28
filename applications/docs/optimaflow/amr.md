@@ -20,25 +20,25 @@ AMRs are mobile robots that can execute tasks in a logistics context without hum
 For our purposes they are able to follow a predefined path and also execute special actions they are designed for.
 
 To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
-
+<!-- 
 <figure markdown>
   ![**Figure 1:** Components and messages](../img/amr_logical_physical_overview.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
-</figure>
+</figure> -->
 
 ## Logical
 
 The AMR Logical Agent is a smart participant in the [CPPS](../intralogistics.md).
-It is the AMR's interface to SOLA and will
+It is the AMR's interface to the communication middleware and other agents.
+It will
 
-- STN (Simple Temporal Network)
 - aquire [Tasks](../glossary.md#t) using specified [Algorithms](optimization.md),
 - report the status of Task execution to the corresponding [Material Flow Logical Agent](material_flow.md),and other participants
 - aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
 - report the AMR's state and position to other agents (cpps) and
 - Send [Transport Orders](../glossary.md#t) in form of a list of [Transport Order Steps](../glossary.md#t) to the AMR Physical Asset
 
-As shown in **Figure 1**
+- STN (Simple Temporal Network)
 
 ### Communication with Material Flow Logical Agent
 
@@ -191,9 +191,11 @@ It offers the following functions:
 
 ## AMR Mobility Helper
 
-- calculated in AMR Logical Agent
-- trapezoid model
-- loading and unloading times
-- AMR Mobility Helper (simulated mobility, estimations for planning)
-- data from the real robot
+The AMR Mobility Helper is a class containing static functions to calculate execution durations, traveling distances and AMR's execution time dependent status for given Functionalities or status.
+Estimations and calculations use a trapezoid velocity profile that assumes acceleration, deceleration or velocity being constant during movement phases ignoring payload weight.
+
+- TODO: Figure
+
+For Load and Unload Functionalities constant durations are used for the corresponding actions.
+Those durations are only dependent on the AMR's load handling unit's parameters.
 
