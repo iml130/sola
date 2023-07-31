@@ -29,3 +29,11 @@ Additionally, a scenario has to be defined with the `scenario` parameter.
 ### Szenaro file structure
 
 ### Create new szenarios
+
+## Logging
+
+See [OptiMaFlow Logging](../../../applications/docs/optimaflow/logging.md)
+
+## Interfaces
+
+How the interfaces are implemented is described in [Implementations](mobility_model.md).

@@ -34,7 +34,7 @@ Our application runs on top of the [ns-3](https://www.nsnam.org/) network simula
 
 - physical simulation
     - collision detection
-    - simulation of objects, their parts and their interaction
+    - simulation of objects, their parts and their physical interaction
 - visualization
     - visulization during simulation
     - although continuous logfiles can be visualized in extensions
@@ -44,6 +44,7 @@ Our application runs on top of the [ns-3](https://www.nsnam.org/) network simula
 - Install [required dependencies from SOLA indroduction](../../docs/index.md#getting-started) first?
 - Try [Using OptiMaFlow](./optimaflow-ns3/using.md)
 - Or use other environments
+
 ### Using Environments
 
 - Several environments can be built and used. 
