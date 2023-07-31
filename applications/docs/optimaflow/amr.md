@@ -161,7 +161,10 @@ It offers the following functions:
 The AMR Mobility Helper is a class containing static functions to calculate execution durations, traveling distances and AMR's execution time dependent status for given Functionalities or status.
 Estimations and calculations use a trapezoid velocity profile that assumes acceleration, deceleration or velocity being constant during movement phases ignoring payload weight.
 
-- TODO: Figure
+<figure markdown>
+  ![**Figure 3:** Trapezoid velocity model](../img/trapezoid_velocity_profile.png)
+  <figcaption markdown>**Figure 1:** Trapezoid velocity model</figcaption>
+</figure>
 
 For Load and Unload Functionalities constant durations are used for the corresponding actions.
 Those durations are only dependent on the AMR's load handling unit's parameters.
