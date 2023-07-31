@@ -49,7 +49,7 @@ void CppsScenariofile::verifyScenarioSequenceOfMaterialFlows() const {
     return info.spawn_distribution.isGaussian();
   });
   if (!all_mfs_have_gaussian) {
-    throw std::runtime_error("Scenario sequence of AMRs must be all gaussian.");
+    throw std::runtime_error("Scenario sequence of MFs must be all gaussian.");
   }
 }
 
@@ -143,7 +143,7 @@ void CppsScenariofile::calcNumbersOfRelativeAmrDistribution() {
   if (missing > 0) {
     // += 1 for the amr types where there is the most deviation
     std::sort(gaps.begin(), gaps.end(),
-              [](const auto &p1, auto const &p2) { return p1.second > p2.second; });
+              [](const auto &p1, const auto &p2) { return p1.second > p2.second; });
     uint16_t count = 0;
 
     for (const auto &gap : gaps) {
