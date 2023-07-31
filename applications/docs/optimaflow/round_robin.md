@@ -9,10 +9,9 @@
 UML-class chart here
 
 ### CentralizedParticipant
-- Simple Participant
-- Implements methods to respond to 
-    - Assignment Notification
-    - Status Update Request
+This class represents interaction possibilities of a participant within a central task assignment procedure. Since the task assignment is moderated centrally, the participant is designed in a reactive way, waiting for and respoding to messages from the central optimizer. A new task is assigned to the participant via an `AssignmentNotification`. When receiving this message, it is tried to add the contained task to the participants `(Simple?)OrderManagement`, checking wether the assigment can be accepted. Since the round robin strategy should be as simple as possible, there is no case where a task could not be accepted here. The answer including the new metrics is set back to the central allocator via an `AssignmentResponse`.
+
+When a `StatusUpdateRequest` is received, the participant's current metrics are calculated via its `OrderManagement` and are sent back as a `StatusUpdate`. Since the participants states are not relevant for round robin, this should never be the case.  
 
 ### CentralizedInitiator
 - Abstract class 
@@ -21,7 +20,6 @@ UML-class chart here
 ### RoundRobinInitiator
 - Central task allocation algorithm
 - implements (modified) round robin strategy
-    - example (img)
 - Priority queue per task ability
 - knows all participants
 - no respect to participant metrics
@@ -29,7 +27,7 @@ UML-class chart here
 
 
 ## Interaction
-- Task Assignnment starts when RoundRobinInitiator receives MFDLScheduler (addMaterialFlow)
+- Task Assignment starts when RoundRobinInitiator receives MFDLScheduler (addMaterialFlow)
     - invoked by CppsManager
     - for each task, assignTask(task) is called
         - calls `chooseParticipantForTask` where the specific task assignment strategy is implemented (Round Robin)
