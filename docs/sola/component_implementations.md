@@ -8,6 +8,7 @@ Hence currently the Publish-Subscribe component implementation has access to the
 For each component, a configuration object must be passed to the constructor of SOLA to configure the component implementation and the underlying component.
 See [Using SOLA](usage.md) for more information about this.
 
+<!-- Application in picture -->
 ![](../img/sola_component_impl_dependencies.svg)
 
 ## Service Discovery Component Implementations
@@ -52,12 +53,3 @@ The information of this new node is **not** inserted into the service discovery 
 !!! danger "This component implementation is currently work in progress"
 
 <!-- Client Server -->
-
-## Exemplary logical representation of SOLA with MINHTON and MINHCAST
-
-![](../img/sola_example_minhton_minhcast.svg)
-
-We mainly use SOLA together with the MINHTON and MINHCAST components.
-The following figure illustrates the logical view on a network with two SOLA peers and two topics, where both SOLA peers are subscribed to both topics.
-
-![](../img/sola_example_minhton_minhcast1.svg)

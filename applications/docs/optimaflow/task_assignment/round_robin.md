@@ -1,4 +1,4 @@
-# Central
+# Centralized Optimization -- Round Robin
 - Idea: Logic of task assignment completely centralized
 - heterogenous Round Robin
 - Simple Approach with no respect to AMR metrics
@@ -25,7 +25,7 @@ When a `StatusUpdateRequest` is received, the participant's current metrics are 
 - no respect to participant metrics
 - ParticipantInfoRoundRobin: struct to store all algorithm-relevant data per participant
 
-![Figure_1](../img/round_robin_example.png "Round Robin task assignment with 5 participants, divided into two abilities A and B.")
+![Figure_1](../../img/round_robin_example.png "Round Robin task assignment with 5 participants, divided into two abilities A and B.")
 <a name="fig1"></a>**Figure 1:** Round Robin task assignment with 5 participants, divided into two abilities A, B.
 
 

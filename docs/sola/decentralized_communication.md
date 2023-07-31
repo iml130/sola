@@ -4,8 +4,10 @@ The local view is of each peer maintains selected links to a subset of all peers
 
 In the following Figure 1, each peer within SOLA is represented by a single entity. 
 Furthermore, the nodes are required to collaborate in order to appear to its user as a single coherent system
+<figure markdown>
 ![SOLA](../img/sola_app.svg)
-**Figure 1**: SOLA appears to it users as a single coherent system. As each node in SOLA has a limited view, a collaboration among all nodes is required.
+<figcaption markdown>**Figure 1**: SOLA appears to it users as a single coherent system. As each node in SOLA has a limited view, a collaboration among all nodes is required.</figcaption>
+</figure>
 
 Entities, such as automated guided vehicles (AGVs), autonomous mobile robots (AMRs) or even virtual entities such as material flows or a production orders, can join and become part of SOLA.
 As SOLA uses Pub-Sub and Service Discovery, this enables a loose coupling during operational runtime.
@@ -24,3 +26,12 @@ Local information is linked with global information.
 Participants act on this aggregated information.
 Technical assistance ensures that the increasingly complex processes remain manageable.
 This support is particularly important for humans, since their role as machine operators is evolving into that of problem solvers.
+
+## Example: SOLA with MINHTON and MINHCAST
+
+![](../img/sola_example_minhton_minhcast.svg)
+
+We mainly use SOLA together with the MINHTON and MINHCAST components.
+The following figure illustrates the logical view on a network with two SOLA peers and two topics, where both SOLA peers are subscribed to both topics.
+
+![](../img/sola_example_minhton_minhcast1.svg)

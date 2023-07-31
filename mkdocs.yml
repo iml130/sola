@@ -46,18 +46,17 @@ nav:
         - MINHCAST: natter_lib/programmers/minhcast.md
     - Known Limitations: natter_lib/known-limitations.md
     - Glossary: natter_lib/glossary.md
-  - Applications: 
+  - OptiMaFlow: 
     - Introduction: applications/getting_started.md
-    - OptiMaFlow: 
-      - Getting Started: applications/optimaflow/getting_started.md
-      - Participants:
-          - Overview: applications/optimaflow/participants/overview.md
-          - Material Flow: applications/optimaflow/participants/material_flow.md
-          - AMR: applications/optimaflow/participants/amr.md
-      - Task Assignment:
-        - ContractNet: applications/optimaflow/contract_net.md
-        - RoundRobin: applications/optimaflow/round_robin.md       
-      - Logging: applications/optimaflow/logging.md 
+    - Getting Started: applications/optimaflow/getting_started.md
+    - Participants:
+        - Overview: applications/optimaflow/participants/overview.md
+        - Material Flow: applications/optimaflow/participants/material_flow.md
+        - AMR: applications/optimaflow/participants/amr.md
+    - Task Assignment:
+        - Centralized: applications/optimaflow/task_assignment/round_robin.md       
+        - Decentralized: applications/optimaflow/task_assignment/tepssi.md
+    - Logging: applications/optimaflow/logging.md 
     - Glossary: applications/glossary.md
       
   - ns-3 Integration: 

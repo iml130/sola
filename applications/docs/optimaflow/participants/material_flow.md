@@ -25,6 +25,7 @@ Moreover, it supports the implementation of various algorithms to optimize mater
 ## Lifecycle
 
 - TODO rephrase to Material Flow
+- TODO more top level (don't describe states)
 
 Each Transport Order will traverse the following states:
 
@@ -52,7 +53,7 @@ A Transport Order is created in a Material Flow Logical Agent, will be queued in
 All state changes will be reported upwards to the Material Flow Logical Agent.
 
 <figure markdown>
-  ![**Figure 2:** States a Transport Order traverses, grouped by components that cause the transition.](../img/amr_transport_order_flowchart.drawio.png)
+  ![**Figure 2:** States a Transport Order traverses, grouped by components that cause the transition.](../../img/amr_transport_order_flowchart.png)
   <figcaption markdown>**Figure 2:** States a Transport Order traverses, grouped by components that cause the transition.</figcaption>
 </figure>
 <!-- TODO rename file -->

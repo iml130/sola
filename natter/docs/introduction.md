@@ -11,7 +11,7 @@ Connected nodes are passed to the broadcast algorithm instances together with th
 Hence ***natter*** is network-structure agnostic and could support structures like rings, grids or trees by providing a suitable algorithm. 
 
 We used ***natter*** to develop the **MINHCAST** algorithm.
-***MINHCAST*** uses the **MINHTON** tree structure, which is based on the nBATON\* structure [1].
+***MINHCAST*** uses the **MINHTON** tree structure.
 ***MINHCAST*** forwards the message to all nodes of a MINHTON tree deterministically in a way, that every node receives the message only once.
 The MINHCAST algorithm is described [here](programmers/minhcast.md).
 
@@ -23,7 +23,3 @@ With this library, we address the following design goals:
 - Supporting up to millions of nodes - in theory ;-)
 
 For a practical example or instructions how to develop your own algorithm for your P2P network structure, visit [Using natter](using.md).
-
-## References
-[1] Detzner, Peter, Jana Gödeke, and Steffen Bondorf. “Low-Cost Search in Tree-Structured P2P Overlays: The Null-Balance Benefit.” In 2021 IEEE 46th Conference on Local Computer Networks (LCN) (LCN 2021). Edmonton, Canada, 2021.
-[https://doi.org/10.1109/LCN52139.2021.9525004](https://doi.org/10.1109/LCN52139.2021.9525004)

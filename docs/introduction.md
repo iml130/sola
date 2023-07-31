@@ -24,6 +24,7 @@ For instructions on how to build and run SOLA and its components, see [Getting S
 
 ![SOLA](img/sola_overview.svg)
 <!-- **Figure 1**: SOLA's main building blocks. -->
+<!-- TODO link "Component" with text (same names) -->
 
 ## Project Structure
 
@@ -35,7 +36,7 @@ The SOLA repository contains multiple subprojects:
 The MINHCAST algorithm to broadcast a message to all nodes in a MINHTON network is included in natter.
 natter is a SOLA component for Publish-Subscribe.
 - **SolaNet** is a basic asynchronous UDP networking and utility library.
-- **[Optimaflow](applications/optimaflow/getting_started.md)** is an application in the domain of intralogistics that uses SOLA to schedule transport tasks to autonomous mobile robots in a decentralized manner.
+- **[OptiMaFlow](applications/optimaflow/getting_started.md)** is an application in the domain of intralogistics that uses SOLA to schedule transport tasks to autonomous mobile robots.
 - **[DAISI](daisi/introduction.md)** provides the integration of the aforementioned components into the network simulator ns-3, a discrete-event network simulator for Internet systems.
 We are using ns-3 as the development and simulation environment for SOLA and its components.
 

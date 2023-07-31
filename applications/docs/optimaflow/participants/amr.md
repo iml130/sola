@@ -5,7 +5,7 @@ For our purposes they are able to follow a predefined path and also execute spec
 
 To function in a [CPPS](../../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
 
-## Logical
+## Logical Agent
 
 The AMR Logical Agent is a smart participant in the [CPPS](../../intralogistics.md).
 It is the AMR's interface to the communication middleware and other agents.
@@ -31,7 +31,7 @@ It can be run either on the robot's hardware or on a server.
 - AMR Logical Agent can run on a server using a direct or hardwired connection
 <!-- * TODO there's more -->
 
-## Physical
+## Physical AMR
 
 The AMR Physical Asset is the [AMR Logical Agent](#logical)'s interface to the real AMR.
 It will receive Orders from and send informations to the AMR Logical Agent through the TCP Connection.
@@ -42,22 +42,19 @@ To manage an Order's state during execution the AMR Physical Asset uses a finite
 The FSM relays the Functionalities through the Asset Connector and handles progress updates the AMR Physical Asset receives whenever a Functionality is finished.
 
 <figure markdown>
-  ![**Figure 1:** AMR Physical Asset's Components](../img/amr_physical_asset.png)
+  ![**Figure 1:** AMR Physical Asset's Components](../../img/amr_physical_asset.png)
   <figcaption markdown>**Figure 1:** Components and messages</figcaption>
 </figure>
 
 ### Functionality
 
 A Functionality is a simple representation of an action the robot can perform.
-There are four types of Functionalities that are used to execute Order Steps:
+There are three types of Functionalities that are used to execute Order Steps:
 
 - **Move To**: Move to a position.
   This does not differentiate between empty movement and transporting a payload and is used to execute a Transport Order Step or Move Order Step.
 - **Load**: Load a payload at the current position and is used to execute a Transport Order Step or Action Order Step.
 - **Unload**: Unload a payload at the current position and is used to execute a Transport Order Step or Action Order Step.
-<!-- TODO Navigate is unused. Delete? -->
-- **Navigate**: Move sequentially to multiple waypoints.
-  This does not differentiate between empty movement and transporting a payload.
 
 ### Finite State Machine (FSM)
 
@@ -67,8 +64,8 @@ The Finite State Machine assumes to process a Transport Order that is part of a 
 Therefore the first state it enters is _1 Started_.
 
 <figure markdown>
-  ![**Figure 2:** Finite State Machine (FSM)](../img/amr_physical_asset_fsm_current.png)
-  <figcaption markdown>**Figure 1:** Components and messages</figcaption>
+  ![**Figure 2:** Finite State Machine (FSM)](../../img/amr_physical_asset_fsm_current.png)
+  <figcaption markdown>**Figure 1:** Finite State Machine (FSM)</figcaption>
 </figure>
 
 The AMR executes Functionalities in states:
@@ -94,48 +91,6 @@ There are extra transitions between:
 - _5 Loaded_ and _2 GoToPickUpLocation:_ because a Transport Order can load payload multiple times
 - _10 Finished_ and _1 Started:_ because the FSM will remain in _10 Finished_ for the last executed Order until another Order to execute is received
 
-### Communication with AMR Logical Agent
-
-#### Message Types
-
-For the communication between the following message types are used:
-
-- **AMR Description** contains information about kinematics, general vehicle properties and special abilities
-- **AMR Status Update** contains the AMR State and position
-- **Topology** contains the borders of the navigatable space
-- **AMR Order Info** contains a series of [Functionalities](#functionality) and the Ability requiement to execute the Order
-- **AMR Order Update** contains the current Order State and the AMR's position
-
-#### Handshake
-
-The AMR Logical Agent opens a TCP socket.
-As soon as the AMR Physical Asset knows the socket it connects to it and sends the AMR Description and an AMR Status Update (_1 Started_).
-<!-- AMR Logical Agent sends nothing back -->
-
-<figure markdown>
-  ![**Figure 3:** Handshake between AMR Logical Agent and AMR Physical Asset](../img/amr_physical_logical_handshake.png)
-  <figcaption markdown>**Figure 1:** Handshake between AMR Logical Agent and AMR Physical Asset</figcaption>
-</figure>
-
-#### Regular and periodic Communication
-
-If
-
-- the AMR Physical Asset is not executing an Order and the AMR Logical Agent is assigned a new Task **or**
-- the AMR Physical Asset finished excecuting an Order and the AMR Logical Agent has another Order queued for execution
-
-the AMR Logical Agent sends an Order to the AMR Physical Asset.
-The AMR Physical Asset will then start to send AMR Status Updates periodically to announce position changes and start executing the Order.
-Each time the AMR Physical Asset's FSM changes states it will send an AMR Order Update to the AMR Logical Agent.
-The first AMR Order Update will contain the _1 Started_ state from the transition from _11 Finished_.
-
-If the AMR Logical Agent is assigned another Task while an Order is beeing executed it will queue the Task.
-
-<figure markdown>
-  ![**Figure 3:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset](../img/amr_physical_logical_order_execution.png)
-  <figcaption markdown>**Figure 1:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset</figcaption>
-</figure>
-
 ### AMR Asset Connector
 
 The AMR Asset Connector is used to communicate with real or simulated robot.
@@ -152,8 +107,51 @@ It offers the following functions:
 - **get Description**: get the AMR's Description (see [AMR Description](#message-types))
 
 <figure markdown>
-  ![**Figure 3:** AMR Asset Connector](../img/amr_asset_connector.png)
+  ![**Figure 3:** AMR Asset Connector](../../img/amr_asset_connector.png)
   <figcaption markdown>**Figure 1:** AMR Asset Connector</figcaption>
+</figure>
+
+## Communication between Logical Agent and physical AMR
+
+
+
+The following messages are exchanged between the AMR Logical Agent and the AMR Physical Asset:
+
+- **AMR Description** contains information about kinematics, general vehicle properties and special abilities
+- **AMR Status Update** contains the AMR State and position
+- **Topology** contains the borders of the navigatable space
+- **AMR Order Info** contains a series of [Functionalities](#functionality) and the Ability requiement to execute the Order
+- **AMR Order Update** contains the current Order State and the AMR's position
+
+### Initialization
+
+The AMR Logical Agent opens a TCP socket.
+As soon as the AMR Physical Asset knows the socket it connects to it and sends the AMR Description and an AMR Status Update (_1 Started_).
+<!-- AMR Logical Agent sends nothing back -->
+
+<figure markdown>
+<!-- TODO not Handshake -->
+  ![**Figure 3:** Handshake between AMR Logical Agent and AMR Physical Asset](../../img/amr_physical_logical_handshake.png)
+  <figcaption markdown>**Figure 1:** Handshake between AMR Logical Agent and AMR Physical Asset</figcaption>
+</figure>
+
+### Regular and periodic Communication
+
+If
+
+- the AMR Physical Asset is not executing an Order and the AMR Logical Agent is assigned a new Task **or**
+- the AMR Physical Asset finished excecuting an Order and the AMR Logical Agent has another Order queued for execution
+
+the AMR Logical Agent sends an Order to the AMR Physical Asset.
+The AMR Physical Asset will then start to send AMR Status Updates periodically to announce position changes and start executing the Order.
+Each time the AMR Physical Asset's FSM changes states it will send an AMR Order Update to the AMR Logical Agent.
+The first AMR Order Update will contain the _1 Started_ state from the transition from _11 Finished_.
+
+If the AMR Logical Agent is assigned another Task while an Order is beeing executed it will queue the Task.
+
+<figure markdown>
+  ![**Figure 3:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset](../../img/amr_physical_logical_order_execution.png)
+  <figcaption markdown>**Figure 1:** Communication during Order execution between AMR Logical Agent and AMR Physical Asset</figcaption>
 </figure>
 
 ## AMR Mobility Helper
@@ -162,7 +160,7 @@ The AMR Mobility Helper is a class containing static functions to calculate exec
 Estimations and calculations use a trapezoid velocity profile that assumes acceleration, deceleration or velocity being constant during movement phases ignoring payload weight.
 
 <figure markdown>
-  ![**Figure 3:** Trapezoid velocity model](../img/trapezoid_velocity_profile.png)
+  ![**Figure 3:** Trapezoid velocity model](../../img/trapezoid_velocity_profile.png)
   <figcaption markdown>**Figure 1:** Trapezoid velocity model</figcaption>
 </figure>
 

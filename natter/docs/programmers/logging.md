@@ -19,3 +19,4 @@ Besides the logging of strings, events and event-data can be also logged. The av
 ## Creating New Logger
 
 Implement ``natter::logging::LoggerInterface`` and add the logger by calling ``Logger::get().addLogger()``.
+<!-- TODO: Link -->
