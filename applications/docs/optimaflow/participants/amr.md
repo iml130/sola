@@ -3,19 +3,19 @@
 AMRs are mobile robots that can execute tasks in a logistics context without human interaction.
 For our purposes they are able to follow a predefined path and also execute special actions they are designed for.
 
-To function in a [CPPS](../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
+To function in a [CPPS](../../intralogistics.md) every AMR has a [logical](#logical) and a [physical](#physical) component.
 
 ## Logical
 
-The AMR Logical Agent is a smart participant in the [CPPS](../intralogistics.md).
+The AMR Logical Agent is a smart participant in the [CPPS](../../intralogistics.md).
 It is the AMR's interface to the communication middleware and other agents.
 It will
 
-- aquire [Tasks](../glossary.md#t) using specified [Algorithms](optimization.md),
+- aquire [Tasks](../../glossary.md#t) using specified [Algorithms](optimization.md),
 - report the status of Task execution to the corresponding [Material Flow Logical Agent](material_flow.md),and other participants
 - aquire map/topology informations and send those to the [AMR Physical Asset](#physical)
 - report the AMR's state and position to other agents (cpps) and
-- Send [Orders](../glossary.md#o) in form of a list of [Functionlities](#functionality) to the AMR Physical Asset
+- Send [Orders](../../glossary.md#o) in form of a list of [Functionlities](#functionality) to the AMR Physical Asset
 
 - STN (Simple Temporal Network)
 
@@ -49,7 +49,7 @@ The FSM relays the Functionalities through the Asset Connector and handles progr
 ### Functionality
 
 A Functionality is a simple representation of an action the robot can perform.
-There are 4 types of Functionalities that are used to execute Order Steps:
+There are four types of Functionalities that are used to execute Order Steps:
 
 - **Move To**: Move to a position.
   This does not differentiate between empty movement and transporting a payload and is used to execute a Transport Order Step or Move Order Step.

@@ -1,20 +1,26 @@
 # Material Flow
 
-## Structure
+## Material Flow Description
 
-- Material Flow
-- Task
-- Transport Order 
-- Action Order, Move Order? (Thoose are not in use))
-- (Transport, Action, Move) Order Step
-TODO Figure
+TODO linking to MFDL
 
-## Logical Agent
+The MFDL consists of 
+- Move Orders
+- Action Orders, and
+- Transport Orders
 
-- Task Assignment
-   - Algorithms (Link?)
-   - Interface
-- Task Status tracking
+At the moment, only one type of task configuration of the MFDL is possible: 
+Action Order, Transport Order with two Transport Order Steps, and a final Action Order. 
+This represents the process of one AMR traveling to a pickup location, loading the good, transporting the good to a delivery location, and unloading afterwards. 
+Other task configurations are not supported yet, but will be in the future. 
+
+## Material Flow Logical Agent
+
+The Material Flow Logical Agent (MF Agent) is a virtual component within the CPPS that manages, handles, and tracks the execution of granular steps in the material flow. 
+It is, additionally, responsible for orchestrating the assignments of tasks to AMRs, and can be in charge of one or multiple material flows, depending on the system's architecture. 
+The MF Agent communicates with AMR Logical Agents via SOLA. 
+Moreover, it supports the implementation of various algorithms to optimize material flow, more than just task assignment. 
+
 
 ## Lifecycle
 
@@ -22,22 +28,20 @@ TODO Figure
 
 Each Transport Order will traverse the following states:
 
-1. kCreated: Transport Orders are created with the Material Flow and Task they are a part of.
-   The creation is performed by the Material Flow Logical Agent.
-2. kQueued: Once an AMR is selected for the execution of a Task, it queues the Task and its contained Transport Orders.
-   The queueing is performed by the AMR Logical Agent.
-3. kStarted: Once the Transport Order is sent to the AMR Physical Asset it will start execution the first Transport Order Step.
-4. kGoToPickupLocation: The first Transport Order Step is always to go to a pickup location.
-   The Transport Order enters this state once it starts moving.
+
+1. kCreated: The task creation is performed by the Material Flow Logical Agent.
+2. kQueued: Once an AMR is selected for the execution of a Task, it queues the it.
+3. kStarted: Once the Task is sent to the AMR Physical Asset it will start the execution. 
+4. kGoToPickupLocation: In the current task configuration, the first step is always going to a pickup location. 
+   The Task enters this state once it starts moving.
 5. kReachedPickupLocation: The AMR has reached the pickup location.
-6. kLoad: The Transport Order enters this state once the AMR starts loading the payload.
-7. kLoaded: The AMR has loaded the payload.
-   After loading the AMR will either go to a delivery location or go to another pickup location.
-8. kGoToDeliveryLocation: The Transport Order enters this state once the AMR starts going to the delivery station.
+6. kLoad: The Task enters this state once the AMR starts loading the payload.
+7. kLoaded: The AMR has loaded the payload. After loading the AMR will go to a delivery location.
+8. kGoToDeliveryLocation: The Task enters this state once the AMR starts going to the delivery station.
 9. kReachedDeliveryLocation: The AMR has reached the delivery location.
-10. kUnload: The Transport Order enters this state once the AMR starts loading the payload.
-11. kUnloaded: The AMR has unloaded the payload. This is the last step in a Transport Order so the following state will always be finished.
-12. kFinished: There are no more steps left in the Transport Order.
+10. kUnload: The Task enters this state once the AMR starts loading the payload.
+11. kUnloaded: The AMR has unloaded the payload. This is the last step in a Task, so the following state will always be finished.
+12. kFinished: There are no more steps left in the Task.
 13. kError: This state is reached if the Transport Order cannot be finished.
     This is the case if
     - another Transport Order is currently executed

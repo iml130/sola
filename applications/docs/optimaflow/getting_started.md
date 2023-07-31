@@ -13,11 +13,7 @@ New technologies and applications emerge in the intelligent manufacturing enviro
 These I4.0-scenarios are built on the design principles such as interconnectivity, information transparency (open interfaces and standards), decentralized decision-making, and technical assistance [[3]](#references).
 For instance, a production order (PO) becomes digital and gains access to information of all devices and services of the CPPS.
 
-### Entities within a CPPS
-
-TODO: Figure
-
-### Agent-based Approach
+### Entities within a CPPS, Agent-based Approach, Participants Overview
 
 - Material Flow
 - Logical Agent
