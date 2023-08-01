@@ -1,4 +1,4 @@
-# Getting Started
+# Using MINHTON
 
 MINHTON is a peer-to-peer management overlay working on the application layer that enables an efficient, decentralized communication by constructing and maintaining a deterministic balanced tree structure.
 The integrated search exact for finding peers at given tree positions as well as the peer discovery for finding stored data and more complex retrievals complement MINHTON.
@@ -8,6 +8,46 @@ The root node initalizes the network, but can be replaced later on.
 Please note that we do not deal with the physical connection with appropriate listeners between the nodes here, we assume that this is given.
 
 ## Code Example
+
+### High Level API
+
+The High Level API can be found in [`minhton.h`](https://github.com/iml130/sola/blob/main/minhton/include/minhton/core/minhton.h).
+It is not feature complete yet and may change in the future.
+
+We can create a MINHTON network starting from an arbitrary root node:
+
+```cpp
+#include "minhton/core/minhton.h"
+#include "minhton/utils/config_node.h"
+
+uint16_t fanout = 2;
+
+int main() {
+  minhton::ConfigNode node_config;
+  node_config.setIsRoot(true);
+  node_config.setFanout(fanout);
+  minhton::Minhton minhton_instance{node_config};
+}
+```
+
+Other participants in the network are then allowed to join like this:
+
+```cpp
+#include "minhton/core/minhton.h"
+#include "minhton/utils/config_node.h"
+
+int main() {
+  std::string known_ip_of_other_node = "0.0.0.0"; // Replace with actual IP
+
+  minhton::ConfigNode node_config;
+  node_config.setJoinInfo({JoinInfo::kIp, known_ip_of_other_node, minhton::kDefaultIpPort});
+  minhton::Minhton minhton_instance{node_config};
+}
+```
+
+If a participant should leave the network, you can simply call `#!cpp minhton_instance.stop();`.
+
+### Low Level API
 
 We can initialize the root node in the following way:
 
@@ -27,20 +67,20 @@ int main() {
 }
 ```
 
+Since the root node creates the network, it has to set the fanout which cannot be changed later on.
+The algorithms and timeouts can be freely set to suit different needs.
+
 Feel free to set the fanout to any appropriate value >= 2.
-The other nodes need to know the IP address and port of any other running node and can join the network like this:
+The other nodes need to know the IP address and (if changed) port of any other running node and can join the network like this:
 
 ```cpp
 #include "minhton/core/node.h"
 #include "minhton/utils/config_node.h"
 
-uint16_t fanout = 2;
-
 int main() {
   std::string known_ip_of_other_node = "0.0.0.0"; // Replace with actual IP
 
   minhton::ConfigNode node_config;
-  node_config.setFanout(fanout);
   node_config.setJoinInfo({JoinInfo::kIp, known_ip_of_other_node, minhton::kDefaultIpPort});
   minhton::MinhtonNode node{node_config, NeighborCallbackFct{}, true};
 }
@@ -78,7 +118,7 @@ node.getAccessContainer()->perform_search_exact(dest_node, message_query);
 The query that should reach the node with unknown network information can be of any message type of the [MessageSEVariant](https://iml130.github.io/sola/doxygen/namespaceminhton.html#typedef-members).
 
 Whenever a node wants to leave the network, it is necessary to initiate a leave procedure so that the tree structure remains consistent.
-Algorithmically under the hood this causes a specific forwaring of a message until a replacement node is found that can take over the position of the leaving node.
+Algorithmically under the hood this causes a specific forwarding of a message until a replacement node is found that can take over the position of the leaving node.
 Only the node on the last position of the tree can freely leave, but still always needs to update the other nodes to prevent invalid routing information.
 
 After a node receives a leave network signal, it initiates the leave procedure.
