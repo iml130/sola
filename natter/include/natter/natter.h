@@ -36,7 +36,7 @@ public:
   ~Natter() = default;
 
   /**
-   * Publish message to a topic via gossip
+   * Publish message to a topic
    * @param topic Topic to publish to
    * @param msg_content content to publish. Might be in any form. std::string acts as a container
    * only.
