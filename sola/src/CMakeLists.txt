@@ -14,10 +14,20 @@ target_link_libraries(sola_service INTERFACE sola_endpoint)
 
 add_library(SOLA INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/sola.h)
 target_include_directories(SOLA INTERFACE ${SOLA_SOURCE_DIR}/include)
-target_link_libraries(SOLA INTERFACE sola_service sola_endpoint)
+target_link_libraries(SOLA INTERFACE
+        sola_service
+        sola_endpoint
+        sola_logger_interface
+        solanet_uuid
+        solanet_uuid_generator
+        NetworkUDP
+)
 
 add_library(sola_check INTERFACE)
 target_sources(sola_check
         INTERFACE
         ${SOLA_SOURCE_DIR}/src/sola_check.h
 )
+
+add_library(sola_logger_interface INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/logger_interface.h)
+target_include_directories(sola_logger_interface INTERFACE ${SOLA_SOURCE_DIR}/include)

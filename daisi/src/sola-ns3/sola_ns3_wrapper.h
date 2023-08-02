@@ -22,7 +22,6 @@
 #include "SOLA/event_dissemination_minhcast.h"
 #include "SOLA/management_overlay_minhton.h"
 #include "SOLA/sola.h"
-#include "cpps/common/cpps_logger_ns3.h"
 #include "logging/logger_manager.h"
 
 namespace daisi::sola_ns3 {
@@ -33,7 +32,7 @@ public:
   SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &config_mo,
                  const sola::EventDisseminationMinhcast::Config &config_ed,
                  sola::MessageReceiveFct receive_fct, sola::TopicMessageReceiveFct topic_recv,
-                 std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger, std::string node_name_);
+                 std::string node_name_);
 
   void subscribeTopic(const std::string &topic);
   void unsubscribeTopic(const std::string &topic);
@@ -53,7 +52,6 @@ public:
   }
 
 private:
-  std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger_;
   std::string node_name_;
 
   std::vector<std::string> subscribed_topics_;

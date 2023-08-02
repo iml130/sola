@@ -18,6 +18,7 @@
 
 #include "minhton/utils/config_reader.h"
 #include "sola-ns3/config_helper_ns3.h"
+#include "solanet/uuid.h"
 #include "utils/sola_utils.h"
 
 using namespace ns3;
@@ -77,12 +78,11 @@ void SolaApplication::startSOLA() {
   auto topic_receive = [id = id_](const sola::TopicMessage &msg) {
     std::cout << "[" << Simulator::Now().GetMilliSeconds() << "] RECEIVE TOPIC MESSAGE "
               << msg.topic << " ON NODE " << id << " WITH LENGTH " << msg.content.size() << " FROM "
-              << msg.sender << std::endl;
+              << solanet::uuidToString(msg.sender) << std::endl;
   };
 
-  auto logger = daisi::global_logger_manager->createSolaLogger();
   sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, single_receive,
-                                                     topic_receive, logger,
+                                                     topic_receive,
                                                      "");  // Already joining overlay network
 }
 

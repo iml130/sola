@@ -7,6 +7,7 @@
 #ifndef SOLA_EVENT_DISSEMINATION_MINHCAST_H_
 #define SOLA_EVENT_DISSEMINATION_MINHCAST_H_
 
+#include "SOLA/logger_interface.h"
 #include "SOLA/message.h"
 #include "event_dissemination/event_dissemination.h"
 #include "minhton/core/minhton.h"
@@ -45,9 +46,9 @@ public:
   using Logger = natter::logging::LoggerPtr;
 
   EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct, std::shared_ptr<Storage> storage_,
-                             std::string ip, const Config &config);
+                             std::string ip, const Config &config, LoggerPtr logger);
   ~EventDisseminationMinhcast() override = default;
-  void publish(const std::string &topic, const std::string &message) final;
+  void publish(const TopicMessage &msg) final;
   void subscribe(const std::string &topic) final;
   void unsubscribe(const std::string &topic) final;
 
@@ -86,6 +87,9 @@ private:
   std::shared_ptr<Storage> storage_;
 
   bool stopping_ = false;
+
+  LoggerPtr logger_;  // Logger only for logging msg id mapping. Receive/Send logging
+                      // is automatically done within SOLA itself.
 };
 }  // namespace sola
 

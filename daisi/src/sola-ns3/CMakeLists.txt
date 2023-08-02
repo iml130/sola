@@ -1,3 +1,14 @@
+add_library(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/sola.h)
+target_include_directories(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include)
+target_link_libraries(SOLA_ns3 INTERFACE
+        sola_service
+        sola_endpoint
+        sola_logger_interface
+        solanet_uuid
+        solanet_uuid_generator_sim
+        NetworkUDPSim
+)
+
 add_library(daisi_sola_sola_ns3_wrapper STATIC)
 target_sources(daisi_sola_sola_ns3_wrapper
         PRIVATE
@@ -6,7 +17,7 @@ target_sources(daisi_sola_sola_ns3_wrapper
 )
 target_link_libraries(daisi_sola_sola_ns3_wrapper
         PUBLIC
-        SOLA
+        SOLA_ns3
         daisi_logger_manager
         ManagementOverlayMINHTONSim
         EventDisseminationMinhcastSim
@@ -28,6 +39,7 @@ target_link_libraries(daisi_sola_application
         daisi_utils
         minhton_utils_config_reader
         sola_config_helper_ns3
+        solanet_uuid
 )
 
 add_library(daisi_sola_logger_ns3 STATIC)
@@ -40,6 +52,7 @@ target_link_libraries(daisi_sola_logger_ns3
         PUBLIC
         daisi_logging_sqlite_helper
         daisi_cpps_common_cpps_logger_ns3
+        sola_logger_interface
         PRIVATE
         ns3::libcore
         solanet_serializer
@@ -81,6 +94,7 @@ target_link_libraries(EventDisseminationMinhcastSim
         Storage
         PRIVATE
         sola_check
+        solanet_serializer
         ns3::libcore
 )
 target_include_directories(EventDisseminationMinhcastSim PUBLIC ${SOLA_SOURCE_DIR}/include)

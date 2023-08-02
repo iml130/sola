@@ -8,5 +8,6 @@ target_link_libraries(EventDisseminationMinhcast
         Storage
         PRIVATE
         sola_check
+        solanet_serializer
 )
 target_include_directories(EventDisseminationMinhcast PUBLIC ${SOLA_SOURCE_DIR}/include)

@@ -10,22 +10,28 @@
 #include <map>
 #include <tuple>
 
+#include "solanet/serializer/serializer.h"
+
 namespace sola {
 EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct,
                                                        std::shared_ptr<Storage> storage,
-                                                       std::string ip, const Config &config)
+                                                       std::string ip, const Config &config,
+                                                       LoggerPtr logger)
     : config_(config),
       minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
           [=](const natter::Message &m) {
-            msgRecvFct({m.topic, solanet::uuidToString(m.sender_id), m.content, m.message_id});
+            msgRecvFct(solanet::serializer::deserialize<sola::TopicMessage>(m.content));
           },
           [](const std::string & /*unused*/) {}, config.logger)),
       ip_(std::move(ip)),
-      storage_(std::move(storage)) {}
+      storage_(std::move(storage)),
+      logger_(std::move(logger)) {}
 
-void EventDisseminationMinhcast::publish(const std::string &topic, const std::string &message) {
+void EventDisseminationMinhcast::publish(const TopicMessage &msg) {
   if (stopping_) throw std::runtime_error("already stopping!");
-  minhcast_->publish(topic, message);
+  solanet::UUID uuid =
+      minhcast_->publish(msg.topic, solanet::serializer::serialize<sola::TopicMessage>(msg));
+  logger_->logMessageIDMapping(msg.uuid, uuid);
 }
 
 void EventDisseminationMinhcast::unsubscribe(const std::string &topic) {

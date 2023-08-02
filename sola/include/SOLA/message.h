@@ -12,6 +12,9 @@
 #include <functional>
 #include <string>
 
+#include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+
 namespace sola {
 
 struct Message {
@@ -20,9 +23,11 @@ struct Message {
 };
 struct TopicMessage {
   std::string topic;
-  std::string sender;
+  solanet::UUID sender;
   std::string content;
-  std::array<uint8_t, 16> uuid;
+  solanet::UUID uuid;
+
+  SERIALIZE(topic, sender, content, uuid);
 };
 
 using TopicMessageReceiveFct = std::function<void(const TopicMessage &m)>;

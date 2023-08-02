@@ -14,7 +14,7 @@ namespace sola {
 class EventDissemination {
 public:
   virtual ~EventDissemination() = default;
-  virtual void publish(const std::string &topic, const std::string &message) = 0;
+  virtual void publish(const TopicMessage &msg) = 0;
   virtual void subscribe(const std::string &topic) = 0;
   virtual void unsubscribe(const std::string &topic) = 0;
 
