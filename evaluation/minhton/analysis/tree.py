@@ -16,7 +16,7 @@ def get_max_level(event_id, sql_connector):
     else:
         timestamp_statement = """
             SELECT MAX(Timestamp_ms)
-            FROM RoutingInfo
+            FROM MinhtonRoutingInfo
             WHERE EventId = {}
             """.format(event_id[0])
         timestamp = sql_connector.fetch_one(timestamp_statement)[0]

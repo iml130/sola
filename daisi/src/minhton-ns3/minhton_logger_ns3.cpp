@@ -37,11 +37,12 @@ void MinhtonLoggerNs3::logEvent(const LoggerInfoAddEvent &info) {
 }
 
 // * FindQuery
-TableDefinition kFindQuery("FindQuery", {DatabaseColumnInfo{"Id"},
-                                         {"Timestamp_ms", "%lu", true},
-                                         {"EventId", "%lu", true, "Event(Id)"},
-                                         {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                                         {"Query", "%s"}});
+TableDefinition kFindQuery("MinhtonFindQuery",
+                           {DatabaseColumnInfo{"Id"},
+                            {"Timestamp_ms", "%lu", true},
+                            {"EventId", "%lu", true, "Event(Id)"},
+                            {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                            {"Query", "%s"}});
 static const std::string kCreateFindQuery = getCreateTableStatement(kFindQuery);
 static bool find_query_exists_ = false;
 
@@ -59,7 +60,7 @@ void MinhtonLoggerNs3::logFindQuery(const LoggerInfoAddFindQuery &info) {
 }
 
 // * FindQueryResult
-TableDefinition kFindQueryResult("FindQueryResult",
+TableDefinition kFindQueryResult("MinhtonFindQueryResult",
                                  {DatabaseColumnInfo{"Id"},
                                   {"Timestamp_ms", "%lu", true},
                                   {"EventId", "%lu", true, "Event(Id)"},
@@ -310,7 +311,7 @@ void MinhtonLoggerNs3::logTraffic(const MessageLoggingInfo &info) {
 }
 
 // * SearchContent
-TableDefinition kSearchContent("SearchContent",
+TableDefinition kSearchContent("MinhtonSearchContent",
                                {DatabaseColumnInfo{"Id"},
                                 {"Timestamp_ms", "%lu", true},
                                 {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
@@ -337,17 +338,17 @@ void MinhtonLoggerNs3::logContent(const LoggerInfoAddContent &info) {
   log_(getInsertStatement(kSearchContent, t));
 }
 
-// * SearchTest
-TableDefinition kSearchTest("SearchTest", {DatabaseColumnInfo{"Id"},
-                                           {"Timestamp_ms", "%lu", true},
-                                           {"EventId", "%lu", true, "Event(Id)"},
-                                           {"State", "%u", true},
-                                           {"SenderLevel", "%u"},
-                                           {"SenderNumber", "%u"},
-                                           {"TargetLevel", "%u"},
-                                           {"TargetNumber", "%u"},
-                                           {"HopLevel", "%u"},
-                                           {"HopNumber", "%u"}});
+// * MinhtonSearchTest
+TableDefinition kSearchTest("MinhtonSearchTest", {DatabaseColumnInfo{"Id"},
+                                                  {"Timestamp_ms", "%lu", true},
+                                                  {"EventId", "%lu", true, "Event(Id)"},
+                                                  {"State", "%u", true},
+                                                  {"SenderLevel", "%u"},
+                                                  {"SenderNumber", "%u"},
+                                                  {"TargetLevel", "%u"},
+                                                  {"TargetNumber", "%u"},
+                                                  {"HopLevel", "%u"},
+                                                  {"HopNumber", "%u"}});
 static const std::string kCreateSearchTest = getCreateTableStatement(kSearchTest);
 static bool search_test_exists_ = false;
 
@@ -371,7 +372,7 @@ void MinhtonLoggerNs3::logSearchExactTest(const LoggerInfoSearchExact &info) {
 }
 
 // * RoutingInfo
-TableDefinition kRoutingInfo("RoutingInfo",
+TableDefinition kRoutingInfo("MinhtonRoutingInfo",
                              {DatabaseColumnInfo{"Id"},
                               {"Timestamp_ms", "%lu", true},
                               {"EventId", "%lu", true, "Event(Id)"},
@@ -412,11 +413,12 @@ ViewDefinition kRtReplacements = {
     {"Relationship", "enumMinhtonRelationship.Name AS Relationship"}};
 static const std::string kCreateViewRoutingInfo = getCreateViewStatement(
     kRoutingInfo, kRtReplacements,
-    {"LEFT JOIN MinhtonNode AS N1 ON RoutingInfo.NodeUuid = N1.PositionUuid",
+    {"LEFT JOIN MinhtonNode AS N1 ON MinhtonRoutingInfo.NodeUuid = N1.PositionUuid",
      "LEFT JOIN MinhtonPhysicalNodeInfo AS Net1 ON N1.ApplicationUuid = Net1.ApplicationUuid",
-     "LEFT JOIN MinhtonNode AS N2 ON RoutingInfo.NeighborNodeUuid = N2.PositionUuid",
+     "LEFT JOIN MinhtonNode AS N2 ON MinhtonRoutingInfo.NeighborNodeUuid = N2.PositionUuid",
      "LEFT JOIN MinhtonPhysicalNodeInfo AS Net2 ON N2.ApplicationUuid = Net2.ApplicationUuid",
-     "LEFT JOIN enumMinhtonRelationship ON RoutingInfo.Relationship = enumMinhtonRelationship.Id"});
+     "LEFT JOIN enumMinhtonRelationship ON MinhtonRoutingInfo.Relationship = "
+     "enumMinhtonRelationship.Id"});
 
 void MinhtonLoggerNs3::logNeighbor(const LoggerInfoAddNeighbor &info) {
   if (!routing_info_exists_) {
