@@ -11,7 +11,8 @@ edit_uri: ""
 
 nav:
   - Home:
-    - Introduction: introduction.md
+    - Index: index.md
+    - Introduction: index.md
     - Getting Started: getting_started.md
     - SOLA:
       - Using SOLA: sola/usage.md
