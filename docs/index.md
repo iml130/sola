@@ -1,3 +1,5 @@
+# Introduction
+
 <p align="center">
 <img src="img/sola_light.png" class="logo" width="300px" alt="natter Logo">
 </p>
