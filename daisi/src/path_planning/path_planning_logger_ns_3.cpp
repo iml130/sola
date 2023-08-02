@@ -240,7 +240,7 @@ TableDefinition kTransportOrderHistory("TransportOrderHistory",
                                           {"State", "%u", true},
                                           {"PosX_m", "%f", true},
                                           {"PosY_m", "%f", true},
-                                          {"AmrId", "sql%u", false, "AutonomousMobileRobot(Id)"}
+                                          {"AmrId", "sql%u", false, "CppsAutonomousMobileRobot(Id)"}
                                           /*{"TransportServiceId", "%u", false,
                                            "TransportService(Id)"}*/});
 static const std::string kCreateTransportOrderHistory =
@@ -263,7 +263,7 @@ void PathPlanningLoggerNs3::logTransportOrderUpdate(const Task &order,
   auto table = kTransportOrderHistory;
   if (!assigned_agv.empty()) {
     std::string amr_id =
-        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+        "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
     auto t = std::make_tuple(
         /* TransportOrderId */ transport_order_id.c_str(),
         /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
@@ -301,7 +301,7 @@ void PathPlanningLoggerNs3::logTransportOrderUpdate(const std::string &order_uui
   auto table = kTransportOrderHistory;
   if (!assigned_agv.empty()) {
     std::string amr_id =
-        "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
+        "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" + assigned_agv + "')";
     auto t = std::make_tuple(
         /* TransportOrderId */ transport_order_id.c_str(),
         /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),

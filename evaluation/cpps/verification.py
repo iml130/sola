@@ -14,14 +14,14 @@ def evaluate_database(path):
         with db:
             # check if there are 12 states for every mf
             result = db.fetch_all(
-                "SELECT COUNT(*) FROM MaterialFlowOrderHistory GROUP by MaterialFlowOrderId")
+                "SELECT COUNT(*) FROM CppsMaterialFlowOrderHistory GROUP by MaterialFlowOrderId")
             for res in result:
                 valid &= (res[0] == 12)
             # check if all states of all mfs are ordered correctly
             [[mf_count]] = db.fetch_all(
-                "SELECT COUNT(DISTINCT MaterialFlowOrderId) FROM MaterialFlowOrderHistory")
+                "SELECT COUNT(DISTINCT MaterialFlowOrderId) FROM CppsMaterialFlowOrderHistory")
             for i in range(1, mf_count+1):
-                sql_query = "SELECT Timestamp_ms, State FROM MaterialFlowOrderHistory WHERE MaterialFlowOrderId = " + \
+                sql_query = "SELECT Timestamp_ms, State FROM CppsMaterialFlowOrderHistory WHERE MaterialFlowOrderId = " + \
                     str(i) + " ORDER BY Timestamp_ms, State"
                 result = db.fetch_all(sql_query)
                 # check if all states are met
