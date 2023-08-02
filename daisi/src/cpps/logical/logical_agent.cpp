@@ -54,7 +54,7 @@ void LogicalAgent::initCommunication() {
   };
 
   sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, message_recv_fct,
-                                                     topic_message_recv_fct, logger_, uuid_);
+                                                     topic_message_recv_fct, uuid_);
 }
 
 void LogicalAgent::processMessage(const Message &msg) {

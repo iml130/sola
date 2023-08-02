@@ -17,11 +17,14 @@
 #include <string>
 #include <vector>
 
+#include "SOLA/logger_interface.h"
 #include "endpoint.h"
 #include "event_dissemination/event_dissemination.h"
 #include "message.h"
 #include "service.h"
 #include "solanet/network_udp/network_udp.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 #include "storage/storage.h"
 
 namespace sola {
@@ -40,14 +43,21 @@ public:
    */
   SOLA(const typename StorageT::Config &storage_config,
        const typename EventDisseminationT::Config &event_dissemination_config,
-       MessageReceiveFct receive_fct, TopicMessageReceiveFct topic_recv)
-      : receive_fct_(std::move(receive_fct)),
-        network_(std::make_unique<solanet::Network>([&](const solanet::Message &msg) {
-          receive_fct_({msg.getIp(), msg.getMessage()});
+       MessageReceiveFct receive_fct, TopicMessageReceiveFct topic_recv, LoggerPtr logger)
+      : network_(std::make_unique<solanet::Network>([receive_fct](const solanet::Message &msg) {
+          receive_fct({msg.getIp(), msg.getMessage()});
         })),
         storage_(std::make_shared<StorageT>(storage_config)),
-        ed_(std::make_unique<EventDisseminationT>(topic_recv, storage_, network_->getIP(),
-                                                  event_dissemination_config)) {}
+        ed_(std::make_unique<EventDisseminationT>(
+            [this, topic_recv](const TopicMessage &m) {
+              logger_->logReceiveTopicMessage(m);
+              topic_recv(m);
+            },
+            storage_, network_->getIP(), event_dissemination_config, logger)),
+        logger_(std::move(logger)),
+        uuid_(solanet::generateUUID()) {
+    logger_->setApplicationUUID(solanet::uuidToString(uuid_));
+  }
 
   void stop() {
     storage_->stop();
@@ -85,10 +95,20 @@ public:
   }
 
   // event dissemination
-  void subscribeTopic(const std::string &topic) { ed_->subscribe(topic); }
-  void unsubscribeTopic(const std::string &topic) { ed_->unsubscribe(topic); }
+  void subscribeTopic(const std::string &topic) {
+    logger_->logSubscribeTopic(topic);
+    ed_->subscribe(topic);
+  }
+
+  void unsubscribeTopic(const std::string &topic) {
+    logger_->logUnsubscribeTopic(topic);
+    ed_->unsubscribe(topic);
+  }
+
   void publishMessage(const std::string &topic, const std::string &message) {
-    ed_->publish(topic, message);
+    sola::TopicMessage msg{topic, uuid_, message, solanet::generateUUID()};
+    logger_->logPublishTopicMessage(msg);
+    ed_->publish(msg);
   }
 
   // returns ip/port for SOLA high-level communication
@@ -101,10 +121,11 @@ public:
   bool isStorageRunning() { return storage_->isRunning(); }
 
 private:
-  MessageReceiveFct receive_fct_;
   std::unique_ptr<solanet::Network> network_;
   std::shared_ptr<StorageT> storage_;
   std::unique_ptr<EventDisseminationT> ed_;
+  LoggerPtr logger_;
+  solanet::UUID uuid_;  /// UUID of this SOLA instance
 };
 }  // namespace sola
 

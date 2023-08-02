@@ -20,19 +20,48 @@
 #include <ctime>
 #include <unordered_map>
 
-#include "cpps/common/cpps_logger_ns3.h"
+#include "SOLA/logger_interface.h"
+#include "logging/definitions.h"
 #include "logging/sqlite/sqlite_helper.h"
 
 namespace daisi::sola_ns3 {
-// Ref #56
-class SolaLoggerNs3 : public daisi::cpps::CppsLoggerNs3 {
-public:
-  SolaLoggerNs3() = delete;
-  explicit SolaLoggerNs3(LogDeviceApp log_device_application, LogFunction log);
 
-  virtual ~SolaLoggerNs3() = default;
+class SolaLoggerNs3 final : public sola::LoggerInterface {
+public:
+  SolaLoggerNs3(LogDeviceApp log_device_application, LogFunction log);
+
+  ~SolaLoggerNs3() override;
+
+  void logSubscribeTopic(const std::string &topic) const override;
+
+  void logUnsubscribeTopic(const std::string &topic) const override;
+
+  void logPublishTopicMessage(const sola::TopicMessage &msg) const override;
+
+  void logReceiveTopicMessage(const sola::TopicMessage &msg) const override;
+
+  void setApplicationUUID(const std::string &app_uuid) override;
+
+  void logMessageIDMapping(const solanet::UUID &sola_msg_uuid,
+                           const solanet::UUID &ed_msg_uuid) const override;
 
 private:
+  enum TopicEventType {
+    kUnsubscribe,
+    kSubscribe,
+  };
+
+  enum TopicPublishType {
+    kPublish,
+    kReceive,
+  };
+
+  void logTopicEvent(const std::string &topic, TopicEventType event_type) const;
+
+  void logTopicMessage(const sola::TopicMessage &ms, TopicPublishType type) const;
+
+  LogDeviceApp log_device_application_;
+  LogFunction log_;
 };
 
 }  // namespace daisi::sola_ns3

@@ -23,16 +23,13 @@ namespace daisi::sola_ns3 {
 SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &config_mo,
                                const sola::EventDisseminationMinhcast::Config &config_ed,
                                sola::MessageReceiveFct receive_fct,
-                               sola::TopicMessageReceiveFct topic_recv,
-                               std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger,
-                               std::string node_name)
-    : SOLA(config_mo, config_ed, receive_fct, topic_recv),
-      logger_(std::move(logger)),
+                               sola::TopicMessageReceiveFct topic_recv, std::string node_name)
+    : SOLA(config_mo, config_ed, receive_fct, topic_recv,
+           daisi::global_logger_manager->createSolaLogger()),
       node_name_(std::move(node_name)) {}
 
 void SOLAWrapperNs3::subscribeTopic(const std::string &topic) {
   if (!isSubscribed(topic)) {
-    logger_->logTopicEvent(topic, node_name_, true);
     SOLA::subscribeTopic(topic);
 
     subscribed_topics_.push_back(topic);
@@ -41,7 +38,6 @@ void SOLAWrapperNs3::subscribeTopic(const std::string &topic) {
 
 void SOLAWrapperNs3::unsubscribeTopic(const std::string &topic) {
   if (isSubscribed(topic)) {
-    logger_->logTopicEvent(topic, node_name_, false);
     SOLA::unsubscribeTopic(topic);
 
     subscribed_topics_.erase(
@@ -52,7 +48,6 @@ void SOLAWrapperNs3::unsubscribeTopic(const std::string &topic) {
 
 void SOLAWrapperNs3::publishMessage(const std::string &topic, const std::string &serialized_message,
                                     const std::string &logging_content) {
-  logger_->logTopicMessage(topic, "", node_name_, logging_content, false);
   SOLA::publishMessage(topic, serialized_message);
 }
 

@@ -26,45 +26,6 @@ namespace daisi::cpps {
 // Refer to DatabaseTable and DatabaseColumnInfo definitions in ../logging/definitions.h
 //! Don't forget to use .c_str() to convert std::string into a char array
 
-// * CppsTopicMessage
-TableDefinition kTopicMessage("CppsTopicMessage", {DatabaseColumnInfo{"Id"},
-                                                   {"Timestamp_ms", "%lu", true},
-                                                   {"Topic", "%s", true},
-                                                   {"MessageUuid", "%s", true},
-                                                   {"Node", "%s", true},
-                                                   {"Content", "%s"},
-                                                   {"Receive", "%u", true}});
-static const std::string kCreateTopicMessage = getCreateTableStatement(kTopicMessage);
-static bool topic_message_exists_ = false;
-
-void CppsLoggerNs3::logTopicMessage(const std::string &topic, const std::string &message_id,
-                                    const std::string &node, const std::string &message,
-                                    bool receive) {
-  if (!topic_message_exists_) {
-    log_(kCreateTopicMessage);
-    topic_message_exists_ = true;
-  }
-
-  // TODO Very inefficient way to escape characters in sqlite statement. Change to sqlite prepare
-  std::string msg = message;
-  const char separator = '\'';
-  for (int i = 0; i < msg.size(); i++) {
-    if (msg[i] == separator && (i + 1 >= msg.size() || msg[i + 1] != separator)) {
-      msg.insert(i, "\'");
-      i++;
-    }
-  }
-
-  auto t = std::make_tuple(
-      /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
-      /* Topic */ topic.c_str(),
-      /* MessageUuid */ message_id.c_str(),
-      /* Node */ node.c_str(),
-      /* Content */ msg.c_str(),
-      /* Receive */ receive ? 1 : 0);
-  log_(getInsertStatement(kTopicMessage, t));
-}
-
 // * ExecutedOrderUtility
 TableDefinition kExecutedOrderUtility("ExecutedOrderUtility",
                                       {{"OrderUuid", "%s", true, "TransportOrder(OrderUuid)"},
@@ -238,32 +199,6 @@ void CppsLoggerNs3::logStation(const std::string &name, const std::string &type,
       /* PosY_m */ position.y);
   log_(getInsertStatement(kStation, t));
   // additionalPositions.empty() ? "" : stream.str().c_str()
-}
-
-// * TopicEvent
-TableDefinition kTopicEvent("TopicEvent",
-                            {DatabaseColumnInfo{"Id"},
-                             {"Timestamp_ms", "%lu", true},
-                             {"Topic", "%s", true},
-                             {"SourceUuid", "%s",
-                              true},  // TODO: what is this?! materialFlow / transportOrder
-                             {"Subscribe", "%u", true}});
-static const std::string kCreateTopicEvent = getCreateTableStatement(kTopicEvent);
-static bool topic_event_exists_ = false;
-
-void CppsLoggerNs3::logTopicEvent(const std::string &topic, const std::string &node,
-                                  bool subscribe) {
-  if (!topic_event_exists_) {
-    log_(kCreateTopicEvent);
-    topic_event_exists_ = true;
-  }
-
-  auto t = std::make_tuple(
-      /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
-      /* Topic */ topic.c_str(),
-      /* SourceUuid */ node.c_str(),
-      /* Subscribe */ subscribe ? 1 : 0);
-  log_(getInsertStatement(kTopicEvent, t));
 }
 
 // * Constructor & Other methods

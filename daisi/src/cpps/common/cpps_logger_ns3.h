@@ -115,9 +115,6 @@ public:
   void logPositionUpdate(const AmrPositionLoggingInfo &logging_info);
   void logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info);
   void logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info);
-  void logTopicMessage(const std::string &topic, const std::string &message_id,
-                       const std::string &node, const std::string &message, bool receive);
-  void logTopicEvent(const std::string &topic, const std::string &node, bool subscribe);
   void logCppsMessageTypes();
 
   void logMaterialFlow(const std::string &mf_uuid, const std::string &ip, uint16_t port,
