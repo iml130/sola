@@ -26,8 +26,8 @@ namespace daisi::cpps {
 // Refer to DatabaseTable and DatabaseColumnInfo definitions in ../logging/definitions.h
 //! Don't forget to use .c_str() to convert std::string into a char array
 
-// * ExecutedOrderUtility
-TableDefinition kExecutedOrderUtility("ExecutedOrderUtility",
+// * CppsExecutedOrderUtility
+TableDefinition kExecutedOrderUtility("CppsExecutedOrderUtility",
                                       {{"OrderUuid", "%s", true, "TransportOrder(OrderUuid)"},
                                        {"AMRUuid", "%s", true, "AMR(ApplicationUuid)"},
                                        {"Timestamp_ms", "%lu", true},
@@ -81,13 +81,13 @@ void CppsLoggerNs3::logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &
   log_(getInsertStatement(kExecutedOrderUtility, t));
 }
 
-// * MaterialFlow
-TableDefinition kMaterialFlow("MaterialFlow", {DatabaseColumnInfo{"Id"},
-                                               {"Timestamp_ms", "%u", true},
-                                               {"Uuid", "%s", true},
-                                               {"IpLogicalCore", "%s", true},
-                                               {"PortLogicalCore", "%u", true},
-                                               {"State", "%u", true}});
+// * CppsMaterialFlow
+TableDefinition kMaterialFlow("CppsMaterialFlow", {DatabaseColumnInfo{"Id"},
+                                                   {"Timestamp_ms", "%u", true},
+                                                   {"Uuid", "%s", true},
+                                                   {"IpLogicalCore", "%s", true},
+                                                   {"PortLogicalCore", "%u", true},
+                                                   {"State", "%u", true}});
 static const std::string kCreateMaterialFlow = getCreateTableStatement(kMaterialFlow);
 static bool material_flow_exists_ = false;
 
@@ -107,8 +107,8 @@ void CppsLoggerNs3::logMaterialFlow(const std::string &mf_uuid, const std::strin
   log_(getInsertStatement(kMaterialFlow, t));
 }
 
-// * NegotiationTraffic
-TableDefinition kNegotiationTraffic("NegotiationTraffic",
+// * CppsNegotiationTraffic
+TableDefinition kNegotiationTraffic("CppsNegotiationTraffic",
                                     {DatabaseColumnInfo{"Id"},
                                      {"TransportOrderId", "sql%u", true, "TransportOrder(Id)"},
                                      {"Timestamp_ms", "%u", true},
@@ -161,7 +161,7 @@ ViewDefinition kNegotiationTrafficReplacements = {
     {"MsgType", "enumCppsMessageType.Name AS MessageType"}};
 static const std::string kCreateViewNegotiationTraffic = getCreateViewStatement(
     kNegotiationTraffic, kNegotiationTrafficReplacements,
-    {"LEFT JOIN enumCppsMessageType ON NegotiationTraffic.MsgType = enumCppsMessageType.Id"});
+    {"LEFT JOIN enumCppsMessageType ON CppsNegotiationTraffic.MsgType = enumCppsMessageType.Id"});
 
 void CppsLoggerNs3::logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info) {
   if (!negotiation_traffic_exists_) {
@@ -191,13 +191,13 @@ void CppsLoggerNs3::logNegotiationTraffic(const NegotiationTrafficLoggingInfo &l
   log_(getInsertStatement(kNegotiationTraffic, t));
 }
 
-// * Station
-TableDefinition kStation("Station", {DatabaseColumnInfo{"Id"},
-                                     // {"ApplicationUuid", "%s", true},
-                                     {"Name", "%s", true},
-                                     {"Type", "%s", true},
-                                     {"PosX_m", "%lf", true},
-                                     {"PosY_M", "%lf", true}});
+// * CppsStation
+TableDefinition kStation("CppsStation", {DatabaseColumnInfo{"Id"},
+                                         // {"ApplicationUuid", "%s", true},
+                                         {"Name", "%s", true},
+                                         {"Type", "%s", true},
+                                         {"PosX_m", "%lf", true},
+                                         {"PosY_M", "%lf", true}});
 static const std::string kCreateStation = getCreateTableStatement(kStation);
 static bool station_exists_ = false;
 

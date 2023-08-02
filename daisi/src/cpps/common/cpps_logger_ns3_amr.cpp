@@ -22,13 +22,14 @@
 
 namespace daisi::cpps {
 
-// * AMRHistory
-TableDefinition kAmrHistory("AMRHistory", {DatabaseColumnInfo{"Id"},
-                                           {"Timestamp_ms", "%u", true},
-                                           {"AmrId", "sql%u", true, "AutonomousMobileRobot(Id)"},
-                                           {"PosX_m", "%f", true},
-                                           {"PosY_m", "%f", true},
-                                           {"State", "%u", true}});
+// * CppsAMRHistory
+TableDefinition kAmrHistory("CppsAMRHistory",
+                            {DatabaseColumnInfo{"Id"},
+                             {"Timestamp_ms", "%u", true},
+                             {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
+                             {"PosX_m", "%f", true},
+                             {"PosY_m", "%f", true},
+                             {"State", "%u", true}});
 static const std::string kCreateAmrHistory = getCreateTableStatement(kAmrHistory);
 static bool amr_history_exists_ = false;
 
@@ -38,8 +39,8 @@ void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info
     amr_history_exists_ = true;
   }
 
-  std::string amr_id =
-      "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + logging_info.uuid + "')";
+  std::string amr_id = "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" +
+                       logging_info.uuid + "')";
   auto t = std::make_tuple(
       /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
       /* AmrId */ amr_id.c_str(),
@@ -50,8 +51,8 @@ void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info
   // logging_info.z_
 }
 
-// * AutonomousMobileRobot
-TableDefinition kAutonomousMobileRobot("AutonomousMobileRobot",
+// * CppsAutonomousMobileRobot
+TableDefinition kAutonomousMobileRobot("CppsAutonomousMobileRobot",
                                        {DatabaseColumnInfo{"Id"},
                                         {"Timestamp_ms", "%u", true},
                                         {"ApplicationUuid", "%s", true,
@@ -101,10 +102,10 @@ void CppsLoggerNs3::logAMR(const AmrLoggingInfo &amr_info) {
   log_(getInsertStatement(kAutonomousMobileRobot, t));
 }
 
-// * Service
-TableDefinition kService("Service", {{"Uuid", "%s", true, "", true},
-                                     {"StartTime_ms", "%u"},
-                                     {"Type", "%u", true}});
+// * CppsService
+TableDefinition kService("CppsService", {{"Uuid", "%s", true, "", true},
+                                         {"StartTime_ms", "%u"},
+                                         {"Type", "%u", true}});
 static const std::string kCreateService = getCreateTableStatement(kService);
 static bool service_exists_ = false;
 
@@ -121,11 +122,11 @@ void CppsLoggerNs3::logService(const std::string &uuid, uint8_t type) {
   log_(getInsertStatement(kService, t));
 }
 
-// * ServiceTransport
-TableDefinition kServiceTransport("ServiceTransport",
+// * CppsServiceTransport
+TableDefinition kServiceTransport("CppsServiceTransport",
                                   {DatabaseColumnInfo{"Id"},
                                    {"Uuid", "%s", true},
-                                   {"AmrId", "sql%u", true, "AutonomousMobileRobot(Id)"},
+                                   {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
                                    {"LoadCarrierType", "%s", true},
                                    {"MaxWeightPayload_kg", "%f", true}});
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
@@ -144,7 +145,7 @@ void CppsLoggerNs3::logTransportService(const sola::Service &service, bool /*act
   logService(service.uuid, 0);
   std::string uuid = service.uuid;
   std::string amr_id =
-      "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" + amr_uuid + "')";
+      "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" + amr_uuid + "')";
   auto t = std::make_tuple(
       /* Uuid */ uuid.c_str(),
       /* AmrId */ amr_id.c_str(),

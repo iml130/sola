@@ -22,13 +22,13 @@
 
 namespace daisi::cpps {
 
-// * MaterialFlow Tasks
-TableDefinition kMaterialFlowTask("MaterialFlowTask",
+// * CPPS MaterialFlow Tasks
+TableDefinition kMaterialFlowTask("CppsMaterialFlowTask",
                                   {
                                       DatabaseColumnInfo{"Id"},
                                       {"TaskUuid", "%s", true},
                                       {"TaskName", "%s", true},
-                                      {"MaterialFlowId", "sql%u", true, "MaterialFlow(Id)"},
+                                      {"MaterialFlowId", "sql%u", true, "CppsMaterialFlow(Id)"},
                                       {"FollowUpTaskUuids", "%s", true},
                                       {"LoadCarrierRequirement", "%s", true},
                                       {"PayloadRequirement_kg", "%f", true},
@@ -44,7 +44,7 @@ void CppsLoggerNs3::logMaterialFlowTask(const material_flow::Task &task,
   }
 
   std::string material_flow_id =
-      "(SELECT Id FROM MaterialFlow WHERE Uuid='" + material_flow_uuid + "')";
+      "(SELECT Id FROM CppsMaterialFlow WHERE Uuid='" + material_flow_uuid + "')";
 
   std::string follow_up_tasks = "";
   for (const auto &follow_up : task.getFollowUpTaskUuids()) {
@@ -64,12 +64,12 @@ void CppsLoggerNs3::logMaterialFlowTask(const material_flow::Task &task,
   log_(getInsertStatement(kMaterialFlowTask, t));
 }
 
-// * MaterialFlow Orders
-TableDefinition kMaterialFlowOrder("MaterialFlowOrder",
+// * CppsMaterialFlow Orders
+TableDefinition kMaterialFlowOrder("CppsMaterialFlowOrder",
                                    {
                                        DatabaseColumnInfo{"Id"},
                                        {"OrderUuid", "%s", true},
-                                       {"TaskId", "sql%u", true, "MaterialFlowTask(Id)"},
+                                       {"TaskId", "sql%u", true, "CppsMaterialFlowTask(Id)"},
                                        {"Type", "%s", true},
                                        {"Step1_Name", "%s", true},
                                        {"Step1_Parameters", "%s", false},
@@ -100,7 +100,7 @@ void CppsLoggerNs3::logMaterialFlowOrder(const material_flow::Order &order,
     material_flow_order_exists_ = true;
   }
 
-  std::string task_id = "(SELECT Id FROM MaterialFlowTask WHERE TaskUuid='" + task_uuid + "')";
+  std::string task_id = "(SELECT Id FROM CppsMaterialFlowTask WHERE TaskUuid='" + task_uuid + "')";
 
   std::string order_uuid = "";
   std::string type = "";
@@ -150,18 +150,19 @@ void CppsLoggerNs3::logMaterialFlowOrder(const material_flow::Order &order,
   log_(getInsertStatement(kMaterialFlowOrder, t));
 }
 
-// * TransportOrderHistory
+// * CppsMaterialFlowOrderHistory
 TableDefinition kMaterialFlowOrderHistory(
-    "MaterialFlowOrderHistory", {
-                                    DatabaseColumnInfo{"Id"},
-                                    {"MaterialFlowOrderId", "sql%u", true, "MaterialFlowOrder(Id)"},
-                                    {"MaterialFlowTaskId", "sql%u", true, "MaterialFlowTask(Id)"},
-                                    {"AmrId", "sql%u", false, "AutonomousMobileRobot(Id)"},
-                                    {"Timestamp_ms", "%u", true},
-                                    {"State", "%u", true},
-                                    {"PosX_m", "%f", true},
-                                    {"PosY_m", "%f", true},
-                                });
+    "CppsMaterialFlowOrderHistory",
+    {
+        DatabaseColumnInfo{"Id"},
+        {"MaterialFlowOrderId", "sql%u", true, "CppsMaterialFlowOrder(Id)"},
+        {"MaterialFlowTaskId", "sql%u", true, "CppsMaterialFlowTask(Id)"},
+        {"AmrId", "sql%u", false, "CppsAutonomousMobileRobot(Id)"},
+        {"Timestamp_ms", "%u", true},
+        {"State", "%u", true},
+        {"PosX_m", "%f", true},
+        {"PosY_m", "%f", true},
+    });
 static const std::string kCreateMaterialFlowOrderHistory =
     getCreateTableStatement(kMaterialFlowOrderHistory);
 static bool material_flow_order_history_exists_ = false;
@@ -173,17 +174,18 @@ void CppsLoggerNs3::logMaterialFlowOrderUpdate(
     material_flow_order_history_exists_ = true;
   }
 
-  std::string amr_id = "(SELECT Id FROM AutonomousMobileRobot WHERE ApplicationUuid='" +
+  std::string amr_id = "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" +
                        logging_info.amr_uuid + "')";
 
   std::string task_id =
-      "(SELECT Id FROM MaterialFlowTask WHERE TaskUuid='" + logging_info.task.getUuid() + "')";
+      "(SELECT Id FROM CppsMaterialFlowTask WHERE TaskUuid='" + logging_info.task.getUuid() + "')";
 
   std::string order_uuid;
   std::visit([&order_uuid](auto &&order) { order_uuid = order.getUuid(); },
              logging_info.task.getOrders()[logging_info.order_index]);
 
-  std::string order_id = "(SELECT Id FROM MaterialFlowOrder WHERE OrderUuid='" + order_uuid + "')";
+  std::string order_id =
+      "(SELECT Id FROM CppsMaterialFlowOrder WHERE OrderUuid='" + order_uuid + "')";
 
   auto t = std::make_tuple(
       /* MaterialFlowOrderId */ order_id.c_str(),
