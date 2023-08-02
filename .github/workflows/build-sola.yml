@@ -32,6 +32,21 @@ jobs:
         find solanet -path solanet/third_party -prune -type f -o -name "*.cpp" -o -name "*.h" >> files.txt
         clang-format --style='file:.clang-format' --dry-run --Werror `cat files.txt`
 
+  # Build documentation to check if build succeeds.
+  # Building for deployment happens in a different workflow.
+  build_documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install pip dependencies
+        run: pip install -r docs/requirements.txt
+      - name: Install doxygen
+        run: sudo apt-get install -y doxygen
+      - name: Build mkdocs
+        run: mkdocs build
+      - name: Build doxygen
+        run: doxygen
 
   ns-3_compile:
     runs-on: ubuntu-22.04
