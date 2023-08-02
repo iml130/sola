@@ -24,6 +24,7 @@
 #include "cpps/model/order_states.h"
 #include "logging/definitions.h"
 #include "material_flow/model/task.h"
+#include "solanet/uuid.h"
 
 namespace daisi::cpps {
 
@@ -116,6 +117,7 @@ public:
   void logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info);
   void logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info);
   void logCppsMessageTypes();
+  void logCppsMessage(solanet::UUID msg_uuid, const std::string &msg_content);
 
   void logMaterialFlow(const std::string &mf_uuid, const std::string &ip, uint16_t port,
                        uint8_t state);

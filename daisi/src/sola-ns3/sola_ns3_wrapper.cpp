@@ -46,9 +46,9 @@ void SOLAWrapperNs3::unsubscribeTopic(const std::string &topic) {
   }
 }
 
-void SOLAWrapperNs3::publishMessage(const std::string &topic, const std::string &serialized_message,
-                                    const std::string &logging_content) {
-  SOLA::publishMessage(topic, serialized_message);
+solanet::UUID SOLAWrapperNs3::publishMessage(const std::string &topic,
+                                             const std::string &serialized_message) {
+  return SOLA::publishMessage(topic, serialized_message);
 }
 
 bool SOLAWrapperNs3::isSubscribed(const std::string &topic) {

@@ -135,6 +135,28 @@ void CppsLoggerNs3::logCppsMessageTypes() {
   // }
 }
 
+TableDefinition kCppsMessage("CppsTopicMessage", {
+                                                     DatabaseColumnInfo{"Id"},
+                                                     {"MessageUuid", "%s", true},
+                                                     {"MessageContent", "%s", true},
+                                                 });
+static const std::string kCreateCppsMessage = getCreateTableStatement(kCppsMessage);
+static bool cpps_message_exists = false;
+
+void CppsLoggerNs3::logCppsMessage(solanet::UUID msg_uuid, const std::string &msg_content) {
+  if (!cpps_message_exists) {
+    log_(kCreateCppsMessage);
+    cpps_message_exists = true;
+  }
+
+  std::string msg_uuid_str = solanet::uuidToString(msg_uuid);
+
+  auto t = std::make_tuple(
+      /* MessageUuid */ msg_uuid_str.c_str(),
+      /* MessageContent */ msg_content.c_str());
+  log_(getInsertStatement(kCppsMessage, t));
+}
+
 ViewDefinition kNegotiationTrafficReplacements = {
     {"MsgType", "enumCppsMessageType.Name AS MessageType"}};
 static const std::string kCreateViewNegotiationTraffic = getCreateViewStatement(
