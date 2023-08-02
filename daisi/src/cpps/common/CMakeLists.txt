@@ -31,6 +31,7 @@ target_link_libraries(daisi_cpps_common_cpps_logger_ns3
         sola_service
         daisi_logging_definitions
         daisi_material_flow_model_task
+        solanet_uuid
 
         PRIVATE
         solanet_serializer

@@ -151,7 +151,8 @@ void IteratedAuctionDispositionInitiator::callForProposal() {
     auto topic = ability_topic_mapping_[pair.first];
 
     CallForProposal cfp(initiator_connection, pair.second);
-    sola_->publishMessage(topic, serialize(cfp), "TODO log cfp");
+    solanet::UUID uuid = sola_->publishMessage(topic, serialize(cfp));
+    logger_->logCppsMessage(uuid, "TODO log cfp");
   }
 }
 
@@ -172,7 +173,8 @@ void IteratedAuctionDispositionInitiator::iterationNotification(
                    [&](const auto &task) { return task.getUuid(); });
 
     IterationNotification notification(initiator_connection, task_uuids);
-    sola_->publishMessage(topic, serialize(notification), "TODO log iteration notification");
+    solanet::UUID uuid = sola_->publishMessage(topic, serialize(notification));
+    logger_->logCppsMessage(uuid, "TODO log iteration notification");
   }
 }
 

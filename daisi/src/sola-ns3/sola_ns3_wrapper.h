@@ -36,8 +36,7 @@ public:
 
   void subscribeTopic(const std::string &topic);
   void unsubscribeTopic(const std::string &topic);
-  void publishMessage(const std::string &topic, const std::string &serialized_message,
-                      const std::string &logging_content = "");
+  solanet::UUID publishMessage(const std::string &topic, const std::string &serialized_message);
 
   bool isSubscribed(const std::string &topic);
 
