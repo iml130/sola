@@ -105,10 +105,11 @@ public:
     ed_->unsubscribe(topic);
   }
 
-  void publishMessage(const std::string &topic, const std::string &message) {
+  solanet::UUID publishMessage(const std::string &topic, const std::string &message) {
     sola::TopicMessage msg{topic, uuid_, message, solanet::generateUUID()};
     logger_->logPublishTopicMessage(msg);
     ed_->publish(msg);
+    return msg.uuid;
   }
 
   // returns ip/port for SOLA high-level communication
