@@ -1,4 +1,5 @@
-When using SOLA with the MINHTON and MINHCAST components as shown in Figure 1, SOLA is a decentral organized communication middleware that omits the need for a dedicated communication instance.
+Using SOLA with the MINHTON and MINHCAST components as shown in Figure 1, SOLA works as a decentral organized communication middleware.
+It omits the need for a dedicated communication instance as no node has a global view on all nodes.
 Contrary to other communication middlewares such as [MQTT](https://mqtt.org/), [ROS 1](https://www.ros.org/), [OPC UA](https://opcfoundation.org/about/opc-technologies/opc-ua/), or [Data Distribution Service (DDS)](https://www.dds-foundation.org/what-is-dds-3/), each node in SOLA operates on a local limited view.
 
 <figure markdown>
