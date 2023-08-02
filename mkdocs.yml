@@ -106,6 +106,9 @@ theme:
 
   font: false # Use system fonts
 
+  logo: img/sola_dark.png
+  favicon: img/sola_dark.png
+
   # Don't include MkDocs' JavaScript
   include_search_page: false
   search_index_only: true
