@@ -22,7 +22,7 @@ def get_adjacent_rights_data_for_event_id(event_id, sql_connector):
     statement = """
         SELECT * from (
             SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-            from viewRoutingInfo
+            from viewMinhtonRoutingInfo
             where Relationship = '{}' and EventId {} and NeighborLevel >= 0
             order by Id desc
         )
@@ -50,7 +50,7 @@ def get_adjacent_lefts_data_for_event_id(event_id, sql_connector):
     statement = """
         SELECT * from (
             SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-            from viewRoutingInfo
+            from viewMinhtonRoutingInfo
             where Relationship = '{}' and EventId {} and NeighborLevel >= 0
             order by Id desc
         )

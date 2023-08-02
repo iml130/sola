@@ -21,10 +21,10 @@ def get_routing_table_neighbors_data_for_event_id(event_id, sql_connector):
 
     statement = """
         SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-        FROM viewRoutingInfo
+        FROM viewMinhtonRoutingInfo
         WHERE Relationship = '{}' and Id in(
             SELECT max(Id)
-            FROM viewRoutingInfo
+            FROM viewMinhtonRoutingInfo
             WHERE Relationship = '{}' AND EventId {}
             GROUP BY NodeLevel, NodeNumber, NeighborLevel, NeighborNumber
         )
@@ -44,10 +44,10 @@ def get_routing_table_neighbor_children_data_for_event_id(event_id, sql_connecto
 
     statement = """
         SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-        FROM viewRoutingInfo
+        FROM viewMinhtonRoutingInfo
         WHERE Relationship = '{}' and Id in(
             SELECT max(Id)
-            FROM viewRoutingInfo
+            FROM viewMinhtonRoutingInfo
             WHERE Relationship = '{}' AND EventId {}
             GROUP BY NodeLevel, NodeNumber, NeighborLevel, NeighborNumber
         )

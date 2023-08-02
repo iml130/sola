@@ -20,10 +20,10 @@ def get_parents_data_for_event_id(event_id, sql_connector):
 
     statement = """
         SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-        FROM viewRoutingInfo
+        FROM viewMinhtonRoutingInfo
         WHERE Relationship = '{}' and Id in(
             SELECT max(Id)
-            FROM viewRoutingInfo
+            FROM viewMinhtonRoutingInfo
             WHERE EventId {} AND Relationship = '{}'
             GROUP BY NodeLevel, NodeNumber
         )
@@ -44,10 +44,10 @@ def get_children_data_for_event_id(event_id, sql_connector):
 
     statement = """
         SELECT NodeLevel, NodeNumber, NodeIp, NodePort, NeighborLevel, NeighborNumber, NeighborIp, NeighborPort
-        FROM viewRoutingInfo
+        FROM viewMinhtonRoutingInfo
         WHERE Relationship = '{}' and Id in(
             SELECT max(Id)
-            FROM viewRoutingInfo
+            FROM viewMinhtonRoutingInfo
             WHERE EventId {} AND Relationship = '{}'
             GROUP BY NodeLevel, NodeNumber, NeighborLevel, NeighborNumber
         )
