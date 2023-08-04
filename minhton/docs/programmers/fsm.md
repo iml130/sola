@@ -36,7 +36,7 @@ Only the most important transitions are shown here. Obvious transitions like Upd
 
 <figure markdown>
   <a id="fig_fsm_graph"></a>
-  ![FSM Graph Representation](../img/finite_state_machine.png)
+  ![FSM Graph Representation](../img/finite_state_machine.svg)
   <figcaption markdown>**Figure 1:** FSM Graph Representation</figcaption>
 </figure>
 
