@@ -35,13 +35,17 @@ public:
 
   void setMakespan(const daisi::util::Duration &makespan);
 
+  bool isStartTimeSet() const;
   void setStartTime(const daisi::util::Duration &start_time);
 
-  bool isStartTimeSet() const;
+  bool isExecutionStartTimeSet() const;
+  void setExecutionStartTime(const daisi::util::Duration &start_time);
 
   daisi::util::Duration getMakespan() const;
 
   daisi::util::Duration getTime() const;
+
+  daisi::util::Duration getExecutionTime() const;
 
   daisi::util::Distance getDistance() const;
 
@@ -64,12 +68,20 @@ public:
   daisi::util::Distance empty_travel_distance = 0.0;
   daisi::util::Distance loaded_travel_distance = 0.0;
 
+  util::Duration start_up_time = 0.0;
+
   SERIALIZE(empty_travel_time, loaded_travel_time, action_time, empty_travel_distance,
-            loaded_travel_distance, makespan_, start_time_);
+            loaded_travel_distance, makespan_, start_time_, execution_start_time_, start_time_set_,
+            execution_start_time_set_, start_up_time);
 
 private:
   daisi::util::Duration makespan_ = 0.0;
+
   daisi::util::Duration start_time_ = 0.0;
+  bool start_time_set_ = false;
+
+  daisi::util::Duration execution_start_time_ = 0.0;
+  bool execution_start_time_set_ = false;
 };
 
 }  // namespace daisi::cpps::logical

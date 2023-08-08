@@ -47,7 +47,7 @@ void CppsLoggerNs3::logMaterialFlowTask(const material_flow::Task &task,
       "(SELECT Id FROM MaterialFlow WHERE Uuid='" + material_flow_uuid + "')";
 
   std::string follow_up_tasks = "";
-  for (const auto &follow_up : task.getFollowUpTasks()) {
+  for (const auto &follow_up : task.getFollowUpTaskUuids()) {
     follow_up_tasks += follow_up + ",";
   }
 

@@ -28,27 +28,57 @@ Metrics::Metrics(daisi::util::Duration empty_travel_time, daisi::util::Duration 
       loaded_travel_distance(loaded_travel_distance) {}
 
 void Metrics::setMakespan(const daisi::util::Duration &makespan) {
-  if (!isStartTimeSet()) {
+  if (!isStartTimeSet() && !isExecutionStartTimeSet()) {
     makespan_ = makespan;
   } else {
     throw std::invalid_argument("makespan cannot be set if start_time_ is set");
   }
 }
 
-void Metrics::setStartTime(const daisi::util::Duration &start_time) { start_time_ = start_time; }
+void Metrics::setStartTime(const daisi::util::Duration &start_time) {
+  if (!isExecutionStartTimeSet()) {
+    start_time_ = start_time;
+    start_time_set_ = true;
+  } else {
+    throw std::invalid_argument("Execution start time is already set");
+  }
+}
 
-bool Metrics::isStartTimeSet() const { return start_time_ != 0; }
+bool Metrics::isStartTimeSet() const { return start_time_set_; }
+
+void Metrics::setExecutionStartTime(const daisi::util::Duration &execution_start_time) {
+  if (!isStartTimeSet()) {
+    execution_start_time_ = execution_start_time;
+    execution_start_time_set_ = true;
+  } else {
+    throw std::invalid_argument("Start time is already set");
+  }
+}
+
+bool Metrics::isExecutionStartTimeSet() const { return execution_start_time_set_; }
 
 daisi::util::Duration Metrics::getMakespan() const {
   if (makespan_ > 0) {
     return makespan_;
   }
 
-  return start_time_ + getTime();
+  if (isExecutionStartTimeSet()) {
+    return execution_start_time_ + getExecutionTime();
+  }
+
+  if (isStartTimeSet()) {
+    return start_time_ + getTime();
+  }
+
+  throw std::runtime_error("No makespan values are available.");
 }
 
 daisi::util::Duration Metrics::getTime() const {
   return empty_travel_time + loaded_travel_time + action_time;
+}
+
+daisi::util::Duration Metrics::getExecutionTime() const {
+  return empty_travel_time + loaded_travel_time + action_time - start_up_time;
 }
 
 daisi::util::Distance Metrics::getDistance() const {
@@ -61,7 +91,7 @@ Metrics Metrics::operator-(const Metrics &other) const {
                empty_travel_distance - other.empty_travel_distance,
                loaded_travel_distance - other.loaded_travel_distance};
 
-  diff.setMakespan(std::min(getMakespan(), other.getMakespan()));
+  diff.setMakespan(abs(getMakespan() - other.getMakespan()));
   return diff;
 }
 
