@@ -20,6 +20,7 @@
 
 #include "minhton/utils/config_reader.h"
 #include "sola-ns3/config_helper_ns3.h"
+#include "sola-ns3/management_minhton_helper.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 
@@ -39,7 +40,7 @@ void LogicalAgent::initCommunication() {
   sola_ns3::configureLogger(config_mo);
 
   if (!first_node_) {
-    sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
+    daisi::sola_ns3::setJoinIp(config_mo);
   }
 
   sola::EventDisseminationMinhcast::Config config_ed;

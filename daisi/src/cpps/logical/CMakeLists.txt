@@ -21,5 +21,6 @@ target_link_libraries(daisi_cpps_logical_logical_agent
     daisi_socket_manager
     solanet_uuid
     solanet_uuid_generator_sim
+    daisi_sola_management_minhton_helper
     sola_config_helper_ns3
 )

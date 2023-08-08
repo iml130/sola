@@ -40,15 +40,6 @@ public:
 
   bool isSubscribed(const std::string &topic);
 
-  /// Helper to set join IP in config
-  static void setJoinIp(sola::ManagementOverlayMinhton::Config &config) {
-    // Ref #95
-    static const std::string ip = "192.168.0.2";  // First AGV - Wifi
-
-    auto info = config.getJoinInfo();
-    info.ip = ip;
-    config.setJoinInfo(info);
-  }
 
 private:
   std::string node_name_;

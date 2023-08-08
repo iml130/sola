@@ -26,6 +26,7 @@
 #include "path_planning/consensus/constants.h"
 #include "path_planning/consensus/paxos/constants.h"
 #include "path_planning/message/serializer.h"
+#include "sola-ns3/management_minhton_helper.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 #include "utils/daisi_check.h"
 #include "utils/sola_utils.h"
@@ -134,7 +135,7 @@ void AGVLogical::init() {
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
 
   if (!first_node_) {
-    sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
+    daisi::sola_ns3::setJoinIp(config_mo);
   }
 
   // Nothing to configure (yet)

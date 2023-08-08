@@ -22,6 +22,7 @@
 #include "minhton/utils/config_reader.h"
 #include "path_planning/consensus/paxos/constants.h"
 #include "path_planning/message/serializer.h"
+#include "sola-ns3/management_minhton_helper.h"
 #include "utils/daisi_check.h"
 #include "utils/sola_utils.h"
 
@@ -44,7 +45,7 @@ void DeliveryStation::init() {
 
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
 
-  sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
+  daisi::sola_ns3::setJoinIp(config_mo);
 
   // Nothing to configure (yet)
   sola::EventDisseminationMinhcast::Config config_ed;

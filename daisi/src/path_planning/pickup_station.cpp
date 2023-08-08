@@ -25,6 +25,7 @@
 #include "path_planning/consensus/paxos/message/prepare_message.h"
 #include "path_planning/consensus/paxos/paxos_consensus.h"
 #include "path_planning/message/serializer.h"
+#include "sola-ns3/management_minhton_helper.h"
 #include "sola_check.h"
 #include "task.h"
 #include "time_calculation_helper.h"
@@ -52,7 +53,7 @@ void PickupStation::init() {
 
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
 
-  sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
+  daisi::sola_ns3::setJoinIp(config_mo);
 
   // Nothing to configure (yet)
   sola::EventDisseminationMinhcast::Config config_ed;

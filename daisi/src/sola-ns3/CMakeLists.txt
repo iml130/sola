@@ -119,3 +119,6 @@ target_link_libraries(sola_config_helper_ns3 INTERFACE
         EventDisseminationMinhcastSim
         daisi_logger_manager
 )
+
+add_library(daisi_sola_management_minhton_helper INTERFACE management_minhton_helper.h)
+target_link_libraries(daisi_sola_management_minhton_helper INTERFACE ManagementOverlayMINHTONSim)
