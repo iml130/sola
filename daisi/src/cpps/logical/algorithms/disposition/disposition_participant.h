@@ -29,7 +29,7 @@ namespace daisi::cpps::logical {
 /// There always must be a corresponding derived class from DispositionInitiator.
 class DispositionParticipant : public AlgorithmInterface {
 public:
-  explicit DispositionParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
+  explicit DispositionParticipant(std::shared_ptr<SOLACppsWrapper> sola)
       : AlgorithmInterface(sola){};
 
   ~DispositionParticipant() override = default;

@@ -19,8 +19,7 @@
 namespace daisi::cpps::logical {
 
 CentralizedParticipant::CentralizedParticipant(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
-    std::shared_ptr<SimpleOrderManagement> order_management)
+    std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<SimpleOrderManagement> order_management)
     : DispositionParticipant(sola), order_management_(std::move((order_management))){};
 
 bool CentralizedParticipant::process(const AssignmentNotification &assignment_notification) {

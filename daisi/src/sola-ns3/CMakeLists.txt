@@ -9,19 +9,12 @@ target_link_libraries(SOLA_ns3 INTERFACE
         NetworkUDPSim
 )
 
-add_library(daisi_sola_sola_ns3_wrapper STATIC)
-target_sources(daisi_sola_sola_ns3_wrapper
-        PRIVATE
-        sola_ns3_wrapper.cpp
-        sola_ns3_wrapper.h
-)
-target_link_libraries(daisi_sola_sola_ns3_wrapper
-        PUBLIC
+add_library(daisi_sola_sola_wrapper INTERFACE sola_wrapper.h)
+target_link_libraries(daisi_sola_sola_wrapper
+        INTERFACE
         SOLA_ns3
-        daisi_logger_manager
         ManagementOverlayMINHTONSim
         EventDisseminationMinhcastSim
-        daisi_cpps_common_cpps_logger_ns3
 )
 
 add_library(daisi_sola_application STATIC)
@@ -34,12 +27,13 @@ target_link_libraries(daisi_sola_application
         PUBLIC
         ns3::libcore
         daisi_sola_logger_ns3
-        daisi_sola_sola_ns3_wrapper
+        daisi_sola_sola_wrapper
         PRIVATE
         daisi_utils
         minhton_utils_config_reader
         sola_config_helper_ns3
         solanet_uuid
+        daisi_logger_manager
 )
 
 add_library(daisi_sola_logger_ns3 STATIC)

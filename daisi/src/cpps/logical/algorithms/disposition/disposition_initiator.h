@@ -31,7 +31,7 @@ namespace daisi::cpps::logical {
 /// There always must be a corresponding derived class from DispositionParticipant.
 class DispositionInitiator : public AlgorithmInterface {
 public:
-  explicit DispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+  explicit DispositionInitiator(std::shared_ptr<SOLACppsWrapper> sola,
                                 std::shared_ptr<CppsLoggerNs3> logger)
       : AlgorithmInterface(sola), logger_(std::move(logger)){};
 

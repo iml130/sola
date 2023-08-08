@@ -31,7 +31,7 @@
 #include "cpps/logical/message/central_allocation/status_update_request.h"
 #include "cpps/logical/message/material_flow_update.h"
 #include "cpps/logical/message/serializer.h"
-#include "sola-ns3/sola_ns3_wrapper.h"
+#include "cpps/sola_wrapper.h"
 
 #define REGISTER_LOGICAL_MESSAGE(MessageType) \
   virtual bool process(const MessageType &) { return false; }
@@ -44,8 +44,7 @@ namespace daisi::cpps::logical {
 
 class AlgorithmInterface {
 public:
-  explicit AlgorithmInterface(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola)
-      : sola_(std::move(sola)){};
+  explicit AlgorithmInterface(std::shared_ptr<SOLACppsWrapper> sola) : sola_(std::move(sola)){};
 
   virtual ~AlgorithmInterface() = default;
 
@@ -61,7 +60,7 @@ public:
   REGISTER_LOGICAL_MESSAGE(MaterialFlowUpdate);  // TODO Ref #79
 
 protected:
-  std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
+  std::shared_ptr<SOLACppsWrapper> sola_;
 };
 
 }  // namespace daisi::cpps::logical

@@ -22,7 +22,7 @@
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola, std::shared_ptr<CppsLoggerNs3> logger)
+    std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<CppsLoggerNs3> logger)
     : DispositionInitiator(sola, logger) {
   // assuming that sola is fully initialized at this point
 
@@ -63,8 +63,7 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
     ability_topic_mapping_[ability] = topic_for_ability;
 
     ns3::Simulator::Schedule(ns3::Seconds(delays_.subscribe_topic * topic_counter++),
-                             &daisi::sola_ns3::SOLAWrapperNs3::subscribeTopic, sola_.get(),
-                             topic_for_ability);
+                             &SOLACppsWrapper::subscribeTopic, sola_.get(), topic_for_ability);
   }
 
   return delays_.subscribe_topic * topic_counter;

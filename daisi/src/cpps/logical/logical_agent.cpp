@@ -18,6 +18,7 @@
 
 #include <functional>
 
+#include "logging/logger_manager.h"
 #include "minhton/utils/config_reader.h"
 #include "sola-ns3/config_helper_ns3.h"
 #include "sola-ns3/management_minhton_helper.h"
@@ -54,8 +55,9 @@ void LogicalAgent::initCommunication() {
     this->topicMessageReceiveFunction(msg);
   };
 
-  sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, message_recv_fct,
-                                                     topic_message_recv_fct, uuid_);
+  sola_ = std::make_unique<SOLACppsWrapper>(config_mo, config_ed, message_recv_fct,
+                                            topic_message_recv_fct,
+                                            daisi::global_logger_manager->createSolaLogger());
 }
 
 void LogicalAgent::processMessage(const Message &msg) {

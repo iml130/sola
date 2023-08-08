@@ -38,7 +38,7 @@ namespace daisi::cpps::logical {
 /// physical properties (abilities).
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
-  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<SOLACppsWrapper> sola,
                                                std::shared_ptr<CppsLoggerNs3> logger);
 
   ~IteratedAuctionDispositionInitiator() override = default;

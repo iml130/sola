@@ -27,7 +27,7 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowStateLogger : public AlgorithmInterface {
 public:
-  MaterialFlowStateLogger(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+  MaterialFlowStateLogger(std::shared_ptr<SOLACppsWrapper> sola,
                           std::shared_ptr<CppsLoggerNs3> logger)
       : AlgorithmInterface(std::move(sola)), logger_(std::move(logger)) {}
 
