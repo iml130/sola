@@ -33,9 +33,13 @@ namespace sola {
 
 struct EventDisseminationMinhcastConfig {
   std::vector<natter::logging::LoggerPtr> logger;
+
+  /// Function that is called to instantiate a MINHTON logger for a topic tree.
+  /// The topic name is passed into this function.
+  std::function<minhton::Logger::LoggerPtr(std::string)> topic_tree_logger_create_fct;
 };
 
-class EventDisseminationMinhcast final : public EventDissemination<minhton::Logger::LoggerPtr> {
+class EventDisseminationMinhcast final : public EventDissemination {
 public:
   using Config = EventDisseminationMinhcastConfig;
   using Logger = natter::logging::LoggerPtr;
@@ -44,7 +48,7 @@ public:
                              std::string ip, const Config &config);
   ~EventDisseminationMinhcast() override = default;
   void publish(const std::string &topic, const std::string &message) final;
-  void subscribe(const std::string &topic, std::vector<minhton::Logger::LoggerPtr> logger) final;
+  void subscribe(const std::string &topic) final;
   void unsubscribe(const std::string &topic) final;
 
   void stop() final;
@@ -58,6 +62,8 @@ private:
   // Implementation in event_dissemination_minhcast_impl.cpp
   void getResult(const std::string &topic, const std::function<void()> &on_result);
   void checkTopicJoin(const std::string &topic, bool should_exist);
+
+  const Config config_;
 
   std::unique_ptr<natter::minhcast::NatterMinhcast> minhcast_;
 

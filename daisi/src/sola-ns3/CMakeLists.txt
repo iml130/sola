@@ -27,6 +27,7 @@ target_link_libraries(daisi_sola_application
         PRIVATE
         daisi_utils
         minhton_utils_config_reader
+        sola_config_helper_ns3
 )
 
 add_library(daisi_sola_logger_ns3 STATIC)
@@ -97,3 +98,12 @@ target_link_libraries(ManagementOverlayMINHTONSim
 target_include_directories(ManagementOverlayMINHTONSim
         PUBLIC
         ${SOLA_SOURCE_DIR}/include)
+
+add_library(sola_config_helper_ns3 INTERFACE config_helper_ns3.h)
+target_link_libraries(sola_config_helper_ns3 INTERFACE
+        ManagementOverlayMINHTONSim
+        EventDisseminationMinhcastSim
+        daisi_logger_manager
+        ns3::libcore
+        daisi_utils
+)

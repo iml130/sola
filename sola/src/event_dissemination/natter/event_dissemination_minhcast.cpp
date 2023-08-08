@@ -14,7 +14,8 @@ namespace sola {
 EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct,
                                                        std::shared_ptr<Storage> storage,
                                                        std::string ip, const Config &config)
-    : minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
+    : config_(config),
+      minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
           [=](const natter::Message &m) {
             msgRecvFct({m.topic, solanet::uuidToString(m.sender_id), m.content, m.message_id});
           },
@@ -36,8 +37,7 @@ void EventDisseminationMinhcast::unsubscribe(const std::string &topic) {
   minhcast_->unsubscribeTopic(topic);
 }
 
-void EventDisseminationMinhcast::subscribe(const std::string &topic,
-                                           std::vector<minhton::Logger::LoggerPtr> logger) {
+void EventDisseminationMinhcast::subscribe(const std::string &topic) {
   if (stopping_) throw std::runtime_error("already stopping!");
 
   if (topic_trees_.find(topic) != topic_trees_.end())
@@ -52,7 +52,9 @@ void EventDisseminationMinhcast::subscribe(const std::string &topic,
   req.permissive = true;
   req.request = "(HAS " + topic + ")";
   result_[topic] = storage_->find(req);
-  minhton_loggers_.push_back(MinhtonTopicLogger{topic, logger});
+
+  minhton_loggers_.push_back(
+      MinhtonTopicLogger{topic, {config_.topic_tree_logger_create_fct(topic)}});
 
   waitForResults(topic);
 }

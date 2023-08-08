@@ -19,6 +19,7 @@
 #include <functional>
 
 #include "minhton/utils/config_reader.h"
+#include "sola-ns3/config_helper_ns3.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 
@@ -36,13 +37,14 @@ void LogicalAgent::initCommunication() {
       first_node_ ? "configurations/root.yml" : "configurations/join.yml";
 
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
+  sola_ns3::configureLogger(config_mo);
 
   if (!first_node_) {
     sola_ns3::SOLAWrapperNs3::setJoinIp(config_mo);
   }
 
-  // Nothing to configure (yet)
   sola::EventDisseminationMinhcast::Config config_ed;
+  sola_ns3::configureLogger(config_ed);
 
   uuid_ = solanet::uuidToString(solanet::generateUUID());
   logger_->setApplicationUUID(uuid_);
