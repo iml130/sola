@@ -22,8 +22,10 @@
 namespace daisi::material_flow {
 
 Task::Task(std::string name, const std::vector<Order> &orders,
-           std::vector<std::string> follow_up_tasks)
-    : name_(std::move(name)), orders_(orders), follow_up_tasks_(std::move(follow_up_tasks)) {
+           const std::vector<std::string> &follow_up_task_uuids)
+    : name_(std::move(name)),
+      orders_(orders),
+      follow_up_task_uuids_(std::move(follow_up_task_uuids)) {
   if (orders.empty()) {
     throw std::invalid_argument("Orders cannot be empty.");
   }
@@ -37,22 +39,33 @@ const std::string &Task::getName() const { return name_; }
 
 const std::vector<Order> &Task::getOrders() const { return orders_; }
 
-const std::vector<std::string> &Task::getFollowUpTasks() const { return follow_up_tasks_; }
+const std::vector<std::string> &Task::getFollowUpTaskUuids() const { return follow_up_task_uuids_; }
 
-const std::vector<std::string> &Task::getPrecedingTasks() const { return preceding_tasks_; }
-
-void Task::setPrecedingTasks(const std::vector<std::string> &preceding_tasks) {
-  preceding_tasks_ = preceding_tasks;
+const std::vector<std::string> &Task::getPrecedingTaskUuids() const {
+  return preceding_task_uuids_;
 }
 
-bool Task::hasTimeWindow() const {
-  return false;  // TODO integrate constraints
+void Task::setPrecedingTasks(const std::vector<std::string> &preceding_tasks) {
+  preceding_task_uuids_ = preceding_tasks;
 }
 
 cpps::amr::AmrStaticAbility Task::getAbilityRequirement() const { return ability_requirement_; }
 
 void Task::setAbilityRequirement(const cpps::amr::AmrStaticAbility &ability) {
   ability_requirement_ = ability;
+}
+
+bool Task::hasTimeWindow() const { return time_window_.has_value(); }
+
+void Task::setTimeWindow(const TimeWindow &time_window) { time_window_ = time_window; }
+
+const TimeWindow &Task::getTimeWindow() const { return time_window_.value(); }
+
+void Task::setSpawnTime(const util::Duration &spawn_time) {
+  if (hasTimeWindow()) {
+    time_window_.value().setSpawnTime(spawn_time);
+  }
+  throw std::runtime_error("TimeWindow not set");
 }
 
 }  // namespace daisi::material_flow

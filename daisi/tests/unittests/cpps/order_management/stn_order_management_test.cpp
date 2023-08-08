@@ -44,7 +44,7 @@ daisi::util::Position p4(5, 10);
 daisi::util::Position p5(20, 0);
 daisi::util::Position p6(20, 10);
 
-TEST_CASE("One Simple Transport Order", "[adding and removing vertices]") {
+TEST_CASE("One Simple Transport Order", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -110,7 +110,7 @@ TEST_CASE("One Simple Transport Order", "[adding and removing vertices]") {
   REQUIRE(!management.hasTasks());
 }
 
-TEST_CASE("Two Simple Transport Orders statically", "[adding and removing vertices]") {
+TEST_CASE("Two Simple Transport Orders statically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -197,7 +197,7 @@ TEST_CASE("Two Simple Transport Orders statically", "[adding and removing vertic
   REQUIRE(!management.hasTasks());
 }
 
-TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing vertices]") {
+TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -242,8 +242,7 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
           add_1_metrics_comp.getCurrentMetrics().getMakespan() +
               can_add_2_1_metrics_comp.getCurrentMetrics().getTime());
 
-  // increasing time such that task 1 should still be executed -> no change to can_add_2_1 expected
-  management.setCurrentTime(10);
+  // no change to can_add_2_1 expected
   REQUIRE(management.canAddTask(simple_task_2));
   std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
       std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
@@ -254,9 +253,14 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
   REQUIRE(can_add_2_1_metrics_comp.getCurrentMetrics().getMakespan() ==
           can_add_2_2_metrics_comp.getCurrentMetrics().getMakespan());
 
+  // cannot set time to earlier than 37, because time inside STN is increased with setNextTask()
+  REQUIRE_THROWS(management.setCurrentTime(20));
+  REQUIRE_THROWS(management.setCurrentTime(36));
+  REQUIRE_NOTHROW(management.setCurrentTime(37));
+
   // increasing time such that execution of task 1 should be over
   // therefore makespan must be greater
-  management.setCurrentTime(50);
+  REQUIRE_NOTHROW(management.setCurrentTime(50));
   REQUIRE(management.canAddTask(simple_task_2));
   auto can_add_2_3_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
 
@@ -269,7 +273,7 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[adding and removing verti
   REQUIRE(management.addTask(simple_task_2));
 }
 
-TEST_CASE("Three Simple Transport Orders statically", "[adding and removing vertices]") {
+TEST_CASE("Three Simple Transport Orders statically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -324,7 +328,7 @@ TEST_CASE("Three Simple Transport Orders statically", "[adding and removing vert
            can_add_3_stn_insertion_point->new_index == 2));
 }
 
-TEST_CASE("Two Transport Orders in one Task", "[adding and removing vertices]") {
+TEST_CASE("Two Transport Orders in one Task", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -347,7 +351,7 @@ TEST_CASE("Two Transport Orders in one Task", "[adding and removing vertices]") 
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().getMakespan() == 58);
 }
 
-TEST_CASE("One Transport, Move, and Action Order in one Task", "[adding and removing vertices]") {
+TEST_CASE("One Transport, Move, and Action Order in one Task", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
   StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
@@ -370,4 +374,152 @@ TEST_CASE("One Transport, Move, and Action Order in one Task", "[adding and remo
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().action_time == 15 + 7);
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().empty_travel_distance == 10);
   REQUIRE(add_1_metrics_comp.getCurrentMetrics().loaded_travel_distance == 10);
+}
+
+TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
+  // arrange
+  auto current_pose = daisi::util::Pose(p0);
+  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+
+  // one transport order with time window
+  TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
+  TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
+  TransportOrder simple_to("simple_to", {pickup1}, delivery1);
+  Task simple_task("simple_task", {simple_to}, {});
+
+  TimeWindow time_window(40, 140, 0);
+  simple_task.setTimeWindow(time_window);
+
+  // act
+  REQUIRE(management.canAddTask(simple_task));
+  auto res1 = management.getLatestCalculatedInsertionInfo();
+  auto metrics_comp = std::get<0>(res1);
+  auto insertion_point = std::get<1>(res1);
+  auto insertion_metrics = metrics_comp.getInsertionMetrics();
+  auto diff_metrics = metrics_comp.getDiffInsertionMetrics();
+
+  // assert
+  REQUIRE(insertion_metrics.getMakespan() == 40 + 15 + 11);  // start time + loaded travel +  action
+
+  REQUIRE(diff_metrics.getTime() == 37);
+  REQUIRE(diff_metrics.getDistance() == 20);
+  REQUIRE(diff_metrics.getMakespan() == 40 + 15 + 11);
+
+  // act
+  REQUIRE(management.addTask(simple_task, insertion_point));
+  auto add_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
+
+  // assert management states not changed
+  REQUIRE(management.setNextTask());
+  REQUIRE(management.hasTasks());
+  auto task = management.getCurrentTask();
+  REQUIRE(task.getName() == "simple_task");
+  REQUIRE(task.hasTimeWindow());
+  REQUIRE(task.getTimeWindow().getRelativeEarliestStart() == 40);
+  REQUIRE(task.getTimeWindow().getRelativeLatestFinish() == 140);
+}
+
+TEST_CASE("One Simple Transport Order with too short Time Window", "[temporal]") {
+  // arrange
+  auto current_pose = daisi::util::Pose(p0);
+  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+
+  // one transport order with time window
+  TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
+  TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
+  TransportOrder simple_to("simple_to", {pickup1}, delivery1);
+  Task simple_task("simple_task", {simple_to}, {});
+
+  simple_task.setTimeWindow(TimeWindow(40, 70, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(40, 66, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(20, 46, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(20, 45, 0));
+  REQUIRE(!management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(40, 65.9, 0));
+  REQUIRE(!management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(40, 60, 0));
+  REQUIRE(!management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(12, 38, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(11, 37, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(10, 36, 0));
+  REQUIRE(!management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(10, 37, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(0, 37, 0));
+  REQUIRE(management.canAddTask(simple_task));
+
+  simple_task.setTimeWindow(TimeWindow(0, 36.9, 0));
+  REQUIRE(!management.canAddTask(simple_task));
+}
+
+TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[temporal]") {
+  // arrange
+  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(),
+                                daisi::util::Pose(p0));
+
+  // transport order 1
+  TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
+  TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
+  TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
+  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+
+  // transport order 2
+  TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
+  TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
+  TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
+  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+
+  simple_task_1.setTimeWindow(TimeWindow(0, 40, 0));
+  simple_task_2.setTimeWindow(TimeWindow(0, 80, 0));
+
+  REQUIRE(management.canAddTask(simple_task_1));
+  REQUIRE(management.canAddTask(simple_task_2));
+
+  REQUIRE(management.addTask(simple_task_2));
+  REQUIRE(management.canAddTask(simple_task_1));
+
+  // ----------------------------------------------------------------
+
+  StnOrderManagement management2(buildBasicAmrDescription(), buildBasicTopology(),
+                                 daisi::util::Pose(p0));
+
+  REQUIRE(management2.addTask(simple_task_1));
+  REQUIRE(management2.canAddTask(simple_task_2));
+
+  // ----------------------------------------------------------------
+
+  simple_task_1.setTimeWindow(TimeWindow(20, 46, 0));
+  simple_task_2.setTimeWindow(TimeWindow(0, 80, 0));
+
+  StnOrderManagement management3(buildBasicAmrDescription(), buildBasicTopology(),
+                                 daisi::util::Pose(p0));
+
+  REQUIRE(management3.canAddTask(simple_task_1));
+  REQUIRE(management3.canAddTask(simple_task_2));
+
+  REQUIRE(management3.addTask(simple_task_2));
+  REQUIRE(management3.canAddTask(simple_task_1));
+
+  auto res = management3.getLatestCalculatedInsertionInfo();
+  std::shared_ptr<StnOrderManagement::StnInsertionPoint> insertion_point =
+      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(res));
+  REQUIRE(insertion_point->new_index == 0);  // task 1 must be before task 2
+
+  REQUIRE(management3.setNextTask());
+  REQUIRE(!management3.canAddTask(simple_task_1));
 }

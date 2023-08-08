@@ -109,6 +109,7 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_material_flow_model_move_order
     daisi_material_flow_model_action_order
     daisi_cpps_amr_model_amr_static_ability
+    daisi_material_flow_model_time_window
     solanet_serialize
 
     PRIVATE
@@ -125,6 +126,20 @@ target_sources(daisi_material_flow_model_material_flow
 target_link_libraries(daisi_material_flow_model_material_flow
     PUBLIC
     daisi_material_flow_model_task
+
+    PRIVATE
+    solanet_serialize
+)
+
+add_library(daisi_material_flow_model_time_window STATIC)
+target_sources(daisi_material_flow_model_time_window
+    PRIVATE
+    time_window.h
+    time_window.cpp
+)
+target_link_libraries(daisi_material_flow_model_time_window
+    PUBLIC
+    daisi_structure_helpers
 
     PRIVATE
     solanet_serialize

@@ -45,7 +45,7 @@ struct AuctionParticipantTaskState {
 /// Each AuctionParticipantState is only responsible for one auction process by one dedicated
 /// initiator.
 struct AuctionParticipantState {
-  /// @brief Initiatoring the task states based on the given tasks.
+  /// @brief Initiating the task states based on the given tasks.
   /// @param tasks Open tasks that initially got announced.
   explicit AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
 

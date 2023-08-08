@@ -78,7 +78,7 @@ public:
 
   using VertexIterator = std::vector<StnOrderManagementVertex>::iterator;
 
-  /// @brief contains a task and the end locations and metrics compositions for the single orders
+  /// @brief contains a task, the end locations, and metrics compositions for the single orders
   struct TaskInsertInfo {
     daisi::material_flow::Task task;
 
@@ -119,7 +119,9 @@ protected:
                               const daisi::material_flow::Order &order,
                               const TaskInsertInfo &task_insert_info);
 
-  void updateDurationConstraints(const int &task_index_to_update);
+  void updateGetToStartDurationConstraint(int task_index_to_update);
+
+  util::Duration calcGetToStartDuration(int task_index_to_update);
 
   void addOrderingConstraintBetweenTasks(StnInsertionPoint insertion_point,
                                          TaskInsertInfo &task_insert_info);
@@ -137,17 +139,17 @@ protected:
 
   daisi::util::Duration calcOrderDurationForInsert(const daisi::material_flow::Order &order,
                                                    const TaskInsertInfo &task_insert_info) const;
+
   /// @brief calculate the metrics for the given order of the given task and insert them into the
   /// given metrics.
   /// @param order the order the metrics should be calculated for
   /// @param metrics the container to insert the metrics
   /// @param task_insert_info the TaskInsertInfo for the passed order
   /// @param task_ordering_index the current ordering index for the task
-  /// @param start_time the start time of the order
+  /// @param absolute_start_time the absolute start time of the order
   void insertOrderPropertiesIntoMetrics(const daisi::material_flow::Order &order, Metrics &metrics,
                                         const TaskInsertInfo &task_insert_info,
-                                        const int &task_ordering_index,
-                                        const daisi::util::Duration &start_time);
+                                        int task_ordering_index);
 
   // simple helper
   VertexIterator getVertexIteratorOfOrder(const daisi::material_flow::Order &order, bool start);

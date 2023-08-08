@@ -33,7 +33,9 @@ StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
                                        const Topology &topology, const daisi::util::Pose &pose)
     : AuctionBasedOrderManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
-      latest_calculated_insertion_info_(std::nullopt) {}
+      latest_calculated_insertion_info_(std::nullopt) {
+  current_total_metrics_.setStartTime(0);
+}
 
 void StnOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
@@ -98,6 +100,8 @@ bool StnOrderManagement::setNextTask() {
         time_now_ + current_insert_info.metrics_composition.getCurrentMetrics().getTime();
     current_task_end_location_ = current_insert_info.end_locations.back();
 
+    setCurrentTime(current_task_expected_finish_time_);
+
     // remove all vertices of the orders contained in the task
     for (const auto &order : current_task_->getOrders()) {
       auto order_start_vertex = getVertexOfOrder(order, true);
@@ -136,7 +140,7 @@ bool StnOrderManagement::addTask(
     std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point) {
   latest_calculated_insertion_info_ = std::nullopt;
 
-  const auto orders = task.getOrders();
+  auto orders = task.getOrders();
   if (orders.empty()) {
     throw std::invalid_argument("Task must have at least one order");
   }
@@ -150,7 +154,23 @@ bool StnOrderManagement::addTask(
     addVertex(start_curr);
     addVertex(finish_curr);
 
-    // TODO time windows
+    if (task.hasTimeWindow() && orders_it == orders.begin()) {
+      // earliest start constraint for first order of task
+
+      if (task.getTimeWindow().getAbsoluteEarliestStart() - time_now_ < 0) {
+        return false;  // task must have started in the past to be still in the correct time window
+      }
+
+      addUnaryConstraint(start_curr, task.getTimeWindow().getAbsoluteEarliestStart() - time_now_,
+                         std::nullopt);
+    }
+
+    if (task.hasTimeWindow() && orders_it == --orders.end()) {
+      // latest finish constraint for last order of task
+
+      addUnaryConstraint(finish_curr, std::nullopt,
+                         task.getTimeWindow().getAbsoluteLatestFinish() - time_now_);
+    }
 
     // precedence constraint to previous order in task
     // always sequential -> cannot change
@@ -169,9 +189,7 @@ bool StnOrderManagement::addTask(
     }
   }
 
-  // TODO time windows
-
-  for (const auto &prec_task : task.getPrecedingTasks()) {
+  for (const auto &prec_task : task.getPrecedingTaskUuids()) {
     addPrecedenceConstraintBetweenTask(getVertexOfOrder(orders.front(), true), prec_task);
   }
 
@@ -297,18 +315,17 @@ void StnOrderManagement::updateCurrentOrdering() {
       const auto start_index = getVertexIndexOfOrder(order, true);
       const double start_time = -d_graph_[start_index][0];
 
-      const auto finish_index = getVertexIndexOfOrder(order, false);
-      const double finish_time = -d_graph_[finish_index][0];
-
-      order_start_times.push_back(start_time);
-      insertOrderPropertiesIntoMetrics(order, new_current_metric, task_info, i, start_time);
+      order_start_times.push_back(start_time + time_now_);
+      insertOrderPropertiesIntoMetrics(order, new_current_metric, task_info, i);
     }
 
     auto task_start_time = *std::min_element(order_start_times.begin(), order_start_times.end());
-    auto offset = std::max(current_task_expected_finish_time_, time_now_);
 
     start_time_mapping[task_info.task] = task_start_time;
-    new_current_metric.setStartTime(task_start_time + offset);
+    new_current_metric.setExecutionStartTime(task_start_time);
+
+    // time required to get to the start of the first order in the task
+    new_current_metric.start_up_time = calcGetToStartDuration(i);
 
     task_info.metrics_composition.updateCurrentMetrics(new_current_metric);
   }
@@ -322,9 +339,8 @@ void StnOrderManagement::updateCurrentOrdering() {
 
   // calc new total metrics
   auto previous_total_metrics = current_total_metrics_;
-  current_total_metrics_ = Metrics{};
   for (const auto &info : current_ordering_) {
-    current_total_metrics_ = current_total_metrics_ + info.metrics_composition.getCurrentMetrics();
+    current_total_metrics_ = previous_total_metrics + info.metrics_composition.getCurrentMetrics();
   }
 
   // set metric difference in new task
@@ -391,13 +407,13 @@ void StnOrderManagement::addOrderingConstraintBetweenTasks(
   auto start_vertex = getVertexOfOrder(task_insert_info.task.getOrders().front(), true);
   addBinaryConstraint(insertion_point.previous_finish, start_vertex, 0, std::nullopt);
 
-  updateDurationConstraints(insertion_point.new_index);
+  updateGetToStartDurationConstraint(insertion_point.new_index);
 
   if (insertion_point.next_start.has_value()) {
     addBinaryConstraint(getVertexOfOrder(task_insert_info.task.getOrders().back(), false),
                         insertion_point.next_start.value(), 0, std::nullopt);
 
-    updateDurationConstraints(insertion_point.new_index + 1);
+    updateGetToStartDurationConstraint(insertion_point.new_index + 1);
   }
 }
 
@@ -425,29 +441,36 @@ daisi::util::Duration StnOrderManagement::calcOrderDurationForInsert(
   }
 
   if (std::holds_alternative<TransportOrder>(order)) {
-    // only supported if this is not the first TransportOrder in the task
-
-    if (order_index >= 1) {
+    if (order_index > 0) {
       auto previous_location = task_insert_info.end_locations[order_index - 1];
       auto funcs = materialFlowToFunctionalities({order}, previous_location.getPosition());
       return AmrMobilityHelper::estimateDuration(daisi::util::Pose(), funcs, amr_description_,
                                                  topology_, false);
     }
+
+    // order_index == 0
+    // previous position does not matter because we remove the
+    // first MoveTo functionality from funcs anyways
+    daisi::util::Position previous_position(-1, -1);
+    auto funcs = materialFlowToFunctionalities({order}, previous_position);
+
+    if (auto move_to = std::get_if<MoveTo>(&funcs.front())) {
+      auto start_position = move_to->destination;
+      funcs.erase(funcs.begin());
+
+      return AmrMobilityHelper::estimateDuration(daisi::util::Pose(start_position), funcs,
+                                                 amr_description_, topology_, false);
+    }
+
+    throw std::runtime_error("First functionality of TransportOrder must be MoveTo.");
   }
 
-  // we dont know the location of the previous task yet
-  // will be determined in the updateDurationConstraints method properly
-  return std::numeric_limits<double>::max();
+  throw std::runtime_error("Unknown Order Type.");
 }
 
 void StnOrderManagement::insertOrderPropertiesIntoMetrics(
     const Order &order, Metrics &metrics,
-    const StnOrderManagement::TaskInsertInfo &task_insert_info, const int &task_ordering_index,
-    const daisi::util::Duration &start_time) {
-  if (!metrics.isStartTimeSet()) {
-    metrics.setStartTime(start_time);
-  }
-
+    const StnOrderManagement::TaskInsertInfo &task_insert_info, const int task_ordering_index) {
   const auto orders = task_insert_info.task.getOrders();
   const auto order_it = std::find(orders.begin(), orders.end(), order);
   const int order_index = order_it - orders.begin();
@@ -496,23 +519,38 @@ void StnOrderManagement::insertOrderPropertiesIntoMetrics(
   }
 }
 
-void StnOrderManagement::updateDurationConstraints(const int &task_index_to_update) {
+void StnOrderManagement::updateGetToStartDurationConstraint(const int task_index_to_update) {
+  const auto duration = calcGetToStartDuration(task_index_to_update);
+
+  const auto &task_info_to_update = current_ordering_[task_index_to_update];
+  const auto &this_task_first_order = task_info_to_update.task.getOrders().front();
+
+  StnOrderManagementVertex previous_finish_vertex = getOrigin();
+  if (task_index_to_update > 0) {
+    const auto &previous_task_last_order =
+        current_ordering_[task_index_to_update - 1].task.getOrders().back();
+    previous_finish_vertex = getVertexOfOrder(previous_task_last_order, false);
+  }
+  StnOrderManagementVertex this_start_vertex = getVertexOfOrder(this_task_first_order, true);
+
+  updateLastBinaryConstraint(previous_finish_vertex, this_start_vertex, duration, std::nullopt);
+}
+
+util::Duration StnOrderManagement::calcGetToStartDuration(const int task_index_to_update) {
   auto last_position = getLastPositionBefore(task_index_to_update);
 
   const auto &task_info_to_update = current_ordering_[task_index_to_update];
-  const auto &first_order = task_info_to_update.task.getOrders().front();
+  const auto &this_task_first_order = task_info_to_update.task.getOrders().front();
 
-  if (!std::holds_alternative<TransportOrder>(first_order)) {
-    throw std::invalid_argument("only supports transport orders at the beginngin of a task");
+  if (!std::holds_alternative<TransportOrder>(this_task_first_order)) {
+    throw std::invalid_argument("Only supports transport orders at the beginngin of a task.");
   }
 
-  auto funcs = materialFlowToFunctionalities({first_order}, last_position);
-  auto duration = AmrMobilityHelper::estimateDuration(daisi::util::Pose(last_position), funcs,
-                                                      amr_description_, topology_, false);
+  auto funcs = materialFlowToFunctionalities({this_task_first_order}, last_position);
+  auto duration = AmrMobilityHelper::estimateDuration(
+      daisi::util::Pose(last_position), {funcs.front()}, amr_description_, topology_, false);
 
-  updateLastBinaryConstraint(getVertexOfOrder(task_info_to_update.task.getOrders().front(), true),
-                             getVertexOfOrder(task_info_to_update.task.getOrders().front(), false),
-                             duration, std::nullopt);
+  return duration;
 }
 
 StnOrderManagement::VertexIterator StnOrderManagement::getVertexIteratorOfOrder(const Order &order,

@@ -23,6 +23,7 @@
 #include "cpps/amr/model/amr_static_ability.h"
 #include "move_order.h"
 #include "solanet/serializer/serialize.h"
+#include "time_window.h"
 #include "transport_order.h"
 
 namespace daisi::material_flow {
@@ -34,44 +35,47 @@ public:
   Task() = default;
 
   Task(std::string name, const std::vector<Order> &orders,
-       std::vector<std::string> follow_up_tasks);
+       const std::vector<std::string> &follow_up_task_uuids);
 
   const std::string &getUuid() const;
   const std::string &getName() const;
   const std::vector<Order> &getOrders() const;
-  const std::vector<std::string> &getFollowUpTasks() const;
+  const std::vector<std::string> &getFollowUpTaskUuids() const;
 
   void setPrecedingTasks(const std::vector<std::string> &preceding_tasks);
-  const std::vector<std::string> &getPrecedingTasks() const;
+  const std::vector<std::string> &getPrecedingTaskUuids() const;
 
   void setAbilityRequirement(const cpps::amr::AmrStaticAbility &ability);
   cpps::amr::AmrStaticAbility getAbilityRequirement() const;
 
   bool hasTimeWindow() const;
+  void setTimeWindow(const TimeWindow &time_window);
+  const TimeWindow &getTimeWindow() const;
+  void setSpawnTime(const util::Duration &spawn_time);
 
   bool operator<(const Task &other) const { return uuid_ < other.uuid_; }
-
   bool operator==(const Task &other) const { return uuid_ == other.uuid_; }
-
   bool operator!=(const Task &other) const { return uuid_ != other.uuid_; }
 
-  SERIALIZE(uuid_, name_, orders_, follow_up_tasks_, preceding_tasks_, ability_requirement_);
+  SERIALIZE(uuid_, name_, orders_, follow_up_task_uuids_, preceding_task_uuids_,
+            ability_requirement_);
 
 private:
   std::string uuid_;
-
   std::string name_;
+
   std::vector<Order> orders_;
-  std::vector<std::string> follow_up_tasks_;
-  std::vector<std::string> preceding_tasks_;
+
+  std::vector<std::string> follow_up_task_uuids_;
+  std::vector<std::string> preceding_task_uuids_;
+
+  std::optional<TimeWindow> time_window_ = std::nullopt;
 
   cpps::amr::AmrStaticAbility ability_requirement_ =
       cpps::amr::AmrStaticAbility(cpps::amr::LoadCarrier(), 0);
 };
 
 }  // namespace daisi::material_flow
-
-// bool operator==(const Order &lhs, const Order &rhs);
 
 namespace std {
 
