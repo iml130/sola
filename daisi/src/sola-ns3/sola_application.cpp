@@ -17,6 +17,7 @@
 #include "sola_application.h"
 
 #include "minhton/utils/config_reader.h"
+#include "sola-ns3/config_helper_ns3.h"
 #include "utils/sola_utils.h"
 
 using namespace ns3;
@@ -63,9 +64,11 @@ void SolaApplication::startSOLA() {
       (number_created == 0) ? "configurations/root.yml" : "configurations/join.yml";
 
   sola::ManagementOverlayMinhton::Config config_mo = minhton::config::readConfig(config_file);
+  sola_ns3::configureLogger(config_mo);
 
-  // Nothing to configure (yet)
   sola::EventDisseminationMinhcast::Config config_ed;
+  sola_ns3::configureLogger(config_ed);
+
   number_created++;
 
   auto single_receive = [](const sola::Message &msg) {

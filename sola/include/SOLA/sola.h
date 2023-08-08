@@ -28,8 +28,7 @@ namespace sola {
 
 template <typename StorageT, typename EventDisseminationT> class SOLA {
   static_assert(std::is_base_of<Storage, StorageT>());
-  static_assert(
-      std::is_base_of<EventDissemination<typename StorageT::Logger>, EventDisseminationT>());
+  static_assert(std::is_base_of<EventDissemination, EventDisseminationT>());
 
 public:
   /*! \brief Starts the SOLA instance
@@ -86,10 +85,7 @@ public:
   }
 
   // event dissemination
-  void subscribeTopic(const std::string &topic,
-                      std::vector<typename StorageT::Logger> logger = {}) {
-    ed_->subscribe(topic, logger);
-  }
+  void subscribeTopic(const std::string &topic) { ed_->subscribe(topic); }
   void unsubscribeTopic(const std::string &topic) { ed_->unsubscribe(topic); }
   void publishMessage(const std::string &topic, const std::string &message) {
     ed_->publish(topic, message);

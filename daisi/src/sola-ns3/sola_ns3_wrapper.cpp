@@ -20,28 +20,13 @@
 
 namespace daisi::sola_ns3 {
 
-sola::ManagementOverlayMinhton::Config addLogger(sola::ManagementOverlayMinhton::Config config,
-                                                 uint32_t device_id) {
-  config.setLogger(std::vector<sola::ManagementOverlayMinhton::Logger>{
-      daisi::global_logger_manager->createMinhtonLogger(device_id, "MO")});
-  return config;
-}
-
-sola::EventDisseminationMinhcast::Config addLogger(sola::EventDisseminationMinhcast::Config config,
-                                                   uint32_t device_id) {
-  config.logger = std::vector<sola::EventDisseminationMinhcast::Logger>{
-      daisi::global_logger_manager->createNatterLogger(device_id)};
-  return config;
-}
-
 SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &config_mo,
                                const sola::EventDisseminationMinhcast::Config &config_ed,
                                sola::MessageReceiveFct receive_fct,
                                sola::TopicMessageReceiveFct topic_recv,
                                std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger,
                                std::string node_name, uint32_t device_id)
-    : SOLA(addLogger(config_mo, device_id), addLogger(config_ed, device_id), receive_fct,
-           topic_recv),
+    : SOLA(config_mo, config_ed, receive_fct, topic_recv),
       device_id_(device_id),
       logger_(std::move(logger)),
       node_name_(std::move(node_name)) {}
@@ -49,10 +34,7 @@ SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &con
 void SOLAWrapperNs3::subscribeTopic(const std::string &topic) {
   if (!isSubscribed(topic)) {
     logger_->logTopicEvent(topic, node_name_, true);
-    const std::string postfix = "ED:" + topic;
-    std::vector<sola::ManagementOverlayMinhton::Logger> logger_list{
-        daisi::global_logger_manager->createMinhtonLogger(device_id_, postfix)};
-    SOLA::subscribeTopic(topic, logger_list);
+    SOLA::subscribeTopic(topic);
 
     subscribed_topics_.push_back(topic);
   }
