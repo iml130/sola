@@ -20,6 +20,7 @@
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 #include "cpps/logical/algorithms/disposition/round_robin_initiator.h"
 #include "cpps/logical/message/material_flow_update.h"
+#include "logging/logger_manager.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 
