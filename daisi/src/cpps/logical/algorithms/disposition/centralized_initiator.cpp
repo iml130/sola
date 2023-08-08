@@ -17,7 +17,7 @@
 #include "centralized_initiator.h"
 
 namespace daisi::cpps::logical {
-CentralizedInitiator::CentralizedInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+CentralizedInitiator::CentralizedInitiator(std::shared_ptr<SOLACppsWrapper> sola,
                                            std::shared_ptr<CppsLoggerNs3> logger)
     : DispositionInitiator(sola, logger) {
   // create request to gain information about all active AMR's

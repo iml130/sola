@@ -36,7 +36,7 @@ namespace daisi::cpps::logical {
 class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
   explicit IteratedAuctionDispositionParticipant(
-      std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+      std::shared_ptr<SOLACppsWrapper> sola,
       std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description);
 
   ~IteratedAuctionDispositionParticipant() override = default;

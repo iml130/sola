@@ -26,7 +26,7 @@ namespace daisi::cpps::logical {
 /// is defined by the central allocator, the participant only needs to handle new task assignments.
 class CentralizedParticipant : public DispositionParticipant {
 public:
-  CentralizedParticipant(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+  CentralizedParticipant(std::shared_ptr<SOLACppsWrapper> sola,
                          std::shared_ptr<SimpleOrderManagement> order_management);
   ~CentralizedParticipant() override = default;
 

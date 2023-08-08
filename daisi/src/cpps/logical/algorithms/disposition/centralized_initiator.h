@@ -26,7 +26,7 @@ namespace daisi::cpps::logical {
 /// assignment algorithm.
 class CentralizedInitiator : public DispositionInitiator {
 public:
-  CentralizedInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+  CentralizedInitiator(std::shared_ptr<SOLACppsWrapper> sola,
                        std::shared_ptr<CppsLoggerNs3> logger);
   ~CentralizedInitiator() override = default;
 

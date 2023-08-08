@@ -22,7 +22,7 @@
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
-    std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+    std::shared_ptr<SOLACppsWrapper> sola,
     std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description)
     : DispositionParticipant(sola),
       order_management_(std::move(order_management)),

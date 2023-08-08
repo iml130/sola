@@ -16,7 +16,9 @@
 
 #include "sola_application.h"
 
+#include "logging/logger_manager.h"
 #include "minhton/utils/config_reader.h"
+#include "ns3/simulator.h"
 #include "sola-ns3/config_helper_ns3.h"
 #include "solanet/uuid.h"
 #include "utils/sola_utils.h"
@@ -79,9 +81,9 @@ void SolaApplication::startSOLA() {
               << solanet::uuidToString(msg.sender) << std::endl;
   };
 
-  sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, single_receive,
-                                                     topic_receive,
-                                                     "");  // Already joining overlay network
+  sola_ = std::make_unique<SOLAWrapper>(
+      config_mo, config_ed, single_receive, topic_receive,
+      daisi::global_logger_manager->createSolaLogger());  // Already joining overlay network
 }
 
 void SolaApplication::subscribeTopic(const std::string &topic) { sola_->subscribeTopic(topic); }

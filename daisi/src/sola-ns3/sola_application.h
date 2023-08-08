@@ -26,7 +26,7 @@
 #include "ns3/socket.h"
 #include "ns3/uinteger.h"
 #include "sola_logger_ns3.h"
-#include "sola_ns3_wrapper.h"
+#include "sola_wrapper.h"
 
 namespace daisi::sola_ns3 {
 
@@ -51,7 +51,7 @@ private:
 
   uint32_t id_ = 0;
 
-  std::unique_ptr<SOLAWrapperNs3> sola_;
+  std::unique_ptr<SOLAWrapper> sola_;
 
   ns3::Ipv4Address local_ip_address_;
 

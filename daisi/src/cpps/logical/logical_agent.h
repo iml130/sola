@@ -24,7 +24,7 @@
 #include "cpps/logical/algorithms/algorithm_config.h"
 #include "cpps/logical/algorithms/algorithm_interface.h"
 #include "cpps/logical/message/serializer.h"
-#include "sola-ns3/sola_ns3_wrapper.h"
+#include "cpps/sola_wrapper.h"
 
 namespace daisi::cpps::logical {
 
@@ -71,7 +71,7 @@ protected:
   std::vector<std::unique_ptr<AlgorithmInterface>> algorithms_;
 
   /// @brief Decentralized communication middleware.
-  std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
+  std::shared_ptr<SOLACppsWrapper> sola_;
 
   /// @brief Logging relevant information into Database.
   std::shared_ptr<CppsLoggerNs3> logger_;

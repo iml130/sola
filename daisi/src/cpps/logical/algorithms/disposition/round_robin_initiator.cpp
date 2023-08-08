@@ -21,7 +21,7 @@
 #include "utils/random_engine.h"
 
 namespace daisi::cpps::logical {
-RoundRobinInitiator::RoundRobinInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+RoundRobinInitiator::RoundRobinInitiator(std::shared_ptr<SOLACppsWrapper> sola,
                                          std::shared_ptr<CppsLoggerNs3> logger)
     : CentralizedInitiator(sola, logger){};
 

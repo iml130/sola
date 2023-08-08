@@ -29,8 +29,7 @@
 namespace daisi::cpps::logical {
 class RoundRobinInitiator : public CentralizedInitiator {
 public:
-  RoundRobinInitiator(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
-                      std::shared_ptr<CppsLoggerNs3> logger);
+  RoundRobinInitiator(std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<CppsLoggerNs3> logger);
   ~RoundRobinInitiator() override = default;
 
   /// @brief React on a participant's response to a task assignment.
