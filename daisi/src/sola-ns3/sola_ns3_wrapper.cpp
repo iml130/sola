@@ -25,9 +25,8 @@ SOLAWrapperNs3::SOLAWrapperNs3(const sola::ManagementOverlayMinhton::Config &con
                                sola::MessageReceiveFct receive_fct,
                                sola::TopicMessageReceiveFct topic_recv,
                                std::shared_ptr<daisi::cpps::CppsLoggerNs3> logger,
-                               std::string node_name, uint32_t device_id)
+                               std::string node_name)
     : SOLA(config_mo, config_ed, receive_fct, topic_recv),
-      device_id_(device_id),
       logger_(std::move(logger)),
       node_name_(std::move(node_name)) {}
 
