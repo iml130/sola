@@ -66,6 +66,7 @@ target_link_libraries(PathPlanning
     daisi_logger_manager
     daisi_random_engine
     minhton_utils_config_reader
+    daisi_sola_management_minhton_helper
     ns3::libwifi
     ns3::libcsma
 )
