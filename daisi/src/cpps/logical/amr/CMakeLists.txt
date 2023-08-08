@@ -21,6 +21,7 @@ target_link_libraries(daisi_cpps_logical_amr_amr_logical_agent
     solanet_uuid
     solanet_uuid_generator_sim
     daisi_cpps_logical_message_material_flow_update
+    daisi_logger_manager
 )
 
 target_include_directories(daisi_cpps_amr_amr_description INTERFACE

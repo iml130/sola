@@ -23,6 +23,7 @@
 #include "cpps/logical/order_management/simple_order_management.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
+#include "logging/logger_manager.h"
 #include "solanet/uuid_generator.h"
 #include "utils/socket_manager.h"
 #include "utils/sola_utils.h"

@@ -11,6 +11,7 @@ target_link_libraries(daisi_cpps_logical_material_flow_material_flow_logical_age
     daisi_cpps_logical_algorithms_disposition_round_robin_initiator
     daisi_material_flow_model_material_flow
     PRIVATE
+    daisi_logger_manager
     solanet_uuid
     solanet_uuid_generator_sim
     daisi_cpps_logical_algorithms_algorithm_config
