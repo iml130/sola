@@ -7,7 +7,7 @@ Additionally, the message header contains an event id and ref event id to identi
 ## Message Types
 
 Please take a look at [the MessageType enum](https://iml130.github.io/sola/doxygen/namespaceminhton.html#enum-members) and [the MessageVariant and MessageSEVariant definitions](https://iml130.github.io/sola/doxygen/namespaceminhton.html#typedef-members) for more information.
-The MessageType enum simply maps each message type to a number, where related message types have numbers closeby.
+The MessageType enum simply maps each message type to a number, whereas related message types have numbers close by.
 The MessageVariant and MessageSEVariant definitions include every message type class respectively every message type class that can be used in a Search Exact query.
 
 ## Adding a new message type

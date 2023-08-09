@@ -2,7 +2,7 @@
 
 If a new node (entering node) wants to join the network, it sends a JOIN message to one known node in the network.
 
-The node who receives a JOIN Message executes the processJoin method. A node who executes the processJoin method will either...
+The node that receives a JOIN Message executes the processJoin method. A node who executes the processJoin method will either...
 
 * forward the JOIN message to another node
 * or accept the node as a child
@@ -15,7 +15,7 @@ When the first reached node is not a null node, we use the adjacent to reach a n
 Second, based on the routing table entries we determine whether we arrived on the last level or the one before it.
 Additional hops may be necessary to finish this process.
 Third and last, the last hops to the end of the tree occur.
-For the join procedure this means reaching the node which is the first one from top to bottom, then left to right, able to become the parent of a new node.
+For the join procedure, this means reaching the node which is the first one from top to bottom, then left to right, able to become the parent of a new node.
 
 <figure markdown>
   <a id="fig_flow_diagram_join"></a>

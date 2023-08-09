@@ -77,7 +77,7 @@ Those who know both need to update their Network Information and at the same tim
 
 After that the adjacent information has to be updated.
 For the adjacents of the removed position the adjacent left and adjacent right need to be linked together.
-We do not need to update the adjacents of the replaced position separately, because this will already be done throught the ReplacementUpdate messages.
+We do not need to update the adjacents of the replaced position separately, because this will already be done through the ReplacementUpdate messages.
 
 <figure markdown>
   <a id="fig_leave_example"></a>
