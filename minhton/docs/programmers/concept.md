@@ -16,7 +16,7 @@ The comparison operators are only comparing the LogicalNodeInfo objects and use 
 
 ### LogicalNodeInfo
 
-This class contains the logical information about a node in the network, most importantly the level, number and fanout.
+This class contains the logical information about a node in the network, most importantly the level, number, and fanout.
 Through these tree values the position of a node in the tree is given.
 There is an additional helper attribute to check if the object is initialized, which says whether this tree position exists or not.
 
@@ -40,7 +40,7 @@ To compare different properties like the depth within the tree there are differe
 
 ### PhysicalNodeInfo
 
-This class contains the information about the physical layer, namely the IP address and port.
+This class contains information about the physical layer, namely the IP address and port.
 At the moment only IPv4 addresses are supported.
 
 The comparison operators calculate a value out of the IP address and node which do not have a direct meaning.
@@ -48,12 +48,12 @@ But they are unique values so that they can be used for sorting etc.
 
 ## RoutingInformation
 
-In the routing information all information to each known neighbor is stored as NodeInfo objects.
+In the routing information, all information to each known neighbor is stored as NodeInfo objects.
 This includes the parent, children, adjacent left and right, and left and right routing tables.
 
 ### Neighbor Relation Properties
 
-There are some properties to keep in mind, before we get into the details of RoutingInformation and RoutingTable.
+There are some properties to keep in mind before we get into the details of RoutingInformation and RoutingTable.
 
 #### Symmetrical vs. Asymmetrical
 
@@ -61,16 +61,16 @@ There are some properties to keep in mind, before we get into the details of Rou
 
 **Asymmetrical Neighbors**: If node A has node B as a neighbor, but B does not have node A as a neighbor.
 
-Symmetrical Neighbors are parent, children, routing table neighbors and adjacent left and adjacent right:
+Symmetrical Neighbors are parent, children, routing table neighbors, and adjacent left and adjacent right:
 
 * if A is the parent of B, B is the child of A
 * if A is a routing table neighbor of B with the distance x, B is also a routing table neighbor of A with the distance x, because the distance will stay the same
 * if A is the adjacent left of B, B is the adjacent right of A
 
 Asymmetrical Neighbors are the routing table neighbor children.
-A node knows about the children of the a routing table neighbor, in most cases that child will not know the node.
+A node knows about the children of a routing table neighbor, in most cases that child will not know the node.
 
-These properties are important to keep in mind when sending message to update other nodes in the network about a join-accept, leave, leave-replacement, etc.
+These properties are important to keep in mind when sending messages to update other nodes in the network about a join-accept, leave, leave-replacement, etc.
 
 #### Neighbors with static vs. dynamic **Positions**
 
@@ -102,7 +102,7 @@ There the nodes are always stored from left to right.
 If we look at node 3:3 with fanout 2, the node will have the neighbors 3:1 and 3:2 to its left, and 3:4, 2:5, and 3:7 to its right.
 So the `routing_table_neighbors_` contains those neighbors in the order 3:1, 3:2, ..., 3:7.
 
-Additionally we are storing the children of those routing table neighbors.
+Additionally, we are storing the children of those routing table neighbors.
 This vector always has the size of fanout \* (size of `routing_table_neighbors_`).
 The first child of the routing table neighbor at index i, has the position (i \* fanout) in the routing table neighbor children vector.
 The last child is stored at position (i \* fanout + fanout-1).
@@ -118,21 +118,21 @@ Because NodeInfo uses the comparison operators of LogicalNodeInfo, we can use fu
 
 ### Using getters and setters (and resetters)
 
-When using a setter method, the tree position of the NodeInfo objects needs to have a right position.
-When setting a neighbor with a static position, the set NodeInfo objects must have the exact same position.
+When using a setter method, the tree position of the NodeInfo objects needs to have the right position.
+When setting a neighbor with a static position, the set NodeInfo objects must have the same position.
 The parent position of 1:0 e.g. may never deviate from 0:0.
-When setting a neighbor with a dynamic position (adjacents) the position must be on the correct side of the node, e.g., with fanout 2 0:0 may not have a adjacent left neighbor like 1:1 because 1:1 is on the right side of 0:0.
-The adjacent left neighbor of 0:0 must always be on its left side, e.g., 1:0, 2:1 or 3:3.
+When setting a neighbor with a dynamic position (adjacents) the position must be on the correct side of the node, e.g., with fanout 2 0:0 may not have an adjacent left neighbor like 1:1 because 1:1 is on the right side of 0:0.
+The adjacent left neighbor of 0:0 must always be on its left side, e.g., 1:0, 2:1, or 3:3.
 
 Also when using setters the NodeInfo object must always be initialized (must exist).
-If a NodeInfo object is not initialized, either PhysicalNodeInfo or LogicalNodeInfo are not initialized.
-LogicalNodeInfo always need to be initialized due to the correct tree position.
+If a NodeInfo object is not initialized, either PhysicalNodeInfo or LogicalNodeInfo is not initialized.
+LogicalNodeInfo always needs to be initialized due to the correct tree position.
 PhysicalNodeInfo also must be initialized by having a correct IP address and port.
 
 When you want to remove a neighbor (e.g. when the neighbor leaves) you cannot use setters for this purpose.
-You must explicitly use the reset methods to make the neighbor non-existent, to not accidentally remove a neighor somewhere else.
+You must explicitly use the reset methods to make the neighbor non-existent, to not accidentally remove a neighbor somewhere else.
 A reset method for the parent node is not supported, because it would logically not make sense to remove the parent node.
 
 ## References
 
-[1] H. V. Jagadish, B. C. Ooi, K.-L. Tan, Q. H. Vu, und R. Zhang, „Speeding up search in peer-to-peer networks with a multi-way tree structure“, in Proceedings of the 2006 ACM SIGMOD international conference on Management of data  - SIGMOD ’06, Chicago, IL, USA, 2006, S. 1. doi: 10.1145/1142473.1142475.
+[1] H. V. Jagadish, B. C. Ooi, K.-L. Tan, Q. H. Vu, and R. Zhang, „Speeding up search in peer-to-peer networks with a multi-way tree structure“, in Proceedings of the 2006 ACM SIGMOD international conference on Management of data  - SIGMOD ’06, Chicago, IL, USA, 2006, S. 1. doi: 10.1145/1142473.1142475.
