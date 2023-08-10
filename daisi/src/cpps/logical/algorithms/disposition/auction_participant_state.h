@@ -31,13 +31,37 @@ namespace daisi::cpps::logical {
 /// AuctionParticipantState, to store information related to exactly one task.
 /// This includes the previously calculated bids (metrics) and insertion points.
 struct AuctionParticipantTaskState {
-  explicit AuctionParticipantTaskState(daisi::material_flow::Task task);
+  friend class AuctionParticipantState;
 
-  daisi::material_flow::Task task;
+  explicit AuctionParticipantTaskState(const daisi::material_flow::Task &task);
 
-  std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point = nullptr;
+  const material_flow::Task &getTask() const;
 
-  std::optional<MetricsComposition> metrics_composition = std::nullopt;
+  const MetricsComposition &getMetricsComposition() const;
+
+  const std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> getInsertionPoint() const;
+
+  /// @brief Checking whether both metrics and insertion point are initialized.
+  bool isValid() const;
+
+  /// @brief Setting information for both metrics and insertion point.
+  void setInformation(const MetricsComposition &metrics_composition,
+                      std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point);
+
+  /// @brief Making metrics and insertion point uninitialized.
+  void removeInformation();
+
+private:
+  /// @brief Storing the task we have auction information about.
+  daisi::material_flow::Task task_;
+
+  /// @brief Storing information about the quality of inserting the task into the order
+  /// management by the participant.
+  std::optional<MetricsComposition> metrics_composition_ = std::nullopt;
+
+  /// @brief Storing information about how to insert the task into an auction based order
+  /// management by the participant.
+  std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point_ = nullptr;
 };
 
 /// @brief Helper struct for the IteratedAuctionDispositionParticipant to store the state of open
@@ -49,22 +73,30 @@ struct AuctionParticipantState {
   /// @param tasks Open tasks that initially got announced.
   explicit AuctionParticipantState(const std::vector<daisi::material_flow::Task> &tasks);
 
-  /// @brief Storing the state of each open task. The key is the task uuid.
-  std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;
-
-  /// @brief Task uuid of the latest previously submitted task. If a task was submitted before, the
-  /// initiator has still the relevant information and sending this bid again is unnecessary
-  /// overhead.
-  std::string previously_submitted;
-
   /// @brief Given the information from the task_state_mapping, the best possible task is picked
   /// depending on stored metrics.
   /// @return
   AuctionParticipantTaskState pickBest();
 
+  /// @brief Removing task states with invalid stored information (= empty metrics and insertion
+  /// point) from the map.
   void prune();
 
+  /// @brief Checking whether there are valid entries.
+  /// @return
   bool hasEntries() const;
+
+  /// @brief Storing the state of each open task. The key is the task uuid.
+  std::unordered_map<std::string, AuctionParticipantTaskState> task_state_mapping;
+
+  /// @brief Task uuid of the lastest previously submitted task. If a task was submitted before,
+  /// the initiator has still the relevant information and sending this bid again is unnecessary
+  /// overhead.
+  std::string previously_submitted;
+
+private:
+  /// @brief Checking whether each entry in the task state mapping is valid.
+  bool checkAllTaskStatesValid();
 };
 
 }  // namespace daisi::cpps::logical

@@ -93,19 +93,19 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
   AuctionParticipantTaskState &task_state = it_auction_task_state->second;
 
   bool accept = false;
-  if (task_state.metrics_composition.has_value() &&
-      order_management_->canAddTask(task_state.task, task_state.insertion_point)) {
+  if (task_state.isValid() &&
+      order_management_->canAddTask(task_state.getTask(), task_state.getInsertionPoint())) {
     auto result = order_management_->getLatestCalculatedInsertionInfo();
     auto metrics_comp = result.first;
 
-    if (metrics_comp == task_state.metrics_composition.value()) {
+    if (metrics_comp == task_state.getMetricsComposition()) {
       accept = true;
     }
   }
 
   std::string participant_connection = sola_->getConectionString();
   if (accept) {
-    bool success = order_management_->addTask(task_state.task, task_state.insertion_point);
+    bool success = order_management_->addTask(task_state.getTask(), task_state.getInsertionPoint());
 
     if (!success) {
       throw std::runtime_error("Winner accepts, but cannot add the task.");
@@ -119,8 +119,8 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     calculateBids(state);
 
   } else {
-    task_state.metrics_composition = std::nullopt;
-    task_state.insertion_point = nullptr;
+    task_state.removeInformation();
+    state.prune();
 
     // Send winner response rejection
     WinnerResponse response(task_uuid, participant_connection, false);
@@ -134,18 +134,16 @@ void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantStat
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
-    if (order_management_->canAddTask(pair.second.task, nullptr)) {
+    if (order_management_->canAddTask(pair.second.getTask(), nullptr)) {
       // Setting new calculated information if we can add the task
       auto result = order_management_->getLatestCalculatedInsertionInfo();
-
-      pair.second.metrics_composition = result.first;
-      pair.second.insertion_point = result.second;
+      pair.second.setInformation(result.first, result.second);
     } else {
       // Setting previous information to invalid because we cannot accept anymore
-      pair.second.metrics_composition = std::nullopt;
-      pair.second.insertion_point = nullptr;
+      pair.second.removeInformation();
     }
   }
+
   state.prune();
 }
 
@@ -158,7 +156,7 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
   AuctionParticipantState &state = it_state->second;
   AuctionParticipantTaskState best_task_state = state.pickBest();
 
-  std::string task_uuid = best_task_state.task.getUuid();
+  std::string task_uuid = best_task_state.getTask().getUuid();
 
   // Only submitting again if we previously submitted something else
   if (task_uuid != state.previously_submitted) {
@@ -166,7 +164,7 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
 
     BidSubmission bid_submission(task_uuid, participant_connection,
                                  description_.getLoadHandling().getAbility(),
-                                 best_task_state.metrics_composition.value());
+                                 best_task_state.getMetricsComposition());
 
     sola_->sendData(serialize(bid_submission), sola::Endpoint(initiator_connection));
 

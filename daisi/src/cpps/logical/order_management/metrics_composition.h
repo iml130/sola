@@ -27,14 +27,17 @@ public:
   MetricsComposition() = default;
 
   explicit MetricsComposition(const Metrics &current_metrics)
-      : current_metrics_(current_metrics), insertion_metrics_(current_metrics) {}
+      : current_metrics_(current_metrics),
+        insertion_metrics_(current_metrics),
+        diff_insertion_metrics_(current_metrics) {}
 
   MetricsComposition(const Metrics &current_metrics, const Metrics &insertion_metrics,
                      const Metrics &diff_insertion_metrics)
       : current_metrics_(current_metrics),
         insertion_metrics_(insertion_metrics),
         insertion_metrics_set_(true),
-        diff_insertion_metrics_(diff_insertion_metrics) {}
+        diff_insertion_metrics_(diff_insertion_metrics),
+        diff_insertion_metrics_set_(true) {}
 
   const Metrics &getCurrentMetrics() const { return current_metrics_; }
 
