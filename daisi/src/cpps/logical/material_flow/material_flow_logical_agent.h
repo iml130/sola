@@ -19,6 +19,7 @@
 
 #include "cpps/logical/logical_agent.h"
 #include "material_flow/model/material_flow.h"
+#include "solanet/network_udp/message.h"
 
 namespace daisi::cpps::logical {
 
@@ -57,10 +58,10 @@ protected:
   /// Only a part of the available interfaces might be allowed for a material flow agent.
   void initAlgorithms() override;
 
-  /// @brief Method being called by sola when we receive a 1-to-1 message. Here, logging of the
+  /// @brief Method being called by solanet when we receive a 1-to-1 message. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface.
   /// @param m received message
-  void messageReceiveFunction(const sola::Message &m) override;
+  void messageReceiveFunction(const solanet::Message &m) override;
 
   /// @brief Method being called by sola when we receive a message via a topic. Here, logging of the
   /// messages will be added in comparison to the implementation of the logical agent interface

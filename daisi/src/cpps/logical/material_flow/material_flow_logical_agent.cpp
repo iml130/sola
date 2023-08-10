@@ -28,9 +28,9 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowStateLogger : public AlgorithmInterface {
 public:
-  MaterialFlowStateLogger(std::shared_ptr<SOLACppsWrapper> sola,
+  MaterialFlowStateLogger(daisi::cpps::common::CppsCommunicatorPtr communicator,
                           std::shared_ptr<CppsLoggerNs3> logger)
-      : AlgorithmInterface(std::move(sola)), logger_(std::move(logger)) {}
+      : AlgorithmInterface(std::move(communicator)), logger_(std::move(logger)) {}
 
   bool process(const MaterialFlowUpdate &msg) override {
     MaterialFlowOrderUpdateLoggingInfo logging_info;
@@ -64,10 +64,10 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
     switch (algo_type) {
       case AlgorithmType::kIteratedAuctionDispositionInitiator:
         algorithms_.push_back(
-            std::make_unique<IteratedAuctionDispositionInitiator>(sola_, logger_));
+            std::make_unique<IteratedAuctionDispositionInitiator>(communicator_, logger_));
         break;
       case AlgorithmType::kRoundRobinInitiator:
-        algorithms_.push_back(std::make_unique<RoundRobinInitiator>(sola_, logger_));
+        algorithms_.push_back(std::make_unique<RoundRobinInitiator>(communicator_, logger_));
         break;
       default:
         throw std::invalid_argument(
@@ -75,10 +75,10 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
     }
   }
 
-  algorithms_.push_back(std::make_unique<MaterialFlowStateLogger>(sola_, logger_));
+  algorithms_.push_back(std::make_unique<MaterialFlowStateLogger>(communicator_, logger_));
 }
 
-void MaterialFlowLogicalAgent::messageReceiveFunction(const sola::Message &msg) {
+void MaterialFlowLogicalAgent::messageReceiveFunction(const solanet::Message &msg) {
   // TODO add logging of message
   this->LogicalAgent::messageReceiveFunction(msg);
 }
@@ -103,8 +103,8 @@ void MaterialFlowLogicalAgent::setServices() {
 
   service.key_values.insert({"servicetype", std::string("assignmentinitiator")});
   service.key_values.insert({"mfuuid", uuid_});
-
-  sola_->addService(service);
+  service.key_values.insert({"endpoint", communicator_->network.getConnectionString()});
+  communicator_->sola.addService(service);
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
@@ -120,11 +120,14 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   auto tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);
 
+  const std::string ip = communicator_->network.getIP();
+  const uint16_t port = communicator_->network.getPort();
+
   if (execution_counter_++ == 0) {
-    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 0);
+    logger_->logMaterialFlow(uuid_, ip, port, 0);
   } else {
     uuid_ = solanet::uuidToString(solanet::generateUUID());
-    logger_->logMaterialFlow(uuid_, sola_->getIP(), sola_->getPort(), 1);
+    logger_->logMaterialFlow(uuid_, ip, port, 1);
   }
   tmp->logMaterialFlowContent(uuid_);
 }

@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_PARTICIPANT_H_
 #define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_PARTICIPANT_H_
 
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/logical/order_management/simple_order_management.h"
 #include "disposition_participant.h"
 
@@ -26,7 +27,7 @@ namespace daisi::cpps::logical {
 /// is defined by the central allocator, the participant only needs to handle new task assignments.
 class CentralizedParticipant : public DispositionParticipant {
 public:
-  CentralizedParticipant(std::shared_ptr<SOLACppsWrapper> sola,
+  CentralizedParticipant(daisi::cpps::common::CppsCommunicatorPtr communicator,
                          std::shared_ptr<SimpleOrderManagement> order_management);
   ~CentralizedParticipant() override = default;
 

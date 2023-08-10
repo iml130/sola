@@ -20,11 +20,12 @@
 #include <memory>
 #include <vector>
 
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/algorithms/algorithm_config.h"
 #include "cpps/logical/algorithms/algorithm_interface.h"
 #include "cpps/logical/message/serializer.h"
-#include "cpps/sola_wrapper.h"
+#include "solanet/network_udp/message.h"
 
 namespace daisi::cpps::logical {
 
@@ -59,9 +60,9 @@ protected:
   /// agent.
   virtual void initAlgorithms() = 0;
 
-  /// @brief Method being called by sola when we receive a 1-to-1 message
+  /// @brief Method being called by solanet when we receive a 1-to-1 message
   /// @param m received message
-  virtual void messageReceiveFunction(const sola::Message &msg) = 0;
+  virtual void messageReceiveFunction(const solanet::Message &msg) = 0;
 
   /// @brief Method being called by sola when we receive a message via a topic
   /// @param m received message
@@ -70,8 +71,8 @@ protected:
   /// @brief The algorithms which logical messages will be forwarded to for processing.
   std::vector<std::unique_ptr<AlgorithmInterface>> algorithms_;
 
-  /// @brief Decentralized communication middleware.
-  std::shared_ptr<SOLACppsWrapper> sola_;
+  /// @brief Collection of members to communicate
+  daisi::cpps::common::CppsCommunicatorPtr communicator_;
 
   /// @brief Logging relevant information into Database.
   std::shared_ptr<CppsLoggerNs3> logger_;

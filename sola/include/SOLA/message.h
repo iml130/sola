@@ -17,10 +17,6 @@
 
 namespace sola {
 
-struct Message {
-  std::string sender;
-  std::string content;
-};
 struct TopicMessage {
   std::string topic;
   solanet::UUID sender;
@@ -31,7 +27,6 @@ struct TopicMessage {
 };
 
 using TopicMessageReceiveFct = std::function<void(const TopicMessage &m)>;
-using MessageReceiveFct = std::function<void(const Message &m)>;
 
 }  // namespace sola
 

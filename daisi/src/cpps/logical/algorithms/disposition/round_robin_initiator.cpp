@@ -21,9 +21,9 @@
 #include "utils/random_engine.h"
 
 namespace daisi::cpps::logical {
-RoundRobinInitiator::RoundRobinInitiator(std::shared_ptr<SOLACppsWrapper> sola,
+RoundRobinInitiator::RoundRobinInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
                                          std::shared_ptr<CppsLoggerNs3> logger)
-    : CentralizedInitiator(sola, logger){};
+    : CentralizedInitiator(communicator, logger){};
 
 bool RoundRobinInitiator::process(const AssignmentResponse &assignment_response) {
   if (assignment_response.doesAccept()) {
@@ -59,7 +59,7 @@ void RoundRobinInitiator::logMaterialFlowContent(const std::string &material_flo
 
 void RoundRobinInitiator::distributeMFTasks(uint32_t index, bool previously_allocated) {
   // TODO: filter the wanted information out from the MFDLScheduler
-  const std::string connection_string = sola_->getConectionString();
+  const std::string connection_string = communicator_->network.getConnectionString();
 
   // hardcoded tasks for testing
   material_flow::TransportOrderStep pickup1(
@@ -132,9 +132,10 @@ void RoundRobinInitiator::assignTask(const material_flow::Task &task) {
       chooseParticipantForTask(task);
 
   // inform about task assignment
-  AssignmentNotification assignment_notification(task, sola_->getConectionString());
-  sola_->sendData(serialize(assignment_notification),
-                  sola::Endpoint(chosen_participant->connection_string));
+  AssignmentNotification assignment_notification(task,
+                                                 communicator_->network.getConnectionString());
+  communicator_->network.send(
+      {chosen_participant->connection_string, serialize(assignment_notification)});
 
   // update participant and priority queue
   chosen_participant->assignment_counter++;

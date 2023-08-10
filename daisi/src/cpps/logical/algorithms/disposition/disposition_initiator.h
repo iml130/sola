@@ -21,6 +21,7 @@
 #include <variant>
 
 #include "../algorithm_interface.h"
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "material_flow/model/material_flow.h"
 
@@ -31,9 +32,9 @@ namespace daisi::cpps::logical {
 /// There always must be a corresponding derived class from DispositionParticipant.
 class DispositionInitiator : public AlgorithmInterface {
 public:
-  explicit DispositionInitiator(std::shared_ptr<SOLACppsWrapper> sola,
-                                std::shared_ptr<CppsLoggerNs3> logger)
-      : AlgorithmInterface(sola), logger_(std::move(logger)){};
+  DispositionInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
+                       std::shared_ptr<CppsLoggerNs3> logger)
+      : AlgorithmInterface(communicator), logger_(std::move(logger)){};
 
   ~DispositionInitiator() override = default;
 

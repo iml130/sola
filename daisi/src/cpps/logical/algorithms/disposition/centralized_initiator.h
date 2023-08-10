@@ -17,6 +17,7 @@
 #ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_INITIATOR_H_
 #define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_INITIATOR_H_
 
+#include "cpps/common/cpps_communicator.h"
 #include "disposition_initiator.h"
 
 namespace daisi::cpps::logical {
@@ -26,7 +27,7 @@ namespace daisi::cpps::logical {
 /// assignment algorithm.
 class CentralizedInitiator : public DispositionInitiator {
 public:
-  CentralizedInitiator(std::shared_ptr<SOLACppsWrapper> sola,
+  CentralizedInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
                        std::shared_ptr<CppsLoggerNs3> logger);
   ~CentralizedInitiator() override = default;
 

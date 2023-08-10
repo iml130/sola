@@ -20,6 +20,7 @@
 #include <memory>
 #include <variant>
 
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/logical/algorithms/algorithm_interface.h"
 
 namespace daisi::cpps::logical {
@@ -29,8 +30,8 @@ namespace daisi::cpps::logical {
 /// There always must be a corresponding derived class from DispositionInitiator.
 class DispositionParticipant : public AlgorithmInterface {
 public:
-  explicit DispositionParticipant(std::shared_ptr<SOLACppsWrapper> sola)
-      : AlgorithmInterface(sola){};
+  explicit DispositionParticipant(daisi::cpps::common::CppsCommunicatorPtr communicator)
+      : AlgorithmInterface(communicator){};
 
   ~DispositionParticipant() override = default;
 };

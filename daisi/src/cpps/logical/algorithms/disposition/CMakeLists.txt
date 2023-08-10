@@ -8,6 +8,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_init
     daisi_cpps_logical_algorithms_algorithm_interface
     daisi_material_flow_model_material_flow
     daisi_cpps_common_cpps_logger_ns3
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_disposition_participant INTERFACE)
@@ -18,6 +19,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_disposition_participant
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_disposition_participant
     INTERFACE
     daisi_cpps_logical_algorithms_algorithm_interface
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_initiator STATIC)
@@ -34,6 +36,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
     daisi_structure_helpers
     ns3::libcore
     daisi_cpps_amr_model_amr_fleet
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_iterated_auction_disposition_participant STATIC)
@@ -47,6 +50,7 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_iterated_auction
     daisi_cpps_logical_algorithms_disposition_disposition_participant
     daisi_cpps_logical_order_management_auction_based_order_management
     daisi_cpps_logical_algorithms_disposition_auction_participant_state
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_layered_precedence_graph STATIC)
@@ -96,6 +100,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_centralized_initiator
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_centralized_initiator
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_initiator
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_centralized_participant STATIC)
@@ -107,6 +112,7 @@ target_sources(daisi_cpps_logical_algorithms_disposition_centralized_participant
 target_link_libraries(daisi_cpps_logical_algorithms_disposition_centralized_participant
     PUBLIC
     daisi_cpps_logical_algorithms_disposition_disposition_participant
+    daisi_cpps_common_cpps_communicator
 )
 
 add_library(daisi_cpps_logical_algorithms_disposition_round_robin_initiator STATIC)
@@ -121,4 +127,5 @@ target_link_libraries(daisi_cpps_logical_algorithms_disposition_round_robin_init
     daisi_cpps_amr_model_amr_fleet
     ns3::libcore
     daisi_random_engine
+    daisi_cpps_common_cpps_communicator
 )

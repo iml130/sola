@@ -4,7 +4,7 @@ root: false
 verbose: true
 join_mode: ip # ip/none/discovery
 join_ip: 1.1.0.2
-join_port: 2001
+join_port: 2000
 
 # timeouts in milliseconds
 bootstrap_response: 500

@@ -23,13 +23,15 @@
 #include <unordered_map>
 
 #include "centralized_initiator.h"
+#include "cpps/common/cpps_communicator.h"
 
 /// @brief Modified Round Robin Algorithm that centrally assigns tasks of incoming material flows to
 /// the corresponding centralized participants.
 namespace daisi::cpps::logical {
 class RoundRobinInitiator : public CentralizedInitiator {
 public:
-  RoundRobinInitiator(std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<CppsLoggerNs3> logger);
+  RoundRobinInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
+                      std::shared_ptr<CppsLoggerNs3> logger);
   ~RoundRobinInitiator() override = default;
 
   /// @brief React on a participant's response to a task assignment.

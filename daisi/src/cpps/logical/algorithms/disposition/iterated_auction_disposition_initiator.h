@@ -21,6 +21,7 @@
 #include <variant>
 
 #include "auction_initiator_state.h"
+#include "cpps/common/cpps_communicator.h"
 #include "disposition_initiator.h"
 #include "layered_precedence_graph.h"
 #include "utils/structure_helpers.h"
@@ -38,8 +39,8 @@ namespace daisi::cpps::logical {
 /// physical properties (abilities).
 class IteratedAuctionDispositionInitiator : public DispositionInitiator {
 public:
-  explicit IteratedAuctionDispositionInitiator(std::shared_ptr<SOLACppsWrapper> sola,
-                                               std::shared_ptr<CppsLoggerNs3> logger);
+  IteratedAuctionDispositionInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
+                                      std::shared_ptr<CppsLoggerNs3> logger);
 
   ~IteratedAuctionDispositionInitiator() override = default;
 

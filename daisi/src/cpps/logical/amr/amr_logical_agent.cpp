@@ -59,7 +59,7 @@ void AmrLogicalAgent::initAlgorithms() {
         order_management_ = stn_order_management;
 
         algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
-            sola_, stn_order_management, description_));
+            communicator_, stn_order_management, description_));
 
         order_management_->addNotifyTaskAssignmentCallback(
             [this]() { this->notifyTaskAssigned(); });
@@ -72,7 +72,7 @@ void AmrLogicalAgent::initAlgorithms() {
         order_management_ = simple_order_management;
 
         algorithms_.push_back(
-            std::make_unique<CentralizedParticipant>(sola_, simple_order_management));
+            std::make_unique<CentralizedParticipant>(communicator_, simple_order_management));
 
         order_management_->addNotifyTaskAssignmentCallback(
             [this]() { this->notifyTaskAssigned(); });
@@ -87,7 +87,7 @@ void AmrLogicalAgent::initAlgorithms() {
 
 void AmrLogicalAgent::start() { initAlgorithms(); }
 
-void AmrLogicalAgent::messageReceiveFunction(const sola::Message &msg) {
+void AmrLogicalAgent::messageReceiveFunction(const solanet::Message &msg) {
   // TODO add logging of message
   this->LogicalAgent::messageReceiveFunction(msg);
 }
@@ -234,8 +234,8 @@ void AmrLogicalAgent::logAmrInfos() {
   std::string logical_asset_ip = daisi::getIpv4AddressString(i_logical_address.GetIpv4());
   uint16_t logical_asset_port = i_logical_address.GetPort();
 
-  info.ip_logical_core = sola_->getIP();
-  info.port_logical_core = sola_->getPort();
+  info.ip_logical_core = communicator_->network.getIP();
+  info.port_logical_core = communicator_->network.getPort();
   info.ip_logical_asset = logical_asset_ip;
   info.port_logical_asset = logical_asset_port;
   info.ip_physical = physical_asset_ip;
@@ -268,7 +268,7 @@ void AmrLogicalAgent::forwardOrderUpdate() {
     update.order_index = execution_state_.getOrderIndex();
   }
 
-  sola_->sendData(serialize(update), sola::Endpoint(update.task.getConnectionString()));
+  communicator_->network.send({update.task.getConnectionString(), serialize(update)});
 }
 
 void AmrLogicalAgent::setServices() {
@@ -286,9 +286,10 @@ void AmrLogicalAgent::setServices() {
        description_.getLoadHandling().getAbility().getLoadCarrier().getTypeAsString()});
 
   service.key_values.insert({"amruuid", uuid_});
+  service.key_values.insert({"endpoint", communicator_->network.getConnectionString()});
 
   logger_->logTransportService(service, true);
-  sola_->addService(service);
+  communicator_->sola.addService(service);
 }
 
 }  // namespace daisi::cpps::logical

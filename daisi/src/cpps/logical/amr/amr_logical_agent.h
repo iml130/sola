@@ -28,6 +28,7 @@
 #include "cpps/logical/logical_agent.h"
 #include "cpps/logical/order_management/order_management.h"
 #include "ns3/socket.h"
+#include "solanet/network_udp/message.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
@@ -55,9 +56,9 @@ public:
 private:
   void initAlgorithms() override;
 
-  /// @brief Method being called by sola when we receive a 1-to-1 message
+  /// @brief Method being called by solanet when we receive a 1-to-1 message
   /// @param m received message
-  void messageReceiveFunction(const sola::Message &msg) override;
+  void messageReceiveFunction(const solanet::Message &msg) override;
 
   /// @brief Method being called by sola when we receive a message via a topic
   /// @param m received message

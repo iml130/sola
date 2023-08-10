@@ -50,14 +50,16 @@ void LogicalAgent::initCommunication() {
   uuid_ = solanet::uuidToString(solanet::generateUUID());
   logger_->setApplicationUUID(uuid_);
 
-  auto message_recv_fct = [this](const sola::Message &msg) { this->messageReceiveFunction(msg); };
+  auto message_recv_fct = [this](const solanet::Message &msg) {
+    this->messageReceiveFunction(msg);
+  };
   auto topic_message_recv_fct = [this](const sola::TopicMessage &msg) {
     this->topicMessageReceiveFunction(msg);
   };
 
-  sola_ = std::make_unique<SOLACppsWrapper>(config_mo, config_ed, message_recv_fct,
-                                            topic_message_recv_fct,
-                                            daisi::global_logger_manager->createSolaLogger());
+  communicator_ = std::make_shared<daisi::cpps::common::CppsCommunicator>(
+      config_mo, config_ed, topic_message_recv_fct,
+      daisi::global_logger_manager->createSolaLogger(), message_recv_fct);
 }
 
 void LogicalAgent::processMessage(const Message &msg) {
@@ -71,8 +73,8 @@ void LogicalAgent::processMessage(const Message &msg) {
   throw std::runtime_error("Failed to process message");
 }
 
-void LogicalAgent::messageReceiveFunction(const sola::Message &msg) {
-  auto logical_message = deserialize(msg.content);
+void LogicalAgent::messageReceiveFunction(const solanet::Message &msg) {
+  auto logical_message = deserialize(msg.getMessage());
   processMessage(logical_message);
 }
 
@@ -81,10 +83,10 @@ void LogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
   processMessage(logical_message);
 }
 
-bool LogicalAgent::isRunning() { return sola_->isStorageRunning(); }
+bool LogicalAgent::isRunning() { return communicator_->sola.isStorageRunning(); }
 
-bool LogicalAgent::canStop() { return sola_->canStop(); }
+bool LogicalAgent::canStop() { return communicator_->sola.canStop(); }
 
-void LogicalAgent::prepareStop() { sola_->stop(); }
+void LogicalAgent::prepareStop() { communicator_->sola.stop(); }
 
 }  // namespace daisi::cpps::logical

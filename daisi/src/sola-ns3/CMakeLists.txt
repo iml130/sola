@@ -2,11 +2,9 @@ add_library(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/sola.h)
 target_include_directories(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include)
 target_link_libraries(SOLA_ns3 INTERFACE
         sola_service
-        sola_endpoint
         sola_logger_interface
         solanet_uuid
         solanet_uuid_generator_sim
-        NetworkUDPSim
 )
 
 add_library(daisi_sola_sola_wrapper INTERFACE sola_wrapper.h)
