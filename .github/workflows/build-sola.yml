@@ -138,6 +138,7 @@ jobs:
         build/tests/unittests/DaisiDatastructureWeightedDirectedGraphTest
         build/tests/unittests/DaisiDatastructureSimpleTemporalNetworkTest
         build/tests/unittests/DaisiCppsOrderManagementStnOrderManagement
+        build/tests/unittests/DaisiCppsLogicalAuctionParticipantState
     - name: Run MINHTON integrationtest
       run: |
         export LD_LIBRARY_PATH=~/ns-3_install/lib

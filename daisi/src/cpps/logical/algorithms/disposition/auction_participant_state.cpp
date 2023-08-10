@@ -18,7 +18,7 @@
 
 namespace daisi::cpps::logical {
 
-AuctionParticipantTaskState::AuctionParticipantTaskState(const daisi::material_flow::Task &task)
+AuctionParticipantTaskState::AuctionParticipantTaskState(daisi::material_flow::Task task)
     : task_(std::move(task)) {}
 
 void AuctionParticipantTaskState::setInformation(
@@ -29,8 +29,8 @@ void AuctionParticipantTaskState::setInformation(
 }
 
 void AuctionParticipantTaskState::removeInformation() {
-  insertion_point_ = nullptr;
-  metrics_composition_ = std::nullopt;
+  insertion_point_.reset();
+  metrics_composition_.reset();
 }
 
 const material_flow::Task &AuctionParticipantTaskState::getTask() const { return task_; }
@@ -66,7 +66,7 @@ AuctionParticipantTaskState AuctionParticipantState::pickBest() {
   }
 
   if (!checkAllTaskStatesValid()) {
-    throw std::runtime_error("Some task states are not valid. Pruning beforehand is necessary. ");
+    throw std::runtime_error("Some task states are not valid. Pruning beforehand is necessary.");
   }
 
   std::vector<AuctionParticipantTaskState> task_states;
@@ -94,12 +94,8 @@ void AuctionParticipantState::prune() {
 }
 
 bool AuctionParticipantState::checkAllTaskStatesValid() {
-  for (auto &it : task_state_mapping) {
-    if (!it.second.isValid()) {
-      return false;
-    }
-  }
-  return true;
+  return std::all_of(task_state_mapping.begin(), task_state_mapping.end(),
+                     [](const auto pair) { return pair.second.isValid(); });
 }
 
 bool AuctionParticipantState::hasEntries() const { return !task_state_mapping.empty(); }

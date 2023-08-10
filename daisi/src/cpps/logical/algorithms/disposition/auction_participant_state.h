@@ -33,7 +33,7 @@ namespace daisi::cpps::logical {
 struct AuctionParticipantTaskState {
   friend class AuctionParticipantState;
 
-  explicit AuctionParticipantTaskState(const daisi::material_flow::Task &task);
+  explicit AuctionParticipantTaskState(daisi::material_flow::Task task);
 
   const material_flow::Task &getTask() const;
 
@@ -57,11 +57,11 @@ private:
 
   /// @brief Storing information about the quality of inserting the task into the order
   /// management by the participant.
-  std::optional<MetricsComposition> metrics_composition_ = std::nullopt;
+  std::optional<MetricsComposition> metrics_composition_;
 
   /// @brief Storing information about how to insert the task into an auction based order
   /// management by the participant.
-  std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point_ = nullptr;
+  std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point_;
 };
 
 /// @brief Helper struct for the IteratedAuctionDispositionParticipant to store the state of open
