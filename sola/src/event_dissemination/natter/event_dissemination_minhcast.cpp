@@ -13,6 +13,11 @@
 #include "solanet/serializer/serializer.h"
 
 namespace sola {
+
+// Hard coded port for all natter instances.
+// TODO See #89
+static constexpr uint16_t kNatterPort = 2001;
+
 EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct,
                                                        std::shared_ptr<Storage> storage,
                                                        const Config &config, LoggerPtr logger)
@@ -122,7 +127,7 @@ void EventDisseminationMinhcast::joinMinhton(
       // New peer
       minhcast_->addPeer(
           topic, {{neighbor.node.getLevel(), neighbor.node.getNumber(), neighbor.node.getFanout()},
-                  {neighbor.node.getAddress(), 2002},
+                  {neighbor.node.getAddress(), kNatterPort},
                   neighbor.node.getLogicalNodeInfo().getRawUuid()});
     }
 
@@ -130,7 +135,7 @@ void EventDisseminationMinhcast::joinMinhton(
       peers_added_natter_.at({neighbor.ip_old, neighbor.port_old}) -= 1;
       uint32_t number_old_added = peers_added_natter_.at({neighbor.ip_old, neighbor.port_old});
       if (number_old_added == 0) {
-        minhcast_->removePeer(topic, neighbor.ip_old, 2002);
+        minhcast_->removePeer(topic, neighbor.ip_old, kNatterPort);
         peers_added_natter_.erase({neighbor.ip_old, neighbor.port_old});
       }
     }

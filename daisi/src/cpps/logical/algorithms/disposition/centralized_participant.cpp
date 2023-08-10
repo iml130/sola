@@ -19,8 +19,9 @@
 namespace daisi::cpps::logical {
 
 CentralizedParticipant::CentralizedParticipant(
-    std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<SimpleOrderManagement> order_management)
-    : DispositionParticipant(sola), order_management_(std::move((order_management))){};
+    daisi::cpps::common::CppsCommunicatorPtr communicator,
+    std::shared_ptr<SimpleOrderManagement> order_management)
+    : DispositionParticipant(communicator), order_management_(std::move((order_management))){};
 
 bool CentralizedParticipant::process(const AssignmentNotification &assignment_notification) {
   const material_flow::Task assigned_task = assignment_notification.getTask();
@@ -33,18 +34,19 @@ bool CentralizedParticipant::process(const AssignmentNotification &assignment_no
   // Respond to the central allocator. Send the acception / rejection as well as the current status.
   AssignmentResponse response(assigned_task.getUuid(), true, order_management_->getFinalMetrics(),
                               order_management_->getExpectedEndPosition(),
-                              sola_->getConectionString());
+                              communicator_->network.getConnectionString());
 
   std::string initiator_connection = assignment_notification.getInitiatorConnection();
-  sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
+  communicator_->network.send({initiator_connection, serialize(response)});
   return true;
 };
 
 bool CentralizedParticipant::process(const StatusUpdateRequest &status_request) {
-  StatusUpdate update(sola_->getConectionString(), order_management_->getFinalMetrics(),
+  StatusUpdate update(communicator_->network.getConnectionString(),
+                      order_management_->getFinalMetrics(),
                       order_management_->getExpectedEndPosition());
   std::string initiator_connection = status_request.getInitiatorConnection();
-  sola_->sendData(serialize(update), sola::Endpoint(initiator_connection));
+  communicator_->network.send({initiator_connection, serialize(update)});
 
   return true;
 };

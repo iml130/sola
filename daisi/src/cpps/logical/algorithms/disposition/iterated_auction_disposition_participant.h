@@ -21,6 +21,7 @@
 #include <optional>
 
 #include "auction_participant_state.h"
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/logical/order_management/auction_based_order_management.h"
 #include "disposition_participant.h"
 
@@ -36,7 +37,7 @@ namespace daisi::cpps::logical {
 class IteratedAuctionDispositionParticipant : public DispositionParticipant {
 public:
   explicit IteratedAuctionDispositionParticipant(
-      std::shared_ptr<SOLACppsWrapper> sola,
+      daisi::cpps::common::CppsCommunicatorPtr communicator,
       std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description);
 
   ~IteratedAuctionDispositionParticipant() override = default;

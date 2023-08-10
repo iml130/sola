@@ -22,13 +22,13 @@
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
-    std::shared_ptr<SOLACppsWrapper> sola,
+    daisi::cpps::common::CppsCommunicatorPtr communicator,
     std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description)
-    : DispositionParticipant(sola),
+    : DispositionParticipant(communicator),
       order_management_(std::move(order_management)),
       description_(std::move(description)) {
   auto topic = AmrFleet::get().getTopicForAbility(description_.getLoadHandling().getAbility());
-  sola_->subscribeTopic(topic);
+  communicator_->sola.subscribeTopic(topic);
 }
 
 bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_for_proposal) {
@@ -103,7 +103,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
     }
   }
 
-  std::string participant_connection = sola_->getConectionString();
+  std::string participant_connection = communicator_->network.getConnectionString();
   if (accept) {
     bool success = order_management_->addTask(task_state.getTask(), task_state.getInsertionPoint());
 
@@ -113,7 +113,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
     // Send winner response acception
     WinnerResponse response(task_uuid, participant_connection, true);
-    sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
+    communicator_->network.send({initiator_connection, serialize(response)});
 
     // Update states
     calculateBids(state);
@@ -124,7 +124,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
 
     // Send winner response rejection
     WinnerResponse response(task_uuid, participant_connection, false);
-    sola_->sendData(serialize(response), sola::Endpoint(initiator_connection));
+    communicator_->network.send({initiator_connection, serialize(response)});
   }
 
   return true;
@@ -160,13 +160,13 @@ void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiat
 
   // Only submitting again if we previously submitted something else
   if (task_uuid != state.previously_submitted) {
-    std::string participant_connection = sola_->getConectionString();
+    std::string participant_connection = communicator_->network.getConnectionString();
 
     BidSubmission bid_submission(task_uuid, participant_connection,
                                  description_.getLoadHandling().getAbility(),
                                  best_task_state.getMetricsComposition());
 
-    sola_->sendData(serialize(bid_submission), sola::Endpoint(initiator_connection));
+    communicator_->network.send({initiator_connection, serialize(bid_submission)});
 
     state.previously_submitted = task_uuid;
   }

@@ -20,6 +20,7 @@
 #include <memory>
 #include <variant>
 
+#include "cpps/common/cpps_communicator.h"
 #include "cpps/logical/message/auction_based/bid_submission.h"
 #include "cpps/logical/message/auction_based/call_for_proposal.h"
 #include "cpps/logical/message/auction_based/iteration_notification.h"
@@ -31,7 +32,6 @@
 #include "cpps/logical/message/central_allocation/status_update_request.h"
 #include "cpps/logical/message/material_flow_update.h"
 #include "cpps/logical/message/serializer.h"
-#include "cpps/sola_wrapper.h"
 
 #define REGISTER_LOGICAL_MESSAGE(MessageType) \
   virtual bool process(const MessageType &) { return false; }
@@ -44,7 +44,8 @@ namespace daisi::cpps::logical {
 
 class AlgorithmInterface {
 public:
-  explicit AlgorithmInterface(std::shared_ptr<SOLACppsWrapper> sola) : sola_(std::move(sola)){};
+  explicit AlgorithmInterface(daisi::cpps::common::CppsCommunicatorPtr communicator)
+      : communicator_(std::move(communicator)){};
 
   virtual ~AlgorithmInterface() = default;
 
@@ -60,7 +61,7 @@ public:
   REGISTER_LOGICAL_MESSAGE(MaterialFlowUpdate);  // TODO Ref #79
 
 protected:
-  std::shared_ptr<SOLACppsWrapper> sola_;
+  daisi::cpps::common::CppsCommunicatorPtr communicator_;
 };
 
 }  // namespace daisi::cpps::logical

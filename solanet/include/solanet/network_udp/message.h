@@ -19,6 +19,11 @@ public:
   Message(std::string ip, uint16_t port, std::string message)
       : ip_(std::move(ip)), port_(port), message_(std::move(message)){};
 
+  Message(const std::string &endpoint, std::string message)
+      : ip_(endpoint.substr(0, endpoint.find(":"))),
+        port_(std::stoi(endpoint.substr(endpoint.find(":") + 1, endpoint.size()))),
+        message_(std::move(message)) {}
+
   /**
    * Check if message is treated as empty
    * @return true if message is empty

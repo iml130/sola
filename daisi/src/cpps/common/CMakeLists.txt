@@ -72,3 +72,12 @@ target_link_libraries(daisi_cpps_common_cpps_manager
 if(DAISI_DISABLE_NETWORK_SIMULATION)
         target_compile_definitions(daisi_cpps_common_cpps_manager PRIVATE DAISI_SOLANET_NS3_DISABLE_NETWORKING)
 endif()
+
+add_library(daisi_cpps_common_cpps_communicator INTERFACE cpps_communicator.h)
+target_link_libraries(daisi_cpps_common_cpps_communicator
+        INTERFACE
+        ManagementOverlayMINHTONSim
+        EventDisseminationMinhcastSim
+        SOLA_ns3
+        NetworkUDPSim
+)

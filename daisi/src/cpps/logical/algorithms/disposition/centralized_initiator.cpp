@@ -17,9 +17,9 @@
 #include "centralized_initiator.h"
 
 namespace daisi::cpps::logical {
-CentralizedInitiator::CentralizedInitiator(std::shared_ptr<SOLACppsWrapper> sola,
+CentralizedInitiator::CentralizedInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
                                            std::shared_ptr<CppsLoggerNs3> logger)
-    : DispositionInitiator(sola, logger) {
+    : DispositionInitiator(communicator, logger) {
   // create request to gain information about all active AMR's
   sola::Request amr_request;
   amr_request.all = true;
@@ -27,7 +27,7 @@ CentralizedInitiator::CentralizedInitiator(std::shared_ptr<SOLACppsWrapper> sola
   amr_request.request = "(servicetype == transport)";
 
   // send request
-  amr_find_result_ = sola_->findService(amr_request);
+  amr_find_result_ = communicator->sola.findService(amr_request);
 };
 
 void CentralizedInitiator::addMaterialFlow(

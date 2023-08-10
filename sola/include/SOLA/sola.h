@@ -18,11 +18,9 @@
 #include <vector>
 
 #include "SOLA/logger_interface.h"
-#include "endpoint.h"
 #include "event_dissemination/event_dissemination.h"
 #include "message.h"
 #include "service.h"
-#include "solanet/network_udp/network_udp.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 #include "storage/storage.h"
@@ -43,11 +41,8 @@ public:
    */
   SOLA(const typename StorageT::Config &storage_config,
        const typename EventDisseminationT::Config &event_dissemination_config,
-       MessageReceiveFct receive_fct, TopicMessageReceiveFct topic_recv, LoggerPtr logger)
-      : network_(std::make_unique<solanet::Network>([receive_fct](const solanet::Message &msg) {
-          receive_fct({msg.getIp(), msg.getMessage()});
-        })),
-        storage_(std::make_shared<StorageT>(storage_config)),
+       TopicMessageReceiveFct topic_recv, LoggerPtr logger)
+      : storage_(std::make_shared<StorageT>(storage_config)),
         ed_(std::make_unique<EventDisseminationT>(
             [this, topic_recv](const TopicMessage &m) {
               logger_->logReceiveTopicMessage(m);
@@ -70,7 +65,6 @@ public:
   void addService(Service service) {
     std::cout << "PUBLISH SERVICE" << std::endl;
     std::vector<Entry> entry;
-    entry.push_back({"endpoint", network_->getIP() + ":" + std::to_string(network_->getPort())});
 
     for (auto [key, value] : service.key_values) {
       if (value.type() == typeid(std::string)) {
@@ -88,11 +82,6 @@ public:
   }
 
   std::future<minhton::FindResult> findService(Request r) { return storage_->find(r); }
-
-  // Functions for negotation
-  void sendData(const std::string &data, Endpoint endpoint) {
-    network_->send({endpoint.ip, endpoint.port, data});
-  }
 
   // event dissemination
   void subscribeTopic(const std::string &topic) {
@@ -112,17 +101,9 @@ public:
     return msg.uuid;
   }
 
-  // returns ip/port for SOLA high-level communication
-  std::string getConectionString() const {
-    return network_->getIP() + ":" + std::to_string(network_->getPort());
-  }
-  std::string getIP() const { return network_->getIP(); }
-  uint16_t getPort() const { return network_->getPort(); }
-
   bool isStorageRunning() { return storage_->isRunning(); }
 
 private:
-  std::unique_ptr<solanet::Network> network_;
   std::shared_ptr<StorageT> storage_;
   std::unique_ptr<EventDisseminationT> ed_;
   LoggerPtr logger_;

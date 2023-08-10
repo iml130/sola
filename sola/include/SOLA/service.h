@@ -9,8 +9,7 @@
 
 #include <any>
 #include <map>
-
-#include "endpoint.h"
+#include <string>
 
 namespace sola {
 struct Service {
@@ -18,9 +17,6 @@ struct Service {
   std::string friendly_name;
   std::string type;
   std::string uuid;
-
-  // Do not fill externally! SOLA is setting this automatically on addService()
-  Endpoint endpoint;
 };
 }  // namespace sola
 

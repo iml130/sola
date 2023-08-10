@@ -22,8 +22,8 @@
 namespace daisi::cpps::logical {
 
 IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
-    std::shared_ptr<SOLACppsWrapper> sola, std::shared_ptr<CppsLoggerNs3> logger)
-    : DispositionInitiator(sola, logger) {
+    daisi::cpps::common::CppsCommunicatorPtr communicator, std::shared_ptr<CppsLoggerNs3> logger)
+    : DispositionInitiator(communicator, logger) {
   // assuming that sola is fully initialized at this point
 
   auto preparation_duration = prepareInteraction();
@@ -39,8 +39,8 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
                              "is not implemented yet.");
   }
 
-  layered_precedence_graph_ =
-      std::make_shared<LayeredPrecedenceGraph>(scheduler, sola_->getConectionString());
+  layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(
+      scheduler, communicator_->network.getConnectionString());
   auction_initiator_state_ = std::make_unique<AuctionInitiatorState>(layered_precedence_graph_);
 
   auto sim_time = (double)ns3::Simulator::Now().GetMilliSeconds();
@@ -63,7 +63,8 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
     ability_topic_mapping_[ability] = topic_for_ability;
 
     ns3::Simulator::Schedule(ns3::Seconds(delays_.subscribe_topic * topic_counter++),
-                             &SOLACppsWrapper::subscribeTopic, sola_.get(), topic_for_ability);
+                             &decltype(daisi::cpps::common::CppsCommunicator::sola)::subscribeTopic,
+                             &communicator_->sola, topic_for_ability);
   }
 
   return delays_.subscribe_topic * topic_counter;
@@ -140,7 +141,7 @@ void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {
 }
 
 void IteratedAuctionDispositionInitiator::callForProposal() {
-  auto initiator_connection = sola_->getConectionString();
+  auto initiator_connection = communicator_->network.getConnectionString();
 
   // Mapping of which tasks should be published with a CallForProposal on which ability topic.
   auto task_ability_mapping =
@@ -150,14 +151,14 @@ void IteratedAuctionDispositionInitiator::callForProposal() {
     auto topic = ability_topic_mapping_[pair.first];
 
     CallForProposal cfp(initiator_connection, pair.second);
-    solanet::UUID uuid = sola_->publishMessage(topic, serialize(cfp));
+    solanet::UUID uuid = communicator_->sola.publishMessage(topic, serialize(cfp));
     logger_->logCppsMessage(uuid, "TODO log cfp");
   }
 }
 
 void IteratedAuctionDispositionInitiator::iterationNotification(
     const std::vector<material_flow::Task> &tasks) {
-  auto initiator_connection = sola_->getConectionString();
+  auto initiator_connection = communicator_->network.getConnectionString();
 
   // Mapping of which tasks should be published with an IterationNotification on which ability
   // topic.
@@ -172,7 +173,7 @@ void IteratedAuctionDispositionInitiator::iterationNotification(
                    [&](const auto &task) { return task.getUuid(); });
 
     IterationNotification notification(initiator_connection, task_uuids);
-    solanet::UUID uuid = sola_->publishMessage(topic, serialize(notification));
+    solanet::UUID uuid = communicator_->sola.publishMessage(topic, serialize(notification));
     logger_->logCppsMessage(uuid, "TODO log iteration notification");
   }
 }
@@ -180,13 +181,13 @@ void IteratedAuctionDispositionInitiator::iterationNotification(
 void IteratedAuctionDispositionInitiator::notifyWinners(
     const std::vector<AuctionInitiatorState::Winner> &winners) {
   auction_initiator_state_->clearWinnerAcceptions();
-  auto initiator_connection = sola_->getConectionString();
+  auto initiator_connection = communicator_->network.getConnectionString();
 
   for (const auto &winner : winners) {
     WinnerNotification notification(winner.task_uuid, initiator_connection,
                                     winner.latest_finish_time);
 
-    sola_->sendData(serialize(notification), sola::Endpoint(winner.winner_connection));
+    communicator_->network.send({winner.winner_connection, serialize(notification)});
   }
 }
 
