@@ -53,7 +53,7 @@ public:
               logger_->logReceiveTopicMessage(m);
               topic_recv(m);
             },
-            storage_, network_->getIP(), event_dissemination_config, logger)),
+            storage_, event_dissemination_config, logger)),
         logger_(std::move(logger)),
         uuid_(solanet::generateUUID()) {
     logger_->setApplicationUUID(solanet::uuidToString(uuid_));
