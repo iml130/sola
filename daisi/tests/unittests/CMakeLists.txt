@@ -74,3 +74,14 @@ target_link_libraries(DaisiCppsOrderManagementSimpleOrderManagement
         daisi_cpps_logical_order_management_simple_order_management
         daisi_cpps_amr_physical_material_flow_functionality_mapping
 )
+
+add_executable(DaisiCppsLogicalAuctionParticipantState "")
+target_sources(DaisiCppsLogicalAuctionParticipantState
+        PRIVATE
+        cpps/logical/auction_participant_state_test.cpp
+)
+target_link_libraries(DaisiCppsLogicalAuctionParticipantState
+        PRIVATE
+        Catch2::Catch2WithMain
+        daisi_cpps_logical_algorithms_disposition_auction_participant_state
+)

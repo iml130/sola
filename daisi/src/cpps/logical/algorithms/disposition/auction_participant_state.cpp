@@ -18,8 +18,38 @@
 
 namespace daisi::cpps::logical {
 
-AuctionParticipantTaskState::AuctionParticipantTaskState(daisi::material_flow::Task task)
-    : task(std::move(task)) {}
+AuctionParticipantTaskState::AuctionParticipantTaskState(const daisi::material_flow::Task &task)
+    : task_(std::move(task)) {}
+
+void AuctionParticipantTaskState::setInformation(
+    const MetricsComposition &metrics_composition,
+    std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point) {
+  metrics_composition_ = metrics_composition;
+  insertion_point_ = insertion_point;
+}
+
+void AuctionParticipantTaskState::removeInformation() {
+  insertion_point_ = nullptr;
+  metrics_composition_ = std::nullopt;
+}
+
+const material_flow::Task &AuctionParticipantTaskState::getTask() const { return task_; }
+
+const MetricsComposition &AuctionParticipantTaskState::getMetricsComposition() const {
+  if (!metrics_composition_.has_value()) {
+    throw std::runtime_error("MetricsComposition does not have a value. ");
+  }
+  return metrics_composition_.value();
+}
+
+const std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint>
+AuctionParticipantTaskState::getInsertionPoint() const {
+  return insertion_point_;
+}
+
+bool AuctionParticipantTaskState::isValid() const {
+  return insertion_point_ && metrics_composition_.has_value();
+}
 
 AuctionParticipantState::AuctionParticipantState(
     const std::vector<daisi::material_flow::Task> &tasks) {
@@ -35,19 +65,17 @@ AuctionParticipantTaskState AuctionParticipantState::pickBest() {
         "If the task state mapping is empty, this method should never be called.");
   }
 
+  if (!checkAllTaskStatesValid()) {
+    throw std::runtime_error("Some task states are not valid. Pruning beforehand is necessary. ");
+  }
+
   std::vector<AuctionParticipantTaskState> task_states;
   for (const auto &entry : task_state_mapping) {
     task_states.push_back(entry.second);
   }
 
   auto task_state_comp = [](const auto &s1, const auto &s2) {
-    if (s1.metrics_composition.has_value()) {
-      if (s2.metrics_composition.has_value()) {
-        return s1.metrics_composition.value() > s2.metrics_composition.value();
-      }
-      return false;
-    }
-    return true;
+    return s1.getMetricsComposition() > s2.getMetricsComposition();
   };
 
   std::sort(task_states.begin(), task_states.end(), task_state_comp);
@@ -57,12 +85,21 @@ AuctionParticipantTaskState AuctionParticipantState::pickBest() {
 
 void AuctionParticipantState::prune() {
   for (auto it = task_state_mapping.begin(); it != task_state_mapping.end();) {
-    if (it->second.insertion_point == nullptr) {
+    if (!it->second.isValid()) {
       it = task_state_mapping.erase(it);
     } else {
       it++;
     }
   }
+}
+
+bool AuctionParticipantState::checkAllTaskStatesValid() {
+  for (auto &it : task_state_mapping) {
+    if (!it.second.isValid()) {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool AuctionParticipantState::hasEntries() const { return !task_state_mapping.empty(); }
