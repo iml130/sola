@@ -46,7 +46,7 @@ public:
   using Logger = natter::logging::LoggerPtr;
 
   EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct, std::shared_ptr<Storage> storage_,
-                             std::string ip, const Config &config, LoggerPtr logger);
+                             const Config &config, LoggerPtr logger);
   ~EventDisseminationMinhcast() override = default;
   void publish(const TopicMessage &msg) final;
   void subscribe(const std::string &topic) final;
@@ -80,7 +80,6 @@ private:
   };
 
   std::vector<MinhtonTopicLogger> minhton_loggers_;
-  std::string ip_;  // IP of ourself
 
   std::unordered_map<Topic, Minhton> topic_trees_;
   std::unordered_map<Info, uint32_t> peers_added_natter_;

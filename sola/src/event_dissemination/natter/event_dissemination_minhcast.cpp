@@ -15,15 +15,13 @@
 namespace sola {
 EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct,
                                                        std::shared_ptr<Storage> storage,
-                                                       std::string ip, const Config &config,
-                                                       LoggerPtr logger)
+                                                       const Config &config, LoggerPtr logger)
     : config_(config),
       minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
           [=](const natter::Message &m) {
             msgRecvFct(solanet::serializer::deserialize<sola::TopicMessage>(m.content));
           },
           [](const std::string & /*unused*/) {}, config.logger)),
-      ip_(std::move(ip)),
       storage_(std::move(storage)),
       logger_(std::move(logger)) {}
 
@@ -158,7 +156,7 @@ void EventDisseminationMinhcast::joinMinhton(
   config.setTimeoutLengthsContainer(timeouts);
 
   config.setFanout(2);
-  config.setOwnIP(ip_);
+  config.setOwnIP(minhcast_->getNetworkInfo().ip);
 
   std::string connection_string;
 
