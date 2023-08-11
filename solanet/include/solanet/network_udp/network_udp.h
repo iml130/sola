@@ -44,6 +44,10 @@ public:
 
   std::string getIP() const;
 
+  [[deprecated("Use separate IP/port methods instead")]] std::string getConnectionString() const {
+    return getIP() + ":" + std::to_string(getPort());
+  }
+
 private:
   class Impl;
   std::unique_ptr<Impl> pimpl_;
