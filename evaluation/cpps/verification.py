@@ -21,14 +21,12 @@ def evaluate_database(path):
             [[mf_count]] = db.fetch_all(
                 "SELECT COUNT(DISTINCT MaterialFlowOrderId) FROM MaterialFlowOrderHistory")
             for i in range(1, mf_count+1):
-                sql_query = "SELECT Timestamp_ms/10 as t, State FROM MaterialFlowOrderHistory WHERE MaterialFlowOrderId = " + \
-                    str(i) + " ORDER BY t"
+                sql_query = "SELECT Timestamp_ms, State FROM MaterialFlowOrderHistory WHERE MaterialFlowOrderId = " + \
+                    str(i) + " ORDER BY Timestamp_ms, State"
                 result = db.fetch_all(sql_query)
                 # check if all states are met
                 j = 0
                 element_valid = True
-
-                result = sorted(result, key=lambda x: x[0]*100 + x[1])
 
                 for res in result:
                     # allow multiple load actions

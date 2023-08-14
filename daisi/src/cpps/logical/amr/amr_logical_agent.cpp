@@ -19,6 +19,7 @@
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "cpps/logical/algorithms/disposition/centralized_participant.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
+#include "cpps/logical/message/material_flow_update.h"
 #include "cpps/logical/order_management/simple_order_management.h"
 #include "cpps/logical/order_management/stn_order_management.h"
 #include "cpps/packet.h"
@@ -137,7 +138,7 @@ void AmrLogicalAgent::processMessageAmrStatusUpdate(const AmrStatusUpdate &statu
 
 void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_update) {
   execution_state_.processAmrOrderUpdate(order_update);
-  logOrderUpdate();
+  forwardOrderUpdate();
   checkSendingNextTaskToPhysical();
 }
 
@@ -253,22 +254,21 @@ void AmrLogicalAgent::logPositionUpdate() {
   logger_->logPositionUpdate(position_logging_info);
 }
 
-void AmrLogicalAgent::logOrderUpdate() {
-  MaterialFlowOrderUpdateLoggingInfo logging_info;
-  logging_info.amr_uuid = uuid_;
-  logging_info.amr_state = execution_state_.getAmrState();
-  logging_info.task = execution_state_.getTask();
-  logging_info.position = execution_state_.getPosition();
+void AmrLogicalAgent::forwardOrderUpdate() {
+  MaterialFlowUpdate update;
+  update.amr_uuid = uuid_;
+  update.task = execution_state_.getTask();
+  update.position = execution_state_.getPosition();
 
   if (execution_state_.getOrderIndex() == -1) {
-    logging_info.order_state = OrderStates::kFinished;
-    logging_info.order_index = execution_state_.getTask().getOrders().size() - 1;
+    update.order_state = OrderStates::kFinished;
+    update.order_index = execution_state_.getTask().getOrders().size() - 1;
   } else {
-    logging_info.order_state = execution_state_.getOrderState();
-    logging_info.order_index = execution_state_.getOrderIndex();
+    update.order_state = execution_state_.getOrderState();
+    update.order_index = execution_state_.getOrderIndex();
   }
 
-  logger_->logMaterialFlowOrderUpdate(logging_info);
+  sola_->sendData(serialize(update), sola::Endpoint(update.task.getConnectionString()));
 }
 
 void AmrLogicalAgent::setServices() {

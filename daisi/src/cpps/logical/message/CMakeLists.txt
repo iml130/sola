@@ -18,6 +18,7 @@ target_link_libraries(daisi_cpps_logical_message_serializer
     daisi_cpps_logical_message_central_allocation_assignment_response
     daisi_cpps_logical_message_central_allocation_status_update
     daisi_cpps_logical_message_central_allocation_status_update_request
+    daisi_cpps_logical_message_material_flow_update
 
     PRIVATE
     solanet_serializer
@@ -25,4 +26,17 @@ target_link_libraries(daisi_cpps_logical_message_serializer
 target_include_directories(daisi_cpps_logical_message_serializer
     PUBLIC
     ${DAISI_SOURCE_DIR}/src
+)
+
+add_library(daisi_cpps_logical_message_material_flow_update INTERFACE)
+target_sources(daisi_cpps_logical_message_material_flow_update
+    INTERFACE
+    material_flow_update.h
+)
+target_link_libraries(daisi_cpps_logical_message_material_flow_update
+    INTERFACE
+    solanet_serializer
+    daisi_material_flow_model_task
+    daisi_cpps_model_order_states
+    daisi_structure_helpers
 )

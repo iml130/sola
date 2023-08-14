@@ -83,7 +83,7 @@ private:
 
   void logAmrInfos();
   void logPositionUpdate();
-  void logOrderUpdate();
+  void forwardOrderUpdate();
 
   void sendToPhysical(std::string payload);
 
