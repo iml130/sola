@@ -34,11 +34,13 @@ class Task {
 public:
   Task() = default;
 
-  Task(std::string name, const std::vector<Order> &orders,
+  Task(std::string name, std::string connection_string, const std::vector<Order> &orders,
        const std::vector<std::string> &follow_up_task_uuids);
 
   const std::string &getUuid() const;
   const std::string &getName() const;
+  const std::string &getConnectionString() const;
+
   const std::vector<Order> &getOrders() const;
   const std::vector<std::string> &getFollowUpTaskUuids() const;
 
@@ -57,12 +59,13 @@ public:
   bool operator==(const Task &other) const { return uuid_ == other.uuid_; }
   bool operator!=(const Task &other) const { return uuid_ != other.uuid_; }
 
-  SERIALIZE(uuid_, name_, orders_, follow_up_task_uuids_, preceding_task_uuids_,
+  SERIALIZE(uuid_, name_, connection_string_, orders_, follow_up_task_uuids_, preceding_task_uuids_,
             ability_requirement_);
 
 private:
   std::string uuid_;
   std::string name_;
+  std::string connection_string_;
 
   std::vector<Order> orders_;
 

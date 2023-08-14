@@ -39,7 +39,8 @@ namespace daisi::cpps::logical {
 /// autonomous agents & multiagent systems. 2016.
 class LayeredPrecedenceGraph : private datastructure::DirectedGraph<LPCVertex, std::monostate> {
 public:
-  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler);
+  explicit LayeredPrecedenceGraph(std::shared_ptr<material_flow::MFDLScheduler> scheduler,
+                                  const std::string &connection_string);
 
   ~LayeredPrecedenceGraph() = default;
 

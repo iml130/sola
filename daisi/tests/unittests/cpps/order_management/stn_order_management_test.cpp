@@ -58,7 +58,7 @@ TEST_CASE("One Simple Transport Order", "[basic]") {
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
   TransportOrder simple_to("simple_to", {pickup1}, delivery1);
-  Task simple_task("simple_task", {simple_to}, {});
+  Task simple_task("simple_task", "127.0.0.1:5000", {simple_to}, {});
 
   // act
 
@@ -119,13 +119,13 @@ TEST_CASE("Two Simple Transport Orders statically", "[basic]") {
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2 without constraints
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // can add tests
   REQUIRE(management.canAddTask(simple_task_1));
@@ -206,13 +206,13 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2 without constraints
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // add task 1 and setting it dynamically to the next task
   REQUIRE(management.addTask(simple_task_1));
@@ -282,19 +282,19 @@ TEST_CASE("Three Simple Transport Orders statically", "[basic]") {
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2 without constraints
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p6));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p5));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // transport order 3 without constraints
   TransportOrderStep pickup_3("tos1_3", {}, Location("0x4", "type", p1));
   TransportOrderStep delivery_3("tos2_3", {}, Location("0x5", "type", p0));
   TransportOrder simple_to_3("simple_to_3", {pickup_3}, delivery_3);
-  Task simple_task_3("simple_task_3", {simple_to_3}, {});
+  Task simple_task_3("simple_task_3", "127.0.0.1:5000", {simple_to_3}, {});
 
   REQUIRE(management.addTask(simple_task_1));
   auto add_1 = management.getLatestCalculatedInsertionInfo();
@@ -342,7 +342,7 @@ TEST_CASE("Two Transport Orders in one Task", "[basic]") {
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p4));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
 
-  Task task_1("task_1", {simple_to_1, simple_to_2}, {});
+  Task task_1("task_1", "127.0.0.1:5000", {simple_to_1, simple_to_2}, {});
 
   REQUIRE(management.addTask(task_1));
   auto add_1_metrics_comp = management.getLatestCalculatedInsertionInfo().first;
@@ -366,7 +366,7 @@ TEST_CASE("One Transport, Move, and Action Order in one Task", "[basic]") {
   ActionOrderStep aos("aos", {{"load", "load"}});
   ActionOrder ao_1("ao", aos);
 
-  Task task_1("task_1", {to_1, mo_1, ao_1}, {});
+  Task task_1("task_1", "127.0.0.1:5000", {to_1, mo_1, ao_1}, {});
 
   REQUIRE(management.addTask(task_1));
   auto add_1_metrics_comp = management.getLatestCalculatedInsertionInfo().first;
@@ -385,7 +385,7 @@ TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
   TransportOrder simple_to("simple_to", {pickup1}, delivery1);
-  Task simple_task("simple_task", {simple_to}, {});
+  Task simple_task("simple_task", "127.0.0.1:5000", {simple_to}, {});
 
   TimeWindow time_window(40, 140, 0);
   simple_task.setTimeWindow(time_window);
@@ -428,7 +428,7 @@ TEST_CASE("One Simple Transport Order with too short Time Window", "[temporal]")
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
   TransportOrder simple_to("simple_to", {pickup1}, delivery1);
-  Task simple_task("simple_task", {simple_to}, {});
+  Task simple_task("simple_task", "127.0.0.1:5000", {simple_to}, {});
 
   simple_task.setTimeWindow(TimeWindow(40, 70, 0));
   REQUIRE(management.canAddTask(simple_task));
@@ -476,13 +476,13 @@ TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[tempora
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   simple_task_1.setTimeWindow(TimeWindow(0, 40, 0));
   simple_task_2.setTimeWindow(TimeWindow(0, 80, 0));
