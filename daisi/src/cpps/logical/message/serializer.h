@@ -29,12 +29,14 @@
 #include "central_allocation/assignment_response.h"
 #include "central_allocation/status_update.h"
 #include "central_allocation/status_update_request.h"
+#include "material_flow_update.h"
 
 namespace daisi::cpps::logical {
 
-using Message = std::variant<CallForProposal, BidSubmission, IterationNotification,
-                             WinnerNotification, WinnerResponse, AssignmentNotification,
-                             AssignmentResponse, StatusUpdate, StatusUpdateRequest>;
+using Message =
+    std::variant<CallForProposal, BidSubmission, IterationNotification, WinnerNotification,
+                 WinnerResponse, AssignmentNotification, AssignmentResponse, StatusUpdate,
+                 StatusUpdateRequest, MaterialFlowUpdate>;
 
 std::string serialize(const Message &msg);
 

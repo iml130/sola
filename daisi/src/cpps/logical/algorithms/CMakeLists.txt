@@ -26,4 +26,5 @@ target_link_libraries(daisi_cpps_logical_algorithms_algorithm_interface
     daisi_cpps_logical_message_central_allocation_assignment_response
     daisi_cpps_logical_message_central_allocation_status_update
     daisi_cpps_logical_message_central_allocation_status_update_request
+    daisi_cpps_logical_message_material_flow_update
 )

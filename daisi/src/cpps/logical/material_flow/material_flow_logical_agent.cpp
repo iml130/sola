@@ -16,12 +16,36 @@
 
 #include "material_flow_logical_agent.h"
 
+#include "cpps/logical/algorithms/algorithm_interface.h"
 #include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
 #include "cpps/logical/algorithms/disposition/round_robin_initiator.h"
+#include "cpps/logical/message/material_flow_update.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
+
+class MaterialFlowStateLogger : public AlgorithmInterface {
+public:
+  MaterialFlowStateLogger(std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola,
+                          std::shared_ptr<CppsLoggerNs3> logger)
+      : AlgorithmInterface(std::move(sola)), logger_(std::move(logger)) {}
+
+  bool process(const MaterialFlowUpdate &msg) override {
+    MaterialFlowOrderUpdateLoggingInfo logging_info;
+    logging_info.amr_uuid = msg.amr_uuid;
+    logging_info.task = msg.task;
+    logging_info.position = msg.position;
+    logging_info.order_state = msg.order_state;
+    logging_info.order_index = msg.order_index;
+    logger_->logMaterialFlowOrderUpdate(logging_info);
+
+    return true;
+  }
+
+private:
+  std::shared_ptr<CppsLoggerNs3> logger_;
+};
 
 MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
                                                    const AlgorithmConfig &config_algo,
@@ -51,6 +75,8 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
             "Algorithm Type cannot be initiated on Material Flow Logical Agent.");
     }
   }
+
+  algorithms_.push_back(std::make_unique<MaterialFlowStateLogger>(sola_, logger_));
 }
 
 void MaterialFlowLogicalAgent::messageReceiveFunction(const sola::Message &msg) {
@@ -87,7 +113,10 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
 
   // TODO there could be multiple algorithm interfaces in the future
-  assert(algorithms_.size() == 1);
+  // TODO Currently only algorithm and logger
+  assert(algorithms_.size() == 2);
+  assert(dynamic_cast<DispositionInitiator *>(algorithms_[0].get()));
+  assert(dynamic_cast<MaterialFlowStateLogger *>(algorithms_[1].get()));
 
   auto tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);

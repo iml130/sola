@@ -29,6 +29,7 @@
 #include "cpps/logical/message/central_allocation/assignment_response.h"
 #include "cpps/logical/message/central_allocation/status_update.h"
 #include "cpps/logical/message/central_allocation/status_update_request.h"
+#include "cpps/logical/message/material_flow_update.h"
 #include "cpps/logical/message/serializer.h"
 #include "sola-ns3/sola_ns3_wrapper.h"
 
@@ -57,6 +58,7 @@ public:
   REGISTER_LOGICAL_MESSAGE(AssignmentResponse);
   REGISTER_LOGICAL_MESSAGE(StatusUpdate);
   REGISTER_LOGICAL_MESSAGE(StatusUpdateRequest);
+  REGISTER_LOGICAL_MESSAGE(MaterialFlowUpdate);  // TODO Ref #79
 
 protected:
   std::shared_ptr<sola_ns3::SOLAWrapperNs3> sola_;
