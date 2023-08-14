@@ -31,17 +31,17 @@ std::vector<Task> getThreeTasks() {
   TransportOrderStep pickup1("tos11", {}, Location("0x0", "type", util::Position(10, 10)));
   TransportOrderStep delivery1("tos12", {}, Location("0x0", "type", util::Position(10, 20)));
   TransportOrder to1({pickup1}, delivery1);
-  Task task1("task1", {to1}, {});
+  Task task1("task1", "127.0.0.1:5000", {to1}, {});
 
   TransportOrderStep pickup2("tos21", {}, Location("0x0", "type", util::Position(20, 10)));
   TransportOrderStep delivery2("tos22", {}, Location("0x0", "type", util::Position(10, 20)));
   TransportOrder to2({pickup2}, delivery2);
-  Task task2("task2", {to2}, {});
+  Task task2("task2", "127.0.0.1:5000", {to2}, {});
 
   TransportOrderStep pickup3("tos31", {}, Location("0x0", "type", util::Position(10, 20)));
   TransportOrderStep delivery3("tos32", {}, Location("0x0", "type", util::Position(5, 5)));
   TransportOrder to3({pickup3}, delivery3);
-  Task task3("task3", {to3}, {});
+  Task task3("task3", "127.0.0.1:5000", {to3}, {});
 
   amr::AmrStaticAbility ability1(amr::LoadCarrier(amr::LoadCarrier::Types::kPackage), 20);
   amr::AmrStaticAbility ability2(amr::LoadCarrier(amr::LoadCarrier::Types::kEuroBox), 20);

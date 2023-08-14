@@ -55,12 +55,12 @@ TEST_CASE("SimpleOrderManagement Empty Tasks", "[adding and removing vertices]")
   REQUIRE(!management.setNextTask());
 
   // empty task
-  Task task_empty("task1", {}, {});
+  Task task_empty("task1", "127.0.0.1:5000", {}, {});
   REQUIRE_THROWS(management.canAddTask(task_empty));
   REQUIRE_THROWS(management.addTask(task_empty));
 
   // empty task with follow ups
-  Task task_empty_with_follow_ups("task2", {}, {"task1", "task3"});
+  Task task_empty_with_follow_ups("task2", "127.0.0.1:5000", {}, {"task1", "task3"});
   REQUIRE_THROWS(management.canAddTask(task_empty_with_follow_ups));
   REQUIRE_THROWS(management.addTask(task_empty_with_follow_ups));
 }
@@ -79,7 +79,7 @@ TEST_CASE("SimpleOrderManagement One Simple Transport Order", "[adding and remov
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery1("tos2", {}, Location("0x1", "type", p2));
   TransportOrder simple_to("simple_to", {pickup1}, delivery1);
-  Task simple_task("simple_task", {simple_to}, {});
+  Task simple_task("simple_task", "127.0.0.1:5000", {simple_to}, {});
 
   // act
   auto opt_result = management.canAddTask(simple_task);
@@ -132,13 +132,13 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // can add tests
   auto can_add_1 = management.canAddTask(simple_task_1);
@@ -207,13 +207,13 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p4));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p3));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // adding and removing task 2
   REQUIRE(!management.hasTasks());
@@ -288,19 +288,19 @@ TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and re
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p6));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p5));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // transport order 3
   TransportOrderStep pickup_3("tos1_3", {}, Location("0x4", "type", p1));
   TransportOrderStep delivery_3("tos2_3", {}, Location("0x5", "type", p0));
   TransportOrder simple_to_3("simple_to_3", {pickup_3}, delivery_3);
-  Task simple_task_3("simple_task_3", {simple_to_3}, {});
+  Task simple_task_3("simple_task_3", "127.0.0.1:5000", {simple_to_3}, {});
 
   auto add_1_opt = management.addTask(simple_task_1);
   auto add_1_metrics = management.getFinalMetrics();
@@ -338,7 +338,7 @@ TEST_CASE("SimpleOrderManagement Two Transport Orders in one Task",
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p4));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
 
-  Task task_1("task_1", {simple_to_1, simple_to_2}, {});
+  Task task_1("task_1", "127.0.0.1:5000", {simple_to_1, simple_to_2}, {});
 
   auto add_1_opt = management.addTask(task_1);
   REQUIRE(add_1_opt);
@@ -367,7 +367,7 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
   ActionOrder ao_1("ao", aos);
 
   // try to add an illformed task, since a MoveOrder should not be the first order
-  Task task_1("task_1", {mo_1, to_1, ao_1}, {});
+  Task task_1("task_1", "127.0.0.1:5000", {mo_1, to_1, ao_1}, {});
   REQUIRE_THROWS(management.addTask(task_1));
 
   // current metrics should be unchanged
@@ -381,7 +381,7 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
   REQUIRE(metrics.getDistance() == 0);
   REQUIRE(metrics.getMakespan() == 0);
 
-  Task task_2("task_2", {to_1, mo_1, ao_1}, {});
+  Task task_2("task_2", "127.0.0.1:5000", {to_1, mo_1, ao_1}, {});
 
   auto add_opt = management.addTask(task_2);
   REQUIRE(add_opt);
@@ -408,19 +408,19 @@ TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p2));
   TransportOrder simple_to_1("simple_to_1", {pickup_1}, delivery_1);
-  Task simple_task_1("simple_task_1", {simple_to_1}, {});
+  Task simple_task_1("simple_task_1", "127.0.0.1:5000", {simple_to_1}, {});
 
   // transport order 2
   TransportOrderStep pickup_2("tos1_2", {}, Location("0x2", "type", p6));
   TransportOrderStep delivery_2("tos2_2", {}, Location("0x3", "type", p5));
   TransportOrder simple_to_2("simple_to_2", {pickup_2}, delivery_2);
-  Task simple_task_2("simple_task_2", {simple_to_2}, {});
+  Task simple_task_2("simple_task_2", "127.0.0.1:5000", {simple_to_2}, {});
 
   // transport order 3
   TransportOrderStep pickup_3("tos1_3", {}, Location("0x4", "type", p1));
   TransportOrderStep delivery_3("tos2_3", {}, Location("0x5", "type", p0));
   TransportOrder simple_to_3("simple_to_3", {pickup_3}, delivery_3);
-  Task simple_task_3("simple_task_3", {simple_to_3}, {});
+  Task simple_task_3("simple_task_3", "127.0.0.1:5000", {simple_to_3}, {});
 
   auto add_1_opt = management.addTask(simple_task_1);
   auto add_1_metrics = management.getFinalMetrics();

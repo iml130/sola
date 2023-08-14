@@ -58,6 +58,7 @@ void RoundRobinInitiator::logMaterialFlowContent(const std::string &material_flo
 
 void RoundRobinInitiator::distributeMFTasks(uint32_t index, bool previously_allocated) {
   // TODO: filter the wanted information out from the MFDLScheduler
+  const std::string connection_string = sola_->getConectionString();
 
   // hardcoded tasks for testing
   material_flow::TransportOrderStep pickup1(
@@ -65,37 +66,37 @@ void RoundRobinInitiator::distributeMFTasks(uint32_t index, bool previously_allo
   material_flow::TransportOrderStep delivery1(
       "tos12", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
   material_flow::TransportOrder to1({pickup1}, delivery1);
-  material_flow::Task task1("task1", {to1}, {});
+  material_flow::Task task1("task1", connection_string, {to1}, {});
 
   material_flow::TransportOrderStep pickup2(
       "tos21", {}, material_flow::Location("0x0", "type", util::Position(20, 10)));
   material_flow::TransportOrderStep delivery2(
       "tos22", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
   material_flow::TransportOrder to2({pickup2}, delivery2);
-  material_flow::Task task2("task2", {to2}, {});
+  material_flow::Task task2("task2", connection_string, {to2}, {});
 
   material_flow::TransportOrderStep pickup3(
       "tos31", {}, material_flow::Location("0x0", "type", util::Position(10, 20)));
   material_flow::TransportOrderStep delivery3(
       "tos32", {}, material_flow::Location("0x0", "type", util::Position(5, 5)));
   material_flow::TransportOrder to3({pickup3}, delivery3);
-  material_flow::Task task3("task3", {to3}, {});
+  material_flow::Task task3("task3", connection_string, {to3}, {});
 
   material_flow::TransportOrderStep pickup4(
       "tos41", {}, material_flow::Location("0x0", "type", util::Position(0, 10)));
   material_flow::TransportOrderStep delivery4(
       "tos42", {}, material_flow::Location("0x0", "type", util::Position(15, 15)));
   material_flow::TransportOrder to4({pickup4}, delivery4);
-  material_flow::Task task4("task4", {to4}, {});
+  material_flow::Task task4("task4", connection_string, {to4}, {});
 
   material_flow::TransportOrder to5({pickup2}, delivery4);
-  material_flow::Task task5("task5", {to5}, {});
+  material_flow::Task task5("task5", connection_string, {to5}, {});
 
   material_flow::TransportOrder to6({pickup1}, delivery1);
-  material_flow::Task task6("task6", {to6}, {});
+  material_flow::Task task6("task6", connection_string, {to6}, {});
 
   material_flow::TransportOrder to7({pickup3}, delivery2);
-  material_flow::Task task7("task7", {to7}, {});
+  material_flow::Task task7("task7", connection_string, {to7}, {});
 
   amr::AmrStaticAbility ability1(amr::LoadCarrier(amr::LoadCarrier::Types::kPackage), 20);
   amr::AmrStaticAbility ability2(amr::LoadCarrier(amr::LoadCarrier::Types::kEuroBox), 20);

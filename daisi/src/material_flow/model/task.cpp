@@ -21,9 +21,10 @@
 
 namespace daisi::material_flow {
 
-Task::Task(std::string name, const std::vector<Order> &orders,
+Task::Task(std::string name, std::string connection_string, const std::vector<Order> &orders,
            const std::vector<std::string> &follow_up_task_uuids)
     : name_(std::move(name)),
+      connection_string_(std::move(connection_string)),
       orders_(orders),
       follow_up_task_uuids_(std::move(follow_up_task_uuids)) {
   if (orders.empty()) {
@@ -36,6 +37,8 @@ Task::Task(std::string name, const std::vector<Order> &orders,
 const std::string &Task::getUuid() const { return uuid_; }
 
 const std::string &Task::getName() const { return name_; }
+
+const std::string &Task::getConnectionString() const { return connection_string_; }
 
 const std::vector<Order> &Task::getOrders() const { return orders_; }
 
