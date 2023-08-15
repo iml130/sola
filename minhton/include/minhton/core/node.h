@@ -191,8 +191,6 @@ private:
   /// \param timeout_type to indicate length and the workflow in triggerTimeout
   void setTimeout(TimeoutType timeout_type);
 
-  void addCallback(NeighborCallbackFct fct);
-
   minhton::core::WatchDog watchdog_;
 
   /// Contains all routing information about nodes we have connections to,

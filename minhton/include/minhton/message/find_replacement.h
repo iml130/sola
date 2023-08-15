@@ -24,7 +24,7 @@ public:
   NodeInfo getNodeToReplace() const;
   SearchProgress getSearchProgress() const;
 
-  SERIALIZE(header_, node_to_replace_, search_progress_);
+  SERIALIZE(header_, node_to_replace_, search_progress_)
 
   MessageFindReplacement() = default;
 

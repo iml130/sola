@@ -25,7 +25,7 @@ public:
   std::unordered_map<std::string, NodeData::ValueAndType> getAttributeValuesAndTypes() const;
   std::vector<std::string> getRemovedAttributeKeys() const;
 
-  SERIALIZE(header_, inquired_node_, attribute_values_and_types_, removed_attribute_keys_);
+  SERIALIZE(header_, inquired_node_, attribute_values_and_types_, removed_attribute_keys_)
 
   MessageAttributeInquiryAnswer() = default;
 

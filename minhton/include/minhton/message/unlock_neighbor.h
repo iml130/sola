@@ -15,7 +15,7 @@ class MessageUnlockNeighbor : public MinhtonMessage<MessageUnlockNeighbor> {
 public:
   explicit MessageUnlockNeighbor(MinhtonMessageHeader header);
 
-  SERIALIZE(header_);
+  SERIALIZE(header_)
 
   MessageUnlockNeighbor() = default;
 

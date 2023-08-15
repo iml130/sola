@@ -15,7 +15,7 @@ namespace minhton {
 
 void SearchExactAlgorithmGeneral::process(const MessageVariant &msg) {
   std::visit(Overload{[this](const MessageSearchExact &message) { processSearchExact(message); },
-                      [](auto &message) {
+                      [](auto & /*message*/) {
                         throw AlgorithmException("Wrong Algorithm Interface process called");
                       }},
              msg);

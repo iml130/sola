@@ -15,7 +15,7 @@ class MessageRemoveNeighborAck : public MinhtonMessage<MessageRemoveNeighborAck>
 public:
   explicit MessageRemoveNeighborAck(MinhtonMessageHeader header);
 
-  SERIALIZE(header_);
+  SERIALIZE(header_)
 
   MessageRemoveNeighborAck() = default;
 

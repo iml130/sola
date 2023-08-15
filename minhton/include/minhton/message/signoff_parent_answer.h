@@ -17,7 +17,7 @@ public:
 
   bool wasSuccessful() const;
 
-  SERIALIZE(header_, successful_);
+  SERIALIZE(header_, successful_)
 
   MessageSignoffParentAnswer() = default;
 

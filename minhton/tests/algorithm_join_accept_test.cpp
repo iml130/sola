@@ -1120,7 +1120,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     REQUIRE(routing_info->getAdjacentLeft() == node_2_0);
     REQUIRE(routing_info->getAdjacentRight() == node_0_0);
 
-    access->wait_for_acks = [](uint32_t number, std::function<void()> cb) { cb(); };
+    access->wait_for_acks = [](uint32_t /*number*/, std::function<void()> cb) { cb(); };
     // must call processJoinAcceptAck of JoinAlgorithmGeneral
     REQUIRE_NOTHROW(join_algo.process(message_join_accept_ack));
 
@@ -1249,7 +1249,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     REQUIRE(routing_info->getAdjacentLeft() == node_2_17);
     REQUIRE(routing_info->getAdjacentRight() == node_2_18);
 
-    access->wait_for_acks = [](uint32_t number, std::function<void()> cb) { cb(); };
+    access->wait_for_acks = [](uint32_t /*number*/, std::function<void()> cb) { cb(); };
     // must call processJoinAcceptAck of JoinAlgorithmGeneral
     REQUIRE_NOTHROW(join_algo.process(message_join_accept_ack));
 

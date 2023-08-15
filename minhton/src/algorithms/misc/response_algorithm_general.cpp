@@ -26,8 +26,8 @@ void ResponseAlgorithmGeneral::process(const MessageVariant &msg) {
                [this](const MessageRemoveAndUpdateNeighbors &message) {
                  processRemoveAndUpdateNeighbors(message);
                },
-               [this](const MessageRemoveNeighborAck &message) { processRemoveNeighborAck(); },
-               [](auto &message) {
+               [this](const MessageRemoveNeighborAck &) { processRemoveNeighborAck(); },
+               [](auto & /*message*/) {
                  throw AlgorithmException("Wrong Algorithm Interface process called");
                }},
       msg);

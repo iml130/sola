@@ -19,7 +19,7 @@ public:
   NodeData::Key getKey() const;
   NodeData::Value getValue() const;
 
-  SERIALIZE(header_, key_, value_);
+  SERIALIZE(header_, key_, value_)
 
   MessageSubscriptionUpdate() = default;
 

@@ -17,7 +17,7 @@ void BootstrapAlgorithmGeneral::process(const MessageVariant &msg) {
       Overload{
           [this](const MessageBootstrapDiscover &message) { processBootstrapDiscover(message); },
           [this](const MessageBootstrapResponse &message) { processBootstrapResponse(message); },
-          [](auto &message) {
+          [](auto & /*message*/) {
             throw AlgorithmException("Wrong Algorithm Interface process called");
           }},
       msg);

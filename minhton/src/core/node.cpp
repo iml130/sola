@@ -24,23 +24,19 @@ namespace minhton {
 
 MinhtonNode::MinhtonNode(const ConfigNode &config_node, NeighborCallbackFct fct, bool auto_start)
     : network_facade_([&](const MessageVariant &msg) { recv(msg); }, config_node.getOwnIP()),
-      neighbor_update_fct_(fct) {
+      neighbor_update_fct_(std::move(fct)) {
   setConfig(config_node);
 
-  if (fct) {
-    addCallback(fct);
+  if (neighbor_update_fct_) {
+    routing_info_->addNeighborChangeSubscription(
+        [&](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
+            const minhton::NodeInfo &old_node, uint16_t position) {
+          neighbor_update_fct_({new_node, relationship, old_node.getAddress(), old_node.getPort(),
+                                position, getNodeInfo()});
+        });
   }
 
   start(config_node.getJoinInfo(), auto_start);
-}
-
-void MinhtonNode::addCallback(NeighborCallbackFct fct) {
-  routing_info_->addNeighborChangeSubscription(
-      [&](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
-          const minhton::NodeInfo &old_node, uint16_t position) {
-        neighbor_update_fct_({new_node, relationship, old_node.getAddress(), old_node.getPort(),
-                              position, getNodeInfo()});
-      });
 }
 
 void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
@@ -62,7 +58,7 @@ void MinhtonNode::setConfig(const minhton::ConfigNode &config) {
     log.addLogger(logger);
   }
 
-  log.setLogLevel(logLevelFromString(config.getLogLevel()));
+  log.setLogLevel(Logger::logLevelFromString(config.getLogLevel()));
 
   acc->logger = std::move(log);
   access_ = acc;

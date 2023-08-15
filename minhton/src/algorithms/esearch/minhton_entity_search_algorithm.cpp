@@ -45,7 +45,7 @@ void MinhtonEntitySearchAlgorithm::process(const MessageVariant &msg) {
           [this](const MessageSubscriptionUpdate &message) { processSubscriptionUpdate(message); },
           [this](const MessageSubscriptionOrder &message) { processSubscriptionOrder(message); },
           [this](const MessageSearchExactFailure &message) { processSearchExactFailure(message); },
-          [](auto &message) {
+          [](auto & /*message*/) {
             throw AlgorithmException("Wrong Algorithm Interface process called");
           }},
       msg);
@@ -210,7 +210,6 @@ void MinhtonEntitySearchAlgorithm::performFindQueryForwarding(const MessageFindQ
 
 void MinhtonEntitySearchAlgorithm::performSendInquiryAggregations(const uint64_t ref_event_id,
                                                                   FindQuery &query) {
-  uint16_t fanout = getSelfNodeInfo().getFanout();
   auto timestamp_now = access_->get_timestamp();
 
   auto requesting_node = query.getRequestingNode();

@@ -364,7 +364,7 @@ void MinhtonManager::Scheduler::parseFindQuery(uint64_t &current_time,
 }
 
 void MinhtonManager::Scheduler::parseRequestCountdown(
-    uint64_t &current_time, const uint64_t &default_delay,
+    uint64_t &current_time, const uint64_t & /*default_delay*/,
     ScenariofileParser::Table::TableMap::iterator it) {
   uint64_t count_value = *std::get_if<uint64_t>(&it->second);
   Simulator::Schedule(MilliSeconds(current_time),

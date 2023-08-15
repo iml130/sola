@@ -24,7 +24,7 @@ public:
   minhton::NodeInfo getDestinationNode() const;
   std::shared_ptr<MessageSEVariant> getQuery() const;
 
-  SERIALIZE(header_, destination_node_, query_);
+  SERIALIZE(header_, destination_node_, query_)
 
   MessageSearchExactFailure() = default;
 
