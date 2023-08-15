@@ -34,13 +34,13 @@ public:
   const util::Duration &getRelativeEarliestStart() const;
   const util::Duration &getRelativeLatestFinish() const;
 
-  const util::Duration getAbsoluteEarliestStart() const;
-  const util::Duration getAbsoluteLatestFinish() const;
+  util::Duration getAbsoluteEarliestStart() const;
+  util::Duration getAbsoluteLatestFinish() const;
 
   bool hasSpawnTime() const;
   void setSpawnTime(const util::Duration &spawn_time);
 
-  SERIALIZE(earliest_start_, latest_finish_, spawn_time_);
+  SERIALIZE(earliest_start_, latest_finish_, spawn_time_)
 
 private:
   util::Duration earliest_start_ = 0.0;

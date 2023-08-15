@@ -31,10 +31,10 @@ public:
   ~CentralizedParticipant() override = default;
 
   /// @brief React on new task assignment and respond to it.
-  REGISTER_IMPLEMENTATION(AssignmentNotification);
+  REGISTER_IMPLEMENTATION(AssignmentNotification)
 
   /// @brief Send a status update as a reaction.
-  REGISTER_IMPLEMENTATION(StatusUpdateRequest);
+  REGISTER_IMPLEMENTATION(StatusUpdateRequest)
 
 private:
   /// @brief the AMR's order management. Simply accepts a new task assignment.

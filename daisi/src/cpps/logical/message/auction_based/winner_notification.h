@@ -37,7 +37,7 @@ public:
 
   const daisi::util::Duration &getLatestFinishTime() const { return latest_finish_time_; }
 
-  SERIALIZE(task_uuid_, initiator_connection_, latest_finish_time_);
+  SERIALIZE(task_uuid_, initiator_connection_, latest_finish_time_)
 
 private:
   std::string task_uuid_;

@@ -29,11 +29,11 @@ bool operator==(const LoadCarrier &l1, const LoadCarrier &l2) { return l1.type_ 
 
 bool operator!=(const LoadCarrier &l1, const LoadCarrier &l2) { return l1.type_ != l2.type_; }
 
-bool operator<(const LoadCarrier &l1, const LoadCarrier &l2) { return false; }
+bool operator<(const LoadCarrier &, const LoadCarrier &) { return false; }
 
 bool operator<=(const LoadCarrier &l1, const LoadCarrier &l2) { return (l1 == l2) || (l1 < l2); };
 
-bool operator>(const LoadCarrier &l1, const LoadCarrier &l2) { return false; }
+bool operator>(const LoadCarrier &, const LoadCarrier &) { return false; }
 
 bool operator>=(const LoadCarrier &l1, const LoadCarrier &l2) { return (l1 == l2) || (l1 > l2); };
 

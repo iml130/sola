@@ -161,7 +161,7 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
   auto add_1_result = management.addTask(simple_task_1);
   REQUIRE(add_1_result);
 
-  auto add_1_metrics = management.getFinalMetrics();
+  [[maybe_unused]] auto add_1_metrics = management.getFinalMetrics();
 
   // can add task 2 after 1
   auto can_add_2_2 = management.canAddTask(simple_task_2);
@@ -318,6 +318,7 @@ TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and re
   auto can_add_3_opt = management.canAddTask(simple_task_3);
   REQUIRE(can_add_3_opt);
   auto add_3_opt = management.addTask(simple_task_3);
+  REQUIRE(add_3_opt);
   auto add_3_metrics = management.getFinalMetrics();
 
   REQUIRE(add_3_metrics.getMakespan() == add_2_metrics.getMakespan() + add_3_metrics.getTime());
@@ -446,6 +447,7 @@ TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay
   auto can_add_3_opt = management.canAddTask(simple_task_3);
   REQUIRE(can_add_3_opt);
   auto add_3_opt = management.addTask(simple_task_3);
+  REQUIRE(add_3_opt);
   auto add_3_metrics = management.getFinalMetrics();
 
   // makespan should have been affected by the current time

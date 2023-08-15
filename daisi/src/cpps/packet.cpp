@@ -33,7 +33,7 @@ TypeId CppsTCPMessage::GetTypeId() {
 
 TypeId CppsTCPMessage::GetInstanceTypeId() const { return GetTypeId(); }
 
-void CppsTCPMessage::Print(std::ostream &os) const {
+void CppsTCPMessage::Print(std::ostream &) const {
   // intentionally not implemented
 }
 

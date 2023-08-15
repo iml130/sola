@@ -27,7 +27,7 @@ public:
   explicit MoveTo(const util::Position &destination) : destination(destination) {}
   ~MoveTo() = default;
 
-  SERIALIZE(destination);
+  SERIALIZE(destination)
 
   util::Position destination;
 };

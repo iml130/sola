@@ -44,10 +44,10 @@ public:
   ~IteratedAuctionDispositionInitiator() override = default;
 
   /// @brief Storing bid submission information in a helper class to determine winners.
-  REGISTER_IMPLEMENTATION(BidSubmission);
+  REGISTER_IMPLEMENTATION(BidSubmission)
 
   /// @brief Storing winner response notification in a helper class to determine outdated bids.
-  REGISTER_IMPLEMENTATION(WinnerResponse);
+  REGISTER_IMPLEMENTATION(WinnerResponse)
 
   void addMaterialFlow(std::shared_ptr<material_flow::MFDLScheduler> scheduler) override;
 

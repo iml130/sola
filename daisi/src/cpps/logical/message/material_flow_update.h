@@ -34,7 +34,7 @@ struct MaterialFlowUpdate {
   uint8_t order_index = 0;
   util::Position position;
 
-  SERIALIZE(amr_uuid, order_state, task, order_index, position);
+  SERIALIZE(amr_uuid, order_state, task, order_index, position)
 };
 }  // namespace daisi::cpps::logical
 

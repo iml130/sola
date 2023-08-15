@@ -41,7 +41,7 @@ public:
 
   bool operator==(const TransportOrder &other) const;
 
-  SERIALIZE(uuid_, pickup_transport_order_steps_, delivery_transport_order_step_);
+  SERIALIZE(uuid_, pickup_transport_order_steps_, delivery_transport_order_step_)
 
 private:
   std::string uuid_;

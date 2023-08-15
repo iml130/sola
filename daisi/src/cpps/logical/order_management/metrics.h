@@ -72,7 +72,7 @@ public:
 
   SERIALIZE(empty_travel_time, loaded_travel_time, action_time, empty_travel_distance,
             loaded_travel_distance, makespan_, start_time_, execution_start_time_, start_time_set_,
-            execution_start_time_set_, start_up_time);
+            execution_start_time_set_, start_up_time)
 
 private:
   daisi::util::Duration makespan_ = 0.0;

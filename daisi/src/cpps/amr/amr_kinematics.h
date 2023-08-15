@@ -43,7 +43,7 @@ public:
   double getMaxDeceleration() const { return max_deceleration_m_s2_; }
   /// @}
 
-  SERIALIZE(max_acceleration_m_s2_, max_deceleration_m_s2_, max_velocity_m_s_, min_velocity_m_s_);
+  SERIALIZE(max_acceleration_m_s2_, max_deceleration_m_s2_, max_velocity_m_s_, min_velocity_m_s_)
 
 private:
   double max_velocity_m_s_ = 0.0;

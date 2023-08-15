@@ -21,7 +21,7 @@
 namespace daisi::cpps::logical {
 
 LayeredPrecedenceGraph::LayeredPrecedenceGraph(
-    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler,
+    std::shared_ptr<daisi::material_flow::MFDLScheduler> /*scheduler*/,
     const std::string &connection_string) {
   // TODO transform scheduler content to vertices and edges
 

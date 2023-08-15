@@ -39,7 +39,7 @@ public:
   const Metrics &getMetrics() { return metrics_; }
   const util::Position getEndPosition() { return end_position_; }
 
-  SERIALIZE(participant_connection_, metrics_, end_position_);
+  SERIALIZE(participant_connection_, metrics_, end_position_)
 
 private:
   std::string participant_connection_;

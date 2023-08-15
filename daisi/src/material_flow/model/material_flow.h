@@ -30,9 +30,9 @@ class MFDLScheduler {
 public:
   MFDLScheduler() = default;
 
-  explicit MFDLScheduler(const std::string &mfdl_program) {}
+  explicit MFDLScheduler(const std::string & /*mfdl_program*/) {}
 
-  SERIALIZE(tasks_);
+  SERIALIZE(tasks_)
 
 private:
   std::vector<Task> tasks_;

@@ -407,7 +407,8 @@ TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
 
   // act
   REQUIRE(management.addTask(simple_task, insertion_point));
-  auto add_metrics_comp = std::get<0>(management.getLatestCalculatedInsertionInfo());
+  [[maybe_unused]] auto add_metrics_comp =
+      std::get<0>(management.getLatestCalculatedInsertionInfo());
 
   // assert management states not changed
   REQUIRE(management.setNextTask());

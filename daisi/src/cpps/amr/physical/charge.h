@@ -26,7 +26,7 @@ public:
   Charge() = default;
   explicit Charge(const util::Position &destination) : destination(destination) {}
 
-  SERIALIZE(destination);
+  SERIALIZE(destination)
 
   util::Position destination;
 };

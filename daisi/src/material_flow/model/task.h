@@ -60,7 +60,7 @@ public:
   bool operator!=(const Task &other) const { return uuid_ != other.uuid_; }
 
   SERIALIZE(uuid_, name_, connection_string_, orders_, follow_up_task_uuids_, preceding_task_uuids_,
-            ability_requirement_);
+            ability_requirement_)
 
 private:
   std::string uuid_;

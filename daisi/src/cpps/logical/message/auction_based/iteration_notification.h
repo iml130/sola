@@ -32,7 +32,7 @@ public:
 
   const std::vector<std::string> &getTaskUuids() const { return task_uuids_; }
 
-  SERIALIZE(initiator_connection_, task_uuids_);
+  SERIALIZE(initiator_connection_, task_uuids_)
 
 private:
   std::string initiator_connection_;

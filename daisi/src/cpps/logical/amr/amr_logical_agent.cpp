@@ -180,7 +180,7 @@ void AmrLogicalAgent::sendTopologyToPhysical() {
 
 void AmrLogicalAgent::notifyTaskAssigned() { checkSendingNextTaskToPhysical(); }
 
-bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket> socket, const ns3::Address &addr) {
+bool AmrLogicalAgent::connectionRequest(ns3::Ptr<ns3::Socket>, const ns3::Address &) {
   // Accept all requests
   return true;
 }

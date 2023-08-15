@@ -34,7 +34,7 @@
 #include "sola-ns3/sola_ns3_wrapper.h"
 
 #define REGISTER_LOGICAL_MESSAGE(MessageType) \
-  virtual bool process(const MessageType &msg) { return false; }
+  virtual bool process(const MessageType &) { return false; }
 
 #define REQUIRE_IMPLEMENTATION(MessageType) virtual bool process(const MessageType &msg) = 0;
 

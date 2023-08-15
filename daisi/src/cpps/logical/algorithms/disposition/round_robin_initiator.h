@@ -34,10 +34,10 @@ public:
   ~RoundRobinInitiator() override = default;
 
   /// @brief React on a participant's response to a task assignment.
-  REGISTER_IMPLEMENTATION(AssignmentResponse);
+  REGISTER_IMPLEMENTATION(AssignmentResponse)
 
   /// @brief Receive a participant's status update. For this basic algorithm, it is simply ignored.
-  REGISTER_IMPLEMENTATION(StatusUpdate);
+  REGISTER_IMPLEMENTATION(StatusUpdate)
 
   /// @brief Log tasks and orders of a material flow.
   void logMaterialFlowContent(const std::string &material_flow_uuid) override;

@@ -26,7 +26,7 @@ public:
   Load() = default;
   explicit Load(const util::Position &destination) : destination(destination) {}
 
-  SERIALIZE(destination);
+  SERIALIZE(destination)
 
   util::Position destination;
 };
