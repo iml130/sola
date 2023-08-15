@@ -40,6 +40,35 @@ using namespace ns3;
 
 namespace daisi::cpps {
 
+// WIFI
+static void handleWifiMacTxDrop(ns3::Ptr<const ns3::Packet>) {
+  throw std::runtime_error("Packet was dropped (MacTxDrop at Wifi)!");
+}
+
+static void handleWifiPhyTxDrop(ns3::Ptr<const ns3::Packet>) {
+  throw std::runtime_error("Packet was dropped (PhyTxDrop at Wifi)!");
+}
+
+static void handleWifiMacRxDrop(ns3::Ptr<const ns3::Packet>) {
+  throw std::runtime_error("Packet was dropped (MacRxDrop at Wifi)!");
+}
+
+static void handleWifiDeassociated(ns3::Mac48Address) {
+  throw std::runtime_error("wifi connection lost (deassociated from access point)");
+}
+
+static void installDefaultWifiTraces() {
+  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/MacTxDrop",
+                                     MakeCallback(&handleWifiMacTxDrop));
+  ns3::Config::ConnectWithoutContext(
+      "/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/$ns3::StaWifiMac/DeAssoc",
+      MakeCallback(&handleWifiDeassociated));
+  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/MacRxDrop",
+                                     MakeCallback(&handleWifiMacRxDrop));
+  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Phy/PhyTxDrop",
+                                     MakeCallback(&handleWifiPhyTxDrop));
+}
+
 /// @brief Global ptr to AmrAssetConnector for ns-3 to pass mobility model
 extern ns3::Ptr<daisi::cpps::AmrMobilityModelNs3> next_mobility_model;
 
@@ -380,7 +409,7 @@ void CppsManager::setupNetworkWifi() {
   installDefaultWifiTraces();
 }
 
-void CppsManager::executeMaterialFlow(int index, const std::string &friendly_name) {
+void CppsManager::executeMaterialFlow(int index, const std::string & /*friendly_name*/) {
   auto cpps_app = this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
   auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
 

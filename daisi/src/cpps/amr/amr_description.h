@@ -41,7 +41,7 @@ public:
   AmrPhysicalProperties getPhysicalProperties() const { return physical_properties_; }
   AmrLoadHandlingUnit getLoadHandling() const { return load_handling_; }
 
-  SERIALIZE(kinematics_, load_handling_, properties_, physical_properties_, serial_number_);
+  SERIALIZE(kinematics_, load_handling_, properties_, physical_properties_, serial_number_)
 
 private:
   uint32_t serial_number_ = 0;

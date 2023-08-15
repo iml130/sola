@@ -100,7 +100,7 @@ private:
   template <typename T> void finish(const T &t);
 
 #define MAKE_SKIP_HANDLE_FUNC_PAIR(FCLASS)                                                     \
-  void handleSkip##FCLASS(const FCLASS &t) {                                                   \
+  void handleSkip##FCLASS(const FCLASS &) {                                                    \
     process_event(FCLASS());                                                                   \
     sendOrderUpdateNs3();                                                                      \
   }                                                                                            \

@@ -154,7 +154,7 @@ bool AmrPhysicalAsset::holdsMoveType(const FunctionalityVariant &f) const {
 // fsmlite actions //
 /////////////////////
 
-template <typename T> void AmrPhysicalAsset::charge(const T &t) {
+template <typename T> void AmrPhysicalAsset::charge(const T &) {
   amr_state_ = AmrState::kCharging;
   executeFrontFunctionality();
   if constexpr (std::is_same_v<ReceivedOrder, T>) {
@@ -162,7 +162,7 @@ template <typename T> void AmrPhysicalAsset::charge(const T &t) {
   }
 }
 
-template <typename T> void AmrPhysicalAsset::execute(const T &t) {
+template <typename T> void AmrPhysicalAsset::execute(const T &) {
   amr_state_ = AmrState::kWorking;
   executeFrontFunctionality();
   if constexpr (std::is_same_v<ReceivedOrder, T>) {
@@ -170,7 +170,7 @@ template <typename T> void AmrPhysicalAsset::execute(const T &t) {
   }
 }
 
-template <typename T> void AmrPhysicalAsset::finish(const T &t) {
+template <typename T> void AmrPhysicalAsset::finish(const T &) {
   if constexpr (std::is_same_v<ReceivedOrder, T>) {
     throw std::invalid_argument("empty task");
   }
@@ -183,39 +183,39 @@ template <typename T> void AmrPhysicalAsset::finish(const T &t) {
 // fsmlite guards //
 ////////////////////
 
-template <typename T> bool AmrPhysicalAsset::isMoveToLoad(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isMoveToLoad(const T &) const {
   return holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Load>(functionality_queue_.at(1));
 }
 
-template <typename T> bool AmrPhysicalAsset::isMoveToUnload(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isMoveToUnload(const T &) const {
   return holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Unload>(functionality_queue_.at(1));
 }
 
-template <typename T> bool AmrPhysicalAsset::isMoveToCharge(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isMoveToCharge(const T &) const {
   return holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Charge>(functionality_queue_.at(1));
 }
 
-template <typename T> bool AmrPhysicalAsset::isMove(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isMove(const T &) const {
   return holdsMoveType(functionality_queue_.front()) &&
          (functionality_queue_.size() == 1 || holdsMoveType(functionality_queue_.at(1)));
 }
 
-template <typename T> bool AmrPhysicalAsset::isLoad(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isLoad(const T &) const {
   return std::holds_alternative<Load>(functionality_queue_.front());
 }
 
-template <typename T> bool AmrPhysicalAsset::isUnload(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isUnload(const T &) const {
   return std::holds_alternative<Unload>(functionality_queue_.front());
 }
 
-// template <typename T> bool AmrPhysicalAsset::isCharge(const T &t) const {
+// template <typename T> bool AmrPhysicalAsset::isCharge(const T &) const {
 //   return std::holds_alternative<Charge>(functionality_queue_.front());
 // }
 
-template <typename T> bool AmrPhysicalAsset::isFinish(const T &t) const {
+template <typename T> bool AmrPhysicalAsset::isFinish(const T &) const {
   return functionality_queue_.empty();
 }
 

@@ -36,7 +36,7 @@ bool RoundRobinInitiator::process(const AssignmentResponse &assignment_response)
 }
 
 // Since this is a basic algorithm, the AMR's status is not relevant here and can be ignored.
-bool RoundRobinInitiator::process(const StatusUpdate &status_update) { return true; }
+bool RoundRobinInitiator::process(const StatusUpdate &) { return true; }
 
 void RoundRobinInitiator::storeParticipant(ParticipantInfo &info) {
   // transform base class ParticipantInfo into concrete ParticipantInfoRoundRobin and store it
@@ -48,11 +48,12 @@ void RoundRobinInitiator::storeParticipant(ParticipantInfo &info) {
 
 void RoundRobinInitiator::logMaterialFlowContent(const std::string &material_flow_uuid) {
   // only roughly implemented since the MFDLScheduler is not available yet
-  auto material_flow = find_if(material_flows_.begin(), material_flows_.end(),
-                               [&material_flow_uuid](const auto &mf_scheduler) {
-                                 // placeholder
-                                 return true;
-                               });
+  [[maybe_unused]] auto material_flow =
+      find_if(material_flows_.begin(), material_flows_.end(),
+              [&material_flow_uuid](const auto & /*mf_scheduler*/) {
+                // placeholder
+                return true;
+              });
   // TODO: Log tasks and orders of the MFDLScheduler with the passed uuid
 }
 

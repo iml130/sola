@@ -60,7 +60,7 @@ public:
     return participant_connection_ > other.participant_connection_;
   }
 
-  SERIALIZE(task_uuid_, participant_connection_, participant_ability_, metrics_composition_);
+  SERIALIZE(task_uuid_, participant_connection_, participant_ability_, metrics_composition_)
 
 private:
   std::string task_uuid_;

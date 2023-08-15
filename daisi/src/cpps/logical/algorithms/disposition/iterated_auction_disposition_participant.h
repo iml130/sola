@@ -44,17 +44,17 @@ public:
   /// @brief To process a CallForProposal we need to initiate AuctionParticipantState for this
   /// auction process, initially calculate possible bids for each open task, and consequently submit
   /// the first bid.
-  REGISTER_IMPLEMENTATION(CallForProposal);
+  REGISTER_IMPLEMENTATION(CallForProposal)
 
   /// @brief When receiving an IterationNotification, it means that another task was assigned to a
   /// different participant. Consequently, we need to remove this open task from the
   /// AuctionParticipantState and submit a new bid.
-  REGISTER_IMPLEMENTATION(IterationNotification);
+  REGISTER_IMPLEMENTATION(IterationNotification)
 
   /// @brief A WinnerNotification means that a task was assigned to us. First, we need to check
   /// whether we can still accept the task. If yes, we add the task to the order management and send
   /// an acceptance WinnerResponse back to the initiator. Otherwise, we must reject.
-  REGISTER_IMPLEMENTATION(WinnerNotification);
+  REGISTER_IMPLEMENTATION(WinnerNotification)
 
 private:
   /// @brief Storing the auction states for different auction processes with changing initiators.

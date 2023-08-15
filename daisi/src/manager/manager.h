@@ -56,23 +56,6 @@ static void handleNodePhyRxDrop(ns3::Ptr<const ns3::Packet> packet) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Node)!");
 }
 
-// WIFI
-static void handleWifiMacTxDrop(ns3::Ptr<const ns3::Packet> packet) {
-  throw std::runtime_error("Packet was dropped (MacTxDrop at Wifi)!");
-}
-
-static void handleWifiPhyTxDrop(ns3::Ptr<const ns3::Packet> packet) {
-  throw std::runtime_error("Packet was dropped (PhyTxDrop at Wifi)!");
-}
-
-static void handleWifiMacRxDrop(ns3::Ptr<const ns3::Packet> packet) {
-  throw std::runtime_error("Packet was dropped (MacRxDrop at Wifi)!");
-}
-
-static void handleWifiDeassociated(ns3::Mac48Address value) {
-  throw std::runtime_error("wifi connection lost (deassociated from access point)");
-}
-
 // SWITCH
 static void handleSwitchMacTxDrop(ns3::Ptr<const ns3::Packet> packet) {
   throw std::runtime_error("Packet was dropped (MacTxDrop at Switch)!");
@@ -97,18 +80,6 @@ static void handleRouterPhyTxDrop(ns3::Ptr<const ns3::Packet> packet) {
 
 static void handleRouterPhyRxDrop(ns3::Ptr<const ns3::Packet> packet) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Router)!");
-}
-
-static void installDefaultWifiTraces() {
-  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/MacTxDrop",
-                                     MakeCallback(&daisi::handleWifiMacTxDrop));
-  ns3::Config::ConnectWithoutContext(
-      "/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/$ns3::StaWifiMac/DeAssoc",
-      MakeCallback(&daisi::handleWifiDeassociated));
-  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Mac/MacRxDrop",
-                                     MakeCallback(&daisi::handleWifiMacRxDrop));
-  ns3::Config::ConnectWithoutContext("/NodeList/*/DeviceList/*/$ns3::WifiNetDevice/Phy/PhyTxDrop",
-                                     MakeCallback(&daisi::handleWifiPhyTxDrop));
 }
 
 template <typename ConcreteApplication> class Manager {

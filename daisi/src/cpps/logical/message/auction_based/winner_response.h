@@ -35,7 +35,7 @@ public:
 
   bool doesAccept() const { return accept_; }
 
-  SERIALIZE(task_uuid_, accept_, participant_connection_);
+  SERIALIZE(task_uuid_, accept_, participant_connection_)
 
 private:
   std::string task_uuid_;

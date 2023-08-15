@@ -34,7 +34,7 @@ public:
 
   bool operator==(const MoveOrder &other) const;
 
-  SERIALIZE(uuid_, move_order_step_);
+  SERIALIZE(uuid_, move_order_step_)
 
 private:
   std::string uuid_;

@@ -32,7 +32,7 @@ struct ActionOrderStep {
   const std::string &getName() const;
   const std::unordered_map<std::string, std::string> &getParameters() const;
 
-  SERIALIZE(name_, parameters_);
+  SERIALIZE(name_, parameters_)
 
 private:
   std::string name_;

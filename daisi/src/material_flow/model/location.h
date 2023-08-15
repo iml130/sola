@@ -34,7 +34,7 @@ struct Location {
   const std::string &getType() const;
   const daisi::util::Position getPosition() const;
 
-  SERIALIZE(id_, type_, position_);
+  SERIALIZE(id_, type_, position_)
 
 private:
   std::string id_;

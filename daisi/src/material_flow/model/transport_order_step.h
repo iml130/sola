@@ -34,7 +34,7 @@ struct TransportOrderStep {
   const std::unordered_map<std::string, std::string> &getParameters() const;
   const Location &getLocation() const;
 
-  SERIALIZE(name_, parameters_, location_);
+  SERIALIZE(name_, parameters_, location_)
 
 private:
   std::string name_;

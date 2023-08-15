@@ -131,7 +131,7 @@ TableDefinition kServiceTransport("ServiceTransport",
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
 static bool service_exists_transport_ = false;
 
-void CppsLoggerNs3::logTransportService(const sola::Service &service, bool active) {
+void CppsLoggerNs3::logTransportService(const sola::Service &service, bool /*active*/) {
   if (!service_exists_transport_) {
     log_(kCreateServiceTransport);
     service_exists_transport_ = true;

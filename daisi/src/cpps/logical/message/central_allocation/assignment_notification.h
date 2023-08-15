@@ -33,7 +33,7 @@ public:
   const material_flow::Task &getTask() const { return task_; }
   const std::string &getInitiatorConnection() const { return initiator_connection_; }
 
-  SERIALIZE(task_, initiator_connection_);
+  SERIALIZE(task_, initiator_connection_)
 
 private:
   material_flow::Task task_;

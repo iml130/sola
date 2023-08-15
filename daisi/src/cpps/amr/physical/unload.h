@@ -26,7 +26,7 @@ public:
   Unload() = default;
   explicit Unload(const util::Position &destination) : destination(destination) {}
 
-  SERIALIZE(destination);
+  SERIALIZE(destination)
 
   util::Position destination;
 };

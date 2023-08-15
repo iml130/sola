@@ -37,7 +37,7 @@ public:
   double getWidth() const;
   double getHeight() const;
 
-  SERIALIZE(uuid_, size_);
+  SERIALIZE(uuid_, size_)
 
 private:
   std::string uuid_;

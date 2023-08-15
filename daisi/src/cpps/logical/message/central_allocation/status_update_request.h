@@ -31,7 +31,7 @@ public:
 
   const std::string &getInitiatorConnection() const { return initiator_connection_; }
 
-  SERIALIZE(initiator_connection_);
+  SERIALIZE(initiator_connection_)
 
 private:
   std::string initiator_connection_;

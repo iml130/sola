@@ -31,7 +31,7 @@ public:
   util::Position getPosition() const { return position_; }
   AmrState getState() const { return state_; }
 
-  SERIALIZE(position_, state_);
+  SERIALIZE(position_, state_)
 
 private:
   util::Position position_;

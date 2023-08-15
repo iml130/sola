@@ -29,14 +29,14 @@ const util::Duration &TimeWindow::getRelativeEarliestStart() const { return earl
 
 const util::Duration &TimeWindow::getRelativeLatestFinish() const { return latest_finish_; }
 
-const util::Duration TimeWindow::getAbsoluteEarliestStart() const {
+util::Duration TimeWindow::getAbsoluteEarliestStart() const {
   if (hasSpawnTime()) {
     return earliest_start_ + spawn_time_.value();
   }
   throw std::runtime_error("Spawn time not set");
 }
 
-const util::Duration TimeWindow::getAbsoluteLatestFinish() const {
+util::Duration TimeWindow::getAbsoluteLatestFinish() const {
   if (hasSpawnTime()) {
     return spawn_time_.value() + latest_finish_;
   }
