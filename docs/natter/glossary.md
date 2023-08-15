@@ -1,5 +1,6 @@
-# natter Glossary
+# Glossary natter
 
-## Node
+## N
 
+**Node**:<br />
 A single entity.
