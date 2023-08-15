@@ -28,7 +28,7 @@ public:
   uint32_t up() const { return std::get<0>(forwarding_limits_); }
   uint32_t down() const { return std::get<1>(forwarding_limits_); }
 
-  SERIALIZE(forwarding_limits_);
+  SERIALIZE(forwarding_limits_)
 
 private:
   std::tuple<Level, Level> forwarding_limits_;

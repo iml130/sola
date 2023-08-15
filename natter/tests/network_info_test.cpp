@@ -9,8 +9,8 @@
 #include "natter/network_info_ipv4.h"
 
 TEST_CASE("[MINHCAST] NetworkInfoIpv4Test", "Equality") {
-  natter::NetworkInfoIPv4 n1{.ip = "10.0.0.0", .port = 2000};
-  natter::NetworkInfoIPv4 n2{.ip = "10.0.0.0", .port = 2000};
+  natter::NetworkInfoIPv4 n1{"10.0.0.0", 2000};
+  natter::NetworkInfoIPv4 n2{"10.0.0.0", 2000};
   REQUIRE(n1 == n2);
   n2.port = 2001;
   REQUIRE_FALSE(n1 == n2);
