@@ -80,7 +80,7 @@ void SolaApplication::startSOLA() {
               << msg.sender << std::endl;
   };
 
-  auto logger = daisi::global_logger_manager->createSolaLogger(GetNode()->GetId());
+  auto logger = daisi::global_logger_manager->createSolaLogger();
   sola_ = std::make_unique<sola_ns3::SOLAWrapperNs3>(config_mo, config_ed, single_receive,
                                                      topic_receive, logger,
                                                      "");  // Already joining overlay network

@@ -50,7 +50,7 @@ private:
 MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
                                                    const AlgorithmConfig &config_algo,
                                                    bool first_node)
-    : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(device_id), config_algo,
+    : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(), config_algo,
                    first_node) {}
 
 void MaterialFlowLogicalAgent::init() { initCommunication(); }

@@ -54,20 +54,20 @@ public:
 
   void logDevice(uint32_t id);
   void logDeviceApplication(const std::string &application_uuid,
-                            const std::string &application_name, uint32_t device_id);
+                            const std::string &application_name);
   void logEvent(const std::string &event_uuid, uint16_t event_type,
                 const std::string &application_uuid);
 
   void logMinhtonConfigFile(const std::string &file_path);
 
   std::shared_ptr<minhton::MinhtonLoggerNs3> createMinhtonLogger(
-      uint32_t device_id, const std::string &app_name_postfix = "");
-  std::shared_ptr<natter::logging::NatterLoggerNs3> createNatterLogger(uint32_t device_id);
-  std::shared_ptr<daisi::cpps::CppsLoggerNs3> createAMRLogger(uint32_t device_id);
-  std::shared_ptr<daisi::cpps::CppsLoggerNs3> createTOLogger(uint32_t device_id);
+      const std::string &app_name_postfix = "");
+  std::shared_ptr<natter::logging::NatterLoggerNs3> createNatterLogger();
+  std::shared_ptr<daisi::cpps::CppsLoggerNs3> createAMRLogger();
+  std::shared_ptr<daisi::cpps::CppsLoggerNs3> createTOLogger();
   // std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3> createPathPlanningLogger(
-  //     uint32_t device_id, const std::string &device_type = "");
-  std::shared_ptr<sola_ns3::SolaLoggerNs3> createSolaLogger(uint32_t device_id);
+  //     const std::string &device_type = "");
+  std::shared_ptr<sola_ns3::SolaLoggerNs3> createSolaLogger();
 
 private:
   daisi::SQLiteHelper sqlite_helper_;

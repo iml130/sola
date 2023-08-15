@@ -104,6 +104,4 @@ target_link_libraries(sola_config_helper_ns3 INTERFACE
         ManagementOverlayMINHTONSim
         EventDisseminationMinhcastSim
         daisi_logger_manager
-        ns3::libcore
-        daisi_utils
 )
