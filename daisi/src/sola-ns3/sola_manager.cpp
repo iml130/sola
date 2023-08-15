@@ -88,19 +88,23 @@ void SolaManager::publishTopic(uint32_t id, const std::string &topic, uint64_t m
   getApplication(id)->publishTopic(topic, msg);
 }
 
-void SolaManager::leaveTopic(uint32_t id) { throw std::runtime_error("not implemented"); }
+void SolaManager::leaveTopic(uint32_t /*node_id*/) { throw std::runtime_error("not implemented"); }
 
-void SolaManager::findService(uint32_t id) { throw std::runtime_error("not implemented"); }
+void SolaManager::findService(uint32_t /*node_id*/) { throw std::runtime_error("not implemented"); }
 
-void SolaManager::addService(uint32_t id) { throw std::runtime_error("not implemented"); }
+void SolaManager::addService(uint32_t /*node_id*/) { throw std::runtime_error("not implemented"); }
 
-void SolaManager::updateService(uint32_t id) { throw std::runtime_error("not implemented"); }
+void SolaManager::updateService(uint32_t /*node_id*/) {
+  throw std::runtime_error("not implemented");
+}
 
-void SolaManager::removeService(uint32_t id) { throw std::runtime_error("not implemented"); }
+void SolaManager::removeService(uint32_t /*node_id*/) {
+  throw std::runtime_error("not implemented");
+}
 
-void SolaManager::startSOLA(uint32_t id) {
-  LOG("[" << Simulator::Now().GetMilliSeconds() << "] STARTING SOLA ON NODE " << id);
-  getApplication(id)->startSOLA();
+void SolaManager::startSOLA(uint32_t node_id) {
+  LOG("[" << Simulator::Now().GetMilliSeconds() << "] STARTING SOLA ON NODE " << node_id);
+  getApplication(node_id)->startSOLA();
 }
 
 std::string SolaManager::getDatabaseFilename() { return generateDBName("sola"); }

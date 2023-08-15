@@ -27,7 +27,7 @@ struct TopicMessage {
   std::string content;
   solanet::UUID uuid;
 
-  SERIALIZE(topic, sender, content, uuid);
+  SERIALIZE(topic, sender, content, uuid)
 };
 
 using TopicMessageReceiveFct = std::function<void(const TopicMessage &m)>;

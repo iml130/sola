@@ -30,7 +30,7 @@ TypeId SolaMessageNs3::GetTypeId() {
 
 TypeId SolaMessageNs3::GetInstanceTypeId() const { return GetTypeId(); }
 
-void SolaMessageNs3::Print(std::ostream &os) const {
+void SolaMessageNs3::Print(std::ostream &) const {
   // intentionally not implemented
 }
 

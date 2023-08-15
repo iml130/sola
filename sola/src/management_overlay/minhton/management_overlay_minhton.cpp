@@ -17,8 +17,8 @@
 
 namespace sola {
 ManagementOverlayMinhton::ManagementOverlayMinhton(const minhton::ConfigNode &config)
-    : node_(std::make_unique<minhton::Minhton>(
-          [&](const minhton::ConnectionInfo &neighbor) { connectionUpdated(neighbor); }, config)) {}
+    : node_(std::make_unique<minhton::Minhton>([&](const minhton::ConnectionInfo & /*neighbor*/) {},
+                                               config)) {}
 
 void ManagementOverlayMinhton::insert(std::vector<Entry> entries) {
   std::vector<minhton::Entry> data;
@@ -55,7 +55,4 @@ bool ManagementOverlayMinhton::canStop() const {
   return node_->getState() == minhton::State::kIdle;
 }
 
-void ManagementOverlayMinhton::connectionUpdated(
-    const minhton::ConnectionInfo &neighbor) { /*std::cout << "UPDATED" << std::endl;*/
-}
 }  // namespace sola
