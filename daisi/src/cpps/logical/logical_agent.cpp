@@ -25,10 +25,9 @@
 
 namespace daisi::cpps::logical {
 
-LogicalAgent::LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-                           AlgorithmConfig config_algo, bool first_node)
-    : device_id_(device_id),
-      logger_(std::move(logger)),
+LogicalAgent::LogicalAgent(std::shared_ptr<CppsLoggerNs3> logger, AlgorithmConfig config_algo,
+                           bool first_node)
+    : logger_(std::move(logger)),
       algorithm_config_(std::move(config_algo)),
       first_node_(first_node) {}
 

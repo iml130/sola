@@ -24,7 +24,7 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowLogicalAgent : public LogicalAgent {
 public:
-  MaterialFlowLogicalAgent(uint32_t device_id, const AlgorithmConfig &config_algo, bool first_node);
+  MaterialFlowLogicalAgent(const AlgorithmConfig &config_algo, bool first_node);
 
   /// @brief Includes leaving Sola.
   ~MaterialFlowLogicalAgent() override = default;  // TODO

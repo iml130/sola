@@ -47,11 +47,9 @@ private:
   std::shared_ptr<CppsLoggerNs3> logger_;
 };
 
-MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(uint32_t device_id,
-                                                   const AlgorithmConfig &config_algo,
+MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(const AlgorithmConfig &config_algo,
                                                    bool first_node)
-    : LogicalAgent(device_id, daisi::global_logger_manager->createTOLogger(), config_algo,
-                   first_node) {}
+    : LogicalAgent(daisi::global_logger_manager->createTOLogger(), config_algo, first_node) {}
 
 void MaterialFlowLogicalAgent::init() { initCommunication(); }
 
