@@ -11,6 +11,6 @@ The calculation is implemented as a recursive algorithm in the function `treeMap
 
 <figure markdown>
   <a id="fig_tree_mapper_example"></a>
-  ![Tree Mapper Example](../img/tree_mapper_m2_example.png)
+  ![Tree Mapper Example](../img/tree_mapper_m2_example.svg)
   <figcaption markdown>**Figure 1:** Tree Mapper Example</figcaption>
 </figure>

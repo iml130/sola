@@ -46,7 +46,7 @@ Only the most important transitions are shown here. Obvious transitions like Upd
 
 <figure markdown>
   <a id="fig_fsm_join_address"></a>
-  ![FSM Join Workflow](../img/fsm_join_workflow.png)
+  ![FSM Join Workflow](../img/fsm_join_workflow.svg)
   <figcaption markdown>**Figure 2:** FSM Join Workflow</figcaption>
 </figure>
 
@@ -63,7 +63,7 @@ It still needs to send the join-accept-ack message to the parent.
 
 <figure markdown>
   <a id="fig_fsm_join_bootstrap"></a>
-  ![FSM Join with Bootstrap Workflow](../img/fsm_join_workflow_bootstrap.png)
+  ![FSM Join with Bootstrap Workflow](../img/fsm_join_workflow_bootstrap.svg)
   <figcaption markdown>**Figure 3:** FSM Join with Bootstrap Workflow</figcaption>
 </figure>
 
@@ -81,7 +81,7 @@ Note: **Doesn't include the changes for concurrent operations yet**
 
 <figure markdown>
   <a id="fig_fsm_leave"></a>
-  ![FSM Leave with Replacement Workflow](../img/fsm_leave_with_repl_workflow.png)
+  ![FSM Leave with Replacement Workflow](../img/fsm_leave_with_repl_workflow.svg)
   <figcaption markdown>**Figure 4:** FSM Leave with Replacement Workflow</figcaption>
 </figure>
 

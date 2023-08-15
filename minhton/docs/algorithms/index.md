@@ -13,7 +13,7 @@ We will later present you how to avoid this kind of created tree.
 
 <figure markdown>
   <a id="fig1"></a>
-  ![BATON tree structure](../user/img/baton.png)
+  ![BATON tree structure](../img/baton.svg)
   <figcaption markdown>**Figure 1:** Exploited BATON/BATON\* Network (height balanced). Level 4 (5) has 64 (18) (bidirectional) in-level links.</figcaption>
 </figure>
 
@@ -37,7 +37,7 @@ The figure also illustrates the DSNs which have a link to each node in the whole
 
 <figure markdown>
   <a id="fig2"></a>
-  ![nBATON* tree structure](../user/img/nbaton.png)
+  ![nBATON* tree structure](../img/nbaton.svg)
   <figcaption markdown>**Figure 2:** (Null-) balanced BATON network (nBATON\*). Level 4 (5) has 98 (4) (bidirectional) in-level links.</figcaption>
 </figure>
 
@@ -51,7 +51,7 @@ For improved efficiency, the MINHTON algorithm goes even further than nBATON* an
 
 Thus, the constructed tree is as compact as possible, since there are no gaps in between the tree.
 However as the tree is filled starting from the leftmost possible position on each level, the amount of links may not be maximal.
-Compared to [Fig. 2](#fig2) the node 5:3 would not exist, assuming the amount of nodes *N* stays the same, but 5:2 would exist (see [Fig. 3](#fig3)).
+Compared to [Fig. 2](#fig2) the node 5:7 would not exist, assuming the amount of nodes *N* stays the same, but 5:2 would exist (see [Fig. 3](#fig3)).
 
 A side effect of MINHTON's complete balance is that there is only one valid position at each time for a joining or leaving node.
 If a node wants to join it is inserted right next to the node with the highest number on the level farthest from the root.
@@ -62,7 +62,7 @@ This algorithm is also capable of handling concurrent operations like multiple l
 
 <figure markdown>
   <a id="fig3"></a>
-  ![MINHTON tree structure](../user/img/minhton.png)
+  ![MINHTON tree structure](../img/minhton.svg)
   <figcaption markdown>**Figure 3:** Minimal height tree overlay network (MINHTON) with complete balance. Level 4 (5) has 98 (6) (bidirectional) in-level links.</figcaption>
 </figure>
 
