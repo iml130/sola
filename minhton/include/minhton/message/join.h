@@ -23,7 +23,7 @@ public:
   NodeInfo getEnteringNode() const;
   SearchProgress getSearchProgress() const;
 
-  SERIALIZE(header_, entering_node_, search_progress_);
+  SERIALIZE(header_, entering_node_, search_progress_)
 
   MessageJoin() = default;
 

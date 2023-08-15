@@ -19,7 +19,7 @@ public:
 
   std::vector<NodeInfo> getRequestedNeighbors() const;
 
-  SERIALIZE(header_, neighbors_);
+  SERIALIZE(header_, neighbors_)
 
   MessageInformAboutNeighbors() = default;
 

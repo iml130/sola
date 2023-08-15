@@ -20,7 +20,7 @@ public:
   std::vector<NodeData::Key> getKeys() const;
   bool getSubscribe() const;
 
-  SERIALIZE(header_, keys_, subscribe_);
+  SERIALIZE(header_, keys_, subscribe_)
 
   MessageSubscriptionOrder() = default;
 

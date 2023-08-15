@@ -57,7 +57,7 @@ public:
 
   std::vector<Key> getAllCurrentKeys();
 
-  SERIALIZE(data_);
+  SERIALIZE(data_)
 
 private:
   std::unordered_map<Key, ValueTimestampAndType> data_;

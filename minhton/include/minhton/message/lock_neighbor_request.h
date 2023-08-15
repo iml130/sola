@@ -15,7 +15,7 @@ class MessageLockNeighborRequest : public MinhtonMessage<MessageLockNeighborRequ
 public:
   explicit MessageLockNeighborRequest(MinhtonMessageHeader header);
 
-  SERIALIZE(header_);
+  SERIALIZE(header_)
 
   MessageLockNeighborRequest() = default;
 

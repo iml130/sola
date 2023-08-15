@@ -23,7 +23,7 @@ public:
   MessageUpdateNeighbors getMessageUpdateNeighbors() const;
   bool getShouldAcknowledge() const;
 
-  SERIALIZE(header_, remove_msg_, update_msg_, should_acknowledge_);
+  SERIALIZE(header_, remove_msg_, update_msg_, should_acknowledge_)
 
   MessageRemoveAndUpdateNeighbors() = default;
 

@@ -25,7 +25,7 @@ public:
   NodeInfo getAdjacentRight() const;
   std::vector<NodeInfo> getRoutingTableNeighbors() const;
 
-  SERIALIZE(header_, fanout_, adjacent_left_, adjacent_right_, routing_table_neighbors_);
+  SERIALIZE(header_, fanout_, adjacent_left_, adjacent_right_, routing_table_neighbors_)
 
   MessageJoinAccept() = default;
 

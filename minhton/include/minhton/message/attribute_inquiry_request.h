@@ -21,7 +21,7 @@ public:
   bool getInquireAll() const;
   std::vector<std::string> getMissingKeys() const;
 
-  SERIALIZE(header_, missing_keys_, inquire_all_);
+  SERIALIZE(header_, missing_keys_, inquire_all_)
 
   MessageAttributeInquiryRequest() = default;
 

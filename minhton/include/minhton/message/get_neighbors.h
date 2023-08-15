@@ -23,7 +23,7 @@ public:
   NodeInfo getSendBackToNode() const;
   std::vector<NeighborRelationship> getRelationships() const;
 
-  SERIALIZE(header_, send_back_to_node_, relationships_);
+  SERIALIZE(header_, send_back_to_node_, relationships_)
 
   MessageGetNeighbors() = default;
 

@@ -452,10 +452,10 @@ MinhtonLoggerNs3::~MinhtonLoggerNs3() {
              current_time, uuid_.c_str()));
 }
 
-void MinhtonLoggerNs3::logCritical(const std::string &msg) const {}
-void MinhtonLoggerNs3::logWarning(const std::string &msg) const {}
-void MinhtonLoggerNs3::logInfo(const std::string &msg) const {}
-void MinhtonLoggerNs3::logDebug(const std::string &msg) const {}
+void MinhtonLoggerNs3::logCritical(const std::string & /*msg*/) const {}
+void MinhtonLoggerNs3::logWarning(const std::string & /*msg*/) const {}
+void MinhtonLoggerNs3::logInfo(const std::string & /*msg*/) const {}
+void MinhtonLoggerNs3::logDebug(const std::string & /*msg*/) const {}
 
 }  // namespace minhton
 

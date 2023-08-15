@@ -49,7 +49,7 @@ public:
   /// For other purposes, a different check is performed when creating a specific message.
   bool validate() const;
 
-  SERIALIZE(sender_, target_, message_type_, ref_event_id_, event_id_, additional_logging_info_);
+  SERIALIZE(sender_, target_, message_type_, ref_event_id_, event_id_, additional_logging_info_)
 
 private:
   NodeInfo sender_;

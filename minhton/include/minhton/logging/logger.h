@@ -17,22 +17,6 @@ namespace minhton {
 
 enum class LogLevel { kDebug, kInfo, kWarning, kCritical };
 
-static LogLevel logLevelFromString(const std::string &level) {
-  if (level == "debug") {
-    return LogLevel::kDebug;
-  }
-  if (level == "info") {
-    return LogLevel::kInfo;
-  }
-  if (level == "warning") {
-    return LogLevel::kWarning;
-  }
-  if (level == "critical") {
-    return LogLevel::kCritical;
-  }
-  return LogLevel::kDebug;
-}
-
 class Logger {
 public:
   using LoggerPtr = std::shared_ptr<LoggerInterface>;
@@ -60,6 +44,8 @@ public:
   LogLevel getLogLevel() const;
 
   void setLogLevel(LogLevel logLevel);
+
+  static LogLevel logLevelFromString(const std::string &level);
 
 private:
   // Command pattern

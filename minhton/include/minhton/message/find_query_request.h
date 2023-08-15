@@ -30,7 +30,7 @@ public:
   ForwardingDirection getForwardingDirection() const;
   std::pair<uint32_t, uint32_t> getInterval() const;
 
-  SERIALIZE(header_, query_, forwarding_direction_, interval_);
+  SERIALIZE(header_, query_, forwarding_direction_, interval_)
 
   MessageFindQueryRequest() = default;
 

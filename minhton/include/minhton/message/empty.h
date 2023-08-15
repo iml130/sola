@@ -17,7 +17,7 @@ class MessageEmpty : public MinhtonMessage<MessageEmpty> {
 public:
   explicit MessageEmpty(MinhtonMessageHeader header);
 
-  SERIALIZE(header_);
+  SERIALIZE(header_)
 
   MessageEmpty() = default;
 

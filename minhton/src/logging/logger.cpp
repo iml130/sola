@@ -96,4 +96,20 @@ LogLevel Logger::getLogLevel() const { return log_level_; }
 
 void Logger::setLogLevel(LogLevel logLevel) { this->log_level_ = logLevel; }
 
+LogLevel Logger::logLevelFromString(const std::string &level) {
+  if (level == "debug") {
+    return LogLevel::kDebug;
+  }
+  if (level == "info") {
+    return LogLevel::kInfo;
+  }
+  if (level == "warning") {
+    return LogLevel::kWarning;
+  }
+  if (level == "critical") {
+    return LogLevel::kCritical;
+  }
+  return LogLevel::kDebug;
+}
+
 }  // namespace minhton

@@ -21,7 +21,7 @@ public:
 
   std::string getDiscoveryMessage() const;
 
-  SERIALIZE(header_, discovery_msg_);
+  SERIALIZE(header_, discovery_msg_)
 
   MessageBootstrapDiscover() = default;
 

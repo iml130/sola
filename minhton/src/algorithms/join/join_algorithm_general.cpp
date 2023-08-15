@@ -20,7 +20,7 @@ void JoinAlgorithmGeneral::process(const MessageVariant &msg) {
           [this](const MessageJoin &specific_msg) { processJoin(specific_msg); },
           [this](const MessageJoinAccept &specific_msg) { processJoinAccept(specific_msg); },
           [this](const MessageJoinAcceptAck &specific_msg) { processJoinAcceptAck(specific_msg); },
-          [](auto &specific_msg) {
+          [](auto & /*specific_msg*/) {
             throw AlgorithmException("Wrong Algorithm Interface process called");
           }},
       msg);
