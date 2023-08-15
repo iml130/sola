@@ -72,9 +72,7 @@ void SolaApplication::startSOLA() {
 
   number_created++;
 
-  auto single_receive = [](const sola::Message &msg) {
-    throw std::runtime_error("not implemented");
-  };
+  auto single_receive = [](const sola::Message &) { throw std::runtime_error("not implemented"); };
   auto topic_receive = [id = id_](const sola::TopicMessage &msg) {
     std::cout << "[" << Simulator::Now().GetMilliSeconds() << "] RECEIVE TOPIC MESSAGE "
               << msg.topic << " ON NODE " << id << " WITH LENGTH " << msg.content.size() << " FROM "

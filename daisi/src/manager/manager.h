@@ -46,39 +46,39 @@
 namespace daisi {
 
 // NODE
-static void handleNodeMacTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleNodeMacTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (MacTxDrop at Node)!");
 }
-static void handleNodePhyTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleNodePhyTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyTxDrop at Node)!");
 }
-static void handleNodePhyRxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleNodePhyRxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Node)!");
 }
 
 // SWITCH
-static void handleSwitchMacTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleSwitchMacTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (MacTxDrop at Switch)!");
 }
 
-static void handleSwitchPhyTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleSwitchPhyTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyTxDrop at Switch)!");
 }
 
-static void handleSwitchPhyRxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleSwitchPhyRxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Switch)!");
 }
 
 // ROUTER
-static void handleRouterMacTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleRouterMacTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (MacTxDrop at Router)!");
 }
 
-static void handleRouterPhyTxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleRouterPhyTxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyTxDrop at Router)!");
 }
 
-static void handleRouterPhyRxDrop(ns3::Ptr<const ns3::Packet> packet) {
+static void handleRouterPhyRxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Router)!");
 }
 

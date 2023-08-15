@@ -41,10 +41,10 @@ void checkValidityIPv4(std::string ip) {
 }
 
 TEST_CASE("[NETWORK_UDP] Automatically fetch IP", "Automatically fetch IP") {
-  Network network1("", [&](const Message &msg) {});
+  Network network1("", [&](const Message &) {});
   checkValidityIPv4(network1.getIP());
 
-  Network network2("", [&](const Message &msg) {});
+  Network network2("", [&](const Message &) {});
   checkValidityIPv4(network2.getIP());
 
   REQUIRE(network1.getPort() != 0);
@@ -73,7 +73,7 @@ TEST_CASE("[NETWORK_UDP] Single send/receive", "Single send/receive") {
 TEST_CASE("[NETWORK_UDP] Multiple send/receive", "Multiple send/receive") {
   std::vector<Message> received_msgs1;
   Network network1("127.0.0.1", [&](const Message &msg) { received_msgs1.push_back(msg); });
-  Network network2("127.0.0.1", [&](const Message &msg) {});
+  Network network2("127.0.0.1", [&](const Message &) {});
 
   // Send from network2 to network 1
   constexpr int message_count = 50;

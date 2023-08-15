@@ -20,7 +20,7 @@ void EventDisseminationMinhcast::getResult(const std::string &topic,
   on_result();
 }
 
-void EventDisseminationMinhcast::checkTopicJoin(const std::string &topic, bool should_exist) {
-}  // No checking
+void EventDisseminationMinhcast::checkTopicJoin(const std::string & /*topic*/,
+                                                bool /*should_exist*/) {}  // No checking
 
 }  // namespace sola
