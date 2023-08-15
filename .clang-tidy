@@ -13,7 +13,10 @@ Checks: '-*,
          -readability-use-anyofallof,
          -readability-redundant-string-init,
          -readability-identifier-length,
+         -readability-named-parameter,
          -readability-suspicious-call-argument'
+
+# readability-named-parameter disabled because: C++ Core Guidelines F.9
 
 WarningsAsErrors: '*'
 CheckOptions:
