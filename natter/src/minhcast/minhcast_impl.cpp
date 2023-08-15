@@ -48,7 +48,6 @@ void NatterMinhcast::Impl::processMessage(const MinhcastMessage &msg) {
   NATTER_CHECK(contains(own_node_info_, msg.getTopic()),
                "not subscribed to topic but received topic message.")
 
-  const NodeInfo &own = own_node_info_.at(msg.getTopic());
   logger_.logReceiveFullMsg(msg.getMessageID(), msg.getLastNodeUUID(), getUUID());
 
   // Pass message to application
@@ -72,14 +71,14 @@ BroadcastInfo NatterMinhcast::Impl::createBroadcastInfo(const MinhcastMessage &m
   NATTER_CHECK(std::get<2>(own_pos) == std::get<2>(msg.getInitialNodePos()),
                "Fanout of own and initial node do not match")
 
-  return {.own_node = {getUUID(), own_pos},
-          .last_node = {msg.getLastNodeUUID(), msg.getLastNodePos()},
-          .initial_node = {msg.getInitialNodeUUID(), msg.getInitialNodePos()},
-          .forwarding_limit = msg.getForwardingLimit(),
-          .topic = msg.getTopic(),
-          .msg_id = msg.getMessageID(),
-          .content = msg.getContent(),
-          .current_round = msg.getRound() + 1};
+  return {{getUUID(), own_pos},
+          {msg.getLastNodeUUID(), msg.getLastNodePos()},
+          {msg.getInitialNodeUUID(), msg.getInitialNodePos()},
+          msg.getForwardingLimit(),
+          msg.getTopic(),
+          msg.getMessageID(),
+          msg.getContent(),
+          msg.getRound() + 1};
 }
 
 bool NatterMinhcast::Impl::hasChildren(LevelNumber node, const std::set<NodeInfo> &other_peers) {
@@ -642,14 +641,14 @@ solanet::UUID NatterMinhcast::Impl::publish(const std::string &topic,
   NodeInfo own_node = own_node_info_[topic];
 
   BroadcastInfo bc{
-      .own_node = {getUUID(), own_node.position},
-      .last_node = {getUUID(), own_node.position},
-      .initial_node = {getUUID(), own_node.position},
-      .forwarding_limit = {},
-      .topic = topic,
-      .msg_id = msg.message_id,
-      .content = msg_content,
-      .current_round = 1,
+      {getUUID(), own_node.position},
+      {getUUID(), own_node.position},
+      {getUUID(), own_node.position},
+      {},
+      topic,
+      msg.message_id,
+      msg_content,
+      1,
   };
   broadcast(bc);
   return msg.message_id;

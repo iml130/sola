@@ -25,14 +25,14 @@ TEST_CASE("[MINHCAST] BroadcastInfo NotInitialSender", "MINHCAST") {
   using namespace natter::minhcast;
 
   BroadcastInfo bc{
-      .own_node = {solanet::generateUUID(), {2, 0, 3}},
-      .last_node = {solanet::generateUUID(), {1, 0, 3}},
-      .initial_node = {solanet::generateUUID(), {0, 0, 3}},
-      .forwarding_limit{2, std::numeric_limits<Level>::max()},
-      .topic = "TOPIC",
-      .msg_id = solanet::generateUUID(),
-      .content = "CONTENT",
-      .current_round = 3,
+      {solanet::generateUUID(), {2, 0, 3}},
+      {solanet::generateUUID(), {1, 0, 3}},
+      {solanet::generateUUID(), {0, 0, 3}},
+      {2, std::numeric_limits<Level>::max()},
+      "TOPIC",
+      solanet::generateUUID(),
+      "CONTENT",
+      3,
   };
 
   REQUIRE(bc.ownLevel() == 2);

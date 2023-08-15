@@ -85,7 +85,7 @@ static const std::string kCreateMessage = getCreateTableStatement(kMessage);
 static bool message_exists_ = false;
 
 // TODO: Enable Content after passing unserialized string?
-void NatterLoggerNs3::logNewMessage(const std::string &topic, const std::string &msg,
+void NatterLoggerNs3::logNewMessage(const std::string &topic, const std::string & /*msg*/,
                                     solanet::UUID msg_uuid) {
   if (!message_exists_) {
     log_(kCreateMessage);
@@ -113,13 +113,13 @@ TableDefinition kNatterNode("NatterNode",
 static const std::string kCreateNatterNode = getCreateTableStatement(kNatterNode);
 static bool natter_node_exists_ = false;
 
-void NatterLoggerNs3::logNewPeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
-                                 const std::string &topic) const {
+void NatterLoggerNs3::logNewPeer(const std::string & /*ip*/, uint16_t /*port*/,
+                                 solanet::UUID /*uuid*/, const std::string & /*topic*/) const {
   // TODO: LOG
 }
 
-void NatterLoggerNs3::logRemovePeer(const std::string &ip, uint16_t port, solanet::UUID uuid,
-                                    const std::string &topic) const {
+void NatterLoggerNs3::logRemovePeer(const std::string & /*ip*/, uint16_t /*port*/,
+                                    solanet::UUID /*uuid*/, const std::string & /*topic*/) const {
   // TODO: LOG
 }
 
@@ -224,8 +224,9 @@ void NatterLoggerNs3::logSendReceive(solanet::UUID msg_uuid, solanet::UUID sende
 //     "forward_up_limit	INTEGER NOT NULL,"
 //     "forward_down_limit	INTEGER NOT NULL);";
 
-void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
-                                           uint32_t forward_up_limit, uint32_t forward_down_limit) {
+void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID /*msg_id*/, uint32_t /*level*/,
+                                           uint32_t /*number*/, uint32_t /*forward_up_limit*/,
+                                           uint32_t /*forward_down_limit*/) {
   // log_(toSQL("INSERT INTO minhcast_broadcast VALUES (NULL, %lu, (SELECT id FROM "
   //            "message_ids WHERE message_id='%s'), %u, %u, %u, %u);",
   //            ns3::Simulator::Now().GetMicroSeconds(), solanet::uuidToString(msg_id).c_str(),
@@ -337,10 +338,10 @@ NatterLoggerNs3::~NatterLoggerNs3() {
              current_time, uuid_.c_str()));
 }
 
-void NatterLoggerNs3::logCritical(const std::string &msg) const {}
-void NatterLoggerNs3::logWarning(const std::string &msg) const {}
-void NatterLoggerNs3::logInfo(const std::string &msg) const {}
-void NatterLoggerNs3::logDebug(const std::string &msg) const {}
+void NatterLoggerNs3::logCritical(const std::string & /*msg*/) const {}
+void NatterLoggerNs3::logWarning(const std::string & /*msg*/) const {}
+void NatterLoggerNs3::logInfo(const std::string & /*msg*/) const {}
+void NatterLoggerNs3::logDebug(const std::string & /*msg*/) const {}
 
 void NatterLoggerNs3::logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid,
                                      solanet::UUID own_uuid) {

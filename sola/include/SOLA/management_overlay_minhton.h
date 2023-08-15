@@ -33,9 +33,6 @@ public:
   bool isRunning() const { return node_->getState() == minhton::State::kConnected; }
 
 private:
-  // For testing only
-  void connectionUpdated(const minhton::ConnectionInfo &neighbor);
-
   std::unique_ptr<minhton::Minhton> node_;
 };
 

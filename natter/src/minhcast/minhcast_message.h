@@ -46,7 +46,7 @@ public:
   ForwardingLimit getForwardingLimit() const { return forwarding_limit_; }
 
   SERIALIZE(topic_, message_id_, initial_node_, last_node_, content_, round_, forwarding_limit_,
-            inner_);
+            inner_)
 
 private:
   std::string topic_;

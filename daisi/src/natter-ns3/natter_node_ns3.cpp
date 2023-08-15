@@ -53,7 +53,7 @@ void NatterNodeNs3::addPeer(const std::string &topic, solanet::UUID uuid, const 
   logger_->logNs3PeerConnection(Simulator::Now().GetMicroSeconds(), true, getUUID(), uuid);
 }
 
-void NatterNodeNs3::removePeer(const std::string &topic, const std::string &uuid) {
+void NatterNodeNs3::removePeer(const std::string & /*topic*/, const std::string & /*uuid*/) {
   throw std::runtime_error("not implemented yet");
 }
 
@@ -79,7 +79,7 @@ void NatterNodeNs3::unsubscribeTopic(const std::string &topic) {
   if (natter_minhcast_) natter_minhcast_->unsubscribeTopic(topic);
 }
 
-void NatterNodeNs3::logReceivedMessage(const natter::Message &m) {
+void NatterNodeNs3::logReceivedMessage(const natter::Message & /*m*/) {
   // solanet::UUID own_uuid = getUUID();
   // logger_->logReceivedMessages(own_uuid, m.sender_id_,
   //                                 m.message_id_, m.round_);
