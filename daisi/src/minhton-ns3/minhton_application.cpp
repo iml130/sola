@@ -41,7 +41,7 @@ void MinhtonApplication::DoDispose() {
 }
 
 void MinhtonApplication::StartApplication() {
-  logger_ = daisi::global_logger_manager->createMinhtonLogger(GetNode()->GetId());
+  logger_ = daisi::global_logger_manager->createMinhtonLogger();
 }
 
 void MinhtonApplication::StopApplication() {}

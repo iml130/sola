@@ -37,7 +37,7 @@ void NatterApplication::DoDispose() {
 }
 
 void NatterApplication::StartApplication() {
-  logger_ = daisi::global_logger_manager->createNatterLogger(GetNode()->GetId());
+  logger_ = daisi::global_logger_manager->createNatterLogger();
 
   natter_node_ = Create<NatterNodeNs3>(logger_, mode_);
 }

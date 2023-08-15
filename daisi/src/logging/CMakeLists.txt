@@ -35,4 +35,5 @@ target_link_libraries(daisi_logger_manager
     daisi_sola_logger_ns3
     PRIVATE
     ns3::libcore
+    daisi_utils
 )

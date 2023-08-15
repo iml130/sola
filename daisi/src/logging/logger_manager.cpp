@@ -21,11 +21,20 @@
 #include <set>
 
 #include "ns3/simulator.h"
+#include "utils/daisi_check.h"
 
 #define TableDefinition static const DatabaseTable
 #define ViewDefinition static const std::unordered_map<std::string, std::string>
 
 namespace daisi {
+
+/// Returns the callers device id. In general, the device ID (ns-3 node ID) should be set as a
+/// context when scheduling events
+static uint64_t getDeviceId() {
+  const uint64_t device_id = ns3::Simulator::GetContext();
+  DAISI_CHECK(device_id != ns3::Simulator::NO_CONTEXT, "Context not set");
+  return device_id;
+}
 
 // * Device
 TableDefinition kDevice("Device", {{"Id", "%lu", true, "", true}});
@@ -51,7 +60,8 @@ TableDefinition kDeviceApplication("DeviceApplication",
 const std::string kCreateDeviceApplication = getCreateTableStatement(kDeviceApplication);
 
 void LoggerManager::logDeviceApplication(const std::string &application_uuid,
-                                         const std::string &application_name, uint32_t device_id) {
+                                         const std::string &application_name) {
+  const uint64_t device_id = getDeviceId();
   logDevice(device_id);
   auto t = std::make_tuple(/* ApplicationUuid */ application_uuid.c_str(),
                            /* ApplicationName */ application_name.c_str(),
@@ -182,14 +192,14 @@ LoggerManager::~LoggerManager() {
 
 // * Create specific loggers
 std::shared_ptr<minhton::MinhtonLoggerNs3> LoggerManager::createMinhtonLogger(
-    uint32_t device_id, const std::string &app_name_postfix) {
+    const std::string &app_name_postfix) {
   minhton_exists_ = true;
   std::string app_name = "Minhton";
   if (!app_name_postfix.empty()) {
     app_name += "+" + app_name_postfix;
   }
-  auto log_dev_app = [this, device_id, app_name](const std::string &application_uuid) {
-    this->logDeviceApplication(application_uuid, app_name, device_id);
+  auto log_dev_app = [this, app_name](const std::string &application_uuid) {
+    this->logDeviceApplication(application_uuid, app_name);
   };
 
   auto log_event = [this](const std::string &event_uuid, uint16_t event_type,
@@ -202,11 +212,10 @@ std::shared_ptr<minhton::MinhtonLoggerNs3> LoggerManager::createMinhtonLogger(
       log_event);
 }
 
-std::shared_ptr<natter::logging::NatterLoggerNs3> LoggerManager::createNatterLogger(
-    uint32_t device_id) {
+std::shared_ptr<natter::logging::NatterLoggerNs3> LoggerManager::createNatterLogger() {
   natter_exists_ = true;
-  auto log_dev_app = [this, device_id](const std::string &application_uuid) {
-    this->logDeviceApplication(application_uuid, "Natter", device_id);
+  auto log_dev_app = [this](const std::string &application_uuid) {
+    this->logDeviceApplication(application_uuid, "Natter");
   };
 
   auto log_event = [this](const std::string &event_uuid, uint16_t event_type,
@@ -219,18 +228,18 @@ std::shared_ptr<natter::logging::NatterLoggerNs3> LoggerManager::createNatterLog
       log_event);
 }
 
-std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createAMRLogger(uint32_t device_id) {
-  auto log_dev_app = [this, device_id](const std::string &application_uuid) {
-    this->logDeviceApplication(application_uuid, "AMR", device_id);
+std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createAMRLogger() {
+  auto log_dev_app = [this](const std::string &application_uuid) {
+    this->logDeviceApplication(application_uuid, "AMR");
   };
 
   return std::make_shared<daisi::cpps::CppsLoggerNs3>(
       log_dev_app, [this](const std::string &sql) -> void { this->sqlite_helper_.execute(sql); });
 }
 
-std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createTOLogger(uint32_t device_id) {
-  auto log_dev_app = [this, device_id](const std::string &application_uuid) {
-    this->logDeviceApplication(application_uuid, "TO", device_id);
+std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createTOLogger() {
+  auto log_dev_app = [this](const std::string &application_uuid) {
+    this->logDeviceApplication(application_uuid, "TO");
   };
 
   return std::make_shared<daisi::cpps::CppsLoggerNs3>(
@@ -238,11 +247,11 @@ std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createTOLogger(uint32
 }
 
 // std::shared_ptr<daisi::path_planning::PathPlanningLoggerNs3>
-// LoggerManager::createPathPlanningLogger(uint32_t device_id, const std::string &device_type) {
-//   auto log_dev_app = [this, device_id, device_type](const std::string &application_uuid) {
+// LoggerManager::createPathPlanningLogger(const std::string &device_type) {
+//   auto log_dev_app = [this, device_type](const std::string &application_uuid) {
 //     const std::string app_name =
 //         device_type.empty() ? "PathPlanning" : "PathPlanning " + device_type;
-//     this->logDeviceApplication(application_uuid, app_name, device_id);
+//     this->logDeviceApplication(application_uuid, app_name);
 //   };
 
 //   return std::make_shared<daisi::path_planning::PathPlanningLoggerNs3>(
@@ -250,9 +259,9 @@ std::shared_ptr<daisi::cpps::CppsLoggerNs3> LoggerManager::createTOLogger(uint32
 //       });
 // }
 
-std::shared_ptr<sola_ns3::SolaLoggerNs3> LoggerManager::createSolaLogger(uint32_t device_id) {
-  auto log_dev_app = [this, device_id](const std::string &application_uuid) {
-    this->logDeviceApplication(application_uuid, "Sola", device_id);
+std::shared_ptr<sola_ns3::SolaLoggerNs3> LoggerManager::createSolaLogger() {
+  auto log_dev_app = [this](const std::string &application_uuid) {
+    this->logDeviceApplication(application_uuid, "Sola");
   };
 
   return std::make_shared<sola_ns3::SolaLoggerNs3>(
