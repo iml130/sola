@@ -73,8 +73,6 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
                            const Topology &topology) {
   std::cout << "Creating AMR " << description.getProperties().getFriendlyName() << std::endl;
 
-  const uint32_t device_id = amrs_.Get(amr_index)->GetId();
-
   if (next_mobility_model != nullptr) {
     throw std::runtime_error("mobility model not empty");
   }
@@ -92,7 +90,7 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
       std::make_shared<AmrPhysicalAsset>(std::move(connector));
   this->amrs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
       std::make_shared<logical::AmrLogicalAgent>(
-          device_id, scenario_.algorithm.getParticipantAlgorithmConfig(), amr_index == 0);
+          scenario_.algorithm.getParticipantAlgorithmConfig(), amr_index == 0);
 }
 
 void CppsManager::setup() {
@@ -184,13 +182,11 @@ void CppsManager::startAMR(uint32_t index) {
 }
 
 void CppsManager::initMF(uint32_t index) {
-  const uint32_t device_id = material_flows_.Get(index)->GetId();
-
   std::cout << "Creating MF Logical Agent " << index << std::endl;
 
   this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application =
       std::make_shared<logical::MaterialFlowLogicalAgent>(
-          device_id, scenario_.algorithm.getInitiatorAlgorithmConfig(), false);
+          scenario_.algorithm.getInitiatorAlgorithmConfig(), false);
 
   std::cout << "Init MF Logical Agent " << index << std::endl;
 

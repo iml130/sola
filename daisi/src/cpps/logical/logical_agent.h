@@ -30,8 +30,7 @@ namespace daisi::cpps::logical {
 
 class LogicalAgent {
 public:
-  LogicalAgent(uint32_t device_id, std::shared_ptr<CppsLoggerNs3> logger,
-               AlgorithmConfig config_algo, bool first_node);
+  LogicalAgent(std::shared_ptr<CppsLoggerNs3> logger, AlgorithmConfig config_algo, bool first_node);
 
   virtual ~LogicalAgent() = default;
 
@@ -67,9 +66,6 @@ protected:
   /// @brief Method being called by sola when we receive a message via a topic
   /// @param m received message
   virtual void topicMessageReceiveFunction(const sola::TopicMessage &msg) = 0;
-
-  /// @brief Needed for initialization of Sola.
-  uint32_t device_id_;
 
   /// @brief The algorithms which logical messages will be forwarded to for processing.
   std::vector<std::unique_ptr<AlgorithmInterface>> algorithms_;
