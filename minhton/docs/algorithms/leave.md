@@ -13,7 +13,7 @@ Then the replacing node has the reponsibility to rebuild everything by firstly l
 
 <figure markdown>
   <a id="fig_leave_sequence"></a>
-  ![Leave with Replacement Sequence](../img/leave_with_replacement_sequence.png)
+  ![Leave with Replacement Sequence](../img/leave_with_replacement_sequence.svg)
   <figcaption markdown>**Figure 1:** Leave with Replacement Sequence</figcaption>
 </figure>
 
@@ -81,6 +81,6 @@ We do not need to update the adjacents of the replaced position separately, beca
 
 <figure markdown>
   <a id="fig_leave_example"></a>
-  ![Leave with Replacement Example](../img/leave_example_01.png)
+  ![Leave with Replacement Example](../img/leave_example_01.svg)
   <figcaption markdown>**Figure 2:** Leave with Replacement Example</figcaption>
 </figure>

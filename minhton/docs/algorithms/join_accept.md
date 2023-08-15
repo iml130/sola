@@ -35,12 +35,12 @@ If e.g. 2:0 has children, 2:1 would need to know about these children as well.
 
 <figure markdown>
   <a id="fig_join_accept_1"></a>
-  ![Sending the Join Accept (Ack) message](../img/join_accept_01.png)
+  ![Sending the Join Accept (Ack) message](../img/join_accept_01.svg)
   <figcaption markdown>**Figure 1:** Sending the Join Accept (Ack) message</figcaption>
 </figure>
 <figure markdown>
   <a id="fig_join_accept_2"></a>
-  ![Update Neighbor messages](../img/join_accept_02.png)
+  ![Update Neighbor messages](../img/join_accept_02.svg)
   <figcaption markdown>**Figure 2:** 1:0 sends Update Neighbor messages</figcaption>
 </figure>
 
@@ -73,14 +73,15 @@ When we receive the InformAboutNeighbor message we can load this information and
 
 **Notes**: It is not possible that both adjacent left and right are not known.
 Only one adjacent might be falsely calculated locally.
+The shown join is not possible with the current MINHTON implementation, it is only depicted to clarify how the adjacents are calculated.
 
 <figure markdown>
   <a id="fig_check_adj"></a>
-  ![Check Adjacents Example](../img/check_adjacents_example.png)
+  ![Check Adjacents Example](../img/check_adjacents_example.svg)
   <figcaption markdown>**Figure 3:** Check Adjacents example where an adjacent connection is wrong and the correct adjacent is acquired.</figcaption>
 </figure>
 <figure markdown>
   <a id="fig_check_adj_sequence"></a>
-  ![Check Adjacents Example](../img/check_adjacents_sequence.png)
+  ![Check Adjacents Example](../img/check_adjacents_sequence.svg)
   <figcaption markdown>**Figure 4:** Check Adjacents sequence diagram</figcaption>
 </figure>
