@@ -124,7 +124,7 @@ jobs:
     - name: Build
       run: |
         mkdir build && cd build
-        cmake ../daisi -G Ninja -DCMAKE_BUILD_TYPE=Release -Dns3_DIR=~/ns-3_install/lib/cmake/ns3 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cmake ../daisi -G Ninja -DCMAKE_BUILD_TYPE=Release -Dns3_DIR=~/ns-3_install/lib/cmake/ns3 -DDAISI_ENABLE_COMPILER_WARNINGS=ON -DDAISI_HANDLE_COMPILER_WARNINGS_AS_ERRORS=ON
         cmake --build .
     - name: Run MINHTON unittest
       run: build/sola_mono/minhton/tests/MinhtonAllTests
