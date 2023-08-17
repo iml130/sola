@@ -53,7 +53,8 @@ public:
                                          const AmrDescription &description,
                                          const Topology &topology, bool check_positioning = true);
 
-  /// @brief Calculates acceleration, constant velocity and deceleration phases for simulation.
+  /// @brief Calculates acceleration, constant velocity and deceleration phases for simulation. The
+  /// deceleration vector is pointing in the opposite direction of the velocity vector.
   /// @throws \c std::invalid_argument
   /// * if \c start_pose or any other Position is outside of \c Topology or
   /// * if a requested \c FunctionalityVariant is missing in description

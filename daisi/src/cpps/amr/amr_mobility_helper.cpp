@@ -133,8 +133,10 @@ AmrMobilityStatus AmrMobilityHelper::calculateMobilityStatus(
       break;
     case AmrMobilityState::kDecelerating:
       status = current_phase;
+      // status.acceleration is pointing in the opposite direction of status.velocity during
+      // deceleration
       status.position +=
-          status.velocity * delta_t - 1 / 2.0 * status.acceleration * delta_t * delta_t;
+          status.velocity * delta_t + 1 / 2.0 * status.acceleration * delta_t * delta_t;
       status.velocity += status.acceleration * delta_t;
       break;
     default:
