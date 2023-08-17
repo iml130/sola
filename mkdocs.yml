@@ -21,7 +21,7 @@ nav:
       - Glossary: sola/glossary.md
   - MINHTON:
     - Introduction: management_overlay/introduction.md
-    - Getting Started: management_overlay/getting_started.md
+    - Using MINHTON: management_overlay/using.md
     - Programmers Manual:
       - Concept: management_overlay/programmers/concept.md
       - Messages: management_overlay/programmers/messages.md

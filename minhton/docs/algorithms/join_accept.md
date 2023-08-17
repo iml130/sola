@@ -1,32 +1,32 @@
 # Join Accept Procedure
 
-If the JOIN Message reaches a node that can accept the child, the `performAcceptChild` method will be called.
-The node that receives the Join message will become the parent of the entering node.
+If the `JOIN` Message reaches a node that can accept the child, the `performAcceptChild` method will be called.
+The node that receives the `JOIN` message will become the parent of the entering node.
 The parent is responsible for initializing the updating of all routing information within the network.
-The entering node does not have any other responsibilities other than sending a JoinAcceptAcknowledgement back to the parent.
+The entering node does not have any other responsibilities other than sending a `JOIN_ACCEPT_ACK` back to the parent.
 
 The parent has to perform the following steps first:
 
 1. calculate the position of its new child / entering node
-2. calculate the left and right adjacent neighbors of the new child (-> see Check-Adjacent-Procedure)
-3. send a JoinAccept message to the new child
-4. receiving the JoinAcceptAck message from the child and updating all routing table neighbors and children within the network
+2. calculate the left and right adjacent neighbors of the new child (--> see [Calculating Correct Adjacents](#calculating-correct-adjacents))
+3. send a `JOIN_ACCEPT` message to the new child
+4. receiving the `JOIN_ACCEPT_ACK` message from the child and updating all routing table neighbors and children within the network
 
-In this example (see [Figure 1](#fig_join_accept_1) and [2](#fig_join_accept_2)) the node who receives the JOIN Message is 1:0.
+In this example (see [Figure 1](#fig_join_accept_1) and [2](#fig_join_accept_2)) the node who receives the `JOIN` Message is 1:0.
 The new child position will be 2:1 because it's the only free child position.
 If there are multiple free child positions, the position which is closest to the center will be chosen.
 The adjacent left and adjacent right of 2:1 will be 1:0 and 0:0.
 
-The JOIN_ACCEPT Message will contain the left and right adjacent information, the information about the siblings (nodes, who also have 2:0 as the parent), and the sender of the message (who is the parent).
-The Fanout is also set here.
+The `JOIN_ACCEPT` Message will contain the left and right adjacent information, the information about the siblings (nodes, who also have 2:0 as the parent), and the sender of the message (who is the parent).
+The fanout is also set here.
 
-As the entering node receives the JOIN_ACCEPT Message, it will execute the processJoinAccept Message.
+As the entering node receives the `JOIN_ACCEPT` Message, it will execute the `processJoinAccept` method.
 Here it will set the given information about the parent, left and right adjacent, and routing table neighbors.
-It will send a JOIN_ACCEPT_ACK Message back to the parent.
+It will send a `JOIN_ACCEPT_ACK` Message back to the parent.
 
-When the parent receives the JOIN_ACCEPT_ACK Message, it will execute the processJoinAcceptAck Method.
+When the parent receives the `JOIN_ACCEPT_ACK` Message, it will execute the `processJoinAcceptAck` Method.
 Here it will actually set the information about the new child in its routing information.
-It sends multiple UPDATE_NEIGHBORS Messages.
+It sends multiple `UPDATE_NEIGHBORS` Messages.
 Firstly to the adjacents of the entering node (here 0:0), and then to the routing table neighbors (2:0, 2:2, 2:3) and routing table neighbor "parents" (1:1).
 
 This procedure works only if the tree is correctly balanced.
@@ -63,13 +63,13 @@ This connection is wrong though and it is possible to notice through tree mapper
 But we also can see that 4:44 has 1:1 as its right adjacent neighbor.
 
 Therefore 3:15 can ask 4:44 who its adjacent right neighbor is.
-This is done through the exchange of GetNeighbors and InformAboutNeighbors messages.
-After 3:15 has received the information about 1:1, it finally knows the correct adjacent left for 4:45 and can send the JoinAccept message to 4:45 with its correct adjacent neighbor information.
+This is done through the exchange of `GET_NEIGHBORS` and `INFORM_ABOUT_NEIGHBORS` messages.
+After 3:15 has received the information about 1:1, it finally knows the correct adjacent left for 4:45 and can send the `JOIN_ACCEPT` message to 4:45 with its correct adjacent neighbor information.
 The join accept procedure can continue as before.
 
-Because we had to interrupt the procedure while waiting for the InformAboutNeighbor message (as you can see in [Figure 4](#fig_check_adj_sequence)), we introduced the ProcedureInfo class in which we can store local information about procedures that were interrupted.
-When we send the GetNeighbors message we store our information about the calculated adjacent neighbors.
-When we receive the InformAboutNeighbor message we can load this information and proceed normally.
+Because we had to interrupt the procedure while waiting for the `INFORM_ABOUT_NEIGHBORS` message (as you can see in [Figure 4](#fig_check_adj_sequence)), we introduced the `ProcedureInfo` class in which we can store local information about procedures that were interrupted.
+When we send the `GET_NEIGHBORS` message we store our information about the calculated adjacent neighbors.
+When we receive the `INFORM_ABOUT_NEIGHBORS` message we can load this information and proceed normally.
 
 **Notes**: It is not possible that both adjacent left and right are not known.
 Only one adjacent might be falsely calculated locally.
