@@ -1282,11 +1282,9 @@ TEST_CASE("calculateMobilityStatus )", "[mobility_helper]") {
     result = AmrMobilityHelper::calculateMobilityStatus(status, status.timestamp + 1);
     REQUIRE(result.acceleration == status.acceleration);
 
-    if (status.state == AmrMobilityState::kDecelerating) {
-      REQUIRE(result.position == status.position + status.velocity - 1 / 2.0 * status.acceleration);
-    } else {
-      REQUIRE(result.position == status.position + status.velocity + 1 / 2.0 * status.acceleration);
-    }
+    // in deceleration phase the status.acceleration vector points in the opposite direction of the
+    // velocity vector
+    REQUIRE(result.position == status.position + status.velocity + 1 / 2.0 * status.acceleration);
 
     REQUIRE(result.state == status.state);
     REQUIRE(result.timestamp == status.timestamp + 1);
