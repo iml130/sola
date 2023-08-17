@@ -16,8 +16,8 @@ MINHTON is an application running on the physical peers, by default on port 2000
 
 ### Timestamp
 
-In the ns-3 simulation the timestamp is in the unit milliseconds.
-But it is easy to change the unit in the simulator to even higher resulutions.
+In the ns-3 simulation the timestamps are logged in the unit milliseconds.
+But it is easy to change the unit in the simulator to even higher resolutions.
 
 ## Tables
 
