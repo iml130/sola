@@ -4,16 +4,15 @@
 // For details on the licensing terms, see the LICENSE file.
 // SPDX-License-Identifier: MIT
 
+#include "minhton/utils/config_reader.h"
+
 #include <unistd.h>
+#include <yaml-cpp/yaml.h>
 
 #include <cstdio> /* defines FILENAME_MAX */
 #include <string>
-#define GetCurrentDir getcwd
-
-#include <yaml-cpp/yaml.h>
 
 #include "minhton/core/constants.h"
-#include "minhton/utils/config_reader.h"
 
 namespace minhton::config {
 
