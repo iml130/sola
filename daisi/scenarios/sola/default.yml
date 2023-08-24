@@ -21,31 +21,17 @@ scenarioSequence:
   - delay:
       delay: 0
   - subscribeTopic:
-      nodes: "all" # number or range () or list [x,y] or all
-      topic: "helloworld" # TODO Fix topic names with upper case
+      nodes: "all"
+      topic: "helloworld"
       delay: 1000
       waitTillFinished: true
   - delay:
       delay: 0
   - publish:
       topic: "helloworld"
-      waitTillFinished: true
       messageSize: 100 # bytes
-      nodes: "1" # Must be string # or range () or list [x,y] or random
-      delay: 1000
+      nodes: "1"
   - publish:
       topic: "helloworld"
-      waitTillFinished: true
       messageSize: 1000 # bytes
-      nodes: "2" # Must be string # or range () or list [x,y] or random
-      delay: 1000
-
-#  - leaveTopic:
-#      waitTillFinished: true
-#      nodes: "all" # or range () or list [x,y] or all
-#      topic: "HelloWorld"
-#      delay: 1000
-  #- publishService:
-  #- findService:
-  #- removeService:
-  #- updateService:
+      nodes: "2"
