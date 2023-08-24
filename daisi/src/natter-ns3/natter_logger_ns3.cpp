@@ -213,24 +213,10 @@ void NatterLoggerNs3::logSendReceive(solanet::UUID msg_uuid, solanet::UUID sende
   }
 }
 
-// TODO: * minhcast_broadcast
-// static std::string createTableMinhcastBroadcast =
-//     "CREATE TABLE minhcast_broadcast ( "
-//     "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, "
-//     "timestamp	INTEGER NOT NULL, "
-//     "msg_id INTEGER NOT NULL,"
-//     "own_level	INTEGER NOT NULL, "
-//     "own_number     INTEGER  NOT NULL, "
-//     "forward_up_limit	INTEGER NOT NULL,"
-//     "forward_down_limit	INTEGER NOT NULL);";
-
 void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID /*msg_id*/, uint32_t /*level*/,
                                            uint32_t /*number*/, uint32_t /*forward_up_limit*/,
                                            uint32_t /*forward_down_limit*/) {
-  // log_(toSQL("INSERT INTO minhcast_broadcast VALUES (NULL, %lu, (SELECT id FROM "
-  //            "message_ids WHERE message_id='%s'), %u, %u, %u, %u);",
-  //            ns3::Simulator::Now().GetMicroSeconds(), solanet::uuidToString(msg_id).c_str(),
-  //            level, number, forward_up_limit, forward_down_limit));
+  // TODO Ref #90
 }
 
 // * TopicMessage
