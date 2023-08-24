@@ -220,14 +220,13 @@ void NatterLoggerNs3::logMinhcastBroadcast(solanet::UUID /*msg_id*/, uint32_t /*
 }
 
 // * TopicMessage
-TableDefinition kTopicMessage("TopicMessage",
+TableDefinition kTopicMessage("DeliveredTopicMessage",
                               {DatabaseColumnInfo{"Id"},
                                {"Timestamp_us", "%lu", true},
                                {"NodeId", "sql%u", true, "NatterNode(Id)"},
                                {"InitialSenderNodeId", "sql%u", true, "NatterNode(Id)"},
                                {"MessageId", "sql%u", true, "NatterMessage(Id)"},
-                               {"Round", "%i", true},
-                               {"Mode", "%i", true}});
+                               {"Round", "%i", true}});
 static const std::string kCreateTopicMessage = getCreateTableStatement(kTopicMessage);
 static bool topic_message_exists_ = false;
 
@@ -265,8 +264,7 @@ void NatterLoggerNs3::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID
       /* NodeId */ node_id.c_str(),
       /* InitialSenderNodeId */ initial_sender_node_id.c_str(),
       /* MessageId */ message_id.c_str(),
-      /* Round */ round,
-      /* Receive */ 1);
+      /* Round */ round);
   log_(getInsertStatement(kTopicMessage, t));
 }
 

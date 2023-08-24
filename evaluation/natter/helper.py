@@ -16,11 +16,11 @@ def get_number_publish_events(db: SqliteDb):
 
 
 def get_number_received_msgs(db: SqliteDb):
-    return db.fetch_one("SELECT COUNT(*) FROM TopicMessage")[0]
+    return db.fetch_one("SELECT COUNT(*) FROM DeliveredTopicMessage")[0]
 
 
 def get_unique_msgs(db: SqliteDb):
-    return db.fetch_all("SELECT DISTINCT MessageId, InitialSenderNodeId FROM TopicMessage")
+    return db.fetch_all("SELECT DISTINCT MessageId, InitialSenderNodeId FROM DeliveredTopicMessage")
 
 
 def get_unique_msg_ids_from_traffic(db: SqliteDb):
@@ -32,5 +32,5 @@ def get_unique_msg_ids_from_publish_events(db: SqliteDb):
 
 
 def get_received_node_ids(db: SqliteDb, message_id):
-    return db.fetch_all("SELECT DISTINCT NodeId FROM TopicMessage WHERE MessageId={}".format(
+    return db.fetch_all("SELECT DISTINCT NodeId FROM DeliveredTopicMessage WHERE MessageId={}".format(
         message_id))
