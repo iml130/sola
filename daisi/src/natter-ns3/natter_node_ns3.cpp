@@ -31,7 +31,7 @@ NatterNodeNs3::NatterNodeNs3(std::shared_ptr<natter::logging::NatterLoggerNs3> l
   std::vector<natter::logging::LoggerPtr> logger_list{logger_};
   if (mode == NatterMode::kMinhcast) {
     natter_minhcast_ = std::make_unique<natter::minhcast::NatterMinhcast>(
-        [&](const natter::Message &m) { logReceivedMessage(m); },
+        [&](const natter::Message &) { /*nothing required here */ },
         [](const std::string & /*unused*/) {}, logger_list);
   } else {
     throw std::runtime_error("Invalid natter mode");
@@ -77,12 +77,6 @@ void NatterNodeNs3::subscribeTopic(const std::string &topic, uint32_t own_level,
 
 void NatterNodeNs3::unsubscribeTopic(const std::string &topic) {
   if (natter_minhcast_) natter_minhcast_->unsubscribeTopic(topic);
-}
-
-void NatterNodeNs3::logReceivedMessage(const natter::Message & /*m*/) {
-  // solanet::UUID own_uuid = getUUID();
-  // logger_->logReceivedMessages(own_uuid, m.sender_id_,
-  //                                 m.message_id_, m.round_);
 }
 
 }  // namespace daisi::natter_ns3

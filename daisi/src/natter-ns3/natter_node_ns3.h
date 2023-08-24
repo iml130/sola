@@ -56,7 +56,6 @@ public:
 private:
   std::unique_ptr<natter::minhcast::NatterMinhcast> natter_minhcast_;
   std::shared_ptr<natter::logging::NatterLoggerNs3> logger_;
-  void logReceivedMessage(const natter::Message &msg);
 };
 }  // namespace daisi::natter_ns3
 #endif
