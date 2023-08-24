@@ -80,10 +80,6 @@ private:
   void logSendReceive(solanet::UUID msg_uuid, solanet::UUID sender, solanet::UUID own_uuid,
                       MsgType type, Mode mode);
 
-  [[maybe_unused]] void logReceive(const std::string &topic, const std::string &ip);
-
-  [[maybe_unused]] void logSend(const std::string &topic, const std::string &ip);
-
   void logMinhcastBroadcast(solanet::UUID msg_id, uint32_t level, uint32_t number,
                             uint32_t forward_up_limit, uint32_t forward_down_limit) final;
 
