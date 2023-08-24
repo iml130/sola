@@ -284,46 +284,6 @@ void NatterLoggerNs3::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID
   log_(getInsertStatement(kTopicMessage, t));
 }
 
-// * TopicTraffic
-TableDefinition kTopicTraffic("TopicTraffic", {DatabaseColumnInfo{"Id"},
-                                               {"Timestamp_ms", "%lu", true},
-                                               {"Topic", "%s", true},
-                                               {"Ip", "%s", true},
-                                               {"Mode", "%i", true}});
-static const std::string kCreateTopicTraffic = getCreateTableStatement(kTopicTraffic);
-static bool topic_traffic_exists_ = false;
-
-void NatterLoggerNs3::logReceive(const std::string &topic, const std::string &ip) {
-  if (!topic_traffic_exists_) {
-    log_(kCreateTopicTraffic);
-    topic_traffic_exists_ = true;
-  }
-
-  auto id = topic_ids_.at(topic);
-  auto t = std::make_tuple(
-      /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
-      /* Topic */ id,
-      /* Ip */ ip.c_str(),
-      /* Mode */ 0);
-  log_(getInsertStatement(kTopicTraffic, t));
-}
-
-void NatterLoggerNs3::logSend(const std::string &topic, const std::string &ip) {
-  if (!topic_traffic_exists_) {
-    log_(kCreateTopicTraffic);
-    topic_traffic_exists_ = true;
-  }
-
-  auto id = topic_ids_.at(topic);
-
-  auto t = std::make_tuple(
-      /* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
-      /* Topic */ id,
-      /* Ip */ ip.c_str(),
-      /* Mode */ 1);
-  log_(getInsertStatement(kTopicTraffic, t));
-}
-
 // * Constructor & Other methods
 NatterLoggerNs3::NatterLoggerNs3(LogDeviceApp log_device_application, LogFunction log,
                                  LogEvent log_event)
