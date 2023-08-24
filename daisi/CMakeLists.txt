@@ -12,6 +12,7 @@ cmake_policy(VERSION 3.19)
 include(CMakeDependentOption)
 
 option(DAISI_DISABLE_NETWORK_SIMULATION "Disable ns-3 network simulation (use ns-3 as discrete event simulator only)" OFF)
+option(DAISI_ENABLE_EXAMPLES "Enable DAISI ns-3 example applications" ON)
 option(DAISI_ENABLE_COMPILER_WARNINGS "Build with compiler warnings" ON)
 cmake_dependent_option(DAISI_HANDLE_COMPILER_WARNINGS_AS_ERRORS "Handle compiler warnings as error" OFF DAISI_ENABLE_COMPILER_WARNINGS OFF)
 
@@ -58,6 +59,10 @@ add_subdirectory(../ ${CMAKE_CURRENT_BINARY_DIR}/sola_mono)
 #-------------------------------------------------------------------------------
 
 add_subdirectory(src)
+
+if(DAISI_ENABLE_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 add_subdirectory(tests/unittests)
 
