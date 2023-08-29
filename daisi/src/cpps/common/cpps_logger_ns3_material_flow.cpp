@@ -69,7 +69,7 @@ TableDefinition kMaterialFlowOrder("MaterialFlowOrder",
                                    {
                                        DatabaseColumnInfo{"Id"},
                                        {"OrderUuid", "%s", true},
-                                       {"TaskId", "sql%u", true, "MaterialFlowTask(TaskId)"},
+                                       {"TaskId", "sql%u", true, "MaterialFlowTask(Id)"},
                                        {"Type", "%s", true},
                                        {"Step1_Name", "%s", true},
                                        {"Step1_Parameters", "%s", false},

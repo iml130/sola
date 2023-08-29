@@ -54,7 +54,7 @@ void LoggerManager::logDevice(uint32_t id) {
 TableDefinition kDeviceApplication("DeviceApplication",
                                    {DatabaseColumnInfo{"ApplicationUuid", "%s", true, "", true},
                                     {"ApplicationName", "%s", true},
-                                    {"DeviceUuid", "%lu", true},
+                                    {"DeviceUuid", "%lu", true, "Device(Id)"},
                                     {"StartTime_ms", "%lu", true},
                                     {"StopTime_ms", "%lu"}});
 const std::string kCreateDeviceApplication = getCreateTableStatement(kDeviceApplication);
