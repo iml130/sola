@@ -240,9 +240,10 @@ protected:
     for (uint32_t i = 0; i < number_of_subnets; i++) {
       for (uint32_t j = 1; j < ip_container_[i].GetN(); j++) {
         auto static_routing = ipv4_routing_helper.GetStaticRouting(ip_container_[i].Get(j).first);
+
+        // Default route/gateway
         auto router_ip = ip_container_[i].GetAddress(0);
         static_routing->AddNetworkRouteTo(Ipv4Address("0.0.0.0"), "0.0.0.0", router_ip, 1);
-        interfaces_.Add(ip_container_[i].Get(j));
       }
     }
 
@@ -295,7 +296,6 @@ protected:
   ns3::NodeContainer node_container_{};
   ns3::NodeContainer switchContainer_{};
   ns3::NodeContainer core_router_{};
-  ns3::Ipv4InterfaceContainer interfaces_{};
   std::vector<ns3::Ipv4InterfaceContainer> ip_container_;
 
 private:

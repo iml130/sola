@@ -224,8 +224,6 @@ void MinhtonManager::Scheduler::initiateJoinNow(uint64_t node_to_join_to_index,
   auto app_to_join_to = manager_.node_container_.Get(node_to_join_to_index)
                             ->GetApplication(0)
                             ->GetObject<MinhtonApplication>();
-  // std::string node_to_join_to_addr_string =
-  //     getIpv4AddressString(manager_.interfaces_.GetAddress(node_to_join_to_index));
   const minhton::NodeInfo nodeinfo_to_join_to = app_to_join_to->getNodeInfo();
 
   auto entering_app = manager_.node_container_.Get(entering_node_index)
