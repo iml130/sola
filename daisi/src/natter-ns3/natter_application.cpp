@@ -67,13 +67,13 @@ void NatterApplication::logSelfToDB(std::pair<uint32_t, uint32_t> level_number) 
                              number);
 }
 
-void NatterApplication::addPeer(const std::string &topic, solanet::UUID uuid, const std::string &ip,
-                                uint16_t port, uint32_t level, uint32_t number, uint32_t fanout) {
+void NatterApplication::addPeer(const std::string &topic,
+                                const natter::minhcast::NatterMinhcast::NodeInfo &info) {
   DAISI_CHECK(natter_minhcast_, "natter not initialized");
   DAISI_CHECK(logger_, "Logger not initialized");
 
-  natter_minhcast_->addPeer(topic, {{level, number, fanout}, {ip, port}, uuid});
-  logger_->logNs3PeerConnection(Simulator::Now().GetMicroSeconds(), true, getUUID(), uuid);
+  natter_minhcast_->addPeer(topic, info);
+  logger_->logNs3PeerConnection(Simulator::Now().GetMicroSeconds(), true, getUUID(), info.uuid);
 }
 
 void NatterApplication::removePeer(const std::string & /*topic*/, const std::string & /*uuid*/) {
@@ -94,10 +94,11 @@ void NatterApplication::publish(const std::string &topic, const std::string &msg
   logger_->logNatterEvent(2, res);
 }
 
-void NatterApplication::subscribeTopic(const std::string &topic, uint32_t own_level,
-                                       uint32_t own_number, uint32_t own_fanout) {
+void NatterApplication::subscribeTopic(const std::string &topic,
+                                       const natter::minhcast::NatterMinhcast::NodeInfo &info) {
   DAISI_CHECK(natter_minhcast_, "natter not initialized");
-  natter_minhcast_->subscribeTopic(topic, {{own_level, own_number, own_fanout}});
+
+  natter_minhcast_->subscribeTopic(topic, info);
 }
 
 void NatterApplication::unsubscribeTopic(const std::string &topic) {

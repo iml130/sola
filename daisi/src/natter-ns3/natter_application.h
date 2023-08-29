@@ -44,15 +44,14 @@ public:
   std::pair<uint32_t, uint32_t> getLevelNumber() const { return level_number_; }
 
   // Natter functions wrapper
-  void addPeer(const std::string &topic, solanet::UUID uuid, const std::string &ip, uint16_t port,
-               uint32_t level, uint32_t number, uint32_t fanout);
+  void addPeer(const std::string &topic, const natter::minhcast::NatterMinhcast::NodeInfo &info);
   void removePeer(const std::string &topic, const std::string &uuid);
 
   solanet::UUID getUUID() const;
 
   void publish(const std::string &topic, const std::string &msg);
-  void subscribeTopic(const std::string &topic, uint32_t own_level, uint32_t own_number,
-                      uint32_t own_fanout);
+  void subscribeTopic(const std::string &topic,
+                      const natter::minhcast::NatterMinhcast::NodeInfo &info);
   void unsubscribeTopic(const std::string &topic);
 
   natter::NetworkInfoIPv4 getNetworkInfo() const;
