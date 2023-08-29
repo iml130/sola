@@ -386,7 +386,7 @@ void CppsManager::setupNetworkWifi() {
     }
 
     // set up ARP caches for AMR and core router
-    // Might not working for wifi devices. (Ref #100)
+    // Might not work for Wi-Fi devices.
     // See https://gitlab.com/nsnam/ns-3-dev/-/issues/664
     NetDeviceContainer container(link.Get(1), amr_sta_dev_temp);
     assert(ips.GetN() == container.GetN());
