@@ -17,36 +17,46 @@
 #ifndef DAISI_MINHTON_NS3_MINHTON_APPLICATION_H_
 #define DAISI_MINHTON_NS3_MINHTON_APPLICATION_H_
 
-#include "logging/logger_manager.h"
-#include "minhton/utils/serializer_cereal.h"
+#include <memory>
+
+#include "minhton/core/node.h"
 #include "minhton_logger_ns3.h"
-#include "minhton_node_ns3.h"
 #include "ns3/application.h"
-#include "ns3/ipv4-address.h"
-#include "ns3/ptr.h"
-#include "ns3/socket.h"
 
 namespace daisi::minhton_ns3 {
 
+/// @brief Wrapper to run MINHTON as a ns-3 application.
 class MinhtonApplication final : public ns3::Application {
 public:
   static ns3::TypeId GetTypeId();
   MinhtonApplication() = default;
   ~MinhtonApplication() final = default;
 
-  ns3::Ptr<MinhtonNodeNs3> getMinhtonNode();
-
   void initializeNode(minhton::ConfigNode config);
 
-  void StopApplication() final;
+  void processSignal(const minhton::Signal &signal);
 
-protected:
-  void DoDispose() final;
+  minhton::NodeInfo getNodeInfo();
+
+  void executeSearchExactTest(uint32_t dest_level, uint32_t dest_number);
+
+  void executeFindQuery(const minhton::FindQuery &query);
+
+  void localTestDataInsert(const std::vector<minhton::Entry> &entries);
+  void localTestDataUpdate(const std::vector<minhton::Entry> &entries);
+  void localTestDataRemove(const std::vector<minhton::NodeData::Key> &keys);
+
+  void setStaticBuildNeighbors(const minhton::NodeInfo &self_pos,
+                               const std::vector<minhton::NodeInfo> &neighbors,
+                               const minhton::NodeInfo &adj_left,
+                               const minhton::NodeInfo &adj_right);
+
+  void StopApplication() final;
 
 private:
   void StartApplication() final;
 
-  ns3::Ptr<MinhtonNodeNs3> minhton_node_;
+  std::unique_ptr<minhton::MinhtonNode> minhton_node_;
 
   std::shared_ptr<minhton::MinhtonLoggerNs3> logger_;
 };

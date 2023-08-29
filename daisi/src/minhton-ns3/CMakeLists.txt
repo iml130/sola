@@ -8,10 +8,10 @@ target_sources(daisi_minhton_application
         )
 target_link_libraries(daisi_minhton_application
         PUBLIC
-            daisi_minhton_node_ns3
-            daisi_logger_manager
+            minhton_core_node_sim
             daisi_minhton_logger_ns3
         PRIVATE
+            daisi_logger_manager
             daisi_solanet_message_ns3
             daisi_utils
         )
@@ -31,22 +31,6 @@ target_link_libraries(daisi_minhton_logger_ns3
             solanet_uuid
         PRIVATE
             ns3::libcore
-        )
-
-add_library(daisi_minhton_node_ns3 STATIC)
-target_sources(daisi_minhton_node_ns3
-        PRIVATE
-        minhton_node_ns3.cpp
-        minhton_node_ns3.h
-        )
-target_link_libraries(daisi_minhton_node_ns3
-        PUBLIC
-            minhton_algorithms_sim
-            minhton_core_node_sim
-            ns3::libcore
-            daisi_solanet_message_ns3
-        PRIVATE
-            minhton_logging
         )
 
 add_library(daisi_minhton_manager STATIC)

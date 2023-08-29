@@ -59,7 +59,7 @@ private:
 
   void scheduleSearchExactAll(uint64_t delay);
   void scheduleSearchExactMany(uint64_t delay, uint16_t number);
-  void executeOneSearchExact(ns3::Ptr<MinhtonNodeNs3> ns3_src_node, uint32_t dest_level,
+  void executeOneSearchExact(ns3::Ptr<MinhtonApplication> src_app, uint32_t dest_level,
                              uint32_t dest_number);
   void executeOneRandomSearchExact();
   void executeFindQuery(minhton::FindQuery query);
@@ -73,7 +73,7 @@ private:
   std::vector<uint64_t> getInitializedNodeIndexes();
   std::tuple<std::vector<uint64_t>, std::vector<std::tuple<uint16_t, uint16_t>>>
   getExistingPositions();
-  ns3::Ptr<MinhtonNodeNs3> getNodeAtPosition(uint16_t level, uint16_t number);
+  ns3::Ptr<MinhtonApplication> getApplicationAtPosition(uint16_t level, uint16_t number);
 
   std::deque<uint64_t> uninit_index_deque_;
   std::deque<uint64_t> init_index_deque_;
@@ -160,17 +160,17 @@ private:
 
   } requests_;
 
-  void initiatePeerDiscoverEnvironmentAfterStaticBuild(ns3::Ptr<MinhtonNodeNs3> node_ns3,
+  void initiatePeerDiscoverEnvironmentAfterStaticBuild(ns3::Ptr<MinhtonApplication> app,
                                                        uint64_t index);
-  void initiatePeerDiscoverEnvironmentAfterJoin(ns3::Ptr<MinhtonNodeNs3> node_ns3);
-  void initiatePeerDiscoverEnvironment(ns3::Ptr<MinhtonNodeNs3> node_ns3,
+  void initiatePeerDiscoverEnvironmentAfterJoin(ns3::Ptr<MinhtonApplication> app);
+  void initiatePeerDiscoverEnvironment(ns3::Ptr<MinhtonApplication> app,
                                        uint64_t init_content_delay, uint64_t init_request_delay);
 
-  void initiateNodeContent(ns3::Ptr<MinhtonNodeNs3> node_ns3);
-  void updateNodeAttribute(ns3::Ptr<MinhtonNodeNs3> node_ns3, minhton::NodeData::Key key);
+  void initiateNodeContent(ns3::Ptr<MinhtonApplication> app);
+  void updateNodeAttribute(ns3::Ptr<MinhtonApplication> app, minhton::NodeData::Key key);
 
   void initiateRequestsOnAllNodes();
-  void makeRequest(ns3::Ptr<MinhtonNodeNs3> node_ns3);
+  void makeRequest(ns3::Ptr<MinhtonApplication> app);
   minhton::FindQuery createFindQuery(uint8_t depth);
   std::shared_ptr<minhton::BooleanExpression> createBooleanExpression(uint8_t depth);
   std::shared_ptr<minhton::BooleanExpression> createBooleanExpressionRecursive(

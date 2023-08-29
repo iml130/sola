@@ -44,10 +44,8 @@ void MinhtonManager::Scheduler::setupRequestingNodes() {
     std::vector<std::string> all_ips;
 
     for (uint64_t i = 0; i < manager_.node_container_.GetN(); i++) {
-      Ptr<MinhtonNodeNs3> app = manager_.node_container_.Get(i)
-                                    ->GetApplication(0)
-                                    ->GetObject<MinhtonApplication>()
-                                    ->getMinhtonNode();
+      auto app =
+          manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
 
       all_ips.push_back(app->getNodeInfo().getAddress());
     }
@@ -114,14 +112,12 @@ void MinhtonManager::Scheduler::executeOneJoinByPosition(uint16_t level, uint16_
   bool found_initialized_node_at_pos = false;
   for (uint64_t join_to_index = 0; join_to_index < manager_.node_container_.GetN();
        join_to_index++) {
-    Ptr<MinhtonNodeNs3> ns3_node = manager_.node_container_.Get(join_to_index)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
+    auto app = manager_.node_container_.Get(join_to_index)
+                   ->GetApplication(0)
+                   ->GetObject<MinhtonApplication>();
 
-    if (ns3_node->getNodeInfo().getLevel() == level &&
-        ns3_node->getNodeInfo().getNumber() == number) {
-      if (ns3_node->getNodeInfo().isInitialized()) {
+    if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number) {
+      if (app->getNodeInfo().isInitialized()) {
         found_initialized_node_at_pos = true;
         uint64_t uninit_index = this->uninit_index_deque_.front();
         this->initiateJoinNow(join_to_index, uninit_index);
@@ -149,12 +145,11 @@ void MinhtonManager::Scheduler::executeOneJoinByIndex(uint16_t join_to_index) {
   if (this->uninit_index_deque_.empty()) {
     throw std::logic_error("No uninit join to enter the network left");
   }
-  Ptr<MinhtonNodeNs3> ns3_node = manager_.node_container_.Get(join_to_index)
-                                     ->GetApplication(0)
-                                     ->GetObject<MinhtonApplication>()
-                                     ->getMinhtonNode();
+  auto app = manager_.node_container_.Get(join_to_index)
+                 ->GetApplication(0)
+                 ->GetObject<MinhtonApplication>();
 
-  if (ns3_node->getNodeInfo().isInitialized()) {
+  if (app->getNodeInfo().isInitialized()) {
     uint64_t uninit_index = this->uninit_index_deque_.front();
     this->initiateJoinNow(join_to_index, uninit_index);
     this->uninit_index_deque_.pop_front();
@@ -214,33 +209,31 @@ void MinhtonManager::Scheduler::Scheduler::executeOneRandomJoin() {
 
 // Join via Multicast
 void MinhtonManager::Scheduler::initiateJoinNowDiscover(uint64_t entering_node_index) {
-  Ptr<MinhtonNodeNs3> entering_node_ns3 = manager_.node_container_.Get(entering_node_index)
-                                              ->GetApplication(0)
-                                              ->GetObject<MinhtonApplication>()
-                                              ->getMinhtonNode();
+  auto entering_app = manager_.node_container_.Get(entering_node_index)
+                          ->GetApplication(0)
+                          ->GetObject<MinhtonApplication>();
 
-  entering_node_ns3->processSignal(
+  entering_app->processSignal(
       minhton::Signal::joinNetworkViaBootstrap("225.1.2.4", minhton::kDefaultIpPort));
 
-  initiatePeerDiscoverEnvironmentAfterJoin(entering_node_ns3);
+  initiatePeerDiscoverEnvironmentAfterJoin(entering_app);
 }
 
 void MinhtonManager::Scheduler::initiateJoinNow(uint64_t node_to_join_to_index,
                                                 uint64_t entering_node_index) {
-  Ptr<MinhtonApplication> node_to_join_to = manager_.node_container_.Get(node_to_join_to_index)
-                                                ->GetApplication(0)
-                                                ->GetObject<MinhtonApplication>();
+  auto app_to_join_to = manager_.node_container_.Get(node_to_join_to_index)
+                            ->GetApplication(0)
+                            ->GetObject<MinhtonApplication>();
   // std::string node_to_join_to_addr_string =
   //     getIpv4AddressString(manager_.interfaces_.GetAddress(node_to_join_to_index));
-  const minhton::NodeInfo nodeinfo_to_join_to = node_to_join_to->getMinhtonNode()->getNodeInfo();
+  const minhton::NodeInfo nodeinfo_to_join_to = app_to_join_to->getNodeInfo();
 
-  Ptr<MinhtonNodeNs3> entering_node_ns3 = manager_.node_container_.Get(entering_node_index)
-                                              ->GetApplication(0)
-                                              ->GetObject<MinhtonApplication>()
-                                              ->getMinhtonNode();
-  entering_node_ns3->processSignal(minhton::Signal::joinNetworkViaNodeInfo(nodeinfo_to_join_to));
+  auto entering_app = manager_.node_container_.Get(entering_node_index)
+                          ->GetApplication(0)
+                          ->GetObject<MinhtonApplication>();
+  entering_app->processSignal(minhton::Signal::joinNetworkViaNodeInfo(nodeinfo_to_join_to));
 
-  initiatePeerDiscoverEnvironmentAfterJoin(entering_node_ns3);
+  initiatePeerDiscoverEnvironmentAfterJoin(entering_app);
 }
 
 void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint16_t level, uint16_t number) {
@@ -248,14 +241,12 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint16_t level, uint16
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
   for (uint64_t leave_index = 0; leave_index < manager_.node_container_.GetN(); leave_index++) {
-    Ptr<MinhtonNodeNs3> ns3_node = manager_.node_container_.Get(leave_index)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
+    auto app = manager_.node_container_.Get(leave_index)
+                   ->GetApplication(0)
+                   ->GetObject<MinhtonApplication>();
 
-    if (ns3_node->getNodeInfo().getLevel() == level &&
-        ns3_node->getNodeInfo().getNumber() == number) {
-      if (ns3_node->getNodeInfo().isInitialized()) {
+    if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number) {
+      if (app->getNodeInfo().isInitialized()) {
         this->initiateLeaveNow(leave_index);
 
         for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
@@ -281,12 +272,10 @@ void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
     throw std::invalid_argument("Index to leave to out of range");
   }
 
-  Ptr<MinhtonNodeNs3> ns3_node = manager_.node_container_.Get(index)
-                                     ->GetApplication(0)
-                                     ->GetObject<MinhtonApplication>()
-                                     ->getMinhtonNode();
+  auto app =
+      manager_.node_container_.Get(index)->GetApplication(0)->GetObject<MinhtonApplication>();
 
-  if (ns3_node->getNodeInfo().isInitialized()) {
+  if (app->getNodeInfo().isInitialized()) {
     this->initiateLeaveNow(index);
     for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
       if (index == *it) {
@@ -340,43 +329,39 @@ void MinhtonManager::Scheduler::executeOneLeaveOnRoot() {
 }
 
 void MinhtonManager::Scheduler::initiateLeaveNow(uint64_t node_to_leave_to_index) {
-  Ptr<MinhtonNodeNs3> leaving_node_ns3 = manager_.node_container_.Get(node_to_leave_to_index)
-                                             ->GetApplication(0)
-                                             ->GetObject<MinhtonApplication>()
-                                             ->getMinhtonNode();
-  leaving_node_ns3->processSignal(minhton::Signal::leaveNetwork());
+  auto leaving_app = manager_.node_container_.Get(node_to_leave_to_index)
+                         ->GetApplication(0)
+                         ->GetObject<MinhtonApplication>();
+  leaving_app->processSignal(minhton::Signal::leaveNetwork());
 }
 
 void MinhtonManager::Scheduler::initiateFailureNow(uint64_t node_to_fail_to_index) {
-  Ptr<MinhtonApplication> failing_node_app = manager_.node_container_.Get(node_to_fail_to_index)
-                                                 ->GetApplication(0)
-                                                 ->GetObject<MinhtonApplication>();
+  auto failing_app = manager_.node_container_.Get(node_to_fail_to_index)
+                         ->GetApplication(0)
+                         ->GetObject<MinhtonApplication>();
 
   std::cout << "\tinitiateFailureNow on index " << node_to_fail_to_index << " at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
-  failing_node_app->StopApplication();
+  failing_app->StopApplication();
 }
 
 void MinhtonManager::Scheduler::scheduleSearchExactAll(uint64_t delay) {
   uint64_t counter = 0;
 
   for (uint64_t i = 0; i < manager_.node_container_.GetN(); i++) {
-    Ptr<MinhtonNodeNs3> node_i = manager_.node_container_.Get(i)
-                                     ->GetApplication(0)
-                                     ->GetObject<MinhtonApplication>()
-                                     ->getMinhtonNode();
-    minhton::NodeInfo node_info_i = node_i->getNodeInfo();
+    auto app_i =
+        manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
+    minhton::NodeInfo node_info_i = app_i->getNodeInfo();
     if (node_info_i.isInitialized()) {
       for (uint64_t k = 0; k < manager_.node_container_.GetN(); k++) {
         minhton::NodeInfo node_info_k = manager_.node_container_.Get(k)
                                             ->GetApplication(0)
                                             ->GetObject<MinhtonApplication>()
-                                            ->getMinhtonNode()
                                             ->getNodeInfo();
         if ((i != k) && node_info_k.isInitialized()) {
           uint64_t current_delay = ++counter * delay;
           Simulator::Schedule(MilliSeconds(current_delay),
-                              &MinhtonManager::Scheduler::executeOneSearchExact, this, node_i,
+                              &MinhtonManager::Scheduler::executeOneSearchExact, this, app_i,
                               node_info_k.getLevel(), node_info_k.getNumber());
         }
       }
@@ -404,26 +389,24 @@ void MinhtonManager::Scheduler::scheduleSearchExactMany(uint64_t delay, uint16_t
       current_delay += delay;
       count++;
 
-      Ptr<MinhtonNodeNs3> node_start = manager_.node_container_.Get(start)
-                                           ->GetApplication(0)
-                                           ->GetObject<MinhtonApplication>()
-                                           ->getMinhtonNode();
+      auto app_start =
+          manager_.node_container_.Get(start)->GetApplication(0)->GetObject<MinhtonApplication>();
       uint16_t node_end_level = std::get<0>(existing_positions[end]);
       uint16_t node_end_number = std::get<1>(existing_positions[end]);
 
       Simulator::Schedule(MilliSeconds(current_delay),
-                          &MinhtonManager::Scheduler::executeOneSearchExact, this, node_start,
+                          &MinhtonManager::Scheduler::executeOneSearchExact, this, app_start,
                           node_end_level, node_end_number);
     }
   }
 }
 
-void MinhtonManager::Scheduler::executeOneSearchExact(Ptr<MinhtonNodeNs3> ns3_src_node,
+void MinhtonManager::Scheduler::executeOneSearchExact(Ptr<MinhtonApplication> src_app,
                                                       uint32_t dest_level, uint32_t dest_number) {
   std::cout << "\texecuteOneSearchExact to " << dest_level << ":" << dest_number << " at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
-  if (ns3_src_node->getNodeInfo().isInitialized()) {
-    ns3_src_node->executeSearchExactTest(dest_level, dest_number);
+  if (src_app->getNodeInfo().isInitialized()) {
+    src_app->executeSearchExactTest(dest_level, dest_number);
   }
 }
 
@@ -438,18 +421,16 @@ void MinhtonManager::Scheduler::executeOneRandomSearchExact() {
     rand_2 = dist(daisi::global_random_engine);
   }
 
-  Ptr<MinhtonNodeNs3> node_1 = manager_.node_container_.Get(this->init_index_deque_.at(rand_1))
-                                   ->GetApplication(0)
-                                   ->GetObject<MinhtonApplication>()
-                                   ->getMinhtonNode();
+  auto app_1 = manager_.node_container_.Get(this->init_index_deque_.at(rand_1))
+                   ->GetApplication(0)
+                   ->GetObject<MinhtonApplication>();
 
-  Ptr<MinhtonNodeNs3> node_2 = manager_.node_container_.Get(this->init_index_deque_.at(rand_2))
-                                   ->GetApplication(0)
-                                   ->GetObject<MinhtonApplication>()
-                                   ->getMinhtonNode();
+  auto app_2 = manager_.node_container_.Get(this->init_index_deque_.at(rand_2))
+                   ->GetApplication(0)
+                   ->GetObject<MinhtonApplication>();
 
-  minhton::NodeInfo node_info_2 = node_2->getNodeInfo();
-  node_1->executeSearchExactTest(node_info_2.getLevel(), node_info_2.getNumber());
+  minhton::NodeInfo node_info_2 = app_2->getNodeInfo();
+  app_1->executeSearchExactTest(node_info_2.getLevel(), node_info_2.getNumber());
 }
 
 void MinhtonManager::Scheduler::executeOneFailByPosition(uint16_t level, uint16_t number) {
@@ -457,14 +438,12 @@ void MinhtonManager::Scheduler::executeOneFailByPosition(uint16_t level, uint16_
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
   for (uint64_t fail_index = 0; fail_index < manager_.node_container_.GetN(); fail_index++) {
-    Ptr<MinhtonNodeNs3> ns3_node = manager_.node_container_.Get(fail_index)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
+    auto app = manager_.node_container_.Get(fail_index)
+                   ->GetApplication(0)
+                   ->GetObject<MinhtonApplication>();
 
-    if (ns3_node->getNodeInfo().getLevel() == level &&
-        ns3_node->getNodeInfo().getNumber() == number) {
-      if (ns3_node->getNodeInfo().isInitialized()) {
+    if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number) {
+      if (app->getNodeInfo().isInitialized()) {
         this->initiateFailureNow(fail_index);
 
         for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
@@ -502,7 +481,6 @@ uint64_t MinhtonManager::Scheduler::getRootIndex() {
       manager_.node_container_.Get(this->latest_root_index_)
           ->GetApplication(0)
           ->GetObject<MinhtonApplication>()
-          ->getMinhtonNode()
           ->getNodeInfo();
   if ((previous_root_node_info.getLevel() == 0) && (previous_root_node_info.getNumber() == 0) &&
       previous_root_node_info.isInitialized()) {
@@ -513,7 +491,6 @@ uint64_t MinhtonManager::Scheduler::getRootIndex() {
     minhton::NodeInfo node_info = manager_.node_container_.Get(i)
                                       ->GetApplication(0)
                                       ->GetObject<MinhtonApplication>()
-                                      ->getMinhtonNode()
                                       ->getNodeInfo();
     if ((node_info.getLevel() == 0) && (node_info.getNumber() == 0) && node_info.isInitialized()) {
       this->latest_root_index_ = i;
@@ -526,11 +503,8 @@ uint64_t MinhtonManager::Scheduler::getRootIndex() {
 
 void MinhtonManager::Scheduler::scheduleValidateLeave(uint64_t delay) {
   for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
-    Ptr<MinhtonNodeNs3> node = manager_.node_container_.Get(i)
-                                   ->GetApplication(0)
-                                   ->GetObject<MinhtonApplication>()
-                                   ->getMinhtonNode();
-    minhton::NodeInfo node_info = node->getNodeInfo();
+    auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
+    const minhton::NodeInfo node_info = app->getNodeInfo();
 
     if (node_info.isInitialized()) {
       Simulator::Schedule(MilliSeconds((2 * i + 1) * delay),
@@ -550,7 +524,6 @@ MinhtonManager::Scheduler::getExistingPositions() {
     minhton::NodeInfo node_info = manager_.node_container_.Get(i)
                                       ->GetApplication(0)
                                       ->GetObject<MinhtonApplication>()
-                                      ->getMinhtonNode()
                                       ->getNodeInfo();
 
     if (node_info.isInitialized()) {
@@ -563,33 +536,31 @@ MinhtonManager::Scheduler::getExistingPositions() {
   return std::make_tuple(indices, positions);
 }
 
-Ptr<MinhtonNodeNs3> MinhtonManager::Scheduler::getNodeAtPosition(uint16_t level, uint16_t number) {
+Ptr<MinhtonApplication> MinhtonManager::Scheduler::getApplicationAtPosition(uint16_t level,
+                                                                            uint16_t number) {
   for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
-    Ptr<MinhtonNodeNs3> node = manager_.node_container_.Get(i)
-                                   ->GetApplication(0)
-                                   ->GetObject<MinhtonApplication>()
-                                   ->getMinhtonNode();
-    minhton::NodeInfo node_info = node->getNodeInfo();
+    auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
+    minhton::NodeInfo node_info = app->getNodeInfo();
 
     if (node_info.isInitialized() && node_info.getLevel() == level &&
         node_info.getNumber() == number) {
-      return node;
+      return app;
     }
   }
   throw std::runtime_error("No node found at given location");
 }
 
 void MinhtonManager::Scheduler::executeFindQuery(minhton::FindQuery query) {
-  Ptr<MinhtonNodeNs3> node = this->getNodeAtPosition(query.getRequestingNode().getLevel(),
-                                                     query.getRequestingNode().getNumber());
-  if (node) {
-    node->executeFindQuery(query);
+  Ptr<MinhtonApplication> app = this->getApplicationAtPosition(
+      query.getRequestingNode().getLevel(), query.getRequestingNode().getNumber());
+  if (app) {
+    app->executeFindQuery(query);
   }
 }
 
 void MinhtonManager::Scheduler::setupRootBehavior() {
-  Ptr<MinhtonNodeNs3> root_node = getNodeAtPosition(0, 0);
-  initiateNodeContent(root_node);
+  Ptr<MinhtonApplication> app = getApplicationAtPosition(0, 0);
+  initiateNodeContent(app);
 }
 
 void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
@@ -607,7 +578,6 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
   manager_.node_container_.Get(0)
       ->GetApplication(0)
       ->GetObject<MinhtonApplication>()
-      ->getMinhtonNode()
       ->getNodeInfo();
 
   // index -> NodeInfo, Neighbors, AdjLeft, AdjRight
@@ -618,11 +588,8 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
 
   // get node info objects without positions
   for (uint64_t i = 0; i < manager_.node_container_.GetN(); i++) {
-    Ptr<MinhtonNodeNs3> node_ns3 = manager_.node_container_.Get(i)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
-    info[i] = {node_ns3->getNodeInfo(), {}, minhton::NodeInfo(), minhton::NodeInfo()};
+    auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
+    info[i] = {app->getNodeInfo(), {}, minhton::NodeInfo(), minhton::NodeInfo()};
   }
 
   // setting positions, left to right
@@ -731,65 +698,62 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
   uint64_t rightmost_index = std::get<0>(index_node[index_node.size() - 1]);
   std::get<2>(info[rightmost_index]) = std::get<1>(index_node[index_node.size() - 2]);
 
-  // give positions to MinhtonNodeNs3
+  // give positions to MINHTON app
   for (uint64_t j = 0; j < manager_.node_container_.GetN(); j++) {
-    Ptr<MinhtonNodeNs3> node_ns3 = manager_.node_container_.Get(j)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
+    auto app = manager_.node_container_.Get(j)->GetApplication(0)->GetObject<MinhtonApplication>();
     auto our_info = info[j];
     if (j > 0) {
-      initiatePeerDiscoverEnvironmentAfterStaticBuild(node_ns3, j);
+      initiatePeerDiscoverEnvironmentAfterStaticBuild(app, j);
     }
-    node_ns3->setStaticBuildNeighbors(std::get<0>(our_info), std::get<1>(our_info),
-                                      std::get<2>(our_info), std::get<3>(our_info));
+    app->setStaticBuildNeighbors(std::get<0>(our_info), std::get<1>(our_info),
+                                 std::get<2>(our_info), std::get<3>(our_info));
   }
 }
 
-void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironment(Ptr<MinhtonNodeNs3> node_ns3,
+void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironment(Ptr<MinhtonApplication> app,
                                                                 uint64_t init_content_delay,
                                                                 uint64_t init_request_delay) {
   if (!attributes_off_) {
     if (init_content_delay == 0) {
-      initiateNodeContent(node_ns3);
+      initiateNodeContent(app);
     } else {
       Simulator::Schedule(MilliSeconds(init_content_delay),
-                          &MinhtonManager::Scheduler::initiateNodeContent, this, node_ns3);
+                          &MinhtonManager::Scheduler::initiateNodeContent, this, app);
     }
   }
 
   if (!requests_off_) {
-    std::string ip = node_ns3->getNodeInfo().getAddress();
+    std::string ip = app->getNodeInfo().getAddress();
     bool is_requesting = std::find(requesting_nodes_ips_.begin(), requesting_nodes_ips_.end(),
                                    ip) != requesting_nodes_ips_.end();
 
     if (is_requesting) {
       if (init_request_delay == 0) {
-        makeRequest(node_ns3);
+        makeRequest(app);
       } else {
         Simulator::Schedule(MilliSeconds(init_request_delay),
-                            &MinhtonManager::Scheduler::makeRequest, this, node_ns3);
+                            &MinhtonManager::Scheduler::makeRequest, this, app);
       }
     }
   }
 }
 
 void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironmentAfterStaticBuild(
-    Ptr<MinhtonNodeNs3> node_ns3, uint64_t index) {
+    Ptr<MinhtonApplication> app, uint64_t index) {
   uint64_t request_delay_diff = 500 * (index + 1);
 
-  initiatePeerDiscoverEnvironment(node_ns3, 1, request_delay_diff);
+  initiatePeerDiscoverEnvironment(app, 1, request_delay_diff);
 }
 
 void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironmentAfterJoin(
-    Ptr<MinhtonNodeNs3> node_ns3) {
+    Ptr<MinhtonApplication> app) {
   auto container =
       helper::toTimeoutLengthsContainer(manager_.parser_.getTable<uint64_t>("timeouts"));
   uint64_t content_delay = container.join_response + container.join_accept_ack_response;
-  initiatePeerDiscoverEnvironment(node_ns3, content_delay, content_delay + 100);
+  initiatePeerDiscoverEnvironment(app, content_delay, content_delay + 100);
 }
 
-void MinhtonManager::Scheduler::initiateNodeContent(Ptr<MinhtonNodeNs3> node_ns3) {
+void MinhtonManager::Scheduler::initiateNodeContent(Ptr<MinhtonApplication> app) {
   std::vector<minhton::Entry> insert_entries;
 
   for (auto &node_attr : node_content_attributes_) {
@@ -806,15 +770,15 @@ void MinhtonManager::Scheduler::initiateNodeContent(Ptr<MinhtonNodeNs3> node_ns3
     if (value_type == minhton::NodeData::ValueType::kValueDynamic) {
       uint64_t update_delay = node_attr.update_delay_distribution(daisi::global_random_engine);
       Simulator::Schedule(MilliSeconds(update_delay),
-                          &MinhtonManager::Scheduler::updateNodeAttribute, this, node_ns3,
+                          &MinhtonManager::Scheduler::updateNodeAttribute, this, app,
                           node_attr.name);
     }
   }
 
-  node_ns3->localTestDataInsert(insert_entries);
+  app->localTestDataInsert(insert_entries);
 }
 
-void MinhtonManager::Scheduler::updateNodeAttribute(Ptr<MinhtonNodeNs3> node_ns3,
+void MinhtonManager::Scheduler::updateNodeAttribute(Ptr<MinhtonApplication> app,
                                                     minhton::NodeData::Key key) {
   auto it = std::find_if(node_content_attributes_.begin(), node_content_attributes_.end(),
                          [&](const NodeAttribute &attr) { return attr.name == key; });
@@ -825,28 +789,25 @@ void MinhtonManager::Scheduler::updateNodeAttribute(Ptr<MinhtonNodeNs3> node_ns3
   minhton::NodeData::Value update_value = it->getRandomContent();
 
   try {
-    node_ns3->localTestDataUpdate({{key, update_value, it->value_type}});
+    app->localTestDataUpdate({{key, update_value, it->value_type}});
     uint64_t next_update_delay = it->update_delay_distribution(daisi::global_random_engine);
     Simulator::Schedule(MilliSeconds(next_update_delay),
-                        &MinhtonManager::Scheduler::updateNodeAttribute, this, node_ns3, it->name);
+                        &MinhtonManager::Scheduler::updateNodeAttribute, this, app, it->name);
   } catch (const minhton::AlgorithmException &e) {
   };
 }
 
 void MinhtonManager::Scheduler::initiateRequestsOnAllNodes() {
   for (uint64_t i = 0; i < manager_.node_container_.GetN(); i++) {
-    Ptr<MinhtonNodeNs3> node_ns3 = manager_.node_container_.Get(i)
-                                       ->GetApplication(0)
-                                       ->GetObject<MinhtonApplication>()
-                                       ->getMinhtonNode();
+    auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
 
     uint64_t request_delay = requests_.request_delay_distribution(daisi::global_random_engine);
     Simulator::Schedule(MilliSeconds(request_delay), &MinhtonManager::Scheduler::makeRequest, this,
-                        node_ns3);
+                        app);
   }
 }
 
-void MinhtonManager::Scheduler::makeRequest(Ptr<MinhtonNodeNs3> node_ns3) {
+void MinhtonManager::Scheduler::makeRequest(Ptr<MinhtonApplication> app) {
   uint8_t depth = requests_.query_depth_distribution(daisi::global_random_engine);
   auto query = createFindQuery(depth);
 
@@ -855,7 +816,7 @@ void MinhtonManager::Scheduler::makeRequest(Ptr<MinhtonNodeNs3> node_ns3) {
     std::cout << "REQUEST-COUNTER " << requests_counter_ << " ";
   }
 
-  node_ns3->executeFindQuery(query);
+  app->executeFindQuery(query);
 
   if (requests_limit_on_) {
     if (requests_limit_ <= requests_counter_) {
@@ -867,7 +828,7 @@ void MinhtonManager::Scheduler::makeRequest(Ptr<MinhtonNodeNs3> node_ns3) {
 
   uint64_t next_request_delay = requests_.request_delay_distribution(daisi::global_random_engine);
   Simulator::Schedule(MilliSeconds(next_request_delay), &MinhtonManager::Scheduler::makeRequest,
-                      this, node_ns3);
+                      this, app);
 }
 
 minhton::FindQuery MinhtonManager::Scheduler::createFindQuery(uint8_t depth) {
