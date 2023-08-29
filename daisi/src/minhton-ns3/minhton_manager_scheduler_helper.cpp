@@ -971,7 +971,7 @@ void MinhtonManager::Scheduler::activateRequestCountdown(uint16_t limit) {
   requests_limit_ = limit;
   requests_limit_on_ = true;
 
-  // Ref #102
+  // TODO Ref #95
   throw std::runtime_error("Logging currently not implemented for request-countdown");
   // LOG_EVENT(minhton::EventType::kRequestCountdownStart, 0);
 }

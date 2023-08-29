@@ -38,7 +38,7 @@ struct CalcVars {
   float real_max_velo = 0;
 };
 
-// Ref #61
+/// Epsilon for floating point precision errors
 static constexpr double kEpsilon = 0.01;
 
 static void verifyCalculation(ns3::Vector2D start, ns3::Vector2D stop, double max_velo,
