@@ -40,29 +40,27 @@ void NatterManager::setup() {
   Manager<NatterApplication>::setup();
 
   // Set natter mode
-  for (auto node = node_container_.Begin(); node != node_container_.End(); node++) {
-    (*node)->GetApplication(0)->GetObject<NatterApplication>()->setMode(mode_);
+  for (size_t i = 0; i < node_container_.GetN(); i++) {
+    getApplication(i)->setMode(mode_);
   }
 }
 
-std::pair<ns3::Ptr<NatterNodeNs3>, ns3::Ptr<NatterApplication>> NatterManager::getNodes(
-    uint32_t id) const {
-  auto app = node_container_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
-  return {app->getNatterNode(), app};
+ns3::Ptr<NatterApplication> NatterManager::getApplication(uint32_t id) const {
+  return node_container_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
 }
 
 NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
   uint64_t fanout = parser_.getFanout();
   const uint32_t own_level = natter_ns3::calculateLevel(index, fanout);
   const uint32_t own_number = natter_ns3::calculateNumber(index, fanout, own_level);
-  auto [node, app] = getNodes(index);
-  return {fanout, node->getUUID(), app->getIP(), app->getPort(), own_level, own_number, node, app,
-          index};
+  const ns3::Ptr<NatterApplication> app = getApplication(index);
+  const natter::NetworkInfoIPv4 net_info = app->getNetworkInfo();
+  return {fanout, app->getUUID(), net_info.ip, net_info.port, own_level, own_number, app, index};
 }
 
 void NatterManager::addPeer(uint32_t other_id, const NodeInfo &info) {
-  getNatterNodeByID(other_id)->addPeer(TOPIC, info.own_uuid, info.ip, info.port, info.own_level,
-                                       info.own_number, info.fanout);
+  getApplication(other_id)->addPeer(TOPIC, info.own_uuid, info.ip, info.port, info.own_level,
+                                    info.own_number, info.fanout);
 }
 
 void NatterManager::connectParent(const NodeInfo &info) {
@@ -148,11 +146,12 @@ void NatterManager::connectRoutingTableNeighborChildren(const NodeInfo &info,
       const uint32_t child_level = natter_ns3::calculateLevel(child, info.fanout);
       const uint32_t child_number = natter_ns3::calculateNumber(child, info.fanout, child_level);
 
-      auto [node_child, app_child] = getNodes(child);
-      std::string child_ip = app_child->getIP();
-      uint16_t child_port = app_child->getPort();
-      getNatterNodeByID(neighbor)->addPeer(TOPIC, node_child->getUUID(), child_ip, child_port,
-                                           child_level, child_number, info.fanout);
+      const ns3::Ptr<NatterApplication> app_child = getApplication(child);
+      const natter::NetworkInfoIPv4 child_net_info = app_child->getNetworkInfo();
+
+      getApplication(neighbor)->addPeer(TOPIC, app_child->getUUID(), child_net_info.ip,
+                                        child_net_info.port, child_level, child_number,
+                                        info.fanout);
     }
   }
 }
@@ -164,7 +163,7 @@ void NatterManager::joinMinhton() {
   for (uint32_t i = 0; i < getNumberOfNodes(); i++) {
     NodeInfo info = getNodeInfo(i);
 
-    info.node->subscribeTopic(TOPIC, info.own_level, info.own_number, info.fanout);
+    info.app->subscribeTopic(TOPIC, info.own_level, info.own_number, info.fanout);
 
     // Log all peers to database
     info.app->setLevelNumber({info.own_level, info.own_number});
@@ -185,22 +184,13 @@ void NatterManager::joinMinhton() {
   }
 }
 
-ns3::Ptr<NatterNodeNs3> NatterManager::getNatterNodeByID(uint32_t id) const {
-  auto [node, app] = getNodes(id);
-  return node;
-}
-
 void NatterManager::publish(uint32_t message_size, uint32_t publishing_node) {
   if (publishing_node >= getNumberOfNodes())
     throw std::runtime_error("publishing node out of bounds");
 
   std::cout << "PUBLISH AT " << Simulator::Now().GetMicroSeconds() << " FROM " << publishing_node
             << std::endl;
-  this->node_container_.Get(publishing_node)
-      ->GetApplication(0)
-      ->GetObject<NatterApplication>()
-      ->getNatterNode()
-      ->publish(TOPIC, std::string(message_size, 'a'));
+  getApplication(publishing_node)->publish(TOPIC, std::string(message_size, 'a'));
 }
 
 void NatterManager::publishRandom(uint32_t message_size) {

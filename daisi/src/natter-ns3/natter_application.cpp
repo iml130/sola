@@ -16,7 +16,9 @@
 
 #include "natter_application.h"
 
+#include "logging/logger_manager.h"
 #include "solanet/uuid_generator.h"
+#include "utils/daisi_check.h"
 #include "utils/sola_utils.h"
 
 using namespace ns3;
@@ -29,41 +31,82 @@ TypeId NatterApplication::GetTypeId() {
   return tid;
 }
 
-Ptr<NatterNodeNs3> NatterApplication::getNatterNode() { return natter_node_; }
-
-void NatterApplication::DoDispose() {
-  StopApplication();
-  Application::DoDispose();
-}
-
 void NatterApplication::StartApplication() {
-  logger_ = daisi::global_logger_manager->createNatterLogger();
+  DAISI_CHECK(mode_ == NatterMode::kMinhcast, "Only MINHCAST supported at the moment!");
+  DAISI_CHECK(!natter_minhcast_, "natter already initialized");
 
-  natter_node_ = Create<NatterNodeNs3>(logger_, mode_);
+  logger_ = daisi::global_logger_manager->createNatterLogger();
+  std::vector<natter::logging::LoggerPtr> logger_list{logger_};
+
+  natter_minhcast_ = std::make_unique<natter::minhcast::NatterMinhcast>(
+      [&](const natter::Message &) { /*nothing required here */ },
+      [](const std::string & /*unused*/) {}, logger_list);
 }
 
-void NatterApplication::StopApplication() {}
-
-void NatterApplication::setMode(NatterMode mode) { mode_ = mode; }
+void NatterApplication::setMode(NatterMode mode) {
+  DAISI_CHECK(mode == NatterMode::kMinhcast, "Only MINHCAST supported at the moment!");
+  mode_ = mode;
+}
 
 void NatterApplication::setLevelNumber(std::pair<uint32_t, uint32_t> level_number) {
+  DAISI_CHECK(logger_, "Logger not initialized");
+
   std::swap(level_number_, level_number);
   logSelfToDB(level_number_);
   logger_->logNatterEvent(1, solanet::generateUUID());
 }
 
-uint16_t NatterApplication::getPort() const {
-  if (!natter_node_) throw std::runtime_error("natter not initialized");
-  return natter_node_->getNetworkInfo().port;
-}
-
-std::string NatterApplication::getIP() const {
-  if (!natter_node_) throw std::runtime_error("natter not initialized");
-  return natter_node_->getNetworkInfo().ip;
-}
-
 void NatterApplication::logSelfToDB(std::pair<uint32_t, uint32_t> level_number) {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  DAISI_CHECK(logger_, "Logger not initialized");
+
   const auto [level, number] = level_number;
-  logger_->logNewNetworkPeer(natter_node_->getUUID(), getIP(), getPort(), level, number);
+  const natter::NetworkInfoIPv4 net_info = natter_minhcast_->getNetworkInfo();
+
+  logger_->logNewNetworkPeer(natter_minhcast_->getUUID(), net_info.ip, net_info.port, level,
+                             number);
+}
+
+void NatterApplication::addPeer(const std::string &topic, solanet::UUID uuid, const std::string &ip,
+                                uint16_t port, uint32_t level, uint32_t number, uint32_t fanout) {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  DAISI_CHECK(logger_, "Logger not initialized");
+
+  natter_minhcast_->addPeer(topic, {{level, number, fanout}, {ip, port}, uuid});
+  logger_->logNs3PeerConnection(Simulator::Now().GetMicroSeconds(), true, getUUID(), uuid);
+}
+
+void NatterApplication::removePeer(const std::string & /*topic*/, const std::string & /*uuid*/) {
+  throw std::runtime_error("not implemented yet");
+}
+
+solanet::UUID NatterApplication::getUUID() const {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  return natter_minhcast_->getUUID();
+}
+
+void NatterApplication::publish(const std::string &topic, const std::string &msg) {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  DAISI_CHECK(logger_, "Logger not initialized");
+
+  solanet::UUID res = natter_minhcast_->publish(topic, msg);
+
+  logger_->logNatterEvent(2, res);
+}
+
+void NatterApplication::subscribeTopic(const std::string &topic, uint32_t own_level,
+                                       uint32_t own_number, uint32_t own_fanout) {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  natter_minhcast_->subscribeTopic(topic, {{own_level, own_number, own_fanout}});
+}
+
+void NatterApplication::unsubscribeTopic(const std::string &topic) {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  natter_minhcast_->unsubscribeTopic(topic);
+}
+
+natter::NetworkInfoIPv4 NatterApplication::getNetworkInfo() const {
+  DAISI_CHECK(natter_minhcast_, "natter not initialized");
+  return natter_minhcast_->getNetworkInfo();
 }
 }  // namespace daisi::natter_ns3
