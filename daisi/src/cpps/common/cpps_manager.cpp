@@ -380,9 +380,10 @@ void CppsManager::setupNetworkWifi() {
     for (uint32_t j = 1; j < ip_container_[ip_container_.size() - 1].GetN(); j++) {
       auto static_routing = ipv4_routing_helper.GetStaticRouting(
           ip_container_[ip_container_.size() - 1].Get(j).first);
+
+      // Default route/gateways
       auto current_router_ip = ip_container_[ip_container_.size() - 1].GetAddress(0);
       static_routing->AddNetworkRouteTo(Ipv4Address("0.0.0.0"), "0.0.0.0", current_router_ip, 1);
-      interfaces_.Add(ip_container_[ip_container_.size() - 1].Get(j));
     }
 
     // set up ARP caches for AMR and core router
