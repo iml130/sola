@@ -46,7 +46,10 @@ void MinhtonManager::initNode(uint32_t id, minhton::ConfigNode config) {
 }
 
 void MinhtonManager::setupNodeConfigurations() {
-  std::string root_addr_string = getIpv4AddressString(this->interfaces_.GetAddress(0));
+  constexpr static uint32_t kRootIndex = 0;
+  std::vector<ns3::Ipv4Address> addrs = getAddressesForNode(node_container_, kRootIndex);
+  ns3::Ipv4Address addr = getNonLocalAddress(addrs);
+  std::string root_addr_string = getIpv4AddressString(addr);
 
   auto algorithm_types_container =
       helper::toAlgorithmContainer(parser_.getTable<std::string>("algorithms"));

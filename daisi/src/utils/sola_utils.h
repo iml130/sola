@@ -49,5 +49,9 @@ std::string generateDBName(const std::string &app_name, const std::string &ident
 std::vector<ns3::Ipv4Address> getAddressesForNode(const ns3::NodeContainer &container,
                                                   uint32_t node_container_idx);
 
+/// Get the first non-local IP address from the address vector.
+/// The vector must contain at least one non-local address.
+ns3::Ipv4Address getNonLocalAddress(std::vector<ns3::Ipv4Address> addresses);
+
 }  // namespace daisi
 #endif
