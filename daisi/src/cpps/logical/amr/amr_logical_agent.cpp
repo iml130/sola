@@ -123,6 +123,7 @@ void AmrLogicalAgent::processMessageAmrDescription(const AmrDescription &descrip
   if (!description_set_) {
     description_ = description;
     description_set_ = true;
+    logAmrInfos();
 
     setServices();
   } else {
@@ -191,8 +192,6 @@ void AmrLogicalAgent::newConnectionCreated(ns3::Ptr<ns3::Socket> socket, const n
   physical_socket_->SetRecvCallback(MakeCallback(&AmrLogicalAgent::readFromPhysicalSocket, this));
 
   physical_address_ = addr;
-
-  logAmrInfos();
 }
 
 void AmrLogicalAgent::logAmrInfos() {
