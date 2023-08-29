@@ -22,9 +22,6 @@
 
 using namespace ns3;
 
-namespace minhton {
-extern std::shared_ptr<minhton::LoggerInterface> logger;
-}
 namespace daisi::minhton_ns3 {
 
 TypeId MinhtonApplication::GetTypeId() {
