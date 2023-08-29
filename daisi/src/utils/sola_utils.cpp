@@ -178,4 +178,13 @@ std::vector<ns3::Ipv4Address> getAddressesForNode(const ns3::NodeContainer &cont
   return addresses;
 }
 
+ns3::Ipv4Address getNonLocalAddress(std::vector<ns3::Ipv4Address> addresses) {
+  DAISI_CHECK(!addresses.empty(), "No addresses given!");
+
+  auto it = std::remove(addresses.begin(), addresses.end(), ns3::Ipv4Address::GetLoopback());
+  DAISI_CHECK(std::distance(addresses.begin(), it) >= 1, "No valid non-loopback address found");
+
+  return addresses[0];
+}
+
 }  // namespace daisi
