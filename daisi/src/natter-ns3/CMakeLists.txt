@@ -43,10 +43,11 @@ target_sources(daisi_natter_application
 target_link_libraries(daisi_natter_application
         PUBLIC
         natter_interface
-        daisi_logger_manager
         ns3::libcore
         daisi_natter_logger_ns3
+        natter_minhcast_sim
         PRIVATE
+        daisi_logger_manager
         daisi_utils
         natter_logging # Private natter target
         solanet_uuid_generator_sim
@@ -66,21 +67,6 @@ target_link_libraries(daisi_natter_logger_ns3
             ns3::libcore
 )
 
-add_library(daisi_natter_node_ns3 STATIC)
-target_sources(daisi_natter_node_ns3
-        PRIVATE
-        natter_node_ns3.cpp
-        natter_node_ns3.h
-        )
-target_link_libraries(daisi_natter_node_ns3
-        PUBLIC
-            natter_minhcast_sim
-            ns3::libcore
-            daisi_natter_logger_ns3
-            solanet_uuid
-)
-
-
 add_library(daisi_natter_manager STATIC)
 target_sources(daisi_natter_manager
         PRIVATE
@@ -91,7 +77,6 @@ target_link_libraries(daisi_natter_manager
         PUBLIC
             daisi_manager
             daisi_natter_application
-            daisi_natter_node_ns3
             daisi_natter_static_network_calculation
         PRIVATE
             daisi_random_engine

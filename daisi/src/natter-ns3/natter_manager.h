@@ -22,7 +22,6 @@
 #include "manager/manager.h"
 #include "natter_application.h"
 #include "natter_logger_ns3.h"
-#include "natter_node_ns3.h"
 
 namespace daisi::natter_ns3 {
 
@@ -39,7 +38,6 @@ private:
     const uint16_t port;
     const uint32_t own_level;
     const uint32_t own_number;
-    const ns3::Ptr<NatterNodeNs3> node;
     const ns3::Ptr<NatterApplication> app;
     const uint32_t container_index;
   };
@@ -66,8 +64,7 @@ private:
                                            const std::set<uint32_t> &neighbors);
 
   void joinMinhton();
-  std::pair<ns3::Ptr<NatterNodeNs3>, ns3::Ptr<NatterApplication>> getNodes(uint32_t id) const;
-  ns3::Ptr<NatterNodeNs3> getNatterNodeByID(uint32_t id) const;
+  ns3::Ptr<NatterApplication> getApplication(uint32_t id) const;
   void removeAllLinks(uint32_t id);
 
   NatterMode mode_ = NatterMode::kNone;
