@@ -20,7 +20,6 @@
 
 #include "minhton_application.h"
 #include "minhton_manager_scheduler.h"
-#include "minhton_node_ns3.h"
 #include "minhton_scenariofile_helper.h"
 
 using namespace minhton;
