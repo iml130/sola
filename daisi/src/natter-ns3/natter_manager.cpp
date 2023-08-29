@@ -59,8 +59,12 @@ NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
 }
 
 void NatterManager::addPeer(uint32_t other_id, const NodeInfo &info) {
-  getApplication(other_id)->addPeer(TOPIC, info.own_uuid, info.ip, info.port, info.own_level,
-                                    info.own_number, info.fanout);
+  natter::minhcast::NatterMinhcast::NodeInfo natter_info;
+  natter_info.position = {info.own_level, info.own_number, info.fanout};
+  natter_info.network_info = {info.ip, info.port};
+  natter_info.uuid = info.own_uuid;
+
+  getApplication(other_id)->addPeer(TOPIC, natter_info);
 }
 
 void NatterManager::connectParent(const NodeInfo &info) {
@@ -149,9 +153,12 @@ void NatterManager::connectRoutingTableNeighborChildren(const NodeInfo &info,
       const ns3::Ptr<NatterApplication> app_child = getApplication(child);
       const natter::NetworkInfoIPv4 child_net_info = app_child->getNetworkInfo();
 
-      getApplication(neighbor)->addPeer(TOPIC, app_child->getUUID(), child_net_info.ip,
-                                        child_net_info.port, child_level, child_number,
-                                        info.fanout);
+      natter::minhcast::NatterMinhcast::NodeInfo natter_info;
+      natter_info.position = {child_level, child_number, info.fanout};
+      natter_info.network_info = {child_net_info.ip, child_net_info.port};
+      natter_info.uuid = app_child->getUUID();
+
+      getApplication(neighbor)->addPeer(TOPIC, natter_info);
     }
   }
 }
@@ -163,7 +170,12 @@ void NatterManager::joinMinhton() {
   for (uint32_t i = 0; i < getNumberOfNodes(); i++) {
     NodeInfo info = getNodeInfo(i);
 
-    info.app->subscribeTopic(TOPIC, info.own_level, info.own_number, info.fanout);
+    // Only level, number and fanout of own peer is required.
+    // Other information of the NodeInfo struct only required for adding other peers.
+    natter::minhcast::NatterMinhcast::NodeInfo natter_info;
+    natter_info.position = {info.own_level, info.own_number, info.fanout};
+
+    info.app->subscribeTopic(TOPIC, natter_info);
 
     // Log all peers to database
     info.app->setLevelNumber({info.own_level, info.own_number});
