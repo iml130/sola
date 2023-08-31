@@ -58,6 +58,7 @@ void serializeType(std::optional<T> &t, const std::string &key, YAML::Node node)
     if constexpr (std::is_fundamental<T>::value || std::is_same<T, std::string>::value) {
       t = node[key].as<T>();
     } else {
+      t.emplace();
       t->parse(node[key]);
     }
   } catch (YAML::TypedBadConversion<T> &e) {
