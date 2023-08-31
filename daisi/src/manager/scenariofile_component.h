@@ -65,6 +65,26 @@ void serializeType(std::optional<T> &t, const std::string &key, YAML::Node node)
   }
 }
 
+/// @brief Deserialize data from node into variant with type T, if \p type matches
+/// T.typeName()
+/// @tparam T The type to parse if \p type matches \p req_type
+/// @param node the YAML node to read data from
+/// @param var variant to which the deserialized object is put
+/// @param type the actual type
+/// @return true if data was deserialzied
+template <typename T, typename... U>
+bool deserializeIf(YAML::Node node, std::variant<U...> &var, const std::string &type) {
+  if (type == T::typeName()) {
+    var.template emplace<T>();
+
+    // Do parsing of the actual object
+    std::get<T>(var).parse(node);
+
+    return true;
+  }
+  return false;
+}
+
 }  // namespace daisi
 
 #endif
