@@ -14,34 +14,40 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
-#define DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
+#ifndef DAISI_MINHTON_NS3_MINHTON_PEER_DISCOVERY_GENERAL_H_
+#define DAISI_MINHTON_NS3_MINHTON_PEER_DISCOVERY_GENERAL_H_
 
-#include "manager/manager.h"
-#include "minhton_application.h"
-#include "minhton_logger_ns3.h"
-#include "minhton_scenariofile.h"
+#include <cstdint>
+#include <string>
+
+#include "manager/scenariofile_component.h"
 
 namespace daisi::minhton_ns3 {
 
-class MinhtonManager : public Manager<MinhtonApplication> {
-public:
-  class Scheduler;
+struct Gaussian {
+  static std::string typeName() { return "gaussian"; }
 
-  explicit MinhtonManager(const std::string &scenariofile_path);
-  void setup() override;
+  uint32_t mean;
+  uint32_t sigma;
 
-private:
-  void initNode(uint32_t id, minhton::ConfigNode config);
-  void setupNodeConfigurations();
-  uint64_t getNumberOfNodes() override;
-  void scheduleEvents() override;
-  std::string getDatabaseFilename() override;
+  void parse(YAML::Node node);
+};
 
-  std::shared_ptr<Scheduler> scheduler_;
-  MinhtonScenariofile scenariofile_;
+struct Uniform {
+  static std::string typeName() { return "uniform"; }
 
-  friend class MinhtonManager::Scheduler;
+  uint32_t min;
+  uint32_t max;
+
+  void parse(YAML::Node node);
+};
+
+struct ConstantTime {
+  static std::string typeName() { return "constant"; }
+
+  uint64_t time;
+
+  void parse(YAML::Node node);
 };
 
 }  // namespace daisi::minhton_ns3

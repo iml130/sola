@@ -49,20 +49,66 @@ target_link_libraries(daisi_minhton_manager
             daisi_manager_scenariofileparser
             daisi_minhton_logger_ns3
             minhton_algorithms_sim
+            daisi_minhton_scenariofile
         PRIVATE
             daisi_utils
             minhton_exception_algorithm
             daisi_random_engine
-            daisi_minhton_manager_scenariofile_helper
 )
 target_include_directories(daisi_minhton_manager
         PUBLIC
             ${PROJECT_SOURCE_DIR}/src
 )
 
-add_library(daisi_minhton_manager_scenariofile_helper STATIC minhton_scenariofile_helper.cpp)
-target_link_libraries(daisi_minhton_manager_scenariofile_helper
-    PUBLIC
-    minhton_utils_algorithm_types_container
-    minhton_utils_timeout_lengths_container
+add_library(daisi_minhton_scenariofile STATIC)
+target_sources(daisi_minhton_scenariofile
+        PRIVATE
+            minhton_scenariofile.cpp
+            minhton_scenariofile.h
+        )
+target_link_libraries(daisi_minhton_scenariofile
+        PUBLIC
+            daisi_manager_general_scenariofile
+            daisi_minhton_scenario_steps
+            minhton_utils_timeout_lengths_container
+            minhton_utils_algorithm_types_container
+            daisi_minhton_peer_discovery
+        PRIVATE
+            daisi_utils
+)
+target_include_directories(daisi_minhton_scenariofile
+        PUBLIC
+            ${PROJECT_SOURCE_DIR}/src
+)
+
+add_library(daisi_minhton_scenario_steps INTERFACE)
+target_sources(daisi_minhton_scenario_steps INTERFACE scenario_steps.h)
+target_link_libraries(daisi_minhton_scenario_steps
+        INTERFACE
+            daisi_manager_scenariofile_component
+)
+target_include_directories(daisi_minhton_scenario_steps
+        INTERFACE
+            ${PROJECT_SOURCE_DIR}/src
+)
+
+add_library(daisi_minhton_peer_discovery STATIC)
+target_sources(daisi_minhton_peer_discovery
+    PRIVATE
+        peer_discovery_general.h
+        peer_discovery_general.cpp
+        peer_discovery_attributes.h
+        peer_discovery_attributes.cpp
+        peer_discovery_requests.h
+        peer_discovery_requests.cpp
+)
+target_link_libraries(daisi_minhton_peer_discovery
+        PUBLIC
+            daisi_manager_scenariofile_component
+        PRIVATE
+            daisi_utils
+)
+target_include_directories(daisi_minhton_peer_discovery
+        INTERFACE
+            ${PROJECT_SOURCE_DIR}/src
 )

@@ -52,18 +52,18 @@ Update behavior describes how often the value of an attribute will be updated.
 ```yaml
 attributes:
     a01:
-        presenceBehavior:
+        presence_behavior:
             ...
-        contentBehavior:
+        content_behavior:
             ...
-        updateBehavior:
+        update_behavior:
             ...
     a02:
-        presenceBehavior:
+        presence_behavior:
             ...
-        contentBehavior:
+        content_behavior:
             ...
-        updateBehavior:
+        update_behavior:
             ...
 ```
 
@@ -72,7 +72,7 @@ attributes:
 Presence Behavior is simply described by the percentage of nodes who posses this attribute. The percentage has to be given as a float (100% -> 1.0).
 
 ```yaml
-presenceBehavior:
+presence_behavior:
     percentage: 0.8
 ```
 
@@ -84,7 +84,7 @@ Choice and constant can be either integers, floats, booleans or strings.
 Uniform:
 
 ```yaml
-contentBehavior:
+content_behavior:
     type: uniform
     min: 0
     max: 10
@@ -93,7 +93,7 @@ contentBehavior:
 Gaussian:
 
 ```yaml
-contentBehavior:
+content_behavior:
     type: gaussian
     mean: 10
     variance: 2
@@ -102,7 +102,7 @@ contentBehavior:
 Constant:
 
 ```yaml
-contentBehavior:
+content_behavior:
     type: constant
     value: 42
 ```
@@ -110,7 +110,7 @@ contentBehavior:
 Choice:
 
 ```yaml
-contentBehavior:
+content_behavior:
     type: choice
     values: 
         - value1:
@@ -131,7 +131,7 @@ The time period between updates is given in milliseconds, either by a constant o
 Constant:
 
 ```yaml
-updateBehavior:
+update_behavior:
     type: constant
     value: 20000 # ms
 ```
@@ -139,7 +139,7 @@ updateBehavior:
 Gaussian:
 
 ```yaml
-updateBehavior:
+update_behavior:
     type: gaussian
     mean: 20000 # ms
     variance: 5000 # ms
@@ -148,7 +148,7 @@ updateBehavior:
 Uniform:
 
 ```yaml
-updateBehavior:
+update_behavior:
     type: uniform
     min: 20000 # ms
     max: 40000 # ms
@@ -157,6 +157,6 @@ updateBehavior:
 Static:
 
 ```yaml
-updateBehavior:
+update_behavior:
     type: static
 ```

@@ -1,14 +1,15 @@
-# required
-title: MINHTON_default
-name: Ein weiterer Test
-stoptime: 10000000
+title: MINHTON default scenario
 version: 0.1
-physicalLayer: ETH
-fanout: 2
+stop_time: 10000000
+random_seed: 1
+default_delay: 5000
 
-defaultDelay: 5000
-logLevel: info
-randomSeed: 1 # 0 = random
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+randomSeed: 1
+stoptime: 5000000
+
+fanout: 2
 
 timeouts:
     bootstrap_response: 500
@@ -26,16 +27,12 @@ algorithms:
     response: general
     bootstrap: general
 
-peerDiscoveryEnvironment:
-    attributes: off
-    requests: off
-
-scenarioSequence:
-    - join-many:
-        number: 20
-        mode: random
-    - search-many:
-        number: 20
-    - leave-many:
-        number: 20
-        mode: random
+scenario_sequence:
+    - type: join-many
+      number: 20
+      mode: random
+    - type: search-many
+      number: 20
+    - type: leave-many
+      number: 20
+      mode: random

@@ -19,7 +19,6 @@
 #include "minhton/core/constants.h"
 #include "minhton/exception/algorithm_exception.h"
 #include "minhton_manager_scheduler.h"
-#include "minhton_scenariofile_helper.h"
 #include "ns3/double.h"
 #include "ns3/simulator.h"
 #include "utils/random_engine.h"
@@ -562,7 +561,7 @@ void MinhtonManager::Scheduler::setupRootBehavior() {
 }
 
 void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
-  uint16_t fanout = manager_.parser_.getFanout();
+  uint16_t fanout = manager_.scenariofile_.fanout;
   uint32_t max_nodes = number + 1;  // with root
 
   auto calc_index = [&](const uint32_t &l, const uint32_t &n) {
@@ -745,9 +744,8 @@ void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironmentAfterStaticBuild(
 
 void MinhtonManager::Scheduler::initiatePeerDiscoverEnvironmentAfterJoin(
     Ptr<MinhtonApplication> app) {
-  auto container =
-      helper::toTimeoutLengthsContainer(manager_.parser_.getTable<uint64_t>("timeouts"));
-  uint64_t content_delay = container.join_response + container.join_accept_ack_response;
+  const Timeouts &timeouts = manager_.scenariofile_.timeouts;
+  uint64_t content_delay = timeouts.join_response + timeouts.join_accept_ack_response;
   initiatePeerDiscoverEnvironment(app, content_delay, content_delay + 100);
 }
 
