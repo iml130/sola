@@ -27,21 +27,19 @@ namespace daisi::natter_ns3 {
 #define TOPIC "TOPIC1"
 
 NatterManager::NatterManager(const std::string &scenariofile_path)
-    : Manager<NatterApplication>(scenariofile_path),
-      mode_(natterModeFromString(parser_.getParsedContent()->getRequired<std::string>("mode"))) {
+    : Manager<NatterApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
   Manager::initLogger();
 }
 
-uint64_t NatterManager::getNumberOfNodes() {
-  return parser_.getParsedContent()->getRequired<uint64_t>("numberNodes");
-}
+uint64_t NatterManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
 
 void NatterManager::setup() {
   Manager<NatterApplication>::setup();
 
   // Set natter mode
   for (size_t i = 0; i < node_container_.GetN(); i++) {
-    getApplication(i)->setMode(mode_);
+    const NatterMode mode = natterModeFromString(scenariofile_.mode);
+    getApplication(i)->setMode(mode);
   }
 }
 
@@ -50,7 +48,7 @@ ns3::Ptr<NatterApplication> NatterManager::getApplication(uint32_t id) const {
 }
 
 NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
-  uint64_t fanout = parser_.getFanout();
+  uint64_t fanout = scenariofile_.fanout;
   const uint32_t own_level = natter_ns3::calculateLevel(index, fanout);
   const uint32_t own_number = natter_ns3::calculateNumber(index, fanout, own_level);
   const ns3::Ptr<NatterApplication> app = getApplication(index);
@@ -164,7 +162,7 @@ void NatterManager::connectRoutingTableNeighborChildren(const NodeInfo &info,
 }
 
 void NatterManager::joinMinhton() {
-  auto lin_proj = natter_ns3::createLinearProjection(getNumberOfNodes(), parser_.getFanout(), 0);
+  auto lin_proj = natter_ns3::createLinearProjection(getNumberOfNodes(), scenariofile_.fanout, 0);
 
   // Initialize nodes
   for (uint32_t i = 0; i < getNumberOfNodes(); i++) {
@@ -189,7 +187,7 @@ void NatterManager::joinMinhton() {
     connectParent(info);
     const std::set<uint32_t> children = connectChildren(info);
     const std::set<uint32_t> neighbors = connectNeighbors(info);
-    if (mode_ == NatterMode::kMinhcast) {
+    if (natterModeFromString(scenariofile_.mode) == NatterMode::kMinhcast) {
       connectAdjacents(info, lin_proj);
       connectRoutingTableNeighborChildren(info, children, neighbors);
     }
@@ -213,62 +211,45 @@ void NatterManager::publishRandom(uint32_t message_size) {
 
 void NatterManager::joinTopic(int /*number*/) { throw std::runtime_error("Not implemented yet"); }
 
+void NatterManager::scheduleEvent(const Join &step, uint64_t &current_time) {
+  const uint64_t join_delay = scenariofile_.default_delay + step.delay.value_or(0);
+  current_time += join_delay;
+
+  if (step.mode == "minhton") {
+    if (scenariofile_.fanout < 2) throw std::runtime_error("fanout must be >=2 for minhton");
+    Simulator::Schedule(MilliSeconds(current_time), &NatterManager::joinMinhton, this);
+  } else {
+    throw std::invalid_argument("Invalid mode type for join");
+  }
+}
+
+void NatterManager::scheduleEvent(const Publish &step, uint64_t &current_time) {
+  const uint64_t publish_delay = scenariofile_.default_delay + step.delay.value_or(0);
+
+  for (uint32_t i = 0; i < step.number; i++) {
+    current_time += publish_delay;
+    if (step.mode == "random")
+      Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publishRandom, this,
+                          step.message_size);
+    else if (step.mode == "sequential")
+      Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publish, this,
+                          step.message_size, i % getNumberOfNodes());
+    else
+      throw std::runtime_error("Invalid publish mode");
+  }
+}
+
 void NatterManager::scheduleEvents() {
-  uint64_t default_delay = parser_.getDefaultDelay();
   uint64_t current_time = 0;
 
-  auto scenario_sequence = parser_.getScenarioSequence();
-
-  for (const std::shared_ptr<ScenariofileParser::Table> &command : scenario_sequence) {
-    auto map = command->content;
-
-    auto it_join = map.find("join");
-    if (it_join != map.end()) {
-      std::optional<uint64_t> optional_delay = INNER_TABLE(it_join)->getOptional<uint64_t>("delay");
-      uint64_t join_delay = optional_delay ? default_delay + *optional_delay : default_delay;
-
-      auto mode = INNER_TABLE(it_join)->getRequired<std::string>("mode");
-      STRING_TO_LOWER(mode);
-
-      current_time += join_delay;
-
-      if (mode == "minhton") {
-        if (parser_.getFanout() < 2) throw std::runtime_error("fanout must be >=2 for minhton");
-        Simulator::Schedule(MilliSeconds(current_time), &NatterManager::joinMinhton, this);
-      } else {
-        throw std::invalid_argument("Invalid mode type for join");
-      }
-      continue;
-    }
-
-    auto it_publish = map.find("publish");
-    if (it_publish != map.end()) {
-      std::optional<uint64_t> optional_delay =
-          INNER_TABLE(it_publish)->getOptional<uint64_t>("delay");
-      uint64_t publish_delay = optional_delay ? default_delay + *optional_delay : default_delay;
-
-      auto mode = INNER_TABLE(it_publish)->getRequired<std::string>("mode");
-      auto number = INNER_TABLE(it_publish)->getRequired<uint64_t>("number");
-      auto message_size = INNER_TABLE(it_publish)->getRequired<uint64_t>("message_size");
-
-      for (uint32_t i = 0; i < number; i++) {
-        current_time += publish_delay;
-        if (mode == "random")
-          Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publishRandom, this,
-                              message_size);
-        else if (mode == "sequential")
-          Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publish, this,
-                              message_size, i % getNumberOfNodes());
-        else
-          throw std::runtime_error("Invalid publish mode");
-      }
-      continue;
-    }
+  for (const NatterScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
+    std::visit([this, &current_time](auto &&step) { scheduleEvent(step, current_time); },
+               step.step);
   }
 }
 
 std::string NatterManager::getDatabaseFilename() {
-  return generateDBNameWithMinhtonInfo("natter", parser_.getFanout(), getNumberOfNodes());
+  return generateDBNameWithMinhtonInfo("natter", scenariofile_.fanout, getNumberOfNodes());
 }
 
 }  // namespace daisi::natter_ns3

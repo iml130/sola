@@ -1,25 +1,23 @@
-# required:  
 title: Test
-name: Ein weiterer Test
-stoptime: 4294967296
 version: 0.1
-physicalLayer: ETH
+stop_time: 5000
+random_seed: 1
+default_delay: 500
+
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+randomSeed: 1
+stoptime: 5000000
+
 fanout: 2
-
-# optional
-defaultDelay: 500
-logLevel: info
-randomSeed: 1 # 0 random, otherwise...
-
-# required:
-numberNodes: 20
+number_nodes: 20
 mode: minhcast # minhcast
 
-scenarioSequence: 
-    - join:
-        mode: minhton
-    - publish:
-        number: 5
-        delay: 0
-        mode: random # random, sequential
-        message_size: 100 # in bytes
+scenario_sequence:
+    - type: join
+      mode: minhton
+    - type: publish
+      number: 5
+      delay: 0
+      mode: random # random, sequential
+      message_size: 100 # in bytes
