@@ -78,6 +78,7 @@ target_link_libraries(daisi_natter_manager
             daisi_manager
             daisi_natter_application
             daisi_natter_static_network_calculation
+            daisi_natter_scenariofile
         PRIVATE
             daisi_random_engine
 )
@@ -96,3 +97,20 @@ target_include_directories(daisi_natter_static_network_calculation
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src
         )
+
+add_library(daisi_natter_scenariofile STATIC)
+target_sources(daisi_natter_scenariofile
+        PRIVATE
+        natter_scenariofile.cpp
+        natter_scenariofile.h
+)
+target_link_libraries(daisi_natter_scenariofile
+        PUBLIC
+                daisi_manager_general_scenariofile
+        PRIVATE
+                daisi_utils
+)
+target_include_directories(daisi_natter_scenariofile
+        PUBLIC
+        ${PROJECT_SOURCE_DIR}/src
+)

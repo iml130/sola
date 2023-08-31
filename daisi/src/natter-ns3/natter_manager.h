@@ -22,6 +22,7 @@
 #include "manager/manager.h"
 #include "natter_application.h"
 #include "natter_logger_ns3.h"
+#include "natter_scenariofile.h"
 
 namespace daisi::natter_ns3 {
 
@@ -46,6 +47,9 @@ private:
   uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
 
+  void scheduleEvent(const Join &step, uint64_t &current_time);
+  void scheduleEvent(const Publish &step, uint64_t &current_time);
+
   void joinTopic(int number_nodes);
   void publishRandom(uint32_t message_size);
   void publish(uint32_t message_size, uint32_t publishing_node);
@@ -66,8 +70,7 @@ private:
   void joinMinhton();
   ns3::Ptr<NatterApplication> getApplication(uint32_t id) const;
   void removeAllLinks(uint32_t id);
-
-  NatterMode mode_ = NatterMode::kNone;
+  NatterScenariofile scenariofile_;
 };
 
 }  // namespace daisi::natter_ns3
