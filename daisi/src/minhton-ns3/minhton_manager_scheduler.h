@@ -80,36 +80,29 @@ private:
   uint64_t latest_root_index_ = 0;
 
   // parsing
-
-  void parseJoinMany(uint64_t &current_time, const uint64_t &default_delay,
-                     ScenariofileParser::Table::TableMap::iterator it);
-  void parseJoinOne(uint64_t &current_time, const uint64_t &default_delay,
-                    ScenariofileParser::Table::TableMap::iterator it);
-  void parseLeaveMany(uint64_t &current_time, const uint64_t &default_delay,
-                      ScenariofileParser::Table::TableMap::iterator it);
-  void parseLeaveOne(uint64_t &current_time, const uint64_t &default_delay,
-                     ScenariofileParser::Table::TableMap::iterator it);
-  void parseSearchAll(uint64_t &current_time, const uint64_t &default_delay,
-                      ScenariofileParser::Table::TableMap::iterator it);
-  void parseSearchMany(uint64_t &current_time, const uint64_t &default_delay,
-                       ScenariofileParser::Table::TableMap::iterator it);
-  void parseFailMany(uint64_t &current_time, const uint64_t &default_delay,
-                     ScenariofileParser::Table::TableMap::iterator it);
-  void parseFailOne(uint64_t &current_time, const uint64_t &default_delay,
-                    ScenariofileParser::Table::TableMap::iterator it);
-  void parseMixedExecution(uint64_t &current_time, const uint64_t &default_delay,
-                           ScenariofileParser::Table::TableMap::iterator it);
-  void parseValidateLeave(uint64_t &current_time, const uint64_t &default_delay,
-                          ScenariofileParser::Table::TableMap::iterator it);
-  void parseFindQuery(uint64_t &current_time, const uint64_t &default_delay,
-                      ScenariofileParser::Table::TableMap::iterator it);
-  void parseRequestCountdown(uint64_t &current_time, const uint64_t &default_delay,
-                             ScenariofileParser::Table::TableMap::iterator it);
-  void parseStaticBuild(uint64_t &current_time, const uint64_t &default_delay,
-                        ScenariofileParser::Table::TableMap::iterator it);
+  void schedule(JoinOne step, uint64_t &current_time);
+  void schedule(JoinMany step, uint64_t &current_time);
+  void schedule(LeaveOne step, uint64_t &current_time);
+  void schedule(LeaveMany step, uint64_t &current_time);
+  void schedule(SearchMany step, uint64_t &current_time);
+  void schedule(SearchAll step, uint64_t &current_time);
+  void schedule(FailOne step, uint64_t &current_time);
+  void schedule(FailMany step, uint64_t &current_time);
+  void schedule(MixedExecution step, uint64_t &current_time);
+  void schedule(ValidateLeave step, uint64_t &current_time);
+  void schedule(FindQuery step, uint64_t &current_time);
+  void schedule(RequestCountdown step, uint64_t &current_time);
+  void schedule(Time step, uint64_t &current_time);
+  void schedule(StaticBuild step, uint64_t &current_time);
 
   void parseNodeAttributes();
-  void parseRequests();
+  void setRequestNodeSetup(RandomNode random);
+  void setRequestNodeSetup(Absolute absolute);
+  void setRequestFrequencySetup(Gaussian gaussian);
+  void setRequestFrequencySetup(StaticTime static_time);
+  void setRequestDepthSetup(Uniform uniform);
+  void setRequestDepthSetup(Static static_val);
+  void setRequestValiditySetup(ConstantTime threshold);
 
   // peer discovery environment
 
@@ -144,6 +137,17 @@ private:
       return value;
     }
   };
+
+  void parseRequests();
+  void setAttributeContentBehavior(Choice choice, Scheduler::NodeAttribute &node_attribute);
+  void setAttributeContentBehavior(Constant constant, Scheduler::NodeAttribute &node_attribute);
+  void setAttributeContentBehavior(Gaussian gaussian, Scheduler::NodeAttribute &node_attribute);
+  void setAttributeContentBehavior(Uniform uniform, Scheduler::NodeAttribute &node_attribute);
+  void setAttributeUpdateBehavior(ConstantTime constant, NodeAttribute &node_attribute);
+  void setAttributeUpdateBehavior(Gaussian gaussian, NodeAttribute &node_attribute);
+  void setAttributeUpdateBehavior(Uniform uniform, NodeAttribute &node_attribute);
+  void setAttributeUpdateBehavior(StaticUpdate static_update, NodeAttribute &node_attribute);
+
   std::vector<NodeAttribute> node_content_attributes_;
   std::vector<std::string> attribute_names_;
 

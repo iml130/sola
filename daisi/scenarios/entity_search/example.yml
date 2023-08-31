@@ -1,14 +1,16 @@
 # required
-title: Test
-name: Ein weiterer Test
-stoptime: 3600000 # 1 hour
+title: Entity Search example with 10 attributes
 version: 0.1
-physicalLayer: ETH
+stop_time: 3600000 # 1 hour
+random_seed: 2
+default_delay: 5000
+
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+randomSeed: 2
+stoptime: 3600000 # 1 hour
+
 fanout: 2
-outputPath: "/work/ns3/results/"
-defaultDelay: 5000
-logLevel: info
-randomSeed: 2 # 0 = random
 
 timeouts:
     bootstrap_response: 500
@@ -26,152 +28,162 @@ algorithms:
     response: general
     bootstrap: general
 
-peerDiscoveryEnvironment:
-    attributes: 
-        a01:
-            presenceBehavior:
-                percentage: 1.0
-            contentBehavior:
-                type: choice
-                values: 
-                    - v1:
-                        content: PALLET
-                        prob: 0.3
-                    - v2:
-                        content: SCL
-                        prob: 0.7
-            updateBehavior:
-                type: static
-        a02:
-            presenceBehavior:
-                percentage: 1.0
-            contentBehavior:
-                type: choice
-                values: 
-                    - v1:
-                        content: kg1
-                        prob: 0.3
-                    - v2:
-                        content: kg2
-                        prob: 0.4
-                    - v2:
-                        content: kg5
-                        prob: 0.3
-            updateBehavior:
-                type: static
-        a03:
-            presenceBehavior:
-                percentage: 1.0
-            contentBehavior:
-                type: choice
-                values: 
-                    - v1:
-                        content: a
-                        prob: 0.1
-                    - v2:
-                        content: b
-                        prob: 0.2
-                    - v2:
-                        content: c
-                        prob: 0.7
-            updateBehavior:
-                type: static
-        a04:
-            presenceBehavior:
-                percentage: 0.8
-            contentBehavior:
-                type: constant
-                value: 42
-            updateBehavior:
-                type: static
-        a05:
-            presenceBehavior:
-                percentage: 0.8
-            contentBehavior:
-                type: gaussian
-                mean: 4
-                sigma: 1
-            updateBehavior:
-                type: static
+peer_discovery_environment:
+  attributes:
+    - name: a01
+      presence_behavior:
+        percentage: 1.0
+      content_behavior:
+        type: choice
+        values:
+          - name: v1
+            content_string: PALLET
+            prob: 0.3
+          - name: v2
+            content_string: SCL
+            prob: 0.7
+      update_behavior:
+        type: static
 
-        a06:
-            presenceBehavior:
-                percentage: 0.8
-            contentBehavior:
-                type: gaussian
-                mean: 50
-                sigma: 3
-            updateBehavior:
-                type: gaussian
-                mean: 5000
-                sigma: 1000
-        a07:
-            presenceBehavior:
-                percentage: 0.8
-            contentBehavior:
-                type: gaussian
-                mean: 100
-                sigma: 15 
-            updateBehavior:
-                type: gaussian
-                mean: 10000
-                sigma: 2000
-        a08:
-            presenceBehavior:
-                percentage: 0.8
-            contentBehavior:
-                type: gaussian
-                mean: 50
-                sigma: 15
-            updateBehavior:
-                type: gaussian
-                mean: 20000
-                sigma: 4000
-        a09:
-            presenceBehavior:
-                percentage: 1.0
-            contentBehavior:
-                type: uniform
-                min: 0
-                max: 100
-            updateBehavior:
-                type: gaussian
-                mean: 40000
-                sigma: 8000
-        a10:
-            presenceBehavior:
-                percentage: 1.0
-            contentBehavior:
-                type: uniform
-                min: 0
-                max: 100
-            updateBehavior:
-                type: constant
-                value: 1000
+    - name: a02
+      presence_behavior:
+        percentage: 1.0
+      content_behavior:
+        type: choice
+        values:
+        - name: v1
+          content_string: kg1
+          prob: 0.3
+        - name: v2
+          content_string: kg2
+          prob: 0.4
+        - name: v3
+          content_string: kg5
+          prob: 0.3
+      update_behavior:
+        type: static
 
-    requests: 
-        validity-threshold: 
-            type: constant
-            time: 10000 # ms
-        nodes: 
-            type: random
-            percentage: 0.2
-        frequency:
-            type: gaussian
-            mean: 60000 # ms
-            sigma: 5000 # ms
-        depth: 
-            type: uniform
-            min: 2
-            max: 2
-        inquire_outdated: off
-        inquire_unknown: off
+    - name: a03
+      presence_behavior:
+        percentage: 1.0
+      content_behavior:
+        type: choice
+        values:
+          - name: v1
+            content_string: a
+            prob: 0.1
+          - name: v2
+            content_string: b
+            prob: 0.2
+          - name: v3
+            content_string: c
+            prob: 0.7
+      update_behavior:
+        type: static
 
-scenarioSequence:
-    - time: 100
-    - static-build:
-        number: 100
-        mode: random
-    - time: 100000
-    - request-countdown: 100
+    - name: a04
+      presence_behavior:
+        percentage: 0.8
+      content_behavior:
+        type: constant
+        value_int: 42
+      update_behavior:
+        type: static
 
+    - name: a05
+      presence_behavior:
+        percentage: 0.8
+      content_behavior:
+        type: gaussian
+        mean: 4
+        sigma: 1
+      update_behavior:
+        type: static
+
+    - name: a06
+      presence_behavior:
+        percentage: 0.8
+      content_behavior:
+        type: gaussian
+        mean: 50
+        sigma: 3
+      update_behavior:
+        type: gaussian
+        mean: 5000
+        sigma: 1000
+
+    - name: a07
+      presence_behavior:
+        percentage: 0.8
+      content_behavior:
+        type: gaussian
+        mean: 100
+        sigma: 15
+      update_behavior:
+        type: gaussian
+        mean: 10000
+        sigma: 2000
+
+    - name: a08
+      presence_behavior:
+        percentage: 0.8
+      content_behavior:
+        type: gaussian
+        mean: 50
+        sigma: 15
+      update_behavior:
+        type: gaussian
+        mean: 20000
+        sigma: 4000
+
+    - name: a09
+      presence_behavior:
+        percentage: 1.0
+      content_behavior:
+        type: uniform
+        min: 0
+        max: 100
+      update_behavior:
+        type: gaussian
+        mean: 40000
+        sigma: 8000
+
+    - name: a10
+      presence_behavior:
+        percentage: 1.0
+      content_behavior:
+        type: uniform
+        min: 0
+        max: 100
+      update_behavior:
+        type: constant
+        time: 1000
+
+  requests:
+    validity_threshold:
+      type: constant
+      time: 10000 # ms
+    nodes:
+      type: random
+      percentage: 0.2
+    frequency:
+      type: gaussian
+      mean: 60000 # ms
+      sigma: 5000 # ms
+    depth:
+      type: uniform
+      min: 2
+      max: 2
+    inquire_outdated: off
+    inquire_unknown: off
+
+scenario_sequence:
+  - type: time
+    time: 100
+  - type: static-build
+    number: 100
+    mode: random
+  - type: time
+    time: 100000
+  - type: request-countdown
+    number: 100

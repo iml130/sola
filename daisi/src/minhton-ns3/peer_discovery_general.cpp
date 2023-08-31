@@ -14,22 +14,20 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_MINHTON_NS3_MINHTON_SCENARIOFILE_HELPER_H_
-#define DAISI_MINHTON_NS3_MINHTON_SCENARIOFILE_HELPER_H_
+#include "peer_discovery_general.h"
 
-#include <unordered_map>
+namespace daisi::minhton_ns3 {
 
-#include "minhton/utils/algorithm_types_container.h"
-#include "minhton/utils/timeout_lengths_container.h"
+void Gaussian::parse(YAML::Node node) {
+  SERIALIZE_VAR(mean);
+  SERIALIZE_VAR(sigma);
+}
 
-namespace daisi::minhton_ns3::helper {
+void Uniform::parse(YAML::Node node) {
+  SERIALIZE_VAR(min);
+  SERIALIZE_VAR(max);
+}
 
-minhton::AlgorithmTypesContainer toAlgorithmContainer(
-    const std::unordered_map<std::string, std::string> &algorithm_map);
+void ConstantTime::parse(YAML::Node node) { SERIALIZE_VAR(time); }
 
-minhton::TimeoutLengthsContainer toTimeoutLengthsContainer(
-    const std::unordered_map<std::string, uint64_t> &timeout_map);
-
-}  // namespace daisi::minhton_ns3::helper
-
-#endif
+}  // namespace daisi::minhton_ns3

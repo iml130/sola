@@ -20,7 +20,6 @@
 
 #include "minhton_application.h"
 #include "minhton_manager_scheduler.h"
-#include "minhton_scenariofile_helper.h"
 
 using namespace minhton;
 using namespace ns3;
@@ -28,7 +27,7 @@ using namespace ns3;
 namespace daisi::minhton_ns3 {
 
 MinhtonManager::MinhtonManager(const std::string &scenariofile_path)
-    : Manager<MinhtonApplication>(scenariofile_path) {
+    : Manager<MinhtonApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
   Manager::initLogger();
   scheduler_ = std::make_shared<MinhtonManager::Scheduler>(*this);
 }
@@ -51,25 +50,20 @@ void MinhtonManager::setupNodeConfigurations() {
   ns3::Ipv4Address addr = getNonLocalAddress(addrs);
   std::string root_addr_string = getIpv4AddressString(addr);
 
-  auto algorithm_types_container =
-      helper::toAlgorithmContainer(parser_.getTable<std::string>("algorithms"));
-  auto timeout_lengths_container =
-      helper::toTimeoutLengthsContainer(parser_.getTable<uint64_t>("timeouts"));
-
   for (uint32_t i = 0; i < getNumberOfNodes(); i++) {
     minhton::ConfigNode node_config;
 
     node_config.setIsRoot(i == 0);
 
     if (node_config.isRoot()) {
-      node_config.setFanout(parser_.getFanout());
+      node_config.setFanout(scenariofile_.fanout);
     } else {
       node_config.setJoinInfo({JoinInfo::kIp, root_addr_string, minhton::kDefaultIpPort});
     }
 
     node_config.setVerbose(true);
-    node_config.setAlgorithmTypesContainer(algorithm_types_container);
-    node_config.setTimeoutLengthsContainer(timeout_lengths_container);
+    node_config.setAlgorithmTypesContainer(scenariofile_.algorithms.convert());
+    node_config.setTimeoutLengthsContainer(scenariofile_.timeouts.convert());
 
     // Init after starting simulation
     ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(), ns3::MilliSeconds(1),
@@ -82,65 +76,32 @@ uint64_t MinhtonManager::getNumberOfNodes() {
   uint64_t max_num = current_number_of_nodes;
   uint64_t min_num = current_number_of_nodes;
 
-  auto scenario_sequence = parser_.getScenarioSequence();
-  for (std::shared_ptr<ScenariofileParser::Table> command : scenario_sequence) {
-    auto map = command->content;
-
-    auto it_join_many = map.find("join-many");
-    if (it_join_many != map.end()) {
-      auto cnodes = INNER_TABLE(it_join_many)->getRequired<uint64_t>("number");
-      current_number_of_nodes += cnodes;
+  for (const MinhtonScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
+    if (auto join = std::get_if<JoinMany>(&step.step)) {
+      current_number_of_nodes += join->number;
 
       max_num = std::max(max_num, current_number_of_nodes);
-      continue;
-    }
-
-    auto it_build_static = map.find("static-build");
-    if (it_build_static != map.end()) {
-      auto cnodes = INNER_TABLE(it_build_static)->getRequired<uint64_t>("number");
-      current_number_of_nodes += cnodes;
+    } else if (auto static_build = std::get_if<StaticBuild>(&step.step)) {
+      current_number_of_nodes += static_build->number;
 
       max_num = std::max(max_num, current_number_of_nodes);
-      continue;
-    }
-
-    auto it_join_one = map.find("join-one");
-    if (it_join_one != map.end()) {
+    } else if ([[maybe_unused]] auto join = std::get_if<JoinOne>(&step.step)) {
       current_number_of_nodes++;
-
       max_num = std::max(max_num, current_number_of_nodes);
-      continue;
-    }
-
-    auto it_leave_many = map.find("leave-many");
-    if (it_leave_many != map.end()) {
-      auto cnodes = INNER_TABLE(it_leave_many)->getRequired<uint64_t>("number");
-      current_number_of_nodes -= cnodes;
+    } else if (auto leave = std::get_if<LeaveMany>(&step.step)) {
+      current_number_of_nodes -= leave->number;
 
       min_num = std::min(min_num, current_number_of_nodes);
-      continue;
-    }
-
-    auto it_leave_one = map.find("leave-one");
-    if (it_leave_one != map.end()) {
+    } else if ([[maybe_unused]] auto leave = std::get_if<LeaveOne>(&step.step)) {
       current_number_of_nodes--;
 
       min_num = std::min(min_num, current_number_of_nodes);
-      continue;
-    }
+    } else if (auto exec = std::get_if<MixedExecution>(&step.step)) {
+      min_num = std::min(min_num, current_number_of_nodes - exec->leave_number);
+      max_num = std::max(max_num, current_number_of_nodes - exec->join_number);
 
-    auto it_mixed_execution = map.find("mixed-execution");
-    if (it_mixed_execution != map.end()) {
-      auto leave_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("leave-number");
-      auto join_nodes = INNER_TABLE(it_mixed_execution)->getRequired<uint64_t>("join-number");
-
-      min_num = std::min(min_num, current_number_of_nodes - leave_nodes);
-      max_num = std::max(max_num, current_number_of_nodes - join_nodes);
-
-      current_number_of_nodes += join_nodes;
-      current_number_of_nodes -= leave_nodes;
-
-      continue;
+      current_number_of_nodes += exec->join_number;
+      current_number_of_nodes -= exec->leave_number;
     }
   }
 
@@ -153,7 +114,7 @@ uint64_t MinhtonManager::getNumberOfNodes() {
 }
 
 std::string MinhtonManager::getDatabaseFilename() {
-  return generateDBNameWithMinhtonInfo("minhton", parser_.getFanout(), this->getNumberOfNodes());
+  return generateDBNameWithMinhtonInfo("minhton", scenariofile_.fanout, this->getNumberOfNodes());
 }
 
 }  // namespace daisi::minhton_ns3

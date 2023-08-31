@@ -1,13 +1,15 @@
-# required
-title: Test
-name: Ein weiterer Test
-stoptime: 10000000
+title: MINHTON scenario including all join algorithm subcases
 version: 0.1
-physicalLayer: ETH
+stop_time: 10000000
+random_seed: 1
+default_delay: 5000
+
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+randomSeed: 1
+stoptime: 10000000
+
 fanout: 3
-defaultDelay: 5000
-logLevel: info
-randomSeed: 1 # 0 = random
 
 timeouts:
     bootstrap_response: 500
@@ -25,56 +27,52 @@ algorithms:
     response: general
     bootstrap: general
 
-peerDiscoveryEnvironment:
-    attributes: off
-    requests: off
-
-scenarioSequence:
+scenario_sequence:
     # Case 1a
-    - join-many:
-        number: 8
-        mode: random
-    - join-one:
-        level: 0
-        number: 0
-    - search-many:
-        number: 9
-    - leave-many:
-        number: 9
-        mode: random
+    - type: join-many
+      number: 8
+      mode: random
+    - type: join-one
+      level: 0
+      number: 0
+    - type: search-many
+      number: 9
+    - type: leave-many
+      number: 9
+      mode: random
     # Case 1b
-    - join-many:
-        number: 4
-        mode: random
-    - join-one:
-        level: 1
-        number: 2
-    - search-many:
-        number: 5
-    - leave-many:
-        number: 5
-        mode: random
+    - type: join-many
+      number: 4
+      mode: random
+    - type: join-one
+      level: 1
+      number: 2
+    - type: search-many
+      number: 5
+    - type: leave-many
+      number: 5
+      mode: random
     # Case 2a
-    - join-many:
-        number: 3
-        mode: random
-    - join-one:
-        level: 0
-        number: 0
-    - search-many:
-        number: 4
-    - leave-many:
-        number: 4
-        mode: random
+    - type: join-many
+      number: 3
+      mode: random
+    - type: join-one
+      level: 0
+      number: 0
+    - type: search-many
+      number: 4
+    - type: leave-many
+      number: 4
+      mode: random
     # Case 2b
-    - join-many:
-        number: 11
-        mode: random
-    - join-one:
-        level: 2
-        number: 0
-    - search-many:
-        number: 12
-    - leave-many:
-        number: 12
-        mode: random
+    - type: join-many
+      number: 11
+      mode: random
+    - type: join-one
+      level: 2
+      number: 0
+    - type: search-many
+      number: 12
+    - type: leave-many
+      number: 12
+      mode: random
