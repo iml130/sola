@@ -80,24 +80,7 @@ struct AlgorithmScenario {
 };
 
 struct CppsScenariofile : public GeneralScenariofile {
-  explicit CppsScenariofile(const std::string &path_to_file) : GeneralScenariofile(path_to_file) {}
-
-  uint16_t initial_number_of_amrs = 0;
-  uint16_t number_of_material_flows = 0;
-  uint16_t number_of_material_flow_agents = 0;
-
-  bool do_material_flow_agents_leave_after_finish = false;
-
-  AlgorithmScenario algorithm;
-  TopologyScenario topology;
-
-  std::vector<AmrDescriptionScenario> autonomous_mobile_robots;
-  std::vector<MaterialFlowDescriptionScenario> material_flows;
-  std::vector<SpawnInfoScenario> scenario_sequence;
-
-  void parse() override {
-    GeneralScenariofile::parse();
-
+  explicit CppsScenariofile(const std::string &path_to_file) : GeneralScenariofile(path_to_file) {
     SERIALIZE_VAR(initial_number_of_amrs);
     SERIALIZE_VAR(number_of_material_flows);
     SERIALIZE_VAR(number_of_material_flow_agents);
@@ -114,6 +97,19 @@ struct CppsScenariofile : public GeneralScenariofile {
     verifyScenarioSequenceOfAmrs();
     calcNumbersOfRelativeAmrDistribution();
   }
+
+  uint16_t initial_number_of_amrs = 0;
+  uint16_t number_of_material_flows = 0;
+  uint16_t number_of_material_flow_agents = 0;
+
+  bool do_material_flow_agents_leave_after_finish = false;
+
+  AlgorithmScenario algorithm;
+  TopologyScenario topology;
+
+  std::vector<AmrDescriptionScenario> autonomous_mobile_robots;
+  std::vector<MaterialFlowDescriptionScenario> material_flows;
+  std::vector<SpawnInfoScenario> scenario_sequence;
 
   std::unordered_map<std::string, AmrDescription> getAmrDescriptions() const;
   std::unordered_map<std::string, MaterialFlowDescriptionScenario> getMaterialFlowDescriptions()

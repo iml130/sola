@@ -29,9 +29,7 @@ struct GeneralScenariofile {
       : file_path_(std::move(path_to_file)) {
     loadFileContent();
     node = YAML::Load(file_content_);
-  }
 
-  virtual void parse() {
     SERIALIZE_VAR(title);
     SERIALIZE_VAR(version);
 
