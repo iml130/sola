@@ -76,8 +76,6 @@ CppsManager::CppsManager(const std::string &scenario_config_file)
     : Manager<CppsApplication>(scenario_config_file), scenario_(scenario_config_file) {
   Manager::initLogger();
 
-  scenario_.parse();
-
   amr_descriptions_ = scenario_.getAmrDescriptions();
   material_flow_descriptions_ = scenario_.getMaterialFlowDescriptions();
 
