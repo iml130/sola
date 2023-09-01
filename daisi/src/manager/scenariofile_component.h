@@ -53,7 +53,12 @@ void serializeType(std::vector<T> &t, const std::string &key, YAML::Node node) {
 }
 
 template <typename T>
-void serializeType(std::optional<T> &t, const std::string &key, YAML::Node node) {
+void serializeType(std::optional<T> &t, const std::string &key, const YAML::Node &node) {
+  if (!node[key].IsDefined()) {
+    t = std::nullopt;
+    return;
+  }
+
   try {
     if constexpr (std::is_fundamental<T>::value || std::is_same<T, std::string>::value) {
       t = node[key].as<T>();
@@ -62,7 +67,7 @@ void serializeType(std::optional<T> &t, const std::string &key, YAML::Node node)
       t->parse(node[key]);
     }
   } catch (YAML::TypedBadConversion<T> &e) {
-    t = std::nullopt;
+    throw std::runtime_error("Wrong data type!");
   }
 }
 
