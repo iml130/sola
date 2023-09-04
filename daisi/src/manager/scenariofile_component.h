@@ -20,6 +20,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include <optional>
+#include <variant>
 
 #define STRING_NAME(VAR_NAME) #VAR_NAME
 #define SERIALIZE_VAR(VAR) serializeType(VAR, STRING_NAME(VAR), node);
