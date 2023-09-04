@@ -8,8 +8,13 @@ from utils.sqlite_db import SqliteDb
 
 
 def get_node_count(db: SqliteDb):
-    return db.fetch_one("SELECT NumberOfNodes FROM General")[0]
-
+    statement = """
+    SELECT AdditionalParameters
+    FROM General"""
+    res = db.fetch_one(statement)[0]
+    tokenized = res.split('=')
+    assert(tokenized[0] == "NumberOfNodes")
+    return int(tokenized[1])
 
 def get_number_publish_events(db: SqliteDb):
     return db.fetch_one("SELECT COUNT(*) FROM Event WHERE Type=258")[0]

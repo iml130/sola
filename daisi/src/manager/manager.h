@@ -123,19 +123,7 @@ public:
     using namespace ns3;
     scheduleEvents();
 
-    uint16_t max_size = 4023;
-    std::string content = parser_.getScenariofileContent();
-    if (content.size() > max_size) content.resize(max_size);
-
-    uint32_t fanout = 0;
-    try {
-      fanout = (uint32_t)parser_.getFanout();
-    } catch (const std::invalid_argument &e) {
-      fanout = 0;
-    }
-
-    daisi::LoggerInfoTestSetup info{this->getNumberOfNodes(), fanout,
-                                    parser_.getScenariofileContent()};
+    daisi::LoggerInfoTestSetup info{parser_.getScenariofileContent(), getAdditionalParameters()};
     daisi::global_logger_manager->logTestSetup(info);
 
     Simulator::Stop(MilliSeconds(parser_.getStopTime()));
@@ -290,6 +278,10 @@ protected:
   virtual void scheduleEvents() = 0;
   virtual uint64_t getNumberOfNodes() = 0;
   virtual std::string getDatabaseFilename() = 0;
+
+  // Return string with additional parameters of this simulation,
+  // that should be logged to the database
+  virtual std::string getAdditionalParameters() { return ""; }
 
   ScenariofileParser parser_;
 

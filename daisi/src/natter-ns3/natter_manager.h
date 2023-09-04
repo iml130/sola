@@ -46,6 +46,7 @@ private:
   void scheduleEvents() override;
   uint64_t getNumberOfNodes() override;
   std::string getDatabaseFilename() override;
+  std::string getAdditionalParameters() override;
 
   void scheduleEvent(const Join &step, uint64_t &current_time);
   void scheduleEvent(const Publish &step, uint64_t &current_time);

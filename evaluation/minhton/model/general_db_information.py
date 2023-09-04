@@ -4,6 +4,8 @@
 # For details on the licensing terms, see the LICENSE file.
 # SPDX-License-Identifier: MIT
 
+import re
+
 from utils.sqlite_db import SqliteDb
 
 class GeneralDbInformation():
@@ -20,15 +22,19 @@ class GeneralDbInformation():
 
     def get_network_size(self, db):
         statement = """
-        SELECT NumberOfNodes 
+        SELECT AdditionalParameters
         FROM General"""
-        return db.fetch_one(statement)[0]
+        res = db.fetch_one(statement)[0]
+        tokenized = res.split('=')
+        assert(tokenized[0] == "NumberOfNodes")
+        return int(res.split('=')[1])
 
     def get_fanout(self, db):
         statement = """
-        SELECT Fanout
+        SELECT Config
         FROM General"""
-        return db.fetch_one(statement)[0]
+        res = db.fetch_one(statement)[0]
+        return int(re.findall("(?<=fanout: )[0-9]*", res)[0])
 
     def get_max_height(self, db):
         statement = """

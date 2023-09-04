@@ -37,9 +37,8 @@ class LoggerManager;
 inline std::unique_ptr<LoggerManager> global_logger_manager;
 
 struct LoggerInfoTestSetup {
-  uint64_t number_of_nodes;
-  uint32_t fanout;
   std::string message;
+  std::string additional_parameters;
 };
 
 class LoggerManager {

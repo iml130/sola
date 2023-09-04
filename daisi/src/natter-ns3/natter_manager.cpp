@@ -252,4 +252,8 @@ std::string NatterManager::getDatabaseFilename() {
   return generateDBNameWithMinhtonInfo("natter", scenariofile_.fanout, getNumberOfNodes());
 }
 
+std::string NatterManager::getAdditionalParameters() {
+  return "NumberOfNodes=" + std::to_string(getNumberOfNodes());
+}
+
 }  // namespace daisi::natter_ns3
