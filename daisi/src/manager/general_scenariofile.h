@@ -41,7 +41,7 @@ struct GeneralScenariofile {
     SERIALIZE_VAR(output_path);
   }
 
-  std::string getOutputPath() {
+  std::string getOutputPath() const {
     // output_path from yaml takes precedence over environment variable DAISI_OUTPUT_PATH
 
     if (output_path.has_value() && !output_path.value().empty()) {
