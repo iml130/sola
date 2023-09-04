@@ -37,6 +37,7 @@ private:
   uint64_t getNumberOfNodes() override;
   void scheduleEvents() override;
   std::string getDatabaseFilename() override;
+  std::string getAdditionalParameters() override;
 
   std::shared_ptr<Scheduler> scheduler_;
   MinhtonScenariofile scenariofile_;

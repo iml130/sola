@@ -117,4 +117,8 @@ std::string MinhtonManager::getDatabaseFilename() {
   return generateDBNameWithMinhtonInfo("minhton", scenariofile_.fanout, this->getNumberOfNodes());
 }
 
+std::string MinhtonManager::getAdditionalParameters() {
+  return "NumberOfNodes=" + std::to_string(getNumberOfNodes());
+}
+
 }  // namespace daisi::minhton_ns3

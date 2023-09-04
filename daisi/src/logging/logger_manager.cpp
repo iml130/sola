@@ -93,11 +93,10 @@ void LoggerManager::logEvent(const std::string &event_uuid, uint16_t event_type,
 // * General
 TableDefinition kGeneral("General", {{"StartTime_ut", "%lu", true},
                                      {"StopTime_ut", "%lu", true},
-                                     {"NumberOfNodes", "%lu", true},
                                      {"NumberOfEvents", "%lu", true},
-                                     {"Fanout", "%u"},
                                      {"Exception", "%s"},
-                                     {"Config", "%s"}});
+                                     {"Config", "%s"},
+                                     {"AdditionalParameters", "%s"}});
 const std::string kCreateGeneral = getCreateTableStatement(kGeneral);
 std::vector<std::string> general_updates_;
 
@@ -112,11 +111,10 @@ void LoggerManager::logTestSetup(const LoggerInfoTestSetup &info) {
   auto t = std::make_tuple(
       /* StartTime_ut */ time_start,
       /* StopTime_ut */ 0,
-      /* NumberOfNodes */ info.number_of_nodes,
       /* NumberOfEvents */ 0,
-      /* Fanout */ info.fanout,
       /* Exception */ "",
-      /* Config */ info.message.c_str());
+      /* Config */ info.message.c_str(),
+      /* Additonal */ info.additional_parameters.c_str());
   sqlite_helper_.execute(getInsertStatement(kGeneral, t));
 
   for (auto general_update : general_updates_) {
