@@ -76,6 +76,8 @@ struct GeneralScenariofile {
 
   YAML::Node node;
 
+  std::string getFileContent() const { return file_content_; }
+
 private:
   void loadFileContent() {
     std::fstream fs;
