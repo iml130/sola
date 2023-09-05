@@ -11,14 +11,34 @@ target_link_libraries(daisi_manager_scenariofileparser
     yaml-cpp
 )
 
-add_library(daisi_manager INTERFACE)
-
+add_library(daisi_manager STATIC)
 target_sources(daisi_manager
-    INTERFACE
+    PRIVATE
     manager.h
+    manager.cpp
+)
+target_link_libraries(daisi_manager
+    PUBLIC
+        daisi_manager_general_scenariofile
+    PRIVATE
+        daisi_logger_manager
+        daisi_random_engine
+        ns3::libcore
+        daisi_utils
+)
+target_include_directories(daisi_manager
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/src
 )
 
-target_link_libraries(daisi_manager
+add_library(daisi_manager_old INTERFACE)
+target_sources(daisi_manager_old
+    INTERFACE
+    sola_constants.h
+    sola_helper.h
+    manager_old.h
+)
+target_link_libraries(daisi_manager_old
     INTERFACE
     daisi_manager_scenariofileparser
     daisi_logger_manager
@@ -30,8 +50,7 @@ target_link_libraries(daisi_manager
     daisi_socket_manager
     daisi_manager_sola_helper
 )
-
-target_include_directories(daisi_manager
+target_include_directories(daisi_manager_old
     INTERFACE
     ${PROJECT_SOURCE_DIR}/src
 )

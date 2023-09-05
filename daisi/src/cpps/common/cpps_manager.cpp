@@ -73,8 +73,8 @@ static void installDefaultWifiTraces() {
 extern ns3::Ptr<daisi::cpps::AmrMobilityModelNs3> next_mobility_model;
 
 CppsManager::CppsManager(const std::string &scenario_config_file)
-    : Manager<CppsApplication>(scenario_config_file), scenario_(scenario_config_file) {
-  Manager::initLogger();
+    : ManagerOld<CppsApplication>(scenario_config_file), scenario_(scenario_config_file) {
+  ManagerOld::initLogger();
 
   amr_descriptions_ = scenario_.getAmrDescriptions();
   material_flow_descriptions_ = scenario_.getMaterialFlowDescriptions();

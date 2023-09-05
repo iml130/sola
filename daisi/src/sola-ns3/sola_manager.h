@@ -19,7 +19,7 @@
 
 #include <deque>
 
-#include "manager/manager.h"
+#include "manager/manager_old.h"
 #include "sola_application.h"
 #include "sola_logger_ns3.h"
 #include "sola_scenariofile.h"
@@ -27,7 +27,7 @@
 namespace daisi::sola_ns3 {
 
 /// Basic manager to test SOLA features standalone within simulation.
-class SolaManager : public Manager<SolaApplication> {
+class SolaManager : public ManagerOld<SolaApplication> {
 public:
   explicit SolaManager(const std::string &scenariofile_path);
   void setup() override;

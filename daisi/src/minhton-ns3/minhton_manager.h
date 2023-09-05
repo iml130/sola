@@ -17,14 +17,14 @@
 #ifndef DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
 #define DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
 
-#include "manager/manager.h"
+#include "manager/manager_old.h"
 #include "minhton_application.h"
 #include "minhton_logger_ns3.h"
 #include "minhton_scenariofile.h"
 
 namespace daisi::minhton_ns3 {
 
-class MinhtonManager : public Manager<MinhtonApplication> {
+class MinhtonManager : public ManagerOld<MinhtonApplication> {
 public:
   class Scheduler;
 

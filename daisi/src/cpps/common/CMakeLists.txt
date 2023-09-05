@@ -48,7 +48,7 @@ target_sources(daisi_cpps_common_cpps_manager
 )
 target_link_libraries(daisi_cpps_common_cpps_manager
         PRIVATE
-        daisi_manager
+        daisi_manager_old
         daisi_cpps_common_cpps_logger_ns3
         daisi_cpps_common_cpps_application
         daisi_cpps_amr_physical_amr_mobility_model_ns3

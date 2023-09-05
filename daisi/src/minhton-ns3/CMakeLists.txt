@@ -45,7 +45,7 @@ target_sources(daisi_minhton_manager
 target_link_libraries(daisi_minhton_manager
         PUBLIC
             daisi_minhton_application
-            daisi_manager
+            daisi_manager_old
             daisi_manager_scenariofileparser
             daisi_minhton_logger_ns3
             minhton_algorithms_sim

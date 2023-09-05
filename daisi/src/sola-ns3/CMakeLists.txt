@@ -59,7 +59,7 @@ target_sources(daisi_sola_manager
 )
 target_link_libraries(daisi_sola_manager
         PUBLIC
-        daisi_manager
+        daisi_manager_old
         daisi_sola_application
         daisi_sola_logger_ns3
         daisi_sola_scenariofile
