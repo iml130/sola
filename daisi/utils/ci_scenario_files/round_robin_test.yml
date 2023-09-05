@@ -4,11 +4,6 @@ stop_time: 5000s
 random_seed: 42
 default_delay: 5s
 
-# outdated/unused fields
-# only present until Manager switches to new scenariofile parser as well
-randomSeed: 42
-stoptime: 5000000
-
 topology:
     width:  50
     height: 20

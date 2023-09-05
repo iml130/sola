@@ -4,11 +4,6 @@ stop_time: 5000s
 random_seed: 42
 default_delay: 5s
 
-# outdated/unused fields
-# only present until Manager switches to new scenariofile parser as well
-randomSeed: 42
-stoptime: 5000000
-
 topology:
     width:  50
     height: 20
@@ -18,12 +13,12 @@ initial_number_of_amrs: 12
 number_of_material_flows: 5
 number_of_material_flow_agents: 5
 do_material_flow_agents_leave_after_finish: false
-  
+
 algorithm:
   assignment_strategy: iterated_auction
 
 autonomous_mobile_robots:
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
@@ -41,7 +36,7 @@ autonomous_mobile_robots:
       load_carrier: package
       max_payload: 30
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerB
@@ -59,7 +54,7 @@ autonomous_mobile_robots:
       load_carrier: package
       max_payload: 45
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
@@ -77,7 +72,7 @@ autonomous_mobile_robots:
       load_carrier: eurobox
       max_payload: 30
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
