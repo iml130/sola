@@ -20,9 +20,11 @@
 #include <cstdint>
 
 namespace daisi::constants {
-constexpr uint32_t kNumberOfAppNodesPerSwitch = 48;
+constexpr uint32_t kNumberOfAppNodesPerSwitch = 48;  // deprecated
+constexpr uint32_t kMaxNumberNodesPerCsmaSubnet = 48;
 constexpr double kMaxPowerDBm = 28.0;
-constexpr uint32_t kMaxNumberAmrsPerAp = 10;
+constexpr uint32_t kMaxNumberAmrsPerAp = 10;  // deprecated
+constexpr uint32_t kMaxNumberNodesPerAp = 10;
 }  // namespace daisi::constants
 
 #endif

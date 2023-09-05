@@ -15,7 +15,6 @@ add_library(daisi_manager INTERFACE)
 
 target_sources(daisi_manager
     INTERFACE
-    sola_constants.h
     sola_helper.h
     manager.h
 )
@@ -56,4 +55,30 @@ target_link_libraries(daisi_manager_general_scenariofile
     INTERFACE
     daisi_manager_scenariofile_component
     yaml-cpp
+)
+
+add_library(daisi_manager_core_network)
+target_sources(daisi_manager_core_network
+    PRIVATE
+    core_network.h
+    core_network.cpp
+)
+target_link_libraries(daisi_manager_core_network
+    PUBLIC
+        ns3::libnetwork
+    PRIVATE
+        ns3::libinternet
+        ns3::libcsma
+        ns3::libcore
+        ns3::libbridge
+        ns3::libmobility
+        ns3::libwifi
+        daisi_utils
+        daisi_manager_sola_constants
+)
+
+add_library(daisi_manager_sola_constants INTERFACE sola_constants.h)
+target_include_directories(daisi_manager_sola_constants
+    INTERFACE
+    ${PROJECT_SOURCE_DIR}/src
 )
