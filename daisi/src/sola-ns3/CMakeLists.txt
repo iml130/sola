@@ -59,10 +59,14 @@ target_sources(daisi_sola_manager
 )
 target_link_libraries(daisi_sola_manager
         PUBLIC
-        daisi_manager_old
-        daisi_sola_application
-        daisi_sola_logger_ns3
-        daisi_sola_scenariofile
+                daisi_manager
+                daisi_sola_application
+                daisi_sola_logger_ns3
+                daisi_manager_core_network
+                daisi_sola_scenariofile
+                ns3::libcore
+        PRIVATE
+                daisi_manager_sola_helper
 )
 target_include_directories(daisi_sola_manager
         PUBLIC

@@ -17,6 +17,7 @@
 #include "sola_manager.h"
 
 #include "../src/logging/logger.h"
+#include "manager/sola_helper.h"
 #include "minhton/logging/logger.h"
 #include "utils/sola_utils.h"
 
@@ -30,28 +31,32 @@ using namespace ns3;
 
 namespace daisi::sola_ns3 {
 
-SolaManager::SolaManager(const std::string &scenariofile_path)
-    : ManagerOld<SolaApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  ManagerOld::initLogger();
-}
+SolaManager::SolaManager(const std::string &scenariofile_path) : scenariofile_(scenariofile_path) {}
 
-uint64_t SolaManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
+uint64_t SolaManager::getNumberOfNodes() const { return scenariofile_.number_nodes; }
 
-void SolaManager::setup() {
-  ManagerOld<SolaApplication>::setup();
+void SolaManager::setupImpl() {
+  nodes_.Create(getNumberOfNodes());
+  core_network_.addNodesCSMA(nodes_);
+
+  daisi::registerNodes(nodes_);
+
+  daisi::setupApplication<SolaApplication>(nodes_);
 
   daisi::global_logger_manager->logMinhtonConfigFile("configurations/root.yml");
   daisi::global_logger_manager->logMinhtonConfigFile("configurations/join.yml");
 
   // Set ID for all applications/nodes
-  for (uint32_t i = 0; i < node_container_.GetN(); i++) {
+  for (uint32_t i = 0; i < nodes_.GetN(); i++) {
     auto app = getApplication(i);
     app->SetAttribute("ID", ns3::UintegerValue(i));
   }
+
+  scheduleEvents();
 }
 
 ns3::Ptr<SolaApplication> SolaManager::getApplication(uint32_t id) const {
-  return node_container_.Get(id)->GetApplication(0)->GetObject<SolaApplication>();
+  return nodes_.Get(id)->GetApplication(0)->GetObject<SolaApplication>();
 }
 
 void SolaManager::scheduleEvents() {
@@ -93,6 +98,8 @@ void SolaManager::startSOLA(uint32_t node_id) {
   getApplication(node_id)->startSOLA();
 }
 
-std::string SolaManager::getDatabaseFilename() { return generateDBName("sola"); }
+std::string SolaManager::getDatabaseFilename() const { return generateDBName("sola"); }
+
+GeneralScenariofile SolaManager::getGeneralScenariofile() const { return scenariofile_; }
 
 }  // namespace daisi::sola_ns3
