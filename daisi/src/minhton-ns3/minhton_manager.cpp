@@ -27,13 +27,13 @@ using namespace ns3;
 namespace daisi::minhton_ns3 {
 
 MinhtonManager::MinhtonManager(const std::string &scenariofile_path)
-    : Manager<MinhtonApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  Manager::initLogger();
+    : ManagerOld<MinhtonApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
+  ManagerOld::initLogger();
   scheduler_ = std::make_shared<MinhtonManager::Scheduler>(*this);
 }
 
 void MinhtonManager::setup() {
-  Manager<MinhtonApplication>::setup();
+  ManagerOld<MinhtonApplication>::setup();
   setupNodeConfigurations();
 }
 

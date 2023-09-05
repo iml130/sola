@@ -27,7 +27,7 @@
 #include "cpps/common/cpps_application.h"
 #include "cpps/common/cpps_logger_ns3.h"
 #include "cpps/logical/material_flow/material_flow_logical_agent.h"
-#include "manager/manager.h"
+#include "manager/manager_old.h"
 #include "ns3/bridge-helper.h"
 #include "ns3/csma-helper.h"
 #include "ns3/internet-stack-helper.h"
@@ -40,7 +40,7 @@
 
 namespace daisi::cpps {
 
-class CppsManager : public daisi::Manager<CppsApplication> {
+class CppsManager : public daisi::ManagerOld<CppsApplication> {
 public:
   explicit CppsManager(const std::string &scenario_config_file);
   void setup() override;

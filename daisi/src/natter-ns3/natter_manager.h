@@ -19,14 +19,14 @@
 
 #include <deque>
 
-#include "manager/manager.h"
+#include "manager/manager_old.h"
 #include "natter_application.h"
 #include "natter_logger_ns3.h"
 #include "natter_scenariofile.h"
 
 namespace daisi::natter_ns3 {
 
-class NatterManager : public Manager<NatterApplication> {
+class NatterManager : public ManagerOld<NatterApplication> {
 public:
   explicit NatterManager(const std::string &scenariofile_path);
   void setup() override;

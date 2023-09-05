@@ -31,14 +31,14 @@ using namespace ns3;
 namespace daisi::sola_ns3 {
 
 SolaManager::SolaManager(const std::string &scenariofile_path)
-    : Manager<SolaApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  Manager::initLogger();
+    : ManagerOld<SolaApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
+  ManagerOld::initLogger();
 }
 
 uint64_t SolaManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
 
 void SolaManager::setup() {
-  Manager<SolaApplication>::setup();
+  ManagerOld<SolaApplication>::setup();
 
   daisi::global_logger_manager->logMinhtonConfigFile("configurations/root.yml");
   daisi::global_logger_manager->logMinhtonConfigFile("configurations/join.yml");

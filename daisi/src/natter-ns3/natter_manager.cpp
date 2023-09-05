@@ -27,14 +27,14 @@ namespace daisi::natter_ns3 {
 #define TOPIC "TOPIC1"
 
 NatterManager::NatterManager(const std::string &scenariofile_path)
-    : Manager<NatterApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  Manager::initLogger();
+    : ManagerOld<NatterApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
+  ManagerOld::initLogger();
 }
 
 uint64_t NatterManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
 
 void NatterManager::setup() {
-  Manager<NatterApplication>::setup();
+  ManagerOld<NatterApplication>::setup();
 
   // Set natter mode
   for (size_t i = 0; i < node_container_.GetN(); i++) {
