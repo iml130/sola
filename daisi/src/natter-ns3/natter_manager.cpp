@@ -16,6 +16,7 @@
 
 #include "natter_manager.h"
 
+#include "manager/sola_helper.h"
 #include "static_network_calculation.h"
 #include "utils/random_engine.h"
 #include "utils/sola_utils.h"
@@ -27,24 +28,29 @@ namespace daisi::natter_ns3 {
 #define TOPIC "TOPIC1"
 
 NatterManager::NatterManager(const std::string &scenariofile_path)
-    : ManagerOld<NatterApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  ManagerOld::initLogger();
-}
+    : scenariofile_(scenariofile_path) {}
 
-uint64_t NatterManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
+uint64_t NatterManager::getNumberOfNodes() const { return scenariofile_.number_nodes; }
 
-void NatterManager::setup() {
-  ManagerOld<NatterApplication>::setup();
+void NatterManager::setupImpl() {
+  nodes_.Create(getNumberOfNodes());
+  core_network_.addNodesCSMA(nodes_);
+
+  daisi::registerNodes(nodes_);
+
+  daisi::setupApplication<NatterApplication>(nodes_);
 
   // Set natter mode
-  for (size_t i = 0; i < node_container_.GetN(); i++) {
+  for (size_t i = 0; i < nodes_.GetN(); i++) {
     const NatterMode mode = natterModeFromString(scenariofile_.mode);
     getApplication(i)->setMode(mode);
   }
+
+  scheduleEvents();
 }
 
 ns3::Ptr<NatterApplication> NatterManager::getApplication(uint32_t id) const {
-  return node_container_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
+  return nodes_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
 }
 
 NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
@@ -247,11 +253,11 @@ void NatterManager::scheduleEvents() {
   }
 }
 
-std::string NatterManager::getDatabaseFilename() {
+std::string NatterManager::getDatabaseFilename() const {
   return generateDBNameWithMinhtonInfo("natter", scenariofile_.fanout, getNumberOfNodes());
 }
 
-std::string NatterManager::getAdditionalParameters() {
+std::string NatterManager::getAdditionalParameters() const {
   return "NumberOfNodes=" + std::to_string(getNumberOfNodes());
 }
 

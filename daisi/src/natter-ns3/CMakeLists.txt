@@ -75,12 +75,14 @@ target_sources(daisi_natter_manager
 )
 target_link_libraries(daisi_natter_manager
         PUBLIC
-            daisi_manager_old
+            daisi_manager
             daisi_natter_application
             daisi_natter_static_network_calculation
             daisi_natter_scenariofile
+            daisi_manager_core_network
         PRIVATE
             daisi_random_engine
+            daisi_manager_sola_helper
 )
 target_include_directories(daisi_natter_manager
         PUBLIC

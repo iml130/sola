@@ -4,11 +4,6 @@ stop_time: 5000s
 random_seed: 1
 default_delay: 0.5s
 
-# outdated/unused fields
-# only present until Manager switches to new scenariofile parser as well
-randomSeed: 1
-stoptime: 5000000
-
 fanout: 2
 number_nodes: 50
 mode: minhcast # minhcast
