@@ -19,19 +19,25 @@
 
 #include <deque>
 
-#include "manager/manager_old.h"
+#include "manager/core_network.h"
+#include "manager/manager.h"
 #include "natter_application.h"
 #include "natter_logger_ns3.h"
 #include "natter_scenariofile.h"
+#include "ns3/node-container.h"
 
 namespace daisi::natter_ns3 {
 
-class NatterManager : public ManagerOld<NatterApplication> {
+class NatterManager : public Manager {
 public:
   explicit NatterManager(const std::string &scenariofile_path);
-  void setup() override;
 
 private:
+  void setupImpl() override;
+  GeneralScenariofile getGeneralScenariofile() const override { return scenariofile_; }
+  std::string getDatabaseFilename() const override;
+  std::string getAdditionalParameters() const override;
+
   struct NodeInfo {
     const uint16_t fanout;
     const solanet::UUID own_uuid;
@@ -43,10 +49,8 @@ private:
     const uint32_t container_index;
   };
 
-  void scheduleEvents() override;
-  uint64_t getNumberOfNodes() override;
-  std::string getDatabaseFilename() override;
-  std::string getAdditionalParameters() override;
+  void scheduleEvents();
+  uint64_t getNumberOfNodes() const;
 
   void scheduleEvent(const Join &step, ns3::Time &current_time);
   void scheduleEvent(const Publish &step, ns3::Time &current_time);
@@ -72,6 +76,10 @@ private:
   ns3::Ptr<NatterApplication> getApplication(uint32_t id) const;
   void removeAllLinks(uint32_t id);
   NatterScenariofile scenariofile_;
+
+  ns3::NodeContainer nodes_;
+
+  CoreNetwork core_network_;
 };
 
 }  // namespace daisi::natter_ns3
