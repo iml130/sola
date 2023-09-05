@@ -19,7 +19,10 @@
 
 #include <deque>
 
-#include "manager/manager_old.h"
+#include "manager/core_network.h"
+#include "manager/general_scenariofile.h"
+#include "manager/manager.h"
+#include "ns3/node-container.h"
 #include "sola_application.h"
 #include "sola_logger_ns3.h"
 #include "sola_scenariofile.h"
@@ -27,12 +30,15 @@
 namespace daisi::sola_ns3 {
 
 /// Basic manager to test SOLA features standalone within simulation.
-class SolaManager : public ManagerOld<SolaApplication> {
+class SolaManager : public Manager {
 public:
   explicit SolaManager(const std::string &scenariofile_path);
-  void setup() override;
 
 private:
+  void setupImpl() override;
+  std::string getDatabaseFilename() const override;
+  GeneralScenariofile getGeneralScenariofile() const override;
+
   void startSOLA(uint32_t id);
   void subscribeTopic(const std::string &topic, uint32_t id);
   void publishTopic(uint32_t id, const std::string &topic, uint64_t msg_size);
@@ -42,14 +48,8 @@ private:
   void updateService(uint32_t id);
   void removeService(uint32_t id);
 
-  void scheduleEvents() override;
-  uint64_t getNumberOfNodes() override;
-  std::string getDatabaseFilename() override;
-
-  using scenario_it = std::unordered_map<
-      std::basic_string<char>,
-      std::variant<std::string, uint64_t, float, std::shared_ptr<ScenariofileParser::Table>,
-                   std::vector<std::shared_ptr<ScenariofileParser::Table>>>>::iterator;
+  void scheduleEvents();
+  uint64_t getNumberOfNodes() const;
 
   // Scheduling methods, implemented in sola_manager_scheduler.cpp
   void schedule(StartSOLA start, ns3::Time &current_time);
@@ -60,6 +60,9 @@ private:
   ns3::Ptr<SolaApplication> getApplication(uint32_t id) const;
 
   SolaScenariofile scenariofile_;
+
+  ns3::NodeContainer nodes_;
+  CoreNetwork core_network_;
 };
 
 }  // namespace daisi::sola_ns3
