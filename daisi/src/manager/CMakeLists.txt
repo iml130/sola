@@ -15,7 +15,6 @@ add_library(daisi_manager INTERFACE)
 
 target_sources(daisi_manager
     INTERFACE
-    sola_helper.h
     manager.h
 )
 
@@ -29,6 +28,7 @@ target_link_libraries(daisi_manager
     ns3::libinternet
     daisi_random_engine
     daisi_socket_manager
+    daisi_manager_sola_helper
 )
 
 target_include_directories(daisi_manager
@@ -81,4 +81,16 @@ add_library(daisi_manager_sola_constants INTERFACE sola_constants.h)
 target_include_directories(daisi_manager_sola_constants
     INTERFACE
     ${PROJECT_SOURCE_DIR}/src
+)
+
+add_library(daisi_manager_sola_helper INTERFACE)
+target_sources(daisi_manager_sola_helper
+    INTERFACE
+    sola_helper.h
+)
+target_link_libraries(daisi_manager_sola_helper
+    INTERFACE
+        ns3::libcore
+        daisi_socket_manager
+        daisi_utils
 )

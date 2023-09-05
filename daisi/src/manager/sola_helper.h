@@ -21,6 +21,8 @@
 #include "ns3/ipv4-address.h"
 #include "ns3/object-factory.h"
 #include "ns3/uinteger.h"
+#include "utils/socket_manager.h"
+#include "utils/sola_utils.h"
 
 namespace daisi {
 
@@ -29,6 +31,22 @@ template <typename T> void installApplication(ns3::Ptr<ns3::Node> node) {
   factory.SetTypeId(T::GetTypeId());
   ns3::Ptr<ns3::Application> app = factory.Create<T>();
   node->AddApplication(app);
+}
+
+inline void registerNodes(ns3::NodeContainer container) {
+  for (uint64_t i = 0; i < container.GetN(); i++) {
+    std::vector<ns3::Ipv4Address> addresses = daisi::getAddressesForNode(container, i);
+    SocketManager::get().registerNode(addresses, container.Get(i), 2000);
+  }
+}
+
+// @brief Helper to setup the same application on all passed nodes,
+// starting at 0 seconds
+template <typename App> inline void setupApplication(ns3::NodeContainer container) {
+  for (uint64_t i = 0; i < container.GetN(); i++) {
+    installApplication<App>(container.Get(i));
+    container.Get(i)->GetApplication(0)->SetStartTime(ns3::MilliSeconds(0));
+  }
 }
 
 }  // namespace daisi
