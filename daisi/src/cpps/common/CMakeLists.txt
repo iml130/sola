@@ -47,26 +47,27 @@ target_sources(daisi_cpps_common_cpps_manager
         cpps_manager.h
 )
 target_link_libraries(daisi_cpps_common_cpps_manager
+        PUBLIC
+              daisi_cpps_amr_amr_topology
+              daisi_manager_core_network
+              daisi_manager
+              ns3::libnetwork
+              daisi_cpps_common_scenariofile_cpps_scenariofile
         PRIVATE
-        daisi_manager_old
-        daisi_cpps_common_cpps_logger_ns3
-        daisi_cpps_common_cpps_application
-        daisi_cpps_amr_physical_amr_mobility_model_ns3
-        daisi_cpps_amr_physical_amr_physical_asset
-        daisi_cpps_logical_amr_amr_logical_agent
-        daisi_cpps_logical_material_flow_material_flow_logical_agent
-        daisi_cpps_logical_algorithms_algorithm_config
-        solanet_serializer
-        daisi_structure_helpers
-        ns3::libcore
-        ns3::libwifi
-        ns3::libmobility
-        ns3::libbridge
-        ns3::libcsma
-        ns3::libinternet
-        daisi_utils
-        daisi_random_engine
-        daisi_cpps_common_scenariofile_cpps_scenariofile
+                daisi_cpps_amr_model_amr_fleet
+                daisi_cpps_amr_physical_amr_mobility_model_ns3
+                daisi_cpps_amr_physical_amr_physical_asset
+                daisi_cpps_amr_model_amr_static_ability
+                daisi_cpps_logical_amr_amr_logical_agent
+                daisi_cpps_common_cpps_application
+                daisi_cpps_logical_material_flow_material_flow_logical_agent
+                daisi_manager_sola_helper
+                ns3::libcore
+                ns3::libmobility
+                ns3::libinternet
+                daisi_utils
+                daisi_random_engine
+                daisi_logger_manager
 )
 
 if(DAISI_DISABLE_NETWORK_SIMULATION)
