@@ -17,24 +17,24 @@ void MinhtonFindEndAlgorithm::forwardRequest(const minhton::NodeInfo target,
   MinhtonMessageHeader header(getSelfNodeInfo(), target);
 
   if (join_) {
-    header.setRefEventId(this->access_->procedure_info->loadEventId(ProcedureKey::kJoinProcedure));
-    MessageJoin msg_to_forward(header, request_origin, search_progress);
-    this->send(msg_to_forward);
-    this->access_->procedure_info->removeEventId(ProcedureKey::kJoinProcedure);
+    header.setRefEventId(access_->procedure_info->loadEventId(ProcedureKey::kJoinProcedure));
+    MessageJoin msg_to_forward(header, request_origin, search_progress, ++hop_count_);
+    send(msg_to_forward);
+    access_->procedure_info->removeEventId(ProcedureKey::kJoinProcedure);
   } else {
     uint64_t ref_event_id = 0;
-    if (this->access_->procedure_info->hasKey(ProcedureKey::kLeaveProcedure)) {
-      ref_event_id = this->access_->procedure_info->loadEventId(ProcedureKey::kLeaveProcedure);
+    if (access_->procedure_info->hasKey(ProcedureKey::kLeaveProcedure)) {
+      ref_event_id = access_->procedure_info->loadEventId(ProcedureKey::kLeaveProcedure);
     }
     if (ref_event_id != 0U) {
       header.setRefEventId(ref_event_id);
     }
 
-    MessageFindReplacement msg_to_forward(header, request_origin, search_progress);
-    this->send(msg_to_forward);
+    MessageFindReplacement msg_to_forward(header, request_origin, search_progress, ++hop_count_);
+    send(msg_to_forward);
     if (ref_event_id == 0U) {
       auto event_id = msg_to_forward.getHeader().getEventId();
-      this->access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
+      access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
       LOG_EVENT(minhton::EventType::kLeaveEvent, event_id);
     }
   }
@@ -245,5 +245,14 @@ bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_ori
   searchEndOnLevel(request_origin, true);
   return false;
 }
+
+void MinhtonFindEndAlgorithm::setHopCount(uint16_t hop_count) {
+  if (hop_count > MAX_HOP_COUNT) {
+    throw std::runtime_error("Incoming MINHTON message exceeds max hop count");
+  }
+  hop_count_ = hop_count;
+}
+
+void MinhtonFindEndAlgorithm::resetHopCount() { hop_count_ = 0; }
 
 }  // namespace minhton

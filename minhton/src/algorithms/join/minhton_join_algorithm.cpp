@@ -26,6 +26,7 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
     access_->procedure_info->saveEventId(ProcedureKey::kJoinProcedure,
                                          msg.getHeader().getRefEventId());
   }
+  find_end_helper_.setHopCount(msg.getHopCount());
 
   NodeInfo entering_node = msg.getEnteringNode();
   bool accept = false;
@@ -69,6 +70,8 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
   if (accept) {
     performAcceptChild(entering_node, true);
   }
+
+  find_end_helper_.resetHopCount();
 }
 
 uint32_t MinhtonJoinAlgorithm::performSendUpdateNeighborMessagesAboutEnteringNode(

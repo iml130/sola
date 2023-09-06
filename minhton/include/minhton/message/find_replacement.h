@@ -22,13 +22,17 @@ class MessageFindReplacement : public MinhtonMessage<MessageFindReplacement> {
 public:
   /// @param node_to_replace The node that wants to leave the network.
   /// @param search_progress Represents the procedure progress for differentiating the phases.
+  /// @param hop_count How often a MessageFindReplacement has been sent during this leave
+  /// procedure so far.
   MessageFindReplacement(MinhtonMessageHeader header, NodeInfo node_to_replace,
-                         SearchProgress search_progress = SearchProgress::kNone);
+                         SearchProgress search_progress = SearchProgress::kNone,
+                         uint16_t hop_count = 0);
 
   NodeInfo getNodeToReplace() const;
   SearchProgress getSearchProgress() const;
+  uint16_t getHopCount() const;
 
-  SERIALIZE(header_, node_to_replace_, search_progress_)
+  SERIALIZE(header_, node_to_replace_, search_progress_, hop_count_);
 
   MessageFindReplacement() = default;
 
@@ -47,6 +51,10 @@ private:
 
   /// Stores information about what steps were already done
   SearchProgress search_progress_ = SearchProgress::kNone;
+
+  /// Keeps track of how many times a MessageFindReplacement has been sent during this leave
+  /// procedure
+  uint16_t hop_count_ = 0;
 };
 }  // namespace minhton
 
