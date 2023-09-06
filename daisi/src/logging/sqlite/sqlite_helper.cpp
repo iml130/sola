@@ -168,7 +168,7 @@ void SQLiteHelper::executeSql(const char *query) {
 
   if (rc != SQLITE_OK) {
     std::string error_message = "Error executing query: ";
-    error_message += err_msg_ptr;
+    error_message += err_msg_ptr + std::string(". Affected query: ") + query;
     //! In case of exception: Check query for broken strings
     throw std::runtime_error(error_message);
   }
