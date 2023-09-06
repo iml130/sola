@@ -17,30 +17,37 @@
 #ifndef DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
 #define DAISI_MINHTON_NS3_MINHTON_MANAGER_H_
 
-#include "manager/manager_old.h"
+#include "manager/core_network.h"
+#include "manager/manager.h"
 #include "minhton_application.h"
 #include "minhton_logger_ns3.h"
 #include "minhton_scenariofile.h"
 
 namespace daisi::minhton_ns3 {
 
-class MinhtonManager : public ManagerOld<MinhtonApplication> {
+class MinhtonManager : public Manager {
 public:
   class Scheduler;
 
   explicit MinhtonManager(const std::string &scenariofile_path);
-  void setup() override;
 
 private:
+  void setupImpl() override;
+  std::string getDatabaseFilename() const override;
+  GeneralScenariofile getGeneralScenariofile() const override { return scenariofile_; };
+  std::string getAdditionalParameters() const override;
+
   void initNode(uint32_t id, minhton::ConfigNode config);
   void setupNodeConfigurations();
-  uint64_t getNumberOfNodes() override;
-  void scheduleEvents() override;
-  std::string getDatabaseFilename() override;
-  std::string getAdditionalParameters() override;
+  uint64_t getNumberOfNodes() const;
+  void scheduleEvents();
 
   std::shared_ptr<Scheduler> scheduler_;
   MinhtonScenariofile scenariofile_;
+
+  ns3::NodeContainer nodes_;
+
+  CoreNetwork core_network_;
 
   friend class MinhtonManager::Scheduler;
 };

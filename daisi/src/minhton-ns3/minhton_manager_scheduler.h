@@ -17,7 +17,6 @@
 #ifndef DAISI_MINHTON_NS3_MINHTON_MANAGER_SCHEDULER_H_
 #define DAISI_MINHTON_NS3_MINHTON_MANAGER_SCHEDULER_H_
 
-#include "manager/scenariofileparser.h"
 #include "minhton/algorithms/esearch/boolean_expression.h"
 #include "minhton/algorithms/esearch/node_data.h"
 #include "minhton_manager.h"

@@ -18,6 +18,7 @@
 
 #include <cmath>
 
+#include "manager/sola_helper.h"
 #include "minhton_application.h"
 #include "minhton_manager_scheduler.h"
 
@@ -27,26 +28,31 @@ using namespace ns3;
 namespace daisi::minhton_ns3 {
 
 MinhtonManager::MinhtonManager(const std::string &scenariofile_path)
-    : ManagerOld<MinhtonApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
-  ManagerOld::initLogger();
+    : scenariofile_(scenariofile_path) {
   scheduler_ = std::make_shared<MinhtonManager::Scheduler>(*this);
 }
 
-void MinhtonManager::setup() {
-  ManagerOld<MinhtonApplication>::setup();
+void MinhtonManager::setupImpl() {
+  nodes_.Create(getNumberOfNodes());
+  core_network_.addNodesCSMA(nodes_);
+
+  daisi::registerNodes(nodes_);
+
+  daisi::setupApplication<MinhtonApplication>(nodes_);
   setupNodeConfigurations();
+
+  scheduleEvents();
 }
 
 void MinhtonManager::initNode(uint32_t id, minhton::ConfigNode config) {
-  Ptr<MinhtonApplication> app =
-      this->node_container_.Get(id)->GetApplication(0)->GetObject<MinhtonApplication>();
+  Ptr<MinhtonApplication> app = nodes_.Get(id)->GetApplication(0)->GetObject<MinhtonApplication>();
 
   app->initializeNode(config);
 }
 
 void MinhtonManager::setupNodeConfigurations() {
   constexpr static uint32_t kRootIndex = 0;
-  std::vector<ns3::Ipv4Address> addrs = getAddressesForNode(node_container_, kRootIndex);
+  std::vector<ns3::Ipv4Address> addrs = getAddressesForNode(nodes_, kRootIndex);
   ns3::Ipv4Address addr = getNonLocalAddress(addrs);
   std::string root_addr_string = getIpv4AddressString(addr);
 
@@ -66,12 +72,12 @@ void MinhtonManager::setupNodeConfigurations() {
     node_config.setTimeoutLengthsContainer(scenariofile_.timeouts.convert());
 
     // Init after starting simulation
-    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(), ns3::MilliSeconds(1),
+    ns3::Simulator::ScheduleWithContext(nodes_.Get(i)->GetId(), ns3::MilliSeconds(1),
                                         &MinhtonManager::initNode, this, i, node_config);
   }
 }
 
-uint64_t MinhtonManager::getNumberOfNodes() {
+uint64_t MinhtonManager::getNumberOfNodes() const {
   uint64_t current_number_of_nodes = 1;
   uint64_t max_num = current_number_of_nodes;
   uint64_t min_num = current_number_of_nodes;
@@ -113,11 +119,11 @@ uint64_t MinhtonManager::getNumberOfNodes() {
   return max_num;
 }
 
-std::string MinhtonManager::getDatabaseFilename() {
+std::string MinhtonManager::getDatabaseFilename() const {
   return generateDBNameWithMinhtonInfo("minhton", scenariofile_.fanout, this->getNumberOfNodes());
 }
 
-std::string MinhtonManager::getAdditionalParameters() {
+std::string MinhtonManager::getAdditionalParameters() const {
   return "NumberOfNodes=" + std::to_string(getNumberOfNodes());
 }
 

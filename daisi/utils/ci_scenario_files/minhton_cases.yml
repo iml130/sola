@@ -4,11 +4,6 @@ stop_time: 10000s
 random_seed: 1
 default_delay: 5s
 
-# outdated/unused fields
-# only present until Manager switches to new scenariofile parser as well
-randomSeed: 1
-stoptime: 10000000
-
 fanout: 3
 
 timeouts:
