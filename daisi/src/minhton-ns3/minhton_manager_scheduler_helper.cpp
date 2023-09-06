@@ -258,7 +258,7 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint16_t level, uint16
     }
   }
 
-  throw std::invalid_argument("position to leave to not found");
+  throw std::invalid_argument("position to leave not found");
 }
 
 void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
@@ -266,7 +266,7 @@ void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
   if (index >= manager_.node_container_.GetN()) {
-    throw std::invalid_argument("Index to leave to out of range");
+    throw std::invalid_argument("Index to leave out of range");
   }
 
   auto app =
@@ -282,7 +282,7 @@ void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
     }
     this->uninit_index_deque_.push_back(index);
   } else {
-    std::cout << "node to leave to found but is not initialized";
+    std::cout << "node to leave found but is not initialized";
   }
 }
 
@@ -456,6 +456,31 @@ void MinhtonManager::Scheduler::executeOneFailByPosition(uint16_t level, uint16_
   }
 
   throw std::invalid_argument("position to fail to not found");
+}
+
+void MinhtonManager::Scheduler::executeOneFailByIndex(uint16_t index) {
+  std::cout << "\texecuteOneFailByIndex on index " << index << " at "
+            << Simulator::Now().GetMilliSeconds() << std::endl;
+
+  if (index >= manager_.node_container_.GetN()) {
+    throw std::invalid_argument("Index to fail out of range");
+  }
+
+  auto app =
+      manager_.node_container_.Get(index)->GetApplication(0)->GetObject<MinhtonApplication>();
+
+  if (app->getNodeInfo().isInitialized()) {
+    this->initiateFailureNow(index);
+    for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
+      if (index == *it) {
+        this->init_index_deque_.erase(it);
+        break;
+      }
+    }
+    this->uninit_index_deque_.push_back(index);
+  } else {
+    std::cout << "node to fail found but is not initialized";
+  }
 }
 
 void MinhtonManager::Scheduler::executeOneRandomFail() {

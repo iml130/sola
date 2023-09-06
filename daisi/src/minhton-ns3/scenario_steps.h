@@ -109,11 +109,15 @@ struct FailOne {
   static std::string typeName() { return "fail-one"; }
 
   std::optional<uint32_t> delay;
-  uint32_t number;
+  std::optional<uint32_t> level;
+  std::optional<uint32_t> number;
+  std::optional<uint32_t> index;
 
   void parse(YAML::Node node) {
     SERIALIZE_VAR(delay);
+    SERIALIZE_VAR(level);
     SERIALIZE_VAR(number);
+    SERIALIZE_VAR(index);
   }
 };
 
@@ -121,12 +125,10 @@ struct FailMany {
   static std::string typeName() { return "fail-many"; }
 
   std::optional<uint32_t> delay;
-  uint32_t level;
   uint32_t number;
 
   void parse(YAML::Node node) {
     SERIALIZE_VAR(delay);
-    SERIALIZE_VAR(level);
     SERIALIZE_VAR(number);
   }
 };

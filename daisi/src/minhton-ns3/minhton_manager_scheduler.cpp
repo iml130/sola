@@ -162,15 +162,6 @@ void MinhtonManager::Scheduler::schedule(SearchMany step, uint64_t &current_time
 }
 
 void MinhtonManager::Scheduler::schedule(FailMany step, uint64_t &current_time) {
-  const uint64_t fail_one_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
-  current_time += fail_one_delay;
-
-  Simulator::Schedule(MilliSeconds(current_time),
-                      &MinhtonManager::Scheduler::executeOneFailByPosition, this, step.level,
-                      step.number);
-}
-
-void MinhtonManager::Scheduler::schedule(FailOne step, uint64_t &current_time) {
   const uint64_t fail_many_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
   current_time += fail_many_delay;
 
@@ -180,6 +171,24 @@ void MinhtonManager::Scheduler::schedule(FailOne step, uint64_t &current_time) {
   }
 
   current_time += fail_many_delay * (step.number - 1);
+}
+
+void MinhtonManager::Scheduler::schedule(FailOne step, uint64_t &current_time) {
+  const uint64_t fail_one_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+  current_time += fail_one_delay;
+
+  if (step.level && step.number) {
+    Simulator::Schedule(MilliSeconds(current_time),
+                        &MinhtonManager::Scheduler::executeOneFailByPosition, this,
+                        step.level.value(), step.number.value());
+  } else if (step.index) {
+    Simulator::Schedule(MilliSeconds(current_time),
+                        &MinhtonManager::Scheduler::executeOneFailByIndex, this,
+                        step.index.value());
+  } else {
+    throw std::invalid_argument(
+        "Invalid Fail-One Arguments. Either fail by position (level and number) or by index");
+  }
 }
 
 void MinhtonManager::Scheduler::schedule(MixedExecution step, uint64_t &current_time) {

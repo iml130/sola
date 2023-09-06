@@ -50,6 +50,7 @@ private:
   void executeOneRandomLeave();
 
   void executeOneFailByPosition(uint16_t level, uint16_t number);
+  void executeOneFailByIndex(uint16_t index);
   void executeOneRandomFail();
 
   void initiateJoinNow(uint64_t node_to_join_to_index, uint64_t entering_node_index);
