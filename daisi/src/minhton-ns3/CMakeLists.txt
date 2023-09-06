@@ -45,15 +45,16 @@ target_sources(daisi_minhton_manager
 target_link_libraries(daisi_minhton_manager
         PUBLIC
             daisi_minhton_application
-            daisi_manager_old
-            daisi_manager_scenariofileparser
+            daisi_manager
             daisi_minhton_logger_ns3
             minhton_algorithms_sim
             daisi_minhton_scenariofile
+            daisi_manager_core_network
         PRIVATE
             daisi_utils
             minhton_exception_algorithm
             daisi_random_engine
+            daisi_manager_sola_helper
 )
 target_include_directories(daisi_minhton_manager
         PUBLIC
