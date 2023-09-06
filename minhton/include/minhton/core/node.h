@@ -145,7 +145,9 @@ private:
   /// divergent FSM event.
   ///
   /// \param msg_variant Message to check
-  void prepareReceiving(const MessageVariant &msg_variant);
+  ///
+  /// \returns true if the message should be processed, false if not
+  bool prepareReceiving(const MessageVariant &msg_variant);
 
   /// After all relevant information have been set, we can start the node.
   ///

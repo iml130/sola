@@ -211,12 +211,14 @@ void MinhtonNode::stop() {
 }
 
 void MinhtonNode::recv(const MessageVariant &msg) {
-  prepareReceiving(msg);
-  logic_->process(msg);
+  bool process_msg = prepareReceiving(msg);
+  if (process_msg) {
+    logic_->process(msg);
+  }
 }
 
-void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
-  std::visit(
+bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
+  bool process_msg = std::visit(
       [this, msg_variant](auto &&msg) {
         const MinhtonMessageHeader header = msg.getHeader();
         LOG_INFO("recv " + getMessageTypeString(header.getMessageType()) + " from " +
@@ -238,7 +240,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         if (fsm_.current_state() == kIdle && replacing_node_.isInitialized()) {
           // Drop specific messages
           if (header.getMessageType() == kFindReplacement || header.getMessageType() == kJoin) {
-            return;
+            return false;
           }
 
           // Forward messages to old node
@@ -273,7 +275,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
             throw std::runtime_error("forwarding this message type not handled yet");
           }
 
-          return;
+          return false;
         }
 
         if (header.getMessageType() == kFindReplacement &&
@@ -282,12 +284,12 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
           // Message was forwarded to us because with knowledge of the sender we are nearer to the
           // successor. But the sender had outdated information about our position. Therefore
           // discard the message for now.
-          return;
+          return false;
         }
 
         if (fsm_.current_state() == kIdle) {
           // We should forward the message but were last
-          return;
+          return false;
         }
 
         fsm_.process_event(fsm_event);
@@ -311,7 +313,7 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
           TimeoutType type = minhton::kSelfDepartureRetry;
           watchdog_.addJob([this]() { processSignal(Signal::leaveNetwork()); }, 1000, type);
 
-          return;
+          return false;
         }
 
         if (header.getMessageType() == MessageType::kReplacementOffer) {
@@ -326,8 +328,11 @@ void MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
             fsm_ = FiniteStateMachine(kConnected);
           }
         }
+
+        return true;
       },
       msg_variant);
+  return process_msg;
 }
 
 void MinhtonNode::triggerTimeout(const TimeoutType &timeout_type) {
