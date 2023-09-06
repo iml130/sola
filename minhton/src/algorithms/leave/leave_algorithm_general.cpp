@@ -615,24 +615,6 @@ void LeaveAlgorithmGeneral::sendReplacementOffer() {
   send(message_replacement_offer);
 }
 
-void LeaveAlgorithmGeneral::forwardFindReplacementMessage(NodeInfo forward_to,
-                                                          NodeInfo node_to_replace,
-                                                          SearchProgress leave_case) {
-  uint64_t ref_event_id = 0;
-  if (access_->procedure_info->hasKey(ProcedureKey::kLeaveProcedure)) {
-    ref_event_id = access_->procedure_info->loadEventId(ProcedureKey::kLeaveProcedure);
-  }
-  MinhtonMessageHeader header(getSelfNodeInfo(), forward_to, ref_event_id);
-
-  MessageFindReplacement message_find_replacement(header, node_to_replace, leave_case);
-  if (ref_event_id == 0) {
-    auto event_id = message_find_replacement.getHeader().getEventId();
-    access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
-    LOG_EVENT(EventType::kLeaveEvent, event_id);
-  }
-  send(message_find_replacement);
-}
-
 void LeaveAlgorithmGeneral::replaceMyself(const NodeInfo &node_to_replace,
                                           std::vector<NodeInfo> neighbors_of_node_to_replace) {
   auto ref_event_id = access_->procedure_info->loadEventId(ProcedureKey::kLeaveProcedure);

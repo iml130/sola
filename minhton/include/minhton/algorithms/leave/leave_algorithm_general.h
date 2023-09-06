@@ -204,17 +204,6 @@ protected:
   /// \param node_to_replace The node leaving the network
   void prepareLeavingAsSuccessor(const minhton::NodeInfo &node_to_replace);
 
-  /// Helper method for the Leave Algorithm to quickly forward the FIND_REPLACEMENT message to the
-  /// target node.
-  ///
-  /// \param forward_to the node we want to forward the message to
-  /// \param node_to_replace the node which wants to leave the network
-  /// \param leave_case the current step
-  /// of the find replacement algorithm (optional)
-  void forwardFindReplacementMessage(minhton::NodeInfo forward_to,
-                                     minhton::NodeInfo node_to_replace,
-                                     SearchProgress leave_case = SearchProgress::kNone);
-
   /// Send a MessageSignoffParentRequest to own parent.
   /// This helper method can be called from the successor or the leaving node itself if it doesn't
   /// need a successor.
