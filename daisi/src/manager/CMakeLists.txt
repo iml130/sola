@@ -1,16 +1,3 @@
-add_library(daisi_manager_scenariofileparser STATIC)
-
-target_sources(daisi_manager_scenariofileparser
-    PRIVATE
-    scenariofileparser.cpp
-    scenariofileparser.h
-)
-
-target_link_libraries(daisi_manager_scenariofileparser
-    PUBLIC
-    yaml-cpp
-)
-
 add_library(daisi_manager STATIC)
 target_sources(daisi_manager
     PRIVATE
@@ -28,30 +15,6 @@ target_link_libraries(daisi_manager
 )
 target_include_directories(daisi_manager
     PUBLIC
-    ${PROJECT_SOURCE_DIR}/src
-)
-
-add_library(daisi_manager_old INTERFACE)
-target_sources(daisi_manager_old
-    INTERFACE
-    sola_constants.h
-    sola_helper.h
-    manager_old.h
-)
-target_link_libraries(daisi_manager_old
-    INTERFACE
-    daisi_manager_scenariofileparser
-    daisi_logger_manager
-    ns3::libnetwork
-    ns3::libbridge
-    ns3::libcsma
-    ns3::libinternet
-    daisi_random_engine
-    daisi_socket_manager
-    daisi_manager_sola_helper
-)
-target_include_directories(daisi_manager_old
-    INTERFACE
     ${PROJECT_SOURCE_DIR}/src
 )
 
