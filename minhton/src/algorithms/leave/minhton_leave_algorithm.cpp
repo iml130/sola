@@ -82,7 +82,7 @@ void MinhtonLeaveAlgorithm::performFindReplacement() {
   if (is_correct_parent) {
     auto last_child = getRoutingInfo()->getInitializedChildren().back();
     // Forward to last child with own SearchProgress just for this case
-    this->forwardFindReplacementMessage(last_child, leaving_node, SearchProgress::kReplacementNode);
+    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode);
   }
 }
 
@@ -159,7 +159,7 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
   if (is_correct_parent) {
     auto last_child = getRoutingInfo()->getInitializedChildren().back();
     // Forward to last child with own SearchProgress just for this case
-    this->forwardFindReplacementMessage(last_child, leaving_node, SearchProgress::kReplacementNode);
+    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode);
   }
 }
 
