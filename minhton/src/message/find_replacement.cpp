@@ -11,10 +11,11 @@
 namespace minhton {
 MessageFindReplacement::MessageFindReplacement(MinhtonMessageHeader header,
                                                NodeInfo node_to_replace,
-                                               SearchProgress search_progress)
+                                               SearchProgress search_progress, uint16_t hop_count)
     : header_(std::move(header)),
       node_to_replace_(std::move(node_to_replace)),
-      search_progress_(search_progress) {
+      search_progress_(search_progress),
+      hop_count_(hop_count) {
   header_.setMessageType(MessageType::kFindReplacement);
   MessageLoggingAdditionalInfo logging_info{getNodeToReplace().getLogicalNodeInfo().getUuid(), "",
                                             "Prog: " + std::to_string(search_progress)};
@@ -22,14 +23,12 @@ MessageFindReplacement::MessageFindReplacement(MinhtonMessageHeader header,
   validate();
 }
 
-bool MessageFindReplacement::validateImpl() const {
-  return this->getNodeToReplace().isInitialized();
-}
+bool MessageFindReplacement::validateImpl() const { return getNodeToReplace().isInitialized(); }
 
-minhton::NodeInfo MessageFindReplacement::getNodeToReplace() const {
-  return this->node_to_replace_;
-}
+minhton::NodeInfo MessageFindReplacement::getNodeToReplace() const { return node_to_replace_; }
 
-SearchProgress MessageFindReplacement::getSearchProgress() const { return this->search_progress_; }
+SearchProgress MessageFindReplacement::getSearchProgress() const { return search_progress_; }
+
+uint16_t MessageFindReplacement::getHopCount() const { return hop_count_; }
 
 }  // namespace minhton

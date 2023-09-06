@@ -14,6 +14,7 @@
 #include "minhton/message/types_all.h"
 
 namespace minhton {
+#define MAX_HOP_COUNT 64U
 
 class MinhtonFindEndAlgorithm : public AlgorithmInterface {
 public:
@@ -77,10 +78,17 @@ public:
   /// \returns true when found correct position, false when concurrent steps are needed
   bool decideNextStep(minhton::NodeInfo request_origin);
 
+  void setHopCount(uint16_t hop_count);
+
+  void resetHopCount();
+
 private:
   /// Set to true if the Find End Algorithm should operate in the mode for the join procedure, or
   /// set to false for usage with the leave procedure
   bool join_;
+
+  /// How often message for finding the position has been sent during this procedure so far
+  uint16_t hop_count_ = 0;
 };
 
 }  // namespace minhton

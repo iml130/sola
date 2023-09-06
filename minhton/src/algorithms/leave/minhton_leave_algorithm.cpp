@@ -58,8 +58,11 @@ void MinhtonLeaveAlgorithm::processFindReplacement(const minhton::MessageFindRep
     event_id = message.getHeader().getEventId();
   }
   this->access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
+  find_end_helper_.setHopCount(message.getHopCount());
+
   this->performFindReplacement(message);
   this->access_->procedure_info->removeEventId(ProcedureKey::kLeaveProcedure);
+  find_end_helper_.resetHopCount();
 }
 
 void MinhtonLeaveAlgorithm::performFindReplacement() {

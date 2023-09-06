@@ -18,16 +18,14 @@ namespace minhton {
 /// * **Algorithm Association:** Join.
 class MessageJoin : public MinhtonMessage<MessageJoin> {
 public:
-  /// @param entering_node The node that wants to enter the network. NetworkInfo must be set
-  /// appropriately.
-  /// @param search_progress Represents the procedure progress for differentiating the phases.
   MessageJoin(MinhtonMessageHeader header, NodeInfo entering_node,
-              SearchProgress search_progress = SearchProgress::kNone);
+              SearchProgress search_progress = SearchProgress::kNone, uint16_t hop_count = 0);
 
   NodeInfo getEnteringNode() const;
   SearchProgress getSearchProgress() const;
+  uint16_t getHopCount() const;
 
-  SERIALIZE(header_, entering_node_, search_progress_)
+  SERIALIZE(header_, entering_node_, search_progress_, hop_count_);
 
   MessageJoin() = default;
 
@@ -46,6 +44,9 @@ private:
 
   /// Stores information about what steps were already done (only for the minhton algorithm)
   SearchProgress search_progress_ = SearchProgress::kNone;
+
+  /// Keeps track of how many times a MessageJoin has been sent during this join procedure
+  uint16_t hop_count_ = 0;
 };
 }  // namespace minhton
 
