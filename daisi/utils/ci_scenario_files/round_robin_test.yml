@@ -1,0 +1,139 @@
+title: CPPS Round Robin Scenario
+version: 0.1
+stop_time: 5000
+random_seed: 42
+default_delay: 5
+
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+randomSeed: 42
+stoptime: 5000000
+
+topology:
+    width:  50
+    height: 20
+    depth:   0
+
+initial_number_of_amrs: 12
+number_of_material_flows: 1
+number_of_material_flow_agents: 1
+do_material_flow_agents_leave_after_finish: false
+  
+algorithm:
+  assignment_strategy: round_robin
+
+autonomous_mobile_robots:
+  - description:  
+    properties:
+      device_type: amr
+      manufacturer: FhG_IML
+      model_name: LoadRunner
+      friendly_name: LR
+      model_number: 1
+    kinematics:
+      min_velocity: 0.0
+      max_velocity: 10.0
+      max_acceleration: 3.0
+      max_deceleration: 3.0
+    load_handling:
+      load_time: 2
+      unload_time: 3
+      load_carrier: package
+      max_payload: 30
+
+  - description:  
+    properties:
+      device_type: amr
+      manufacturer: LocusBot
+      model_name: LocusOrigin
+      friendly_name: locus
+      model_number: 2
+    kinematics:
+      min_velocity: 0.0
+      max_velocity: 1.1
+      max_acceleration: 0.5
+      max_deceleration: 0.5
+    load_handling:
+      load_time: 10
+      unload_time: 10
+      load_carrier: package
+      max_payload: 45
+
+  - description:  
+    properties:
+      device_type: amr
+      manufacturer: FhG_IML
+      model_name: ZTF
+      friendly_name: ztf
+      model_number: 3
+    kinematics:
+      min_velocity: 0.0
+      max_velocity: 1.0
+      max_acceleration: 0.5
+      max_deceleration: 0.5
+    load_handling:
+      load_time: 5
+      unload_time: 5
+      load_carrier: eurobox
+      max_payload: 30
+
+  - description:  
+    properties:
+      device_type: amr
+      manufacturer: FhG_IML
+      model_name: Flip
+      friendly_name: ctv
+      model_number: 4
+    kinematics:
+      min_velocity: 0.0
+      max_velocity: 1.0
+      max_acceleration: 0.5
+      max_deceleration: 0.5
+    load_handling:
+      load_time: 10
+      unload_time: 10
+      load_carrier: eurobox
+      max_payload: 60
+
+material_flows:
+  - mf:
+    mfdl_program: bli bla blub
+    friendly_name: mf1
+
+scenario_sequence:
+  - amr:
+    entity: amr
+    friendly_name: LR
+    start_time: 0
+    spawn_distribution:
+      type: absolute
+      number: 3
+  - amr:
+    entity: amr
+    friendly_name: locus
+    start_time: 0
+    spawn_distribution:
+      type: absolute
+      number: 3
+  - amr:
+    entity: amr
+    friendly_name: ztf
+    start_time: 0
+    spawn_distribution:
+      type: absolute
+      number: 3
+  - amr:
+    entity: amr
+    friendly_name: ctv
+    start_time: 0
+    spawn_distribution:
+      type: absolute
+      number: 3
+  - mf:
+    entity: mf
+    friendly_name: mf1
+    start_time: 0
+    spawn_distribution:
+      type: gaussian
+      mean: 100
+      sigma: 10

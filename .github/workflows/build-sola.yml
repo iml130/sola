@@ -173,3 +173,11 @@ jobs:
         build/src/main/Main --environment=cpps --scenario=`pwd`/daisi/utils/ci_scenario_files/cpps_test.yml
         python3 evaluation/cpps_verification.py `find output -name '*.db'`
         rm -rf output
+    - name: Run ROUND_ROBIN integrationtest
+      run: |
+        export LD_LIBRARY_PATH=~/ns-3_install/lib
+        export MINHTONDIR=$GITHUB_WORKSPACE/minhton
+        mkdir output
+        export MINHTONDIR=`pwd`/minhton
+        build/src/main/Main --environment=cpps --scenario=`pwd`/daisi/utils/ci_scenario_files/round_robin_test.yml
+        rm -rf output
