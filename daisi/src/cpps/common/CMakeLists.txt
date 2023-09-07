@@ -1,21 +1,39 @@
 add_subdirectory(scenariofile)
 
-add_library(daisi_cpps_common_cpps_application STATIC)
-target_sources(daisi_cpps_common_cpps_application
+add_library(daisi_cpps_common_material_flow_logical_agent_application STATIC)
+target_sources(daisi_cpps_common_material_flow_logical_agent_application
         PRIVATE
-        cpps_application.cpp
-        cpps_application.h
+        material_flow_logical_agent_application.h
+        material_flow_logical_agent_application.cpp
 )
-target_link_libraries(daisi_cpps_common_cpps_application
+target_link_libraries(daisi_cpps_common_material_flow_logical_agent_application
         PUBLIC
-        ns3::libapplications
-        ns3::libnetwork
-        daisi_cpps_amr_physical_amr_physical_asset
-        daisi_cpps_logical_amr_amr_logical_agent
-        daisi_cpps_common_cpps_logger_ns3
-        daisi_cpps_logical_material_flow_material_flow_logical_agent
+                ns3::libapplications
+                daisi_cpps_logical_material_flow_material_flow_logical_agent
+)
+
+add_library(daisi_cpps_common_amr_logical_agent_application STATIC)
+target_sources(daisi_cpps_common_amr_logical_agent_application
         PRIVATE
-        daisi_socket_manager
+        amr_logical_agent_application.h
+        amr_logical_agent_application.cpp
+)
+target_link_libraries(daisi_cpps_common_amr_logical_agent_application
+        PUBLIC
+                ns3::libapplications
+                daisi_cpps_logical_amr_amr_logical_agent
+)
+
+add_library(daisi_cpps_common_amr_physical_asset_application STATIC)
+target_sources(daisi_cpps_common_amr_physical_asset_application
+        PRIVATE
+        amr_physical_asset_application.h
+        amr_physical_asset_application.cpp
+)
+target_link_libraries(daisi_cpps_common_amr_physical_asset_application
+        PUBLIC
+                ns3::libapplications
+                daisi_cpps_amr_physical_amr_physical_asset
 )
 
 add_library(daisi_cpps_common_cpps_logger_ns3 STATIC)
@@ -59,7 +77,9 @@ target_link_libraries(daisi_cpps_common_cpps_manager
                 daisi_cpps_amr_physical_amr_physical_asset
                 daisi_cpps_amr_model_amr_static_ability
                 daisi_cpps_logical_amr_amr_logical_agent
-                daisi_cpps_common_cpps_application
+                daisi_cpps_common_material_flow_logical_agent_application
+                daisi_cpps_common_amr_logical_agent_application
+                daisi_cpps_common_amr_physical_asset_application
                 daisi_cpps_logical_material_flow_material_flow_logical_agent
                 daisi_manager_sola_helper
                 ns3::libcore
