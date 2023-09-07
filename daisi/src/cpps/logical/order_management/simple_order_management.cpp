@@ -22,7 +22,9 @@ namespace daisi::cpps::logical {
 SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_description,
                                              const Topology &topology,
                                              const daisi::util::Pose &pose)
-    : OrderManagement(amr_description, topology, pose), expected_end_position_(pose.position) {}
+    : OrderManagement(amr_description, topology, pose), expected_end_position_(pose.position) {
+  final_metrics_.setStartTime(0);
+}
 
 Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; }
 
