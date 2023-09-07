@@ -27,7 +27,9 @@
 #include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/amr/physical/amr_mobility_model_ns3.h"
 #include "cpps/amr/physical/amr_physical_asset.h"
-#include "cpps/common/cpps_application.h"
+#include "cpps/common/amr_logical_agent_application.h"
+#include "cpps/common/amr_physical_asset_application.h"
+#include "cpps/common/material_flow_logical_agent_application.h"
 #include "cpps/logical/amr/amr_logical_agent.h"
 #include "cpps/logical/material_flow/material_flow_logical_agent.h"
 #include "logging/logger_manager.h"
@@ -84,11 +86,15 @@ void CppsManager::spawnAMR(uint32_t amr_index, const AmrDescription &description
     throw std::runtime_error("mobility model not empty");
   }
 
-  this->amrs_.Get(amr_index)->GetApplication(1)->GetObject<CppsApplication>()->application =
-      std::make_shared<AmrPhysicalAsset>(std::move(connector));
-  this->amrs_.Get(amr_index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::AmrLogicalAgent>(
-          scenario_.algorithm.getParticipantAlgorithmConfig(), amr_index == 0);
+  this->amrs_.Get(amr_index)
+      ->GetApplication(1)
+      ->GetObject<AmrPhysicalAssetApplication>()
+      ->application = std::make_unique<AmrPhysicalAsset>(std::move(connector));
+  this->amrs_.Get(amr_index)
+      ->GetApplication(0)
+      ->GetObject<AmrLogicalAgentApplication>()
+      ->application = std::make_unique<logical::AmrLogicalAgent>(
+      scenario_.algorithm.getParticipantAlgorithmConfig(), amr_index == 0);
 }
 
 void CppsManager::setupImpl() {
@@ -126,8 +132,10 @@ uint64_t CppsManager::getNumberOfNodes() const {
 }
 
 void CppsManager::checkStarted(uint32_t index) {
-  auto cpps_app_logical = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(
-      this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
+  const auto &cpps_app_logical = this->amrs_.Get(index)
+                                     ->GetApplication(0)
+                                     ->GetObject<AmrLogicalAgentApplication>()
+                                     ->application;
   if (!cpps_app_logical->isRunning()) {
     throw std::runtime_error("storage instance not started yet");
   }
@@ -136,61 +144,64 @@ void CppsManager::checkStarted(uint32_t index) {
 void CppsManager::initAMR(uint32_t index) {
   std::cout << "Init AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
-
-  cpps_app_logical->init();
-  cpps_app_physical->init();
+  amrs_.Get(index)->GetApplication(0)->GetObject<AmrLogicalAgentApplication>()->application->init();
+  amrs_.Get(index)
+      ->GetApplication(1)
+      ->GetObject<AmrPhysicalAssetApplication>()
+      ->application->init();
 }
 
 void CppsManager::connectAMR(uint32_t index) {
   std::cout << "Connect AMR " << index << std::endl;
 
   // Get address from logical
-  auto logical_agent = std::get<std::shared_ptr<logical::AmrLogicalAgent>>(
-      this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application);
+  const auto &logical_agent =
+      amrs_.Get(index)->GetApplication(0)->GetObject<AmrLogicalAgentApplication>()->application;
   const ns3::InetSocketAddress logical_addr = logical_agent->getServerAddress();
 
   // Let physical connect to logical
-  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
-  auto amr_physical_asset =
-      std::get<std::shared_ptr<AmrPhysicalAsset>>(cpps_app_physical->application);
-  amr_physical_asset->connect(logical_addr);
+  amrs_.Get(index)
+      ->GetApplication(1)
+      ->GetObject<AmrPhysicalAssetApplication>()
+      ->application->connect(logical_addr);
 }
 
 void CppsManager::startAMR(uint32_t index) {
   std::cout << "Start AMR " << index << std::endl;
 
-  auto cpps_app_logical = this->amrs_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto cpps_app_physical = this->amrs_.Get(index)->GetApplication(1)->GetObject<CppsApplication>();
-
-  cpps_app_logical->start();
-  cpps_app_physical->start();
+  amrs_.Get(index)
+      ->GetApplication(0)
+      ->GetObject<AmrLogicalAgentApplication>()
+      ->application->start();
 }
 
 void CppsManager::initMF(uint32_t index) {
   std::cout << "Creating MF Logical Agent " << index << std::endl;
 
-  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->application =
-      std::make_shared<logical::MaterialFlowLogicalAgent>(
-          scenario_.algorithm.getInitiatorAlgorithmConfig(), false);
+  material_flows_.Get(index)
+      ->GetApplication(0)
+      ->GetObject<MaterialFlowLogicalAgentApplication>()
+      ->application = std::make_unique<logical::MaterialFlowLogicalAgent>(
+      scenario_.algorithm.getInitiatorAlgorithmConfig(), false);
 
   std::cout << "Init MF Logical Agent " << index << std::endl;
 
-  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->init();
-  auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
-      this->material_flows_.Get(index)
-          ->GetApplication(0)
-          ->GetObject<CppsApplication>()
-          ->application);
+  const auto &mf_app = material_flows_.Get(index)
+                           ->GetApplication(0)
+                           ->GetObject<MaterialFlowLogicalAgentApplication>()
+                           ->application;
 
+  mf_app->init();
   mf_app->setWaitingForStart();
 }
 
 void CppsManager::startMF(uint32_t index) {
   std::cout << "Start MF Logical Agent " << index << std::endl;
 
-  this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>()->start();
+  material_flows_.Get(index)
+      ->GetApplication(0)
+      ->GetObject<MaterialFlowLogicalAgentApplication>()
+      ->application->start();
 }
 
 void CppsManager::setupNodes() {
@@ -205,17 +216,15 @@ void CppsManager::setupNodes() {
 
   // Setup Applications
   for (int i = 0; i < amrs_.GetN(); i++) {
-    // For logical AMR
-    installApplication<CppsApplication>(amrs_.Get(i));
+    installApplication<AmrLogicalAgentApplication>(amrs_.Get(i));
     amrs_.Get(i)->GetApplication(0)->SetStartTime(ns3::MilliSeconds(0));
 
-    // For physical AMR
-    installApplication<CppsApplication>(amrs_.Get(i));
+    installApplication<AmrPhysicalAssetApplication>(amrs_.Get(i));
     amrs_.Get(i)->GetApplication(1)->SetStartTime(ns3::MilliSeconds(0));
   }
 
   for (int i = 0; i < material_flows_.GetN(); i++) {
-    installApplication<CppsApplication>(material_flows_.Get(i));
+    installApplication<MaterialFlowLogicalAgentApplication>(material_flows_.Get(i));
     material_flows_.Get(i)->GetApplication(0)->SetStartTime(ns3::MilliSeconds(0));
   }
 
@@ -232,35 +241,36 @@ void CppsManager::setupNodes() {
 }
 
 void CppsManager::executeMaterialFlow(int index, const std::string & /*friendly_name*/) {
-  auto cpps_app = this->material_flows_.Get(index)->GetApplication(0)->GetObject<CppsApplication>();
-  auto mf_app = std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
-
   // TODO MaterialFlowDescriptionScenario info = material_flow_descriptions_[friendly_name];
-
-  mf_app->addMaterialFlow("todo");
+  material_flows_.Get(index)
+      ->GetApplication(0)
+      ->GetObject<MaterialFlowLogicalAgentApplication>()
+      ->application->addMaterialFlow("todo");
 }
 
 void CppsManager::clearFinishedMaterialFlows() {
   bool found_running_matrial_flow_app = false;
 
   for (uint32_t i = 0; i < material_flows_.GetN(); i++) {
-    auto cpps_app = this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>();
-    if (std::holds_alternative<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
-            cpps_app->application)) {
-      auto to_app =
-          std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
-      if (to_app) {
-        if (scenario_.do_material_flow_agents_leave_after_finish && to_app->canStop()) {
-          found_running_matrial_flow_app = true;
-          cpps_app->cleanup();
+    const auto &mf_app = material_flows_.Get(i)
+                             ->GetApplication(0)
+                             ->GetObject<MaterialFlowLogicalAgentApplication>()
+                             ->application;
 
-        } else if (to_app->isFinished()) {
-          number_material_flows_finished_++;
-          found_running_matrial_flow_app = true;
+    if (mf_app) {
+      if (scenario_.do_material_flow_agents_leave_after_finish && mf_app->canStop()) {
+        found_running_matrial_flow_app = true;
+        material_flows_.Get(i)
+            ->GetApplication(0)
+            ->GetObject<MaterialFlowLogicalAgentApplication>()
+            ->application.reset();
 
-          if (scenario_.do_material_flow_agents_leave_after_finish) {
-            to_app->prepareStop();
-          }
+      } else if (mf_app->isFinished()) {
+        number_material_flows_finished_++;
+        found_running_matrial_flow_app = true;
+
+        if (scenario_.do_material_flow_agents_leave_after_finish) {
+          mf_app->prepareStop();
         }
       }
     }
@@ -284,21 +294,19 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
   uint32_t i = 0;
   bool init_application = true;
   for (; i < material_flows_.GetN(); i++) {
-    auto cpps_app = this->material_flows_.Get(i)->GetApplication(0)->GetObject<CppsApplication>();
+    const auto &mf_app = this->material_flows_.Get(i)
+                             ->GetApplication(0)
+                             ->GetObject<MaterialFlowLogicalAgentApplication>()
+                             ->application;
 
-    if (std::holds_alternative<std::monostate>(cpps_app->application)) {
+    if (!mf_app) {
       init_application = true;
       break;
     }
 
-    if (std::holds_alternative<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(
-            cpps_app->application)) {
-      auto mf_app =
-          std::get<std::shared_ptr<logical::MaterialFlowLogicalAgent>>(cpps_app->application);
-      if (!mf_app->isBusy()) {
-        init_application = false;
-        break;
-      }
+    if (!mf_app->isBusy()) {
+      init_application = false;
+      break;
     }
 
     if (i + 1 == material_flows_.GetN())
