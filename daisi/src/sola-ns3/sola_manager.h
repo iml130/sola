@@ -22,6 +22,7 @@
 #include "manager/manager.h"
 #include "sola_application.h"
 #include "sola_logger_ns3.h"
+#include "sola_scenariofile.h"
 
 namespace daisi::sola_ns3 {
 
@@ -51,14 +52,14 @@ private:
                    std::vector<std::shared_ptr<ScenariofileParser::Table>>>>::iterator;
 
   // Scheduling methods, implemented in sola_manager_scheduler.cpp
-  void scheduleSOLAStart(scenario_it it, uint64_t &current_time);
-  void scheduleSubscribeTopic(scenario_it it, uint64_t &current_time);
-  void scheduleDelay(scenario_it it, uint64_t &current_time);
-  void schedulePublish(scenario_it it, uint64_t &current_time);
+  void schedule(StartSOLA start, uint64_t &current_time);
+  void schedule(SubscribeTopic subscribe, uint64_t &current_time);
+  void schedule(Delay delay, uint64_t &current_time);
+  void schedule(Publish publish, uint64_t &current_time);
 
   ns3::Ptr<SolaApplication> getApplication(uint32_t id) const;
 
-  uint64_t number_nodes_ = 0;
+  SolaScenariofile scenariofile_;
 };
 
 }  // namespace daisi::sola_ns3

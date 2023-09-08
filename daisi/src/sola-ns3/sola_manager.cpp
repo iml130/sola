@@ -31,12 +31,11 @@ using namespace ns3;
 namespace daisi::sola_ns3 {
 
 SolaManager::SolaManager(const std::string &scenariofile_path)
-    : Manager<SolaApplication>(scenariofile_path),
-      number_nodes_(parser_.getParsedContent()->getRequired<uint64_t>("numberNodes")) {
+    : Manager<SolaApplication>(scenariofile_path), scenariofile_(scenariofile_path) {
   Manager::initLogger();
 }
 
-uint64_t SolaManager::getNumberOfNodes() { return number_nodes_; }
+uint64_t SolaManager::getNumberOfNodes() { return scenariofile_.number_nodes; }
 
 void SolaManager::setup() {
   Manager<SolaApplication>::setup();
@@ -56,24 +55,11 @@ ns3::Ptr<SolaApplication> SolaManager::getApplication(uint32_t id) const {
 }
 
 void SolaManager::scheduleEvents() {
-  uint64_t default_delay = parser_.getDefaultDelay();
   uint64_t current_time = 0;
 
-  for (const std::shared_ptr<ScenariofileParser::Table> &command : parser_.getScenarioSequence()) {
-    auto map = command->content;
-
-    if (auto it = map.find("startSOLA"); it != map.end()) {
-      scheduleSOLAStart(it, current_time);
-    } else if (it = map.find("subscribeTopic"); it != map.end()) {
-      scheduleSubscribeTopic(it, current_time);
-    } else if (it = map.find("delay"); it != map.end()) {
-      scheduleDelay(it, current_time);
-    } else if (it = map.find("publish"); it != map.end()) {
-      schedulePublish(it, current_time);
-    } else {
-      throw std::runtime_error("invalid testfile key");
-    }
-    current_time += default_delay;
+  for (const SolaScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
+    std::visit([this, &current_time](auto &&step) { schedule(step, current_time); }, step.step);
+    current_time += scenariofile_.default_delay;
   }
 }
 void SolaManager::subscribeTopic(const std::string &topic, uint32_t id) {
