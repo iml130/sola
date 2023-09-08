@@ -1,3 +1,33 @@
+## Simulation setup
+
+So called ``Manager`` classes are used to set up and run the simulation.
+Common tasks like setting up randomness, logging and running the ns-3 simulation are implemented in a ``Manager`` base class.
+For every application, a specific manager is implemented, which for example parses the specific scenariofile and schedules all required ns-3 events for the application.
+Methods of the specific manager are called from the base class ``Manager`` as depicted in Fig. 1.
+
+<figure markdown>
+  ![ManagerSetup](img/manager_setup.svg)
+  <figcaption markdown>**Figure 1:** Simulation setup</figcaption>
+</figure>
+
+## Scenariofile parsing
+A YAML scenariofile is represented by a struct, inheriting from ``GeneralScenariofile``.
+``GeneralScenariofile`` already provides access and parsing capabilities for all general scenariofile entries, like ``delay``.
+Application-specific entries can be added by adding members to the struct.
+The member must be named exactly like the entry in the YAML scenariofile.
+Parsing happens in the constructor by calling the ``SERIALIZE_VAR`` macro for every member.
+
+Currently, parsing of all basic data types is supported out of the box.
+Further,  ``std::vector``, ``std::optional`` and ``std::variant`` can be parsed.
+For parsing a ``std::variant`` see [this example](https://github.com/iml130/sola/blob/8007aa76bd5800b5932ef82bf2301c5da4ea33f2/daisi/src/minhton-ns3/minhton_scenariofile.cpp#L49-L66).
+To parse a custom class, this class must implement ``void parse(YAML::Node node)``, which calls the ``SERIALIZE_VAR`` macro for every member.
+
+
+<figure markdown>
+  ![ScenariofileParsing](img/scenariofile_parsing.svg)
+  <figcaption markdown>**Figure 2:** Example scenariofile structs</figcaption>
+</figure>
+
 ## Logging
 
 To capture data output from all SOLA components, loggers for the components were implemented that log the data into a SQLite database.
@@ -9,7 +39,7 @@ As multiple SOLA components share a simulation run (for example SOLA with MINHTO
 A global instance of the `daisi::LoggerManager` class holds the SQLite database connection and allows creating loggers for each SOLA component.
 All those loggers use this connection.
 
-Some general data about the simulation is logged with every SOLA component (see Figure 1 for the tables and their columns).
+Some general data about the simulation is logged with every SOLA component (see Figure 3 for the tables and their columns).
 This gives an overview about which SOLA components or applications are running on which device.
 With every SOLA component and application having its own UUID, the mapping of the component's or application's UUID to the device it is running on is logged once.
 This allows for example the evaluation of the load per node/device, that is running multiple components or applications.
@@ -18,7 +48,7 @@ The naming of the tables and columns (including the unit prefixes) follows [our 
 <figure markdown>
   <a></a>
     ![LoggingGeneral](img/logging_general.svg)
-  <figcaption markdown>**Figure 1:** Structure of general logging information</figcaption>
+  <figcaption markdown>**Figure 3:** Structure of general logging information</figcaption>
 </figure>
 
 Additional data, that is specific to SOLA components and applications, is logged into the database as well.
@@ -87,12 +117,12 @@ Every access point can handle a specific number of connections to application no
 
 The number of L2 switches and access points are automatically scaled up accordingly to the number of application nodes.
 The L2 switches and access points are connected through CSMA links to a central ns-3 node representing a L3 IP router.
-This setup forms a star topology as shown in Fig. 2.
+This setup forms a star topology as shown in Fig. 4.
 
 <figure markdown>
   <a></a>
     ![DAISI network structure](img/network_structure.svg)
-  <figcaption markdown>**Figure 2:** Example DAISI network structure with nodes connected via CSMA and nodes connected via Wi-Fi. The number of application nodes per switch/access point is set to 3.</figcaption>
+  <figcaption markdown>**Figure 4:** Example DAISI network structure with nodes connected via CSMA and nodes connected via Wi-Fi. The number of application nodes per switch/access point is set to 3.</figcaption>
 </figure>
 
 The specific network parameters (throughput, delay, ...) are currently hardcodeded within the network setup code.
