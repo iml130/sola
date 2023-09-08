@@ -24,19 +24,17 @@ Can be any string, purely descriptive at the moment.
     - Reasonable default: `ScenarioName`
     - Data type: ``std::string``
 
-#### ``stoptime``
-<!-- TODO Adjust to stop_time after modification of manager scenariofile parser -->
+#### ``stop_time``
 
-Defines at which simulation time in milliseconds the simulation will be aborted if it does not finish earlier.
+Defines at which simulation time the simulation will be aborted if it does not finish earlier.
 
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `10000000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``version``
-<!-- TODO deprecated? -->
 
 Can be used to differentiate different implementation versions.
 Currently not used.
@@ -47,19 +45,17 @@ Currently not used.
     - Reasonable default: `0.1`
     - Data type: ``std::string``
 
-#### ``defaultDelay``
-<!-- TODO Adjust to default_delay after modification of manager scenariofile parser -->
+#### ``default_delay``
 
-Delay between each simulation step (operations defined in the `scenarioSequence`, respectively between each step for *x*-many operations) in milliseconds.
+Delay between each simulation step (operations defined in the `scenario_sequence`, respectively between each step for *x*-many operations).
 
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `5000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
-#### ``randomSeed``
-<!-- TODO Adjust to random_seed after modification of manager scenariofile parser -->
+#### ``random_seed``
 
 Seed used for reproducable simulations.
 If ``=0`` random results are produced.
@@ -70,20 +66,7 @@ If ``=0`` random results are produced.
     - Reasonable default: `1`
     - Data type: ``uint64_t``
 
-#### ``logLevel``
-<!-- TODO Deprecated; Adjust after modification of manager scenariofile parser -->
-
-Level used for logging.
-
-??? properties
-
-    - Required:
-    - Reasonable default: `info`
-    - Data type: ``std::string``
-    - Possible values: ``debug``, ``info``, ``warning``, ``critical``
-
-#### ``outputPath``
-<!-- TODO Adjust after modification of manager scenariofile parser -->
+#### ``output_path``
 
 Directory path for the resulting logging output.
 
