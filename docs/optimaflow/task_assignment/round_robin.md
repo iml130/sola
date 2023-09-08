@@ -13,9 +13,11 @@ In the centralized scenario, the participants only have to communicate with the 
 The real logic of the task assignment procedure belongs to the central optimizer.
 Figure 1 shows the general architecture, where a [Material Flow](../participants/material_flow.md) contains the new tasks to be scheduled while the [AMR Logical Agents](../participants/amr.md)s represent the participants waiting for task assignments.
 
+<a name="fig1"></a>
+
 <figure markdown>
-  ![Figure_1](../img/central_optimizer_architecture.svg "Overview of the central task assignment architecture.")
-  <a name="fig1"></a><figcaption makdown>**Figure 1:** Overview of the central task assignment architecture.</figcaption>
+  ![Figure_1](../img/central_optimizer_architecture.svg)
+  <figcaption markdown>**Figure 1:** Overview of the central task assignment architecture.</figcaption>
 </figure>
 
 ### Message Types

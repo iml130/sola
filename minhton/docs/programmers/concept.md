@@ -111,7 +111,7 @@ Because NodeInfo uses the comparison operators of LogicalNodeInfo, we can use fu
 
 <figure markdown>
   <a id="fig2"></a>
-  ![Routing Table Example](../img/example_routing_table.svg)
+  ![Routing table Example](../img/example_routing_table.svg)
   <figcaption markdown>**Figure 2:** The node 3:3 in the example tree with fanout 2 maintains bidirectional links to the blue highlighted nodes on the same level in its routing table.
   One-directional links exist to the nodes on the level below highlighted in light blue.</figcaption>
 </figure>

@@ -36,12 +36,14 @@
 }
 
 figcaption p {
-    display: flex;
+    padding-left: 9ch;
+    position: relative;
 }
 
-figcaption strong {
-    flex-shrink: 0;
-    padding-right: 1ch;
+figcaption p strong {
+    display: block;
+    left: 0;
+    position: absolute;
 }
 
 /* End: Figures */

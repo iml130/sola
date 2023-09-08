@@ -1,37 +1,20 @@
-# MINHTON Logging
+## Database structure
 
-We are using a single SQLite database while running simulations with ns-3.
-Here the logging messages from each peer get put into one sqlite database from a given simulation run.
+<figure markdown>
+  <a></a>
+    ![DAISI SOLA logging](../img/logging_minhton.svg)
+  <figcaption markdown>**Figure 1:** Database structure for logging MINTHON data with ns-3.</figcaption>
+</figure>
 
-## General Side Notes
-
-Further details about the database structure are explained in the [main logging documentation](../logging.md).
-
-### IP Address
-
-The IP address of a physical peer will never change in the simulation, whereas the tree position of a physical peer might change multiple times through e.g. leaves, replacements or other restructuring of the network.
-Therefore to determine the actual load of a peer it is necessary to compare the IP addresses and not the tree position.
-The used IP addresses are based on the IPv4 standard and will be logged as a string, e.g., "1.1.0.2".
-MINHTON is an application running on the physical peers, by default on port 2000.
-
-### Timestamp
-
-In the ns-3 simulation the timestamps are logged in the unit milliseconds.
-But it is easy to change the unit in the simulator to even higher resolutions.
-
-## Tables
-
-The database tables related to MINHTON are:
-
-- **FindQuery**: Logs find queries
-- **FindQueryResult**: Logs only finished find queries
+- **MinhtonFindQuery**: Logs find queries
+- **MinhtonFindQueryResult**: Logs only finished find queries
 - **MinhtonNetworkInfo**: Associates the network information consisting of an IP address and a port with an application UUID for each node. Each node exists exactly once in this table.
 - **MinhtonNode**: Provides a position UUID that combines the application UUID of a node with its tree position.
 - **MinhtonNodeState**: When the state of a node changes an entry is added. This happens when 1) a node gets accepted into the network, 2) a node leaves the network (because the status changes to *left*), and 3) a node replaces another node (because the position changes).
 - **MinhtonTraffic**: Each message that a node receives or sends will be logged in the MinhtonTraffic table.
-- **SearchContent**: Logs the content of Search Exact requests with their attribute name and type.
-- **SearchTest**: Only used for testing Search Exact with empty messages.
-- **RoutingInfo**: When the routing information about a neighbor of any node changes, a new entry is added. This happens when 1) a node gets a new neighbor, 2) the network information about neighbor gets updated, and 3) a neighbor leaves the network.
+- **MinhtonSearchContent**: Logs the content of Search Exact requests with their attribute name and type.
+- **MinhtonSearchTest**: Only used for testing Search Exact with empty messages.
+- **MinhtonRoutingInfo**: When the routing information about a neighbor of any node changes, a new entry is added. This happens when 1) a node gets a new neighbor, 2) the network information about neighbor gets updated, and 3) a neighbor leaves the network.
 
 ## Views
 
@@ -40,20 +23,13 @@ The views are named after their originating tables:
 
 - **viewMinhtonNodeState**
 - **viewMinhtonTraffic**
-- **viewRoutingInfo**
+- **viewMinhtonRoutingInfo**
 
 ## Further Information
 
 ### MinhtonTraffic
 
-Mode means either that the message got sent or received.
-
-| Mode | Interpretation |
-|------|----------------|
-| 0    | Receiving      |
-| 1    | Sending        |
-
-Every other field represents information about the content of the message.
+Most of the fields represent information about the content of the message.
 Sender and target must always be set.
 Depending on the message type the other fields might also be set.
 In most cases only two additional fields for nodes are necessary.

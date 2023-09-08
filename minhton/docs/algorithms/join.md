@@ -10,7 +10,7 @@ The node that receives a JOIN Message executes the processJoin method. A node wh
 ## Finding the correct position
 
 Figure 1 illustrates how the MINHTON algorithm consists of three parts in sequence to find the correct position for a joining node.
-First, a null node (compare [glossary](../other/glossary.md)) has to be found.
+First, a null node (compare [glossary](../glossary.md)) has to be found.
 When the first reached node is not a null node, we use the adjacent to reach a null node with a single hop.
 Second, based on the routing table entries we determine whether we arrived on the last level or the one before it.
 Additional hops may be necessary to finish this process.

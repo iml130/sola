@@ -1,4 +1,4 @@
-# Minimal Height Tree Overlay Network (MINHTON)
+# Introduction
 
 <p class="center">
 <img src="img/minhtonLogo.svg" class="logo" width="200px" alt="MINHTON Logo">
@@ -10,9 +10,9 @@ Distributed systems, potentially growing large and consisting of heterogeneous n
 It becomes imperative that a P2P network is paired with efficient protocols for each phase of its life cycle: construction as well as maintenance and operation.
 Three operations are fundamental for a P2P network: nodes must be able to a) join, b) be located, c) leave.
 The main challenge for efficient protocols is that a single node will only possess limited information about the network, also known as the local view.
-The minimal height tree overlay network (MINHTON) is such a P2P overlay architecture featuring several beneficial structural properties added over existing tree-structured networks.
+The minimal height tree overlay network (**MINHTON**) is such a P2P overlay architecture featuring several beneficial structural properties added over existing tree-structured networks.
 The minimal height guarantees a global tree balance, yet, it must be retained at all times, even though the P2P network may change dynamically.
-MINHTON provides efficient protocols for node Join and Departure in logarithmic order, comparable to tree overlays with less strict structural guarantees, both retaining a minimal height tree.
+**MINHTON** provides efficient protocols for node Join and Departure in logarithmic order, comparable to tree overlays with less strict structural guarantees, both retaining a minimal height tree.
 
 ![Figure 1](img/cpps.png "An interconnected cyber-physical production system, representing an P2P network")
 <a id="fig1"></a>**Figure 1:** An interconnected cyber-physical production system, representing a P2P network.
@@ -39,7 +39,7 @@ If you use it for research, please include one of the following references in an
 }
 ```
 
-MINHTON is based on few other publications:
+**MINHTON** is based on few other publications:
 
 <details>
   <summary>Peer Discovery in Tree-Structured P2P Overlay Networks by Means of Connected Dominating Sets</summary>

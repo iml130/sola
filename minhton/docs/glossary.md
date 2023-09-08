@@ -8,8 +8,8 @@ This means the new node inhabits the position of one of *m* children on the leve
 
 ## D
 
-**Dominating Set Node (DSN)**:<br />
-DSNs are a subset of nodes establishing a Dominating Set (DS) on each level.
+**Dominating set node (DSN)**:<br />
+DSNs are a subset of nodes establishing a dominating set (DS) on each level.
 Using only DSNs, every node in the network can be reached by just another hop from the right DSN at maximum.
 
 ## F
@@ -33,7 +33,7 @@ E.g. in a network consisting of the nodes 0:0, 1:0, 1:1, 1:2, and 1:3, this is 1
 A process in which the overlay network is reduced by a node.
 The node is currently part of the network but will leave the network during the process.
 
-**Leaving Node**:<br />
+**Leaving node**:<br />
 A node that wants to leave the network.
 
 **Level**:<br />
@@ -69,19 +69,33 @@ Physical information about a node like networking information.
 
 ## R
 
+**Removed position**:<br />
+The position where the replacing node was, but which is becoming empty when the replacing node replaces the leaving node.
+
+**Replaced position**:<br />
+The position where the leaving node was, which is being replaced.
+
+**Replacing node**:<br />
+The node who is replacing the position of the leaving node.
+
 **Root node**:<br />
 This node is 0:0 and must always exist, otherwise, there is no starting point for the overlay structure.
 
-**Routing Table (RT)**:<br />
+**Routing table (RT)**:<br />
 Each node has a routing table that contains (the position and network address of) other nodes on the same level.
 The other nodes are selected based on a formula from the BATON / BATON\* paper.
 Nodes nearby are more likely to be included.
 
+**Routing table (RT) neighbor parents**:<br />
+The parents of our routing table neighbors.
+Those neighbors have the current node as a routing table neighbor child, and need to be informed about it joining / leaving too, although the current node does not have a direct connection to them.
+We can calculate the positions locally.
+
 ## S
 
-**Successor Node**:<br />
+**Successor node**:<br />
 A node that is found with ``FindReplacement`` is proposed to be the last node in the network (rightmost on the lowest level).
-This node will be used to replace the *Leaving Node*.
+This node will be used to replace the [*leaving node*](#l).
 
 ## T
 

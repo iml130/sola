@@ -4,8 +4,8 @@
 
 ## Getting started
 
-To run OptiMaFlow please download and build the repository as described [here](../../docs/getting_started.md).
-Afterwards follow the instructions for [OptiMaFlow](../../daisi/docs/optimaflow-ns3/introduction.md) in the ns3-Integration tab.
+To run OptiMaFlow please download and build the repository as described [here](../getting_started.md).
+Afterwards, follow the instructions for [OptiMaFlow](../daisi/using.md) in the ns-3 Integration tab.
 
 ### Intralogistics
 

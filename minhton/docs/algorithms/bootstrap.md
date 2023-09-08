@@ -9,5 +9,5 @@ The new node will then continue to join the network using the node of the first 
 Currently, three modes can be used which define which nodes will be "bootstrap nodes".
 
 - **All nodes**: All nodes will become bootstrap nodes. This will likely cause much network traffic! (k_MULTICAST_STRATEGY = 0)
-- **Prio-Nodes**: All [prio-nodes](../other/glossary.md) become bootstrap nodes (k_MULTICAST_STRATEGY = 1)
+- **Prio-Nodes**: All [prio-nodes](../glossary.md) become bootstrap nodes (k_MULTICAST_STRATEGY = 1)
 - **Nodes with free children**: Nodes with place for new childs become bootstrap nodes (k_MULTICAST_STRATEGY = 2)
