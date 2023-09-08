@@ -1,10 +1,10 @@
 # Leave Procedure
 
 If a node wants to leave the network it first has to call the `initiateSelfDeparture` method.
-It nay need a successor, which it can find using `FIND_REPLACEMENT` messages.
+It nay need a [successor node](../glossary.md#s), which it can find using `FIND_REPLACEMENT` messages.
 `FIND_REPLACEMENT` messages are directed in an equivalent way as described for the [join algorithm](join.md#finding-the-correct-position).
 
-When a node notices that it can leave its position without any violations, it sends a `REPLACEMENT_OFFER` message to the leaving node.
+When a node notices that it can leave its position without any violations, it sends a `REPLACEMENT_OFFER` message to the [leaving node](../glossary.md#l).
 The leaving node accepts the offer by sending back a `REPLACEMENT_ACK` to the replacing node.
 This message contains all routing information about the leaving node, so that the replacing node can reconstruct the routing information without any additional messages.
 
@@ -19,8 +19,8 @@ Then the replacing node has the reponsibility to rebuild everything by firstly l
 
 ## Message sequence for a successful leave procedure (MINHTON Algorithm)
 
-0. (Leaving Node *l* sends **Find Replacement (80)**) (If successor necessary)
-1. (**Find Replacement (80)** eventually reaches successor *s*) (*s* can be *l* --> No successor necessary)
+0. ([Leaving node *l*](../glossary.md#l) sends **Find Replacement (80)**) (If successor necessary)
+1. (**Find Replacement (80)** eventually reaches [successor node *s*](../glossary.md#s)) (*s* can be *l* --> No successor necessary)
 2. *s* sends **Sign Off Parent Request (82)** to its parent *ps*
 3. *ps* sends **Lock Neighbor Request (84)** to its right neighbor *rn_ps*
 4. *rn_ps* replies with **Lock Neighbor Response (86)** to *ps*
@@ -44,29 +44,17 @@ Then the replacing node has the reponsibility to rebuild everything by firstly l
 22. *s* sends **Unlock Neighbor (96)** to *ps*
 23. *ps* sends **Unlock Neighbor (96)** to *rn_ps* and *ln_ps*
 
-## Terminology
-
-*leaving/left node*: the node who leaves the network
-
-*replacing node*: the node who is replacing the position of the leaving node
-
-*replaced position*: the position where the leaving node was, which is now being replaced
-
-*removed position*: the position where the replacing node was, but which is becoming empty now as the replacing node replaces the leaving node
-
-*routing table neighbor parents*: the parents of our routing table neighbors. those neighbors have the current node as a routing table neighbor child, and need to be informed about the leaving too, although the current node does not have a direct connection to them. we can calculate the positions locally.
-
 ## Updating Network for Leave without Replacement
 
-The leaving node must handle the updating of the network itself. For this the node has to send `REMOVE_NEIGHBOR` messages to each neighbor who knows the node (not its routing table neighbor children, but also its routing table neighbor parents).
+The leaving node must handle the updating of the network itself. For this the node has to send `REMOVE_NEIGHBOR` messages to each neighbor who knows the node (not its routing table neighbor children, but also its [routing table neighbor parents](../glossary.md#r)).
 To the routing table neighbor parents has to be sent via `SearchExact`, because the network information is not known.
 
 After that the adjacent information has to be updated by linking the adjacent left and adjacent right of the leaving node together.
 
 ## Updating Network for Leave with Replacement
 
-The replacing node must handle the updating of the network.
-For this the nodes who know the replacing position and those who know the removing position are crucial.
+The [replacing node](../glossary.md#r) must handle the updating of the network.
+For this the nodes who know the replacing position and those who know the [removing position](../glossary.md#r) are crucial.
 Firstly we need to send `REMOVE_NEIGHBOR` messages to those nodes who know the removing position, but not the replacing position.
 They only need to remove their entry of the removing position.
 
@@ -77,7 +65,7 @@ Those who know both need to update their Network Information and at the same tim
 
 After that the adjacent information has to be updated.
 For the adjacents of the removed position the adjacent left and adjacent right need to be linked together.
-We do not need to update the adjacents of the replaced position separately, because this will already be done through the `REPLACEMENT_UPDATE` messages.
+We do not need to update the adjacents of the [replaced position](../glossary.md#r) separately, because this will already be done through the `REPLACEMENT_UPDATE` messages.
 
 <figure markdown>
   <a id="fig_leave_example"></a>

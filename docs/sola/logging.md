@@ -1,2 +1,1 @@
-# Logging
-!!! danger "SOLAs logging component is work in progress!"
+Currently SOLA does not have a separate logger.

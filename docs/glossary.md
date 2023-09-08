@@ -2,10 +2,10 @@
 
 [MINHTON](management_overlay/glossary.md)
 
-[NATTER](natter_lib/glossary.md)
+[NATTER](natter/glossary.md)
 
-[ns-3 Integration](ns3-integration/glossary.md)
+[OptiMaFlow](optimaflow/glossary.md)
 
-[Applications](applications/glossary.md)
+[ns-3 Integration](daisi/glossary.md)
 
 [DAISI](daisi/glossary.md)

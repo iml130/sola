@@ -25,14 +25,14 @@ A description on how the Service Discovery with MINHTON works will be published 
 The API for Publish-Subscribe component implementations is documented [here](https://iml130.github.io/sola/doxygen/classsola_1_1EventDissemination.html).
 
 ### MINHCAST
-The MINHCAST algorithm is integrated into the [natter](../natter_lib/introduction.md) framework.
+The MINHCAST algorithm is integrated into the [natter](../natter/introduction.md) framework.
 It uses the MINHTON structure to send messages to all nodes in the tree by using unicasts.
-Futher information about the concept of MINHCAST can be found [here](../natter_lib/programmers/minhcast.md).
+Futher information about the concept of MINHCAST can be found [here](../natter/programmers/minhcast.md).
 
 The component implementation ``EventDisseminationMinhcast`` creates separate MINHTON networks (separate trees) for every topic in the Publish-Subscribe environment.
 As only nodes interested in a particular topic are part of a topic tree, only they are receiving messages published for this topic.
 The connection between nodes in the MINHTON topic trees are forwarded to MINHCAST together with the corresponding topic and are used for publishing the message.
-By invoking the method ``subscribeTopic(..)``, the component implementation must also pass its own node info (MINHTON level and number) for its topic tree node. 
+By invoking the method ``subscribeTopic(..)``, the component implementation must also pass its own node info (MINHTON level and number) for its topic tree node.
 The connection information (IP address and port) of node in the topic tree must be known to join into an existing MINHTON topic tree (see [MINHTONs Join Procedure](../management_overlay/algorithms/join.md)).
 The component implementation uses the Service Discovery to discover these information.
 By using the Service Discovery like a key-value database, the component implementation searches for a key with the name of the topic.

@@ -144,29 +144,53 @@ Since the node that was previously located at 2:1 moved to 1:1 to replace it, bo
   <figcaption markdown>**Figure 4:** The entries in the routing information of the 4 nodes in the network. The updated entries after the node, which was previously at 1:1 left, are highlighted in blue.</figcaption>
 </figure>
 
-## Entity Search / Peer Discovery
-
-Each node in the constructed peer-to-peer network may have different capabilities and properties.
-To find peers with specific capabilities and properties, we use a practical solution to the problem of peer discovery, which is finding peers in the network according to a specified query.
-We contribute a peer discovery for an m-ary tree-structured P2P network by utilizing a connected dominating set (CDS), a technique that is typically used in unstructured networks.
-Our approach to constructing the CDS requires no additional communication cost, while nodes can insert, update and remove data within O(1).
-
-A peer discovery query description is given according to boolean algebra consisting of logical *and*-, *or*- and *not*-operators.
-Literals are comparisons with the key-value pairs (KVPs).
-The peer discovery query result is expected to contain information about each peer whose KVPs satisfy the peer discovery query.
-
 ## Routing links
 
 <figure markdown>
   <a id="fig_routing_links"></a>
   ![Routing links example](./img/minhton_links.svg)
-  <figcaption markdown>**Figure 5:** The node 3:4 in the example tree with fanout 2 maintains several types of links.</figcaption>
+  <figcaption markdown>**Figure 6:** The node 3:4 in the example tree with fanout 2 maintains several types of links.</figcaption>
 </figure>
 
 Each MINHTON node individually maintains links to selected nodes in the network based on the tree structure and its position in the tree for its local view as follows:
 
-- a link to its parent node (unless it is the root node 0:0).
+- a link to its parent node (unless it is the root node (0:0)).
 - links to up to *m* children nodes (*m* also denotes the fanout of the tree).
 - a link to a left and right adjacent node based on an in-order traversal.
-- links to selected same-level [neighbor nodes in routing tables (RT)](./programmers/concept.md#routingtable).
-- links to all children of each same-level neighbor.
+- links to selected same-level [routing table (RT) neighbors](./programmers/concept.md#routingtable).
+- links to all children of each same-level neighbor (RT children).
+
+## Peer Discovery / Entity Search (ESearch)
+
+Each node in the constructed peer-to-peer network may have different capabilities and properties.
+To find peers which meet specific requirements, we use a practical solution to the problem of peer discovery, which is finding peers in the network according to a specified query.
+We contribute a peer discovery for an m-ary tree-structured P2P network by utilizing a connected dominating set (CDS), a technique that is typically used in unstructured networks.
+Our solution is also known as Entity Search (ESearch).
+Our approach to constructing the CDS requires no additional communication cost, while nodes can insert, update and remove data within O(1).
+
+Each CDS maintains up to two levels at the same time and consists of a number of dominating set nodes (DSNs).
+Furthermore, each DSN is responsible for several nodes and their key-value pairs (KVPs) within its cover area (CA) as seen in [Figure 5](#fig_peer_discovery).
+A CA includes, if present, the DSN itself, its *m* RT neighbors to the left and right, its own *m* children, and the RT children.
+If a DSN has a neighboring DSN to its left, only *m − 1* in-level neighbors to the left are included in its CA.
+It concludes that the CAs of all DSNs are disjoint sets, including up to *(2m + 1) · m* nodes.
+
+<figure markdown>
+  <a id="fig_peer_discovery"></a>
+  ![Routing links example](./img/peer_discovery_forwarding.svg)
+  <figcaption markdown>**Figure 5:** Peer Discovery example where node (2:1) sends the peer discovery request φ to one dominating set node (DSN) on each level, where at least one DSN exists.
+  Each DSN forwards the request to other DSNs on the same level and returns the discovery result to the requesting node.</figcaption>
+</figure>
+
+The peer discovery consists of two phases.
+In the first phase of the example from [Figure 5](#fig_peer_discovery), node (2:1) sends its discovery request φ to one DSN on each even level, e.g., (0:0), (2:2), and (4:6).
+Any node p can estimate the tree’s height with its adjacent links since at least one adjacent of p is located either on the highest level *h − 1* or one level below the highest level, *h − 2*.
+However, after sending the discovery request to one DSN per level, these DSNs are responsible for forwarding φ among each DSN on their level.
+For example, the DSN (4:6) forwards the request to the other DSNs on level 4, i.e., (4:2) and (4:10).
+This request gets forwarded until all DSNs of the CDS have received it.
+The second phase includes an evaluation of the peer discovery query φ.
+Each DSN evaluates the maintained CA either by using its stored or requesting new information from the nodes assigned to it.
+Any result is returned by each DSN to the requester node (2:1).
+
+A peer discovery query description is given according to boolean algebra consisting of logical *and*-, *or*- and *not*-operators.
+Literals are comparisons with the KVPs.
+The peer discovery query result is expected to contain information about each peer whose KVPs satisfy the peer discovery query.

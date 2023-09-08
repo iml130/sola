@@ -21,7 +21,7 @@ We will later present you how to avoid this kind of created tree.
 
 Internal name: ``nbaton_star``
 
-We extend the functionality by introducing bootstrapping nodes (further described as Dominating Set Nodes (DSNs)) with a more sophisticated *Join* procedure.
+We extend the functionality by introducing bootstrapping nodes (further described as dominating set nodes (DSNs)) with a more sophisticated *Join* procedure.
 Those DSNs handle the forwarding of *Join*-request specifically to keep a null balanced tree [[3]](#references).
 Therefore, we tighten the condition of a balanced tree to:
 

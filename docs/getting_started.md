@@ -7,7 +7,7 @@ An instruction to install all dependencies with Ubuntu 22.04 is given below.
 
 Some dependencies are already included in the SOLA repository and are not listed here.
 
-**Be advised that DAISI depends on all other components and all components depend on SolaNet.** 
+**Be advised that DAISI depends on all other components and all components depend on SolaNet.**
 
 
 | External dependency | DAISI                   | MINHTON                | natter | SolaNet               |
@@ -65,7 +65,6 @@ For example to only build the MINHTON library (and all its internal dependencies
 
 ```
 cmake --build . --target minhton_core_node
-
 ```
 
 ### Build with ns-3 integration
@@ -99,7 +98,7 @@ This problem only appears on [Linux kernels prior to version 5.11 or low-perform
 
 To execute a ns-3 simulation or integrating components (SOLA, MINHTON, natter) into your application, visit the following pages:
 
-* [Execute DAISI simulation](daisi/getting_started.md)
+* [Execute DAISI simulation](daisi/using.md)
 * [Using SOLA](sola/usage.md)
-* [Using MINHTON](management_overlay/getting_started.md)
-* [Using natter](natter_lib/using.md)
+* [Using MINHTON](management_overlay/using.md)
+* [Using natter](natter/using.md)
