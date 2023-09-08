@@ -26,8 +26,8 @@ The structure and content of this data is described under the "Logging" section 
 
 ### Specify output path for simulation results
 
-The path where the output database file should be stored can either be specified by setting the `outputPath` key within the scenario file (see "Scenariofile" sections in the left sidebar) or by setting the `DAISI_OUTPUT_PATH` environment variable.
-If both are set, `outputPath` from the scenariofile is used.
+The path where the output database file should be stored can either be specified by setting the `output_path` key within the scenario file (see "Scenariofile" sections in the left sidebar) or by setting the `DAISI_OUTPUT_PATH` environment variable.
+If both are set, `output_path` from the scenariofile is used.
 
 The name for the database file is automatically generated and contains the name of the application or SOLA component, a timestamp and a random six-character string.
 Database files from simulations using the MINHTON component also include the fanout and number of nodes in its filename.
