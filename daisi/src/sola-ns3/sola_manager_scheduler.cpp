@@ -19,12 +19,10 @@
 #define GET_VALUE(type, name) INNER_TABLE(it)->getRequired<type>(name);
 
 namespace daisi::sola_ns3 {
-void SolaManager::scheduleSOLAStart(scenario_it it, uint64_t &current_time) {
-  auto nodes = GET_VALUE(std::string, "nodes");
-  auto delay = GET_VALUE(uint64_t, "delay");
-  assert(nodes == "all");
+void SolaManager::schedule(StartSOLA start, uint64_t &current_time) {
+  const uint64_t delay = start.delay;
 
-  for (uint32_t i = 0; i < number_nodes_; i++) {
+  for (uint32_t i = 0; i < scenariofile_.number_nodes; i++) {
     ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
                                         ns3::MilliSeconds(current_time), &SolaManager::startSOLA,
                                         this, i);
@@ -33,40 +31,25 @@ void SolaManager::scheduleSOLAStart(scenario_it it, uint64_t &current_time) {
   current_time -= delay;  // No delay at end (should be default delay)
 }
 
-void SolaManager::scheduleSubscribeTopic(SolaManager::scenario_it it, uint64_t &current_time) {
-  auto topic = GET_VALUE(std::string, "topic");
-  [[maybe_unused]] auto wait_till_finished = GET_VALUE(std::string, "waitTillFinished");
-  auto nodes = GET_VALUE(std::string, "nodes");
-  auto delay = GET_VALUE(uint64_t, "delay");
-  assert(nodes == "all");
+void SolaManager::schedule(SubscribeTopic subscribe, uint64_t &current_time) {
+  const uint64_t delay = subscribe.delay;
 
-  for (uint32_t i = 0; i < number_nodes_; i++) {
+  for (uint32_t i = 0; i < scenariofile_.number_nodes; i++) {
     ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
                                         ns3::MilliSeconds(current_time),
-                                        &SolaManager::subscribeTopic, this, topic, i);
+                                        &SolaManager::subscribeTopic, this, subscribe.topic, i);
     current_time += delay;
   }
   current_time -= delay;  // No delay at end (should be default delay)
 }
 
-void SolaManager::scheduleDelay(scenario_it it, uint64_t &current_time) {
-  current_time += GET_VALUE(uint64_t, "delay");
-}
+void SolaManager::schedule(Delay delay, uint64_t &current_time) { current_time += delay.delay; }
 
-void SolaManager::schedulePublish(scenario_it it, uint64_t &current_time) {
-  auto topic = GET_VALUE(std::string, "topic");
-  auto msg_size = GET_VALUE(uint64_t, "messageSize");
-  auto nodes = GET_VALUE(uint64_t, "nodes");
-  try {
-    //    uint32_t node_number = std::stoi(nodes);
-    uint32_t node_number = nodes;
-    ns3::Simulator::ScheduleWithContext(node_container_.Get(node_number)->GetId(),
-                                        ns3::MilliSeconds(current_time), &SolaManager::publishTopic,
-                                        this, node_number, topic, msg_size);
-  } catch (...) {
-    std::cerr << "failed node conversion" << std::endl;
-    throw;
-  }
+void SolaManager::schedule(Publish publish, uint64_t &current_time) {
+  const uint32_t node_id = publish.node_id;
+  ns3::Simulator::ScheduleWithContext(node_container_.Get(node_id)->GetId(),
+                                      ns3::MilliSeconds(current_time), &SolaManager::publishTopic,
+                                      this, node_id, publish.topic, publish.message_size);
 }
 
 }  // namespace daisi::sola_ns3

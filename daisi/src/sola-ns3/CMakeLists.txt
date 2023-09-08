@@ -62,6 +62,7 @@ target_link_libraries(daisi_sola_manager
         daisi_manager
         daisi_sola_application
         daisi_sola_logger_ns3
+        daisi_sola_scenariofile
 )
 target_include_directories(daisi_sola_manager
         PUBLIC
@@ -114,3 +115,20 @@ target_link_libraries(sola_config_helper_ns3 INTERFACE
 
 add_library(daisi_sola_management_minhton_helper INTERFACE management_minhton_helper.h)
 target_link_libraries(daisi_sola_management_minhton_helper INTERFACE ManagementOverlayMINHTONSim)
+
+add_library(daisi_sola_scenariofile STATIC)
+target_sources(daisi_sola_scenariofile
+        PRIVATE
+        sola_scenariofile.cpp
+        sola_scenariofile.h
+)
+target_link_libraries(daisi_sola_scenariofile
+        PUBLIC
+                daisi_manager_general_scenariofile
+        PRIVATE
+                daisi_utils
+)
+target_include_directories(daisi_sola_scenariofile
+        PUBLIC
+        ${PROJECT_SOURCE_DIR}/src
+)

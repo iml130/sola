@@ -1,37 +1,32 @@
-# required:
-title: Test
-name: Ein weiterer Test
-stoptime: 4294967296
+title: SOLA default scenario
 version: 0.1
-physicalLayer: ETH
+stop_time: 4294967296
+random_seed: 1
+default_delay: 500
+
+# outdated/unused fields
+# only present until Manager switches to new scenariofile parser as well
+stoptime: 4294967296
+randomSeed: 1
+
 fanout: 2
+number_nodes: 3
 
-# optional
-defaultDelay: 500
-logLevel: info
-randomSeed: 1 # 0 random, otherwise...
-
-# required:
-numberNodes: 3
-
-scenarioSequence:
-  - startSOLA:
-      nodes: "all"
-      delay: 1000
-  - delay:
-      delay: 0
-  - subscribeTopic:
-      nodes: "all"
-      topic: "helloworld"
-      delay: 1000
-      waitTillFinished: true
-  - delay:
-      delay: 0
-  - publish:
-      topic: "helloworld"
-      messageSize: 100 # bytes
-      nodes: "1"
-  - publish:
-      topic: "helloworld"
-      messageSize: 1000 # bytes
-      nodes: "2"
+scenario_sequence:
+  - type: start_sola
+    delay: 1000
+  - type: delay
+    delay: 0
+  - type: subscribe_topic
+    topic: "helloworld"
+    delay: 1000
+  - type: delay
+    delay: 0
+  - type: publish
+    topic: "helloworld"
+    message_size: 100 # bytes
+    node_id: "1"
+  - type: publish
+    topic: "helloworld"
+    message_size: 1000 # bytes
+    node_id: 2
