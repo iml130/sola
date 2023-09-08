@@ -13,12 +13,12 @@ initial_number_of_amrs: 12
 number_of_material_flows: 1
 number_of_material_flow_agents: 1
 do_material_flow_agents_leave_after_finish: false
-  
+
 algorithm:
   assignment_strategy: round_robin
 
 autonomous_mobile_robots:
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
@@ -36,7 +36,7 @@ autonomous_mobile_robots:
       load_carrier: package
       max_payload: 30
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerB
@@ -54,7 +54,7 @@ autonomous_mobile_robots:
       load_carrier: package
       max_payload: 45
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
@@ -72,7 +72,7 @@ autonomous_mobile_robots:
       load_carrier: eurobox
       max_payload: 30
 
-  - description:  
+  - description:
     properties:
       device_type: amr
       manufacturer: ManufacturerA
