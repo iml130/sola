@@ -246,12 +246,11 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint16_t level, uint16
       if (app->getNodeInfo().isInitialized()) {
         this->initiateLeaveNow(leave_index);
 
-        for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-          if (leave_index == *it) {
-            this->init_index_deque_.erase(it);
-            break;
-          }
+        const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), leave_index);
+        if (it == this->init_index_deque_.end()) {
+          throw std::invalid_argument("Index to leave not found in init_index_deque_");
         }
+        this->init_index_deque_.erase(it);
         this->uninit_index_deque_.push_back(leave_index);
         return;
       }
@@ -274,12 +273,12 @@ void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
 
   if (app->getNodeInfo().isInitialized()) {
     this->initiateLeaveNow(index);
-    for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-      if (index == *it) {
-        this->init_index_deque_.erase(it);
-        break;
-      }
+
+    const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), index);
+    if (it == this->init_index_deque_.end()) {
+      throw std::invalid_argument("Index to leave not found in init_index_deque_");
     }
+    this->init_index_deque_.erase(it);
     this->uninit_index_deque_.push_back(index);
   } else {
     std::cout << "node to leave found but is not initialized";
@@ -300,12 +299,9 @@ void MinhtonManager::Scheduler::executeOneRandomLeave() {
             << std::endl;
   this->initiateLeaveNow(random_index_to_leave);
 
-  for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-    if (random_index_to_leave == *it) {
-      this->init_index_deque_.erase(it);
-      break;
-    }
-  }
+  const auto it =
+      std::find(init_index_deque_.begin(), init_index_deque_.end(), random_index_to_leave);
+  this->init_index_deque_.erase(it);
   this->uninit_index_deque_.push_back(random_index_to_leave);
 }
 
@@ -316,12 +312,8 @@ void MinhtonManager::Scheduler::executeOneLeaveOnRoot() {
   this->initiateLeaveNow(root_index);
 
   // finding root_index in deque and erasing
-  for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-    if (root_index == *it) {
-      this->init_index_deque_.erase(it);
-      break;
-    }
-  }
+  const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), root_index);
+  this->init_index_deque_.erase(it);
   this->uninit_index_deque_.push_back(root_index);
 }
 
@@ -443,12 +435,11 @@ void MinhtonManager::Scheduler::executeOneFailByPosition(uint16_t level, uint16_
       if (app->getNodeInfo().isInitialized()) {
         this->initiateFailureNow(fail_index);
 
-        for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-          if (fail_index == *it) {
-            this->init_index_deque_.erase(it);
-            break;
-          }
+        const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), fail_index);
+        if (it == this->init_index_deque_.end()) {
+          throw std::invalid_argument("Index to fail not found in init_index_deque_");
         }
+        this->init_index_deque_.erase(it);
         this->uninit_index_deque_.push_back(fail_index);
         return;
       }
@@ -471,12 +462,12 @@ void MinhtonManager::Scheduler::executeOneFailByIndex(uint16_t index) {
 
   if (app->getNodeInfo().isInitialized()) {
     this->initiateFailureNow(index);
-    for (auto it = this->init_index_deque_.begin(); it != this->init_index_deque_.end(); it++) {
-      if (index == *it) {
-        this->init_index_deque_.erase(it);
-        break;
-      }
+
+    const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), index);
+    if (it == this->init_index_deque_.end()) {
+      throw std::invalid_argument("Index to fail not found in init_index_deque_");
     }
+    this->init_index_deque_.erase(it);
     this->uninit_index_deque_.push_back(index);
   } else {
     std::cout << "node to fail found but is not initialized";
