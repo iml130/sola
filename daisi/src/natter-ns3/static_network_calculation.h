@@ -21,9 +21,9 @@
 #include <vector>
 
 namespace daisi::natter_ns3 {
-uint32_t calculateLevel(uint32_t node_id, uint32_t fanout);
-uint32_t calculateNumber(uint32_t i, uint32_t fanout, uint32_t own_level);
-std::vector<uint32_t> createLinearProjection(uint64_t number_of_nodes, uint32_t fanout,
+uint32_t calculateLevel(uint32_t node_id, uint16_t fanout);
+uint32_t calculateNumber(uint32_t i, uint16_t fanout, uint32_t own_level);
+std::vector<uint32_t> createLinearProjection(uint64_t number_of_nodes, uint16_t fanout,
                                              uint32_t own_index);
 }  // namespace daisi::natter_ns3
 

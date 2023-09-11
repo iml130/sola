@@ -194,7 +194,7 @@ bool isFanoutValid(uint16_t fanout);
 ///
 /// \returns horizontal value
 ///
-double treeMapper(uint16_t level, uint16_t number, uint8_t fanout, double K);
+double treeMapper(uint32_t level, uint32_t number, uint16_t fanout, double K);
 
 ///
 /// Method internally used by the treeMapper to additionally pass lower and upper bounds.
@@ -202,8 +202,8 @@ double treeMapper(uint16_t level, uint16_t number, uint8_t fanout, double K);
 ///
 /// \returns tuple of lower bound, upper bound, and center
 ///
-std::tuple<double, double, double> treeMapperInternal(uint16_t level, uint16_t number,
-                                                      uint8_t fanout, uint8_t K);
+std::tuple<double, double, double> treeMapperInternal(uint32_t level, uint32_t number,
+                                                      uint16_t fanout, uint8_t K);
 
 std::tuple<uint32_t, uint32_t> getCoveringDSN(uint32_t level, uint32_t number, uint16_t fanout);
 std::vector<std::tuple<uint32_t, uint32_t>> getCoverArea(uint32_t level, uint32_t number,

@@ -38,18 +38,18 @@ private:
   void setupRequestingNodes();
   void setupRootBehavior();
 
-  void executeOneJoinByPosition(uint16_t level, uint16_t number);
+  void executeOneJoinByPosition(uint32_t level, uint32_t number);
   void executeOneJoinByIndex(uint16_t index);
   void executeOneJoinOnRoot();
   void executeOneRandomJoin();
   void executeOneJoinDiscover();
 
-  void executeOneLeaveByPosition(uint16_t level, uint16_t number);
+  void executeOneLeaveByPosition(uint32_t level, uint32_t number);
   void executeOneLeaveByIndex(uint16_t index);
   void executeOneLeaveOnRoot();
   void executeOneRandomLeave();
 
-  void executeOneFailByPosition(uint16_t level, uint16_t number);
+  void executeOneFailByPosition(uint32_t level, uint32_t number);
   void executeOneFailByIndex(uint16_t index);
   void executeOneRandomFail();
 
@@ -59,7 +59,7 @@ private:
   void initiateFailureNow(uint64_t node_to_fail_to_index);
 
   void scheduleSearchExactAll(uint64_t delay);
-  void scheduleSearchExactMany(uint64_t delay, uint16_t number);
+  void scheduleSearchExactMany(uint64_t delay, uint32_t number);
   void executeOneSearchExact(ns3::Ptr<MinhtonApplication> src_app, uint32_t dest_level,
                              uint32_t dest_number);
   void executeOneRandomSearchExact();
@@ -74,7 +74,7 @@ private:
   std::vector<uint64_t> getInitializedNodeIndexes();
   std::tuple<std::vector<uint64_t>, std::vector<std::tuple<uint16_t, uint16_t>>>
   getExistingPositions();
-  ns3::Ptr<MinhtonApplication> getApplicationAtPosition(uint16_t level, uint16_t number);
+  ns3::Ptr<MinhtonApplication> getApplicationAtPosition(uint32_t level, uint32_t number);
 
   std::deque<uint64_t> uninit_index_deque_;
   std::deque<uint64_t> init_index_deque_;

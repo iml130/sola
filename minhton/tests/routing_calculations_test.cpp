@@ -164,19 +164,19 @@ TEST_CASE("RoutingCalculations calcRightRT", "[RoutingCalculations][calcRightRT]
 
 TEST_CASE("RoutingCalculations calcPrioSet", "[RoutingCalculations][calcPrioSet]") {
   // (level, fanout)
-  std::vector<std::tuple<uint16_t, uint8_t>> tests = {
+  std::vector<std::tuple<uint32_t, uint16_t>> tests = {
       std::make_tuple(0, 2),  std::make_tuple(1, 2), std::make_tuple(2, 2), std::make_tuple(4, 2),
       std::make_tuple(10, 2), std::make_tuple(4, 3), std::make_tuple(5, 3), std::make_tuple(2, 3),
       std::make_tuple(6, 5),  std::make_tuple(5, 5), std::make_tuple(4, 6), std::make_tuple(3, 10),
       std::make_tuple(4, 7)};
 
   for (auto const &test : tests) {
-    uint16_t level = std::get<0>(test);
-    uint8_t fanout = std::get<1>(test);
+    uint32_t level = std::get<0>(test);
+    uint16_t fanout = std::get<1>(test);
     uint16_t max_num = pow(fanout, level);
 
     auto prio_set = calcPrioSet(level, fanout);
-    auto covered = std::set<uint16_t>();
+    auto covered = std::set<uint32_t>();
 
     for (auto const &prio_num : prio_set) {
       covered.insert(prio_num);

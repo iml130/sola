@@ -19,7 +19,7 @@
 #include <cmath>
 
 namespace daisi::natter_ns3 {
-uint32_t calculateLevel(uint32_t node_id, uint32_t fanout) {
+uint32_t calculateLevel(uint32_t node_id, uint16_t fanout) {
   uint32_t level = 0;
   while (node_id != 0) {
     node_id = std::ceil(node_id / (float)fanout) - 1;
@@ -28,13 +28,13 @@ uint32_t calculateLevel(uint32_t node_id, uint32_t fanout) {
   return level;
 }
 
-uint32_t calculateNumber(uint32_t i, uint32_t fanout, uint32_t own_level) {
+uint32_t calculateNumber(uint32_t i, uint16_t fanout, uint32_t own_level) {
   if (own_level == 0) return 0;
   uint32_t nodes_above = (pow(fanout, own_level) - 1) / (fanout - 1);
   return i - nodes_above;
 }
 
-std::vector<uint32_t> createLinearProjection(uint64_t number_of_nodes, uint32_t fanout,
+std::vector<uint32_t> createLinearProjection(uint64_t number_of_nodes, uint16_t fanout,
                                              uint32_t own_index) {
   uint32_t i = 1;
   std::vector<uint32_t> proj{};

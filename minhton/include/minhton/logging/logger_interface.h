@@ -31,7 +31,7 @@ struct LoggerInfoAddNode {
   std::string position_uuid;
   uint32_t level;
   uint32_t number;
-  uint32_t fanout;
+  uint16_t fanout;
   bool initialized;
 };
 
