@@ -23,7 +23,7 @@ namespace daisi::path_planning::message {
 //! Update of the actual AGV position send from \c AGVPhysicalBasic to \c AGVLogical
 class PositionUpdate {
 public:
-  SERIALIZE(x, y, z);
+  SERIALIZE(x, y, z)
   double x;
   double y;
   double z;
