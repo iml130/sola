@@ -26,9 +26,9 @@ autonomous_mobile_robots:
   - description:  
     properties:
       device_type: amr
-      manufacturer: FhG_IML
-      model_name: LoadRunner
-      friendly_name: LR
+      manufacturer: ManufacturerA
+      model_name: amr_fast_package
+      friendly_name: FPckg
       model_number: 1
     kinematics:
       min_velocity: 0.0
@@ -44,9 +44,9 @@ autonomous_mobile_robots:
   - description:  
     properties:
       device_type: amr
-      manufacturer: LocusBot
-      model_name: LocusOrigin
-      friendly_name: locus
+      manufacturer: ManufacturerB
+      model_name: amr_slow_package
+      friendly_name: SPckg
       model_number: 2
     kinematics:
       min_velocity: 0.0
@@ -62,9 +62,9 @@ autonomous_mobile_robots:
   - description:  
     properties:
       device_type: amr
-      manufacturer: FhG_IML
-      model_name: ZTF
-      friendly_name: ztf
+      manufacturer: ManufacturerA
+      model_name: amr_weak_euro
+      friendly_name: WEuro
       model_number: 3
     kinematics:
       min_velocity: 0.0
@@ -80,9 +80,9 @@ autonomous_mobile_robots:
   - description:  
     properties:
       device_type: amr
-      manufacturer: FhG_IML
-      model_name: Flip
-      friendly_name: ctv
+      manufacturer: ManufacturerA
+      model_name: amr_strong_euro
+      friendly_name: SEuro
       model_number: 4
     kinematics:
       min_velocity: 0.0
@@ -103,28 +103,28 @@ material_flows:
 scenario_sequence:
   - amr:
     entity: amr
-    friendly_name: LR
+    friendly_name: FPckg
     start_time: 0
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
-    friendly_name: locus
+    friendly_name: SPckg
     start_time: 0
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
-    friendly_name: ztf
+    friendly_name: WEuro
     start_time: 0
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
-    friendly_name: ctv
+    friendly_name: SEuro
     start_time: 0
     spawn_distribution:
       type: absolute
