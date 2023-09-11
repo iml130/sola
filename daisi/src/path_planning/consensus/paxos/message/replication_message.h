@@ -26,7 +26,7 @@ namespace daisi::path_planning::consensus {
 //!< participants know about this consensus
 //!< Possible to add other data, e.g., billing relevant data
 struct ReplicationMessage {
-  SERIALIZE(instance_id, station_id, proposal_id);
+  SERIALIZE(instance_id, station_id, proposal_id)
   uint32_t instance_id = 0;
   uint32_t proposal_id = 0;
   uint32_t station_id = 0;

@@ -27,7 +27,7 @@ namespace daisi::path_planning::consensus {
 //!< Accept message send from the proposer to the acceptors with the actual intersection
 //!< occupancies that should be set for the given instance
 struct AcceptMessage {
-  SERIALIZE(instance_id, proposal_id, station_id, intersections);
+  SERIALIZE(instance_id, proposal_id, station_id, intersections)
 
   uint32_t instance_id = 0;
   uint32_t proposal_id = 0;

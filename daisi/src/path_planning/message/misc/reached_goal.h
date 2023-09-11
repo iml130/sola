@@ -25,7 +25,7 @@ namespace daisi::path_planning::message {
 //! Message that \c AGVLogical sends to inform \c PickupStation that previous goal from \c
 //! DriveMessage has been reached.
 struct ReachedGoal {
-  SERIALIZE(agv_uuid, x, y);
+  SERIALIZE(agv_uuid, x, y)
   std::string agv_uuid;
   double x;
   double y;

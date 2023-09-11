@@ -32,7 +32,7 @@ public:
   SearchProgress getSearchProgress() const;
   uint16_t getHopCount() const;
 
-  SERIALIZE(header_, node_to_replace_, search_progress_, hop_count_);
+  SERIALIZE(header_, node_to_replace_, search_progress_, hop_count_)
 
   MessageFindReplacement() = default;
 

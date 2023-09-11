@@ -28,7 +28,7 @@ class NewAuthorityAGV {
 public:
   SERIALIZE(agv_ip, agv_uuid, min_acceleration, max_acceleration, min_velocity, max_velocity,
             load_time_s, unload_time_s, current_x, current_y, initial, current_del_dest_x,
-            current_del_dest_y);
+            current_del_dest_y)
 
   std::string agv_ip;
   std::string agv_uuid;

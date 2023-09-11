@@ -28,7 +28,7 @@ namespace daisi::path_planning::consensus {
 //!< acceptors).
 struct PromiseMessage {
   SERIALIZE(instance_id, prepare_id, station_id, already_accepted, accepted_prepare_id,
-            accepted_station_id);
+            accepted_station_id)
   uint32_t instance_id = 0;
   uint32_t prepare_id = 0;
   uint32_t station_id = 0;

@@ -37,7 +37,7 @@ public:
   [[nodiscard]] std::string getNextStationIP() const { return next_station_ip_; }
   [[nodiscard]] DriveMessage getDriveMessage() const { return drive_; }
 
-  SERIALIZE(drive_, next_station_, next_station_ip_);
+  SERIALIZE(drive_, next_station_, next_station_ip_)
 
 private:
   DriveMessage drive_;

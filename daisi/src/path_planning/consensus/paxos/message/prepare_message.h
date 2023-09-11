@@ -28,7 +28,7 @@ namespace daisi::path_planning::consensus {
 //!< Prepare message send from proposer to all acceptors which is used to get a promise from
 //!< all acceptors (quorum) so that they will accept the occupancies.
 struct PrepareMessage {
-  SERIALIZE(instance_id, prepare_id, station_id);
+  SERIALIZE(instance_id, prepare_id, station_id)
 
   uint32_t instance_id = 0;
   uint32_t prepare_id = 0;

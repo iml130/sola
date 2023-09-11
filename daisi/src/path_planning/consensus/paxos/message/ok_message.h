@@ -24,7 +24,7 @@
 namespace daisi::path_planning::consensus {
 //!< OK message from all acceptors to all other participants to commit the requested occupancy
 struct OKMessage {
-  SERIALIZE(instance_id, station_id, proposal_id, sender_station);
+  SERIALIZE(instance_id, station_id, proposal_id, sender_station)
   uint32_t instance_id = 0;
   uint32_t proposal_id = 0;
   uint32_t station_id = 0;
