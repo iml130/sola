@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 #include "minhton/core/constants.h"
@@ -45,14 +46,14 @@ std::vector<std::tuple<uint32_t, uint32_t>> calcChildren(uint32_t level, uint32_
     throw std::invalid_argument("Invalid Position");
   }
 
-  if (level == UINT16_MAX) {
-    throw std::invalid_argument("Overflow in level");
+  if (level == UINT32_MAX) {
+    throw std::invalid_argument("Overflow in Level");
   }
 
   uint32_t c_level = level + 1;
   std::vector<std::tuple<uint32_t, uint32_t>> child_vector;
 
-  for (int i = 0; i < fanout; i++) {
+  for (uint16_t i = 0; i < fanout; i++) {
     uint32_t c_number = (number * fanout) + i;
 
     if (c_number < number) {
@@ -94,7 +95,7 @@ std::vector<std::tuple<uint32_t, uint32_t>> calcLeftRT(uint32_t level, uint32_t 
   std::vector<uint32_t> seq = calcRoutingSequence(level, fanout);
   std::vector<std::tuple<uint32_t, uint32_t>> lrt;
 
-  for (const unsigned int i : seq) {
+  for (const uint32_t i : seq) {
     if (i > number) {
       break;
     }
@@ -113,12 +114,17 @@ std::vector<std::tuple<uint32_t, uint32_t>> calcRightRT(uint32_t level, uint32_t
   std::vector<uint32_t> seq = calcRoutingSequence(level, fanout);
   std::vector<std::tuple<uint32_t, uint32_t>> rrt;
 
-  // Preventing Overflow, at leadt for uint16_t
+  // Show warning for cases with very high node numbers leading to potential overflows
+  if ((fanout >= 16 && level >= 8) || (fanout >= 8 && level >= 16) ||
+      (fanout >= 4 && level >= 32) || (fanout >= 2 && level >= 64)) {
+    std::cout << "Warning: Potentially unsafe operations due to a high node count." << std::endl;
+  }
+
   uint64_t i_fanout = fanout;
   uint64_t i_level = level;
   uint64_t max_number = pow(i_fanout, i_level);
 
-  for (const unsigned int i : seq) {
+  for (const uint32_t i : seq) {
     uint32_t k = number + i;
     if (k >= max_number) {
       break;
@@ -155,7 +161,7 @@ std::set<uint32_t> calcPrioSet(uint32_t level, uint16_t fanout) {
     }
   }
 
-  uint16_t last_prio = *prio_set.rbegin();
+  uint32_t last_prio = *prio_set.rbegin();
   if (last_prio < max_num - fanout) {
     prio_set.insert(max_num - fanout);
   }
@@ -189,8 +195,8 @@ bool isFanoutValid(uint16_t fanout) {
   return true;
 }
 
-std::tuple<double, double, double> treeMapperInternal(uint16_t level, uint16_t number,
-                                                      uint8_t fanout, uint8_t K) {
+std::tuple<double, double, double> treeMapperInternal(uint32_t level, uint32_t number,
+                                                      uint16_t fanout, uint8_t K) {
   double lower = NAN;
   double upper = NAN;
   double center = NAN;
@@ -222,7 +228,7 @@ std::tuple<double, double, double> treeMapperInternal(uint16_t level, uint16_t n
   return std::make_tuple(lower, upper, center);
 }
 
-double treeMapper(uint16_t level, uint16_t number, uint8_t fanout, double K) {
+double treeMapper(uint32_t level, uint32_t number, uint16_t fanout, double K) {
   // extracting the center from the full results with bounds
   std::tuple<double, double, double> result = treeMapperInternal(level, number, fanout, K);
   return std::get<2>(result);

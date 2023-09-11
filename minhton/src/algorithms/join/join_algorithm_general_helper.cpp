@@ -29,7 +29,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
     for (uint16_t i = 0; i < getRoutingInfo()->getFanout(); i++) {
       // look at each free position
       if (!getRoutingInfo()->getChildren()[i].isInitialized()) {
-        uint16_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
+        uint32_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
         minhton::NodeInfo new_child =
             NodeInfo(getSelfNodeInfo().getLevel() + 1, current_num, getRoutingInfo()->getFanout());
         return new_child;
@@ -45,7 +45,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
   for (uint16_t i = 0; i < getRoutingInfo()->getFanout(); i++) {
     // look at each free position
     if (!getRoutingInfo()->getChildren()[i].isInitialized()) {
-      uint16_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
+      uint32_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
       double current_value = treeMapper(getSelfNodeInfo().getLevel() + 1, current_num,
                                         getRoutingInfo()->getFanout(), k_TREEMAPPER_ROOT_VALUE);
       double current_diff = std::abs(root_value - current_value);

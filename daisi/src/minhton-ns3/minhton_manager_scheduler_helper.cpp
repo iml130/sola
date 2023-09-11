@@ -100,7 +100,7 @@ void MinhtonManager::Scheduler::scheduleMixedExecution(uint64_t join_num, uint64
   }
 }
 
-void MinhtonManager::Scheduler::executeOneJoinByPosition(uint16_t level, uint16_t number) {
+void MinhtonManager::Scheduler::executeOneJoinByPosition(uint32_t level, uint32_t number) {
   std::cout << "\texecuteOneJoinByPosition on (" << level << ":" << number << ") at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
@@ -233,7 +233,7 @@ void MinhtonManager::Scheduler::initiateJoinNow(uint64_t node_to_join_to_index,
   initiatePeerDiscoverEnvironmentAfterJoin(entering_app);
 }
 
-void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint16_t level, uint16_t number) {
+void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint32_t level, uint32_t number) {
   std::cout << "\texecuteOneLeaveByPosition on (" << level << ":" << number << ") at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
@@ -358,7 +358,7 @@ void MinhtonManager::Scheduler::scheduleSearchExactAll(uint64_t delay) {
   }
 }
 
-void MinhtonManager::Scheduler::scheduleSearchExactMany(uint64_t delay, uint16_t number) {
+void MinhtonManager::Scheduler::scheduleSearchExactMany(uint64_t delay, uint32_t number) {
   uint64_t current_delay = 0;
 
   auto existing_positions_tuple = this->getExistingPositions();
@@ -422,7 +422,7 @@ void MinhtonManager::Scheduler::executeOneRandomSearchExact() {
   app_1->executeSearchExactTest(node_info_2.getLevel(), node_info_2.getNumber());
 }
 
-void MinhtonManager::Scheduler::executeOneFailByPosition(uint16_t level, uint16_t number) {
+void MinhtonManager::Scheduler::executeOneFailByPosition(uint32_t level, uint32_t number) {
   std::cout << "\texecuteOneFailByPosition on (" << level << ":" << number << ") at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
@@ -549,8 +549,8 @@ MinhtonManager::Scheduler::getExistingPositions() {
   return std::make_tuple(indices, positions);
 }
 
-Ptr<MinhtonApplication> MinhtonManager::Scheduler::getApplicationAtPosition(uint16_t level,
-                                                                            uint16_t number) {
+Ptr<MinhtonApplication> MinhtonManager::Scheduler::getApplicationAtPosition(uint32_t level,
+                                                                            uint32_t number) {
   for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
     auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
     minhton::NodeInfo node_info = app->getNodeInfo();

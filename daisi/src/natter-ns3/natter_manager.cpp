@@ -48,7 +48,7 @@ ns3::Ptr<NatterApplication> NatterManager::getApplication(uint32_t id) const {
 }
 
 NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
-  uint64_t fanout = scenariofile_.fanout;
+  uint16_t fanout = scenariofile_.fanout;
   const uint32_t own_level = natter_ns3::calculateLevel(index, fanout);
   const uint32_t own_number = natter_ns3::calculateNumber(index, fanout, own_level);
   const ns3::Ptr<NatterApplication> app = getApplication(index);
@@ -88,7 +88,7 @@ std::set<uint32_t> NatterManager::connectChildren(const NodeInfo &info) {
 std::set<uint32_t> NatterManager::connectNeighbors(const NodeInfo &info) {
   std::set<uint32_t> neighbors;
 
-  auto get_neighbor_distance = [](const uint32_t d, const uint64_t fanout,
+  auto get_neighbor_distance = [](const uint32_t d, const uint16_t fanout,
                                   const uint32_t i) -> uint32_t {
     return d * static_cast<uint32_t>(std::pow(fanout, i));  // [BATON* - Jagadish]
   };

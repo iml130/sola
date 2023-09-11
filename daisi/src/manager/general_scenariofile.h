@@ -66,7 +66,7 @@ struct GeneralScenariofile {
   std::string version;
 
   // setup information
-  int random_seed = 0;
+  uint64_t random_seed = 0;
 
   // simulation information
   uint64_t stop_time = 0;
