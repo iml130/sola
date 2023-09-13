@@ -58,11 +58,9 @@ void MinhtonLeaveAlgorithm::processFindReplacement(const minhton::MessageFindRep
     event_id = message.getHeader().getEventId();
   }
   this->access_->procedure_info->saveEventId(ProcedureKey::kLeaveProcedure, event_id);
-  find_end_helper_.setHopCount(message.getHopCount());
 
   this->performFindReplacement(message);
   this->access_->procedure_info->removeEventId(ProcedureKey::kLeaveProcedure);
-  find_end_helper_.resetHopCount();
 }
 
 void MinhtonLeaveAlgorithm::performFindReplacement() {
@@ -73,16 +71,16 @@ void MinhtonLeaveAlgorithm::performFindReplacement() {
 
   // Check if the start position is not a null node
   if (getRoutingInfo()->areChildrenFull()) {
-    find_end_helper_.forwardToAdjacentNode(leaving_node);
+    find_end_helper_.forwardToAdjacentNode(leaving_node, 0);
   } else {
-    is_correct_parent = find_end_helper_.decideNextStep(leaving_node);
+    is_correct_parent = find_end_helper_.decideNextStep(leaving_node, 0);
   }
 
   // Currently at the parent of the last node of the network
   if (is_correct_parent) {
     auto last_child = getRoutingInfo()->getInitializedChildren().back();
     // Forward to last child with own SearchProgress just for this case
-    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode);
+    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode, 0);
   }
 }
 
@@ -108,9 +106,9 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
       LOG_INFO("FR Case 1");
       // Check if it's not a null node
       if (getRoutingInfo()->areChildrenFull()) {
-        find_end_helper_.forwardToAdjacentNode(leaving_node);
+        find_end_helper_.forwardToAdjacentNode(leaving_node, msg.getHopCount());
       } else {
-        is_correct_parent = find_end_helper_.decideNextStep(leaving_node);
+        is_correct_parent = find_end_helper_.decideNextStep(leaving_node, msg.getHopCount());
       }
       break;
 
@@ -121,7 +119,7 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
       // Check if we already are at the correct node to join
       is_correct_parent = find_end_helper_.isCorrectParent();
       if (!is_correct_parent) {
-        find_end_helper_.searchEndOnLevel(leaving_node, static_cast<bool>(prog));
+        find_end_helper_.searchEndOnLevel(leaving_node, static_cast<bool>(prog), msg.getHopCount());
       }
       break;
 
@@ -129,7 +127,7 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
     // (level h-1)
     case SearchProgress::kCheckRight:
       LOG_INFO("FR Case 3");
-      find_end_helper_.checkRight(leaving_node);
+      find_end_helper_.checkRight(leaving_node, msg.getHopCount());
       break;
 
     // The current node emerged as the last node of the network
@@ -159,7 +157,8 @@ void MinhtonLeaveAlgorithm::performFindReplacement(const minhton::MessageFindRep
   if (is_correct_parent) {
     auto last_child = getRoutingInfo()->getInitializedChildren().back();
     // Forward to last child with own SearchProgress just for this case
-    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode);
+    find_end_helper_.forwardRequest(last_child, leaving_node, SearchProgress::kReplacementNode,
+                                    msg.getHopCount());
   }
 }
 
