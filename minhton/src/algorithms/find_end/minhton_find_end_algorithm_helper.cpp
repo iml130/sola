@@ -10,15 +10,21 @@
 #include "minhton/logging/logging.h"
 
 namespace minhton {
+static constexpr uint16_t kMaxHopCount = 64U;
 
 void MinhtonFindEndAlgorithm::forwardRequest(const minhton::NodeInfo target,
                                              const minhton::NodeInfo request_origin,
-                                             SearchProgress search_progress) {
+                                             SearchProgress search_progress, uint16_t hop_count) {
+  uint16_t new_hop_count = ++hop_count;
+  if (new_hop_count > kMaxHopCount) {
+    throw std::runtime_error("MINHTON message to be forwarded exceeds max hop count");
+  }
+
   MinhtonMessageHeader header(getSelfNodeInfo(), target);
 
   if (join_) {
     header.setRefEventId(access_->procedure_info->loadEventId(ProcedureKey::kJoinProcedure));
-    MessageJoin msg_to_forward(header, request_origin, search_progress, ++hop_count_);
+    MessageJoin msg_to_forward(header, request_origin, search_progress, new_hop_count);
     send(msg_to_forward);
     access_->procedure_info->removeEventId(ProcedureKey::kJoinProcedure);
   } else {
@@ -30,7 +36,7 @@ void MinhtonFindEndAlgorithm::forwardRequest(const minhton::NodeInfo target,
       header.setRefEventId(ref_event_id);
     }
 
-    MessageFindReplacement msg_to_forward(header, request_origin, search_progress, ++hop_count_);
+    MessageFindReplacement msg_to_forward(header, request_origin, search_progress, new_hop_count);
     send(msg_to_forward);
     if (ref_event_id == 0U) {
       auto event_id = msg_to_forward.getHeader().getEventId();
@@ -40,7 +46,8 @@ void MinhtonFindEndAlgorithm::forwardRequest(const minhton::NodeInfo target,
   }
 }
 
-void MinhtonFindEndAlgorithm::forwardToAdjacentNode(const minhton::NodeInfo request_origin) {
+void MinhtonFindEndAlgorithm::forwardToAdjacentNode(const minhton::NodeInfo request_origin,
+                                                    uint16_t hop_count) {
   auto level_capacity = pow(getSelfNodeInfo().getFanout(), getSelfNodeInfo().getLevel());
   bool in_left_half = getSelfNodeInfo().getNumber() + 1 < (level_capacity / 2);
   minhton::NodeInfo target;
@@ -57,7 +64,7 @@ void MinhtonFindEndAlgorithm::forwardToAdjacentNode(const minhton::NodeInfo requ
     throw std::logic_error("Adjacent node isn't initialized");
   }
 
-  forwardRequest(target, request_origin, SearchProgress::kNone);
+  forwardRequest(target, request_origin, SearchProgress::kNone, hop_count);
 }
 
 bool MinhtonFindEndAlgorithm::isCorrectParent() {
@@ -99,7 +106,7 @@ bool MinhtonFindEndAlgorithm::isCorrectParent() {
 }
 
 void MinhtonFindEndAlgorithm::searchEndOnLevel(const minhton::NodeInfo request_origin,
-                                               bool left_side) {
+                                               bool left_side, uint16_t hop_count) {
   std::vector<minhton::NodeInfo> chosen_side_init;
   if (left_side) {
     chosen_side_init = getRoutingInfo()->getAllInitializedLeftRoutingTableNeighborsAndChildren();
@@ -119,7 +126,8 @@ void MinhtonFindEndAlgorithm::searchEndOnLevel(const minhton::NodeInfo request_o
     }
 
     // Perfect tree during leave procedure, forward to own parent
-    forwardRequest(getRoutingInfo()->getParent(), request_origin, SearchProgress::kSearchRight);
+    forwardRequest(getRoutingInfo()->getParent(), request_origin, SearchProgress::kSearchRight,
+                   hop_count);
     return;
   }
 
@@ -133,11 +141,11 @@ void MinhtonFindEndAlgorithm::searchEndOnLevel(const minhton::NodeInfo request_o
     }
     // If we search the left side: Continue searching on the left side
     // Else: The neighbor directly on the right should be the final position
-    forwardRequest(chosen_side_init.front(), request_origin,
-                   static_cast<SearchProgress>(left_side));
+    forwardRequest(chosen_side_init.front(), request_origin, static_cast<SearchProgress>(left_side),
+                   hop_count);
   } else {
     auto closest_node_to_parent = findReachableNodeClosestToParent(last_child);
-    forwardRequest(closest_node_to_parent, request_origin, SearchProgress::kSearchRight);
+    forwardRequest(closest_node_to_parent, request_origin, SearchProgress::kSearchRight, hop_count);
   }
 }
 
@@ -163,7 +171,8 @@ minhton::NodeInfo MinhtonFindEndAlgorithm::findReachableNodeClosestToParent(
   return last_known_null_node;
 }
 
-void MinhtonFindEndAlgorithm::checkRight(const minhton::NodeInfo request_origin) {
+void MinhtonFindEndAlgorithm::checkRight(const minhton::NodeInfo request_origin,
+                                         uint16_t hop_count) {
   auto rightmost_neighbor = getRoutingInfo()->getRightmostNeighbor();
 
   // We are at rightmost possible node
@@ -175,14 +184,15 @@ void MinhtonFindEndAlgorithm::checkRight(const minhton::NodeInfo request_origin)
   if (rightmost_neighbor.isInitialized()) {
     // Is the rightmost possible neighbor initialized and in our routing infos?
     if (isRightmostPossibleNode(rightmost_neighbor)) {
-      searchEndOnLevel(request_origin, true);
+      searchEndOnLevel(request_origin, true, hop_count);
     } else {
       // Continue looking for the end of the level
-      forwardRequest(rightmost_neighbor, request_origin, SearchProgress::kCheckRight);
+      forwardRequest(rightmost_neighbor, request_origin, SearchProgress::kCheckRight, hop_count);
     }
   } else {
     // Rightmost neighbor doesn't exist yet, so hop to the level below and seach to the right there
-    forwardRequest(getRoutingInfo()->getParent(), request_origin, SearchProgress::kSearchRight);
+    forwardRequest(getRoutingInfo()->getParent(), request_origin, SearchProgress::kSearchRight,
+                   hop_count);
   }
 }
 
@@ -191,7 +201,8 @@ bool MinhtonFindEndAlgorithm::isRightmostPossibleNode(const minhton::NodeInfo no
   return at_rightmost_number && node.isInitialized();
 }
 
-bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_origin) {
+bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_origin,
+                                             uint16_t hop_count) {
   // Check left neighbors
   auto leftmost_neighbor_child = getRoutingInfo()->getLeftmostNeighborChild();
   if (leftmost_neighbor_child.isValidPeer()) {
@@ -202,7 +213,7 @@ bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_ori
 
     // Has the leftmost neighbor at least one child?
     if (leftmost_neighbor_child.isInitialized()) {
-      searchEndOnLevel(request_origin, true);
+      searchEndOnLevel(request_origin, true, hop_count);
       return false;
     }
   }
@@ -228,11 +239,11 @@ bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_ori
 
       // Search on a direction depending on the own capacity for children
       bool search_on_left_side = !(getRoutingInfo()->areChildrenFull());
-      searchEndOnLevel(request_origin, search_on_left_side);
+      searchEndOnLevel(request_origin, search_on_left_side, hop_count);
       return false;
     }
 
-    forwardRequest(target, request_origin, search_progress);
+    forwardRequest(target, request_origin, search_progress, hop_count);
     return false;
   }
 
@@ -242,17 +253,8 @@ bool MinhtonFindEndAlgorithm::decideNextStep(const minhton::NodeInfo request_ori
     return true;
   }
 
-  searchEndOnLevel(request_origin, true);
+  searchEndOnLevel(request_origin, true, hop_count);
   return false;
 }
-
-void MinhtonFindEndAlgorithm::setHopCount(uint16_t hop_count) {
-  if (hop_count > MAX_HOP_COUNT) {
-    throw std::runtime_error("Incoming MINHTON message exceeds max hop count");
-  }
-  hop_count_ = hop_count;
-}
-
-void MinhtonFindEndAlgorithm::resetHopCount() { hop_count_ = 0; }
 
 }  // namespace minhton

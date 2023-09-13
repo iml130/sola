@@ -26,7 +26,6 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
     access_->procedure_info->saveEventId(ProcedureKey::kJoinProcedure,
                                          msg.getHeader().getRefEventId());
   }
-  find_end_helper_.setHopCount(msg.getHopCount());
 
   NodeInfo entering_node = msg.getEnteringNode();
   bool accept = false;
@@ -37,9 +36,9 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
     case SearchProgress::kNone:
       // Check if it's not a null node
       if (getRoutingInfo()->areChildrenFull()) {
-        find_end_helper_.forwardToAdjacentNode(entering_node);
+        find_end_helper_.forwardToAdjacentNode(entering_node, msg.getHopCount());
       } else {
-        accept = find_end_helper_.decideNextStep(entering_node);
+        accept = find_end_helper_.decideNextStep(entering_node, msg.getHopCount());
       }
       break;
 
@@ -51,14 +50,14 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
       if (!accept) {
         // The SearchProgress is either left (1) or right (0) in this case
         auto search_left = static_cast<bool>(msg.getSearchProgress());
-        find_end_helper_.searchEndOnLevel(entering_node, search_left);
+        find_end_helper_.searchEndOnLevel(entering_node, search_left, msg.getHopCount());
       }
       break;
 
     // Find out whether the current level is completely filled (level h-2 or perfect tree) or not
     // (level h-1)
     case SearchProgress::kCheckRight:
-      find_end_helper_.checkRight(entering_node);
+      find_end_helper_.checkRight(entering_node, msg.getHopCount());
       break;
 
     default:
@@ -70,8 +69,6 @@ void MinhtonJoinAlgorithm::processJoin(const MessageJoin &msg) {
   if (accept) {
     performAcceptChild(entering_node, true);
   }
-
-  find_end_helper_.resetHopCount();
 }
 
 uint32_t MinhtonJoinAlgorithm::performSendUpdateNeighborMessagesAboutEnteringNode(
