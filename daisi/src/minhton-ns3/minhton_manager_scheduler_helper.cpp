@@ -21,6 +21,7 @@
 #include "minhton_manager_scheduler.h"
 #include "ns3/double.h"
 #include "ns3/simulator.h"
+#include "utils/daisi_check.h"
 #include "utils/random_engine.h"
 #include "utils/sola_utils.h"
 
@@ -104,7 +105,7 @@ void MinhtonManager::Scheduler::executeOneJoinByPosition(uint32_t level, uint32_
   std::cout << "\texecuteOneJoinByPosition on (" << level << ":" << number << ") at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
-  if (this->uninit_index_deque_.empty()) {
+  if (uninit_index_deque_.empty()) {
     throw std::logic_error("No uninit join to enter the network left");
   }
 
@@ -118,10 +119,10 @@ void MinhtonManager::Scheduler::executeOneJoinByPosition(uint32_t level, uint32_
     if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number) {
       if (app->getNodeInfo().isInitialized()) {
         found_initialized_node_at_pos = true;
-        uint64_t uninit_index = this->uninit_index_deque_.front();
+        uint64_t uninit_index = uninit_index_deque_.front();
         this->initiateJoinNow(join_to_index, uninit_index);
-        this->uninit_index_deque_.pop_front();
-        this->init_index_deque_.push_back(uninit_index);
+        uninit_index_deque_.pop_front();
+        init_index_deque_.push_back(uninit_index);
       } else {
         continue;
       }
@@ -141,7 +142,7 @@ void MinhtonManager::Scheduler::executeOneJoinByIndex(uint16_t join_to_index) {
     throw std::invalid_argument("Index to join to out of range");
   }
 
-  if (this->uninit_index_deque_.empty()) {
+  if (uninit_index_deque_.empty()) {
     throw std::logic_error("No uninit join to enter the network left");
   }
   auto app = manager_.node_container_.Get(join_to_index)
@@ -149,61 +150,61 @@ void MinhtonManager::Scheduler::executeOneJoinByIndex(uint16_t join_to_index) {
                  ->GetObject<MinhtonApplication>();
 
   if (app->getNodeInfo().isInitialized()) {
-    uint64_t uninit_index = this->uninit_index_deque_.front();
+    uint64_t uninit_index = uninit_index_deque_.front();
     this->initiateJoinNow(join_to_index, uninit_index);
-    this->uninit_index_deque_.pop_front();
-    this->init_index_deque_.push_back(uninit_index);
+    uninit_index_deque_.pop_front();
+    init_index_deque_.push_back(uninit_index);
   } else {
     std::cout << "node to join to found but is not initialized";
   }
 }
 
 void MinhtonManager::Scheduler::executeOneJoinOnRoot() {
-  if (this->uninit_index_deque_.empty()) {
+  if (uninit_index_deque_.empty()) {
     throw std::logic_error("No uninit join to enter the network left");
   }
 
-  uint64_t uninit_index = this->uninit_index_deque_.front();
+  uint64_t uninit_index = uninit_index_deque_.front();
   uint64_t root_index = this->getRootIndex();
   std::cout << "\texecuteOneJoinOnRoot from " << uninit_index << " to " << root_index << " at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
   this->initiateJoinNow(root_index, uninit_index);
-  this->uninit_index_deque_.pop_front();
-  this->init_index_deque_.push_back(uninit_index);
+  uninit_index_deque_.pop_front();
+  init_index_deque_.push_back(uninit_index);
 }
 
 void MinhtonManager::Scheduler::executeOneJoinDiscover() {
   throw std::runtime_error("currently not supported");
-  // if (this->uninit_index_deque_.empty()) {
+  // if (uninit_index_deque_.empty()) {
   //   throw std::logic_error("No uninit join to enter the network left");
   // }
 
-  // uint64_t uninit_index = this->uninit_index_deque_.front();
+  // uint64_t uninit_index = uninit_index_deque_.front();
   // std::cout << "\texecuteOneJoinDiscover from " << uninit_index << " at "
   //           << Simulator::Now().GetMilliSeconds() << std::endl;
   // this->initiateJoinNowDiscover(uninit_index);
-  // this->uninit_index_deque_.pop_front();
-  // this->init_index_deque_.push_back(uninit_index);
+  // uninit_index_deque_.pop_front();
+  // init_index_deque_.push_back(uninit_index);
 }
 
 void MinhtonManager::Scheduler::Scheduler::executeOneRandomJoin() {
-  if (this->uninit_index_deque_.empty()) {
+  if (uninit_index_deque_.empty()) {
     throw std::logic_error("No uninit join to enter the network left");
   }
 
-  uint64_t uninit_index = this->uninit_index_deque_.front();
+  uint64_t uninit_index = uninit_index_deque_.front();
 
   // random index within [0; uininit_index-1]
   std::uniform_int_distribution<uint64_t> dist(0, init_index_deque_.size() - 1);
   uint64_t random_index_to_join_in_deque = dist(daisi::global_random_engine);
-  uint64_t random_index_to_join = this->init_index_deque_.at(random_index_to_join_in_deque);
+  uint64_t random_index_to_join = init_index_deque_.at(random_index_to_join_in_deque);
 
   std::cout << "\texecuteOneRandomJoin from " << uninit_index << " to " << random_index_to_join
-            << " at " << Simulator::Now().GetMilliSeconds() << ", #"
-            << this->init_index_deque_.size() << std::endl;
+            << " at " << Simulator::Now().GetMilliSeconds() << ", #" << init_index_deque_.size()
+            << std::endl;
   this->initiateJoinNow(random_index_to_join, uninit_index);
-  this->uninit_index_deque_.pop_front();
-  this->init_index_deque_.push_back(uninit_index);
+  uninit_index_deque_.pop_front();
+  init_index_deque_.push_back(uninit_index);
 }
 
 // Join via Multicast
@@ -247,11 +248,9 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint32_t level, uint32
         this->initiateLeaveNow(leave_index);
 
         const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), leave_index);
-        if (it == this->init_index_deque_.end()) {
-          throw std::invalid_argument("Index to leave not found in init_index_deque_");
-        }
-        this->init_index_deque_.erase(it);
-        this->uninit_index_deque_.push_back(leave_index);
+        DAISI_CHECK(it != init_index_deque_.end(), "Index to leave not found in init_index_deque_");
+        init_index_deque_.erase(it);
+        uninit_index_deque_.push_back(leave_index);
         return;
       }
     }
@@ -275,34 +274,33 @@ void MinhtonManager::Scheduler::executeOneLeaveByIndex(uint16_t index) {
     this->initiateLeaveNow(index);
 
     const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), index);
-    if (it == this->init_index_deque_.end()) {
-      throw std::invalid_argument("Index to leave not found in init_index_deque_");
-    }
-    this->init_index_deque_.erase(it);
-    this->uninit_index_deque_.push_back(index);
+    DAISI_CHECK(it != init_index_deque_.end(), "Index to leave not found in init_index_deque_");
+    init_index_deque_.erase(it);
+    uninit_index_deque_.push_back(index);
   } else {
     std::cout << "node to leave found but is not initialized";
   }
 }
 
 void MinhtonManager::Scheduler::executeOneRandomLeave() {
-  if (this->init_index_deque_.empty()) {
+  if (init_index_deque_.empty()) {
     throw std::logic_error("No uninit join to leave the network left");
   }
 
   std::uniform_int_distribution<uint64_t> dist(0, init_index_deque_.size() - 1);
   uint64_t random_index_to_leave_in_deque = dist(daisi::global_random_engine);
-  uint64_t random_index_to_leave = this->init_index_deque_.at(random_index_to_leave_in_deque);
+  uint64_t random_index_to_leave = init_index_deque_.at(random_index_to_leave_in_deque);
 
   std::cout << "\texecuteOneRandomLeave from " << random_index_to_leave << " at "
-            << Simulator::Now().GetMilliSeconds() << ", #" << this->init_index_deque_.size() - 1
+            << Simulator::Now().GetMilliSeconds() << ", #" << init_index_deque_.size() - 1
             << std::endl;
   this->initiateLeaveNow(random_index_to_leave);
 
-  const auto it =
-      std::find(init_index_deque_.begin(), init_index_deque_.end(), random_index_to_leave);
-  this->init_index_deque_.erase(it);
-  this->uninit_index_deque_.push_back(random_index_to_leave);
+  const auto random_it = init_index_deque_.begin() + random_index_to_leave_in_deque;
+  DAISI_CHECK(random_it < init_index_deque_.end(),
+              "Index to be erased of init deque outside of range");
+  init_index_deque_.erase(random_it);
+  uninit_index_deque_.push_back(random_index_to_leave);
 }
 
 void MinhtonManager::Scheduler::executeOneLeaveOnRoot() {
@@ -313,8 +311,9 @@ void MinhtonManager::Scheduler::executeOneLeaveOnRoot() {
 
   // finding root_index in deque and erasing
   const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), root_index);
-  this->init_index_deque_.erase(it);
-  this->uninit_index_deque_.push_back(root_index);
+  DAISI_CHECK(it != init_index_deque_.end(), "Root index to leave not found in init_index_deque_");
+  init_index_deque_.erase(it);
+  uninit_index_deque_.push_back(root_index);
 }
 
 void MinhtonManager::Scheduler::initiateLeaveNow(uint64_t node_to_leave_to_index) {
@@ -410,11 +409,11 @@ void MinhtonManager::Scheduler::executeOneRandomSearchExact() {
     rand_2 = dist(daisi::global_random_engine);
   }
 
-  auto app_1 = manager_.node_container_.Get(this->init_index_deque_.at(rand_1))
+  auto app_1 = manager_.node_container_.Get(init_index_deque_.at(rand_1))
                    ->GetApplication(0)
                    ->GetObject<MinhtonApplication>();
 
-  auto app_2 = manager_.node_container_.Get(this->init_index_deque_.at(rand_2))
+  auto app_2 = manager_.node_container_.Get(init_index_deque_.at(rand_2))
                    ->GetApplication(0)
                    ->GetObject<MinhtonApplication>();
 
@@ -436,11 +435,11 @@ void MinhtonManager::Scheduler::executeOneFailByPosition(uint32_t level, uint32_
         this->initiateFailureNow(fail_index);
 
         const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), fail_index);
-        if (it == this->init_index_deque_.end()) {
+        if (it == init_index_deque_.end()) {
           throw std::invalid_argument("Index to fail not found in init_index_deque_");
         }
-        this->init_index_deque_.erase(it);
-        this->uninit_index_deque_.push_back(fail_index);
+        init_index_deque_.erase(it);
+        uninit_index_deque_.push_back(fail_index);
         return;
       }
     }
@@ -464,29 +463,29 @@ void MinhtonManager::Scheduler::executeOneFailByIndex(uint16_t index) {
     this->initiateFailureNow(index);
 
     const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), index);
-    if (it == this->init_index_deque_.end()) {
+    if (it == init_index_deque_.end()) {
       throw std::invalid_argument("Index to fail not found in init_index_deque_");
     }
-    this->init_index_deque_.erase(it);
-    this->uninit_index_deque_.push_back(index);
+    init_index_deque_.erase(it);
+    uninit_index_deque_.push_back(index);
   } else {
     std::cout << "node to fail found but is not initialized";
   }
 }
 
 void MinhtonManager::Scheduler::executeOneRandomFail() {
-  if (this->init_index_deque_.empty()) {
+  if (init_index_deque_.empty()) {
     throw std::logic_error("No uninit join to fail in the network left");
   }
 
-  uint64_t index_to_fail = this->init_index_deque_.front();
+  uint64_t index_to_fail = init_index_deque_.front();
 
   std::cout << "\texecuteOneRandomFail from " << index_to_fail << " at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
   this->initiateFailureNow(index_to_fail);
 
-  this->init_index_deque_.pop_front();
-  this->uninit_index_deque_.push_back(index_to_fail);
+  init_index_deque_.pop_front();
+  uninit_index_deque_.push_back(index_to_fail);
 }
 
 uint64_t MinhtonManager::Scheduler::getRootIndex() {
