@@ -6,6 +6,19 @@ Here you find information on how to contribute to SOLA.
 
 With some exceptions listed below, we are following the [Google Coding Style Guide](https://google.github.io/styleguide/cppguide.html).
 
+### SQL Style Guide
+
+- Tables
+	- General tables: UpperCamelCase, singular, e.g., `TransportOrder`
+	- Views: lowerCamelCase beginning with "view", e.g., `viewFinishedTransportTraffic`
+	- Enumerations (for listing types): lowerCamelCase beginning with "enum", e.g., `enumTransportOrderState`
+- Columns
+	- General columns: UpperCamelCase, e.g., `ModelName`
+	- Columns with amounts/measurements: Append the unit at the end after an underscore, e.g., `Weight_kg`
+		- For derived units consisting of multiple units, append them and use "p" for a division. Do not use numbers or special characters. E.g., meter per second squared (m/s^2) becomes `mpss`.
+		- Some other common units: `us` for microseconds, `ms` for milliseconds, `ut` for unix timestamps
+	- Foreign key: UpperCamelCase, is usually the referenced table name (or an abbreviation of it) followed by "Id" or "Uuid", e.g., `ApplicationId`
+
 ### Deviations and additonal aspects:
 - **Comments/Comment Style**:
 We are using Doxygen to automatically create documentation.
