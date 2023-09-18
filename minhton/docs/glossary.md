@@ -26,7 +26,7 @@ A process in which the overlay network is extended by a node, which is not a par
 ## L
 
 **Last node**:<br />
-This is the rightmost node on the lowest level.
+This is the rightmost node on the highest level.
 E.g. in a network consisting of the nodes 0:0, 1:0, 1:1, 1:2, and 1:3, this is 1:3.
 
 **Leave**:<br />
@@ -38,6 +38,8 @@ A node that wants to leave the network.
 
 **Level**:<br />
 The level is a value for the vertical position of a node within the tree structure.
+Level 0 is defined as the lowest level.
+The level with the highest number is defined as the highest level.
 
 **LogicalNodeInfo**:<br />
 Logical information about a node like level and number.
@@ -94,7 +96,7 @@ We can calculate the positions locally.
 ## S
 
 **Successor node**:<br />
-A node that is found with ``FindReplacement`` is proposed to be the last node in the network (rightmost on the lowest level).
+A node that is found with ``FindReplacement`` is proposed to be the last node in the network (rightmost on the highest level).
 This node will be used to replace the [*leaving node*](#l).
 
 ## T
