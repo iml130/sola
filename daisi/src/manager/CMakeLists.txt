@@ -44,6 +44,7 @@ target_sources(daisi_manager_scenariofile_component
 target_link_libraries(daisi_manager_scenariofile_component
     INTERFACE
     yaml-cpp
+    ns3::libcore
 )
 
 add_library(daisi_manager_general_scenariofile INTERFACE)
