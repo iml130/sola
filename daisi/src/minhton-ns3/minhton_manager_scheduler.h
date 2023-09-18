@@ -58,8 +58,8 @@ private:
   void initiateLeaveNow(uint64_t node_to_leave_to_index);
   void initiateFailureNow(uint64_t node_to_fail_to_index);
 
-  void scheduleSearchExactAll(uint64_t delay);
-  void scheduleSearchExactMany(uint64_t delay, uint32_t number);
+  void scheduleSearchExactAll(ns3::Time delay);
+  void scheduleSearchExactMany(ns3::Time delay, uint32_t number);
   void executeOneSearchExact(ns3::Ptr<MinhtonApplication> src_app, uint32_t dest_level,
                              uint32_t dest_number);
   void executeOneRandomSearchExact();
@@ -67,8 +67,8 @@ private:
   void executeStaticNetworkBuild(uint32_t number);
 
   void scheduleMixedExecution(uint64_t join_num, uint64_t leave_num, uint64_t search_num,
-                              uint64_t current_time, uint64_t delay);
-  void scheduleValidateLeave(uint64_t delay);
+                              ns3::Time current_time, ns3::Time delay);
+  void scheduleValidateLeave(ns3::Time delay);
 
   uint64_t getRootIndex();
   std::vector<uint64_t> getInitializedNodeIndexes();
@@ -81,20 +81,20 @@ private:
   uint64_t latest_root_index_ = 0;
 
   // parsing
-  void schedule(JoinOne step, uint64_t &current_time);
-  void schedule(JoinMany step, uint64_t &current_time);
-  void schedule(LeaveOne step, uint64_t &current_time);
-  void schedule(LeaveMany step, uint64_t &current_time);
-  void schedule(SearchMany step, uint64_t &current_time);
-  void schedule(SearchAll step, uint64_t &current_time);
-  void schedule(FailOne step, uint64_t &current_time);
-  void schedule(FailMany step, uint64_t &current_time);
-  void schedule(MixedExecution step, uint64_t &current_time);
-  void schedule(ValidateLeave step, uint64_t &current_time);
-  void schedule(FindQuery step, uint64_t &current_time);
-  void schedule(RequestCountdown step, uint64_t &current_time);
-  void schedule(Time step, uint64_t &current_time);
-  void schedule(StaticBuild step, uint64_t &current_time);
+  void schedule(JoinOne step, ns3::Time &current_time);
+  void schedule(JoinMany step, ns3::Time &current_time);
+  void schedule(LeaveOne step, ns3::Time &current_time);
+  void schedule(LeaveMany step, ns3::Time &current_time);
+  void schedule(SearchMany step, ns3::Time &current_time);
+  void schedule(SearchAll step, ns3::Time &current_time);
+  void schedule(FailOne step, ns3::Time &current_time);
+  void schedule(FailMany step, ns3::Time &current_time);
+  void schedule(MixedExecution step, ns3::Time &current_time);
+  void schedule(ValidateLeave step, ns3::Time &current_time);
+  void schedule(FindQuery step, ns3::Time &current_time);
+  void schedule(RequestCountdown step, ns3::Time &current_time);
+  void schedule(Time step, ns3::Time &current_time);
+  void schedule(StaticBuild step, ns3::Time &current_time);
 
   void parseNodeAttributes();
   void setRequestNodeSetup(RandomNode random);

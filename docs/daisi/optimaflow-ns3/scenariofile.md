@@ -341,7 +341,8 @@ The specific typ of the entity to initialize (for example the friendly name of a
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.spawnInfo.spawn_distribution``
 

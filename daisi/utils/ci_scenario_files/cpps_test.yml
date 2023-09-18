@@ -1,8 +1,8 @@
 title: CPPS Default Scenario
 version: 0.1
-stop_time: 5000
+stop_time: 5000s
 random_seed: 42
-default_delay: 5
+default_delay: 5s
 
 # outdated/unused fields
 # only present until Manager switches to new scenariofile parser as well
@@ -104,35 +104,35 @@ scenario_sequence:
   - amr:
     entity: amr
     friendly_name: FPckg
-    start_time: 0
+    start_time: 0s
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
     friendly_name: SPckg
-    start_time: 0
+    start_time: 0s
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
     friendly_name: WEuro
-    start_time: 0
+    start_time: 0s
     spawn_distribution:
       type: absolute
       number: 3
   - amr:
     entity: amr
     friendly_name: SEuro
-    start_time: 0
+    start_time: 0s
     spawn_distribution:
       type: absolute
       number: 3
   - mf:
     entity: mf
     friendly_name: mf1
-    start_time: 0
+    start_time: 0s
     spawn_distribution:
       type: gaussian
       mean: 100

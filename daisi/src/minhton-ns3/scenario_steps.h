@@ -22,19 +22,20 @@
 #include <string>
 
 #include "manager/scenariofile_component.h"
+#include "ns3/core-module.h"
 
 namespace daisi::minhton_ns3 {
 
 struct JoinOne {
   static std::string typeName() { return "join-one"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   std::optional<uint32_t> level;
   std::optional<uint32_t> number;
   std::optional<uint32_t> index;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(level);
     SERIALIZE_VAR(number);
     SERIALIZE_VAR(index);
@@ -44,12 +45,12 @@ struct JoinOne {
 struct JoinMany {
   static std::string typeName() { return "join-many"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   uint32_t number;
   std::string mode;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(number);
     SERIALIZE_VAR(mode);
   }
@@ -58,13 +59,13 @@ struct JoinMany {
 struct LeaveOne {
   static std::string typeName() { return "leave-one"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   std::optional<uint32_t> level;
   std::optional<uint32_t> number;
   std::optional<uint32_t> index;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(level);
     SERIALIZE_VAR(number);
     SERIALIZE_VAR(index);
@@ -74,12 +75,12 @@ struct LeaveOne {
 struct LeaveMany {
   static std::string typeName() { return "leave-many"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   uint32_t number;
   std::string mode;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(number);
     SERIALIZE_VAR(mode);
   }
@@ -88,11 +89,11 @@ struct LeaveMany {
 struct SearchMany {
   static std::string typeName() { return "search-many"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   uint32_t number;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(number);
   }
 };
@@ -100,21 +101,21 @@ struct SearchMany {
 struct SearchAll {
   static std::string typeName() { return "search-all"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
 
-  void parse(YAML::Node node) { SERIALIZE_VAR(delay); }
+  void parse(YAML::Node node) { SERIALIZE_NS3_TIME_OPTIONAL(delay); }
 };
 
 struct FailOne {
   static std::string typeName() { return "fail-one"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   std::optional<uint32_t> level;
   std::optional<uint32_t> number;
   std::optional<uint32_t> index;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(level);
     SERIALIZE_VAR(number);
     SERIALIZE_VAR(index);
@@ -124,11 +125,11 @@ struct FailOne {
 struct FailMany {
   static std::string typeName() { return "fail-many"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   uint32_t number;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(number);
   }
 };
@@ -136,13 +137,13 @@ struct FailMany {
 struct MixedExecution {
   static std::string typeName() { return "mixed-execution"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
   uint32_t join_number;
   uint32_t leave_number;
   uint32_t search_number;
 
   void parse(YAML::Node node) {
-    SERIALIZE_VAR(delay);
+    SERIALIZE_NS3_TIME_OPTIONAL(delay);
     SERIALIZE_VAR(join_number);
     SERIALIZE_VAR(leave_number);
     SERIALIZE_VAR(search_number);
@@ -152,9 +153,9 @@ struct MixedExecution {
 struct ValidateLeave {
   static std::string typeName() { return "validate-leave"; }
 
-  std::optional<uint32_t> delay;
+  std::optional<ns3::Time> delay;
 
-  void parse(YAML::Node node) { SERIALIZE_VAR(delay); }
+  void parse(YAML::Node node) { SERIALIZE_NS3_TIME_OPTIONAL(delay); }
 };
 
 struct FindQuery {
@@ -178,9 +179,9 @@ struct FindQuery {
 struct Time {
   static std::string typeName() { return "time"; }
 
-  uint32_t time;
+  ns3::Time time;
 
-  void parse(YAML::Node node) { SERIALIZE_VAR(time); }
+  void parse(YAML::Node node) { SERIALIZE_NS3_TIME(time); }
 };
 
 struct StaticBuild {

@@ -1,8 +1,8 @@
 title: Test
 version: 0.1
-stop_time: 5000
+stop_time: 5000s
 random_seed: 1
-default_delay: 500
+default_delay: 0.5s
 
 # outdated/unused fields
 # only present until Manager switches to new scenariofile parser as well
@@ -18,6 +18,6 @@ scenario_sequence:
       mode: minhton
     - type: publish
       number: 5
-      delay: 0
+      delay: 0s
       mode: random # random, sequential
       message_size: 100 # in bytes

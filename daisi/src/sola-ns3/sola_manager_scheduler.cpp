@@ -19,37 +19,35 @@
 #define GET_VALUE(type, name) INNER_TABLE(it)->getRequired<type>(name);
 
 namespace daisi::sola_ns3 {
-void SolaManager::schedule(StartSOLA start, uint64_t &current_time) {
-  const uint64_t delay = start.delay;
+void SolaManager::schedule(StartSOLA start, ns3::Time &current_time) {
+  const ns3::Time delay = start.delay;
 
   for (uint32_t i = 0; i < scenariofile_.number_nodes; i++) {
-    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
-                                        ns3::MilliSeconds(current_time), &SolaManager::startSOLA,
-                                        this, i);
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(), current_time,
+                                        &SolaManager::startSOLA, this, i);
     current_time += delay;
   }
   current_time -= delay;  // No delay at end (should be default delay)
 }
 
-void SolaManager::schedule(SubscribeTopic subscribe, uint64_t &current_time) {
-  const uint64_t delay = subscribe.delay;
+void SolaManager::schedule(SubscribeTopic subscribe, ns3::Time &current_time) {
+  const ns3::Time delay = subscribe.delay;
 
   for (uint32_t i = 0; i < scenariofile_.number_nodes; i++) {
-    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(),
-                                        ns3::MilliSeconds(current_time),
+    ns3::Simulator::ScheduleWithContext(node_container_.Get(i)->GetId(), current_time,
                                         &SolaManager::subscribeTopic, this, subscribe.topic, i);
     current_time += delay;
   }
   current_time -= delay;  // No delay at end (should be default delay)
 }
 
-void SolaManager::schedule(Delay delay, uint64_t &current_time) { current_time += delay.delay; }
+void SolaManager::schedule(Delay delay, ns3::Time &current_time) { current_time += delay.delay; }
 
-void SolaManager::schedule(Publish publish, uint64_t &current_time) {
+void SolaManager::schedule(Publish publish, ns3::Time &current_time) {
   const uint32_t node_id = publish.node_id;
-  ns3::Simulator::ScheduleWithContext(node_container_.Get(node_id)->GetId(),
-                                      ns3::MilliSeconds(current_time), &SolaManager::publishTopic,
-                                      this, node_id, publish.topic, publish.message_size);
+  ns3::Simulator::ScheduleWithContext(node_container_.Get(node_id)->GetId(), current_time,
+                                      &SolaManager::publishTopic, this, node_id, publish.topic,
+                                      publish.message_size);
 }
 
 }  // namespace daisi::sola_ns3

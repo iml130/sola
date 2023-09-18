@@ -211,36 +211,35 @@ void NatterManager::publishRandom(uint32_t message_size) {
 
 void NatterManager::joinTopic(int /*number*/) { throw std::runtime_error("Not implemented yet"); }
 
-void NatterManager::scheduleEvent(const Join &step, uint64_t &current_time) {
-  const uint64_t join_delay = scenariofile_.default_delay + step.delay.value_or(0);
+void NatterManager::scheduleEvent(const Join &step, ns3::Time &current_time) {
+  const ns3::Time join_delay = scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += join_delay;
 
   if (step.mode == "minhton") {
     if (scenariofile_.fanout < 2) throw std::runtime_error("fanout must be >=2 for minhton");
-    Simulator::Schedule(MilliSeconds(current_time), &NatterManager::joinMinhton, this);
+    Simulator::Schedule(current_time, &NatterManager::joinMinhton, this);
   } else {
     throw std::invalid_argument("Invalid mode type for join");
   }
 }
 
-void NatterManager::scheduleEvent(const Publish &step, uint64_t &current_time) {
-  const uint64_t publish_delay = scenariofile_.default_delay + step.delay.value_or(0);
+void NatterManager::scheduleEvent(const Publish &step, ns3::Time &current_time) {
+  const ns3::Time publish_delay = scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
 
   for (uint32_t i = 0; i < step.number; i++) {
     current_time += publish_delay;
     if (step.mode == "random")
-      Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publishRandom, this,
-                          step.message_size);
+      Simulator::Schedule(current_time, &NatterManager::publishRandom, this, step.message_size);
     else if (step.mode == "sequential")
-      Simulator::Schedule(MilliSeconds(current_time), &NatterManager::publish, this,
-                          step.message_size, i % getNumberOfNodes());
+      Simulator::Schedule(current_time, &NatterManager::publish, this, step.message_size,
+                          i % getNumberOfNodes());
     else
       throw std::runtime_error("Invalid publish mode");
   }
 }
 
 void NatterManager::scheduleEvents() {
-  uint64_t current_time = 0;
+  ns3::Time current_time = ns3::Time(0);
 
   for (const NatterScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
     std::visit([this, &current_time](auto &&step) { scheduleEvent(step, current_time); },

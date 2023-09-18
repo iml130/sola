@@ -68,8 +68,8 @@ void MinhtonManager::Scheduler::setupRequestingNodes() {
 }
 
 void MinhtonManager::Scheduler::scheduleMixedExecution(uint64_t join_num, uint64_t leave_num,
-                                                       uint64_t search_num, uint64_t current_time,
-                                                       uint64_t delay) {
+                                                       uint64_t search_num, ns3::Time current_time,
+                                                       ns3::Time delay) {
   std::vector<uint8_t> random_sequence;
   std::vector<uint8_t> join_seq(join_num);
   std::vector<uint8_t> leave_seq(leave_num);
@@ -89,14 +89,12 @@ void MinhtonManager::Scheduler::scheduleMixedExecution(uint64_t join_num, uint64
     current_time += delay;
 
     if (type == 0) {  // join
-      Simulator::Schedule(MilliSeconds(current_time),
-                          &MinhtonManager::Scheduler::executeOneRandomJoin, this);
+      Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneRandomJoin, this);
     } else if (type == 1) {  // leave
-      Simulator::Schedule(MilliSeconds(current_time),
-                          &MinhtonManager::Scheduler::executeOneRandomLeave, this);
+      Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneRandomLeave, this);
     } else {  // search
-      Simulator::Schedule(MilliSeconds(current_time),
-                          &MinhtonManager::Scheduler::executeOneRandomSearchExact, this);
+      Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneRandomSearchExact,
+                          this);
     }
   }
 }
@@ -333,7 +331,7 @@ void MinhtonManager::Scheduler::initiateFailureNow(uint64_t node_to_fail_to_inde
   failing_app->StopApplication();
 }
 
-void MinhtonManager::Scheduler::scheduleSearchExactAll(uint64_t delay) {
+void MinhtonManager::Scheduler::scheduleSearchExactAll(ns3::Time delay) {
   uint64_t counter = 0;
 
   for (uint64_t i = 0; i < manager_.node_container_.GetN(); i++) {
@@ -347,18 +345,17 @@ void MinhtonManager::Scheduler::scheduleSearchExactAll(uint64_t delay) {
                                             ->GetObject<MinhtonApplication>()
                                             ->getNodeInfo();
         if ((i != k) && node_info_k.isInitialized()) {
-          uint64_t current_delay = ++counter * delay;
-          Simulator::Schedule(MilliSeconds(current_delay),
-                              &MinhtonManager::Scheduler::executeOneSearchExact, this, app_i,
-                              node_info_k.getLevel(), node_info_k.getNumber());
+          ns3::Time current_delay = ++counter * delay;
+          Simulator::Schedule(current_delay, &MinhtonManager::Scheduler::executeOneSearchExact,
+                              this, app_i, node_info_k.getLevel(), node_info_k.getNumber());
         }
       }
     }
   }
 }
 
-void MinhtonManager::Scheduler::scheduleSearchExactMany(uint64_t delay, uint32_t number) {
-  uint64_t current_delay = 0;
+void MinhtonManager::Scheduler::scheduleSearchExactMany(ns3::Time delay, uint32_t number) {
+  ns3::Time current_delay = ns3::Time(0);
 
   auto existing_positions_tuple = this->getExistingPositions();
   auto existing_positions = std::get<1>(existing_positions_tuple);
@@ -382,9 +379,8 @@ void MinhtonManager::Scheduler::scheduleSearchExactMany(uint64_t delay, uint32_t
       uint16_t node_end_level = std::get<0>(existing_positions[end]);
       uint16_t node_end_number = std::get<1>(existing_positions[end]);
 
-      Simulator::Schedule(MilliSeconds(current_delay),
-                          &MinhtonManager::Scheduler::executeOneSearchExact, this, app_start,
-                          node_end_level, node_end_number);
+      Simulator::Schedule(current_delay, &MinhtonManager::Scheduler::executeOneSearchExact, this,
+                          app_start, node_end_level, node_end_number);
     }
   }
 }
@@ -513,16 +509,16 @@ uint64_t MinhtonManager::Scheduler::getRootIndex() {
   throw std::logic_error("No initialized root node found. Manager-Scheduling Error");
 }
 
-void MinhtonManager::Scheduler::scheduleValidateLeave(uint64_t delay) {
+void MinhtonManager::Scheduler::scheduleValidateLeave(ns3::Time delay) {
   for (uint64_t i = 0; i < manager_.getNumberOfNodes(); i++) {
     auto app = manager_.node_container_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
     const minhton::NodeInfo node_info = app->getNodeInfo();
 
     if (node_info.isInitialized()) {
-      Simulator::Schedule(MilliSeconds((2 * i + 1) * delay),
-                          &MinhtonManager::Scheduler::executeOneLeaveByIndex, this, i);
-      Simulator::Schedule(MilliSeconds((2 * i + 2) * delay),
-                          &MinhtonManager::Scheduler::executeOneRandomJoin, this);
+      Simulator::Schedule((2 * i + 1) * delay, &MinhtonManager::Scheduler::executeOneLeaveByIndex,
+                          this, i);
+      Simulator::Schedule((2 * i + 2) * delay, &MinhtonManager::Scheduler::executeOneRandomJoin,
+                          this);
     }
   }
 }

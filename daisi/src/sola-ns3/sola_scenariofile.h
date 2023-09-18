@@ -21,13 +21,14 @@
 #include <variant>
 
 #include "manager/general_scenariofile.h"
+#include "ns3/core-module.h"
 
 namespace daisi::sola_ns3 {
 
 struct StartSOLA {
   static std::string typeName() { return "start_sola"; }
 
-  uint64_t delay;
+  ns3::Time delay;
 
   void parse(YAML::Node node);
 };
@@ -36,7 +37,7 @@ struct SubscribeTopic {
   static std::string typeName() { return "subscribe_topic"; }
 
   std::string topic;
-  uint64_t delay;
+  ns3::Time delay;
 
   void parse(YAML::Node node);
 };
@@ -44,7 +45,7 @@ struct SubscribeTopic {
 struct Delay {
   static std::string typeName() { return "delay"; }
 
-  uint64_t delay;
+  ns3::Time delay;
 
   void parse(YAML::Node node);
 };

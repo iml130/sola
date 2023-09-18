@@ -52,10 +52,10 @@ private:
                    std::vector<std::shared_ptr<ScenariofileParser::Table>>>>::iterator;
 
   // Scheduling methods, implemented in sola_manager_scheduler.cpp
-  void schedule(StartSOLA start, uint64_t &current_time);
-  void schedule(SubscribeTopic subscribe, uint64_t &current_time);
-  void schedule(Delay delay, uint64_t &current_time);
-  void schedule(Publish publish, uint64_t &current_time);
+  void schedule(StartSOLA start, ns3::Time &current_time);
+  void schedule(SubscribeTopic subscribe, ns3::Time &current_time);
+  void schedule(Delay delay, ns3::Time &current_time);
+  void schedule(Publish publish, ns3::Time &current_time);
 
   ns3::Ptr<SolaApplication> getApplication(uint32_t id) const;
 

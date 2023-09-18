@@ -125,6 +125,7 @@ target_sources(daisi_sola_scenariofile
 target_link_libraries(daisi_sola_scenariofile
         PUBLIC
                 daisi_manager_general_scenariofile
+                ns3::libcore
         PRIVATE
                 daisi_utils
 )

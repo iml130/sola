@@ -1,8 +1,8 @@
 title: MINHTON scenario including all join algorithm subcases
 version: 0.1
-stop_time: 10000000
+stop_time: 10000s
 random_seed: 1
-default_delay: 5000
+default_delay: 5s
 
 # outdated/unused fields
 # only present until Manager switches to new scenariofile parser as well

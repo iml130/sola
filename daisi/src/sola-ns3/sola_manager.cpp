@@ -55,7 +55,7 @@ ns3::Ptr<SolaApplication> SolaManager::getApplication(uint32_t id) const {
 }
 
 void SolaManager::scheduleEvents() {
-  uint64_t current_time = 0;
+  ns3::Time current_time = ns3::Time(0);
 
   for (const SolaScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
     std::visit([this, &current_time](auto &&step) { schedule(step, current_time); }, step.step);
