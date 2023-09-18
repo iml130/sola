@@ -15,7 +15,7 @@ To specify the path, set the environment variable ``DAISI_OUTPUT_PATH`` to the d
 The name of the application that should run in the simulation must be passed to the executable with ``--environment=<APP_NAME>``.
 The following applications are supported:
 
-- [``minhton``](../management_overlay/introduction.md)
+- [``minhton``](../minhton/introduction.md)
 - [``natter``](../natter/introduction.md)
 - [``sola``](../index.md)
 - [``cpps`` (OptiMaFlow)](../optimaflow/introduction.md)

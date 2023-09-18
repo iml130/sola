@@ -100,5 +100,5 @@ To execute a ns-3 simulation or integrating components (SOLA, MINHTON, natter) i
 
 * [Execute DAISI simulation](daisi/using.md)
 * [Using SOLA](sola/usage.md)
-* [Using MINHTON](management_overlay/using.md)
+* [Using MINHTON](minhton/using.md)
 * [Using natter](natter/using.md)
