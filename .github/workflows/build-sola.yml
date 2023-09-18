@@ -143,6 +143,7 @@ jobs:
         build/tests/unittests/DaisiDatastructureSimpleTemporalNetworkTest
         build/tests/unittests/DaisiCppsOrderManagementStnOrderManagement
         build/tests/unittests/DaisiCppsLogicalAuctionParticipantState
+        build/tests/unittests/network_tcp/daisi_network_tcp_framing_manager_test
     - name: Run MINHTON integrationtest
       run: |
         export LD_LIBRARY_PATH=~/ns-3_install/lib
