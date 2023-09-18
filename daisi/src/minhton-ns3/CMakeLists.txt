@@ -86,6 +86,7 @@ target_sources(daisi_minhton_scenario_steps INTERFACE scenario_steps.h)
 target_link_libraries(daisi_minhton_scenario_steps
         INTERFACE
             daisi_manager_scenariofile_component
+            ns3::libcore
 )
 target_include_directories(daisi_minhton_scenario_steps
         INTERFACE

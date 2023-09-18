@@ -18,6 +18,7 @@
 #define DAISI_CPPS_MANAGER_SPAWN_INFO_SCENARIO_H_
 
 #include "manager/scenariofile_component.h"
+#include "ns3/core-module.h"
 
 namespace daisi::cpps {
 
@@ -57,14 +58,14 @@ struct SpawnDistributionScenario {
 struct SpawnInfoScenario {
   std::string entity;
   std::string friendly_name;
-  uint64_t start_time;
+  ns3::Time start_time;
 
   SpawnDistributionScenario spawn_distribution;
 
   void parse(YAML::Node node) {
     SERIALIZE_VAR(entity);
     SERIALIZE_VAR(friendly_name);
-    SERIALIZE_VAR(start_time);
+    SERIALIZE_NS3_TIME(start_time);
 
     SERIALIZE_VAR(spawn_distribution);
   }

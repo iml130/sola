@@ -145,7 +145,7 @@ void CppsManager::setup() {
 void CppsManager::initialSpawn() {
   uint32_t previous_index = 0;
 
-  while (!spawn_info_.empty() && spawn_info_.top().start_time == 0) {
+  while (!spawn_info_.empty() && spawn_info_.top().start_time == ns3::Time(0)) {
     auto info = spawn_info_.top();
     spawn_info_.pop();
 
@@ -514,24 +514,24 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
 
 void CppsManager::scheduleEvents() {
   Simulator::Schedule(Seconds(1), &CppsManager::clearFinishedMaterialFlows, this);
-  uint64_t current_time = Simulator::Now().GetSeconds();
-  uint64_t delay = scenario_.default_delay;
+  ns3::Time current_time = Simulator::Now();
+  const ns3::Time delay = scenario_.default_delay;
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
-                                   &CppsManager::initAMR, this, i);
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), current_time, &CppsManager::initAMR,
+                                   this, i);
   }
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), current_time,
                                    &CppsManager::connectAMR, this, i);
   }
 
   for (auto i = 0U; i < scenario_.initial_number_of_amrs; i++) {
     current_time += delay;
-    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), Seconds(current_time),
+    Simulator::ScheduleWithContext(this->amrs_.Get(i)->GetId(), current_time,
                                    &CppsManager::startAMR, this, i);
   }
 
@@ -540,8 +540,8 @@ void CppsManager::scheduleEvents() {
     auto info = schedule_info_.top();
     schedule_info_.pop();
     current_time += delay;
-    Simulator::Schedule(Seconds(current_time + info.start_time), &CppsManager::scheduleMaterialFlow,
-                        this, info);
+    Simulator::Schedule(current_time + info.start_time, &CppsManager::scheduleMaterialFlow, this,
+                        info);
   }
 }
 

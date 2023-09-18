@@ -21,6 +21,7 @@
 #include <variant>
 
 #include "manager/general_scenariofile.h"
+#include "ns3/core-module.h"
 
 namespace daisi::natter_ns3 {
 
@@ -28,7 +29,7 @@ struct Join {
   static std::string typeName() { return "join"; }
 
   std::string mode;
-  std::optional<uint64_t> delay = 0;
+  std::optional<ns3::Time> delay;
 
   void parse(YAML::Node node);
 };
@@ -38,7 +39,7 @@ struct Publish {
 
   std::string mode;
   uint64_t number = 0;
-  std::optional<uint64_t> delay = 0;
+  std::optional<ns3::Time> delay;
   uint64_t message_size = 0;
 
   void parse(YAML::Node node);

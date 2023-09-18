@@ -20,6 +20,7 @@
 #include <fstream>
 #include <string>
 
+#include "ns3/core-module.h"
 #include "scenariofile_component.h"
 
 namespace daisi {
@@ -35,8 +36,8 @@ struct GeneralScenariofile {
 
     SERIALIZE_VAR(random_seed);
 
-    SERIALIZE_VAR(stop_time);
-    SERIALIZE_VAR(default_delay);
+    SERIALIZE_NS3_TIME(stop_time);
+    SERIALIZE_NS3_TIME(default_delay);
 
     SERIALIZE_VAR(output_path);
   }
@@ -69,8 +70,8 @@ struct GeneralScenariofile {
   uint64_t random_seed = 0;
 
   // simulation information
-  uint64_t stop_time = 0;
-  uint64_t default_delay = 0;
+  ns3::Time stop_time;
+  ns3::Time default_delay;
 
   std::optional<std::string> output_path;
 

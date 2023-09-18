@@ -31,7 +31,7 @@ MinhtonManager::Scheduler::Scheduler(MinhtonManager &manager)
       uniform_zero_one_distribution_(std::uniform_real_distribution<double>(0.0, 1.0)){};
 
 void MinhtonManager::Scheduler::schedule() {
-  uint64_t current_time = 0;
+  ns3::Time current_time = ns3::Time(0);
 
   parseNodeAttributes();
   parseRequests();
@@ -57,27 +57,28 @@ void MinhtonManager::Scheduler::schedule() {
   }
 }
 
-void MinhtonManager::Scheduler::schedule(Time step, uint64_t &current_time) {
+void MinhtonManager::Scheduler::schedule(Time step, ns3::Time &current_time) {
   current_time += step.time;
 }
 
-void MinhtonManager::Scheduler::schedule(JoinMany step, uint64_t &current_time) {
-  const uint64_t join_many_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(JoinMany step, ns3::Time &current_time) {
+  const ns3::Time join_many_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += join_many_delay;
 
   if (step.mode == "random") {
     for (uint64_t i = 0; i < step.number; i++) {
-      Simulator::Schedule(MilliSeconds(current_time + join_many_delay * i),
+      Simulator::Schedule(current_time + join_many_delay * i,
                           &MinhtonManager::Scheduler::executeOneRandomJoin, this);
     }
   } else if (step.mode == "root") {
     for (uint64_t i = 0; i < step.number; i++) {
-      Simulator::Schedule(MilliSeconds(current_time + join_many_delay * i),
+      Simulator::Schedule(current_time + join_many_delay * i,
                           &MinhtonManager::Scheduler::executeOneJoinOnRoot, this);
     }
   } else if (step.mode == "discover") {
     for (uint64_t i = 0; i < step.number; i++) {
-      Simulator::Schedule(MilliSeconds(current_time + join_many_delay * i),
+      Simulator::Schedule(current_time + join_many_delay * i,
                           &MinhtonManager::Scheduler::executeOneJoinDiscover, this);
     }
   } else {
@@ -87,17 +88,16 @@ void MinhtonManager::Scheduler::schedule(JoinMany step, uint64_t &current_time) 
   current_time += join_many_delay * (step.number - 1);
 }
 
-void MinhtonManager::Scheduler::schedule(JoinOne step, uint64_t &current_time) {
-  const uint64_t join_one_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(JoinOne step, ns3::Time &current_time) {
+  const ns3::Time join_one_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += join_one_delay;
 
   if (step.level && step.number) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneJoinByPosition, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneJoinByPosition, this,
                         step.level.value(), step.number.value());
   } else if (step.index) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneJoinByIndex, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneJoinByIndex, this,
                         step.index.value());
   } else {
     throw std::invalid_argument(
@@ -105,18 +105,19 @@ void MinhtonManager::Scheduler::schedule(JoinOne step, uint64_t &current_time) {
   }
 }
 
-void MinhtonManager::Scheduler::schedule(LeaveMany step, uint64_t &current_time) {
-  const uint64_t leave_many_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(LeaveMany step, ns3::Time &current_time) {
+  const ns3::Time leave_many_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += leave_many_delay;
 
   if (step.mode == "random") {
     for (uint64_t i = 0; i < step.number; i++) {
-      Simulator::Schedule(MilliSeconds(current_time + leave_many_delay * i),
+      Simulator::Schedule(current_time + leave_many_delay * i,
                           &MinhtonManager::Scheduler::executeOneRandomLeave, this);
     }
   } else if (step.mode == "root") {
     for (uint64_t i = 0; i < step.number; i++) {
-      Simulator::Schedule(MilliSeconds(current_time + leave_many_delay * i),
+      Simulator::Schedule(current_time + leave_many_delay * i,
                           &MinhtonManager::Scheduler::executeOneLeaveOnRoot, this);
     }
   } else {
@@ -126,17 +127,16 @@ void MinhtonManager::Scheduler::schedule(LeaveMany step, uint64_t &current_time)
   current_time += leave_many_delay * (step.number - 1);
 }
 
-void MinhtonManager::Scheduler::schedule(LeaveOne step, uint64_t &current_time) {
-  const uint64_t leave_one_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(LeaveOne step, ns3::Time &current_time) {
+  const ns3::Time leave_one_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += leave_one_delay;
 
   if (step.level && step.number) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneLeaveByPosition, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneLeaveByPosition, this,
                         step.level.value(), step.number.value());
   } else if (step.index) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneLeaveByIndex, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneLeaveByIndex, this,
                         step.index.value());
   } else {
     throw std::invalid_argument(
@@ -144,46 +144,47 @@ void MinhtonManager::Scheduler::schedule(LeaveOne step, uint64_t &current_time) 
   }
 }
 
-void MinhtonManager::Scheduler::schedule(SearchAll step, uint64_t &current_time) {
-  const uint64_t search_all_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(SearchAll step, ns3::Time &current_time) {
+  const ns3::Time search_all_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
 
-  Simulator::Schedule(MilliSeconds(current_time + search_all_delay),
+  Simulator::Schedule(current_time + search_all_delay,
                       &MinhtonManager::Scheduler::scheduleSearchExactAll, this, search_all_delay);
   current_time += search_all_delay * (manager_.getNumberOfNodes() + 1);
 }
 
-void MinhtonManager::Scheduler::schedule(SearchMany step, uint64_t &current_time) {
-  const uint64_t search_many_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(SearchMany step, ns3::Time &current_time) {
+  const ns3::Time search_many_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
 
-  Simulator::Schedule(MilliSeconds(current_time),
-                      &MinhtonManager::Scheduler::scheduleSearchExactMany, this, search_many_delay,
-                      step.number);
+  Simulator::Schedule(current_time, &MinhtonManager::Scheduler::scheduleSearchExactMany, this,
+                      search_many_delay, step.number);
   current_time += search_many_delay * (step.number + 1) - manager_.scenariofile_.default_delay;
 }
 
-void MinhtonManager::Scheduler::schedule(FailMany step, uint64_t &current_time) {
-  const uint64_t fail_many_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(FailMany step, ns3::Time &current_time) {
+  const ns3::Time fail_many_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += fail_many_delay;
 
   for (uint64_t i = 0; i < step.number; i++) {
-    Simulator::Schedule(MilliSeconds(current_time + fail_many_delay * i),
+    Simulator::Schedule(current_time + fail_many_delay * i,
                         &MinhtonManager::Scheduler::executeOneRandomFail, this);
   }
 
   current_time += fail_many_delay * (step.number - 1);
 }
 
-void MinhtonManager::Scheduler::schedule(FailOne step, uint64_t &current_time) {
-  const uint64_t fail_one_delay = manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(FailOne step, ns3::Time &current_time) {
+  const ns3::Time fail_one_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
   current_time += fail_one_delay;
 
   if (step.level && step.number) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneFailByPosition, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneFailByPosition, this,
                         step.level.value(), step.number.value());
   } else if (step.index) {
-    Simulator::Schedule(MilliSeconds(current_time),
-                        &MinhtonManager::Scheduler::executeOneFailByIndex, this,
+    Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeOneFailByIndex, this,
                         step.index.value());
   } else {
     throw std::invalid_argument(
@@ -191,9 +192,9 @@ void MinhtonManager::Scheduler::schedule(FailOne step, uint64_t &current_time) {
   }
 }
 
-void MinhtonManager::Scheduler::schedule(MixedExecution step, uint64_t &current_time) {
-  const uint64_t mixed_execution_delay =
-      manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(MixedExecution step, ns3::Time &current_time) {
+  const ns3::Time mixed_execution_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
 
   this->scheduleMixedExecution(step.join_number, step.leave_number, step.search_number,
                                current_time, mixed_execution_delay);
@@ -201,21 +202,21 @@ void MinhtonManager::Scheduler::schedule(MixedExecution step, uint64_t &current_
       mixed_execution_delay * (step.join_number + step.leave_number + step.search_number);
 }
 
-void MinhtonManager::Scheduler::schedule(ValidateLeave step, uint64_t &current_time) {
-  const uint64_t validate_leave_delay =
-      manager_.scenariofile_.default_delay + step.delay.value_or(0);
+void MinhtonManager::Scheduler::schedule(ValidateLeave step, ns3::Time &current_time) {
+  const ns3::Time validate_leave_delay =
+      manager_.scenariofile_.default_delay + step.delay.value_or(ns3::Time(0));
 
   current_time += validate_leave_delay;
 
-  Simulator::Schedule(MilliSeconds(current_time), &MinhtonManager::Scheduler::scheduleValidateLeave,
-                      this, validate_leave_delay);
+  Simulator::Schedule(current_time, &MinhtonManager::Scheduler::scheduleValidateLeave, this,
+                      validate_leave_delay);
 
   // upper bound, might be less though
   // times 2 for each leave and join
   current_time += validate_leave_delay * (manager_.getNumberOfNodes() - 1) * 2;
 }
 
-void MinhtonManager::Scheduler::schedule(FindQuery step, uint64_t &current_time) {
+void MinhtonManager::Scheduler::schedule(FindQuery step, ns3::Time &current_time) {
   minhton::FindQuery query(step.query, step.scope);
 
   minhton::NodeInfo requesting_node;
@@ -225,20 +226,19 @@ void MinhtonManager::Scheduler::schedule(FindQuery step, uint64_t &current_time)
   query.setValidityThreshold(step.validity_threshold);
   query.setSelection(minhton::FindQuery::FindQuerySelection::kSelectUnspecific);
 
-  Simulator::Schedule(MilliSeconds(current_time), &MinhtonManager::Scheduler::executeFindQuery,
-                      this, query);
+  Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeFindQuery, this, query);
 
   current_time += manager_.scenariofile_.default_delay;
 }
 
-void MinhtonManager::Scheduler::schedule(RequestCountdown step, uint64_t &current_time) {
-  Simulator::Schedule(MilliSeconds(current_time),
-                      &MinhtonManager::Scheduler::activateRequestCountdown, this, step.number);
+void MinhtonManager::Scheduler::schedule(RequestCountdown step, ns3::Time &current_time) {
+  Simulator::Schedule(current_time, &MinhtonManager::Scheduler::activateRequestCountdown, this,
+                      step.number);
 }
 
-void MinhtonManager::Scheduler::schedule(StaticBuild step, uint64_t &current_time) {
-  Simulator::Schedule(MilliSeconds(current_time),
-                      &MinhtonManager::Scheduler::executeStaticNetworkBuild, this, step.number);
+void MinhtonManager::Scheduler::schedule(StaticBuild step, ns3::Time &current_time) {
+  Simulator::Schedule(current_time, &MinhtonManager::Scheduler::executeStaticNetworkBuild, this,
+                      step.number);
 
   current_time += manager_.scenariofile_.default_delay;
 }
