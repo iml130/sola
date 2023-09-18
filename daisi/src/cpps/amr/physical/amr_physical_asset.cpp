@@ -137,7 +137,7 @@ void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
 util::Position AmrPhysicalAsset::getPosition() const { return connector_.getPosition(); }
 
 /////////////////////
-// flmlite helpers //
+// fsmlite helpers //
 /////////////////////
 
 void AmrPhysicalAsset::executeFrontFunctionality() {
@@ -184,35 +184,38 @@ template <typename T> void AmrPhysicalAsset::finish(const T &) {
 ////////////////////
 
 template <typename T> bool AmrPhysicalAsset::isMoveToLoad(const T &) const {
-  return holdsMoveType(functionality_queue_.front()) &&
+  return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Load>(functionality_queue_.at(1));
 }
 
 template <typename T> bool AmrPhysicalAsset::isMoveToUnload(const T &) const {
-  return holdsMoveType(functionality_queue_.front()) &&
+  return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Unload>(functionality_queue_.at(1));
 }
 
 template <typename T> bool AmrPhysicalAsset::isMoveToCharge(const T &) const {
-  return holdsMoveType(functionality_queue_.front()) &&
+  return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
          std::holds_alternative<Charge>(functionality_queue_.at(1));
 }
 
 template <typename T> bool AmrPhysicalAsset::isMove(const T &) const {
-  return holdsMoveType(functionality_queue_.front()) &&
+  return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
          (functionality_queue_.size() == 1 || holdsMoveType(functionality_queue_.at(1)));
 }
 
 template <typename T> bool AmrPhysicalAsset::isLoad(const T &) const {
-  return std::holds_alternative<Load>(functionality_queue_.front());
+  return !functionality_queue_.empty() &&
+         std::holds_alternative<Load>(functionality_queue_.front());
 }
 
 template <typename T> bool AmrPhysicalAsset::isUnload(const T &) const {
-  return std::holds_alternative<Unload>(functionality_queue_.front());
+  return !functionality_queue_.empty() &&
+         std::holds_alternative<Unload>(functionality_queue_.front());
 }
 
 // template <typename T> bool AmrPhysicalAsset::isCharge(const T &) const {
-//   return std::holds_alternative<Charge>(functionality_queue_.front());
+//   return !functionality_queue_.empty() &&
+//   std::holds_alternative<Charge>(functionality_queue_.front());
 // }
 
 template <typename T> bool AmrPhysicalAsset::isFinish(const T &) const {
