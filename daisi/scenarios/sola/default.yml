@@ -1,8 +1,8 @@
 title: SOLA default scenario
 version: 0.1
-stop_time: 4294967296
+stop_time: 4294967296ms
 random_seed: 1
-default_delay: 500
+default_delay: 0.5s
 
 # outdated/unused fields
 # only present until Manager switches to new scenariofile parser as well
@@ -14,14 +14,14 @@ number_nodes: 3
 
 scenario_sequence:
   - type: start_sola
-    delay: 1000
+    delay: 1s
   - type: delay
-    delay: 0
+    delay: 0s
   - type: subscribe_topic
     topic: "helloworld"
-    delay: 1000
+    delay: 1s
   - type: delay
-    delay: 0
+    delay: 0s
   - type: publish
     topic: "helloworld"
     message_size: 100 # bytes

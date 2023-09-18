@@ -48,8 +48,8 @@ private:
   std::string getDatabaseFilename() override;
   std::string getAdditionalParameters() override;
 
-  void scheduleEvent(const Join &step, uint64_t &current_time);
-  void scheduleEvent(const Publish &step, uint64_t &current_time);
+  void scheduleEvent(const Join &step, ns3::Time &current_time);
+  void scheduleEvent(const Publish &step, ns3::Time &current_time);
 
   void joinTopic(int number_nodes);
   void publishRandom(uint32_t message_size);

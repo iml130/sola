@@ -107,6 +107,7 @@ target_sources(daisi_natter_scenariofile
 target_link_libraries(daisi_natter_scenariofile
         PUBLIC
                 daisi_manager_general_scenariofile
+                ns3::libcore
         PRIVATE
                 daisi_utils
 )

@@ -20,14 +20,14 @@
 
 namespace daisi::sola_ns3 {
 
-void StartSOLA::parse(YAML::Node node) { SERIALIZE_VAR(delay); }
+void StartSOLA::parse(YAML::Node node) { SERIALIZE_NS3_TIME(delay); }
 
 void SubscribeTopic::parse(YAML::Node node) {
   SERIALIZE_VAR(topic);
-  SERIALIZE_VAR(delay);
+  SERIALIZE_NS3_TIME(delay);
 }
 
-void Delay::parse(YAML::Node node) { SERIALIZE_VAR(delay); }
+void Delay::parse(YAML::Node node) { SERIALIZE_NS3_TIME(delay); }
 
 void Publish::parse(YAML::Node node) {
   SERIALIZE_VAR(topic);

@@ -22,13 +22,13 @@ namespace daisi::natter_ns3 {
 
 void Join::parse(YAML::Node node) {
   SERIALIZE_VAR(mode);
-  SERIALIZE_VAR(delay);
+  SERIALIZE_NS3_TIME_OPTIONAL(delay);
 }
 
 void Publish::parse(YAML::Node node) {
   SERIALIZE_VAR(mode);
   SERIALIZE_VAR(number);
-  SERIALIZE_VAR(delay);
+  SERIALIZE_NS3_TIME_OPTIONAL(delay);
   SERIALIZE_VAR(message_size);
 }
 

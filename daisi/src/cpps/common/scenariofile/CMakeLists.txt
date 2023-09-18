@@ -45,4 +45,5 @@ target_link_libraries(daisi_cpps_common_scenariofile_spawn_info_scenario
     INTERFACE
     daisi_manager_scenariofile_component
     yaml-cpp
+    ns3::libcore
 )

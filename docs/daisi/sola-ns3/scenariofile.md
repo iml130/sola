@@ -140,8 +140,8 @@ Delay between the nodes joining the SOLA network.
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `1000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.subscribe_topic``
 
@@ -177,8 +177,8 @@ Delay between the nodes joining the SOLA network.
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `1000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.delay``
 
@@ -193,12 +193,13 @@ This is a dictionary containing key, value pairs, that further specify this step
 
 #### ``scenario_sequence.delay.delay``
 
-The delay in miliseconds.
+The delay.
 
 ??? properties
 
     - Required: :fontawesome-solid-star-of-life:
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.publish``
 

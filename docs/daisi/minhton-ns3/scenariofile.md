@@ -227,7 +227,8 @@ When ``level`` + ``number`` and ``index`` are both defined, ``level`` + ``number
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``level``
         - Required: :fontawesome-solid-star-of-life: (Together with ``number``. Alternatively define the ``index``.)
         - Data type: ``uint32_t``
@@ -247,7 +248,8 @@ Depending on the ``mode``, the new nodes either join on a node randomly selected
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``number``
         - Required: :fontawesome-solid-star-of-life:
         - Data type: ``uint32_t``
@@ -265,7 +267,8 @@ When ``level`` + ``number`` and ``index`` are defined, ``level`` + ``number`` ta
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``level``
         - Required: :fontawesome-solid-star-of-life: (Together with ``number``. Alternatively define the ``index``.)
         - Data type: ``uint32_t``
@@ -285,7 +288,8 @@ Depending on the ``mode``, the nodes are either randomly selected each time, or 
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``number``
         - Required: :fontawesome-solid-star-of-life:
         - Data type: ``uint32_t``
@@ -302,7 +306,8 @@ Searches for multiple nodes (with the amount given by `number`).
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``number``
         - Required: :fontawesome-solid-star-of-life:
         - Data type: ``uint32_t``
@@ -316,7 +321,8 @@ Warning: Can quickly congest the network!
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### `scenario_sequence.fail-one`
 
@@ -327,7 +333,8 @@ When ``level`` + ``number`` and ``index`` are defined, ``level`` + ``number`` ta
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``level``
         - Required: :fontawesome-solid-star-of-life: (Together with ``number``. Alternatively define the ``index``.)
         - Data type: ``uint32_t``
@@ -346,7 +353,8 @@ Initiates a failure on multiple nodes (with the amount given by `number`).
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``number``
         - Required: :fontawesome-solid-star-of-life:
         - Data type: ``uint32_t``
@@ -359,7 +367,8 @@ Schedules a mixed execution with joins (with the amount given by ``join-number``
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
     - ``join-number``
         - Required: :fontawesome-solid-star-of-life:
         - Data type: ``uint32_t``
@@ -378,7 +387,8 @@ Iterates over all nodes and lets them leave, followed by them joining the networ
 
     - ``delay``
         - Required:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### `scenario_sequence.find-query`
 
@@ -405,13 +415,14 @@ The find query is specified by ``scope``, ``query``, and ``validity-threshold``.
 
 #### `scenario_sequence.time`
 
-Waits the specificed amount of ``time`` (miliseconds).
+Waits the specificed amount of ``time``.
 
 ??? properties
 
     - ``time``
         - Required: :fontawesome-solid-star-of-life:
-        - Data type: ``uint32_t``
+        - Data type: ``std::string``
+        - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### `scenario_sequence.static-build`
 
@@ -443,7 +454,7 @@ scenario_sequence:
     - type: join-many:
         number: 100
         mode: random
-        delay: 1000
+        delay: 1s
 ```
 
 ### Removing Nodes
@@ -455,11 +466,11 @@ scenario_sequence:
     - type: join-many:
         number: 100
         mode: random
-        delay: 1000
+        delay: 1s
     - type: leave-many:
         number: 100
         mode: random
-        delay: 1000
+        delay: 1s
 ```
 
 ### Searching Nodes
@@ -472,12 +483,12 @@ scenario_sequence:
     - type: join-many:
         number: 100
         mode: random
-        delay: 1000
+        delay: 1s
     - type: search-many:
         number: 100
-        delay: 1000
+        delay: 1s
     - type: search-all:
-        delay: 1000
+        delay: 1s
 ```
 
 ### Static P2P Build
@@ -493,7 +504,7 @@ scenario_sequence:
     - type: static-build:
         number: 100
         mode: random
-        delay: 1000
+        delay: 1s
 ```
 
 ### Peer Discovery

@@ -168,8 +168,8 @@ Specifies **additional** delay (added to ``default_delay``) that is added **befo
 ??? properties
 
     - Required:
-    - Reasonable default: `5000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.publish``
 
@@ -201,8 +201,8 @@ When more than one node should publish a message in the same step, this delay is
 ??? properties
 
     - Required:
-    - Reasonable default: `5000`
-    - Data type: ``uint64_t``
+    - Data type: ``std::string``
+    - Possible values: Any string ending with a unit prefix like "s" or "ms". If no unit is given, it will be treated as seconds.
 
 #### ``scenario_sequence.publish.mode``
 
