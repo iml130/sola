@@ -1,3 +1,5 @@
+add_subdirectory(network_tcp)
+
 add_executable(NatterStaticCalculationTest "")
 target_sources(NatterStaticCalculationTest
         PRIVATE
