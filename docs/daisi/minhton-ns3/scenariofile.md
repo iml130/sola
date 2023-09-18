@@ -99,7 +99,7 @@ Directory path for the resulting logging output.
 
 #### ``fanout``
 
-The [fanout](../../management_overlay/glossary.md#f) of the MINHTON tree.
+The [fanout](../../minhton/glossary.md#f) of the MINHTON tree.
 
 ??? properties
 
@@ -498,7 +498,7 @@ scenario_sequence:
 
 ### Peer Discovery
 
-Inside the scenario sequence, [ESearch](../../management_overlay/using.md#peer-discovery-entity-search-esearch) find queries can be specified, after you have created a network as [shown above](#adding-nodes).
+Inside the scenario sequence, [ESearch](../../minhton/using.md#peer-discovery-entity-search-esearch) find queries can be specified, after you have created a network as [shown above](#adding-nodes).
 You initiate a find query with the requesting node (level:number).
 The scope can be `all` or `some` and the query must be a valid expression.
 In the following example we define a find query from the requesting node 100:100 with an unrestricted scope and query the attribute `a01` and `a02` with a value over 5.

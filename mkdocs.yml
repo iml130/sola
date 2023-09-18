@@ -22,21 +22,21 @@ nav:
       - Glossary: sola/glossary.md
 
   - MINHTON:
-    - Introduction: management_overlay/introduction.md
-    - Using MINHTON: management_overlay/using.md
+    - Introduction: minhton/introduction.md
+    - Using MINHTON: minhton/using.md
     - Programmers Manual:
-      - Concept: management_overlay/programmers/concept.md
-      - Messages: management_overlay/programmers/messages.md
+      - Concept: minhton/programmers/concept.md
+      - Messages: minhton/programmers/messages.md
       - Algorithms:
-        - Introduction: management_overlay/algorithms/index.md
-        - Join: management_overlay/algorithms/join.md
-        - Join Accept: management_overlay/algorithms/join_accept.md
-        - Leave: management_overlay/algorithms/leave.md
-        - Concurrent Leave: management_overlay/algorithms/leave_concurrent.md
-        - Bootstrap: management_overlay/algorithms/bootstrap.md
-        - TreeMapper: management_overlay/algorithms/treemapper.md
-      - FSM: management_overlay/programmers/fsm.md
-    - Glossary: management_overlay/glossary.md
+        - Introduction: minhton/algorithms/index.md
+        - Join: minhton/algorithms/join.md
+        - Join Accept: minhton/algorithms/join_accept.md
+        - Leave: minhton/algorithms/leave.md
+        - Concurrent Leave: minhton/algorithms/leave_concurrent.md
+        - Bootstrap: minhton/algorithms/bootstrap.md
+        - TreeMapper: minhton/algorithms/treemapper.md
+      - FSM: minhton/programmers/fsm.md
+    - Glossary: minhton/glossary.md
 
   - NATTER:
     - Introduction: natter/introduction.md

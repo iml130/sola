@@ -42,7 +42,7 @@ The transformation of the material flow into a precedence graph allows the TePSS
 ### Interaction
 
 Efficient communication is crucial for scalability in large CPPS applications.
-In the context of OptiMaFlow, the aim of minimizing communication overhead is addressed through a combination of one-to-one communication and publishing on topics via SOLA with [MINHTON](../../management_overlay/introduction.md) for interactions involving multiple participants.
+In the context of OptiMaFlow, the aim of minimizing communication overhead is addressed through a combination of one-to-one communication and publishing on topics via SOLA with [MINHTON](../../minhton/introduction.md) for interactions involving multiple participants.
 
 #### One-to-One Communication
 

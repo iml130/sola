@@ -154,7 +154,7 @@ This is a dictionary containing key, value pairs, that further specify this step
 Specify which type of join should be used to join the tree.
 
 With the MINHCAST join, all connections are statically calculated and inserted into the nodes.
-The [actual MINHTON join algorithm](../../management_overlay/algorithms/join.md) is not executed.
+The [actual MINHTON join algorithm](../../minhton/algorithms/join.md) is not executed.
 
 ??? properties
 

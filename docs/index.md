@@ -13,7 +13,7 @@
 
 **SOLA** is a framework providing Service Discovery and Publish-Subscribe functionalities.
 Different components can be used to implement these functionalities.
-Initially SOLA was used with distributed peer-to-peer network structures and algorithms as the components, like [MINHTON](management_overlay/introduction.md) and [MINHCAST](natter/introduction.md).
+Initially SOLA was used with distributed peer-to-peer network structures and algorithms as the components, like [MINHTON](minhton/introduction.md) and [MINHCAST](natter/introduction.md).
 Hence, it omits the need for a dedicated communication instance like a message broker.
 But due to the flexibility of SOLA, centralized approaches are supported as well.
 All supported components and their SOLA-specific implementations ("connectors" between the components and SOLA) are described [here](sola/component_implementations.md).
@@ -36,7 +36,7 @@ For instructions on how to build and run SOLA and its components, see [Getting S
 The SOLA repository contains multiple subprojects:
 
 - **SOLA (Standalone)** is the framework that initializes and uses different components to offer a Service Discovery and Publish-Subscribe API.
-- **[MINHTON](management_overlay/introduction.md)** is a peer-to-peer management overlay which organizes peers in an optimized tree structure. MINHTON is a SOLA component for service discovery.
+- **[MINHTON](minhton/introduction.md)** is a peer-to-peer management overlay which organizes peers in an optimized tree structure. MINHTON is a SOLA component for service discovery.
 - **[natter](natter/introduction.md)** is a framework for peer-to-peer Publish-Subscribe algorithms.
 The MINHCAST algorithm to broadcast a message to all nodes in a MINHTON network is included in natter.
 natter is a SOLA component for Publish-Subscribe.

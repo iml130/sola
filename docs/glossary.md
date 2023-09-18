@@ -1,6 +1,6 @@
 [SOLA](sola/glossary.md)
 
-[MINHTON](management_overlay/glossary.md)
+[MINHTON](minhton/glossary.md)
 
 [NATTER](natter/glossary.md)
 
