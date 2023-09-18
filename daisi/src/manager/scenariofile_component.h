@@ -22,8 +22,23 @@
 #include <optional>
 #include <variant>
 
+#include "ns3/core-module.h"
+
 #define STRING_NAME(VAR_NAME) #VAR_NAME
 #define SERIALIZE_VAR(VAR) serializeType(VAR, STRING_NAME(VAR), node);
+#define SERIALIZE_NS3_TIME(VAR)                      \
+  {                                                  \
+    std::string internal;                            \
+    serializeType(internal, STRING_NAME(VAR), node); \
+    VAR = ns3::Time(internal);                       \
+  }
+
+#define SERIALIZE_NS3_TIME_OPTIONAL(VAR)             \
+  {                                                  \
+    std::optional<std::string> internal;             \
+    serializeType(internal, STRING_NAME(VAR), node); \
+    if (internal) VAR = ns3::Time(internal.value()); \
+  }
 
 namespace daisi {
 
