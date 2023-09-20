@@ -14,33 +14,33 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_PARTICIPANT_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_PARTICIPANT_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_ITERATED_AUCTION_ASSIGNMENT_PARTICIPANT_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_ITERATED_AUCTION_ASSIGNMENT_PARTICIPANT_H_
 
 #include <memory>
 #include <optional>
 
+#include "assignment_participant.h"
 #include "auction_participant_state.h"
 #include "cpps/common/cpps_communicator.h"
 #include "cpps/logical/order_management/auction_based_order_management.h"
-#include "disposition_participant.h"
 
 namespace daisi::cpps::logical {
 
-/// @brief This class is the counterpart of the IteratedAuctionDispositionInitiator, particpanting
+/// @brief This class is the counterpart of the IteratedAuctionAssignmentInitiator, particpanting
 /// in the iterated auction procedure. It must be able to process, IterationNotification, and
 /// WinnerNotification messages.
 ///
 /// The participant is responsible for managing states of each auction it is taking place,
 /// represented by different initiator connection strings, and storing which bids with insertion
 /// infos it has submitted.
-class IteratedAuctionDispositionParticipant : public DispositionParticipant {
+class IteratedAuctionAssignmentParticipant : public AssignmentParticipant {
 public:
-  explicit IteratedAuctionDispositionParticipant(
+  explicit IteratedAuctionAssignmentParticipant(
       daisi::cpps::common::CppsCommunicatorPtr communicator,
       std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description);
 
-  ~IteratedAuctionDispositionParticipant() override = default;
+  ~IteratedAuctionAssignmentParticipant() override = default;
 
   /// @brief To process a CallForProposal we need to initiate AuctionParticipantState for this
   /// auction process, initially calculate possible bids for each open task, and consequently submit

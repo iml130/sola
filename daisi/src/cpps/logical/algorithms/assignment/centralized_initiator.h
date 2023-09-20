@@ -14,18 +14,18 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_INITIATOR_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_CENTRALIZED_INITIATOR_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_CENTRALIZED_INITIATOR_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_CENTRALIZED_INITIATOR_H_
 
+#include "assignment_initiator.h"
 #include "cpps/common/cpps_communicator.h"
-#include "disposition_initiator.h"
 
 namespace daisi::cpps::logical {
 
 /// @brief Algorithm that centrally assigns tasks of incoming material flows to the
 /// corresponding centralized participants. Should be implemented by any concrete centralized task
 /// assignment algorithm.
-class CentralizedInitiator : public DispositionInitiator {
+class CentralizedInitiator : public AssignmentInitiator {
 public:
   CentralizedInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
                        std::shared_ptr<CppsLoggerNs3> logger);

@@ -22,8 +22,8 @@
 namespace daisi::cpps::logical {
 
 enum class AlgorithmType {
-  kIteratedAuctionDispositionInitiator,
-  kIteratedAuctionDispositionParticipant,
+  kIteratedAuctionAssignmentInitiator,
+  kIteratedAuctionAssignmentParticipant,
   kRoundRobinInitiator,
   kRoundRobinParticipant
 };

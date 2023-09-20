@@ -19,7 +19,7 @@
 namespace daisi::cpps::logical {
 CentralizedInitiator::CentralizedInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
                                            std::shared_ptr<CppsLoggerNs3> logger)
-    : DispositionInitiator(communicator, logger) {
+    : AssignmentInitiator(communicator, logger) {
   // create request to gain information about all active AMR's
   sola::Request amr_request;
   amr_request.all = true;

@@ -83,5 +83,5 @@ target_sources(DaisiCppsLogicalAuctionParticipantState
 target_link_libraries(DaisiCppsLogicalAuctionParticipantState
         PRIVATE
         Catch2::Catch2WithMain
-        daisi_cpps_logical_algorithms_disposition_auction_participant_state
+        daisi_cpps_logical_algorithms_assignment_auction_participant_state
 )

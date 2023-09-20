@@ -1,5 +1,5 @@
 
-add_subdirectory(disposition)
+add_subdirectory(assignment)
 
 add_library(daisi_cpps_logical_algorithms_algorithm_config INTERFACE)
 target_sources(daisi_cpps_logical_algorithms_algorithm_config
