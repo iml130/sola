@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_INITIATOR_STATE_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_INITIATOR_STATE_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_AUCTION_INITIATOR_STATE_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_AUCTION_INITIATOR_STATE_H_
 
 #include <memory>
 
@@ -27,7 +27,7 @@
 
 namespace daisi::cpps::logical {
 
-/// @brief Helper class for the IteratedAuctionDispositionInitiator to handle and store the state of
+/// @brief Helper class for the IteratedAuctionAssignmentInitiator to handle and store the state of
 /// received bids and winner responses.
 class AuctionInitiatorState {
 public:

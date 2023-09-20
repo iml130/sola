@@ -17,8 +17,8 @@
 #include "material_flow_logical_agent.h"
 
 #include "cpps/logical/algorithms/algorithm_interface.h"
-#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_initiator.h"
-#include "cpps/logical/algorithms/disposition/round_robin_initiator.h"
+#include "cpps/logical/algorithms/assignment/iterated_auction_assignment_initiator.h"
+#include "cpps/logical/algorithms/assignment/round_robin_initiator.h"
 #include "cpps/logical/message/material_flow_update.h"
 #include "logging/logger_manager.h"
 #include "solanet/uuid.h"
@@ -62,9 +62,9 @@ void MaterialFlowLogicalAgent::start() {
 void MaterialFlowLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kIteratedAuctionDispositionInitiator:
+      case AlgorithmType::kIteratedAuctionAssignmentInitiator:
         algorithms_.push_back(
-            std::make_unique<IteratedAuctionDispositionInitiator>(communicator_, logger_));
+            std::make_unique<IteratedAuctionAssignmentInitiator>(communicator_, logger_));
         break;
       case AlgorithmType::kRoundRobinInitiator:
         algorithms_.push_back(std::make_unique<RoundRobinInitiator>(communicator_, logger_));
@@ -114,10 +114,10 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   // TODO there could be multiple algorithm interfaces in the future
   // TODO Currently only algorithm and logger
   assert(algorithms_.size() == 2);
-  assert(dynamic_cast<DispositionInitiator *>(algorithms_[0].get()));
+  assert(dynamic_cast<AssignmentInitiator *>(algorithms_[0].get()));
   assert(dynamic_cast<MaterialFlowStateLogger *>(algorithms_[1].get()));
 
-  auto tmp = dynamic_cast<DispositionInitiator *>(algorithms_[0].get());
+  auto tmp = dynamic_cast<AssignmentInitiator *>(algorithms_[0].get());
   tmp->addMaterialFlow(scheduler);
 
   const std::string ip = communicator_->network.getIP();

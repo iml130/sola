@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/logical/algorithms/disposition/auction_participant_state.h"
+#include "cpps/logical/algorithms/assignment/auction_participant_state.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>

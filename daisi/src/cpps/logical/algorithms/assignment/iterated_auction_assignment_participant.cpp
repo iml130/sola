@@ -14,24 +14,24 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "iterated_auction_disposition_participant.h"
+#include "iterated_auction_assignment_participant.h"
 
 #include "cpps/amr/model/amr_fleet.h"
 #include "cpps/logical/message/auction_based/bid_submission.h"
 
 namespace daisi::cpps::logical {
 
-IteratedAuctionDispositionParticipant::IteratedAuctionDispositionParticipant(
+IteratedAuctionAssignmentParticipant::IteratedAuctionAssignmentParticipant(
     daisi::cpps::common::CppsCommunicatorPtr communicator,
     std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description)
-    : DispositionParticipant(communicator),
+    : AssignmentParticipant(communicator),
       order_management_(std::move(order_management)),
       description_(std::move(description)) {
   auto topic = AmrFleet::get().getTopicForAbility(description_.getLoadHandling().getAbility());
   communicator_->sola.subscribeTopic(topic);
 }
 
-bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_for_proposal) {
+bool IteratedAuctionAssignmentParticipant::process(const CallForProposal &call_for_proposal) {
   AuctionParticipantState state(call_for_proposal.getTasks());
 
   auto initiator_connection = call_for_proposal.getInitiatorConnection();
@@ -52,7 +52,7 @@ bool IteratedAuctionDispositionParticipant::process(const CallForProposal &call_
   return true;
 }
 
-bool IteratedAuctionDispositionParticipant::process(
+bool IteratedAuctionAssignmentParticipant::process(
     const IterationNotification &iteration_notification) {
   std::string initiator_connection = iteration_notification.getInitiatorConnection();
 
@@ -74,7 +74,7 @@ bool IteratedAuctionDispositionParticipant::process(
   return true;
 }
 
-bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &winner_notification) {
+bool IteratedAuctionAssignmentParticipant::process(const WinnerNotification &winner_notification) {
   std::string initiator_connection = winner_notification.getInitiatorConnection();
   std::string task_uuid = winner_notification.getTaskUuid();
 
@@ -130,7 +130,7 @@ bool IteratedAuctionDispositionParticipant::process(const WinnerNotification &wi
   return true;
 }
 
-void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantState &state) {
+void IteratedAuctionAssignmentParticipant::calculateBids(AuctionParticipantState &state) {
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
@@ -147,7 +147,7 @@ void IteratedAuctionDispositionParticipant::calculateBids(AuctionParticipantStat
   state.prune();
 }
 
-void IteratedAuctionDispositionParticipant::submitBid(const std::string &initiator_connection) {
+void IteratedAuctionAssignmentParticipant::submitBid(const std::string &initiator_connection) {
   auto it_state = initiator_auction_state_mapping_.find(initiator_connection);
   if (it_state == initiator_auction_state_mapping_.end()) {
     throw std::runtime_error("Auction state for initiator connection not found.");

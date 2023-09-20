@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_PARTICIPANT_STATE_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_AUCTION_PARTICIPANT_STATE_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_AUCTION_PARTICIPANT_STATE_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_AUCTION_PARTICIPANT_STATE_H_
 
 #include <memory>
 #include <unordered_map>
@@ -27,7 +27,7 @@
 
 namespace daisi::cpps::logical {
 
-/// @brief Helper struct for the IteratedAuctionDispositionParticipant, used inside of the
+/// @brief Helper struct for the IteratedAuctionAssignmentParticipant, used inside of the
 /// AuctionParticipantState, to store information related to exactly one task.
 /// This includes the previously calculated bids (metrics) and insertion points.
 struct AuctionParticipantTaskState {
@@ -64,7 +64,7 @@ private:
   std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point_;
 };
 
-/// @brief Helper struct for the IteratedAuctionDispositionParticipant to store the state of open
+/// @brief Helper struct for the IteratedAuctionAssignmentParticipant to store the state of open
 /// auction processes, calculated bids (metrics) and insertion points.
 /// Each AuctionParticipantState is only responsible for one auction process by one dedicated
 /// initiator.

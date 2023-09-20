@@ -17,8 +17,8 @@
 #include "amr_logical_agent.h"
 
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "cpps/logical/algorithms/disposition/centralized_participant.h"
-#include "cpps/logical/algorithms/disposition/iterated_auction_disposition_participant.h"
+#include "cpps/logical/algorithms/assignment/centralized_participant.h"
+#include "cpps/logical/algorithms/assignment/iterated_auction_assignment_participant.h"
 #include "cpps/logical/message/material_flow_update.h"
 #include "cpps/logical/order_management/simple_order_management.h"
 #include "cpps/logical/order_management/stn_order_management.h"
@@ -53,12 +53,12 @@ void AmrLogicalAgent::initAlgorithms() {
 
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
-      case AlgorithmType::kIteratedAuctionDispositionParticipant: {
+      case AlgorithmType::kIteratedAuctionAssignmentParticipant: {
         auto stn_order_management = std::make_shared<StnOrderManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
         order_management_ = stn_order_management;
 
-        algorithms_.push_back(std::make_unique<IteratedAuctionDispositionParticipant>(
+        algorithms_.push_back(std::make_unique<IteratedAuctionAssignmentParticipant>(
             communicator_, stn_order_management, description_));
 
         order_management_->addNotifyTaskAssignmentCallback(

@@ -14,25 +14,25 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "iterated_auction_disposition_initiator.h"
+#include "iterated_auction_assignment_initiator.h"
 
 #include "cpps/amr/model/amr_fleet.h"
 #include "ns3/simulator.h"
 
 namespace daisi::cpps::logical {
 
-IteratedAuctionDispositionInitiator::IteratedAuctionDispositionInitiator(
+IteratedAuctionAssignmentInitiator::IteratedAuctionAssignmentInitiator(
     daisi::cpps::common::CppsCommunicatorPtr communicator, std::shared_ptr<CppsLoggerNs3> logger)
-    : DispositionInitiator(communicator, logger) {
+    : AssignmentInitiator(communicator, logger) {
   // assuming that sola is fully initialized at this point
 
   auto preparation_duration = prepareInteraction();
 
   ns3::Simulator::Schedule(ns3::Seconds(preparation_duration),
-                           &IteratedAuctionDispositionInitiator::setPreparationFinished, this);
+                           &IteratedAuctionAssignmentInitiator::setPreparationFinished, this);
 }
 
-void IteratedAuctionDispositionInitiator::addMaterialFlow(
+void IteratedAuctionAssignmentInitiator::addMaterialFlow(
     std::shared_ptr<material_flow::MFDLScheduler> scheduler) {
   if (layered_precedence_graph_) {
     throw std::runtime_error("A material flow is already processed currently. Support of multiple "
@@ -53,7 +53,7 @@ void IteratedAuctionDispositionInitiator::addMaterialFlow(
   }
 }
 
-daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() {
+daisi::util::Duration IteratedAuctionAssignmentInitiator::prepareInteraction() {
   auto available_abilities = AmrFleet::get().getAllExistingAbilities();
   uint8_t topic_counter = 0;
 
@@ -70,18 +70,18 @@ daisi::util::Duration IteratedAuctionDispositionInitiator::prepareInteraction() 
   return delays_.subscribe_topic * topic_counter;
 }
 
-void IteratedAuctionDispositionInitiator::setPreparationFinished() { preparation_finished_ = true; }
+void IteratedAuctionAssignmentInitiator::setPreparationFinished() { preparation_finished_ = true; }
 
-void IteratedAuctionDispositionInitiator::startIteration() {
+void IteratedAuctionAssignmentInitiator::startIteration() {
   // Sending CallForProposal messages to initiate the auction.
   callForProposal();
 
   // Starting loop to assign all auctionable tasks
   ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
-                           &IteratedAuctionDispositionInitiator::bidProcessing, this);
+                           &IteratedAuctionAssignmentInitiator::bidProcessing, this);
 }
 
-void IteratedAuctionDispositionInitiator::finishIteration() {
+void IteratedAuctionAssignmentInitiator::finishIteration() {
   // Moving all free tasks from the free layer to the scheduled layer
   // and updating the other layers accordingly
   layered_precedence_graph_->next();
@@ -98,7 +98,7 @@ void IteratedAuctionDispositionInitiator::finishIteration() {
   }
 }
 
-void IteratedAuctionDispositionInitiator::bidProcessing() {
+void IteratedAuctionAssignmentInitiator::bidProcessing() {
   // Receiving bids in the meantime
   auction_initiator_state_->countBidSubmissionProcessing();
 
@@ -110,18 +110,18 @@ void IteratedAuctionDispositionInitiator::bidProcessing() {
 
     // Scheduling the processing of winner responses
     ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_winner_responses),
-                             &IteratedAuctionDispositionInitiator::winnerResponseProcessing, this);
+                             &IteratedAuctionAssignmentInitiator::winnerResponseProcessing, this);
   } else {
     // If no winners were found, we renotify the participants with IterationNotifcations
     iterationNotification(layered_precedence_graph_->getAuctionableTasks());
 
     // Continuing the loop
     ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
-                             &IteratedAuctionDispositionInitiator::bidProcessing, this);
+                             &IteratedAuctionAssignmentInitiator::bidProcessing, this);
   }
 }
 
-void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {
+void IteratedAuctionAssignmentInitiator::winnerResponseProcessing() {
   // Receiving WinnerResponse messages in the meantime
   auction_initiator_state_->countWinnerResponseProcessing();
 
@@ -136,11 +136,11 @@ void IteratedAuctionDispositionInitiator::winnerResponseProcessing() {
   } else {
     // Continuing the loop as there are still unscheduled tasks left in this iteration
     ns3::Simulator::Schedule(ns3::Seconds(delays_.waiting_to_receive_bids),
-                             &IteratedAuctionDispositionInitiator::bidProcessing, this);
+                             &IteratedAuctionAssignmentInitiator::bidProcessing, this);
   }
 }
 
-void IteratedAuctionDispositionInitiator::callForProposal() {
+void IteratedAuctionAssignmentInitiator::callForProposal() {
   auto initiator_connection = communicator_->network.getConnectionString();
 
   // Mapping of which tasks should be published with a CallForProposal on which ability topic.
@@ -156,7 +156,7 @@ void IteratedAuctionDispositionInitiator::callForProposal() {
   }
 }
 
-void IteratedAuctionDispositionInitiator::iterationNotification(
+void IteratedAuctionAssignmentInitiator::iterationNotification(
     const std::vector<material_flow::Task> &tasks) {
   auto initiator_connection = communicator_->network.getConnectionString();
 
@@ -178,7 +178,7 @@ void IteratedAuctionDispositionInitiator::iterationNotification(
   }
 }
 
-void IteratedAuctionDispositionInitiator::notifyWinners(
+void IteratedAuctionAssignmentInitiator::notifyWinners(
     const std::vector<AuctionInitiatorState::Winner> &winners) {
   auction_initiator_state_->clearWinnerAcceptions();
   auto initiator_connection = communicator_->network.getConnectionString();
@@ -193,7 +193,7 @@ void IteratedAuctionDispositionInitiator::notifyWinners(
 
 std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
                    amr::AmrStaticAbilityHasher>
-IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
+IteratedAuctionAssignmentInitiator::getTaskAbilityMapping(
     const std::vector<material_flow::Task> &tasks) {
   std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
                      amr::AmrStaticAbilityHasher>
@@ -210,7 +210,7 @@ IteratedAuctionDispositionInitiator::getTaskAbilityMapping(
   return task_ability_mapping;
 }
 
-void IteratedAuctionDispositionInitiator::logMaterialFlowContent(
+void IteratedAuctionAssignmentInitiator::logMaterialFlowContent(
     const std::string &material_flow_uuid) {
   for (const auto &task : layered_precedence_graph_->getTasks()) {
     logger_->logMaterialFlowTask(task, material_flow_uuid);
@@ -223,7 +223,7 @@ void IteratedAuctionDispositionInitiator::logMaterialFlowContent(
   }
 }
 
-void IteratedAuctionDispositionInitiator::logMaterialFlowOrderStatesOfTask(
+void IteratedAuctionAssignmentInitiator::logMaterialFlowOrderStatesOfTask(
     const material_flow::Task &task, const OrderStates &order_state) {
   for (auto i = 0; i < task.getOrders().size(); i++) {
     MaterialFlowOrderUpdateLoggingInfo logging_info;
@@ -235,12 +235,12 @@ void IteratedAuctionDispositionInitiator::logMaterialFlowOrderStatesOfTask(
   }
 }
 
-bool IteratedAuctionDispositionInitiator::process(const BidSubmission &bid_submission) {
+bool IteratedAuctionAssignmentInitiator::process(const BidSubmission &bid_submission) {
   auction_initiator_state_->addBidSubmission(bid_submission);
   return true;
 }
 
-bool IteratedAuctionDispositionInitiator::process(const WinnerResponse &winner_response) {
+bool IteratedAuctionAssignmentInitiator::process(const WinnerResponse &winner_response) {
   if (winner_response.doesAccept()) {
     auto task = layered_precedence_graph_->getTask(winner_response.getTaskUuid());
     logMaterialFlowOrderStatesOfTask(task, OrderStates::kQueued);

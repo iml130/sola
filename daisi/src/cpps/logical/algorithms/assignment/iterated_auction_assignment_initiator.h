@@ -14,35 +14,35 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_INITIATOR_H_
-#define DAISI_CPPS_LOGICAL_ALGORITHMS_DISPOSITION_ITERATED_AUCTION_DISPOSITION_INITIATOR_H_
+#ifndef DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_ITERATED_AUCTION_ASSIGNMENT_INITIATOR_H_
+#define DAISI_CPPS_LOGICAL_ALGORITHMS_ASSIGNMENT_ITERATED_AUCTION_ASSIGNMENT_INITIATOR_H_
 
 #include <memory>
 #include <variant>
 
+#include "assignment_initiator.h"
 #include "auction_initiator_state.h"
 #include "cpps/common/cpps_communicator.h"
-#include "disposition_initiator.h"
 #include "layered_precedence_graph.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
 
-/// @brief The initiator class for auction-based disposition, based on the TePSSI algorithm from
+/// @brief The initiator class for auction-based assignment, based on the TePSSI algorithm from
 /// Nunes, E., McIntire, M., & Gini, M. (2017). Decentralized multi-robot allocation of tasks with
 /// temporal and precedence constraints. Advanced Robotics, 31(22), 1193-1207.
 ///
-/// This class is the counterpart of the IteratedAuctionDispositionParticipant.
+/// This class is the counterpart of the IteratedAuctionAssignmentParticipant.
 ///
 /// Modifications were made to the algorithm by sending CallForPropsal and IterationNotification
 /// messages on separate topcis by assuming separate topics for robots (AMRs) with different
 /// physical properties (abilities).
-class IteratedAuctionDispositionInitiator : public DispositionInitiator {
+class IteratedAuctionAssignmentInitiator : public AssignmentInitiator {
 public:
-  IteratedAuctionDispositionInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
-                                      std::shared_ptr<CppsLoggerNs3> logger);
+  IteratedAuctionAssignmentInitiator(daisi::cpps::common::CppsCommunicatorPtr communicator,
+                                     std::shared_ptr<CppsLoggerNs3> logger);
 
-  ~IteratedAuctionDispositionInitiator() override = default;
+  ~IteratedAuctionAssignmentInitiator() override = default;
 
   /// @brief Storing bid submission information in a helper class to determine winners.
   REGISTER_IMPLEMENTATION(BidSubmission)

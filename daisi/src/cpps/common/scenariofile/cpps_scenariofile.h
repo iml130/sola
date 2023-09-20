@@ -48,13 +48,13 @@ struct AlgorithmScenario {
 
   const std::unordered_map<std::string, logical::AlgorithmType>
       assignment_strategy_to_initiator_algorithm_type = {
-          {"iterated_auction", logical::AlgorithmType::kIteratedAuctionDispositionInitiator},
+          {"iterated_auction", logical::AlgorithmType::kIteratedAuctionAssignmentInitiator},
           {"round_robin", logical::AlgorithmType::kRoundRobinInitiator},
   };
 
   const std::unordered_map<std::string, logical::AlgorithmType>
       assignment_strategy_to_participant_algorithm_type = {
-          {"iterated_auction", logical::AlgorithmType::kIteratedAuctionDispositionParticipant},
+          {"iterated_auction", logical::AlgorithmType::kIteratedAuctionAssignmentParticipant},
           {"round_robin", logical::AlgorithmType::kRoundRobinParticipant},
   };
 
