@@ -26,7 +26,7 @@
 #include "cpps/amr/message/amr_state.h"
 #include "cpps/amr/message/serializer.h"
 #include "cpps/logical/logical_agent.h"
-#include "cpps/logical/order_management/order_management.h"
+#include "cpps/logical/task_management/task_management.h"
 #include "ns3/socket.h"
 #include "solanet/network_udp/message.h"
 #include "utils/structure_helpers.h"
@@ -110,7 +110,7 @@ private:
   /// @brief The address of the AmrPhysicalAsset after it connected to AmrLogicalAgent.
   ns3::Address physical_address_;
 
-  std::shared_ptr<OrderManagement> order_management_;
+  std::shared_ptr<TaskManagement> task_management_;
 };
 }  // namespace daisi::cpps::logical
 

@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/logical/order_management/simple_order_management.h"
+#include "cpps/logical/task_management/simple_task_management.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>
@@ -44,10 +44,10 @@ daisi::util::Position p4(5, 10);
 daisi::util::Position p5(20, 0);
 daisi::util::Position p6(20, 10);
 
-TEST_CASE("SimpleOrderManagement Empty Tasks", "[adding and removing vertices]") {
+TEST_CASE("SimpleTaskManagement Empty Tasks", "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(daisi::util::Position(10, 10));
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // assert preconditions
   REQUIRE(!management.hasTasks());
@@ -65,10 +65,10 @@ TEST_CASE("SimpleOrderManagement Empty Tasks", "[adding and removing vertices]")
   REQUIRE_THROWS(management.addTask(task_empty_with_follow_ups));
 }
 
-TEST_CASE("SimpleOrderManagement One Simple Transport Order", "[adding and removing vertices]") {
+TEST_CASE("SimpleTaskManagement One Simple Transport Order", "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // assert preconditions
   REQUIRE(!management.hasTasks());
@@ -123,10 +123,10 @@ TEST_CASE("SimpleOrderManagement One Simple Transport Order", "[adding and remov
   REQUIRE(!management.hasTasks());
 }
 
-TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and removing vertices]") {
+TEST_CASE("SimpleTaskManagement Two Simple Transport Orders", "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
@@ -197,11 +197,11 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders", "[adding and remo
   REQUIRE(!management.hasTasks());
 }
 
-TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
+TEST_CASE("SimpleTaskManagement Two Simple Transport Orders multiple times",
           "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
@@ -279,10 +279,10 @@ TEST_CASE("SimpleOrderManagement Two Simple Transport Orders multiple times",
   REQUIRE(!management.hasTasks());
 }
 
-TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and removing vertices]") {
+TEST_CASE("SimpleTaskManagement Three Simple Transport Orders", "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));
@@ -324,11 +324,11 @@ TEST_CASE("SimpleOrderManagement Three Simple Transport Orders", "[adding and re
   REQUIRE(add_3_metrics.getMakespan() == add_2_metrics.getMakespan() + add_3_metrics.getTime());
 }
 
-TEST_CASE("SimpleOrderManagement Two Transport Orders in one Task",
+TEST_CASE("SimpleTaskManagement Two Transport Orders in one Task",
           "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p0));
@@ -351,11 +351,11 @@ TEST_CASE("SimpleOrderManagement Two Transport Orders in one Task",
   REQUIRE(add_1_metrics.getMakespan() == 58);
 }
 
-TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Task",
+TEST_CASE("SimpleTaskManagement One Transport, Move, and Action Order in one Task",
           "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p0));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p1));
@@ -399,11 +399,11 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
   REQUIRE(add_metrics.getMakespan() >= add_metrics.getTime() + 41);
 }
 
-TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay",
+TEST_CASE("Simple Task Management Three Simple Transport Orders with time delay",
           "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  SimpleOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  SimpleTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));

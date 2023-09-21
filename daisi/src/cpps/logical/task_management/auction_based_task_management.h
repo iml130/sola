@@ -14,23 +14,23 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_AUCTION_BASED_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_AUCTION_BASED_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_AUCTION_BASED_TASK_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_AUCTION_BASED_TASK_MANAGEMENT_H_
 
 #include "metrics_composition.h"
-#include "order_management.h"
+#include "task_management.h"
 
 namespace daisi::cpps::logical {
 
-class AuctionBasedOrderManagement : public OrderManagement {
+class AuctionBasedTaskManagement : public TaskManagement {
 public:
   struct InsertionPoint {};
 
-  AuctionBasedOrderManagement(const AmrDescription &amr_description, const Topology &topology,
-                              const daisi::util::Pose &pose)
-      : OrderManagement(amr_description, topology, pose) {}
+  AuctionBasedTaskManagement(const AmrDescription &amr_description, const Topology &topology,
+                             const daisi::util::Pose &pose)
+      : TaskManagement(amr_description, topology, pose) {}
 
-  ~AuctionBasedOrderManagement() override = default;
+  ~AuctionBasedTaskManagement() override = default;
 
   virtual bool addTask(const daisi::material_flow::Task &task,
                        std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;

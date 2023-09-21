@@ -48,7 +48,7 @@ target_sources(daisi_cpps_logical_algorithms_assignment_iterated_auction_assignm
 target_link_libraries(daisi_cpps_logical_algorithms_assignment_iterated_auction_assignment_participant
     PUBLIC
     daisi_cpps_logical_algorithms_assignment_assignment_participant
-    daisi_cpps_logical_order_management_auction_based_order_management
+    daisi_cpps_logical_task_management_auction_based_task_management
     daisi_cpps_logical_algorithms_assignment_auction_participant_state
     daisi_cpps_common_cpps_communicator
 )
@@ -88,7 +88,7 @@ target_sources(daisi_cpps_logical_algorithms_assignment_auction_participant_stat
 target_link_libraries(daisi_cpps_logical_algorithms_assignment_auction_participant_state
     PUBLIC
     daisi_material_flow_model_material_flow
-    daisi_cpps_logical_order_management_auction_based_order_management
+    daisi_cpps_logical_task_management_auction_based_task_management
 )
 
 add_library(daisi_cpps_logical_algorithms_assignment_centralized_initiator STATIC)

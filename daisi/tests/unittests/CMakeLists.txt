@@ -49,29 +49,29 @@ target_link_libraries(DaisiDatastructureSimpleTemporalNetworkTest
         daisi_datastructure_simple_temporal_network
 )
 
-add_executable(DaisiCppsOrderManagementStnOrderManagement "")
-target_sources(DaisiCppsOrderManagementStnOrderManagement
+add_executable(DaisiCppsTaskManagementStnTaskManagement "")
+target_sources(DaisiCppsTaskManagementStnTaskManagement
         PRIVATE
-        cpps/order_management/stn_order_management_test.cpp
+        cpps/task_management/stn_task_management_test.cpp
 )
-target_link_libraries(DaisiCppsOrderManagementStnOrderManagement
+target_link_libraries(DaisiCppsTaskManagementStnTaskManagement
         PRIVATE
         Catch2::Catch2WithMain
         ns3::libcore
-        daisi_cpps_logical_order_management_stn_order_management
+        daisi_cpps_logical_task_management_stn_task_management
         daisi_cpps_amr_physical_material_flow_functionality_mapping
 )
 
-add_executable(DaisiCppsOrderManagementSimpleOrderManagement "")
-target_sources(DaisiCppsOrderManagementSimpleOrderManagement
+add_executable(DaisiCppsTaskManagementSimpleTaskManagement "")
+target_sources(DaisiCppsTaskManagementSimpleTaskManagement
         PRIVATE
-        cpps/order_management/simple_order_management_test.cpp
+        cpps/task_management/simple_task_management_test.cpp
 )
-target_link_libraries(DaisiCppsOrderManagementSimpleOrderManagement
+target_link_libraries(DaisiCppsTaskManagementSimpleTaskManagement
         PRIVATE
         Catch2::Catch2WithMain
         ns3::libcore
-        daisi_cpps_logical_order_management_simple_order_management
+        daisi_cpps_logical_task_management_simple_task_management
         daisi_cpps_amr_physical_material_flow_functionality_mapping
 )
 

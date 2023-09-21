@@ -23,9 +23,9 @@ namespace daisi::cpps::logical {
 
 IteratedAuctionAssignmentParticipant::IteratedAuctionAssignmentParticipant(
     daisi::cpps::common::CppsCommunicatorPtr communicator,
-    std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description)
+    std::shared_ptr<AuctionBasedTaskManagement> task_management, AmrDescription description)
     : AssignmentParticipant(communicator),
-      order_management_(std::move(order_management)),
+      task_management_(std::move(task_management)),
       description_(std::move(description)) {
   auto topic = AmrFleet::get().getTopicForAbility(description_.getLoadHandling().getAbility());
   communicator_->sola.subscribeTopic(topic);
@@ -94,8 +94,8 @@ bool IteratedAuctionAssignmentParticipant::process(const WinnerNotification &win
 
   bool accept = false;
   if (task_state.isValid() &&
-      order_management_->canAddTask(task_state.getTask(), task_state.getInsertionPoint())) {
-    auto result = order_management_->getLatestCalculatedInsertionInfo();
+      task_management_->canAddTask(task_state.getTask(), task_state.getInsertionPoint())) {
+    auto result = task_management_->getLatestCalculatedInsertionInfo();
     auto metrics_comp = result.first;
 
     if (metrics_comp == task_state.getMetricsComposition()) {
@@ -105,7 +105,7 @@ bool IteratedAuctionAssignmentParticipant::process(const WinnerNotification &win
 
   std::string participant_connection = communicator_->network.getConnectionString();
   if (accept) {
-    bool success = order_management_->addTask(task_state.getTask(), task_state.getInsertionPoint());
+    bool success = task_management_->addTask(task_state.getTask(), task_state.getInsertionPoint());
 
     if (!success) {
       throw std::runtime_error("Winner accepts, but cannot add the task.");
@@ -134,9 +134,9 @@ void IteratedAuctionAssignmentParticipant::calculateBids(AuctionParticipantState
   for (auto &pair : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
-    if (order_management_->canAddTask(pair.second.getTask(), nullptr)) {
+    if (task_management_->canAddTask(pair.second.getTask(), nullptr)) {
       // Setting new calculated information if we can add the task
-      auto result = order_management_->getLatestCalculatedInsertionInfo();
+      auto result = task_management_->getLatestCalculatedInsertionInfo();
       pair.second.setInformation(result.first, result.second);
     } else {
       // Setting previous information to invalid because we cannot accept anymore

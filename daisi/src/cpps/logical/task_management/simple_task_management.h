@@ -14,20 +14,20 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_SIMPLE_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_SIMPLE_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_SIMPLE_TASK_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_SIMPLE_TASK_MANAGEMENT_H_
 
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
-#include "order_management.h"
+#include "task_management.h"
 
 namespace daisi::cpps::logical {
-class SimpleOrderManagement : public OrderManagement {
+class SimpleTaskManagement : public TaskManagement {
 public:
-  SimpleOrderManagement(const AmrDescription &amr_description, const Topology &topology,
-                        const daisi::util::Pose &pose);
+  SimpleTaskManagement(const AmrDescription &amr_description, const Topology &topology,
+                       const daisi::util::Pose &pose);
 
-  ~SimpleOrderManagement() override = default;
+  ~SimpleTaskManagement() override = default;
 
   /// @brief return the metrics of the final order contained in the last task that has been added to
   /// the management
@@ -36,7 +36,7 @@ public:
   /// @brief return the end position after executing the final task in the queue
   daisi::util::Position getExpectedEndPosition() const;
 
-  /// @brief check wether the order management has a current task assigned
+  /// @brief check wether the task management has a current task assigned
   bool hasTasks() const override;
 
   /// @brief get the current task

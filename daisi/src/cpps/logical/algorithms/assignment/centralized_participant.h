@@ -19,7 +19,7 @@
 
 #include "assignment_participant.h"
 #include "cpps/common/cpps_communicator.h"
-#include "cpps/logical/order_management/simple_order_management.h"
+#include "cpps/logical/task_management/simple_task_management.h"
 
 namespace daisi::cpps::logical {
 
@@ -28,7 +28,7 @@ namespace daisi::cpps::logical {
 class CentralizedParticipant : public AssignmentParticipant {
 public:
   CentralizedParticipant(daisi::cpps::common::CppsCommunicatorPtr communicator,
-                         std::shared_ptr<SimpleOrderManagement> order_management);
+                         std::shared_ptr<SimpleTaskManagement> task_management);
   ~CentralizedParticipant() override = default;
 
   /// @brief React on new task assignment and respond to it.
@@ -38,8 +38,8 @@ public:
   REGISTER_IMPLEMENTATION(StatusUpdateRequest)
 
 private:
-  /// @brief the AMR's order management. Simply accepts a new task assignment.
-  std::shared_ptr<SimpleOrderManagement> order_management_;
+  /// @brief the AMR's task management. Simply accepts a new task assignment.
+  std::shared_ptr<SimpleTaskManagement> task_management_;
 };
 }  // namespace daisi::cpps::logical
 

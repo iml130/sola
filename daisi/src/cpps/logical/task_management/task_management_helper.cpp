@@ -14,14 +14,14 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "order_management_helper.h"
+#include "task_management_helper.h"
 
 using namespace daisi::material_flow;
 namespace daisi::cpps::logical {
 
 template <class> inline constexpr bool kAlwaysFalseV = false;
 
-std::optional<Location> OrderManagementHelper::getEndLocationOfOrder(const Order &order) {
+std::optional<Location> TaskManagementHelper::getEndLocationOfOrder(const Order &order) {
   return std::visit(
       [&](auto &&arg) -> std::optional<Location> {
         using T = std::decay_t<decltype(arg)>;

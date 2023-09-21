@@ -2,7 +2,7 @@ add_subdirectory(algorithms)
 add_subdirectory(amr)
 add_subdirectory(material_flow)
 add_subdirectory(message)
-add_subdirectory(order_management)
+add_subdirectory(task_management)
 
 add_library(daisi_cpps_logical_logical_agent STATIC)
 target_sources(daisi_cpps_logical_logical_agent

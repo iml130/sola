@@ -49,6 +49,7 @@
 cmake-build-*/
 
 build/*
+build_checks/*
 
 # ignore mac desktop store services
 **/.DS_Store

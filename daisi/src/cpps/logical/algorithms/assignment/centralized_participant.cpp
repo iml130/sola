@@ -20,20 +20,20 @@ namespace daisi::cpps::logical {
 
 CentralizedParticipant::CentralizedParticipant(
     daisi::cpps::common::CppsCommunicatorPtr communicator,
-    std::shared_ptr<SimpleOrderManagement> order_management)
-    : AssignmentParticipant(communicator), order_management_(std::move((order_management))){};
+    std::shared_ptr<SimpleTaskManagement> task_management)
+    : AssignmentParticipant(communicator), task_management_(std::move((task_management))){};
 
 bool CentralizedParticipant::process(const AssignmentNotification &assignment_notification) {
   const material_flow::Task assigned_task = assignment_notification.getTask();
-  if (order_management_->canAddTask(assigned_task)) {
-    order_management_->addTask(assigned_task);
+  if (task_management_->canAddTask(assigned_task)) {
+    task_management_->addTask(assigned_task);
   } else {
-    throw std::runtime_error("The order management should always accept the assigned task.");
+    throw std::runtime_error("The task management should always accept the assigned task.");
   }
 
   // Respond to the central allocator. Send the acception / rejection as well as the current status.
-  AssignmentResponse response(assigned_task.getUuid(), true, order_management_->getFinalMetrics(),
-                              order_management_->getExpectedEndPosition(),
+  AssignmentResponse response(assigned_task.getUuid(), true, task_management_->getFinalMetrics(),
+                              task_management_->getExpectedEndPosition(),
                               communicator_->network.getConnectionString());
 
   std::string initiator_connection = assignment_notification.getInitiatorConnection();
@@ -43,8 +43,8 @@ bool CentralizedParticipant::process(const AssignmentNotification &assignment_no
 
 bool CentralizedParticipant::process(const StatusUpdateRequest &status_request) {
   StatusUpdate update(communicator_->network.getConnectionString(),
-                      order_management_->getFinalMetrics(),
-                      order_management_->getExpectedEndPosition());
+                      task_management_->getFinalMetrics(),
+                      task_management_->getExpectedEndPosition());
   std::string initiator_connection = status_request.getInitiatorConnection();
   communicator_->network.send({initiator_connection, serialize(update)});
 

@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/logical/order_management/stn_order_management.h"
+#include "cpps/logical/task_management/stn_task_management.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>
@@ -47,7 +47,7 @@ daisi::util::Position p6(20, 10);
 TEST_CASE("One Simple Transport Order", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // assert preconditions
   REQUIRE(!management.hasTasks());
@@ -81,8 +81,8 @@ TEST_CASE("One Simple Transport Order", "[basic]") {
 
   // assert intertion point
 
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(insertion_point);
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(insertion_point);
 
   REQUIRE(stn_insertion_point->new_index == 0);
   REQUIRE(stn_insertion_point->previous_finish.isOrigin());
@@ -113,7 +113,7 @@ TEST_CASE("One Simple Transport Order", "[basic]") {
 TEST_CASE("Two Simple Transport Orders statically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1 without constraints
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
@@ -168,15 +168,15 @@ TEST_CASE("Two Simple Transport Orders statically", "[basic]") {
 
   // can add task 2 after 1
   REQUIRE(management.canAddTask(simple_task_2));
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(
           std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(can_add_2_2_stn_insertion_point->new_index == 1);
 
   // adding task 2
   REQUIRE(management.addTask(simple_task_2));
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_2_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> add_2_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(
           std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(add_2_stn_insertion_point->new_index == 1);
   REQUIRE(!add_2_stn_insertion_point->next_start.has_value());
@@ -200,7 +200,7 @@ TEST_CASE("Two Simple Transport Orders statically", "[basic]") {
 TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1 without constraints
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
@@ -226,9 +226,8 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
   auto can_add_2_1_info = management.getLatestCalculatedInsertionInfo();
 
   // insertion point should be at the first point of the current ordering
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_1_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
-          std::get<1>(can_add_2_1_info));
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> can_add_2_1_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(std::get<1>(can_add_2_1_info));
   REQUIRE(can_add_2_1_stn_insertion_point->new_index == 0);
   REQUIRE(can_add_2_1_stn_insertion_point->previous_finish.isOrigin());
   REQUIRE(!can_add_2_1_stn_insertion_point->next_start.has_value());
@@ -244,8 +243,8 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
 
   // no change to can_add_2_1 expected
   REQUIRE(management.canAddTask(simple_task_2));
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> can_add_2_2_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(
           std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE(can_add_2_2_stn_insertion_point->new_index == 0);
 
@@ -276,7 +275,7 @@ TEST_CASE("Two Simple Transport Orders dynamically", "[basic]") {
 TEST_CASE("Three Simple Transport Orders statically", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1 without constraints
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p3));
@@ -311,18 +310,18 @@ TEST_CASE("Three Simple Transport Orders statically", "[basic]") {
           add_1_metrics_comp.getCurrentMetrics().getMakespan() +
               add_1_metrics_comp.getCurrentMetrics().getTime());
 
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_1_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(add_1));
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> add_1_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(std::get<1>(add_1));
 
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> add_2_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(add_2));
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> add_2_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(std::get<1>(add_2));
   REQUIRE(add_1_stn_insertion_point->new_index == 0);
   REQUIRE(add_2_stn_insertion_point->new_index == 1);
 
   // trying to add task 3, should come after task 2
   REQUIRE(management.canAddTask(simple_task_3));
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> can_add_3_stn_insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> can_add_3_stn_insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(
           std::get<1>(management.getLatestCalculatedInsertionInfo()));
   REQUIRE((can_add_3_stn_insertion_point->new_index == 0 ||
            can_add_3_stn_insertion_point->new_index == 2));
@@ -331,7 +330,7 @@ TEST_CASE("Three Simple Transport Orders statically", "[basic]") {
 TEST_CASE("Two Transport Orders in one Task", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // transport order 1 without constraints
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p0));
@@ -354,7 +353,7 @@ TEST_CASE("Two Transport Orders in one Task", "[basic]") {
 TEST_CASE("One Transport, Move, and Action Order in one Task", "[basic]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p0));
   TransportOrderStep delivery_1("tos2_1", {}, Location("0x1", "type", p1));
@@ -379,7 +378,7 @@ TEST_CASE("One Transport, Move, and Action Order in one Task", "[basic]") {
 TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // one transport order with time window
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
@@ -407,8 +406,6 @@ TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
 
   // act
   REQUIRE(management.addTask(simple_task, insertion_point));
-  [[maybe_unused]] auto add_metrics_comp =
-      std::get<0>(management.getLatestCalculatedInsertionInfo());
 
   // assert management states not changed
   REQUIRE(management.setNextTask());
@@ -423,7 +420,7 @@ TEST_CASE("One Simple Transport Order with Time Window", "[temporal]") {
 TEST_CASE("One Simple Transport Order with too short Time Window", "[temporal]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(), current_pose);
 
   // one transport order with time window
   TransportOrderStep pickup1("tos1", {}, Location("0x0", "type", p1));
@@ -470,8 +467,8 @@ TEST_CASE("One Simple Transport Order with too short Time Window", "[temporal]")
 
 TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[temporal]") {
   // arrange
-  StnOrderManagement management(buildBasicAmrDescription(), buildBasicTopology(),
-                                daisi::util::Pose(p0));
+  StnTaskManagement management(buildBasicAmrDescription(), buildBasicTopology(),
+                               daisi::util::Pose(p0));
 
   // transport order 1
   TransportOrderStep pickup_1("tos1_1", {}, Location("0x0", "type", p1));
@@ -496,8 +493,8 @@ TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[tempora
 
   // ----------------------------------------------------------------
 
-  StnOrderManagement management2(buildBasicAmrDescription(), buildBasicTopology(),
-                                 daisi::util::Pose(p0));
+  StnTaskManagement management2(buildBasicAmrDescription(), buildBasicTopology(),
+                                daisi::util::Pose(p0));
 
   REQUIRE(management2.addTask(simple_task_1));
   REQUIRE(management2.canAddTask(simple_task_2));
@@ -507,8 +504,8 @@ TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[tempora
   simple_task_1.setTimeWindow(TimeWindow(20, 46, 0));
   simple_task_2.setTimeWindow(TimeWindow(0, 80, 0));
 
-  StnOrderManagement management3(buildBasicAmrDescription(), buildBasicTopology(),
-                                 daisi::util::Pose(p0));
+  StnTaskManagement management3(buildBasicAmrDescription(), buildBasicTopology(),
+                                daisi::util::Pose(p0));
 
   REQUIRE(management3.canAddTask(simple_task_1));
   REQUIRE(management3.canAddTask(simple_task_2));
@@ -517,8 +514,8 @@ TEST_CASE("Two Simple Transport Orders with overlapping Time Windows", "[tempora
   REQUIRE(management3.canAddTask(simple_task_1));
 
   auto res = management3.getLatestCalculatedInsertionInfo();
-  std::shared_ptr<StnOrderManagement::StnInsertionPoint> insertion_point =
-      std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(std::get<1>(res));
+  std::shared_ptr<StnTaskManagement::StnInsertionPoint> insertion_point =
+      std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(std::get<1>(res));
   REQUIRE(insertion_point->new_index == 0);  // task 1 must be before task 2
 
   REQUIRE(management3.setNextTask());

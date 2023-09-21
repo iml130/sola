@@ -22,7 +22,7 @@
 
 #include "cpps/logical/message/auction_based/bid_submission.h"
 #include "cpps/logical/message/auction_based/winner_response.h"
-#include "cpps/logical/order_management/auction_based_order_management.h"
+#include "cpps/logical/task_management/auction_based_task_management.h"
 #include "material_flow/model/task.h"
 
 namespace daisi::cpps::logical {
@@ -39,14 +39,14 @@ struct AuctionParticipantTaskState {
 
   const MetricsComposition &getMetricsComposition() const;
 
-  const std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> getInsertionPoint() const;
+  const std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> getInsertionPoint() const;
 
   /// @brief Checking whether both metrics and insertion point are initialized.
   bool isValid() const;
 
   /// @brief Setting information for both metrics and insertion point.
   void setInformation(const MetricsComposition &metrics_composition,
-                      std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point);
+                      std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> insertion_point);
 
   /// @brief Making metrics and insertion point uninitialized.
   void removeInformation();
@@ -61,7 +61,7 @@ private:
 
   /// @brief Storing information about how to insert the task into an auction based order
   /// management by the participant.
-  std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point_;
+  std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> insertion_point_;
 };
 
 /// @brief Helper struct for the IteratedAuctionAssignmentParticipant to store the state of open

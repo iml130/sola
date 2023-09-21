@@ -17,7 +17,7 @@ target_sources(daisi_cpps_logical_message_central_allocation_assignment_response
 target_link_libraries(daisi_cpps_logical_message_central_allocation_assignment_response
     INTERFACE
     solanet_serializer
-    daisi_cpps_logical_order_management_metrics_composition
+    daisi_cpps_logical_task_management_metrics_composition
     daisi_structure_helpers
 )
 
@@ -39,6 +39,6 @@ target_sources(daisi_cpps_logical_message_central_allocation_status_update
 target_link_libraries(daisi_cpps_logical_message_central_allocation_status_update
     INTERFACE
     solanet_serializer
-    daisi_cpps_logical_order_management_metrics_composition
+    daisi_cpps_logical_task_management_metrics_composition
     daisi_structure_helpers
 )

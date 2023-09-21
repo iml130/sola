@@ -141,7 +141,7 @@ jobs:
         build/tests/unittests/DaisiDatastructureDirectedGraphTest
         build/tests/unittests/DaisiDatastructureWeightedDirectedGraphTest
         build/tests/unittests/DaisiDatastructureSimpleTemporalNetworkTest
-        build/tests/unittests/DaisiCppsOrderManagementStnOrderManagement
+        build/tests/unittests/DaisiCppsTaskManagementStnTaskManagement
         build/tests/unittests/DaisiCppsLogicalAuctionParticipantState
     - name: Run MINHTON integrationtest
       run: |

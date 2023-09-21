@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "stn_order_management.h"
+#include "stn_task_management.h"
 
 #include <cassert>
 #include <iostream>
@@ -29,15 +29,15 @@ namespace daisi::cpps::logical {
 
 template <class> inline constexpr bool kAlwaysFalseV = false;
 
-StnOrderManagement::StnOrderManagement(const AmrDescription &amr_description,
-                                       const Topology &topology, const daisi::util::Pose &pose)
-    : AuctionBasedOrderManagement(amr_description, topology, pose),
+StnTaskManagement::StnTaskManagement(const AmrDescription &amr_description,
+                                     const Topology &topology, const daisi::util::Pose &pose)
+    : AuctionBasedTaskManagement(amr_description, topology, pose),
       current_task_end_location_(std::nullopt),
       latest_calculated_insertion_info_(std::nullopt) {
   current_total_metrics_.setStartTime(0);
 }
 
-void StnOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
+void StnTaskManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
     throw std::invalid_argument("new time must be later than current time");
   }
@@ -46,7 +46,7 @@ void StnOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
   time_now_ = now;
 }
 
-void StnOrderManagement::updateOriginConstraints(const daisi::util::Duration &time_difference) {
+void StnTaskManagement::updateOriginConstraints(const daisi::util::Duration &time_difference) {
   if (time_difference < 0) {
     return;
   }
@@ -83,16 +83,16 @@ void StnOrderManagement::updateOriginConstraints(const daisi::util::Duration &ti
   }
 }
 
-bool StnOrderManagement::hasTasks() const { return current_task_.has_value(); }
+bool StnTaskManagement::hasTasks() const { return current_task_.has_value(); }
 
-Task StnOrderManagement::getCurrentTask() const {
+Task StnTaskManagement::getCurrentTask() const {
   if (!hasTasks()) {
     throw std::logic_error("no tasks available");
   }
   return current_task_.value();
 }
 
-bool StnOrderManagement::setNextTask() {
+bool StnTaskManagement::setNextTask() {
   if (!current_ordering_.empty()) {
     auto current_insert_info = current_ordering_.front();
     current_task_ = current_insert_info.task;
@@ -119,13 +119,13 @@ bool StnOrderManagement::setNextTask() {
   return false;
 }
 
-bool StnOrderManagement::canAddTask(const Task &task,
-                                    std::shared_ptr<InsertionPoint> insertion_point) {
+bool StnTaskManagement::canAddTask(const Task &task,
+                                   std::shared_ptr<InsertionPoint> insertion_point) {
   // TODO first checking whether we have the ability to execute the task
 
   latest_calculated_insertion_info_ = std::nullopt;
 
-  StnOrderManagement copy(*this);
+  StnTaskManagement copy(*this);
   copy.clearNotifyTaskAssignmentCallback();
   if (copy.addTask(task, insertion_point)) {
     latest_calculated_insertion_info_ = copy.getLatestCalculatedInsertionInfo();
@@ -135,9 +135,8 @@ bool StnOrderManagement::canAddTask(const Task &task,
   return false;
 }
 
-bool StnOrderManagement::addTask(
-    const Task &task,
-    std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point) {
+bool StnTaskManagement::addTask(
+    const Task &task, std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> insertion_point) {
   latest_calculated_insertion_info_ = std::nullopt;
 
   auto orders = task.getOrders();
@@ -145,11 +144,11 @@ bool StnOrderManagement::addTask(
     throw std::invalid_argument("Task must have at least one order");
   }
 
-  StnOrderManagement::TaskInsertInfo info{task, {}, {}};
+  StnTaskManagement::TaskInsertInfo info{task, {}, {}};
 
   for (auto orders_it = orders.begin(); orders_it != orders.end(); orders_it++) {
-    StnOrderManagementVertex start_curr{*orders_it, true};
-    StnOrderManagementVertex finish_curr{*orders_it, false};
+    StnTaskManagementVertex start_curr{*orders_it, true};
+    StnTaskManagementVertex finish_curr{*orders_it, false};
 
     addVertex(start_curr);
     addVertex(finish_curr);
@@ -181,7 +180,7 @@ bool StnOrderManagement::addTask(
 
     addDurationConstraints(start_curr, finish_curr, *orders_it, info);
 
-    auto end_location_of_order = OrderManagementHelper::getEndLocationOfOrder(*orders_it);
+    auto end_location_of_order = TaskManagementHelper::getEndLocationOfOrder(*orders_it);
     if (end_location_of_order.has_value()) {
       info.end_locations.push_back(end_location_of_order.value());
     } else {
@@ -195,8 +194,8 @@ bool StnOrderManagement::addTask(
 
   bool added = false;
   if (insertion_point) {
-    std::shared_ptr<StnOrderManagement::StnInsertionPoint> stn_insertion_point =
-        std::static_pointer_cast<StnOrderManagement::StnInsertionPoint>(insertion_point);
+    std::shared_ptr<StnTaskManagement::StnInsertionPoint> stn_insertion_point =
+        std::static_pointer_cast<StnTaskManagement::StnInsertionPoint>(insertion_point);
 
     addOrderingConstraintBetweenTasks(*stn_insertion_point, info);
 
@@ -225,8 +224,8 @@ bool StnOrderManagement::addTask(
   return false;
 }
 
-void StnOrderManagement::addPrecedenceConstraintBetweenTask(
-    const StnOrderManagementVertex &start_vertex, const std::string &precedence_task_name) {
+void StnTaskManagement::addPrecedenceConstraintBetweenTask(
+    const StnTaskManagementVertex &start_vertex, const std::string &precedence_task_name) {
   auto task_info_it =
       std::find_if(current_ordering_.begin(), current_ordering_.end(),
                    [&](const auto &info) { return info.task.getName() == precedence_task_name; });
@@ -237,14 +236,14 @@ void StnOrderManagement::addPrecedenceConstraintBetweenTask(
   }
 }
 
-void StnOrderManagement::addDurationConstraints(
-    const StnOrderManagementVertex &start_vertex, const StnOrderManagementVertex &finish_vertex,
-    const Order &order, const StnOrderManagement::TaskInsertInfo &task_insert_info) {
+void StnTaskManagement::addDurationConstraints(
+    const StnTaskManagementVertex &start_vertex, const StnTaskManagementVertex &finish_vertex,
+    const Order &order, const StnTaskManagement::TaskInsertInfo &task_insert_info) {
   addBinaryConstraint(start_vertex, finish_vertex,
                       calcOrderDurationForInsert(order, task_insert_info), std::nullopt);
 }
 
-daisi::util::Position StnOrderManagement::getLastPositionBefore(const int task_index) {
+daisi::util::Position StnTaskManagement::getLastPositionBefore(const int task_index) {
   if (task_index == 0) {
     if (hasTasks()) {
       return current_task_end_location_->getPosition();
@@ -255,17 +254,17 @@ daisi::util::Position StnOrderManagement::getLastPositionBefore(const int task_i
   return current_ordering_[task_index - 1].end_locations.back().getPosition();
 }
 
-std::vector<StnOrderManagement::StnInsertionPoint> StnOrderManagement::calcInsertionPoints() {
-  std::vector<StnOrderManagement::StnInsertionPoint> insertion_points;
+std::vector<StnTaskManagement::StnInsertionPoint> StnTaskManagement::calcInsertionPoints() {
+  std::vector<StnTaskManagement::StnInsertionPoint> insertion_points;
 
   if (current_ordering_.empty()) {
     insertion_points.push_back(
-        StnOrderManagement::StnInsertionPoint{{}, *vertices_.begin(), std::nullopt, 0});
+        StnTaskManagement::StnInsertionPoint{{}, *vertices_.begin(), std::nullopt, 0});
   } else {
     auto next_start = getVertexOfOrder(current_ordering_.front().task.getOrders().front(), true);
 
     insertion_points.push_back(
-        StnOrderManagement::StnInsertionPoint{{}, *vertices_.begin(), next_start, 0});
+        StnTaskManagement::StnInsertionPoint{{}, *vertices_.begin(), next_start, 0});
   }
 
   int i = 1;
@@ -278,10 +277,10 @@ std::vector<StnOrderManagement::StnInsertionPoint> StnOrderManagement::calcInser
       auto next_start = getVertexOfOrder(next->task.getOrders().front(), true);
 
       insertion_points.push_back(
-          StnOrderManagement::StnInsertionPoint{{}, previous_finish, next_start, i});
+          StnTaskManagement::StnInsertionPoint{{}, previous_finish, next_start, i});
     } else {
       insertion_points.push_back(
-          StnOrderManagement::StnInsertionPoint{{}, previous_finish, std::nullopt, i});
+          StnTaskManagement::StnInsertionPoint{{}, previous_finish, std::nullopt, i});
     }
 
     i++;
@@ -290,7 +289,7 @@ std::vector<StnOrderManagement::StnInsertionPoint> StnOrderManagement::calcInser
   return insertion_points;
 }
 
-bool StnOrderManagement::solve() {
+bool StnTaskManagement::solve() {
   bool success = SimpleTemporalNetwork::solve();
   if (success) {
     updateCurrentOrdering();
@@ -298,7 +297,7 @@ bool StnOrderManagement::solve() {
   return success;
 }
 
-void StnOrderManagement::updateCurrentOrdering() {
+void StnTaskManagement::updateCurrentOrdering() {
   std::unordered_map<Task, daisi::util::Duration> start_time_mapping;
 
   // updating current metrics
@@ -332,8 +331,8 @@ void StnOrderManagement::updateCurrentOrdering() {
 
   // sorting ordering by start time
   std::sort(current_ordering_.begin(), current_ordering_.end(),
-            [&start_time_mapping](const StnOrderManagement::TaskInsertInfo &i1,
-                                  const StnOrderManagement::TaskInsertInfo &i2) {
+            [&start_time_mapping](const StnTaskManagement::TaskInsertInfo &i1,
+                                  const StnTaskManagement::TaskInsertInfo &i2) {
               return start_time_mapping[i1.task] < start_time_mapping[i2.task];
             });
 
@@ -344,7 +343,7 @@ void StnOrderManagement::updateCurrentOrdering() {
   }
 
   // set metric difference in new task
-  auto find_new_task_lambda = [&](const StnOrderManagement::TaskInsertInfo &info) {
+  auto find_new_task_lambda = [&](const StnTaskManagement::TaskInsertInfo &info) {
     return !info.metrics_composition.hasDiffInsertionMetrics();
   };
   if (std::count_if(current_ordering_.begin(), current_ordering_.end(), find_new_task_lambda) !=
@@ -360,8 +359,8 @@ void StnOrderManagement::updateCurrentOrdering() {
   newest_task_insert_info_ = new_task_it;
 }
 
-std::optional<std::pair<MetricsComposition, std::shared_ptr<StnOrderManagement::StnInsertionPoint>>>
-StnOrderManagement::addBestOrdering(StnOrderManagement::TaskInsertInfo &task_insert_info) {
+std::optional<std::pair<MetricsComposition, std::shared_ptr<StnTaskManagement::StnInsertionPoint>>>
+StnTaskManagement::addBestOrdering(StnTaskManagement::TaskInsertInfo &task_insert_info) {
   auto insertion_points = calcInsertionPoints();
 
   int best_index = -1;
@@ -370,7 +369,7 @@ StnOrderManagement::addBestOrdering(StnOrderManagement::TaskInsertInfo &task_ins
   for (auto i = 0; i < insertion_points.size(); i++) {
     const auto &point = insertion_points[i];
 
-    StnOrderManagement copy(*this);
+    StnTaskManagement copy(*this);
     copy.addOrderingConstraintBetweenTasks(point, task_insert_info);
     bool success = copy.solve();
 
@@ -393,15 +392,15 @@ StnOrderManagement::addBestOrdering(StnOrderManagement::TaskInsertInfo &task_ins
 
     return std::make_pair(
         newest_task_insert_info_->metrics_composition,
-        std::make_shared<StnOrderManagement::StnInsertionPoint>(insertion_points[best_index]));
+        std::make_shared<StnTaskManagement::StnInsertionPoint>(insertion_points[best_index]));
   }
 
   return std::nullopt;
 }
 
-void StnOrderManagement::addOrderingConstraintBetweenTasks(
-    StnOrderManagement::StnInsertionPoint insertion_point,
-    StnOrderManagement::TaskInsertInfo &task_insert_info) {
+void StnTaskManagement::addOrderingConstraintBetweenTasks(
+    StnTaskManagement::StnInsertionPoint insertion_point,
+    StnTaskManagement::TaskInsertInfo &task_insert_info) {
   current_ordering_.insert(current_ordering_.begin() + insertion_point.new_index, task_insert_info);
 
   auto start_vertex = getVertexOfOrder(task_insert_info.task.getOrders().front(), true);
@@ -417,7 +416,7 @@ void StnOrderManagement::addOrderingConstraintBetweenTasks(
   }
 }
 
-daisi::util::Duration StnOrderManagement::calcOrderDurationForInsert(
+daisi::util::Duration StnTaskManagement::calcOrderDurationForInsert(
     const Order &order, const TaskInsertInfo &task_insert_info) const {
   const auto orders = task_insert_info.task.getOrders();
   const auto it = std::find(orders.begin(), orders.end(), order);
@@ -468,9 +467,9 @@ daisi::util::Duration StnOrderManagement::calcOrderDurationForInsert(
   throw std::runtime_error("Unknown Order Type.");
 }
 
-void StnOrderManagement::insertOrderPropertiesIntoMetrics(
-    const Order &order, Metrics &metrics,
-    const StnOrderManagement::TaskInsertInfo &task_insert_info, const int task_ordering_index) {
+void StnTaskManagement::insertOrderPropertiesIntoMetrics(
+    const Order &order, Metrics &metrics, const StnTaskManagement::TaskInsertInfo &task_insert_info,
+    const int task_ordering_index) {
   const auto orders = task_insert_info.task.getOrders();
   const auto order_it = std::find(orders.begin(), orders.end(), order);
   const int order_index = order_it - orders.begin();
@@ -519,24 +518,24 @@ void StnOrderManagement::insertOrderPropertiesIntoMetrics(
   }
 }
 
-void StnOrderManagement::updateGetToStartDurationConstraint(const int task_index_to_update) {
+void StnTaskManagement::updateGetToStartDurationConstraint(const int task_index_to_update) {
   const auto duration = calcGetToStartDuration(task_index_to_update);
 
   const auto &task_info_to_update = current_ordering_[task_index_to_update];
   const auto &this_task_first_order = task_info_to_update.task.getOrders().front();
 
-  StnOrderManagementVertex previous_finish_vertex = getOrigin();
+  StnTaskManagementVertex previous_finish_vertex = getOrigin();
   if (task_index_to_update > 0) {
     const auto &previous_task_last_order =
         current_ordering_[task_index_to_update - 1].task.getOrders().back();
     previous_finish_vertex = getVertexOfOrder(previous_task_last_order, false);
   }
-  StnOrderManagementVertex this_start_vertex = getVertexOfOrder(this_task_first_order, true);
+  StnTaskManagementVertex this_start_vertex = getVertexOfOrder(this_task_first_order, true);
 
   updateLastBinaryConstraint(previous_finish_vertex, this_start_vertex, duration, std::nullopt);
 }
 
-util::Duration StnOrderManagement::calcGetToStartDuration(const int task_index_to_update) {
+util::Duration StnTaskManagement::calcGetToStartDuration(const int task_index_to_update) {
   auto last_position = getLastPositionBefore(task_index_to_update);
 
   const auto &task_info_to_update = current_ordering_[task_index_to_update];
@@ -553,10 +552,10 @@ util::Duration StnOrderManagement::calcGetToStartDuration(const int task_index_t
   return duration;
 }
 
-StnOrderManagement::VertexIterator StnOrderManagement::getVertexIteratorOfOrder(const Order &order,
-                                                                                const bool start) {
+StnTaskManagement::VertexIterator StnTaskManagement::getVertexIteratorOfOrder(const Order &order,
+                                                                              const bool start) {
   auto it = std::find_if(vertices_.begin(), vertices_.end(),
-                         [&start, &order](const StnOrderManagementVertex &v) {
+                         [&start, &order](const StnTaskManagementVertex &v) {
                            return v.isStart() == start && order == v.getOrder();
                          });
 
@@ -567,17 +566,17 @@ StnOrderManagement::VertexIterator StnOrderManagement::getVertexIteratorOfOrder(
   return it;
 }
 
-int StnOrderManagement::getVertexIndexOfOrder(const Order &order, const bool start) {
+int StnTaskManagement::getVertexIndexOfOrder(const Order &order, const bool start) {
   return std::distance(vertices_.begin(), getVertexIteratorOfOrder(order, start));
 }
 
-const StnOrderManagementVertex &StnOrderManagement::getVertexOfOrder(const Order &order,
-                                                                     const bool start) {
+const StnTaskManagementVertex &StnTaskManagement::getVertexOfOrder(const Order &order,
+                                                                   const bool start) {
   return *getVertexIteratorOfOrder(order, start);
 }
 
-std::pair<MetricsComposition, std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint>>
-StnOrderManagement::getLatestCalculatedInsertionInfo() const {
+std::pair<MetricsComposition, std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint>>
+StnTaskManagement::getLatestCalculatedInsertionInfo() const {
   if (latest_calculated_insertion_info_.has_value()) {
     return latest_calculated_insertion_info_.value();
   }

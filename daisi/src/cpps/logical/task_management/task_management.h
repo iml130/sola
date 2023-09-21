@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_TASK_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_TASK_MANAGEMENT_H_
 
 #include <algorithm>
 #include <functional>
@@ -27,22 +27,22 @@
 #include "cpps/amr/amr_topology.h"
 #include "material_flow/model/task.h"
 #include "metrics_composition.h"
-#include "order_management_helper.h"
+#include "task_management_helper.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
 
-class OrderManagement {
+class TaskManagement {
 public:
-  explicit OrderManagement(AmrDescription amr_description, Topology topology,
-                           const daisi::util::Pose &pose)
+  explicit TaskManagement(AmrDescription amr_description, Topology topology,
+                          const daisi::util::Pose &pose)
       : amr_description_(std::move(amr_description)),
         topology_(std::move(topology)),
         current_pose_(pose) {}
 
-  virtual ~OrderManagement() = default;
+  virtual ~TaskManagement() = default;
 
-  /// @brief check wether the order management has a current task assigned
+  /// @brief check wether the task management has a current task assigned
   virtual bool hasTasks() const = 0;
 
   /// @brief get the current task

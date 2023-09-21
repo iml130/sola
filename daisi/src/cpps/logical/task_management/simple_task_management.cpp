@@ -14,44 +14,43 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "simple_order_management.h"
+#include "simple_task_management.h"
 
 using namespace daisi::material_flow;
 namespace daisi::cpps::logical {
 
-SimpleOrderManagement::SimpleOrderManagement(const AmrDescription &amr_description,
-                                             const Topology &topology,
-                                             const daisi::util::Pose &pose)
-    : OrderManagement(amr_description, topology, pose), expected_end_position_(pose.position) {
+SimpleTaskManagement::SimpleTaskManagement(const AmrDescription &amr_description,
+                                           const Topology &topology, const daisi::util::Pose &pose)
+    : TaskManagement(amr_description, topology, pose), expected_end_position_(pose.position) {
   final_metrics_.setStartTime(0);
 }
 
-Metrics SimpleOrderManagement::getFinalMetrics() const { return final_metrics_; }
+Metrics SimpleTaskManagement::getFinalMetrics() const { return final_metrics_; }
 
-daisi::util::Position SimpleOrderManagement::getExpectedEndPosition() const {
+daisi::util::Position SimpleTaskManagement::getExpectedEndPosition() const {
   if (!expected_end_position_.has_value()) {
     throw std::logic_error("There must exist at least a position for the AMR to start from.");
   }
   return expected_end_position_.value();
 }
 
-void SimpleOrderManagement::setCurrentTime(const daisi::util::Duration &now) {
+void SimpleTaskManagement::setCurrentTime(const daisi::util::Duration &now) {
   if (now < time_now_) {
     throw std::invalid_argument("New time must be later than current time.");
   }
   time_now_ = now;
 }
 
-bool SimpleOrderManagement::hasTasks() const { return active_task_.has_value(); }
+bool SimpleTaskManagement::hasTasks() const { return active_task_.has_value(); }
 
-Task SimpleOrderManagement::getCurrentTask() const {
+Task SimpleTaskManagement::getCurrentTask() const {
   if (!hasTasks()) {
     throw std::logic_error("No tasks available!");
   }
   return active_task_.value();
 }
 
-bool SimpleOrderManagement::setNextTask() {
+bool SimpleTaskManagement::setNextTask() {
   if (!queue_.empty()) {
     active_task_ = queue_.front();
     queue_.erase(queue_.begin());
@@ -61,14 +60,14 @@ bool SimpleOrderManagement::setNextTask() {
   return false;
 }
 
-bool SimpleOrderManagement::canAddTask(const Task &task) {
-  SimpleOrderManagement copy(*this);
+bool SimpleTaskManagement::canAddTask(const Task &task) {
+  SimpleTaskManagement copy(*this);
   bool result = copy.addTask(task);
 
   return result;
 }
 
-bool SimpleOrderManagement::addTask(const Task &task) {
+bool SimpleTaskManagement::addTask(const Task &task) {
   // simply add all orders in the given order
   const auto orders = task.getOrders();
   if (orders.empty()) {
@@ -92,13 +91,13 @@ bool SimpleOrderManagement::addTask(const Task &task) {
   if (!final_order.has_value()) {
     throw std::logic_error("Task must contain at least one TransportOrder or MoveOrder.");
   }
-  auto end_location = OrderManagementHelper::getEndLocationOfOrder(final_order.value());
+  auto end_location = TaskManagementHelper::getEndLocationOfOrder(final_order.value());
   expected_end_position_ = end_location->getPosition();
 
   return true;
 }
 
-void SimpleOrderManagement::updateFinalMetrics() {
+void SimpleTaskManagement::updateFinalMetrics() {
   // calculate the start time and metrics for the new task
   auto start_time = std::max(final_metrics_.getMakespan(), time_now_);
 
@@ -117,7 +116,7 @@ void SimpleOrderManagement::updateFinalMetrics() {
   final_metrics_ = new_current_metrics;
 }
 
-void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
+void SimpleTaskManagement::insertOrderPropertiesIntoMetrics(
     const Order &order, Metrics &metrics, const Task &task,
     const daisi::util::Duration &start_time) {
   if (!metrics.isStartTimeSet()) {
@@ -131,7 +130,7 @@ void SimpleOrderManagement::insertOrderPropertiesIntoMetrics(
   std::optional<Location> previous_location;
   order_it++;
   for (; order_it != orders.rend(); order_it++) {
-    previous_location = OrderManagementHelper::getEndLocationOfOrder(*order_it);
+    previous_location = TaskManagementHelper::getEndLocationOfOrder(*order_it);
     if (previous_location.has_value()) {
       break;
     }

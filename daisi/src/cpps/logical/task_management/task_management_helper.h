@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_ORDER_MANAGEMENT_HELPER_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_TASK_MANAGEMENT_HELPER_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_TASK_MANAGEMENT_HELPER_H_
 
 #include <optional>
 
@@ -23,7 +23,7 @@
 
 namespace daisi::cpps::logical {
 
-class OrderManagementHelper {
+class TaskManagementHelper {
 public:
   /// @brief get the end location of a given order.
   /// @param order the order to get the end location for

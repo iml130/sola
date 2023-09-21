@@ -14,8 +14,8 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_COMPONENTS_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_COMPONENTS_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_STN_TASK_MANAGEMENT_COMPONENTS_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_STN_TASK_MANAGEMENT_COMPONENTS_H_
 
 #include <optional>
 #include <string>
@@ -26,16 +26,16 @@
 
 namespace daisi::cpps::logical {
 
-struct StnOrderManagementVertex {
-  StnOrderManagementVertex(daisi::material_flow::Order order, bool is_start);
+struct StnTaskManagementVertex {
+  StnTaskManagementVertex(daisi::material_flow::Order order, bool is_start);
 
-  static StnOrderManagementVertex createOrigin();
+  static StnTaskManagementVertex createOrigin();
 
   const daisi::material_flow::Order &getOrder() const;
   bool isStart() const;
   bool isOrigin() const;
 
-  friend bool operator==(const StnOrderManagementVertex &v1, const StnOrderManagementVertex &v2);
+  friend bool operator==(const StnTaskManagementVertex &v1, const StnTaskManagementVertex &v2);
 
   void setLastPosition(const daisi::util::Position &position);
 
@@ -51,8 +51,8 @@ private:
   daisi::util::Position position_;
 };
 
-struct StnOrderManagementEdge {
-  explicit StnOrderManagementEdge(const bool all_positive) : all_positive_(all_positive){};
+struct StnTaskManagementEdge {
+  explicit StnTaskManagementEdge(const bool all_positive) : all_positive_(all_positive){};
 
   void addWeight(double weight) {
     if (weight >= 0 && all_positive_) {
@@ -98,8 +98,8 @@ private:
 
 namespace std {
 
-template <> struct hash<daisi::cpps::logical::StnOrderManagementVertex> {
-  std::size_t operator()(const daisi::cpps::logical::StnOrderManagementVertex &v) const {
+template <> struct hash<daisi::cpps::logical::StnTaskManagementVertex> {
+  std::size_t operator()(const daisi::cpps::logical::StnTaskManagementVertex &v) const {
     std::string repr;
 
     if (auto move_order_pval = std::get_if<daisi::material_flow::MoveOrder>(&v.getOrder())) {

@@ -19,7 +19,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 
-#include "cpps/logical/order_management/stn_order_management.h"
+#include "cpps/logical/task_management/stn_task_management.h"
 #include "material_flow/model/task.h"
 
 using namespace daisi;
@@ -107,7 +107,7 @@ TEST_CASE("Small Examples", "[pickBest]") {
 
   AuctionParticipantState state(tasks);
 
-  auto basic_insertion_point = std::make_shared<AuctionBasedOrderManagement::InsertionPoint>();
+  auto basic_insertion_point = std::make_shared<AuctionBasedTaskManagement::InsertionPoint>();
 
   auto m1 = getMetrics1();
   auto m2 = getMetrics2();
