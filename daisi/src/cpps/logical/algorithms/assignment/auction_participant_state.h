@@ -22,7 +22,7 @@
 
 #include "cpps/logical/message/auction_based/bid_submission.h"
 #include "cpps/logical/message/auction_based/winner_response.h"
-#include "cpps/logical/order_management/auction_based_order_management.h"
+#include "cpps/logical/task_management/auction_based_task_management.h"
 #include "material_flow/model/task.h"
 
 namespace daisi::cpps::logical {

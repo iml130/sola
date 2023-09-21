@@ -29,14 +29,14 @@ And all received messages are forwarded to the Algorithms component.
 
 The Algorithms component handles Task aquisition or assignment from [Material Flow Logical Agents (MFLA)](./material_flow.md).
 Those Tasks are assigned to AMRs using [centralized](../task_assignment/round_robin.md) or [decentralized](../task_assignment/decentralized.md) Task Assignment Algorithms.
-Some Task Assignment Algorithms require cost calculations that are delegated to the Order Management.
+Some Task Assignment Algorithms require cost calculations that are delegated to the Task Management.
 
-When a Task is assigned to an AMR Logical Agent the Algorithms component will forward it to the Order Management.
+When a Task is assigned to an AMR Logical Agent the Algorithms component will forward it to the Task Management.
 
-### Order Management
+### Task Management
 
-The Order Management holds assigned Tasks in a queue.
-Whenever a Task is queued and the AMR is ready to execute it, the Order Management's next Order will be sent to the AMR Physical Asset using the TCP Connection and also send it to the AMR Logical Execution State to manage the Order execution.
+The Task Management holds assigned Tasks in a queue.
+Whenever a Task is queued and the AMR is ready to execute it, the Task Management's next Order will be sent to the AMR Physical Asset using the TCP Connection and also send it to the AMR Logical Execution State to manage the Order execution.
 
 It also does cost calculations required by the Algorithms component using the [AMR Mobility Helper](#amr-mobility-helper).
 

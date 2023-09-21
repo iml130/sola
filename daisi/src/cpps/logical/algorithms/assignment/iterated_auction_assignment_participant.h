@@ -23,7 +23,7 @@
 #include "assignment_participant.h"
 #include "auction_participant_state.h"
 #include "cpps/common/cpps_communicator.h"
-#include "cpps/logical/order_management/auction_based_order_management.h"
+#include "cpps/logical/task_management/auction_based_task_management.h"
 
 namespace daisi::cpps::logical {
 
@@ -38,7 +38,7 @@ class IteratedAuctionAssignmentParticipant : public AssignmentParticipant {
 public:
   explicit IteratedAuctionAssignmentParticipant(
       daisi::cpps::common::CppsCommunicatorPtr communicator,
-      std::shared_ptr<AuctionBasedOrderManagement> order_management, AmrDescription description);
+      std::shared_ptr<AuctionBasedOrderManagement> task_management, AmrDescription description);
 
   ~IteratedAuctionAssignmentParticipant() override = default;
 
@@ -53,7 +53,7 @@ public:
   REGISTER_IMPLEMENTATION(IterationNotification)
 
   /// @brief A WinnerNotification means that a task was assigned to us. First, we need to check
-  /// whether we can still accept the task. If yes, we add the task to the order management and send
+  /// whether we can still accept the task. If yes, we add the task to the task management and send
   /// an acceptance WinnerResponse back to the initiator. Otherwise, we must reject.
   REGISTER_IMPLEMENTATION(WinnerNotification)
 
@@ -63,9 +63,9 @@ private:
   /// tasks for each auction process, as well as previously calculated bids and insertion infos.
   std::unordered_map<std::string, AuctionParticipantState> initiator_auction_state_mapping_;
 
-  /// @brief Pointer to the order management of the corresponding AmrLogicalAgent.
+  /// @brief Pointer to the task management of the corresponding AmrLogicalAgent.
   /// We need access to calculate bids and add tasks after receiving WinnerNotifications.
-  std::shared_ptr<AuctionBasedOrderManagement> order_management_;
+  std::shared_ptr<AuctionBasedOrderManagement> task_management_;
 
   /// @brief Calculating bids for each open task in a state.
   /// @param state Relevant auction state.

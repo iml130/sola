@@ -53,7 +53,7 @@ In the ambigous case that more than one candidate has the fewest task assignment
 
 As for each centralized approach in this section, the task assignment starts immediately after the optimizer receives a new Material Flow.
 Each of the tasks is assigned sequentially as described above by respecting the valid abilities per tasks as well as the total number of assigned tasks per ability.
-The selected participant receives the task and tries to add it to it's local Order Management.
+The selected participant receives the task and tries to add it to it's local Task Management.
 The result of this additon (successful or not), followed by the (updated) status is sent back to the optimizer.
 Since it is a simplified strategy, a task should always be accepted.
 However, if the selected participant's answer is not received after a fixed time, the corresponding task is rescheduled.

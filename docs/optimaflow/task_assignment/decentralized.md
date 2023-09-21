@@ -30,7 +30,7 @@ Meanwhile, the primary goal of the TePSSI algorithm is to optimize task assignme
 
 ### Task Storage
 
-Once tasks are assigned to an AMR, the AMR Logical Agent stores the tasks in a Simple Temporal Network (STN) [[3]](#references) as an Order Management.
+Once tasks are assigned to an AMR, the AMR Logical Agent stores the tasks in a Simple Temporal Network (STN) [[3]](#references) as an Task Management.
 The STN enables efficient representation and management of the temporal constraints associated with task execution.
 
 ### TePSSI in the Material Flow Logical Agent

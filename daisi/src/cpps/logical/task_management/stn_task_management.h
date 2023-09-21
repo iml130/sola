@@ -14,16 +14,16 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_STN_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_STN_TASK_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_STN_TASK_MANAGEMENT_H_
 
 #include <memory>
 
-#include "auction_based_order_management.h"
+#include "auction_based_task_management.h"
 #include "cpps/amr/amr_mobility_helper.h"
 #include "cpps/amr/physical/material_flow_functionality_mapping.h"
 #include "datastructure/simple_temporal_network.tpp"
-#include "stn_order_management_components.h"
+#include "stn_task_management_components.h"
 
 namespace daisi::cpps::logical {
 
@@ -43,7 +43,7 @@ public:
 
   ~StnOrderManagement() override = default;
 
-  /// @brief check wether the order management has a current task assigned
+  /// @brief check wether the task management has a current task assigned
   bool hasTasks() const override;
 
   /// @brief get the current task

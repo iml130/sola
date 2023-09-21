@@ -20,8 +20,8 @@
 #include "cpps/logical/algorithms/assignment/centralized_participant.h"
 #include "cpps/logical/algorithms/assignment/iterated_auction_assignment_participant.h"
 #include "cpps/logical/message/material_flow_update.h"
-#include "cpps/logical/order_management/simple_order_management.h"
-#include "cpps/logical/order_management/stn_order_management.h"
+#include "cpps/logical/task_management/simple_task_management.h"
+#include "cpps/logical/task_management/stn_task_management.h"
 #include "cpps/packet.h"
 #include "logging/logger_manager.h"
 #include "solanet/uuid_generator.h"
@@ -54,28 +54,26 @@ void AmrLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
       case AlgorithmType::kIteratedAuctionAssignmentParticipant: {
-        auto stn_order_management = std::make_shared<StnOrderManagement>(
+        auto stn_task_management = std::make_shared<StnOrderManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
-        order_management_ = stn_order_management;
+        task_management_ = stn_task_management;
 
         algorithms_.push_back(std::make_unique<IteratedAuctionAssignmentParticipant>(
-            communicator_, stn_order_management, description_));
+            communicator_, stn_task_management, description_));
 
-        order_management_->addNotifyTaskAssignmentCallback(
-            [this]() { this->notifyTaskAssigned(); });
+        task_management_->addNotifyTaskAssignmentCallback([this]() { this->notifyTaskAssigned(); });
 
         break;
       }
       case AlgorithmType::kRoundRobinParticipant: {
-        auto simple_order_management = std::make_shared<SimpleOrderManagement>(
+        auto simple_task_management = std::make_shared<SimpleOrderManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
-        order_management_ = simple_order_management;
+        task_management_ = simple_task_management;
 
         algorithms_.push_back(
-            std::make_unique<CentralizedParticipant>(communicator_, simple_order_management));
+            std::make_unique<CentralizedParticipant>(communicator_, simple_task_management));
 
-        order_management_->addNotifyTaskAssignmentCallback(
-            [this]() { this->notifyTaskAssigned(); });
+        task_management_->addNotifyTaskAssignmentCallback([this]() { this->notifyTaskAssigned(); });
 
         break;
       }
@@ -144,9 +142,9 @@ void AmrLogicalAgent::processMessageAmrOrderUpdate(const AmrOrderUpdate &order_u
 }
 
 void AmrLogicalAgent::sendTaskToPhysical() {
-  order_management_->setNextTask();
-  if (order_management_->hasTasks()) {
-    material_flow::Task task = order_management_->getCurrentTask();
+  task_management_->setNextTask();
+  if (task_management_->hasTasks()) {
+    material_flow::Task task = task_management_->getCurrentTask();
     execution_state_.setNextTask(task);
 
     AmrOrderInfo amr_order_info(
@@ -160,7 +158,7 @@ void AmrLogicalAgent::sendTaskToPhysical() {
 
 void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
   if (execution_state_.shouldSendNextTaskToPhysical()) {
-    if (order_management_) {
+    if (task_management_) {
       sendTaskToPhysical();
     }
   }
