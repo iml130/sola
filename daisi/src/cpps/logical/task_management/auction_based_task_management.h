@@ -14,11 +14,11 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#ifndef DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_AUCTION_BASED_ORDER_MANAGEMENT_H_
-#define DAISI_CPPS_LOGICAL_ORDER_MANAGEMENT_AUCTION_BASED_ORDER_MANAGEMENT_H_
+#ifndef DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_AUCTION_BASED_TASK_MANAGEMENT_H_
+#define DAISI_CPPS_LOGICAL_TASK_MANAGEMENT_AUCTION_BASED_TASK_MANAGEMENT_H_
 
 #include "metrics_composition.h"
-#include "order_management.h"
+#include "task_management.h"
 
 namespace daisi::cpps::logical {
 

@@ -19,7 +19,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 
-#include "cpps/logical/order_management/stn_order_management.h"
+#include "cpps/logical/task_management/stn_task_management.h"
 #include "material_flow/model/task.h"
 
 using namespace daisi;

@@ -18,7 +18,7 @@
 #define DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_ASSIGNMENT_RESPONSE_H_
 
 #include "cpps/amr/model/amr_static_ability.h"
-#include "cpps/logical/order_management/metrics_composition.h"
+#include "cpps/logical/task_management/metrics_composition.h"
 #include "solanet/serializer/serialize.h"
 
 namespace daisi::cpps::logical {

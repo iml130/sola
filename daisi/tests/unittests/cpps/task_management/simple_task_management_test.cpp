@@ -14,7 +14,7 @@
 //
 // SPDX-License-Identifier: GPL-2.0-only
 
-#include "cpps/logical/order_management/simple_order_management.h"
+#include "cpps/logical/task_management/simple_task_management.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <string>
@@ -399,7 +399,7 @@ TEST_CASE("SimpleOrderManagement One Transport, Move, and Action Order in one Ta
   REQUIRE(add_metrics.getMakespan() >= add_metrics.getTime() + 41);
 }
 
-TEST_CASE("Simple Order Management Three Simple Transport Orders with time delay",
+TEST_CASE("Simple Task Management Three Simple Transport Orders with time delay",
           "[adding and removing vertices]") {
   // arrange
   auto current_pose = daisi::util::Pose(p0);
