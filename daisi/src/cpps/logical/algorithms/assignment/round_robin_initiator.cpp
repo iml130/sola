@@ -171,14 +171,12 @@ RoundRobinInitiator::chooseParticipantForTask(const material_flow::Task &task) {
   if (possible_candidates.empty()) {
     throw std::runtime_error("No AMR matches the task requirements");
   }
-  int random_index = 0;
-  if (possible_candidates.size() > 1) {
-    // choose AMR randomly
-    std::uniform_int_distribution<uint64_t> dist(0, possible_candidates.size());
-    random_index = dist(daisi::global_random_engine);
-  }
+
+  // choose AMR randomly
+  std::uniform_int_distribution<uint64_t> dist(0, possible_candidates.size() - 1);
+  const uint64_t random_index = dist(daisi::global_random_engine);
   auto chosen_participant =
-      std::make_shared<ParticipantInfoRoundRobin>(possible_candidates[random_index]);
+      std::make_shared<ParticipantInfoRoundRobin>(possible_candidates.at(random_index));
 
   return chosen_participant;
 }
