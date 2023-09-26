@@ -31,6 +31,8 @@ if(DAISI_HANDLE_COMPILER_WARNINGS_AS_ERRORS)
   add_compile_options(-Werror)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH ${DAISI_SOURCE_DIR}/build_tools)
+
 #-------------------------------------------------------------------------------
 # Third-party dependencies
 #-------------------------------------------------------------------------------

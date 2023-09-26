@@ -1,3 +1,5 @@
+include(create_ns3_executable)
+
 # Simulator version of natter
 add_library(natter_minhcast_sim STATIC)
 target_sources(natter_minhcast_sim
@@ -116,4 +118,11 @@ target_link_libraries(daisi_natter_scenariofile
 target_include_directories(daisi_natter_scenariofile
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src
+)
+
+create_ns3_executable(
+        daisi::natter_ns3::NatterManager # Class
+        natter-ns3/natter_manager.h # Include
+        daisi_natter_manager # CMake target
+        natter # Name
 )

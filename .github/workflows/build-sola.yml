@@ -148,21 +148,21 @@ jobs:
       run: |
         export LD_LIBRARY_PATH=~/ns-3_install/lib
         mkdir output
-        build/src/main/Main --environment=minhton --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_test.yml
+        build/src/minhton-ns3/minhton_ns3 --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_test.yml
         python3 evaluation/minhton_verification.py `find output -name '*.db'`
         rm -rf output
     - name: Run MINHTON Star Cases integrationtest
       run: |
         export LD_LIBRARY_PATH=~/ns-3_install/lib
         mkdir output
-        build/src/main/Main --environment=minhton --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_cases.yml
+        build/src/minhton-ns3/minhton_ns3 --scenario=`pwd`/daisi/utils/ci_scenario_files/minhton_cases.yml
         python3 evaluation/minhton_verification.py `find output -name '*.db'`
         rm -rf output
     - name: Run MINHCAST integrationtest
       run: |
         export LD_LIBRARY_PATH=~/ns-3_install/lib
         mkdir output
-        build/src/main/Main --environment=natter --scenario=`pwd`/daisi/utils/ci_scenario_files/minhcast_test.yml
+        build/src/natter-ns3/natter_ns3 --scenario=`pwd`/daisi/utils/ci_scenario_files/minhcast_test.yml
         python3 evaluation/natter_verification.py `find output -name '*.db'`
         rm -rf output
     - name: Run CPPS integrationtest
@@ -171,7 +171,7 @@ jobs:
         export MINHTONDIR=$GITHUB_WORKSPACE/minhton
         mkdir output
         export MINHTONDIR=`pwd`/minhton
-        build/src/main/Main --environment=cpps --scenario=`pwd`/daisi/utils/ci_scenario_files/cpps_test.yml
+        build/src/cpps/CPPS_ns3 --scenario=`pwd`/daisi/utils/ci_scenario_files/cpps_test.yml
         python3 evaluation/cpps_verification.py `find output -name '*.db'`
         rm -rf output
     - name: Run ROUND_ROBIN integrationtest
@@ -180,5 +180,5 @@ jobs:
         export MINHTONDIR=$GITHUB_WORKSPACE/minhton
         mkdir output
         export MINHTONDIR=`pwd`/minhton
-        build/src/main/Main --environment=cpps --scenario=`pwd`/daisi/utils/ci_scenario_files/round_robin_test.yml
+        build/src/cpps/CPPS_ns3 --scenario=`pwd`/daisi/utils/ci_scenario_files/round_robin_test.yml
         rm -rf output

@@ -1,5 +1,4 @@
 add_subdirectory(logging)
-add_subdirectory(main)
 
 add_subdirectory(cpps)
 add_subdirectory(minhton-ns3)

@@ -1,3 +1,5 @@
+include(create_ns3_executable)
+
 add_subdirectory(adapter)
 
 add_library(daisi_minhton_application STATIC)
@@ -113,4 +115,11 @@ target_link_libraries(daisi_minhton_peer_discovery
 target_include_directories(daisi_minhton_peer_discovery
         INTERFACE
             ${PROJECT_SOURCE_DIR}/src
+)
+
+create_ns3_executable(
+    daisi::minhton_ns3::MinhtonManager # Class
+    minhton-ns3/minhton_manager.h # Include
+    daisi_minhton_manager # CMake target
+    minhton # Name
 )
