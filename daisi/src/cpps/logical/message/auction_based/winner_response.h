@@ -17,7 +17,11 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_RESPONSE_H_
 
+#include <string>
+
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -35,9 +39,13 @@ public:
 
   bool doesAccept() const { return accept_; }
 
-  SERIALIZE(task_uuid_, accept_, participant_connection_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, task_uuid_, accept_, participant_connection_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string task_uuid_;
 
   std::string participant_connection_;

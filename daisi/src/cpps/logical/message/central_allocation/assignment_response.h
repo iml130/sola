@@ -17,9 +17,13 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_ASSIGNMENT_RESPONSE_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_ASSIGNMENT_RESPONSE_H_
 
+#include <string>
+
 #include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/logical/task_management/metrics_composition.h"
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -42,9 +46,13 @@ public:
 
   bool doesAccept() const { return accept_; }
 
-  SERIALIZE(task_uuid_, accept_, metrics_, end_position_, participant_connection_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, task_uuid_, accept_, metrics_, end_position_, participant_connection_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string task_uuid_;
 
   bool accept_;

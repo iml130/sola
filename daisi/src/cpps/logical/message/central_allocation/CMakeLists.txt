@@ -7,6 +7,8 @@ target_link_libraries(daisi_cpps_logical_message_central_allocation_assignment_n
     INTERFACE
     solanet_serializer
     daisi_material_flow_model_task
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_cpps_logical_message_central_allocation_assignment_response INTERFACE)
@@ -19,6 +21,8 @@ target_link_libraries(daisi_cpps_logical_message_central_allocation_assignment_r
     solanet_serializer
     daisi_cpps_logical_task_management_metrics_composition
     daisi_structure_helpers
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_cpps_logical_message_central_allocation_status_update_request INTERFACE)
@@ -29,6 +33,8 @@ target_sources(daisi_cpps_logical_message_central_allocation_status_update_reque
 target_link_libraries(daisi_cpps_logical_message_central_allocation_status_update_request
     INTERFACE
     solanet_serializer
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
 
 add_library(daisi_cpps_logical_message_central_allocation_status_update INTERFACE)
@@ -41,4 +47,6 @@ target_link_libraries(daisi_cpps_logical_message_central_allocation_status_updat
     solanet_serializer
     daisi_cpps_logical_task_management_metrics_composition
     daisi_structure_helpers
+    solanet_uuid
+    solanet_uuid_generator_sim
 )
