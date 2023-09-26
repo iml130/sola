@@ -129,9 +129,6 @@ The specific network parameters (throughput, delay, ...) are currently hardcoded
 
 As most of the applications used with DAISI are not handling network failures yet, ns-3 traces are installed to automatically stop the application if network failures happen (packet lost, connection lost, ...).
 
-To avoid such cases and to speed up simulation, the ARP table of every node is prefilled.
-This avoids execcsive ARP traffic that could be caused by Peer-To-Peer applications if all nodes within the same subnet communicate with each other.
-
 ### IP address ranges
 
 - Core routers IP always ends with `.1`
