@@ -17,7 +17,12 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_ITERATION_NOTIFICATION_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_ITERATION_NOTIFICATION_H_
 
+#include <string>
+#include <vector>
+
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -32,9 +37,13 @@ public:
 
   const std::vector<std::string> &getTaskUuids() const { return task_uuids_; }
 
+  solanet::UUID getUUID() const { return uuid_; }
+
   SERIALIZE(initiator_connection_, task_uuids_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string initiator_connection_;
 
   std::vector<std::string> task_uuids_;

@@ -17,8 +17,13 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_CALL_FOR_PROPOSAL_H_
 
+#include <string>
+#include <vector>
+
 #include "material_flow/model/task.h"
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -32,9 +37,13 @@ public:
 
   const std::vector<daisi::material_flow::Task> &getTasks() const { return tasks_; }
 
-  SERIALIZE(initiator_connection_, tasks_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, initiator_connection_, tasks_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string initiator_connection_;
 
   std::vector<daisi::material_flow::Task> tasks_;

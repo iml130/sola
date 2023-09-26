@@ -17,7 +17,11 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_STATUS_UPDATE_REQUEST_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_CENTRAL_ALLOCATION_STATUS_UPDATE_REQUEST_H_
 
+#include <string>
+
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -31,9 +35,13 @@ public:
 
   const std::string &getInitiatorConnection() const { return initiator_connection_; }
 
-  SERIALIZE(initiator_connection_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, initiator_connection_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string initiator_connection_;
 };
 }  // namespace daisi::cpps::logical

@@ -17,7 +17,11 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_NOTIFICATION_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_WINNER_NOTIFICATION_H_
 
+#include <string>
+
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
@@ -37,9 +41,13 @@ public:
 
   const daisi::util::Duration &getLatestFinishTime() const { return latest_finish_time_; }
 
-  SERIALIZE(task_uuid_, initiator_connection_, latest_finish_time_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, task_uuid_, initiator_connection_, latest_finish_time_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string task_uuid_;
 
   std::string initiator_connection_;

@@ -17,9 +17,13 @@
 #ifndef DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 #define DAISI_CPPS_LOGICAL_MESSAGE_AUCTION_BASED_BID_SUBMISSION_H_
 
+#include <string>
+
 #include "cpps/amr/model/amr_static_ability.h"
 #include "cpps/logical/task_management/metrics_composition.h"
 #include "solanet/serializer/serialize.h"
+#include "solanet/uuid.h"
+#include "solanet/uuid_generator.h"
 
 namespace daisi::cpps::logical {
 
@@ -60,9 +64,13 @@ public:
     return participant_connection_ > other.participant_connection_;
   }
 
-  SERIALIZE(task_uuid_, participant_connection_, participant_ability_, metrics_composition_)
+  solanet::UUID getUUID() const { return uuid_; }
+
+  SERIALIZE(uuid_, task_uuid_, participant_connection_, participant_ability_, metrics_composition_)
 
 private:
+  solanet::UUID uuid_ = solanet::generateUUID();
+
   std::string task_uuid_;
 
   std::string participant_connection_;
