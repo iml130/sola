@@ -1,7 +1,12 @@
 !!! danger "This is work in progress!"
 
 First you need to build SOLA with the ns-3 integration as described in [Getting Started](../getting_started.md).
-Following these steps, all components are integrated into a single ns-3 simulation executable that is located at ``<SOLA_REPOSITORY_DIR>/build/main/Main``.
+For each component/application, a single ns-3 simulation executable is created.
+Following the building instructions, the executables are located at:
+- [``minhton``](../minhton/introduction.md): ``<SOLA_REPOSITORY_DIR>/build/src/minhton-ns3/minhton_ns3``.
+- [``natter``](../natter/introduction.md): ``<SOLA_REPOSITORY_DIR>/build/src/natter-ns3/natter_ns3``
+- [``sola``](../index.md): ``<SOLA_REPOSITORY_DIR>/build/src/sola-ns3/SOLA_ns3``
+- [``cpps`` (OptiMaFlow)](../optimaflow/introduction.md): ``<SOLA_REPOSITORY_DIR>/build/src/cpps-ns3/CPPS_ns3``
 
 ### Specify logging output path
 
@@ -10,15 +15,7 @@ This database is used for logging simulation events, states and other simulation
 To specify the path, set the environment variable ``DAISI_OUTPUT_PATH`` to the desired output path, like ``export DAISI_OUTPUT_PATH=<PATH>``.
 
 
-### Specifiy application
-
-The name of the application that should run in the simulation must be passed to the executable with ``--environment=<APP_NAME>``.
-The following applications are supported:
-
-- [``minhton``](../minhton/introduction.md)
-- [``natter``](../natter/introduction.md)
-- [``sola``](../index.md)
-- [``cpps`` (OptiMaFlow)](../optimaflow/introduction.md)
+### Application-specific configurations
 
 !!! warning "Running OptiMaFlow"
 
@@ -39,9 +36,9 @@ This path must either be a absolute path or a path relative to the current worki
 
 For example to start a OptiMaFlow simulation with your current working directory being ``<SOLA_REPOSITORY_DIR>``, run:
 
-```build/main/Main --environment=cpps --scenario=daisi/scenarios/cpps/default.yml```
+```build/src/cpps/CPPS_ns3 --scenario=daisi/scenarios/cpps/default.yml```
 
-To start a different application, just pass a different environment and scenariofile path.
+To start a different application, just use a different executable and a different scenariofile.
 
 ### Inspecting the output
 

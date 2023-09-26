@@ -36,7 +36,7 @@ Then, you can build DAISI from a build subdirectory as a CMake project:
 
 ```sh
 cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -Dns3_DIR="PATH_TO_YOUR_NS3_INSTALL"
-cmake --build . --target Main
+cmake --build .
 ```
 
 Please refer to the [documentation](https://iml130.github.io/sola/) for an in depth installation guide including other options as well as further information.
@@ -71,5 +71,5 @@ If you use it for research, please include the following reference in any result
 }
 ```
 
-SOLA is a composition of other components. 
+SOLA is a composition of other components.
 References to the publications are provided in the dedicated documentation.

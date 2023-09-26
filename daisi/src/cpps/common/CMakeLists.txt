@@ -99,6 +99,6 @@ target_link_libraries(daisi_cpps_common_cpps_communicator
         INTERFACE
         ManagementOverlayMINHTONSim
         EventDisseminationMinhcastSim
-        SOLA_ns3
+        SOLA_ns3_interface
         NetworkUDPSim
 )

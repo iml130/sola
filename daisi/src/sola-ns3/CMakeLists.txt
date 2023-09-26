@@ -1,6 +1,8 @@
-add_library(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/sola.h)
-target_include_directories(SOLA_ns3 INTERFACE ${SOLA_SOURCE_DIR}/include)
-target_link_libraries(SOLA_ns3 INTERFACE
+include(create_ns3_executable)
+
+add_library(SOLA_ns3_interface INTERFACE ${SOLA_SOURCE_DIR}/include/SOLA/sola.h)
+target_include_directories(SOLA_ns3_interface INTERFACE ${SOLA_SOURCE_DIR}/include)
+target_link_libraries(SOLA_ns3_interface INTERFACE
         sola_service
         sola_logger_interface
         solanet_uuid
@@ -10,7 +12,7 @@ target_link_libraries(SOLA_ns3 INTERFACE
 add_library(daisi_sola_sola_wrapper INTERFACE sola_wrapper.h)
 target_link_libraries(daisi_sola_sola_wrapper
         INTERFACE
-        SOLA_ns3
+        SOLA_ns3_interface
         ManagementOverlayMINHTONSim
         EventDisseminationMinhcastSim
 )
@@ -136,4 +138,11 @@ target_link_libraries(daisi_sola_scenariofile
 target_include_directories(daisi_sola_scenariofile
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src
+)
+
+create_ns3_executable(
+        daisi::sola_ns3::SolaManager # Class
+        sola-ns3/sola_manager.h # Include
+        daisi_sola_manager # CMake target
+        SOLA # Name
 )
