@@ -193,7 +193,7 @@ void CoreNetwork::addNodesWifi(ns3::NodeContainer nodes, double topology_width,
   mob.Install(access_points);
 
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
-  YansWifiPhyHelper wifi_phy = YansWifiPhyHelper();
+  YansWifiPhyHelper wifi_phy;
   wifi_phy.SetPcapDataLinkType(YansWifiPhyHelper::DLT_IEEE802_11_RADIO);
   channel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
 
@@ -213,7 +213,7 @@ void CoreNetwork::addNodesWifi(ns3::NodeContainer nodes, double topology_width,
 
   for (uint32_t i = 0; i < access_points.GetN(); i++) {
     wifi_phy.SetChannel(channel.Create());
-    WifiHelper wifi = WifiHelper();
+    WifiHelper wifi;
     wifi.SetRemoteStationManager("ns3::IdealWifiManager");
     wifi.SetRemoteStationManager("ns3::IdealWifiManager", "RtsCtsThreshold", UintegerValue(100));
     wifi.SetStandard(WifiStandard::WIFI_STANDARD_80211ac);
@@ -229,7 +229,7 @@ void CoreNetwork::addNodesWifi(ns3::NodeContainer nodes, double topology_width,
     wifi_phy.Set("TxPowerEnd", DoubleValue(constants::kMaxPowerDBm));
 
     WifiMacHelper wifi_mac;
-    Ssid ssid = Ssid("IMLwifi" + std::to_string(i));
+    Ssid ssid("IMLwifi" + std::to_string(i));
     wifi_mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), "ActiveProbing",
                      BooleanValue(false), "WaitBeaconTimeout", TimeValue(Seconds(2.56)));
 

@@ -157,10 +157,8 @@ void AmrLogicalAgent::sendTaskToPhysical() {
 }
 
 void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
-  if (execution_state_.shouldSendNextTaskToPhysical()) {
-    if (task_management_) {
-      sendTaskToPhysical();
-    }
+  if (execution_state_.shouldSendNextTaskToPhysical() && task_management_) {
+    sendTaskToPhysical();
   }
 }
 

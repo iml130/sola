@@ -257,8 +257,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::calcRoutingTableNeighborParen
 
 std::vector<minhton::NodeInfo> RoutingInformation::getAllInitializedRoutingTableNeighborChildren()
     const {
-  std::vector<minhton::NodeInfo> initialized_routing_table_neighbor_children =
-      std::vector<minhton::NodeInfo>();
+  std::vector<minhton::NodeInfo> initialized_routing_table_neighbor_children;
 
   std::copy_if(this->routing_table_neighbor_children_.begin(),
                this->routing_table_neighbor_children_.end(),
@@ -429,7 +428,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::removeRoutingTableNeighborChi
 }
 
 std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueSymmetricalExistingNeighbors() {
-  std::vector<minhton::NodeInfo> neighbors = std::vector<minhton::NodeInfo>();
+  std::vector<minhton::NodeInfo> neighbors;
 
   if (this->self_node_info_.getLevel() != 0) {
     neighbors.push_back(this->getParent());
@@ -490,7 +489,7 @@ bool RoutingInformation::atLeastOneRoutingTableNeighborChildIsFree() const {
 }
 
 minhton::NodeInfo RoutingInformation::getLowestNode() const {
-  minhton::NodeInfo lowest = minhton::NodeInfo();
+  minhton::NodeInfo lowest;
 
   if (this->adjacent_left_.isInitialized()) {
     if (!lowest.isInitialized() ||

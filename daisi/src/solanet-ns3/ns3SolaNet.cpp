@@ -49,7 +49,7 @@ private:
   Ptr<Socket> socket_;
   std::string ip_;
   uint16_t port_;
-  void processUdpPacket(Ptr<Socket> socket);
+  void readFromSocket(Ptr<Socket> socket);
   void processPacket(Ptr<Packet> packet);
 
   std::function<void(const Message &)> callback_;
@@ -67,7 +67,7 @@ std::set<Network::Impl *> Network::Impl::network_interfaces_;
 Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> callback)
     : socket_(daisi::SocketManager::get().createSocket(daisi::SocketType::kUDP)),
       callback_(std::move(callback)) {
-  socket_->SetRecvCallback(MakeCallback(&Impl::processUdpPacket, this));
+  socket_->SetRecvCallback(MakeCallback(&Impl::readFromSocket, this));
 
   // https://groups.google.com/g/ns-3-users/c/tZmjq_KoCfo/m/x1xBvn-H31gJ
   Address addr;
@@ -100,7 +100,7 @@ void Network::Impl::processPacket(Ptr<Packet> packet) {
   callback_(m);
 }
 
-void Network::Impl::processUdpPacket(Ptr<Socket> socket) {
+void Network::Impl::readFromSocket(Ptr<Socket> socket) {
   Ptr<Packet> packet;
   Address from;
 

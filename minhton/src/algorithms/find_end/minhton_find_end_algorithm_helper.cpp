@@ -15,7 +15,8 @@ static constexpr uint16_t kMaxHopCount = 64U;
 void MinhtonFindEndAlgorithm::forwardRequest(const minhton::NodeInfo target,
                                              const minhton::NodeInfo request_origin,
                                              SearchProgress search_progress, uint16_t hop_count) {
-  uint16_t new_hop_count = ++hop_count;
+  ++hop_count;
+  uint16_t new_hop_count = hop_count;
   if (new_hop_count > kMaxHopCount) {
     throw std::runtime_error("MINHTON message to be forwarded exceeds max hop count");
   }

@@ -93,7 +93,7 @@ uint32_t PhysicalNodeInfo::getAddressValue() const {
   auto bytes_begin = std::sregex_iterator(addr_string.begin(), addr_string.end(), regex);
   auto bytes_end = std::sregex_iterator();
 
-  std::vector<int16_t> bytes = std::vector<int16_t>();
+  std::vector<int16_t> bytes;
   for (std::sregex_iterator i = bytes_begin; i != bytes_end; ++i) {
     std::smatch match = *i;
     std::string match_str = match.str();

@@ -22,9 +22,7 @@ ManagementOverlayMinhton::ManagementOverlayMinhton(const minhton::ConfigNode &co
 
 void ManagementOverlayMinhton::insert(std::vector<Entry> entries) {
   std::vector<minhton::Entry> data;
-  for (auto &entry : entries) {
-    std::string key = std::get<0>(entry);
-    std::variant<int, float, bool, std::string> value = std::get<1>(entry);
+  for (auto &[key, value] : entries) {
     minhton::Entry a = {key, value, minhton::NodeData::ValueType::kValueDynamic};
     data.push_back(a);
   }

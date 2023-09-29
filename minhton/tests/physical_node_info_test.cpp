@@ -102,8 +102,7 @@ TEST_CASE("PhysicalNodeInfo PhysicalNodeInfoHasher", "[PhysicalNodeInfo][Physica
   minhton::PhysicalNodeInfo net_2("1.2.3.4", 2001);
   minhton::PhysicalNodeInfo net_3("1.2.3.5", 2001);
 
-  std::unordered_map<minhton::PhysicalNodeInfo, int, PhysicalNodeInfoHasher> test_map =
-      std::unordered_map<minhton::PhysicalNodeInfo, int, PhysicalNodeInfoHasher>();
+  std::unordered_map<minhton::PhysicalNodeInfo, int, PhysicalNodeInfoHasher> test_map;
   test_map[net_1] = 1;
   test_map[net_2] = 2;
   test_map[net_3] = 3;
@@ -112,7 +111,7 @@ TEST_CASE("PhysicalNodeInfo PhysicalNodeInfoHasher", "[PhysicalNodeInfo][Physica
   REQUIRE(test_map[net_2] == 2);
   REQUIRE(test_map[net_3] == 3);
 
-  minhton::PhysicalNodeInfoHasher hasher = minhton::PhysicalNodeInfoHasher();
+  minhton::PhysicalNodeInfoHasher hasher;
 
   REQUIRE(hasher(net_1) == hasher(net_1));
   REQUIRE(hasher(net_1) != hasher(net_2));

@@ -11,7 +11,7 @@ namespace minhton {
 
 NodeInfo LeaveAlgorithmGeneral::getAdjacentLeftFromVector(const NodeInfo &considered_node,
                                                           std::vector<NodeInfo> neighbors) {
-  NodeInfo closest = NodeInfo();
+  NodeInfo closest;
   double considered_node_value = considered_node.getLogicalNodeInfo().getHorizontalValue();
   double best_diff = k_TREEMAPPER_ROOT_VALUE * 2;
 
@@ -32,7 +32,7 @@ NodeInfo LeaveAlgorithmGeneral::getAdjacentLeftFromVector(const NodeInfo &consid
 
 NodeInfo LeaveAlgorithmGeneral::getAdjacentRightFromVector(const NodeInfo &considered_node,
                                                            std::vector<NodeInfo> neighbors) {
-  NodeInfo closest = NodeInfo();
+  NodeInfo closest;
   double considered_node_value = considered_node.getLogicalNodeInfo().getHorizontalValue();
   double best_diff = k_TREEMAPPER_ROOT_VALUE * 2;
 

@@ -100,7 +100,7 @@ TEST_CASE("RoutingInformation Setter/Getter Parent", "[RoutingInformation][Attri
                     std::invalid_argument);
 
   // setting uninitialized parent
-  minhton::NodeInfo node_4_parent = minhton::NodeInfo(1, 0, (uint16_t)3);
+  minhton::NodeInfo node_4_parent(1, 0, (uint16_t)3);
   REQUIRE_THROWS_AS(routing_info_4.setParent(node_4_parent), std::invalid_argument);
 
   // setting initalized parent at right position

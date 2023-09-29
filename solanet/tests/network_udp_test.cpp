@@ -53,7 +53,8 @@ TEST_CASE("[NETWORK_UDP] Automatically fetch IP", "Automatically fetch IP") {
 }
 
 TEST_CASE("[NETWORK_UDP] Single send/receive", "Single send/receive") {
-  std::vector<Message> received_msgs1, received_msgs2;
+  std::vector<Message> received_msgs1;
+  std::vector<Message> received_msgs2;
   Network network1("127.0.0.1", [&](const Message &msg) { received_msgs1.push_back(msg); });
   Network network2("127.0.0.1", [&](const Message &msg) { received_msgs2.push_back(msg); });
 

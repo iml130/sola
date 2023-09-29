@@ -245,7 +245,7 @@ void NatterManager::scheduleEvent(const Publish &step, ns3::Time &current_time) 
 }
 
 void NatterManager::scheduleEvents() {
-  ns3::Time current_time = ns3::Time(0);
+  ns3::Time current_time(0);
 
   for (const NatterScenarioSequenceStep &step : scenariofile_.scenario_sequence) {
     std::visit([this, &current_time](auto &&step) { scheduleEvent(step, current_time); },

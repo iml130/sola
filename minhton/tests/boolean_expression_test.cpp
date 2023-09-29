@@ -6,9 +6,8 @@
 
 #include "algorithms/esearch/boolean_expression.h"
 
-#include <memory.h>
-
 #include <catch2/catch_test_macros.hpp>
+#include <memory>
 
 #include "algorithms/esearch/distributed_data.h"
 #include "algorithms/esearch/local_data.h"

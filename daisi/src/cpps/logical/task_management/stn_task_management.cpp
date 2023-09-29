@@ -181,11 +181,7 @@ bool StnTaskManagement::addTask(
     addDurationConstraints(start_curr, finish_curr, *orders_it, info);
 
     auto end_location_of_order = TaskManagementHelper::getEndLocationOfOrder(*orders_it);
-    if (end_location_of_order.has_value()) {
-      info.end_locations.push_back(end_location_of_order.value());
-    } else {
-      info.end_locations.push_back(info.end_locations.back());
-    }
+    info.end_locations.push_back(end_location_of_order.value_or(info.end_locations.back()));
   }
 
   for (const auto &prec_task : task.getPrecedingTaskUuids()) {
@@ -385,8 +381,7 @@ StnTaskManagement::addBestOrdering(StnTaskManagement::TaskInsertInfo &task_inser
 
   if (best_index >= 0) {
     addOrderingConstraintBetweenTasks(insertion_points[best_index], task_insert_info);
-    bool success = solve();
-    if (!success) {
+    if (bool success = solve(); !success) {
       throw std::logic_error("failed to solve although it was solvable on the copy");
     }
 

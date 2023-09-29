@@ -50,12 +50,10 @@ void CentralizedInitiator::readAmrRequestFuture() {
   for (const auto &result : amr_find_result_.get()) {
     ParticipantInfo info;
     float max_payload = -1;
-    amr::LoadCarrier loadcarrier = amr::LoadCarrier(amr::LoadCarrier::kNoLoadCarrierType);
+    amr::LoadCarrier loadcarrier(amr::LoadCarrier::kNoLoadCarrierType);
 
-    for (const auto &entry : result) {
+    for (const auto &[key, value, value_type] : result) {
       // retreive all relevant information for ParticipantInfo
-      std::string key = std::get<0>(entry);
-      auto value = std::get<1>(entry);
       if (key == "endpoint") {
         info.connection_string = std::get<std::string>(value);
       } else if (key == "loadcarriertype") {
@@ -66,7 +64,7 @@ void CentralizedInitiator::readAmrRequestFuture() {
 
       if (max_payload != -1 && loadcarrier.isValid()) {
         // all information to initialize ability were obtained
-        amr::AmrStaticAbility ability = amr::AmrStaticAbility(loadcarrier, max_payload);
+        amr::AmrStaticAbility ability(loadcarrier, max_payload);
         info.ability = ability;
       }
     }

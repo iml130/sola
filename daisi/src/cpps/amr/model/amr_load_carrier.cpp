@@ -43,9 +43,9 @@ std::ostream &operator<<(std::ostream &os, const LoadCarrier &l) {
 }
 
 std::string LoadCarrier::getTypeAsString() const {
-  for (auto const &entry : LoadCarrier::string_to_type_) {
-    if (entry.second == type_) {
-      return entry.first;
+  for (auto const &[name, type] : LoadCarrier::string_to_type_) {
+    if (type == type_) {
+      return name;
     }
   }
   return "invalid";

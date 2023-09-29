@@ -95,8 +95,7 @@ bool IteratedAuctionAssignmentParticipant::process(const WinnerNotification &win
   bool accept = false;
   if (task_state.isValid() &&
       task_management_->canAddTask(task_state.getTask(), task_state.getInsertionPoint())) {
-    auto result = task_management_->getLatestCalculatedInsertionInfo();
-    auto metrics_comp = result.first;
+    const auto &[metrics_comp, _] = task_management_->getLatestCalculatedInsertionInfo();
 
     if (metrics_comp == task_state.getMetricsComposition()) {
       accept = true;
@@ -130,17 +129,17 @@ bool IteratedAuctionAssignmentParticipant::process(const WinnerNotification &win
   return true;
 }
 
-void IteratedAuctionAssignmentParticipant::calculateBids(AuctionParticipantState &state) {
-  for (auto &pair : state.task_state_mapping) {
+void IteratedAuctionAssignmentParticipant::calculateBids(AuctionParticipantState &state) const {
+  for (auto &[_, auction_participant_task_state] : state.task_state_mapping) {
     // Iterating through each task state of this auction process
 
-    if (task_management_->canAddTask(pair.second.getTask(), nullptr)) {
+    if (task_management_->canAddTask(auction_participant_task_state.getTask(), nullptr)) {
       // Setting new calculated information if we can add the task
-      auto result = task_management_->getLatestCalculatedInsertionInfo();
-      pair.second.setInformation(result.first, result.second);
+      auto [metrics_comp, insertion_point] = task_management_->getLatestCalculatedInsertionInfo();
+      auction_participant_task_state.setInformation(metrics_comp, insertion_point);
     } else {
       // Setting previous information to invalid because we cannot accept anymore
-      pair.second.removeInformation();
+      auction_participant_task_state.removeInformation();
     }
   }
 

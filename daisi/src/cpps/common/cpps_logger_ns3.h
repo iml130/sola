@@ -99,6 +99,11 @@ public:
   explicit CppsLoggerNs3(LogDeviceApp log_device_application, LogFunction log);
   ~CppsLoggerNs3();
 
+  CppsLoggerNs3(CppsLoggerNs3 &) = delete;
+  CppsLoggerNs3 &operator=(const CppsLoggerNs3 &) = delete;
+  CppsLoggerNs3(CppsLoggerNs3 &&) noexcept = default;
+  CppsLoggerNs3 &operator=(CppsLoggerNs3 &&) = default;
+
   // cpps specific logging functions
   void logAMR(const AmrLoggingInfo &amr_info);
   void logStation(const std::string &name, const std::string &type, ns3::Vector2D position,

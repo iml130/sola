@@ -13,7 +13,7 @@ using namespace minhton;
 
 TEST_CASE("MinhtonMessageHeader General", "[MinhtonMessageHeader][General]") {
   NodeInfo sender, target;
-  MinhtonMessageHeader header = MinhtonMessageHeader(sender, target);
+  MinhtonMessageHeader header(sender, target);
   REQUIRE(header.getEventId() != 0);
   REQUIRE(header.getEventId() != header.getRefEventId());
   REQUIRE(MinhtonMessageHeader(sender, target).getEventId() !=
@@ -33,7 +33,7 @@ TEST_CASE("MinhtonMessageHeader IdCollisionCheck", "[MinhtonMessageHeader][IdCol
 
 TEST_CASE("MinhtonMessageHeader Constructor", "[MinhtonMessageHeader][Constructor]") {
   NodeInfo sender, target;
-  MinhtonMessageHeader header = MinhtonMessageHeader(sender, target);
+  MinhtonMessageHeader header(sender, target);
   REQUIRE(header.getEventId() != header.getRefEventId());
 
   header = MinhtonMessageHeader(sender, target, UINT64_MAX);
@@ -42,7 +42,7 @@ TEST_CASE("MinhtonMessageHeader Constructor", "[MinhtonMessageHeader][Constructo
 }
 
 TEST_CASE("MinhtonMessageHeader setEventId", "[MinhtonMessageHeader][setEventId]") {
-  MinhtonMessageHeader header = MinhtonMessageHeader();
+  MinhtonMessageHeader header;
   header.setEventId(1);
   REQUIRE(header.getEventId() == 1);
   header.setEventId(UINT64_MAX);
@@ -51,7 +51,7 @@ TEST_CASE("MinhtonMessageHeader setEventId", "[MinhtonMessageHeader][setEventId]
 }
 
 TEST_CASE("MinhtonMessageHeader setRefEventId", "[MinhtonMessageHeader][setRefEventId]") {
-  MinhtonMessageHeader header = MinhtonMessageHeader();
+  MinhtonMessageHeader header;
   header.setRefEventId(1);
   REQUIRE(header.getRefEventId() == 1);
   header.setRefEventId(UINT64_MAX);

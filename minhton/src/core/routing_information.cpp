@@ -64,10 +64,9 @@ void RoutingInformation::initParentAndChildren() {
   this->parent_ =
       minhton::NodeInfo();  // overwriting parent if there might have been something set before
   if (this->self_node_info_.getLevel() > 0) {
-    std::tuple<uint32_t, uint32_t> parent_pos = calcParent(
+    auto [parent_level, parent_number] = calcParent(
         this->self_node_info_.getLevel(), this->self_node_info_.getNumber(), this->getFanout());
-    this->parent_ = minhton::NodeInfo((uint32_t)std::get<0>(parent_pos),
-                                      (uint32_t)std::get<1>(parent_pos), this->getFanout());
+    this->parent_ = minhton::NodeInfo(parent_level, parent_number, this->getFanout());
   }
 
   // children
