@@ -28,27 +28,9 @@
 namespace daisi::cpps {
 
 class AmrFleet {
+public:
   using AmrInfo = std::pair<amr::AmrStaticAbility, AmrKinematics>;
 
-private:
-  std::vector<AmrInfo> infos_;
-
-  static AmrFleet &getImpl(const std::optional<std::vector<AmrInfo>> &infos = std::nullopt) {
-    static AmrFleet instance{infos};
-    return instance;
-  }
-
-  explicit AmrFleet(const std::optional<std::vector<AmrInfo>> &infos) {
-    if (!infos.has_value()) {
-      throw std::runtime_error("AmrFleet not initialized");
-    }
-
-    infos_ = infos.value();
-  }
-
-  AmrFleet() = default;
-
-public:
   static AmrFleet &get() { return getImpl(); }
 
   static void init(const std::vector<AmrInfo> &infos) { getImpl(infos); }
@@ -71,6 +53,24 @@ public:
   AmrKinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability) const;
 
   static std::string getDefaultTopic() { return "defaulttopic"; }
+
+private:
+  std::vector<AmrInfo> infos_;
+
+  static AmrFleet &getImpl(const std::optional<std::vector<AmrInfo>> &infos = std::nullopt) {
+    static AmrFleet instance{infos};
+    return instance;
+  }
+
+  explicit AmrFleet(const std::optional<std::vector<AmrInfo>> &infos) {
+    if (!infos.has_value()) {
+      throw std::runtime_error("AmrFleet not initialized");
+    }
+
+    infos_ = infos.value();
+  }
+
+  AmrFleet() = default;
 };
 
 }  // namespace daisi::cpps
