@@ -44,7 +44,7 @@ void SolaMessageNs3::Serialize(Buffer::Iterator start) const {
   stream << ip_ << ";";
   stream << port_ << ";";
   stream << payload_ << ";";
-  start.Write((uint8_t *)stream.str().c_str(), stream.str().size());
+  start.Write((const uint8_t *)stream.str().c_str(), stream.str().size());
 }
 
 uint32_t SolaMessageNs3::Deserialize(Buffer::Iterator start) {

@@ -105,7 +105,7 @@ void CppsScenariofile::verifyScenarioSequenceOfAmrs() const {
       sum += info.spawn_distribution.percentage;
     }
 
-    if (abs(sum - 1) > std::numeric_limits<double>::epsilon()) {
+    if (std::abs(sum - 1) > std::numeric_limits<double>::epsilon()) {
       throw std::runtime_error("Percentages of AMRs in scenario sequence must add up to 1.");
     }
   }
@@ -134,7 +134,7 @@ void CppsScenariofile::calcNumbersOfRelativeAmrDistribution() {
   // total number * percentage
   for (auto i = 0U; i < amrs.size(); i++) {
     auto percentage = amrs[i].spawn_distribution.percentage;
-    absolute.push_back(std::floor(percentage * initial_number_of_amrs));
+    absolute.push_back(static_cast<uint16_t>(std::floor(percentage * initial_number_of_amrs)));
     gaps.push_back({i, percentage * initial_number_of_amrs - absolute[i]});
   }
 

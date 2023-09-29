@@ -91,7 +91,7 @@ Metrics Metrics::operator-(const Metrics &other) const {
                empty_travel_distance - other.empty_travel_distance,
                loaded_travel_distance - other.loaded_travel_distance};
 
-  diff.setMakespan(abs(getMakespan() - other.getMakespan()));
+  diff.setMakespan(std::abs(getMakespan() - other.getMakespan()));
   return diff;
 }
 

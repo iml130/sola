@@ -43,7 +43,7 @@ void MinhtonManager::Scheduler::setupRequestingNodes() {
   if (!requests_off_) {
     std::vector<std::string> all_ips;
 
-    for (uint64_t i = 0; i < manager_.nodes_.GetN(); i++) {
+    for (uint32_t i = 0; i < manager_.nodes_.GetN(); i++) {
       auto app = manager_.nodes_.Get(i)->GetApplication(0)->GetObject<MinhtonApplication>();
 
       all_ips.push_back(app->getNodeInfo().getAddress());
@@ -107,7 +107,7 @@ void MinhtonManager::Scheduler::executeOneJoinByPosition(uint32_t level, uint32_
   }
 
   bool found_initialized_node_at_pos = false;
-  for (uint64_t join_to_index = 0; join_to_index < manager_.nodes_.GetN(); join_to_index++) {
+  for (uint32_t join_to_index = 0; join_to_index < manager_.nodes_.GetN(); join_to_index++) {
     auto app =
         manager_.nodes_.Get(join_to_index)->GetApplication(0)->GetObject<MinhtonApplication>();
 
@@ -191,7 +191,7 @@ void MinhtonManager::Scheduler::Scheduler::executeOneRandomJoin() {
 }
 
 // Join via Multicast
-void MinhtonManager::Scheduler::initiateJoinNowDiscover(uint64_t entering_node_index) {
+void MinhtonManager::Scheduler::initiateJoinNowDiscover(uint32_t entering_node_index) {
   auto entering_app =
       manager_.nodes_.Get(entering_node_index)->GetApplication(0)->GetObject<MinhtonApplication>();
 
@@ -201,8 +201,8 @@ void MinhtonManager::Scheduler::initiateJoinNowDiscover(uint64_t entering_node_i
   initiatePeerDiscoverEnvironmentAfterJoin(entering_app);
 }
 
-void MinhtonManager::Scheduler::initiateJoinNow(uint64_t node_to_join_to_index,
-                                                uint64_t entering_node_index) {
+void MinhtonManager::Scheduler::initiateJoinNow(uint32_t node_to_join_to_index,
+                                                uint32_t entering_node_index) {
   auto app_to_join_to = manager_.nodes_.Get(node_to_join_to_index)
                             ->GetApplication(0)
                             ->GetObject<MinhtonApplication>();
@@ -219,7 +219,7 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint32_t level, uint32
   std::cout << "\texecuteOneLeaveByPosition on (" << level << ":" << number << ") at "
             << Simulator::Now().GetMilliSeconds() << std::endl;
 
-  for (uint64_t leave_index = 0; leave_index < manager_.nodes_.GetN(); leave_index++) {
+  for (uint32_t leave_index = 0; leave_index < manager_.nodes_.GetN(); leave_index++) {
     auto app = manager_.nodes_.Get(leave_index)->GetApplication(0)->GetObject<MinhtonApplication>();
 
     if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number &&

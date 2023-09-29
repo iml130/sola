@@ -52,8 +52,8 @@ private:
   void executeOneFailByIndex(uint16_t index);
   void executeOneRandomFail();
 
-  void initiateJoinNow(uint64_t node_to_join_to_index, uint64_t entering_node_index);
-  void initiateJoinNowDiscover(uint64_t entering_node_index);
+  void initiateJoinNow(uint32_t node_to_join_to_index, uint32_t entering_node_index);
+  void initiateJoinNowDiscover(uint32_t entering_node_index);
   void initiateLeaveNow(uint64_t node_to_leave_to_index);
   void initiateFailureNow(uint64_t node_to_fail_to_index);
 
