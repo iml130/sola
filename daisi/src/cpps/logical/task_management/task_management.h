@@ -59,7 +59,7 @@ public:
   virtual bool addTask(const daisi::material_flow::Task &task) = 0;
 
   void addNotifyTaskAssignmentCallback(std::function<void(void)> callback) {
-    task_assignment_callbacks_.push_back(callback);
+    task_assignment_callbacks_.push_back(std::move(callback));
   }
 
   void clearNotifyTaskAssignmentCallback() { task_assignment_callbacks_.clear(); }

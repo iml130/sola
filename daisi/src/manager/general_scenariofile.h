@@ -26,8 +26,7 @@
 namespace daisi {
 
 struct GeneralScenariofile {
-  explicit GeneralScenariofile(const std::string &path_to_file)
-      : file_path_(std::move(path_to_file)) {
+  explicit GeneralScenariofile(std::string path_to_file) : file_path_(std::move(path_to_file)) {
     loadFileContent();
     node = YAML::Load(file_content_);
 

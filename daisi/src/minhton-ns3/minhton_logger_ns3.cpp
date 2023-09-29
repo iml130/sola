@@ -444,7 +444,7 @@ void MinhtonLoggerNs3::logNeighbor(const LoggerInfoAddNeighbor &info) {
 MinhtonLoggerNs3::MinhtonLoggerNs3(LogDeviceApp log_device_application, LogFunction log,
                                    LogEvent log_event)
     : LoggerInterface("NOT-KNOWN-YET"),
-      log_device_application_(log_device_application),
+      log_device_application_(std::move(log_device_application)),
       log_(std::move(log)),
       log_event_(std::move(log_event)) {}
 

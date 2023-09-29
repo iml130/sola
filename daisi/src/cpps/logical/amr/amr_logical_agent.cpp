@@ -164,7 +164,7 @@ void AmrLogicalAgent::checkSendingNextTaskToPhysical() {
 
 void AmrLogicalAgent::sendToPhysical(std::string payload) {
   daisi::cpps::CppsTCPMessage message;
-  message.addMessage({payload, 0});
+  message.addMessage({std::move(payload), 0});
 
   auto packet = ns3::Create<ns3::Packet>();
   packet->AddHeader(message);
