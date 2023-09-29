@@ -19,7 +19,7 @@ namespace minhton {
 
 class SearchExactAlgorithmGeneral : public SearchExactAlgorithmInterface {
 public:
-  SearchExactAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
+  explicit SearchExactAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
       : SearchExactAlgorithmInterface(access){};
 
   ~SearchExactAlgorithmGeneral() override = default;

@@ -16,7 +16,7 @@ namespace minhton {
 
 class BootstrapAlgorithmInterface : public AlgorithmInterface {
 public:
-  BootstrapAlgorithmInterface(std::shared_ptr<AccessContainer> access)
+  explicit BootstrapAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
 
   ~BootstrapAlgorithmInterface() override = default;

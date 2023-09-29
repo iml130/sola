@@ -17,7 +17,8 @@ namespace minhton {
 
 class LeaveAlgorithmInterface : public AlgorithmInterface {
 public:
-  LeaveAlgorithmInterface(std::shared_ptr<AccessContainer> access) : AlgorithmInterface(access){};
+  explicit LeaveAlgorithmInterface(std::shared_ptr<AccessContainer> access)
+      : AlgorithmInterface(access){};
 
   ~LeaveAlgorithmInterface() override = default;
 
