@@ -40,7 +40,7 @@ public:
   bool hasSpawnTime() const;
   void setSpawnTime(const util::Duration &spawn_time);
 
-  SERIALIZE(earliest_start_, latest_finish_, spawn_time_)
+  SERIALIZE(earliest_start_, latest_finish_, spawn_time_);
 
 private:
   util::Duration earliest_start_ = 0.0;

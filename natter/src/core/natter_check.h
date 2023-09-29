@@ -13,6 +13,7 @@
 #define NATTER_CHECK(req, msg)     \
   if (!(req)) {                    \
     throw std::runtime_error(msg); \
-  }
+  }                                \
+  static_assert(true)
 
 #endif  // NATTER_NATTER_CHECK_H_

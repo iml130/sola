@@ -28,7 +28,7 @@ public:
 
   NodeData::NodesWithAttributes getFulfillingNodesWithAttributes() const;
 
-  SERIALIZE(header_, nodes_with_attributes_)
+  SERIALIZE(header_, nodes_with_attributes_);
 
   MessageFindQueryAnswer() = default;
 

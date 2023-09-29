@@ -49,7 +49,7 @@ public:
   std::set<FunctionalityType> getFunctionalities() const { return functionalities_; }
 
   SERIALIZE(device_type_, friendly_name_, functionalities_, manufacturer_, model_name_,
-            model_number_)
+            model_number_);
 
 private:
   std::string device_type_ = "none";

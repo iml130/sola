@@ -20,7 +20,7 @@ class MessageJoinAcceptAck : public MinhtonMessage<MessageJoinAcceptAck> {
 public:
   explicit MessageJoinAcceptAck(MinhtonMessageHeader header);
 
-  SERIALIZE(header_)
+  SERIALIZE(header_);
 
   MessageJoinAcceptAck() = default;
 

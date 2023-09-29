@@ -35,7 +35,7 @@ public:
   bool getShouldAcknowledge() const;
 
   SERIALIZE(header_, removed_position_node_, replaced_position_node_, new_l_node_info_,
-            should_acknowledge_)
+            should_acknowledge_);
 
   MessageReplacementUpdate() = default;
 

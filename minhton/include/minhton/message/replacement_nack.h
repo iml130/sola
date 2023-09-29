@@ -20,7 +20,7 @@ class MessageReplacementNack : public MinhtonMessage<MessageReplacementNack> {
 public:
   explicit MessageReplacementNack(MinhtonMessageHeader header);
 
-  SERIALIZE(header_)
+  SERIALIZE(header_);
 
   MessageReplacementNack() = default;
 

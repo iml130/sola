@@ -45,7 +45,7 @@ public:
   void setOrderState(cpps::OrderStates state) { state_ = state; }
   cpps::OrderStates getOrderState() const { return state_; }
 
-  SERIALIZE(uuid_, pickup_transport_order_steps_, delivery_transport_order_step_)
+  SERIALIZE(uuid_, pickup_transport_order_steps_, delivery_transport_order_step_);
 
 private:
   cpps::OrderStates state_ = cpps::OrderStates::kInvalid;

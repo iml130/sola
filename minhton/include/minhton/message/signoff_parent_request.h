@@ -19,7 +19,7 @@ class MessageSignoffParentRequest : public MinhtonMessage<MessageSignoffParentRe
 public:
   explicit MessageSignoffParentRequest(MinhtonMessageHeader header);
 
-  SERIALIZE(header_)
+  SERIALIZE(header_);
 
   MessageSignoffParentRequest() = default;
 

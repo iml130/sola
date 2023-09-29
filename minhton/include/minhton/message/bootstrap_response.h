@@ -23,7 +23,7 @@ public:
 
   minhton::NodeInfo getNodeToJoin() const;
 
-  SERIALIZE(header_, node_to_join_)
+  SERIALIZE(header_, node_to_join_);
 
   MessageBootstrapResponse() = default;
 

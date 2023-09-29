@@ -33,7 +33,7 @@ public:
 
   std::vector<FunctionalityVariant> getFunctionalities() const { return functionalities_; }
   amr::AmrStaticAbility getAbilityRequirement() const { return ability_requirement_; }
-  SERIALIZE(functionalities_, ability_requirement_)
+  SERIALIZE(functionalities_, ability_requirement_);
 
 private:
   std::vector<FunctionalityVariant> functionalities_;

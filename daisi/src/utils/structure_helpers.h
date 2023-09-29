@@ -69,7 +69,7 @@ struct Pose {
 
   Position position;
   double orientation = 0.0;
-  SERIALIZE(position, orientation)
+  SERIALIZE(position, orientation);
 };
 
 }  // namespace daisi::util

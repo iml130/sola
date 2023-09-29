@@ -25,7 +25,7 @@ public:
   SearchProgress getSearchProgress() const;
   uint16_t getHopCount() const;
 
-  SERIALIZE(header_, entering_node_, search_progress_, hop_count_)
+  SERIALIZE(header_, entering_node_, search_progress_, hop_count_);
 
   MessageJoin() = default;
 

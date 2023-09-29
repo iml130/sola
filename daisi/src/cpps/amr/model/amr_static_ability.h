@@ -47,7 +47,7 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os, const AmrStaticAbility &a);
 
-  SERIALIZE(load_carrier_, max_payload_weight_kg_)
+  SERIALIZE(load_carrier_, max_payload_weight_kg_);
 
 private:
   LoadCarrier load_carrier_;

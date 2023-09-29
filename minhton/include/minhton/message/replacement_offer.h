@@ -19,7 +19,7 @@ class MessageReplacementOffer : public MinhtonMessage<MessageReplacementOffer> {
 public:
   explicit MessageReplacementOffer(MinhtonMessageHeader header);
 
-  SERIALIZE(header_)
+  SERIALIZE(header_);
 
   MessageReplacementOffer() = default;
 

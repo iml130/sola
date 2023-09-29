@@ -24,7 +24,7 @@ public:
   NodeInfo getRemovedPositionNode() const;
   bool getShouldAcknowledge() const;
 
-  SERIALIZE(header_, removed_position_node_, acknowledge_)
+  SERIALIZE(header_, removed_position_node_, acknowledge_);
 
   MessageRemoveNeighbor() = default;
 

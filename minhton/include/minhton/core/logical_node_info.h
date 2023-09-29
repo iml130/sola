@@ -220,7 +220,7 @@ public:
   friend bool operator>(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
   friend bool operator>=(const minhton::LogicalNodeInfo &p1, const minhton::LogicalNodeInfo &p2);
 
-  SERIALIZE(level_, number_, fanout_, uuid_, initialized_)
+  SERIALIZE(level_, number_, fanout_, uuid_, initialized_);
 
 private:
   uint32_t level_ = 0;

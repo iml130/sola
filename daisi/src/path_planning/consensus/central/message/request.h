@@ -26,7 +26,7 @@
 namespace daisi::path_planning::consensus {
 //! Request message from a pickup station to the central server
 struct Request {
-  SERIALIZE(request_id, earliest_possible_start_ms, intersection_times)
+  SERIALIZE(request_id, earliest_possible_start_ms, intersection_times);
   uint32_t request_id;  //!< Per station unique request id to match requests and responses
   uint64_t earliest_possible_start_ms;  //!< Earliest possible time at which the AGV can start
   std::vector<std::tuple<float, float, double>>

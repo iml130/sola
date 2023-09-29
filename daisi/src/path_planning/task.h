@@ -52,7 +52,7 @@ public:
   void setName(const std::string &name);
   std::string getName() const;
 
-  SERIALIZE(uuid_, from_x_, from_y_, to_x_, to_y_, connection_, name_)
+  SERIALIZE(uuid_, from_x_, from_y_, to_x_, to_y_, connection_, name_);
 
 private:
   std::string uuid_;
