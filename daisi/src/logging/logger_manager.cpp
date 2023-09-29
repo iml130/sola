@@ -116,7 +116,7 @@ void LoggerManager::logTestSetup(const LoggerInfoTestSetup &info) {
       /* Additonal */ info.additional_parameters.c_str());
   sqlite_helper_.execute(getInsertStatement(kGeneral, t));
 
-  for (auto general_update : general_updates_) {
+  for (const auto &general_update : general_updates_) {
     sqlite_helper_.execute(general_update);
   }
   general_updates_.clear();

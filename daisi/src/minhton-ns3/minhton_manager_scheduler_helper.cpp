@@ -655,12 +655,12 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
 
   // setting adjacents
   for (uint64_t sort_index = 1; sort_index < index_node.size() - 1; sort_index++) {
-    auto adj_left = std::get<1>(index_node[sort_index - 1]);
-    auto adj_right = std::get<1>(index_node[sort_index + 1]);
+    minhton::NodeInfo adj_left = std::get<1>(index_node[sort_index - 1]);
+    minhton::NodeInfo adj_right = std::get<1>(index_node[sort_index + 1]);
 
     uint64_t info_index = std::get<0>(index_node[sort_index]);
-    std::get<2>(info[info_index]) = adj_left;
-    std::get<3>(info[info_index]) = adj_right;
+    std::get<2>(info[info_index]) = std::move(adj_left);
+    std::get<3>(info[info_index]) = std::move(adj_right);
   }
 
   // leftmost has only adj right
@@ -737,7 +737,7 @@ void MinhtonManager::Scheduler::initiateNodeContent(Ptr<MinhtonApplication> app)
     minhton::NodeData::Value initial_value = node_attr.getRandomContent();
     minhton::NodeData::ValueType value_type = node_attr.value_type;
 
-    insert_entries.push_back({node_attr.name, initial_value, value_type});
+    insert_entries.emplace_back(node_attr.name, initial_value, value_type);
 
     if (value_type == minhton::NodeData::ValueType::kValueDynamic) {
       uint64_t update_delay = node_attr.update_delay_distribution(daisi::global_random_engine);

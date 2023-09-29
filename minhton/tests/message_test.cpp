@@ -88,7 +88,7 @@ TEST_CASE("MessageVariant SearchExact", "[MessageVariant][SearchExact]") {
   REQUIRE(message.getHeader().getMessageType() == MessageType::kSearchExact);
 
   MinhtonMessageHeader query_header = std::visit(
-      [](auto &&msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *message.getQuery());
+      [](const auto &msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *message.getQuery());
   REQUIRE(query_header.getMessageType() == MessageType::kJoin);
 
   REQUIRE(message.getDestinationNode().getLevel() == 32);

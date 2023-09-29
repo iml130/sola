@@ -44,7 +44,7 @@ bool IteratedAuctionAssignmentParticipant::process(const CallForProposal &call_f
   calculateBids(state);
 
   if (state.hasEntries()) {
-    initiator_auction_state_mapping_.emplace(initiator_connection, state);
+    initiator_auction_state_mapping_.try_emplace(initiator_connection, state);
 
     submitBid(initiator_connection);
   }

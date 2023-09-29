@@ -1025,8 +1025,8 @@ TEST_CASE("calculatePhases single functionality (neglect rotation cost, neglect 
       AmrMobilityHelper::calculatePhases(0, start_pose, fail_functionality, description1, topology),
       std::invalid_argument);
 
-  for (auto kinematics : kinematics_list) {
-    for (auto load_handling : load_handling_list) {
+  for (const auto &kinematics : kinematics_list) {
+    for (const auto &load_handling : load_handling_list) {
       AmrDescription description(1, kinematics, properties, physical_properties, load_handling);
       for (auto functionality : functionality_list) {
         auto phases =
@@ -1044,12 +1044,12 @@ TEST_CASE("calculatePhases single functionality (neglect rotation cost, neglect 
         double total_phases_distance = 0;
         daisi::util::Position start_pos = start_pose.position;
         daisi::util::Position last_pos = start_pos;
-        for (auto phase : phases) {
+        for (const auto &phase : phases) {
           total_phases_distance += (phase.position - last_pos).GetLength();
           last_pos = phase.position;
         }
         if (std::holds_alternative<Navigate>(functionality)) {
-          auto navigate = std::get<Navigate>(functionality);
+          const auto &navigate = std::get<Navigate>(functionality);
           REQUIRE(phases.size() <= 4 + navigate.waypoints.size());
           unsigned long i = 0;
           for (auto wp : navigate.waypoints) {

@@ -30,7 +30,7 @@ struct Gaussian {
   uint32_t mean;
   uint32_t sigma;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Uniform {
@@ -39,7 +39,7 @@ struct Uniform {
   uint32_t min;
   uint32_t max;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct ConstantTime {
@@ -47,7 +47,7 @@ struct ConstantTime {
 
   uint64_t time;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 }  // namespace daisi::minhton_ns3

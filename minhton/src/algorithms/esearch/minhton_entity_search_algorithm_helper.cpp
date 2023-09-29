@@ -206,7 +206,7 @@ void MinhtonEntitySearchAlgorithm::processSearchExactFailure(const MessageSearch
   auto query = msg.getQuery();
   uint16_t fanout = getRoutingInfo()->getFanout();
   MinhtonMessageHeader query_header =
-      std::visit([](auto &&msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
+      std::visit([](const auto &msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
 
   if (query_header.getMessageType() == MessageType::kFindQueryRequest ||
       query_header.getMessageType() == MessageType::kAttributeInquiryAnswer) {
@@ -217,7 +217,7 @@ void MinhtonEntitySearchAlgorithm::processSearchExactFailure(const MessageSearch
     // dsn does not exist -> sending to its parent instead
 
     NodeInfo new_dsn_target(parent_level, parent_number, fanout);
-    std::visit([new_dsn_target](auto &&query_msg) { query_msg.setTarget(new_dsn_target); }, *query);
+    std::visit([new_dsn_target](auto &query_msg) { query_msg.setTarget(new_dsn_target); }, *query);
 
     access_->perform_search_exact(new_dsn_target, query);
 

@@ -20,7 +20,7 @@
 
 namespace daisi::minhton_ns3 {
 
-void ValidityThreshold::parse(YAML::Node node) {
+void ValidityThreshold::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -30,11 +30,11 @@ void ValidityThreshold::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid request validty threshold");
 }
 
-void Absolute::parse(YAML::Node node) { SERIALIZE_VAR(number); }
+void Absolute::parse(const YAML::Node &node) { SERIALIZE_VAR(number); }
 
-void RandomNode::parse(YAML::Node node) { SERIALIZE_VAR(percentage); }
+void RandomNode::parse(const YAML::Node &node) { SERIALIZE_VAR(percentage); }
 
-void Nodes::parse(YAML::Node node) {
+void Nodes::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -45,9 +45,9 @@ void Nodes::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid request nodes type");
 }
 
-void StaticTime::parse(YAML::Node node) { SERIALIZE_VAR(time); }
+void StaticTime::parse(const YAML::Node &node) { SERIALIZE_VAR(time); }
 
-void Frequency::parse(YAML::Node node) {
+void Frequency::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -58,9 +58,9 @@ void Frequency::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid request frequency type");
 }
 
-void Static::parse(YAML::Node node) { SERIALIZE_VAR(value); }
+void Static::parse(const YAML::Node &node) { SERIALIZE_VAR(value); }
 
-void Depth::parse(YAML::Node node) {
+void Depth::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -71,7 +71,7 @@ void Depth::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid request depth type");
 }
 
-void Requests::parse(YAML::Node node) {
+void Requests::parse(const YAML::Node &node) {
   SERIALIZE_VAR(validity_threshold);
   SERIALIZE_VAR(nodes);
   SERIALIZE_VAR(frequency);

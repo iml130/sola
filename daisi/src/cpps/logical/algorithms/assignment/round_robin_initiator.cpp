@@ -120,7 +120,7 @@ void RoundRobinInitiator::distributeMFTasks(uint32_t index, bool previously_allo
   } else {
     unallocated_tasks_per_mf_[mf_id] = tasks;
   }
-  for (auto &task : tasks) {
+  for (const auto &task : tasks) {
     assignTask(task);
   }
   ns3::Simulator::Schedule(ns3::Seconds(delays_.wait_to_receive_assignment_response),
@@ -189,7 +189,7 @@ void RoundRobinInitiator::processAssignmentAcceptions(uint32_t index) {
 
   auto distributed_tasks = unallocated_tasks_per_mf_[mf_id];
   // remove tasks where we received an acception for
-  for (auto &message : assignment_acceptions_) {
+  for (const auto &message : assignment_acceptions_) {
     auto task_it = std::find_if(distributed_tasks.begin(), distributed_tasks.end(),
                                 [&message](const material_flow::Task &task) -> bool {
                                   return task.getUuid() == message.getTaskUuid();

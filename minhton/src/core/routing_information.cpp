@@ -81,9 +81,8 @@ void RoutingInformation::initParentAndChildren() {
 
   this->children_ = std::vector<minhton::NodeInfo>();
   for (uint32_t i = 0; i < this->self_node_info_.getFanout(); i++) {
-    this->children_.push_back(minhton::NodeInfo((uint32_t)std::get<0>(children_pos[i]),
-                                                (uint32_t)std::get<1>(children_pos[i]),
-                                                this->self_node_info_.getFanout()));
+    this->children_.emplace_back(std::get<0>(children_pos[i]), std::get<1>(children_pos[i]),
+                                 this->self_node_info_.getFanout());
   }
 }
 

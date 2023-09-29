@@ -25,7 +25,7 @@ struct MaterialFlowDescriptionScenario {
   std::string mfdl_program;
   std::string friendly_name;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(friendly_name);
     SERIALIZE_VAR(mfdl_program);
   }

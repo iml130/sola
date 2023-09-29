@@ -108,9 +108,9 @@ void AmrPhysicalAsset::readSocket(ns3::Ptr<ns3::Socket> socket) {
   packet->RemoveHeader(header);
   for (const auto &msg : header.getMessages()) {
     amr::Message m = amr::deserialize(msg.payload);
-    if (auto topology = std::get_if<Topology>(&m))
+    if (const auto topology = std::get_if<Topology>(&m))
       connector_.setTopology(*topology);
-    else if (auto order_info = std::get_if<AmrOrderInfo>(&m))
+    else if (const auto order_info = std::get_if<AmrOrderInfo>(&m))
       processMessageOrderInfo(*order_info);
     else
       throw std::runtime_error("invalid packet type for physical amr");
@@ -128,7 +128,7 @@ void AmrPhysicalAsset::sendDescriptionNs3() {
 
 void AmrPhysicalAsset::processMessageOrderInfo(const AmrOrderInfo &order_info) {
   DAISI_CHECK(functionality_queue_.empty(), "Should not get new task before last task is finished");
-  for (auto &functionality : order_info.getFunctionalities())
+  for (const auto &functionality : order_info.getFunctionalities())
     functionality_queue_.push_back(functionality);
   process_event(ReceivedOrder());
   sendOrderUpdateNs3();

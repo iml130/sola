@@ -27,7 +27,7 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
     std::function<uint32_t(const MessageVariant &)> save_target =
         [&target_node](const MessageVariant &msg) mutable {
           target_node =
-              std::visit([](auto &&message) -> NodeInfo { return message.getTarget(); }, msg);
+              std::visit([](const auto &message) -> NodeInfo { return message.getTarget(); }, msg);
           return 1;
         };
     access->send = save_target;
@@ -151,7 +151,7 @@ TEST_CASE("MinhtonSearchExactAlgorithm", "[MinhtonSearchExactAlgorithm][performS
     std::function<uint32_t(const MessageVariant &)> save_target =
         [&target_node](const MessageVariant &msg) mutable {
           target_node =
-              std::visit([](auto &&message) -> NodeInfo { return message.getTarget(); }, msg);
+              std::visit([](const auto &message) -> NodeInfo { return message.getTarget(); }, msg);
           return 1;
         };
     access->send = save_target;

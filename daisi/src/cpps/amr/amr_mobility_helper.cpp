@@ -36,9 +36,9 @@ util::Duration AmrMobilityHelper::estimateDuration(
   for (auto f : functionalities) {
     total_duration +=
         estimateDuration(util::Pose(start, 0), f, description, topology, check_positioning);
-    if (auto move_to = std::get_if<MoveTo>(&f))
+    if (const auto move_to = std::get_if<MoveTo>(&f))
       start = move_to->destination;
-    else if (auto navigate = std::get_if<Navigate>(&f))
+    else if (const auto navigate = std::get_if<Navigate>(&f))
       start = navigate->waypoints.back();
   }
   return total_duration;
@@ -140,26 +140,23 @@ AmrMobilityStatus AmrMobilityHelper::calculateMobilityStatus(
 void AmrMobilityHelper::arePositionsInTopology(const FunctionalityVariant &functionality,
                                                const Topology &topology) {
   if (auto load = std::get_if<Load>(&functionality)) {
-    util::Position p = load->destination;
-    if (!topology.isPositionInTopology(p))
+    if (!topology.isPositionInTopology(load->destination))
       throw std::invalid_argument("destination of Deliver is invalid");
     return;
   }
   if (auto move_to = std::get_if<MoveTo>(&functionality)) {
-    util::Position p = move_to->destination;
-    if (!topology.isPositionInTopology(p))
+    if (!topology.isPositionInTopology(move_to->destination))
       throw std::invalid_argument("destination of MoveTo is invalid");
     return;
   }
   if (auto unload = std::get_if<Unload>(&functionality)) {
-    util::Position p = unload->destination;
-    if (!topology.isPositionInTopology(p))
+    if (!topology.isPositionInTopology(unload->destination))
       throw std::invalid_argument("destination of PickUp is invalid");
     return;
   }
   if (auto navigate = std::get_if<Navigate>(&functionality)) {
-    std::vector<util::Position> wpts = navigate->waypoints;
-    if (std::any_of(wpts.begin(), wpts.end(), [topology](const util::Position &p) {
+    const std::vector<util::Position> wpts = navigate->waypoints;
+    if (std::any_of(wpts.begin(), wpts.end(), [&topology](const util::Position &p) {
           return !topology.isPositionInTopology(p);
         }))
       throw std::invalid_argument("waypoint of Navigate is invalid");
@@ -169,7 +166,7 @@ void AmrMobilityHelper::arePositionsInTopology(const FunctionalityVariant &funct
 
 void AmrMobilityHelper::arePositionsInTopology(
     const std::vector<FunctionalityVariant> &functionalities, const Topology &topology) {
-  for (auto f : functionalities)
+  for (const auto &f : functionalities)
     arePositionsInTopology(f, topology);
 }
 
@@ -514,7 +511,7 @@ AmrMobilityHelper::calculateMetricsByDomain(
   for (auto const &functionality : functionalities) {
     std::visit(
         [&last_pos, &functionality, &description, &topology, &loaded, &loaded_distance,
-         &loaded_time, &empty_distance, &empty_time, &action_time](auto &&arg) {
+         &loaded_time, &empty_distance, &empty_time, &action_time](const auto &arg) {
           using T = std::decay_t<decltype(arg)>;
 
           if constexpr (std::is_same_v<T, MoveTo>) {

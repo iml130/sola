@@ -35,7 +35,7 @@ struct SpawnDistributionScenario {
   double mean = 0.0;
   double sigma = 0.0;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(type);
 
     if (isAbsolute()) {
@@ -62,7 +62,7 @@ struct SpawnInfoScenario {
 
   SpawnDistributionScenario spawn_distribution;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(entity);
     SERIALIZE_VAR(friendly_name);
     SERIALIZE_NS3_TIME(start_time);

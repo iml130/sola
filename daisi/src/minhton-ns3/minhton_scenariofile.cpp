@@ -20,7 +20,7 @@
 
 namespace daisi::minhton_ns3 {
 
-void Timeouts::parse(YAML::Node node) {
+void Timeouts::parse(const YAML::Node &node) {
   SERIALIZE_VAR(bootstrap_response);
   SERIALIZE_VAR(join_response);
   SERIALIZE_VAR(join_accept_ack_response);
@@ -30,7 +30,7 @@ void Timeouts::parse(YAML::Node node) {
   SERIALIZE_VAR(inquiry_aggregation);
 }
 
-void Algorithms::parse(YAML::Node node) {
+void Algorithms::parse(const YAML::Node &node) {
   SERIALIZE_VAR(join);
   SERIALIZE_VAR(leave);
   SERIALIZE_VAR(search_exact);
@@ -38,12 +38,12 @@ void Algorithms::parse(YAML::Node node) {
   SERIALIZE_VAR(bootstrap);
 }
 
-void PeerDiscoveryEnvironment::parse(YAML::Node node) {
+void PeerDiscoveryEnvironment::parse(const YAML::Node &node) {
   SERIALIZE_VAR(attributes);
   SERIALIZE_VAR(requests);
 }
 
-void MinhtonScenarioSequenceStep::parse(YAML::Node node) {
+void MinhtonScenarioSequenceStep::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
   bool handled = false;

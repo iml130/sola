@@ -55,7 +55,7 @@ AuctionParticipantState::AuctionParticipantState(
     const std::vector<daisi::material_flow::Task> &tasks) {
   for (const auto &task : tasks) {
     AuctionParticipantTaskState task_state(task);
-    task_state_mapping.emplace(task.getUuid(), task_state);
+    task_state_mapping.try_emplace(task.getUuid(), task_state);
   }
 }
 

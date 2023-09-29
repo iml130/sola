@@ -110,7 +110,7 @@ std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner()
               [](const auto &b1, const auto &b2) { return b1 > b2; });
 
     auto best_bid = temp_bids.front();
-    const auto task_uuid = best_bid.getTaskUuid();
+    const std::string &task_uuid = best_bid.getTaskUuid();
 
     removeBidsForTask(temp_bids, task_uuid);
 

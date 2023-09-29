@@ -41,7 +41,7 @@ struct Timeouts {
   uint64_t dsn_aggregation;
   uint64_t inquiry_aggregation;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 
   /// @brief Convert this struct to a TimeoutLengthsContainer
   minhton::TimeoutLengthsContainer convert() const {
@@ -64,7 +64,7 @@ struct Algorithms {
   std::string response;
   std::string bootstrap;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 
   /// @brief Convert this struct to a AlgorithmTypesContainer
   minhton::AlgorithmTypesContainer convert() const {
@@ -106,7 +106,7 @@ struct PeerDiscoveryEnvironment {
   std::vector<PeerDiscoveryAttribute> attributes;
   Requests requests;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct MinhtonScenarioSequenceStep {
@@ -114,7 +114,7 @@ struct MinhtonScenarioSequenceStep {
                MixedExecution, ValidateLeave, FindQuery, Time, StaticBuild, RequestCountdown>
       step;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct MinhtonScenariofile : public GeneralScenariofile {

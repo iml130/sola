@@ -26,12 +26,12 @@ void AmrMobilityModelNs3::execute(const FunctionalityVariant &functionality,
                                   const AmrDescription &description, const Topology &topology,
                                   FunctionalityDoneCallback notifyDone) {
   if (phases_.empty()) {
-    phases_.push_back(AmrMobilityStatus());
+    phases_.emplace_back();
   }
   std::vector<AmrMobilityStatus> new_phases =
       AmrMobilityHelper::calculatePhases(now(), getPose(), functionality, description, topology);
   phases_.insert(phases_.end(), new_phases.begin(), new_phases.end());
-  notifyDone_ = notifyDone;
+  notifyDone_ = std::move(notifyDone);
   current_functionality_ = functionality;
   startNextPhase();
 }

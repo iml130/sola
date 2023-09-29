@@ -33,7 +33,7 @@ namespace daisi::cpps {
 
 class AmrMobilityModelNs3 : public ns3::MobilityModel {
 public:
-  AmrMobilityModelNs3() { phases_.push_back(AmrMobilityStatus()); }
+  AmrMobilityModelNs3() { phases_.emplace_back(); }
 
   ~AmrMobilityModelNs3() override = default;
 

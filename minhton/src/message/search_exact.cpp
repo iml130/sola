@@ -18,7 +18,7 @@ MessageSearchExact::MessageSearchExact(MinhtonMessageHeader header, NodeInfo des
 
   MessageLoggingAdditionalInfo logging_info{};
   MessageType type = std::visit(
-      [](auto &&msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
+      [](const auto &msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
   logging_info.content = "query_destination=(" +
                          getDestinationNode().getLogicalNodeInfo().getString() +
                          "), query_msg_type=" + getMessageTypeString(type);

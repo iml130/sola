@@ -18,7 +18,7 @@ MessageSearchExactFailure::MessageSearchExactFailure(MinhtonMessageHeader header
   MessageLoggingAdditionalInfo logging_info{getDestinationNode().getLogicalNodeInfo().getUuid(), "",
                                             ""};
   MessageType type = std::visit(
-      [](auto &&msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
+      [](const auto &msg) -> MessageType { return msg.getHeader().getMessageType(); }, *query_);
   logging_info.content = "failure_query_msg_type=" + getMessageTypeString(type);
   header_.setAdditionalLoggingInfo(logging_info);
 

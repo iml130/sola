@@ -209,7 +209,7 @@ bool StnTaskManagement::addTask(
   }
 
   if (added) {
-    for (auto &callback : task_assignment_callbacks_) {
+    for (const auto &callback : task_assignment_callbacks_) {
       callback();
     }
     return true;
@@ -446,7 +446,7 @@ daisi::util::Duration StnTaskManagement::calcOrderDurationForInsert(
     daisi::util::Position previous_position(-1, -1);
     auto funcs = materialFlowToFunctionalities({order}, previous_position);
 
-    if (auto move_to = std::get_if<MoveTo>(&funcs.front())) {
+    if (const auto move_to = std::get_if<MoveTo>(&funcs.front())) {
       auto start_position = move_to->destination;
       funcs.erase(funcs.begin());
 

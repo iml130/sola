@@ -29,7 +29,7 @@ bool DistributedData::insert(NodeData::Key key,
   std::queue<uint64_t> update_queue;
   update_queue.push(update_timestamp);
 
-  bool update_inserted = update_timestamps_.insert({key, update_queue}).second;
+  bool update_inserted = update_timestamps_.try_emplace(key, update_queue).second;
 
   return data_inserted && update_inserted;
 }
