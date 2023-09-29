@@ -22,7 +22,7 @@ namespace minhton {
 MinhtonEntitySearchAlgorithm::MinhtonEntitySearchAlgorithm(std::shared_ptr<AccessContainer> access)
     : EntitySearchAlgorithmInterface(access),
       dsn_handler_(access->routing_info,
-                   [&](const NodeInfo &node) { requestAttributeInformation(node); }) {
+                   [this](const NodeInfo &node) { requestAttributeInformation(node); }) {
   value_time_validity_threshold_at_find_query_request_ = 5000;
 
   value_time_validity_threshold_after_inquiry_aggregation_ =

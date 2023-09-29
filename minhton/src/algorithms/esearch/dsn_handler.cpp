@@ -16,14 +16,15 @@ DSNHandler::DSNHandler(std::shared_ptr<RoutingInformation> routing_info,
                        std::function<void(const NodeInfo &)> request_attribute_inquiry_callback)
     : routing_info_(routing_info),
       request_attribute_inquiry_callback_(std::move(request_attribute_inquiry_callback)) {
-  auto neighbor_change_callback =
-      [&](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
-          [[maybe_unused]] const minhton::NodeInfo &old_node, [[maybe_unused]] uint16_t position) {
-        onNeighborChangeNotification(new_node, relationship);
-      };
+  auto neighbor_change_callback = [this](const minhton::NodeInfo &new_node,
+                                         NeighborRelationship relationship,
+                                         [[maybe_unused]] const minhton::NodeInfo &old_node,
+                                         [[maybe_unused]] uint16_t position) {
+    onNeighborChangeNotification(new_node, relationship);
+  };
 
-  auto node_info_change_callback = [&](const minhton::NodeInfo &previous_node_info,
-                                       const minhton::NodeInfo &new_node_info) {
+  auto node_info_change_callback = [this](const minhton::NodeInfo &previous_node_info,
+                                          const minhton::NodeInfo &new_node_info) {
     onNodeInfoChangeNotification(previous_node_info, new_node_info);
   };
 

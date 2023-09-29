@@ -17,7 +17,7 @@
 
 namespace sola {
 ManagementOverlayMinhton::ManagementOverlayMinhton(const minhton::ConfigNode &config)
-    : node_(std::make_unique<minhton::Minhton>([&](const minhton::ConnectionInfo & /*neighbor*/) {},
+    : node_(std::make_unique<minhton::Minhton>([](const minhton::ConnectionInfo & /*neighbor*/) {},
                                                config)) {}
 
 void ManagementOverlayMinhton::insert(std::vector<Entry> entries) {

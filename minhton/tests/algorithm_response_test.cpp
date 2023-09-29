@@ -107,7 +107,8 @@ TEST_CASE("ResponseAlgorithmGeneral processGetNeighbors",
   NodeInfo sent_msg_target;
   std::vector<NodeInfo> sent_msg_requested_neighbors;
   std::function<uint32_t(const MessageVariant &)> save_target =
-      [&](const MessageVariant &msg) mutable {
+      [&sent_msg_sender, &sent_msg_target,
+       &sent_msg_requested_neighbors](const MessageVariant &msg) mutable {
         auto sent_msg = std::get_if<MessageInformAboutNeighbors>(&msg);
 
         sent_msg_sender = sent_msg->getSender();

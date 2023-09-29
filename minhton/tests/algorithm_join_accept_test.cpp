@@ -614,7 +614,8 @@ TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJ
   NodeInfo sent_msg_target;
   NodeInfo sent_msg_entering_node;
   std::function<uint32_t(const MessageVariant &)> save_target =
-      [&](const MessageVariant &msg) mutable {
+      [&sent_msg_sender, &sent_msg_target,
+       &sent_msg_entering_node](const MessageVariant &msg) mutable {
         auto sent_msg = std::get_if<MessageJoin>(&msg);
 
         sent_msg_sender = sent_msg->getSender();
@@ -627,7 +628,7 @@ TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJ
 
   // to see what timeout was set
   TimeoutType set_timeout_type;
-  std::function<void(TimeoutType)> set_timeout = [&](TimeoutType type) mutable {
+  std::function<void(TimeoutType)> set_timeout = [&set_timeout_type](TimeoutType type) mutable {
     set_timeout_type = type;
     return 1;
   };
@@ -660,7 +661,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
     NodeInfo sent_msg_target;
     uint64_t ref_event_id;
     std::function<uint32_t(const MessageVariant &)> save_target =
-        [&](const MessageVariant &msg) mutable {
+        [&sent_msg_sender, &sent_msg_target, &ref_event_id](const MessageVariant &msg) mutable {
           auto sent_msg = std::get_if<MessageJoinAcceptAck>(&msg);
 
           sent_msg_sender = sent_msg->getSender();
@@ -672,10 +673,11 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
 
     // to see what timeout was set
     TimeoutType cancelled_timeout_type;
-    std::function<void(TimeoutType)> cancel_timeout = [&](TimeoutType type) mutable {
-      cancelled_timeout_type = type;
-      return 1;
-    };
+    std::function<void(TimeoutType)> cancel_timeout =
+        [&cancelled_timeout_type](TimeoutType type) mutable {
+          cancelled_timeout_type = type;
+          return 1;
+        };
     access->cancel_timeout = cancel_timeout;
 
     MinhtonJoinAlgorithmForTest join_algo(access);
@@ -734,7 +736,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
     NodeInfo sent_msg_target;
     uint64_t ref_event_id;
     std::function<uint32_t(const MessageVariant &)> save_target =
-        [&](const MessageVariant &msg) mutable {
+        [&sent_msg_sender, &sent_msg_target, &ref_event_id](const MessageVariant &msg) mutable {
           auto sent_msg = std::get_if<MessageJoinAcceptAck>(&msg);
 
           sent_msg_sender = sent_msg->getSender();
@@ -746,10 +748,11 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAccept", "[JoinAlgorithmGeneral][proc
 
     // to see what timeout was set
     TimeoutType cancelled_timeout_type;
-    std::function<void(TimeoutType)> cancel_timeout = [&](TimeoutType type) mutable {
-      cancelled_timeout_type = type;
-      return 1;
-    };
+    std::function<void(TimeoutType)> cancel_timeout =
+        [&cancelled_timeout_type](TimeoutType type) mutable {
+          cancelled_timeout_type = type;
+          return 1;
+        };
     access->cancel_timeout = cancel_timeout;
 
     MinhtonJoinAlgorithmForTest join_algo(access);
@@ -851,7 +854,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
     // to see what was sent, we can look at target_node
     std::vector<std::vector<NodeInfo>> update_neighbor_msg_contents;
     std::function<uint32_t(const MessageVariant &)> save_target =
-        [&](const MessageVariant &msg) mutable {
+        [&update_neighbor_msg_contents](const MessageVariant &msg) mutable {
           try {
             auto sent_msg = std::get_if<MessageUpdateNeighbors>(&msg);
 
@@ -871,10 +874,11 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
 
     // to see what timeout was set
     TimeoutType cancelled_timeout_type;
-    std::function<void(TimeoutType)> cancel_timeout = [&](TimeoutType type) mutable {
-      cancelled_timeout_type = type;
-      return 1;
-    };
+    std::function<void(TimeoutType)> cancel_timeout =
+        [&cancelled_timeout_type](TimeoutType type) mutable {
+          cancelled_timeout_type = type;
+          return 1;
+        };
     access->cancel_timeout = cancel_timeout;
 
     MinhtonJoinAlgorithmForTest join_algo(access);
@@ -975,7 +979,7 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
 
     std::vector<std::vector<NodeInfo>> update_neighbor_msg_contents;
     std::function<uint32_t(const MessageVariant &)> save_target =
-        [&](const MessageVariant &msg) mutable {
+        [&update_neighbor_msg_contents](const MessageVariant &msg) mutable {
           try {
             auto sent_msg = std::get_if<MessageUpdateNeighbors>(&msg);
 
@@ -995,10 +999,11 @@ TEST_CASE("JoinAlgorithmGeneral processJoinAcceptAck",
 
     // to see what timeout was set
     TimeoutType cancelled_timeout_type;
-    std::function<void(TimeoutType)> cancel_timeout = [&](TimeoutType type) mutable {
-      cancelled_timeout_type = type;
-      return 1;
-    };
+    std::function<void(TimeoutType)> cancel_timeout =
+        [&cancelled_timeout_type](TimeoutType type) mutable {
+          cancelled_timeout_type = type;
+          return 1;
+        };
     access->cancel_timeout = cancel_timeout;
 
     MinhtonJoinAlgorithmForTest join_algo(access);
@@ -1113,7 +1118,7 @@ TEST_CASE("MinhtonJoinAlgorithm performSendUpdateNeighbor",
     // to see what was sent, we can look at target_node
     std::vector<std::vector<NodeInfo>> update_neighbor_msg_contents;
     std::function<uint32_t(const MessageVariant &)> save_target =
-        [&](const MessageVariant &msg) mutable {
+        [&update_neighbor_msg_contents](const MessageVariant &msg) mutable {
           try {
             auto sent_msg = std::get_if<MessageUpdateNeighbors>(&msg);
 

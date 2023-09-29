@@ -414,7 +414,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::removeRoutingTableNeighborChi
     const minhton::NodeInfo node, std::vector<minhton::NodeInfo> neighbors) {
   auto routing_sequence = calcRoutingSequence(node.getLevel(), node.getFanout());
 
-  auto is_rt_neighbor_child_of_node = [&, node, routing_sequence](const minhton::NodeInfo &n) {
+  auto is_rt_neighbor_child_of_node = [&node, &routing_sequence](const minhton::NodeInfo &n) {
     return n.getLevel() == node.getLevel() + 1 &&
            std::find(routing_sequence.begin(), routing_sequence.end(),
                      std::abs(int((n.getNumber() / node.getFanout()) - node.getNumber()))) !=

@@ -37,7 +37,7 @@ void LeaveAlgorithmGeneral::process(const MessageVariant &msg) {
           },
           [this](const MessageRemoveNeighborAck &) { processRemoveNeighborAck(); },
           [this](const MessageUnlockNeighbor &message) { processUnlockNeighbor(message); },
-          [this](const MessageReplacementNack &) { /*Currently unhandled*/ },
+          [](const MessageReplacementNack &) { /*Currently unhandled*/ },
           [](auto & /*message*/) {
             throw AlgorithmException("Wrong Algorithm Interface process called");
           }},

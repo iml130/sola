@@ -513,7 +513,8 @@ AmrMobilityHelper::calculateMetricsByDomain(
 
   for (auto const &functionality : functionalities) {
     std::visit(
-        [&](auto &&arg) {
+        [&last_pos, &functionality, &description, &topology, &loaded, &loaded_distance,
+         &loaded_time, &empty_distance, &empty_time, &action_time](auto &&arg) {
           using T = std::decay_t<decltype(arg)>;
 
           if constexpr (std::is_same_v<T, MoveTo>) {

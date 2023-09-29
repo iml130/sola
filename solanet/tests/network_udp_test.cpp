@@ -41,10 +41,10 @@ void checkValidityIPv4(std::string ip) {
 }
 
 TEST_CASE("[NETWORK_UDP] Automatically fetch IP", "Automatically fetch IP") {
-  Network network1("", [&](const Message &) {});
+  Network network1("", [](const Message &) {});
   checkValidityIPv4(network1.getIP());
 
-  Network network2("", [&](const Message &) {});
+  Network network2("", [](const Message &) {});
   checkValidityIPv4(network2.getIP());
 
   REQUIRE(network1.getPort() != 0);
@@ -55,8 +55,10 @@ TEST_CASE("[NETWORK_UDP] Automatically fetch IP", "Automatically fetch IP") {
 TEST_CASE("[NETWORK_UDP] Single send/receive", "Single send/receive") {
   std::vector<Message> received_msgs1;
   std::vector<Message> received_msgs2;
-  Network network1("127.0.0.1", [&](const Message &msg) { received_msgs1.push_back(msg); });
-  Network network2("127.0.0.1", [&](const Message &msg) { received_msgs2.push_back(msg); });
+  Network network1("127.0.0.1",
+                   [&received_msgs1](const Message &msg) { received_msgs1.push_back(msg); });
+  Network network2("127.0.0.1",
+                   [&received_msgs2](const Message &msg) { received_msgs2.push_back(msg); });
 
   // Send from network1 to network2 and vice versa
   Message m1("127.0.0.1", network2.getPort(), "From network1 to network2");
@@ -73,8 +75,9 @@ TEST_CASE("[NETWORK_UDP] Single send/receive", "Single send/receive") {
 
 TEST_CASE("[NETWORK_UDP] Multiple send/receive", "Multiple send/receive") {
   std::vector<Message> received_msgs1;
-  Network network1("127.0.0.1", [&](const Message &msg) { received_msgs1.push_back(msg); });
-  Network network2("127.0.0.1", [&](const Message &) {});
+  Network network1("127.0.0.1",
+                   [&received_msgs1](const Message &msg) { received_msgs1.push_back(msg); });
+  Network network2("127.0.0.1", [](const Message &) {});
 
   // Send from network2 to network 1
   constexpr int message_count = 50;

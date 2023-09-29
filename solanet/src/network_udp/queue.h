@@ -51,7 +51,7 @@ public:
    */
   T pop() {
     std::unique_lock<std::mutex> lk(queue_mutex_);
-    if (queue_.empty()) cv_queue_.wait(lk, [&] { return !running_ || !queue_.empty(); });
+    if (queue_.empty()) cv_queue_.wait(lk, [this] { return !running_ || !queue_.empty(); });
 
     if (!running_) return {};  // Return empty message if we should stop
 

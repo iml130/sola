@@ -76,7 +76,7 @@ std::vector<FunctionalityVariant> materialFlowToFunctionalities(
 
   for (const auto &order : orders) {
     std::visit(
-        [&](auto &&arg) {
+        [&functionalities, &last_position, &order](auto &&arg) {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, daisi::material_flow::MoveOrder>) {
             handleMoveOrder(functionalities, last_position,
