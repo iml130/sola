@@ -20,7 +20,8 @@ public:
   MinhtonFindEndAlgorithm(std::shared_ptr<AccessContainer> access, bool join)
       : AlgorithmInterface(access), join_(join){};
 
-  void process(const MessageVariant &) override {}
+  void process(const MessageVariant &) override { /* nothing required */
+  }
 
   /// Helper method to send a message for forwarding the join / leave request to another node
   ///

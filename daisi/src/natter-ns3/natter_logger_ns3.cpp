@@ -282,10 +282,18 @@ NatterLoggerNs3::~NatterLoggerNs3() {
              current_time, uuid_.c_str()));
 }
 
-void NatterLoggerNs3::logCritical(const std::string & /*msg*/) const {}
-void NatterLoggerNs3::logWarning(const std::string & /*msg*/) const {}
-void NatterLoggerNs3::logInfo(const std::string & /*msg*/) const {}
-void NatterLoggerNs3::logDebug(const std::string & /*msg*/) const {}
+void NatterLoggerNs3::logCritical(
+    const std::string & /*msg*/) const { /* string logging not implemented yet */
+}
+void NatterLoggerNs3::logWarning(
+    const std::string & /*msg*/) const { /* string logging not implemented yet */
+}
+void NatterLoggerNs3::logInfo(
+    const std::string & /*msg*/) const { /* string logging not implemented yet */
+}
+void NatterLoggerNs3::logDebug(
+    const std::string & /*msg*/) const { /* string logging not implemented yet */
+}
 
 void NatterLoggerNs3::logSendFullMsg(solanet::UUID msg_uuid, solanet::UUID uuid,
                                      solanet::UUID own_uuid) {

@@ -55,7 +55,8 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     routing_info->updateNeighbor(node_5_8);
     routing_info->updateNeighbor(node_5_9);
 
-    std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+    std::function<void(const NodeInfo &node)> empty_callback =
+        [](const NodeInfo &) { /* intentionally empty*/ };
     DSNHandler handler(routing_info, empty_callback);
 
     REQUIRE(handler.isActive());
@@ -148,7 +149,8 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     routing_info->updateNeighbor(node_5_37);
     routing_info->updateNeighbor(node_5_38);
 
-    std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+    std::function<void(const NodeInfo &node)> empty_callback =
+        [](const NodeInfo &) { /* intentionally empty*/ };
     DSNHandler handler(routing_info, empty_callback);
 
     auto cover_data = handler.getCoverData();
@@ -226,7 +228,8 @@ TEST_CASE("DSNHandler Constructor", "[DSNHandler][Constructor]") {
     routing_info->updateNeighbor(node_5_27);
     routing_info->updateNeighbor(node_5_28);
 
-    std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+    std::function<void(const NodeInfo &node)> empty_callback =
+        [](const NodeInfo &) { /* intentionally empty*/ };
     DSNHandler handler(routing_info, empty_callback);
 
     auto cover_data = handler.getCoverData();
@@ -287,7 +290,8 @@ TEST_CASE("DSNHandler onNeighborChangeNotification", "[DSNHandler][Constructor]"
   routing_info->updateNeighbor(node_5_3);
   routing_info->updateNeighbor(node_5_4);
 
-  std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+  std::function<void(const NodeInfo &node)> empty_callback =
+      [](const NodeInfo &) { /* intentionally empty*/ };
   DSNHandler handler(routing_info, empty_callback);
   REQUIRE(handler.isActive());
 
@@ -396,7 +400,8 @@ TEST_CASE("DSNHandler changing positions", "[DSNHandler][changing positions]") {
   routing_info->updateNeighbor(node_5_8);
   routing_info->updateNeighbor(node_5_9);
 
-  std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+  std::function<void(const NodeInfo &node)> empty_callback =
+      [](const NodeInfo &) { /* intentionally empty*/ };
   DSNHandler handler(routing_info, empty_callback);
 
   REQUIRE(handler.isActive());
@@ -509,7 +514,8 @@ TEST_CASE("DSNHandler getTrueNodes and getUndecidedNodesAndMissingKeys",
   routing_info->updateNeighbor(node_5_8);
   routing_info->updateNeighbor(node_5_9);
 
-  std::function<void(const NodeInfo &node)> empty_callback = [](const NodeInfo &) {};
+  std::function<void(const NodeInfo &node)> empty_callback =
+      [](const NodeInfo &) { /* intentionally empty*/ };
   DSNHandler handler(routing_info, empty_callback);
   REQUIRE(handler.isActive());
 

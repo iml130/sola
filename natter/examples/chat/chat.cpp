@@ -59,7 +59,7 @@ public:
               std::cout << "[" << solanet::uuidToString(msg.sender_id) << "]: " << msg.content
                         << std::endl;
             },
-            [](const std::string & /*missing_msg_id*/) {}) {}
+            [](const std::string & /*missing_msg_id*/) { /* intentionally not implemented */ }) {}
 
   void run() {
     std::cout << "Starting chat" << std::endl;
