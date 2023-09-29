@@ -232,16 +232,15 @@ void MinhtonManager::Scheduler::executeOneLeaveByPosition(uint32_t level, uint32
   for (uint64_t leave_index = 0; leave_index < manager_.nodes_.GetN(); leave_index++) {
     auto app = manager_.nodes_.Get(leave_index)->GetApplication(0)->GetObject<MinhtonApplication>();
 
-    if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number) {
-      if (app->getNodeInfo().isInitialized()) {
-        this->initiateLeaveNow(leave_index);
+    if (app->getNodeInfo().getLevel() == level && app->getNodeInfo().getNumber() == number &&
+        app->getNodeInfo().isInitialized()) {
+      this->initiateLeaveNow(leave_index);
 
-        const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), leave_index);
-        DAISI_CHECK(it != init_index_deque_.end(), "Index to leave not found in init_index_deque_");
-        init_index_deque_.erase(it);
-        uninit_index_deque_.push_back(leave_index);
-        return;
-      }
+      const auto it = std::find(init_index_deque_.begin(), init_index_deque_.end(), leave_index);
+      DAISI_CHECK(it != init_index_deque_.end(), "Index to leave not found in init_index_deque_");
+      init_index_deque_.erase(it);
+      uninit_index_deque_.push_back(leave_index);
+      return;
     }
   }
 
@@ -344,7 +343,7 @@ void MinhtonManager::Scheduler::scheduleSearchExactAll(ns3::Time delay) {
 }
 
 void MinhtonManager::Scheduler::scheduleSearchExactMany(ns3::Time delay, uint32_t number) {
-  ns3::Time current_delay = ns3::Time(0);
+  ns3::Time current_delay(0);
 
   auto existing_positions_tuple = this->getExistingPositions();
   auto existing_positions = std::get<1>(existing_positions_tuple);

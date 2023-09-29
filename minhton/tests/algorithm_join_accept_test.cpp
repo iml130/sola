@@ -43,9 +43,9 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
     /// We accept B as a child. B's new adjacent left is A.
     /// A's new adjacent right is B. B's adjacent right does not exist.
 
-    minhton::NodeInfo node_a = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(0, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(1, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x(1, 0, fanout, "127.0.0.1", 1234);
 
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
     auto access = std::make_shared<AccessContainer>();
@@ -96,10 +96,10 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 2",
     /// We accept C as a child. C's new adjacent left is A.
     /// A's new adjacent right is C.
 
-    minhton::NodeInfo node_a = minhton::NodeInfo(2, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_c = minhton::NodeInfo(3, 2, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x = minhton::NodeInfo(3, 3, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(2, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(1, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_c(3, 2, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x(3, 3, fanout, "127.0.0.1", 1234);
 
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
     auto access = std::make_shared<AccessContainer>();
@@ -140,10 +140,10 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
   uint16_t fanout = 3;
 
   SECTION("Scenario 3.1") {
-    minhton::NodeInfo node_a = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1235);  // us
-    minhton::NodeInfo node_b = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1235);  // entering node
-    minhton::NodeInfo node_x = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1235);
-    minhton::NodeInfo node_y = minhton::NodeInfo(1, 2, fanout, "127.0.0.1", 1235);
+    minhton::NodeInfo node_a(0, 0, fanout, "127.0.0.1", 1235);  // us
+    minhton::NodeInfo node_b(1, 0, fanout, "127.0.0.1", 1235);  // entering node
+    minhton::NodeInfo node_x(1, 1, fanout, "127.0.0.1", 1235);
+    minhton::NodeInfo node_y(1, 2, fanout, "127.0.0.1", 1235);
 
     // build routing information of A
 
@@ -176,10 +176,10 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
   }
 
   SECTION("Scenario 3.2") {
-    minhton::NodeInfo node_a = minhton::NodeInfo(1, 2, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_y = minhton::NodeInfo(2, 6, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(2, 7, fanout, "127.0.0.1", 1234);  // entering node
-    minhton::NodeInfo node_z = minhton::NodeInfo(2, 8, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(1, 2, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_y(2, 6, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(2, 7, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_z(2, 8, fanout, "127.0.0.1", 1234);
 
     // build routing information of A
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
@@ -209,11 +209,11 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 3",
   }
 
   SECTION("Scenario 3.3") {
-    minhton::NodeInfo node_p = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);  // parent of us
-    minhton::NodeInfo node_a = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_x = minhton::NodeInfo(2, 3, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y = minhton::NodeInfo(2, 4, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(2, 5, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_p(0, 0, fanout, "127.0.0.1", 1234);  // parent of us
+    minhton::NodeInfo node_a(1, 1, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_x(2, 3, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y(2, 4, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(2, 5, fanout, "127.0.0.1", 1234);  // entering node
 
     // build routing information of A
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
@@ -249,11 +249,11 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 4",
   uint16_t fanout = 4;
 
   SECTION("Scenario 4.1") {
-    minhton::NodeInfo node_a = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_x = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(1, 2, fanout, "127.0.0.1", 1234);  // entering node
-    minhton::NodeInfo node_z = minhton::NodeInfo(1, 3, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(0, 0, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_x(1, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y(1, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(1, 2, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_z(1, 3, fanout, "127.0.0.1", 1234);
 
     // build routing information of A
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
@@ -284,17 +284,17 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 4",
   }
 
   SECTION("Scenario 4.2") {
-    minhton::NodeInfo node_p = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_a = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_c = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x0 = minhton::NodeInfo(2, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x1 = minhton::NodeInfo(2, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x2 = minhton::NodeInfo(2, 2, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(2, 3, fanout, "127.0.0.1", 1234);  // entering node
-    minhton::NodeInfo node_y0 = minhton::NodeInfo(2, 4, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y1 = minhton::NodeInfo(2, 5, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y2 = minhton::NodeInfo(2, 6, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y3 = minhton::NodeInfo(2, 7, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_p(0, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(1, 0, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_c(1, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x0(2, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x1(2, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x2(2, 2, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(2, 3, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_y0(2, 4, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y1(2, 5, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y2(2, 6, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y3(2, 7, fanout, "127.0.0.1", 1234);
 
     // build routing information of A
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
@@ -336,12 +336,12 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 5",
   uint16_t fanout = 5;
 
   SECTION("Scenario 5.1") {
-    minhton::NodeInfo node_a = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_x = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_y = minhton::NodeInfo(1, 2, fanout, "127.0.0.1", 1234);  // entering node
-    minhton::NodeInfo node_w = minhton::NodeInfo(1, 3, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_v = minhton::NodeInfo(1, 4, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(0, 0, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_x(1, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(1, 1, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_y(1, 2, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_w(1, 3, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_v(1, 4, fanout, "127.0.0.1", 1234);
 
     // build routing information of A
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
@@ -372,15 +372,15 @@ TEST_CASE("JoinAlgorithmGeneral calcAdjacents Fanout 5",
   }
 
   SECTION("Scenario 5.2") {
-    minhton::NodeInfo node_p = minhton::NodeInfo(0, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_c = minhton::NodeInfo(1, 0, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_a = minhton::NodeInfo(1, 1, fanout, "127.0.0.1", 1234);  // us
-    minhton::NodeInfo node_d = minhton::NodeInfo(1, 2, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_b = minhton::NodeInfo(2, 5, fanout, "127.0.0.1", 1234);  // entering node
-    minhton::NodeInfo node_x1 = minhton::NodeInfo(2, 6, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x2 = minhton::NodeInfo(2, 7, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x3 = minhton::NodeInfo(2, 8, fanout, "127.0.0.1", 1234);
-    minhton::NodeInfo node_x4 = minhton::NodeInfo(2, 9, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_p(0, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_c(1, 0, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_a(1, 1, fanout, "127.0.0.1", 1234);  // us
+    minhton::NodeInfo node_d(1, 2, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_b(2, 5, fanout, "127.0.0.1", 1234);  // entering node
+    minhton::NodeInfo node_x1(2, 6, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x2(2, 7, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x3(2, 8, fanout, "127.0.0.1", 1234);
+    minhton::NodeInfo node_x4(2, 9, fanout, "127.0.0.1", 1234);
 
     auto routing_info = std::make_shared<RoutingInformation>(node_a, Logger());
     auto access = std::make_shared<AccessContainer>();
@@ -849,7 +849,7 @@ TEST_CASE("JoinAlgorithmGeneral initiateJoin", "[JoinAlgorithmGeneral][initiateJ
 
   MinhtonJoinAlgorithmForTest join_algo(access);
 
-  PhysicalNodeInfo target_p_node_info = PhysicalNodeInfo("1.2.3.4", 2020);
+  PhysicalNodeInfo target_p_node_info("1.2.3.4", 2020);
   join_algo.initiateJoin(target_p_node_info);
 
   REQUIRE(sent_msg_sender == node);

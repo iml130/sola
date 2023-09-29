@@ -37,7 +37,7 @@ public:
   AmrAssetConnector();
   ~AmrAssetConnector();
 
-  AmrAssetConnector(AmrAssetConnector &&other);
+  AmrAssetConnector(AmrAssetConnector &&other) noexcept;
   AmrAssetConnector(const AmrAssetConnector &) = delete;
 
   /// @brief start execution, notify whenever a functionality is done

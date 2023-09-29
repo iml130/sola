@@ -42,8 +42,7 @@ const std::string kCreateDevice = getCreateTableStatement(kDevice);
 
 void LoggerManager::logDevice(uint32_t id) {
   static std::set<uint32_t> cached_ids;
-  const auto res = cached_ids.insert(id);
-  const bool inserted = std::get<1>(res);
+  const auto &[_, inserted] = cached_ids.insert(id);
   if (inserted) {
     auto t = std::make_tuple(/* Id */ id);
     sqlite_helper_.execute(getInsertStatement(kDevice, t));

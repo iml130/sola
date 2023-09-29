@@ -46,7 +46,9 @@ private:
   // Some basic heuristics to find own IP, only picking the first one
   static std::string readIPFromInterfaces();
 
-  std::thread receiver_thread_, sender_thread_, network_thread_;
+  std::thread receiver_thread_;
+  std::thread sender_thread_;
+  std::thread network_thread_;
   Queue<Message> receiving_queue_, sending_queue_;
   asio::io_service io_service_;
   std::string ip_;

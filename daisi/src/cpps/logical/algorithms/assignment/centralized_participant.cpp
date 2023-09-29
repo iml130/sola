@@ -21,7 +21,7 @@ namespace daisi::cpps::logical {
 CentralizedParticipant::CentralizedParticipant(
     daisi::cpps::common::CppsCommunicatorPtr communicator,
     std::shared_ptr<SimpleTaskManagement> task_management)
-    : AssignmentParticipant(communicator), task_management_(std::move((task_management))){};
+    : AssignmentParticipant(communicator), task_management_(std::move(task_management)){};
 
 bool CentralizedParticipant::process(const AssignmentNotification &assignment_notification) {
   const material_flow::Task assigned_task = assignment_notification.getTask();

@@ -122,8 +122,7 @@ TEST_CASE("NodeInfo NodeInfoHasher", "[NodeInfo][NodeInfoHasher]") {
   minhton::NodeInfo node_4(1, 0, (uint16_t)3, "1.2.3.5", 2000);
   minhton::NodeInfo node_5(1, 0, (uint16_t)3, "1.2.3.5", 2001);
 
-  std::unordered_map<minhton::NodeInfo, int, NodeInfoHasher> test_map =
-      std::unordered_map<minhton::NodeInfo, int, NodeInfoHasher>();
+  std::unordered_map<minhton::NodeInfo, int, NodeInfoHasher> test_map;
   test_map[node_1] = 1;
   test_map[node_2] = 2;
   test_map[node_3] = 3;
@@ -136,7 +135,7 @@ TEST_CASE("NodeInfo NodeInfoHasher", "[NodeInfo][NodeInfoHasher]") {
   REQUIRE(test_map[node_4] == 4);
   REQUIRE(test_map[node_5] == 5);
 
-  minhton::NodeInfoHasher hasher = minhton::NodeInfoHasher();
+  minhton::NodeInfoHasher hasher;
 
   REQUIRE(hasher(node_1) == hasher(node_1));
   REQUIRE(hasher(node_1) != hasher(node_2));

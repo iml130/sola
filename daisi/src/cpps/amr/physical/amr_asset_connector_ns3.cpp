@@ -50,7 +50,7 @@ AmrAssetConnector::AmrAssetConnector(AmrDescription description, Topology topolo
 
 AmrAssetConnector::~AmrAssetConnector() = default;
 
-AmrAssetConnector::AmrAssetConnector(AmrAssetConnector &&other) = default;
+AmrAssetConnector::AmrAssetConnector(AmrAssetConnector &&other) noexcept = default;
 
 void AmrAssetConnector::execute(const FunctionalityVariant &functionality,
                                 const FunctionalityDoneCallback notifyDone) {

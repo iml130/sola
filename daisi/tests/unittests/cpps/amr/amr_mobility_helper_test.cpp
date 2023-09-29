@@ -69,8 +69,8 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
 
   std::vector<FunctionalityVariant> functionalities;
 
-  AmrDescription impossible_description =
-      AmrDescription(1, kinematics1, impossible_properties, physical_properties, load_handling1);
+  AmrDescription impossible_description(1, kinematics1, impossible_properties, physical_properties,
+                                        load_handling1);
 
   functionalities = {move_to11};
   REQUIRE_THROWS_AS(AmrMobilityHelper::estimateDuration(start_pose, functionalities,
@@ -89,8 +89,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
                                                         impossible_description, topology),
                     std::invalid_argument);
 
-  AmrDescription description1 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling1);
+  AmrDescription description1(1, kinematics1, properties, physical_properties, load_handling1);
   functionalities = {MoveTo({1, 0})};
   REQUIRE_THROWS_AS(AmrMobilityHelper::estimateDuration(impossible_start_pose1, functionalities,
                                                         description1, topology),
@@ -131,8 +130,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
       AmrMobilityHelper::estimateDuration(start_pose, functionalities, description1, topology),
       std::invalid_argument);
 
-  AmrDescription description2 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling1);
+  AmrDescription description2(1, kinematics1, properties, physical_properties, load_handling1);
   // kinematics1, load_handling1, MoveTo
   functionalities = {move_to11};
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description2,
@@ -200,8 +198,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description2,
                                               topology) == Catch::Approx(6));
 
-  AmrDescription description3 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling2);
+  AmrDescription description3(1, kinematics1, properties, physical_properties, load_handling2);
   // kinematics1, load_handling2, MoveTo
   functionalities = {move_to11};
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description3,
@@ -269,8 +266,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description3,
                                               topology) == Catch::Approx(6));
 
-  AmrDescription description4 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling3);
+  AmrDescription description4(1, kinematics1, properties, physical_properties, load_handling3);
   // kinematics1, load_handling3, MoveTo
   functionalities = {move_to11};
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description4,
@@ -338,8 +334,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description4,
                                               topology) == Catch::Approx(6));
 
-  AmrDescription description5 =
-      AmrDescription(1, kinematics2, properties, physical_properties, load_handling1);
+  AmrDescription description5(1, kinematics2, properties, physical_properties, load_handling1);
   // kinematics2, load_handling1, MoveTo
   functionalities = {move_to11};
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description5,
@@ -407,8 +402,7 @@ TEST_CASE("EstimamteTimeConsumption single function execution (neglect rotation 
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description5,
                                               topology) == Catch::Approx(1.414213562));
 
-  AmrDescription description6 =
-      AmrDescription(1, kinematics3, properties, physical_properties, load_handling1);
+  AmrDescription description6(1, kinematics3, properties, physical_properties, load_handling1);
   // kinematics3, load_handling1, MoveTo
   functionalities = {move_to11};
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionalities, description6,
@@ -524,8 +518,8 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
 
   FunctionalityVariant functionality;
 
-  AmrDescription impossible_description =
-      AmrDescription(1, kinematics1, impossible_properties, physical_properties, load_handling1);
+  AmrDescription impossible_description(1, kinematics1, impossible_properties, physical_properties,
+                                        load_handling1);
 
   functionality = move_to11;
   REQUIRE_THROWS_AS(AmrMobilityHelper::estimateDuration(start_pose, functionality,
@@ -544,8 +538,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
                                                         impossible_description, topology),
                     std::invalid_argument);
 
-  AmrDescription description1 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling1);
+  AmrDescription description1(1, kinematics1, properties, physical_properties, load_handling1);
   functionality = MoveTo({1, 0});
   REQUIRE_THROWS_AS(AmrMobilityHelper::estimateDuration(impossible_start_pose1, functionality,
                                                         description1, topology),
@@ -586,8 +579,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
       AmrMobilityHelper::estimateDuration(start_pose, functionality, description1, topology),
       std::invalid_argument);
 
-  AmrDescription description2 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling1);
+  AmrDescription description2(1, kinematics1, properties, physical_properties, load_handling1);
   // kinematics1, load_handling1, MoveTo
   functionality = move_to11;
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description2, topology) ==
@@ -653,8 +645,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description2, topology) ==
           Catch::Approx(6));
 
-  AmrDescription description3 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling2);
+  AmrDescription description3(1, kinematics1, properties, physical_properties, load_handling2);
   // kinematics1, load_handling2, MoveTo
   functionality = move_to11;
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description3, topology) ==
@@ -720,8 +711,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description3, topology) ==
           Catch::Approx(6));
 
-  AmrDescription description4 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling3);
+  AmrDescription description4(1, kinematics1, properties, physical_properties, load_handling3);
   // kinematics1, load_handling3, MoveTo
   functionality = move_to11;
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description4, topology) ==
@@ -787,8 +777,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description4, topology) ==
           Catch::Approx(6));
 
-  AmrDescription description5 =
-      AmrDescription(1, kinematics2, properties, physical_properties, load_handling1);
+  AmrDescription description5(1, kinematics2, properties, physical_properties, load_handling1);
   // kinematics2, load_handling1, MoveTo
   functionality = move_to11;
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description5, topology) ==
@@ -854,8 +843,7 @@ TEST_CASE("estimateDuration single functionality (neglect rotation cost, neglect
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description5, topology) ==
           Catch::Approx(1.414213562));
 
-  AmrDescription description6 =
-      AmrDescription(1, kinematics3, properties, physical_properties, load_handling1);
+  AmrDescription description6(1, kinematics3, properties, physical_properties, load_handling1);
   // kinematics3, load_handling1, MoveTo
   functionality = move_to11;
   REQUIRE(AmrMobilityHelper::estimateDuration(start_pose, functionality, description6, topology) ==
@@ -976,8 +964,8 @@ TEST_CASE("calculatePhases single functionality (neglect rotation cost, neglect 
 
   FunctionalityVariant fail_functionality;
 
-  AmrDescription impossible_description =
-      AmrDescription(1, kinematics1, impossible_properties, physical_properties, load_handling1);
+  AmrDescription impossible_description(1, kinematics1, impossible_properties, physical_properties,
+                                        load_handling1);
 
   fail_functionality = move_to11;
   REQUIRE_THROWS_AS(AmrMobilityHelper::calculatePhases(0, start_pose, fail_functionality,
@@ -996,8 +984,7 @@ TEST_CASE("calculatePhases single functionality (neglect rotation cost, neglect 
                                                        impossible_description, topology),
                     std::invalid_argument);
 
-  AmrDescription description1 =
-      AmrDescription(1, kinematics1, properties, physical_properties, load_handling1);
+  AmrDescription description1(1, kinematics1, properties, physical_properties, load_handling1);
   fail_functionality = MoveTo({1, 0});
   REQUIRE_THROWS_AS(AmrMobilityHelper::calculatePhases(0, impossible_start_pose1,
                                                        fail_functionality, description1, topology),

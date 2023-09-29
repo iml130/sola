@@ -70,8 +70,8 @@ AuctionParticipantTaskState AuctionParticipantState::pickBest() {
   }
 
   std::vector<AuctionParticipantTaskState> task_states;
-  for (const auto &entry : task_state_mapping) {
-    task_states.push_back(entry.second);
+  for (const auto &[_, auction_participant_task_state] : task_state_mapping) {
+    task_states.push_back(auction_participant_task_state);
   }
 
   auto task_state_comp = [](const auto &s1, const auto &s2) {

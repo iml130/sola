@@ -160,7 +160,8 @@ void CppsScenariofile::calcNumbersOfRelativeAmrDistribution() {
   size_t amr_counter = 0;
   for (auto &info : scenario_sequence) {
     if (info.isAmr()) {
-      info.spawn_distribution.number = absolute[amr_counter++];
+      info.spawn_distribution.number = absolute[amr_counter];
+      amr_counter++;
     }
   }
 }

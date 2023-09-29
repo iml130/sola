@@ -31,7 +31,7 @@ MinhtonManager::Scheduler::Scheduler(MinhtonManager &manager)
       uniform_zero_one_distribution_(std::uniform_real_distribution<double>(0.0, 1.0)){};
 
 void MinhtonManager::Scheduler::schedule() {
-  ns3::Time current_time = ns3::Time(0);
+  ns3::Time current_time(0);
 
   parseNodeAttributes();
   parseRequests();

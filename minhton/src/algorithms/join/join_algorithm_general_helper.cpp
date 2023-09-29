@@ -30,8 +30,8 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
       // look at each free position
       if (!getRoutingInfo()->getChildren()[i].isInitialized()) {
         uint32_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
-        minhton::NodeInfo new_child =
-            NodeInfo(getSelfNodeInfo().getLevel() + 1, current_num, getRoutingInfo()->getFanout());
+        minhton::NodeInfo new_child(getSelfNodeInfo().getLevel() + 1, current_num,
+                                    getRoutingInfo()->getFanout());
         return new_child;
       }
     }
@@ -58,8 +58,8 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
   }
 
   if (best_num < UINT32_MAX) {
-    minhton::NodeInfo new_child =
-        NodeInfo(getSelfNodeInfo().getLevel() + 1, best_num, getRoutingInfo()->getFanout());
+    minhton::NodeInfo new_child(getSelfNodeInfo().getLevel() + 1, best_num,
+                                getRoutingInfo()->getFanout());
 
     return new_child;
   }
@@ -207,7 +207,7 @@ std::vector<minhton::NodeInfo> JoinAlgorithmGeneral::getRoutingTableNeighborsFor
     throw std::logic_error("The entering node has to be one of our children");
   }
 
-  std::vector<minhton::NodeInfo> neighbors_for_new_child = std::vector<minhton::NodeInfo>();
+  std::vector<minhton::NodeInfo> neighbors_for_new_child;
 
   std::vector<std::tuple<uint32_t, uint32_t>> rt_positions =
       calcLeftRT(new_child.getLevel(), new_child.getNumber(), getRoutingInfo()->getFanout());

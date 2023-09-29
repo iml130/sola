@@ -7,10 +7,9 @@
 #ifndef MINHTON_CORE_NODE_H_
 #define MINHTON_CORE_NODE_H_
 
-#include <memory.h>
-
 #include <chrono>
 #include <future>
+#include <memory>
 #include <thread>
 #include <vector>
 

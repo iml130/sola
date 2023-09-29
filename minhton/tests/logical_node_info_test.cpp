@@ -369,8 +369,7 @@ TEST_CASE("LogicalNodeInfo LogicalNodeInfoHasher", "[LogicalNodeInfo][LogicalNod
   minhton::LogicalNodeInfo peer_4(1, 1, (uint16_t)3);
   minhton::LogicalNodeInfo peer_5(1, 1);
 
-  std::unordered_map<minhton::LogicalNodeInfo, int, LogicalNodeInfoHasher> test_map =
-      std::unordered_map<minhton::LogicalNodeInfo, int, LogicalNodeInfoHasher>();
+  std::unordered_map<minhton::LogicalNodeInfo, int, LogicalNodeInfoHasher> test_map;
   test_map[peer_1] = 1;
   test_map[peer_2] = 2;
   test_map[peer_3] = 3;
@@ -383,7 +382,7 @@ TEST_CASE("LogicalNodeInfo LogicalNodeInfoHasher", "[LogicalNodeInfo][LogicalNod
   REQUIRE(test_map[peer_4] == 4);
   REQUIRE(test_map[peer_5] == 5);
 
-  minhton::LogicalNodeInfoHasher hasher = minhton::LogicalNodeInfoHasher();
+  minhton::LogicalNodeInfoHasher hasher;
 
   REQUIRE(hasher(peer_1) == hasher(peer_1));
   REQUIRE(hasher(peer_1) != hasher(peer_2));

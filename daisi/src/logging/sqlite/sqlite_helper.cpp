@@ -25,7 +25,9 @@
 #include <sstream>
 #include <stdexcept>
 
+#ifdef DEFERRED_LOGGING
 static constexpr size_t kMaxQueueSize = 100000;
+#endif
 
 namespace daisi {
 
