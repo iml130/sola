@@ -27,6 +27,7 @@ template <typename Vertex, typename Edge>
 class SimpleTemporalNetwork : public WeightedDirectedGraph<Vertex, Edge> {
 public:
   SimpleTemporalNetwork();
+  virtual ~SimpleTemporalNetwork() = default;
 
   void addBinaryConstraint(const Vertex &start, const Vertex &end,
                            const std::optional<double> &lower_bound,
