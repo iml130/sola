@@ -22,6 +22,8 @@ public:
   DistributedData() = default;
   explicit DistributedData(const PhysicalNodeInfo &p_node_info);
 
+  virtual ~DistributedData() = default;
+
   void setPhysicalNodeInfo(const PhysicalNodeInfo &p_node_info);
   PhysicalNodeInfo getPhysicalNodeInfo() const;
 
