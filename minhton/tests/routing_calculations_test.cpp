@@ -35,13 +35,6 @@ TEST_CASE("RoutingCalculations calcParent", "[RoutingCalculations][calcParent]")
 
   REQUIRE(calcParent(1, 2, 3) == std::make_tuple(0, 0));
 
-  // Boundaries Check
-  // REQUIRE(calcParent(65535, 65535, 255) == std::make_tuple(65534, 257));
-  // REQUIRE(calcParent(65535, 0, 1) == std::make_tuple(65534, 0));
-  // REQUIRE(calcParent(65535, 0, 255) == std::make_tuple(65534, 0));
-  // REQUIRE(calcParent(1, 0, 1) == std::make_tuple(0, 0));
-  // REQUIRE(calcParent(1, 0, 255) == std::make_tuple(0, 0));
-
   // Exceptions Check
   CHECK_THROWS(calcParent(0, 0, 3));
   CHECK_THROWS(calcParent(1, 0, 0));
@@ -78,11 +71,6 @@ TEST_CASE("RoutingCalculations calcChildren", "[RoutingCalculations][calcChildre
   CHECK_THROWS(calcChildren(2, 4, 2));
   CHECK_THROWS(calcChildren(2, 9, 3));
   CHECK_THROWS(calcChildren(0, 1, 3));
-
-  // Check Overflows
-  // CHECK_THROWS(calcChildren(65534, 257, 255)); // Number Overflow
-  // CHECK_THROWS(calcChildren(2, 257, 255)); // Number Overflow
-  // CHECK_THROWS(calcChildren(65535, 3, 2)); // Level Overflow
 }
 
 TEST_CASE("RoutingCalculations calcRoutingSequence", "[RoutingCalculations][calcRoutingSequence]") {

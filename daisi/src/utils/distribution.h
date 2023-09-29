@@ -39,7 +39,6 @@ template <typename T> struct Dist {
     if (auto normal = std::get_if<std::normal_distribution<double>>(&dist)) {
       double number = normal->operator()(gen);
       return static_cast<uint64_t>(std::clamp(number, 0.0, std::numeric_limits<double>::max()));
-      // return normal->operator()(gen);
     }
 
     if (auto uniform = std::get_if<std::uniform_int_distribution<T>>(&dist)) {

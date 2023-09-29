@@ -164,29 +164,6 @@ TEST_CASE("MessageVariant FindReplacement", "[MessageVariant][FindReplacement]")
   REQUIRE_THROWS(MessageFindReplacement(header, node1));
 }
 
-TEST_CASE("MessageVariant InformAboutNeighbors", "[MessageVariant][InformAboutNeighbors]") {
-  // MessageInformAboutNeighbors msg;
-
-  // REQUIRE(msg.getHeader().getRefEventId() == 0);
-  // REQUIRE(msg.getMessageType() == MessageType::kInformAboutNeighbors);
-
-  // NodeInfo node1(5, 1, 2);
-  // NodeInfo node2(6, 1, 2, "1.2.3.4", 2000);
-
-  // msg.setSender(node2);
-  // msg.setTarget(node2);
-
-  // REQUIRE_FALSE(msg.validate());
-
-  // msg.addRequestedNeighbor(node1);
-
-  // REQUIRE(msg.getSender().getLevel() == 6);
-  // REQUIRE(msg.getTarget().getNumber() == 1);
-  // REQUIRE(msg.getRequestedNeighbors()[0].getFanout() == 2);
-
-  // REQUIRE(msg.validate());
-}
-
 TEST_CASE("MessageVariant RemoveNeighbor", "[MessageVariant][RemoveNeighbor]") {
   NodeInfo node1(3, 1, 2, "1.2.3.4", 2000);
   NodeInfo node2(6, 1, 2, "1.2.3.4", 2000);

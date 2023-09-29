@@ -125,16 +125,6 @@ protected:
   void continueAcceptChildProcedure(const minhton::MessageInformAboutNeighbors &message) noexcept(
       false) override;
 
-  /// Helper method for the Sweep Join Algorithm to quickly forward the JOIN message to the target
-  /// node. If we do not know the target, we send via Search Exact.
-  ///
-  /// \param target the node we want to forward the message to
-  /// \param entering_node the node which wants to join the network
-  /// \param target_on_next_to_last_level true if we definitely know that the target of this
-  ///         message is on the next to last level
-  // void forwardJoinMessage(minhton::NodeInfo target, minhton::NodeInfo entering_node,
-  //                         bool target_on_next_to_last_level);
-
   ///
   /// Gathering all information for the entering node
   /// and sending a JOIN_ACCEPT message.

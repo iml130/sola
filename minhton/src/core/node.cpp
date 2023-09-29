@@ -407,10 +407,6 @@ void MinhtonNode::initFSM(minhton::FSMState &init_state) {
   fsm_ = minhton::FiniteStateMachine(init_state);
 }
 
-/*uint32_t MinhtonNode::sendMulticast(const MessageVariant &msg) {
-  return network_interface_->sendMulticast(msg);
-}*/
-
 std::shared_ptr<minhton::RoutingInformation> MinhtonNode::getRoutingInformation() {
   return routing_info_;
 }

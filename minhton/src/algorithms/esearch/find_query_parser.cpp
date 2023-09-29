@@ -83,7 +83,7 @@ void FindQueryParser::initBooleanExpressionParser() {
       default:  // exprEmpty
         return std::dynamic_pointer_cast<BooleanExpression>(
             std::any_cast<std::shared_ptr<EmptyExpression>>(vs[0]));
-    };
+    }
   };
 
   boolean_expression_parser_["exprOR"] = [](const peg::SemanticValues &vs) {

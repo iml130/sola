@@ -28,31 +28,4 @@ TEST_CASE("FindQuery Constructor", "[FindQuery][Init]") {
   auto keys1 = q1.getBooleanExpression()->getRelevantKeys();
   REQUIRE(keys1.size() == 1);
   REQUIRE(keys1[0] == "huhu");
-
-  // FindQuery q2("( HAS sugar )", "some");
-  // REQUIRE(q2.getScope() == FindQuery::FindQueryScope::kSome);
-  // REQUIRE(q2.getInquireOutdatedAttributes());
-  // REQUIRE(q2.getInquireUnknownAttributes());
-
-  // auto keys2 = q2.getBooleanExpression()->getRelevantKeys();
-  // REQUIRE(keys2.size() == 2);
-  // REQUIRE(((keys2[0] == "energy") || (keys2[0] == "sugar")));
-  // REQUIRE(((keys2[1] == "energy") || (keys2[1] == "sugar")));
-
-  // q2.setInquireOutdatedAttributes(false);
-  // REQUIRE(q2.getInquireOutdatedAttributes());
-
-  // q2.setInquireUnknownAttributes(false);
-  // REQUIRE(q2.getInquireUnknownAttributes());
 }
-
-// TEST_CASE("FindQuery Serialize/Deserialize", "[FindQuery][Serialize]") {
-
-//     std::string s1 = "( HAS cake )";
-//     std::string s2 = "( ( HAS sugar ) OR ( HAS cookies ) )";
-//     std::string s3 = "( ( HAS sugar ) AND ( HAS cookies ) )";
-//     std::string s4 = "( ( NOT ( cakesize < 42 ) ) AND ( HAS cookies ) )";
-
-//     // FindQuery q1(s1, "some");
-
-// }

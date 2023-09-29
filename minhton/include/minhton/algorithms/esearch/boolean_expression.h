@@ -341,7 +341,7 @@ public:
       comparison = applyComparison<int>(int_value);
       compared = true;
     } catch (std::bad_variant_access const &ex) {
-    };
+    }
 
     if (!compared) {
       try {
@@ -349,7 +349,7 @@ public:
         comparison = applyComparison<float>(float_value);
         compared = true;
       } catch (std::bad_variant_access const &ex) {
-      };
+      }
     }
 
     if (compared) {

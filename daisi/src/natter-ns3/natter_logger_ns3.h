@@ -87,12 +87,6 @@ private:
   LogDeviceApp log_device_application_;
   LogFunction log_;
   LogEvent log_event_;
-
-  const std::unordered_map<std::string, uint8_t> topic_ids_ = {{"topic30eurobox", 1},
-                                                               {"topic60eurobox", 2},
-                                                               {"topic30package", 3},
-                                                               {"topic45package", 4},
-                                                               {"defaulttopic", 5}};
 };
 
 }  // namespace natter::logging

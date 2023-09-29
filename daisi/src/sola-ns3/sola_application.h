@@ -45,10 +45,6 @@ public:
   void publishTopic(const std::string &topic, const std::string &msg);
 
 private:
-  void DoDispose() final;
-  void StopApplication() final;
-  void StartApplication() final;  // Called from ns-3 without delay
-
   uint32_t id_ = 0;
 
   std::unique_ptr<SOLAWrapper> sola_;

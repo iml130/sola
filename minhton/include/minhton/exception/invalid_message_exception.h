@@ -24,7 +24,6 @@ public:
 private:
   MessageType message_type_;
   std::string error_message_;
-  // MessageProcessingModes processing_mode_;  // sending or receiving
 };
 
 }  // namespace minhton

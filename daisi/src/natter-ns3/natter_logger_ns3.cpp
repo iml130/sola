@@ -176,11 +176,6 @@ void NatterLoggerNs3::logSendReceive(solanet::UUID msg_uuid, solanet::UUID sende
     natter_ctrl_msg_exists_ = true;
   }
 
-  // workaround for integrating NatterLoggerNs3 into cpps
-  // uint64_t peer_id_sender = peer_pos_to_id_.find(sender) != peer_pos_to_id_.end() ?
-  // peer_pos_to_id_.at(sender) : 0; uint64_t peer_id_own = peer_pos_to_id_.find(own_uuid) !=
-  // peer_pos_to_id_.end() ? peer_pos_to_id_.at(own_uuid) : 0;
-
   // TODO: own_uuid is minhton posUUID sometimes when used from cpps
   std::string sender_node_id =
       "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" + solanet::uuidToString(sender) + "')";

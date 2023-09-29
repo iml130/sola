@@ -57,20 +57,6 @@ public:
 
   bool operator!=(FuzzyValue other) const { return this->value_ != other.value_; }
 
-  // FuzzyValue operator==(FuzzyValue other) const {
-  //   if(this->value_ == other.value_) {
-  //     return FuzzyValue::createTrue();
-  //   }
-  //   return FuzzyValue::createFalse();
-  // }
-
-  // FuzzyValue operator!=(FuzzyValue other) const {
-  //   if(this->value_ != other.value_) {
-  //     return FuzzyValue::createTrue();
-  //   }
-  //   return FuzzyValue::createFalse();
-  // }
-
 private:
   static const short kFalse = 0;
   static const short kUndecided = 1;
