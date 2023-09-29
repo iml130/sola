@@ -34,13 +34,13 @@ TableDefinition kMaterialFlowTask("CppsMaterialFlowTask",
                                       {"PayloadRequirement_kg", "%f", true},
                                   });
 static const std::string kCreateMaterialFlowTask = getCreateTableStatement(kMaterialFlowTask);
-static bool material_flow_task_exists_ = false;
 
 void CppsLoggerNs3::logMaterialFlowTask(const material_flow::Task &task,
                                         const std::string &material_flow_uuid) {
-  if (!material_flow_task_exists_) {
+  static bool material_flow_task_exists = false;
+  if (!material_flow_task_exists) {
     log_(kCreateMaterialFlowTask);
-    material_flow_task_exists_ = true;
+    material_flow_task_exists = true;
   }
 
   std::string material_flow_id =
@@ -79,7 +79,6 @@ TableDefinition kMaterialFlowOrder("CppsMaterialFlowOrder",
                                        // {"Step2_StationId", "%s", false}, // TODO
                                    });
 static const std::string kCreateMaterialFlowOrder = getCreateTableStatement(kMaterialFlowOrder);
-static bool material_flow_order_exists_ = false;
 
 std::string parametersToString(const std::unordered_map<std::string, std::string> &parameters) {
   std::string s;
@@ -93,11 +92,13 @@ std::string parametersToString(const std::unordered_map<std::string, std::string
 
 void CppsLoggerNs3::logMaterialFlowOrder(const material_flow::Order &order,
                                          const std::string &task_uuid) {
+  static bool material_flow_order_exists = false;
+
   // TODO: use station ids
 
-  if (!material_flow_order_exists_) {
+  if (!material_flow_order_exists) {
     log_(kCreateMaterialFlowOrder);
-    material_flow_order_exists_ = true;
+    material_flow_order_exists = true;
   }
 
   std::string task_id = "(SELECT Id FROM CppsMaterialFlowTask WHERE TaskUuid='" + task_uuid + "')";
@@ -165,13 +166,14 @@ TableDefinition kMaterialFlowOrderHistory(
     });
 static const std::string kCreateMaterialFlowOrderHistory =
     getCreateTableStatement(kMaterialFlowOrderHistory);
-static bool material_flow_order_history_exists_ = false;
 
 void CppsLoggerNs3::logMaterialFlowOrderUpdate(
     const cpps::logical::MaterialFlowUpdate &logging_info) {
-  if (!material_flow_order_history_exists_) {
+  static bool material_flow_order_history_exists = false;
+
+  if (!material_flow_order_history_exists) {
     log_(kCreateMaterialFlowOrderHistory);
-    material_flow_order_history_exists_ = true;
+    material_flow_order_history_exists = true;
   }
 
   std::string amr_id = "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" +

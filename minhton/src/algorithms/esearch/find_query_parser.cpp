@@ -12,7 +12,8 @@ namespace minhton {
 
 FindQueryParser::FindQueryParser() { this->initBooleanExpressionParser(); }
 
-static std::string booleanExpressionGrammar = R"(
+void FindQueryParser::initBooleanExpressionParser() {
+  static const std::string boolean_expression_grammar = R"(
     expr          <- exprOR / exprAND / exprNOT / exprPRES / exprSringEq / exprNumComp / exprEmpty
 
     exprOR        <- '(' expr opOR expr ')'
@@ -48,12 +49,11 @@ static std::string booleanExpressionGrammar = R"(
     %whitespace   <- [ \t]*
 )";
 
-void FindQueryParser::initBooleanExpressionParser() {
   boolean_expression_parser_.log = [](std::size_t line, std::size_t col, const std::string &msg) {
     std::cerr << line << ":" << col << ": " << msg << "\n";
   };
 
-  bool ok = boolean_expression_parser_.load_grammar(booleanExpressionGrammar);
+  bool ok = boolean_expression_parser_.load_grammar(boolean_expression_grammar);
   if (!ok) {
     throw std::logic_error("Invalid Grammar for parsing Find Query Expressions");
   }

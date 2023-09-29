@@ -44,12 +44,12 @@ TableDefinition kFindQuery("MinhtonFindQuery",
                             {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
                             {"Query", "%s"}});
 static const std::string kCreateFindQuery = getCreateTableStatement(kFindQuery);
-static bool find_query_exists_ = false;
 
 void MinhtonLoggerNs3::logFindQuery(const LoggerInfoAddFindQuery &info) {
-  if (!find_query_exists_) {
+  static bool find_query_exists = false;
+  if (!find_query_exists) {
     log_(kCreateFindQuery);
-    find_query_exists_ = true;
+    find_query_exists = true;
   }
 
   auto t = std::make_tuple(/* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
@@ -66,12 +66,12 @@ TableDefinition kFindQueryResult("MinhtonFindQueryResult",
                                   {"EventId", "%lu", true, "Event(Id)"},
                                   {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"}});
 static const std::string kCreateFindQueryResult = getCreateTableStatement(kFindQueryResult);
-static bool find_query_result_exists_ = false;
 
 void MinhtonLoggerNs3::logFindQueryResult(const LoggerInfoAddFindQueryResult &info) {
-  if (!find_query_result_exists_) {
+  static bool find_query_result_exists = false;
+  if (!find_query_result_exists) {
     log_(kCreateFindQueryResult);
-    find_query_result_exists_ = true;
+    find_query_result_exists = true;
   }
 
   auto t = std::make_tuple(/* Timestamp_ms */ ns3::Simulator::Now().GetMilliSeconds(),
@@ -88,12 +88,12 @@ TableDefinition kMinhtonPhysicalNodeInfo("MinhtonPhysicalNodeInfo",
                                           {"Port", "%u", true}});
 static const std::string kCreateMinhtonPhysicalNodeInfo =
     getCreateTableStatement(kMinhtonPhysicalNodeInfo);
-static bool minhton_p_node_info_exists_ = false;
 
 void MinhtonLoggerNs3::logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) {
-  if (!minhton_p_node_info_exists_) {
+  static bool minhton_p_node_info_exists = false;
+  if (!minhton_p_node_info_exists) {
     log_(kCreateMinhtonPhysicalNodeInfo);
-    minhton_p_node_info_exists_ = true;
+    minhton_p_node_info_exists = true;
   }
 
   auto t = std::make_tuple(/* ApplicationUuid */ uuid_.c_str(),
@@ -110,12 +110,12 @@ TableDefinition kMinhtonNode("MinhtonNode",
                               {"Number", "%u"},
                               {"Fanout", "%u"}});
 static const std::string kCreateMinhtonNode = getCreateTableStatement(kMinhtonNode);
-static bool minhton_node_exists_ = false;
 
 void MinhtonLoggerNs3::logNode(const LoggerInfoAddNode &info) {
-  if (!minhton_node_exists_) {
+  static bool minhton_node_exists = false;
+  if (!minhton_node_exists) {
     log_(kCreateMinhtonNode);
-    minhton_node_exists_ = true;
+    minhton_node_exists = true;
   }
 
   if (info.initialized) {
@@ -245,7 +245,6 @@ TableDefinition kMinhtonTraffic("MinhtonTraffic",
                                   "MinhtonNode(PositionUuid)"},
                                  {"Content", "%s"}});
 static const std::string kCreateMinhtonTraffic = getCreateTableStatement(kMinhtonTraffic);
-static bool minhton_traffic_exists_ = false;
 
 TableDefinition kEnumMinhtonMessageType("enumMinhtonMessageType",
                                         {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
@@ -286,9 +285,11 @@ static const std::string kCreateViewMinhtonTraffic = getCreateViewStatement(
      "Network2.ApplicationUuid"});
 
 void MinhtonLoggerNs3::logTraffic(const MessageLoggingInfo &info) {
-  if (!minhton_traffic_exists_) {
+  static bool minhton_traffic_exists = false;
+
+  if (!minhton_traffic_exists) {
     log_(kCreateMinhtonTraffic);
-    minhton_traffic_exists_ = true;
+    minhton_traffic_exists = true;
 
     log_(kCreateEnumMinhtonMessageType);
     logMinhtonMessageTypes();
@@ -320,12 +321,12 @@ TableDefinition kSearchContent("MinhtonSearchContent",
                                 {"Type", "%u", true},
                                 {"Text", "%s"}});
 static const std::string kCreateCreateTraffic = getCreateTableStatement(kSearchContent);
-static bool search_content_exists_ = false;
 
 void MinhtonLoggerNs3::logContent(const LoggerInfoAddContent &info) {
-  if (!search_content_exists_) {
+  static bool search_content_exists = false;
+  if (!search_content_exists) {
     log_(kCreateCreateTraffic);
-    search_content_exists_ = true;
+    search_content_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -350,12 +351,12 @@ TableDefinition kSearchTest("MinhtonSearchTest", {DatabaseColumnInfo{"Id"},
                                                   {"HopLevel", "%u"},
                                                   {"HopNumber", "%u"}});
 static const std::string kCreateSearchTest = getCreateTableStatement(kSearchTest);
-static bool search_test_exists_ = false;
 
 void MinhtonLoggerNs3::logSearchExactTest(const LoggerInfoSearchExact &info) {
-  if (!search_test_exists_) {
+  static bool search_test_exists = false;
+  if (!search_test_exists) {
     log_(kCreateSearchTest);
-    search_test_exists_ = true;
+    search_test_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -380,7 +381,6 @@ TableDefinition kRoutingInfo("MinhtonRoutingInfo",
                               {"NeighborNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
                               {"Relationship", "%u", true}});
 static const std::string kCreateRoutingInfo = getCreateTableStatement(kRoutingInfo);
-static bool routing_info_exists_ = false;
 
 TableDefinition kEnumMinhtonRelationship("enumMinhtonRelationship",
                                          {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
@@ -421,9 +421,10 @@ static const std::string kCreateViewRoutingInfo = getCreateViewStatement(
      "enumMinhtonRelationship.Id"});
 
 void MinhtonLoggerNs3::logNeighbor(const LoggerInfoAddNeighbor &info) {
-  if (!routing_info_exists_) {
+  static bool routing_info_exists = false;
+  if (!routing_info_exists) {
     log_(kCreateRoutingInfo);
-    routing_info_exists_ = true;
+    routing_info_exists = true;
 
     log_(kCreateEnumMinhtonRelationship);
     logMinhtonRelationships();
