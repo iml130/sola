@@ -33,7 +33,7 @@ extern const std::unordered_map<uint32_t, std::string> kMapMinhtonMessageTypeStr
 
 // * Event
 void MinhtonLoggerNs3::logEvent(const LoggerInfoAddEvent &info) {
-  log_event_(std::to_string(info.event_id), info.event_type, uuid_);
+  log_event_(std::to_string(info.event_id), static_cast<uint8_t>(info.event_type), uuid_);
 }
 
 // * FindQuery
@@ -154,7 +154,7 @@ static const std::string kCreateEnumMinhtonNodeState =
 
 void MinhtonLoggerNs3::logMinhtonNodeStates() {
   // adding a key-value map to get the string for easier debugging purposes
-  const std::map<uint8_t, std::string> map_minhton_node_state_strings = {
+  const std::map<NodeStatus, std::string> map_minhton_node_state_strings = {
       {NodeStatus::kUninit, "UNINIT"},
       {NodeStatus::kRunning, "RUNNING"},
       {NodeStatus::kLeft, "LEFT"},
@@ -389,7 +389,7 @@ static const std::string kCreateEnumMinhtonRelationship =
 
 void MinhtonLoggerNs3::logMinhtonRelationships() {
   // adding a key-value map to get the string for easier debugging purposes
-  const std::map<uint8_t, std::string> map_minhton_relationship_strings = {
+  const std::map<NeighborRelationship, std::string> map_minhton_relationship_strings = {
       {NeighborRelationship::kParent, "PARENT"},
       {NeighborRelationship::kChild, "CHILD"},
       {NeighborRelationship::kAdjacentLeft, "ADJACENT_LEFT"},

@@ -13,7 +13,7 @@
 
 namespace minhton {
 
-enum AlgorithmType : uint8_t {
+enum class AlgorithmType : uint8_t {
   kUndefinedAlgorithm = 0,
   kJoinAlgorithm = 1,
   kLeaveAlgorithm = 2,

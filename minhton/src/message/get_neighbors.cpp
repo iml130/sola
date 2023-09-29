@@ -13,14 +13,14 @@ MessageGetNeighbors::MessageGetNeighbors(MinhtonMessageHeader header, NodeInfo s
     : header_(std::move(header)),
       send_back_to_node_(std::move(send_back_to_node)),
       relationships_(std::move(relationships)) {
-  header_.setMessageType(kGetNeighbors);
+  header_.setMessageType(MessageType::kGetNeighbors);
 
   MessageLoggingAdditionalInfo logging_info{getSendBackToNode().getLogicalNodeInfo().getUuid(), "",
                                             ""};
   std::string text = "relationships_to_request={";
   for (auto const &rel : relationships_) {
     // TODO add positions to request
-    std::string current_text = std::to_string(rel) + ",";
+    std::string current_text = std::to_string(static_cast<uint8_t>(rel)) + ",";
     text += current_text;
   }
   text += "}";

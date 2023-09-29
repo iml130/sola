@@ -21,4 +21,4 @@ target_include_directories(minhton_logger_interface
         INTERFACE
         ${MINHTON_SOURCE_DIR}/include
 )
-target_link_libraries(minhton_logger_interface INTERFACE solanet_uuid)
+target_link_libraries(minhton_logger_interface INTERFACE solanet_uuid minhton_core_constants)

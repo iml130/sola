@@ -17,7 +17,7 @@
 namespace minhton {
 
 // TODO move into numeric comparison expression
-enum ComparisonTypes {
+enum class ComparisonTypes {
   kEqualTo,
   kNotEqualTo,
   kLessThan,

@@ -143,11 +143,11 @@ void EventDisseminationMinhcast::joinMinhton(
   minhton::ConfigNode config;
 
   minhton::AlgorithmTypesContainer algorithms{};
-  algorithms.bootstrap = minhton::kBootstrapGeneral;
-  algorithms.join = minhton::kJoinMinhton;
-  algorithms.leave = minhton::kLeaveMinhton;
-  algorithms.response = minhton::kResponseGeneral;
-  algorithms.search_exact = minhton::kSearchExactMinhton;
+  algorithms.bootstrap = minhton::BootstrapAlgorithms::kBootstrapGeneral;
+  algorithms.join = minhton::JoinAlgorithms::kJoinMinhton;
+  algorithms.leave = minhton::LeaveAlgorithms::kLeaveMinhton;
+  algorithms.response = minhton::ResponseAlgorithms::kResponseGeneral;
+  algorithms.search_exact = minhton::SearchExactAlgorithms::kSearchExactMinhton;
   config.setAlgorithmTypesContainer(algorithms);
 
   minhton::TimeoutLengthsContainer timeouts{};

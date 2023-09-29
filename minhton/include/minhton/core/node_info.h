@@ -15,7 +15,7 @@
 
 namespace minhton {
 
-enum NodeStatus : uint8_t { kUninit = 0, kRunning = 1, kLeft = 2, kFailed = 3 };
+enum class NodeStatus : uint8_t { kUninit = 0, kRunning = 1, kLeft = 2, kFailed = 3 };
 
 ///
 /// A NodeInfo is based on a LogicalNodeInfo and PhysicalNodeInfo. These two classes build the core
@@ -142,7 +142,7 @@ private:
   minhton::LogicalNodeInfo l_node_info_;
   minhton::PhysicalNodeInfo p_node_info_;
 
-  NodeStatus status_{kUninit};
+  NodeStatus status_{NodeStatus::kUninit};
 };
 
 struct NodeInfoHasher {

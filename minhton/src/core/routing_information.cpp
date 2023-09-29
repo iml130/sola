@@ -402,7 +402,8 @@ void RoutingInformation::resetChild(uint16_t position, uint64_t ref_event_id) {
   if (this->children_[position].getPhysicalNodeInfo().isInitialized()) {
     minhton::NodeInfo node = this->children_[position];
     this->children_[position].setPhysicalNodeInfo(minhton::PhysicalNodeInfo());
-    this->notifyNeighborChange(this->children_[position], kChild, ref_event_id, node, position);
+    this->notifyNeighborChange(this->children_[position], NeighborRelationship::kChild,
+                               ref_event_id, node, position);
   }
 }
 

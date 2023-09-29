@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "minhton/core/constants.h"
 #include "minhton/message/message_logging.h"
 #include "solanet/uuid.h"
 
@@ -18,7 +19,7 @@ namespace minhton {
 struct LoggerInfoSearchExact {
   uint64_t timestamp;
   uint64_t event_id;
-  uint16_t status;
+  SearchExactTestEntryTypes status;
   uint32_t sender_level;
   uint32_t sender_number;
   uint32_t target_level;
@@ -39,12 +40,12 @@ struct LoggerInfoAddNeighbor {
   uint64_t event_id;
   std::string node_uuid;
   std::string neighbor_node_uuid;
-  uint16_t relationship;
+  NeighborRelationship relationship;
 };
 
 struct LoggerInfoAddEvent {
   uint64_t timestamp;
-  uint8_t event_type;
+  minhton::EventType event_type;
   uint64_t event_id;
 };
 
@@ -56,7 +57,7 @@ struct LoggerInfoNodeState {
 struct LoggerInfoAddContent {
   uint64_t timestamp;
   std::string node_uuid;
-  uint8_t content_status;
+  ContentStatus content_status;
   std::string attribute_name;
   uint8_t content_type;
   std::string content_text;
