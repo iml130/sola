@@ -129,7 +129,7 @@ public:
     log_device_application_(uuid_);
   }
 
-protected:
+private:
   // TODO Refactor to other class
   const LogDeviceApp log_device_application_;
   const LogFunction log_;

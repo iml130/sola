@@ -28,7 +28,7 @@ public:
 
   MessageRemoveNeighbor() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
@@ -37,7 +37,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   /// The position of the node to remove
   NodeInfo removed_position_node_;
 

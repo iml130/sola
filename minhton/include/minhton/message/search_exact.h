@@ -35,7 +35,7 @@ public:
 
   MessageSearchExact() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
@@ -44,7 +44,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   /// The destination node of the message. (This is not the target node. The target is only the node
   /// the message gets forwarded to. )The destination node of the message. (This is not the target
   /// node. The target is only the node the message gets forwarded to. )

@@ -22,7 +22,7 @@ public:
 
   MessageRemoveNeighborAck() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
