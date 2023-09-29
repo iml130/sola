@@ -92,7 +92,7 @@ void Network::Impl::networkFunction() { io_service_.run(); }
 
 void Network::Impl::readFromSocket() {
   receiver_socket_.async_receive_from(asio::buffer(buffer_.data(), buffer_.size()), endpoint_,
-                                      [&](asio::error_code ec, std::size_t size) {
+                                      [this](asio::error_code ec, std::size_t size) {
                                         if (ec)
                                           throw std::runtime_error("Failed to receive message");
 

@@ -137,7 +137,7 @@ private:
    * Calls \p_function for every registered logger (command-pattern)
    * @param function function to call for every logger
    */
-  void log(const std::function<void(const LoggerPtr &logger)> &function) const;
+  template <typename LogFunction> void log(LogFunction function) const;
 
   std::vector<LoggerPtr> logger_list_;
 

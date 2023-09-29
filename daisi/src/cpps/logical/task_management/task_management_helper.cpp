@@ -23,7 +23,7 @@ template <class> inline constexpr bool kAlwaysFalseV = false;
 
 std::optional<Location> TaskManagementHelper::getEndLocationOfOrder(const Order &order) {
   return std::visit(
-      [&](auto &&arg) -> std::optional<Location> {
+      [&order](auto &&arg) -> std::optional<Location> {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, MoveOrder>) {
           return std::get<MoveOrder>(order).getMoveOrderStep().getLocation();

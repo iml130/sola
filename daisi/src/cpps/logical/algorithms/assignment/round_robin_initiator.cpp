@@ -191,7 +191,7 @@ void RoundRobinInitiator::processAssignmentAcceptions(uint32_t index) {
   // remove tasks where we received an acception for
   for (auto &message : assignment_acceptions_) {
     auto task_it = std::find_if(distributed_tasks.begin(), distributed_tasks.end(),
-                                [message](const material_flow::Task &task) -> bool {
+                                [&message](const material_flow::Task &task) -> bool {
                                   return task.getUuid() == message.getTaskUuid();
                                 });
     assert(task_it != distributed_tasks.end());

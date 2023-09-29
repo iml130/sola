@@ -55,11 +55,11 @@ class Application {
 public:
   Application()
       : natter_(
-            [&](const natter::Message &msg) {
+            [](const natter::Message &msg) {
               std::cout << "[" << solanet::uuidToString(msg.sender_id) << "]: " << msg.content
                         << std::endl;
             },
-            [&](const std::string & /*missing_msg_id*/) {}) {}
+            [](const std::string & /*missing_msg_id*/) {}) {}
 
   void run() {
     std::cout << "Starting chat" << std::endl;

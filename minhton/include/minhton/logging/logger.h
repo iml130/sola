@@ -49,7 +49,7 @@ public:
 
 private:
   // Command pattern
-  void logCommand(const std::function<void(const LoggerPtr &logger)> &function) const;
+  template <typename LogFunction> void logCommand(LogFunction function) const;
 
   std::vector<LoggerPtr> logger_list_;
 

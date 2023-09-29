@@ -39,7 +39,7 @@ void NatterApplication::StartApplication() {
   std::vector<natter::logging::LoggerPtr> logger_list{logger_};
 
   natter_minhcast_ = std::make_unique<natter::minhcast::NatterMinhcast>(
-      [&](const natter::Message &) { /*nothing required here */ },
+      [](const natter::Message &) { /*nothing required here */ },
       [](const std::string & /*unused*/) {}, logger_list);
 }
 

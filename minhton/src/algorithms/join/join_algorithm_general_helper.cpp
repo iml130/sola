@@ -77,7 +77,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
 
   // removing every neighbor which is to the right of the entering node
   left_neighbors.erase(std::remove_if(left_neighbors.begin(), left_neighbors.end(),
-                                      [&, entering_node](const minhton::NodeInfo &node) {
+                                      [&entering_node](const minhton::NodeInfo &node) {
                                         return entering_node.getLogicalNodeInfo() <
                                                node.getLogicalNodeInfo();
                                       }),
@@ -107,7 +107,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentRightOfNewChild(
 
   // removing every neighbor which is to the left of the entering node
   right_neighbors.erase(std::remove_if(right_neighbors.begin(), right_neighbors.end(),
-                                       [&, entering_node](const minhton::NodeInfo &node) {
+                                       [&entering_node](const minhton::NodeInfo &node) {
                                          return entering_node.getLogicalNodeInfo() >
                                                 node.getLogicalNodeInfo();
                                        }),

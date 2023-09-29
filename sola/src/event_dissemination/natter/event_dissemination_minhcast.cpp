@@ -23,7 +23,7 @@ EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct ms
                                                        const Config &config, LoggerPtr logger)
     : config_(config),
       minhcast_(std::make_unique<natter::minhcast::NatterMinhcast>(
-          [=](const natter::Message &m) {
+          [msgRecvFct](const natter::Message &m) {
             msgRecvFct(solanet::serializer::deserialize<sola::TopicMessage>(m.content));
           },
           [](const std::string & /*unused*/) {}, config.logger)),
@@ -106,7 +106,7 @@ void EventDisseminationMinhcast::joinMinhton(
     const std::vector<minhton::Logger::LoggerPtr> &logger) {
   if (stopping_) throw std::runtime_error("already stopping!");
 
-  auto callback = [=](const minhton::ConnectionInfo &neighbor) {
+  auto callback = [this, topic](const minhton::ConnectionInfo &neighbor) {
     if (peers_added_natter_.find({neighbor.node.getAddress(), neighbor.node.getPort()}) ==
         peers_added_natter_.end()) {
       peers_added_natter_[{neighbor.node.getAddress(), neighbor.node.getPort()}] = 0;

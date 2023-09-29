@@ -23,14 +23,14 @@
 namespace minhton {
 
 MinhtonNode::MinhtonNode(const ConfigNode &config_node, NeighborCallbackFct fct, bool auto_start)
-    : network_facade_([&](const MessageVariant &msg) { recv(msg); }, config_node.getOwnIP()),
+    : network_facade_([this](const MessageVariant &msg) { recv(msg); }, config_node.getOwnIP()),
       neighbor_update_fct_(std::move(fct)) {
   setConfig(config_node);
 
   if (neighbor_update_fct_) {
     routing_info_->addNeighborChangeSubscription(
-        [&](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
-            const minhton::NodeInfo &old_node, uint16_t position) {
+        [this](const minhton::NodeInfo &new_node, NeighborRelationship relationship,
+               const minhton::NodeInfo &old_node, uint16_t position) {
           neighbor_update_fct_({new_node, relationship, old_node.getAddress(), old_node.getPort(),
                                 position, getNodeInfo()});
         });
@@ -374,7 +374,7 @@ void MinhtonNode::setTimeout(TimeoutType timeout_type) {
   // is set to 0
 
   if (timeout_length > 0) {
-    watchdog_.addJob([&, timeout_type]() { triggerTimeout(timeout_type); }, timeout_length,
+    watchdog_.addJob([this, timeout_type]() { triggerTimeout(timeout_type); }, timeout_length,
                      timeout_type);
   }
 }
