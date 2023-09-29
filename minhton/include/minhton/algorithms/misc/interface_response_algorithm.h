@@ -17,7 +17,7 @@ namespace minhton {
 
 class ResponseAlgorithmInterface : public AlgorithmInterface {
 public:
-  ResponseAlgorithmInterface(std::shared_ptr<AccessContainer> access)
+  explicit ResponseAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
   void process(const MessageVariant &msg) override = 0;
   virtual void waitForAcks(uint32_t number, std::function<void()> cb) = 0;

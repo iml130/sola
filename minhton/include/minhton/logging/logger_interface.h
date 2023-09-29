@@ -84,7 +84,7 @@ struct LoggerInfoAddFindQueryResult {
 
 class LoggerInterface {
 public:
-  LoggerInterface(std::string uuid) : uuid_(std::move(uuid)) {}
+  explicit LoggerInterface(std::string uuid) : uuid_(std::move(uuid)) {}
   virtual ~LoggerInterface() = default;
 
   virtual void logCritical(const std::string &msg) const = 0;

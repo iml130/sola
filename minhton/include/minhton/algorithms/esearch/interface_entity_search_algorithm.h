@@ -20,7 +20,7 @@ namespace minhton {
 
 class EntitySearchAlgorithmInterface : public AlgorithmInterface {
 public:
-  EntitySearchAlgorithmInterface(std::shared_ptr<AccessContainer> access)
+  explicit EntitySearchAlgorithmInterface(std::shared_ptr<AccessContainer> access)
       : AlgorithmInterface(access){};
   void process(const MessageVariant &msg) override = 0;
 

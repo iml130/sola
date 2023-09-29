@@ -30,7 +30,7 @@ namespace minhton {
 
 class LeaveAlgorithmGeneral : public LeaveAlgorithmInterface {
 public:
-  LeaveAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
+  explicit LeaveAlgorithmGeneral(std::shared_ptr<AccessContainer> access)
       : LeaveAlgorithmInterface(access){};
 
   ~LeaveAlgorithmGeneral() override = default;

@@ -17,7 +17,8 @@ namespace minhton {
 
 class JoinAlgorithmInterface : public AlgorithmInterface {
 public:
-  JoinAlgorithmInterface(std::shared_ptr<AccessContainer> access) : AlgorithmInterface(access){};
+  explicit JoinAlgorithmInterface(std::shared_ptr<AccessContainer> access)
+      : AlgorithmInterface(access){};
 
   ~JoinAlgorithmInterface() override = default;
 

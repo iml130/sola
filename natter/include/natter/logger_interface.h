@@ -24,7 +24,7 @@ using LoggerPtr = std::shared_ptr<LoggerInterface>;
  */
 class LoggerInterface {
 public:
-  LoggerInterface(std::string uuid) : uuid_(std::move(uuid)) {}
+  explicit LoggerInterface(std::string uuid) : uuid_(std::move(uuid)) {}
   virtual ~LoggerInterface() = default;
 
   /**
