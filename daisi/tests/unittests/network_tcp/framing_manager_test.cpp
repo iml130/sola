@@ -33,7 +33,7 @@ TEST_CASE("Frame message", "[frame_message]") {
   REQUIRE(framed.substr(4) == a);
 
   const std::string prefix = framed.substr(0, 4);
-  uint32_t *x = (uint32_t *)(prefix.data());
+  const uint32_t *x = (const uint32_t *)(prefix.data());
   REQUIRE(*x == htonl(6));
 }
 
@@ -45,7 +45,7 @@ TEST_CASE("Frame empty message", "[frame_empty_message]") {
   REQUIRE(framed.size() == 4);
 
   const std::string prefix = framed.substr(0);
-  uint32_t *x = (uint32_t *)(prefix.data());
+  const uint32_t *x = (const uint32_t *)(prefix.data());
   REQUIRE(*x == htonl(0));
 }
 

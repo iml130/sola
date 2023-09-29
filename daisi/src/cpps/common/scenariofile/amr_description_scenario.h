@@ -44,7 +44,7 @@ struct AmrLoadHandlingScenario {
   double load_time;
   double unload_time;
   std::string load_carrier;
-  double max_payload;
+  float max_payload;
 
   void parse(const YAML::Node &node) {
     SERIALIZE_VAR(load_time);
