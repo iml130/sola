@@ -46,7 +46,7 @@ namespace daisi {
 
 template <typename T> void serializeType(T &t, const std::string &key, YAML::Node node) {
   try {
-    if constexpr (std::is_fundamental<T>::value || std::is_same<T, std::string>::value) {
+    if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
       // Can directly fetch this
       t = node[key].as<T>();
     } else {
@@ -78,7 +78,7 @@ void serializeType(std::optional<T> &t, const std::string &key, const YAML::Node
   }
 
   try {
-    if constexpr (std::is_fundamental<T>::value || std::is_same<T, std::string>::value) {
+    if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
       t = node[key].as<T>();
     } else {
       t.emplace();
