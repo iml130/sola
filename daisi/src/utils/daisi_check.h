@@ -22,6 +22,7 @@
 #define DAISI_CHECK(REQ, MSG)      \
   if (!(REQ)) {                    \
     throw std::runtime_error(MSG); \
-  }
+  }                                \
+  static_assert(true)
 
 #endif  // DAISI_DAISI_CHECK_H_

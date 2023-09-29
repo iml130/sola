@@ -42,7 +42,7 @@ public:
 
   bool isFinished() const;
 
-  SERIALIZE(tasks_)
+  SERIALIZE(tasks_);
 
   void addTask(Task task);
 

@@ -25,7 +25,7 @@ namespace daisi::path_planning::consensus {
 //!< Response message send from acceptors to proposer to acknowledge that the acceptor received an
 //!< OK from all other acceptors and therefore committed the wanted occupancy to its local data
 struct ResponseMessage {
-  SERIALIZE(instance_id, station_id, proposal_id)
+  SERIALIZE(instance_id, station_id, proposal_id);
   uint32_t instance_id = 0;
   uint32_t proposal_id = 0;
   uint32_t station_id = 0;

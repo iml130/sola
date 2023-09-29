@@ -24,9 +24,9 @@
 using namespace ns3;
 
 #ifndef NDEBUG
-#define LOG(m) std::cout << m << std::endl;
+#define LOG(m) std::cout << m << std::endl
 #else
-#define LOG(m)
+#define LOG(m) static_assert(true)
 #endif
 
 namespace daisi::sola_ns3 {

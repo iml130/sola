@@ -29,7 +29,7 @@ public:
       : state_(state), position_(position) {}
   OrderStates getState() const { return state_; };
   util::Position getPosition() const { return position_; };
-  SERIALIZE(state_, position_)
+  SERIALIZE(state_, position_);
 
 private:
   OrderStates state_ = OrderStates::kInvalid;

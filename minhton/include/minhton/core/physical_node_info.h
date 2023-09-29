@@ -98,7 +98,7 @@ public:
   /// \returns true if the calculated unique value of n1 is larger or equal than that of n2
   friend bool operator>=(const minhton::PhysicalNodeInfo &n1, const minhton::PhysicalNodeInfo &n2);
 
-  SERIALIZE(address_, port_)
+  SERIALIZE(address_, port_);
 
 private:
   uint16_t port_;

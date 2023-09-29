@@ -66,7 +66,7 @@ std::string decodeScenarioString(std::string scenario_string) {
   size_t current_pos = scenario_string.find('%');
   while (current_pos != std::string::npos) {
     DAISI_CHECK(current_pos + 3 <= scenario_string.length(),
-                "Last encoded % is shorter than string")
+                "Last encoded % is shorter than string");
 
     // Get hex number after % and convert to char
     char replacement = 0;
@@ -80,7 +80,7 @@ std::string decodeScenarioString(std::string scenario_string) {
   }
 
   DAISI_CHECK(scenario_string.find('%') == scenario_string.npos,
-              "Found unknown percent-encoded element in scenariostring")
+              "Found unknown percent-encoded element in scenariostring");
   return scenario_string;
 }
 

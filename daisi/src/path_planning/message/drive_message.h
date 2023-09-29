@@ -37,7 +37,7 @@ public:
 
   [[nodiscard]] ns3::Vector2D getGoal() const { return {pos_x_, pos_y_}; };
 
-  SERIALIZE(pos_x_, pos_y_)
+  SERIALIZE(pos_x_, pos_y_);
 
 private:
   bool initialized_ = false;

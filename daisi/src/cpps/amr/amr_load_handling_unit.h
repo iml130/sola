@@ -38,7 +38,7 @@ public:
 
   amr::AmrStaticAbility getAbility() const { return ability_; }
 
-  SERIALIZE(ability_, load_time_s_, unload_time_s_)
+  SERIALIZE(ability_, load_time_s_, unload_time_s_);
 
 private:
   double load_time_s_ = -1;

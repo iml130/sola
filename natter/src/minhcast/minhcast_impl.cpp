@@ -46,7 +46,7 @@ NatterMinhcast::Impl::Impl(MsgReceiveFct recv_callback,
 
 void NatterMinhcast::Impl::processMessage(const MinhcastMessage &msg) {
   NATTER_CHECK(contains(own_node_info_, msg.getTopic()),
-               "not subscribed to topic but received topic message.")
+               "not subscribed to topic but received topic message.");
 
   logger_.logReceiveFullMsg(msg.getMessageID(), msg.getLastNodeUUID(), getUUID());
 
@@ -67,9 +67,9 @@ BroadcastInfo NatterMinhcast::Impl::createBroadcastInfo(const MinhcastMessage &m
 
   // Check that fanouts of all nodes match
   NATTER_CHECK(std::get<2>(own_pos) == std::get<2>(msg.getLastNodePos()),
-               "Fanout of own and last node do not match")
+               "Fanout of own and last node do not match");
   NATTER_CHECK(std::get<2>(own_pos) == std::get<2>(msg.getInitialNodePos()),
-               "Fanout of own and initial node do not match")
+               "Fanout of own and initial node do not match");
 
   return {{getUUID(), own_pos},
           {msg.getLastNodeUUID(), msg.getLastNodePos()},
@@ -102,7 +102,7 @@ void NatterMinhcast::Impl::addLRT(LevelNumber own_node, const std::set<NodeInfo>
   for (auto &node : lrt) {
     auto it = other_peers.find({node});
     NATTER_CHECK(it != other_peers.end(),
-                 "Do not know node in LRT. Nodes in LRT should always be known (complete tree).")
+                 "Do not know node in LRT. Nodes in LRT should always be known (complete tree).");
     receiver.emplace_back(*it);
   }
 }
@@ -134,7 +134,7 @@ void NatterMinhcast::Impl::addLeftForwardNodes(LevelNumber own_node, LevelNumber
   if (std::get<0>(last_node) == std::get<0>(own_node)) {
     last_sender_lrt = calculateLRT(last_node);
     auto it = last_sender_lrt.find(own_node);
-    NATTER_CHECK(it != last_sender_lrt.end(), "Cannot find ourselves in LRT from last node")
+    NATTER_CHECK(it != last_sender_lrt.end(), "Cannot find ourselves in LRT from last node");
     lower_boundary = --it;  // Lower boundary is the next left node
   }
 
@@ -143,7 +143,7 @@ void NatterMinhcast::Impl::addLeftForwardNodes(LevelNumber own_node, LevelNumber
   if (lower_boundary == last_sender_lrt.end()) {
     for (auto &node : our_lrt) {
       auto it = other_peers.find({node});
-      NATTER_CHECK(it != other_peers.end(), "Do not known node in our LRT")
+      NATTER_CHECK(it != other_peers.end(), "Do not known node in our LRT");
       receiver.emplace_back(*it);
     }
   } else {
@@ -153,7 +153,7 @@ void NatterMinhcast::Impl::addLeftForwardNodes(LevelNumber own_node, LevelNumber
       // Forward to all nodes in our LRT which have a greater number than lower_boundary
       if (std::get<1>(node) > lower_boundary_number) {
         auto it = other_peers.find({node});
-        NATTER_CHECK(it != other_peers.end(), "Do not know node in our LRT")
+        NATTER_CHECK(it != other_peers.end(), "Do not know node in our LRT");
         receiver.emplace_back(*it);
       }
     }
@@ -172,7 +172,7 @@ void NatterMinhcast::Impl::addRightForwardNodes(LevelNumber own_node, LevelNumbe
   if (std::get<0>(last_node) == std::get<0>(own_node)) {
     last_sender_rrt = calculateRRT(last_node);
     auto it = last_sender_rrt.find(own_node);
-    NATTER_CHECK(it != last_sender_rrt.end(), "Cannot find ourselves in RRT from last node")
+    NATTER_CHECK(it != last_sender_rrt.end(), "Cannot find ourselves in RRT from last node");
     upper_boundary = ++it;  // upper boundary is the next right node
   }
 
@@ -218,7 +218,8 @@ void NatterMinhcast::Impl::addInnerForwardNodes(const BroadcastInfo &bc,
   const bool left_child = (own_number == last_number * fanout);
   const bool right_child = (own_number == right_child_number);
 
-  NATTER_CHECK(left_child != right_child, "addInnerForwardNodes() called without being outer child")
+  NATTER_CHECK(left_child != right_child,
+               "addInnerForwardNodes() called without being outer child");
 
   const uint32_t nodes_between = fanout - 2;
 
@@ -251,7 +252,7 @@ void NatterMinhcast::Impl::addInnerForwardNodes(const BroadcastInfo &bc,
 void NatterMinhcast::Impl::logMinhcastBroadcastInfo(const BroadcastInfo &bc) {
   logger_.logMinhcastBroadcast(bc.msg_id, bc.ownLevel(), bc.ownNumber(), bc.forwarding_limit.up(),
                                bc.forwarding_limit.down());
-  NATTER_CHECK(!contains(received_messages_, bc.msg_id), "received message more than once")
+  NATTER_CHECK(!contains(received_messages_, bc.msg_id), "received message more than once");
   received_messages_.insert(bc.msg_id);
 }
 #endif
@@ -267,7 +268,7 @@ bool NatterMinhcast::Impl::centeredNodeAddChildren(const BroadcastInfo &bc,
   uint32_t others_number = left_child ? bc.lastNumber() * bc.ownFanout() + (bc.ownFanout() - 1)
                                       : bc.lastNumber() * bc.ownFanout();
   NATTER_CHECK(left_child != right_child,
-               "Received message directly from above but we are not an outer child")
+               "Received message directly from above but we are not an outer child");
 
   if (left_child && !contains(other_peers, {{bc.ownLevel(), others_number, bc.ownFanout()}})) {
     // We are the only child received the message
@@ -436,7 +437,7 @@ void NatterMinhcast::Impl::sendToParent(const BroadcastInfo &bc, const Level par
     const NodeInfo parent_info = {{parent_level, parent_number, bc.ownFanout()}};
 
     auto it = other_peers.find({parent_info});
-    NATTER_CHECK(it != other_peers.end(), "Parent must exist but is not known")
+    NATTER_CHECK(it != other_peers.end(), "Parent must exist but is not known");
     const NodeInfo &parent = *it;
 
     sendMessage(bc, parent, parent_up_border, bc.ownLevel() - 1);
@@ -460,7 +461,7 @@ NatterMinhcast::Impl::getInlevel(const BroadcastInfo &bc) {
     // Determine if we are left or right child and forward accordingly
     bool left_child = (bc.ownNumber() == bc.lastNumber() * bc.ownFanout());
     bool right_child = (bc.ownNumber() == bc.lastNumber() * bc.ownFanout() + (bc.ownFanout() - 1));
-    NATTER_CHECK(left_child != right_child, "Cannot be left and right child simultaneous")
+    NATTER_CHECK(left_child != right_child, "Cannot be left and right child simultaneous");
     if (left_child) {
       addLeftForwardNodes(bc.getOwnNodePos(), bc.getLastNodePos(), other_peers, receiver_inlevel);
     } else {
@@ -521,16 +522,16 @@ std::tuple<uint32_t, uint32_t> NatterMinhcast::Impl::sendToAdjacents(const Broad
 
   // For debugging
   NATTER_CHECK(!(highest_adjacent.has_value() && deepest_adjacent.has_value()),
-               "SENDING TO 2 ADJACENTS!")
+               "SENDING TO 2 ADJACENTS!");
   if (deepest_adjacent.has_value()) {
     uint32_t deepest_adjacent_level = std::get<0>(deepest_adjacent->position);
     NATTER_CHECK(deepest_adjacent_level > bc.ownLevel() + 1,
-                 "Deepest adjacent not at least one level below own level")
+                 "Deepest adjacent not at least one level below own level");
   }
   if (highest_adjacent.has_value()) {
     uint32_t highest_adjacent_level = std::get<0>(highest_adjacent->position);
     NATTER_CHECK(highest_adjacent_level < bc.ownLevel() - 1,
-                 "Highest adjacent not at least one level above own level")
+                 "Highest adjacent not at least one level above own level");
   }
 
   uint32_t child_down_border = bc.forwarding_limit.down();
@@ -540,7 +541,7 @@ std::tuple<uint32_t, uint32_t> NatterMinhcast::Impl::sendToAdjacents(const Broad
   // forward to more than the half of levels
 
   if (highest_adjacent.has_value()) {
-    NATTER_CHECK(bc.ownLevel() != 0, "Cannot send to higher adjacent if we are root")
+    NATTER_CHECK(bc.ownLevel() != 0, "Cannot send to higher adjacent if we are root");
     const uint32_t peer_level = std::get<0>(highest_adjacent->position);
     const uint32_t parent_level = bc.ownLevel() - 1;
     const uint32_t level_diff_adj_parent = parent_level - peer_level - 1;
@@ -550,7 +551,7 @@ std::tuple<uint32_t, uint32_t> NatterMinhcast::Impl::sendToAdjacents(const Broad
     const auto level_reached_from_parent =
         static_cast<uint32_t>(std::floor(level_diff_adj_parent / 2.0));
     parent_up_border = parent_level - level_reached_from_parent;
-    NATTER_CHECK(parent_up_border - 1 == down_border, "failure in middle calculation")
+    NATTER_CHECK(parent_up_border - 1 == down_border, "failure in middle calculation");
     sendMessage(bc, highest_adjacent.value(), 0, down_border);
   }
 
@@ -565,7 +566,7 @@ std::tuple<uint32_t, uint32_t> NatterMinhcast::Impl::sendToAdjacents(const Broad
     const auto level_reached_from_child =
         static_cast<uint32_t>(std::ceil(level_diff_adj_child / 2.0));
     child_down_border = child_level + level_reached_from_child;
-    NATTER_CHECK(child_down_border + 1 == up_border, "failure in middle calculation")
+    NATTER_CHECK(child_down_border + 1 == up_border, "failure in middle calculation");
     sendMessage(bc, deepest_adjacent.value(), up_border, maxLevelNumber());
   }
 
@@ -608,7 +609,7 @@ void NatterMinhcast::Impl::broadcast(const BroadcastInfo &bc) {
   sendToInlevel(bc, other_sending_down, send_to_children);
 }
 void NatterMinhcast::Impl::subscribeTopic(const std::string &topic, const NodeInfo &info) {
-  NATTER_CHECK(std::get<2>(info.position) >= 2, "Fanout must be >= 2")
+  NATTER_CHECK(std::get<2>(info.position) >= 2, "Fanout must be >= 2");
   other_peers_[topic] = {};
   own_node_info_[topic] = info;
   auto [level, number, fanout] = info.position;
@@ -657,14 +658,14 @@ solanet::UUID NatterMinhcast::Impl::publish(const std::string &topic,
 bool NatterMinhcast::Impl::addPeer(const std::string &topic, const NodeInfo &info) {
   if (!contains(other_peers_, topic)) return false;         // not subscribed to topic
   if (contains(other_peers_[topic], {info})) return false;  // node already known
-  NATTER_CHECK(std::get<2>(info.position) >= 2, "Fanout must be >= 2")
+  NATTER_CHECK(std::get<2>(info.position) >= 2, "Fanout must be >= 2");
   other_peers_[topic].insert(info);
   return true;
 }
 
 bool NatterMinhcast::Impl::removePeer(const std::string &topic, const std::string &ip,
                                       uint16_t port) {
-  NATTER_CHECK(contains(other_peers_, topic), "no such topic")
+  NATTER_CHECK(contains(other_peers_, topic), "no such topic");
 
   NetworkInfoIPv4 network{ip, port};
   auto it = std::find_if(other_peers_.at(topic).begin(), other_peers_.at(topic).end(),

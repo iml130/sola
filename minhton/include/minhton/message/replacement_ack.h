@@ -33,7 +33,7 @@ public:
   std::vector<minhton::NodeInfo> getNeighbors() const;
   LockedStates getLockedStates() const;
 
-  SERIALIZE(header_, neighbors_, locked_, locked_right_, locked_left_)
+  SERIALIZE(header_, neighbors_, locked_, locked_right_, locked_left_);
 
   MessageReplacementAck() = default;
 

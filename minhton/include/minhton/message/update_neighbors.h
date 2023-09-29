@@ -28,7 +28,7 @@ public:
   NeighborsAndRelationships getNeighborsToUpdate() const;
   bool getShouldAcknowledge() const;
 
-  SERIALIZE(header_, neighbors_and_relationships_, should_acknowledge_)
+  SERIALIZE(header_, neighbors_and_relationships_, should_acknowledge_);
 
   MessageUpdateNeighbors() = default;
 

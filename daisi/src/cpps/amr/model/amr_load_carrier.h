@@ -51,7 +51,7 @@ public:
   std::string getTypeAsString() const;
   bool isValid() const;
 
-  SERIALIZE(type_)
+  SERIALIZE(type_);
 
 private:
   Types type_ = Types::kNoLoadCarrierType;

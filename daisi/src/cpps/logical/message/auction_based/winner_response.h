@@ -41,7 +41,7 @@ public:
 
   solanet::UUID getUUID() const { return uuid_; }
 
-  SERIALIZE(uuid_, task_uuid_, accept_, participant_connection_)
+  SERIALIZE(uuid_, task_uuid_, accept_, participant_connection_);
 
 private:
   solanet::UUID uuid_ = solanet::generateUUID();

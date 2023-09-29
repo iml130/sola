@@ -136,7 +136,7 @@ public:
   friend bool operator>(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
   friend bool operator>=(const minhton::NodeInfo &n1, const minhton::NodeInfo &n2);
 
-  SERIALIZE(l_node_info_, p_node_info_)
+  SERIALIZE(l_node_info_, p_node_info_);
 
 private:
   minhton::LogicalNodeInfo l_node_info_;

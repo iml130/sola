@@ -28,7 +28,7 @@ public:
   Navigate() = default;
   explicit Navigate(std::vector<util::Position> waypoints) : waypoints(std::move(waypoints)) {}
 
-  SERIALIZE(waypoints)
+  SERIALIZE(waypoints);
 
   std::vector<util::Position> waypoints;
 };

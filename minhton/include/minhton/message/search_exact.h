@@ -31,7 +31,7 @@ public:
   std::shared_ptr<MessageSEVariant> getQuery() const;
   bool getNotifyAboutFailure() const;
 
-  SERIALIZE(header_, destination_node_, query_, notify_about_failure_)
+  SERIALIZE(header_, destination_node_, query_, notify_about_failure_);
 
   MessageSearchExact() = default;
 

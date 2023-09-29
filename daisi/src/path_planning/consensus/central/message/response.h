@@ -26,7 +26,7 @@
 namespace daisi::path_planning::consensus {
 //! Response to a request from central server to pickup station
 struct Response {
-  SERIALIZE(success, request_id, start_offset)
+  SERIALIZE(success, request_id, start_offset);
   uint32_t request_id;  //!< Per station unique request id to match requests and responses
   bool success;         //!< True if request was successful. If false, \p start_offset_ is not valid
   double start_offset;  //!< Global possible start time in seconds

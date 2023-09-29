@@ -101,7 +101,7 @@ public:
   }
 
   SERIALIZE(current_metrics_, insertion_metrics_, insertion_metrics_set_, diff_insertion_metrics_,
-            diff_insertion_metrics_set_)
+            diff_insertion_metrics_set_);
 
 private:
   // the current costs

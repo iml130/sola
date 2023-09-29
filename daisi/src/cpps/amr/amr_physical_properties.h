@@ -34,7 +34,7 @@ public:
   // Get dimensions in meters
   std::vector<double> getDimensions() const { return dimensions_m_; }
 
-  SERIALIZE(dimensions_m_, weight_kg_)
+  SERIALIZE(dimensions_m_, weight_kg_);
 
 private:
   std::vector<double> dimensions_m_;

@@ -22,7 +22,7 @@
 namespace daisi::path_planning::message {
 //! Message send from \c AGVLogical to \c AGVPhysicalBasic with a 2D coordinate.
 struct DriveMessageField {
-  SERIALIZE(x, y)
+  SERIALIZE(x, y);
   double x;
   double y;
 };
