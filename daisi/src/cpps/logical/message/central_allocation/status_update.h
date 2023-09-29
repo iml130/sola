@@ -40,8 +40,8 @@ public:
         end_position_(end_position) {}
 
   const std::string &getParticipantConnection() const { return participant_connection_; }
-  const Metrics &getMetrics() { return metrics_; }
-  const util::Position getEndPosition() { return end_position_; }
+  const Metrics &getMetrics() const { return metrics_; }
+  const util::Position getEndPosition() const { return end_position_; }
 
   solanet::UUID getUUID() const { return uuid_; }
 

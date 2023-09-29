@@ -70,7 +70,7 @@ private:
   /// @param start_time the start time of the order
   void insertOrderPropertiesIntoMetrics(const daisi::material_flow::Order &order, Metrics &metrics,
                                         const daisi::material_flow::Task &task,
-                                        const daisi::util::Duration &start_time);
+                                        const daisi::util::Duration &start_time) const;
 
   /// @brief the currently active task
   std::optional<daisi::material_flow::Task> active_task_;

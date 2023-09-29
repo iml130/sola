@@ -90,7 +90,9 @@ void AmrPhysicalAsset::sendOrderUpdateNs3() {
 
 void AmrPhysicalAsset::startVehicleStatusUpdates() { scheduleVehicleStatusUpdateNs3(); }
 
-void AmrPhysicalAsset::stopVehicleStatusUpdatesNs3() { ns3::Simulator::Cancel(next_update_event_); }
+void AmrPhysicalAsset::stopVehicleStatusUpdatesNs3() const {
+  ns3::Simulator::Cancel(next_update_event_);
+}
 
 void AmrPhysicalAsset::scheduleVehicleStatusUpdateNs3() {
   sendVehicleStatusUpdateNs3(false);

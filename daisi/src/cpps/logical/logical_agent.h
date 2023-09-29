@@ -42,10 +42,10 @@ public:
   virtual void start() = 0;
 
   /// @brief Helper method for event scheduling.
-  bool isRunning();
+  bool isRunning() const;
 
   /// @brief Helper method for event scheduling.
-  bool canStop();
+  bool canStop() const;
 
   /// @brief Helper method for event scheduling.
   void prepareStop();

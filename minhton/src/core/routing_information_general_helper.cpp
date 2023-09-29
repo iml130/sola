@@ -377,7 +377,7 @@ std::vector<minhton::NodeInfo> RoutingInformation::combiningNodeVectorsWithoutDu
   return result;
 }
 
-std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueKnownExistingNeighbors() {
+std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueKnownExistingNeighbors() const {
   auto neighbors = this->getAllUniqueSymmetricalExistingNeighbors();
 
   auto initialized_routing_table_children = this->getAllInitializedRoutingTableNeighborChildren();
@@ -427,7 +427,8 @@ std::vector<minhton::NodeInfo> RoutingInformation::removeRoutingTableNeighborChi
   return neighbors;
 }
 
-std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueSymmetricalExistingNeighbors() {
+std::vector<minhton::NodeInfo> RoutingInformation::getAllUniqueSymmetricalExistingNeighbors()
+    const {
   std::vector<minhton::NodeInfo> neighbors;
 
   if (this->self_node_info_.getLevel() != 0) {
@@ -558,12 +559,12 @@ minhton::NodeInfo RoutingInformation::getLowestNode() const {
   return {};
 }
 
-bool RoutingInformation::areWeDSN() {
+bool RoutingInformation::areWeDSN() const {
   auto dsn_set = getDSNSet(self_node_info_.getLevel(), self_node_info_.getFanout());
   return std::find(dsn_set.begin(), dsn_set.end(), self_node_info_.getNumber()) != dsn_set.end();
 }
 
-bool RoutingInformation::areWeTempDSN() {
+bool RoutingInformation::areWeTempDSN() const {
   if (areWeDSN()) {
     return false;
   }

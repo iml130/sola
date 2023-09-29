@@ -59,7 +59,7 @@ private:
   void publishRandom(uint32_t message_size);
   void publish(uint32_t message_size, uint32_t publishing_node);
 
-  NodeInfo getNodeInfo(uint32_t index);
+  NodeInfo getNodeInfo(uint32_t index) const;
 
   /*
    * Add node info to node of other_id

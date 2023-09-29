@@ -68,7 +68,7 @@ void MinhtonFindEndAlgorithm::forwardToAdjacentNode(const minhton::NodeInfo requ
   forwardRequest(target, request_origin, SearchProgress::kNone, hop_count);
 }
 
-bool MinhtonFindEndAlgorithm::isCorrectParent() {
+bool MinhtonFindEndAlgorithm::isCorrectParent() const {
   auto left_neighbors = getRoutingInfo()->getLeftRoutingTableNeighborsLeftToRight();
   bool own_criteria = false;
 
@@ -151,7 +151,7 @@ void MinhtonFindEndAlgorithm::searchEndOnLevel(const minhton::NodeInfo request_o
 }
 
 minhton::NodeInfo MinhtonFindEndAlgorithm::findReachableNodeClosestToParent(
-    const minhton::NodeInfo child) {
+    const minhton::NodeInfo child) const {
   bool actual_target_is_on_the_right =
       join_ && ((child.getNumber() + 1) % getSelfNodeInfo().getFanout() == 0);
 

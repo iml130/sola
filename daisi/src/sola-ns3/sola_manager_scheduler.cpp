@@ -41,7 +41,9 @@ void SolaManager::schedule(SubscribeTopic subscribe, ns3::Time &current_time) {
   current_time -= delay;  // No delay at end (should be default delay)
 }
 
-void SolaManager::schedule(Delay delay, ns3::Time &current_time) { current_time += delay.delay; }
+void SolaManager::schedule(Delay delay, ns3::Time &current_time) const {
+  current_time += delay.delay;
+}
 
 void SolaManager::schedule(Publish publish, ns3::Time &current_time) {
   const uint32_t node_id = publish.node_id;

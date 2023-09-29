@@ -351,7 +351,7 @@ void DSNHandler::updateRemovedAttributes(const NodeInfo &inquired_node,
 }
 
 std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher>
-DSNHandler::getCoverData() {
+DSNHandler::getCoverData() const {
   return this->cover_data_;
 }
 

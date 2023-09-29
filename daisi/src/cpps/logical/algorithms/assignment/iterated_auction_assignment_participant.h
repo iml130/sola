@@ -69,7 +69,7 @@ private:
 
   /// @brief Calculating bids for each open task in a state.
   /// @param state Relevant auction state.
-  void calculateBids(AuctionParticipantState &state);
+  void calculateBids(AuctionParticipantState &state) const;
 
   /// @brief Picking the best bid from the referring auction state and submitting it.
   /// If we already submitted the same bid previously, the submission is not sent to avoid overhead

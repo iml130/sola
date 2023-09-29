@@ -52,7 +52,7 @@ public:
   /// @brief In this modification of pIA we do not consider prioritizations yet. Therefore, all free
   /// tasks are auctionable.
   /// @return Vector of all free tasks.
-  std::vector<material_flow::Task> getAuctionableTasks();
+  std::vector<material_flow::Task> getAuctionableTasks() const;
 
   /// @brief Setting the earliest valid start time, in pIA represented as PC[t], of a task.
   /// @param task Task to search for the according vertex

@@ -432,7 +432,7 @@ public:
   ///
   /// \returns a vector of every existing/initialized neighbor we know
   ///
-  std::vector<minhton::NodeInfo> getAllUniqueKnownExistingNeighbors();
+  std::vector<minhton::NodeInfo> getAllUniqueKnownExistingNeighbors() const;
 
   ///
   /// Returns a vector of every neighbor that we know which exists.
@@ -451,7 +451,7 @@ public:
   ///
   /// \returns a vector of every existing/initialized symmetrical neighbor we know
   ///
-  std::vector<minhton::NodeInfo> getAllUniqueSymmetricalExistingNeighbors();
+  std::vector<minhton::NodeInfo> getAllUniqueSymmetricalExistingNeighbors() const;
 
   ///
   /// Uninitializing the given position to remove.
@@ -571,8 +571,8 @@ public:
       const std::function<void(const minhton::NodeInfo &previous_node_info,
                                const minhton::NodeInfo &new_node_info)> &callback);
 
-  bool areWeDSN();
-  bool areWeTempDSN();
+  bool areWeDSN() const;
+  bool areWeTempDSN() const;
 
   NodeInfo getCoveringDSNOrTempDSN();
 

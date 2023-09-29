@@ -198,7 +198,7 @@ void IteratedAuctionAssignmentInitiator::notifyWinners(
 std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
                    amr::AmrStaticAbilityHasher>
 IteratedAuctionAssignmentInitiator::getTaskAbilityMapping(
-    const std::vector<material_flow::Task> &tasks) {
+    const std::vector<material_flow::Task> &tasks) const {
   std::unordered_map<amr::AmrStaticAbility, std::vector<material_flow::Task>,
                      amr::AmrStaticAbilityHasher>
       task_ability_mapping;

@@ -49,7 +49,7 @@ public:
   ValueAndTimestamp getValueAndTimestamp(Key key);
   ValueTimestampAndType getValueTimestampAndType(Key key);
 
-  std::unordered_map<Key, ValueTimestampAndType> getData();
+  std::unordered_map<Key, ValueTimestampAndType> getData() const;
 
   virtual bool isValueUpToDate(const NodeData::Key &key, uint64_t validity_threshold_timestamp);
 

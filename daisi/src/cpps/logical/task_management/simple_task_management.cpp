@@ -118,7 +118,7 @@ void SimpleTaskManagement::updateFinalMetrics() {
 
 void SimpleTaskManagement::insertOrderPropertiesIntoMetrics(
     const Order &order, Metrics &metrics, const Task &task,
-    const daisi::util::Duration &start_time) {
+    const daisi::util::Duration &start_time) const {
   if (!metrics.isStartTimeSet()) {
     metrics.setStartTime(start_time);
   }

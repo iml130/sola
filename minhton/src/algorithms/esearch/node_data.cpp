@@ -55,7 +55,7 @@ NodeData::ValueAndTimestamp NodeData::getValueAndTimestamp(Key key) {
 
 NodeData::Value NodeData::getValue(Key key) { return std::get<0>(data_.at(key)); }
 
-std::unordered_map<NodeData::Key, NodeData::ValueTimestampAndType> NodeData::getData() {
+std::unordered_map<NodeData::Key, NodeData::ValueTimestampAndType> NodeData::getData() const {
   return data_;
 }
 

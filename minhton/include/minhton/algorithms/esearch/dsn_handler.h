@@ -96,7 +96,7 @@ public:
                                std::vector<NodeData::Key> removed_keys);
 
   /// \returns current cover data
-  std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher> getCoverData();
+  std::unordered_map<LogicalNodeInfo, DistributedData, LogicalNodeInfoHasher> getCoverData() const;
 
   // TODO unit tests
   void notifyAboutQueryRequest(const FindQuery &query, uint64_t request_timestamp);

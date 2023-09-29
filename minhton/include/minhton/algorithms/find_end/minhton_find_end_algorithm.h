@@ -42,7 +42,7 @@ public:
   /// position. Only use after it is known which level is the last one!
   ///
   /// \returns true if we are at the final position, else false
-  bool isCorrectParent();
+  bool isCorrectParent() const;
 
   /// Helper method to do the search for the first null node on one side
   ///
@@ -57,7 +57,7 @@ public:
   ///
   /// \param child Node we are searching a parent (or a node close to it) for
   /// \returns NodeInfo Parent or a node close to it
-  minhton::NodeInfo findReachableNodeClosestToParent(minhton::NodeInfo child);
+  minhton::NodeInfo findReachableNodeClosestToParent(minhton::NodeInfo child) const;
 
   /// Helper method to check if the current level is completely filled
   ///
