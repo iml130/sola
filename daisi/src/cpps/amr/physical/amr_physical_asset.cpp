@@ -61,8 +61,6 @@ void AmrPhysicalAsset::updateFunctionality(const FunctionalityVariant &functiona
     process_event(LoadedPayload());
   else if (std::holds_alternative<Unload>(functionality))
     process_event(UnloadedPayload());
-  else if (std::holds_alternative<Charge>(functionality))
-    process_event(ChargedBattery());
   sendOrderUpdateNs3();
 }
 
@@ -154,14 +152,6 @@ bool AmrPhysicalAsset::holdsMoveType(const FunctionalityVariant &f) const {
 // fsmlite actions //
 /////////////////////
 
-template <typename T> void AmrPhysicalAsset::charge(const T &) {
-  amr_state_ = AmrState::kCharging;
-  executeFrontFunctionality();
-  if constexpr (std::is_same_v<ReceivedOrder, T>) {
-    startVehicleStatusUpdates();
-  }
-}
-
 template <typename T> void AmrPhysicalAsset::execute(const T &) {
   amr_state_ = AmrState::kWorking;
   executeFrontFunctionality();
@@ -193,11 +183,6 @@ template <typename T> bool AmrPhysicalAsset::isMoveToUnload(const T &) const {
          std::holds_alternative<Unload>(functionality_queue_.at(1));
 }
 
-template <typename T> bool AmrPhysicalAsset::isMoveToCharge(const T &) const {
-  return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
-         std::holds_alternative<Charge>(functionality_queue_.at(1));
-}
-
 template <typename T> bool AmrPhysicalAsset::isMove(const T &) const {
   return !functionality_queue_.empty() && holdsMoveType(functionality_queue_.front()) &&
          (functionality_queue_.size() == 1 || holdsMoveType(functionality_queue_.at(1)));
@@ -212,11 +197,6 @@ template <typename T> bool AmrPhysicalAsset::isUnload(const T &) const {
   return !functionality_queue_.empty() &&
          std::holds_alternative<Unload>(functionality_queue_.front());
 }
-
-// template <typename T> bool AmrPhysicalAsset::isCharge(const T &) const {
-//   return !functionality_queue_.empty() &&
-//   std::holds_alternative<Charge>(functionality_queue_.front());
-// }
 
 template <typename T> bool AmrPhysicalAsset::isFinish(const T &) const {
   return functionality_queue_.empty();

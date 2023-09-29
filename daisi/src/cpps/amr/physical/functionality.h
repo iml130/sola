@@ -20,16 +20,15 @@
 #include <functional>
 #include <variant>
 
-#include "cpps/amr/physical/charge.h"
 #include "cpps/amr/physical/load.h"
 #include "cpps/amr/physical/move_to.h"
 #include "cpps/amr/physical/navigate.h"
 #include "cpps/amr/physical/unload.h"
 
 namespace daisi::cpps {
-enum class FunctionalityType { kCharge, kLoad, kMoveTo, kNavigate, kUnload };
+enum class FunctionalityType { kLoad, kMoveTo, kNavigate, kUnload };
 
-using FunctionalityVariant = std::variant<std::monostate, Charge, Load, MoveTo, Navigate, Unload>;
+using FunctionalityVariant = std::variant<std::monostate, Load, MoveTo, Navigate, Unload>;
 using FunctionalityDoneCallback = std::function<void(const FunctionalityVariant &)>;
 
 }  // namespace daisi::cpps
