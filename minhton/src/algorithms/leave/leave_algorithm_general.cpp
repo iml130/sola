@@ -640,7 +640,7 @@ void LeaveAlgorithmGeneral::replaceMyself(const NodeInfo &node_to_replace,
 
   /// Determining what role each neighbor has: parent, child, routing table neighor, routing table
   /// neighbor child
-  for (auto &neighbor : neighbors_of_node_to_replace) {
+  for (const auto &neighbor : neighbors_of_node_to_replace) {
     getRoutingInfo()->updateNeighbor(neighbor, ref_event_id);
   }
 

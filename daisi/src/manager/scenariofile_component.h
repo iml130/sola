@@ -44,7 +44,7 @@
 
 namespace daisi {
 
-template <typename T> void serializeType(T &t, const std::string &key, YAML::Node node) {
+template <typename T> void serializeType(T &t, const std::string &key, const YAML::Node &node) {
   try {
     if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
       // Can directly fetch this

@@ -20,22 +20,22 @@
 
 namespace daisi::sola_ns3 {
 
-void StartSOLA::parse(YAML::Node node) { SERIALIZE_NS3_TIME(delay); }
+void StartSOLA::parse(const YAML::Node &node) { SERIALIZE_NS3_TIME(delay); }
 
-void SubscribeTopic::parse(YAML::Node node) {
+void SubscribeTopic::parse(const YAML::Node &node) {
   SERIALIZE_VAR(topic);
   SERIALIZE_NS3_TIME(delay);
 }
 
-void Delay::parse(YAML::Node node) { SERIALIZE_NS3_TIME(delay); }
+void Delay::parse(const YAML::Node &node) { SERIALIZE_NS3_TIME(delay); }
 
-void Publish::parse(YAML::Node node) {
+void Publish::parse(const YAML::Node &node) {
   SERIALIZE_VAR(topic);
   SERIALIZE_VAR(message_size);
   SERIALIZE_VAR(node_id);
 }
 
-void SolaScenarioSequenceStep::parse(YAML::Node node) {
+void SolaScenarioSequenceStep::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
   bool handled = false;

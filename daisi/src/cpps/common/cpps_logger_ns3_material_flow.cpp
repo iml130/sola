@@ -181,7 +181,7 @@ void CppsLoggerNs3::logMaterialFlowOrderUpdate(
       "(SELECT Id FROM CppsMaterialFlowTask WHERE TaskUuid='" + logging_info.task.getUuid() + "')";
 
   std::string order_uuid;
-  std::visit([&order_uuid](auto &&order) { order_uuid = order.getUuid(); },
+  std::visit([&order_uuid](const auto &order) { order_uuid = order.getUuid(); },
              logging_info.task.getOrders()[logging_info.order_index]);
 
   std::string order_id =

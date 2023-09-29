@@ -69,7 +69,7 @@ bool SimpleTaskManagement::canAddTask(const Task &task) {
 
 bool SimpleTaskManagement::addTask(const Task &task) {
   // simply add all orders in the given order
-  const auto orders = task.getOrders();
+  const auto &orders = task.getOrders();
   if (orders.empty()) {
     throw std::invalid_argument("Task must have at least one order.");
   }
@@ -103,7 +103,7 @@ void SimpleTaskManagement::updateFinalMetrics() {
 
   Metrics new_current_metrics;
   Task new_task = queue_.back();
-  auto orders = new_task.getOrders();
+  const auto &orders = new_task.getOrders();
 
   // iterate through orders to find the correct start time for the final order
   for (const auto &order : orders) {
@@ -122,7 +122,7 @@ void SimpleTaskManagement::insertOrderPropertiesIntoMetrics(
   if (!metrics.isStartTimeSet()) {
     metrics.setStartTime(start_time);
   }
-  const auto orders = task.getOrders();
+  const auto &orders = task.getOrders();
   auto order_it = std::find(orders.rbegin(), orders.rend(), order);
   const int order_index = orders.rend() - order_it - 1;
 

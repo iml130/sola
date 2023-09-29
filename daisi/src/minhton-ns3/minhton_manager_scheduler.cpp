@@ -51,7 +51,8 @@ void MinhtonManager::Scheduler::schedule() {
   Simulator::Schedule(MilliSeconds(10), &MinhtonManager::Scheduler::setupRootBehavior, this);
 
   for (const MinhtonScenarioSequenceStep &step : manager_.scenariofile_.scenario_sequence) {
-    std::visit([this, &current_time](auto &&step) { schedule(step, current_time); }, step.step);
+    std::visit([this, &current_time](const auto &step) { schedule(step, current_time); },
+               step.step);
   }
 }
 

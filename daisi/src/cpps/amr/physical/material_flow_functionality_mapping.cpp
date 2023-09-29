@@ -30,7 +30,7 @@ void handleMoveOrder(std::vector<FunctionalityVariant> &functionalities,
 
   auto move_to_position = move_order.getMoveOrderStep().getLocation().getPosition();
 
-  functionalities.push_back(MoveTo(move_to_position));
+  functionalities.emplace_back(MoveTo(move_to_position));
   last_position = move_to_position;
 }
 
@@ -44,9 +44,9 @@ void handleActionOrder(std::vector<FunctionalityVariant> &functionalities,
   auto params = action_order.getActionOrderStep().getParameters();
 
   if (params.count("load") == 1) {
-    functionalities.push_back(Load{last_position.value()});
+    functionalities.emplace_back(Load{last_position.value()});
   } else if (params.count("unload") == 1) {
-    functionalities.push_back(Unload{last_position.value()});
+    functionalities.emplace_back(Unload{last_position.value()});
   } else {
     throw std::invalid_argument("ActionOrder invalid");
   }
@@ -56,15 +56,15 @@ void handleTransportOrder(std::vector<FunctionalityVariant> &functionalities,
                           std::optional<daisi::util::Position> &last_position,
                           const daisi::material_flow::TransportOrder &transport_order) {
   auto pickup_to_steps = transport_order.getPickupTransportOrderSteps();
-  auto delivery_to_step = transport_order.getDeliveryTransportOrderStep();
+  const auto &delivery_to_step = transport_order.getDeliveryTransportOrderStep();
 
   for (auto const &pickup_step : pickup_to_steps) {
-    functionalities.push_back(MoveTo(pickup_step.getLocation().getPosition()));
-    functionalities.push_back(Load(pickup_step.getLocation().getPosition()));
+    functionalities.emplace_back(MoveTo(pickup_step.getLocation().getPosition()));
+    functionalities.emplace_back(Load(pickup_step.getLocation().getPosition()));
   }
 
-  functionalities.push_back(MoveTo(delivery_to_step.getLocation().getPosition()));
-  functionalities.push_back(Unload(delivery_to_step.getLocation().getPosition()));
+  functionalities.emplace_back(MoveTo(delivery_to_step.getLocation().getPosition()));
+  functionalities.emplace_back(Unload(delivery_to_step.getLocation().getPosition()));
 
   last_position = delivery_to_step.getLocation().getPosition();
 }
@@ -76,7 +76,7 @@ std::vector<FunctionalityVariant> materialFlowToFunctionalities(
 
   for (const auto &order : orders) {
     std::visit(
-        [&functionalities, &last_position, &order](auto &&arg) {
+        [&functionalities, &last_position, &order](const auto &arg) {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, daisi::material_flow::MoveOrder>) {
             handleMoveOrder(functionalities, last_position,

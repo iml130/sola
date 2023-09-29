@@ -93,7 +93,8 @@ void LogicContainer::associateMessageTypesWithAlgorithm(
 void LogicContainer::process(const MessageVariant &msg) {
   // Process the received message with the algorithm responsible for the message type
   MessageType type = std::visit(
-      [this](auto &&message) -> MessageType { return message.getHeader().getMessageType(); }, msg);
+      [this](const auto &message) -> MessageType { return message.getHeader().getMessageType(); },
+      msg);
   auto algorithm_to_use = message_type_to_algorithm_map_.at(type);
   algorithm_to_use->process(msg);
 }

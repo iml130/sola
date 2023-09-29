@@ -105,13 +105,13 @@ void AmrLogicalAgent::readFromPhysicalSocket(ns3::Ptr<ns3::Socket> socket) {
   for (const auto &msg : header.getMessages()) {
     auto amr_msg = amr::deserialize(msg.payload);
 
-    if (auto amr_description = std::get_if<AmrDescription>(&amr_msg)) {
+    if (const auto amr_description = std::get_if<AmrDescription>(&amr_msg)) {
       processMessageAmrDescription(*amr_description);
 
-    } else if (auto amr_status_update = std::get_if<AmrStatusUpdate>(&amr_msg)) {
+    } else if (const auto amr_status_update = std::get_if<AmrStatusUpdate>(&amr_msg)) {
       processMessageAmrStatusUpdate(*amr_status_update);
 
-    } else if (auto amr_order_update = std::get_if<AmrOrderUpdate>(&amr_msg)) {
+    } else if (const auto amr_order_update = std::get_if<AmrOrderUpdate>(&amr_msg)) {
       processMessageAmrOrderUpdate(*amr_order_update);
     }
   }
@@ -271,17 +271,17 @@ void AmrLogicalAgent::setServices() {
   service.friendly_name = "service_" + description_.getProperties().getFriendlyName();
   service.uuid = solanet::uuidToString(solanet::generateUUID());
 
-  service.key_values.insert({"servicetype", std::string("transport")});
+  service.key_values.try_emplace("servicetype", std::string("transport"));
 
-  service.key_values.insert(
-      {"maxpayload", description_.getLoadHandling().getAbility().getMaxPayloadWeight()});
+  service.key_values.try_emplace("maxpayload",
+                                 description_.getLoadHandling().getAbility().getMaxPayloadWeight());
 
-  service.key_values.insert(
-      {"loadcarriertype",
-       description_.getLoadHandling().getAbility().getLoadCarrier().getTypeAsString()});
+  service.key_values.try_emplace(
+      "loadcarriertype",
+      description_.getLoadHandling().getAbility().getLoadCarrier().getTypeAsString());
 
-  service.key_values.insert({"amruuid", uuid_});
-  service.key_values.insert({"endpoint", communicator_->network.getConnectionString()});
+  service.key_values.try_emplace("amruuid", uuid_);
+  service.key_values.try_emplace("endpoint", communicator_->network.getConnectionString());
 
   logger_->logTransportService(service, true);
   communicator_->sola.addService(service);

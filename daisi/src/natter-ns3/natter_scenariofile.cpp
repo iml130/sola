@@ -20,19 +20,19 @@
 
 namespace daisi::natter_ns3 {
 
-void Join::parse(YAML::Node node) {
+void Join::parse(const YAML::Node &node) {
   SERIALIZE_VAR(mode);
   SERIALIZE_NS3_TIME_OPTIONAL(delay);
 }
 
-void Publish::parse(YAML::Node node) {
+void Publish::parse(const YAML::Node &node) {
   SERIALIZE_VAR(mode);
   SERIALIZE_VAR(number);
   SERIALIZE_NS3_TIME_OPTIONAL(delay);
   SERIALIZE_VAR(message_size);
 }
 
-void NatterScenarioSequenceStep::parse(YAML::Node node) {
+void NatterScenarioSequenceStep::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
   bool handled = false;

@@ -431,10 +431,10 @@ NodeData::NodesWithAttributes MinhtonEntitySearchAlgorithm::getRelevantAttribute
       for (auto const &key : relevant_keys) {
         if (local_data_.hasKey(key)) {
           auto value = local_data_.getValue(key);
-          node_data.push_back({key, value});
+          node_data.emplace_back(key, value);
         } else if (std::find(relevant_topic_keys.begin(), relevant_topic_keys.end(), key) !=
                    relevant_topic_keys.end()) {
-          node_data.push_back({key, false});
+          node_data.emplace_back(key, false);
         }
       }
 
@@ -451,10 +451,10 @@ NodeData::NodesWithAttributes MinhtonEntitySearchAlgorithm::getRelevantAttribute
         for (auto const &key : relevant_keys) {
           if (distr_data.hasKey(key)) {
             auto value = distr_data.getValue(key);
-            node_data.push_back({key, value});
+            node_data.emplace_back(key, value);
           } else if (std::find(relevant_topic_keys.begin(), relevant_topic_keys.end(), key) !=
                      relevant_topic_keys.end()) {
-            node_data.push_back({key, false});
+            node_data.emplace_back(key, false);
           }
         }
       }
@@ -525,7 +525,7 @@ std::vector<NodeInfo> MinhtonEntitySearchAlgorithm::calcDSNsToSendInitialCDSForw
   }
 
   if (self.getLevel() != 0) {
-    initial_dsns.push_back(NodeInfo(0, 0, fanout));
+    initial_dsns.emplace_back(0, 0, fanout);
   } else {
     initial_dsns.push_back(self);
   }
@@ -538,7 +538,7 @@ std::vector<NodeInfo> MinhtonEntitySearchAlgorithm::calcDSNsToSendInitialCDSForw
       auto level_ds = getDSNSet(level, fanout);
       if (level_ds.size() <= (size_t)fanout + 1) {
         // pick first
-        initial_dsns.push_back(NodeInfo(level, fanout, fanout));
+        initial_dsns.emplace_back(level, fanout, fanout);
 
       } else {
         // pick dsn in middle of set
@@ -547,7 +547,7 @@ std::vector<NodeInfo> MinhtonEntitySearchAlgorithm::calcDSNsToSendInitialCDSForw
         std::advance(it, middle_index);
         uint32_t middle_number = *it;
 
-        initial_dsns.push_back(NodeInfo(level, middle_number, fanout));
+        initial_dsns.emplace_back(level, middle_number, fanout);
       }
     }
   }
@@ -556,10 +556,10 @@ std::vector<NodeInfo> MinhtonEntitySearchAlgorithm::calcDSNsToSendInitialCDSForw
     if (self.getLevel() == known_max_level && we_are_dsn) {
       initial_dsns.push_back(self);
     } else {
-      initial_dsns.push_back(NodeInfo(known_max_level, known_max_level == 0 ? 0 : fanout, fanout));
+      initial_dsns.emplace_back(known_max_level, known_max_level == 0 ? 0 : fanout, fanout);
     }
   } else {
-    initial_dsns.push_back(NodeInfo(known_max_level + 1, fanout, fanout));
+    initial_dsns.emplace_back(known_max_level + 1, fanout, fanout);
   }
 
   return initial_dsns;

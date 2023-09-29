@@ -17,7 +17,7 @@ bool NodeData::insert(Key key, NodeData::ValueTimestampAndType value_timestamp_a
   if (hasKey(key)) {
     return false;
   }
-  bool inserted = data_.insert({key, value_timestamp_and_type}).second;
+  bool inserted = data_.try_emplace(key, value_timestamp_and_type).second;
   return inserted;
 }
 

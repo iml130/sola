@@ -28,7 +28,7 @@ struct AmrKinematicsScenario {
   double max_acceleration;
   double max_deceleration;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(max_velocity);
     SERIALIZE_VAR(min_velocity);
     SERIALIZE_VAR(max_acceleration);
@@ -46,7 +46,7 @@ struct AmrLoadHandlingScenario {
   std::string load_carrier;
   double max_payload;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(load_time);
     SERIALIZE_VAR(unload_time);
     SERIALIZE_VAR(load_carrier);
@@ -66,7 +66,7 @@ struct AmrPropertiesScenario {
   std::string friendly_name;
   uint32_t model_number;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(device_type);
     SERIALIZE_VAR(manufacturer);
     SERIALIZE_VAR(model_name);
@@ -90,7 +90,7 @@ struct AmrDescriptionScenario {
   AmrLoadHandlingScenario load_handling;
   AmrPropertiesScenario properties;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(kinematics);
     SERIALIZE_VAR(load_handling);
     SERIALIZE_VAR(properties);

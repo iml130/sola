@@ -18,7 +18,7 @@ NetworkFacade::NetworkFacade(std::function<void(const MessageVariant &msg)> recv
 
 void NetworkFacade::send(const MessageVariant &msg) {
   MinhtonMessageHeader header =
-      std::visit([](auto &&arg) -> MinhtonMessageHeader { return arg.getHeader(); }, msg);
+      std::visit([](const auto &arg) -> MinhtonMessageHeader { return arg.getHeader(); }, msg);
   network_.send(
       {header.getTarget().getAddress(), header.getTarget().getPort(), serializer_.serialize(msg)});
 }

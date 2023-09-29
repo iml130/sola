@@ -63,8 +63,9 @@ void LogicalAgent::initCommunication() {
 }
 
 void LogicalAgent::processMessage(const Message &msg) {
-  for (auto &algorithm : algorithms_) {
-    bool processed = std::visit([&algorithm](auto &&msg) { return algorithm->process(msg); }, msg);
+  for (const auto &algorithm : algorithms_) {
+    bool processed =
+        std::visit([&algorithm](const auto &msg) { return algorithm->process(msg); }, msg);
     if (processed) {
       return;
     }

@@ -18,16 +18,16 @@
 
 namespace daisi::minhton_ns3 {
 
-void Gaussian::parse(YAML::Node node) {
+void Gaussian::parse(const YAML::Node &node) {
   SERIALIZE_VAR(mean);
   SERIALIZE_VAR(sigma);
 }
 
-void Uniform::parse(YAML::Node node) {
+void Uniform::parse(const YAML::Node &node) {
   SERIALIZE_VAR(min);
   SERIALIZE_VAR(max);
 }
 
-void ConstantTime::parse(YAML::Node node) { SERIALIZE_VAR(time); }
+void ConstantTime::parse(const YAML::Node &node) { SERIALIZE_VAR(time); }
 
 }  // namespace daisi::minhton_ns3

@@ -31,7 +31,7 @@ namespace daisi::minhton_ns3 {
 struct PresenceBehavior {
   double percentage;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /*******************/
@@ -47,7 +47,7 @@ struct ChoiceValue {
 
   double prob;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Choice {
@@ -55,7 +55,7 @@ struct Choice {
 
   std::vector<ChoiceValue> values;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Constant {
@@ -67,13 +67,13 @@ struct Constant {
   std::optional<bool> value_bool;
   std::optional<std::string> value_string;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct ContentBehavior {
   std::variant<Choice, Constant, Gaussian, Uniform> content_behavior;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /*******************/
@@ -89,7 +89,7 @@ struct StaticUpdate {
 struct UpdateBehavior {
   std::variant<ConstantTime, Gaussian, Uniform, StaticUpdate> update_behavior;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /*******************/
@@ -102,7 +102,7 @@ struct PeerDiscoveryAttribute {
   ContentBehavior content_behavior;
   UpdateBehavior update_behavior;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 }  // namespace daisi::minhton_ns3

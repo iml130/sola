@@ -31,7 +31,7 @@ struct Join {
   std::string mode;
   std::optional<ns3::Time> delay;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Publish {
@@ -42,13 +42,13 @@ struct Publish {
   std::optional<ns3::Time> delay;
   uint64_t message_size = 0;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct NatterScenarioSequenceStep {
   std::variant<Join, Publish> step;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct NatterScenariofile : public GeneralScenariofile {

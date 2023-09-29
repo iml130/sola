@@ -20,9 +20,9 @@
 
 namespace daisi::minhton_ns3 {
 
-void PresenceBehavior::parse(YAML::Node node) { SERIALIZE_VAR(percentage); }
+void PresenceBehavior::parse(const YAML::Node &node) { SERIALIZE_VAR(percentage); }
 
-void ChoiceValue::parse(YAML::Node node) {
+void ChoiceValue::parse(const YAML::Node &node) {
   SERIALIZE_VAR(content_int);
   SERIALIZE_VAR(content_float);
   SERIALIZE_VAR(content_bool);
@@ -30,16 +30,16 @@ void ChoiceValue::parse(YAML::Node node) {
   SERIALIZE_VAR(prob);
 }
 
-void Choice::parse(YAML::Node node) { SERIALIZE_VAR(values); }
+void Choice::parse(const YAML::Node &node) { SERIALIZE_VAR(values); }
 
-void Constant::parse(YAML::Node node) {
+void Constant::parse(const YAML::Node &node) {
   SERIALIZE_VAR(value_int);
   SERIALIZE_VAR(value_float);
   SERIALIZE_VAR(value_bool);
   SERIALIZE_VAR(value_string);
 }
 
-void ContentBehavior::parse(YAML::Node node) {
+void ContentBehavior::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -52,7 +52,7 @@ void ContentBehavior::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid content behavior type");
 }
 
-void UpdateBehavior::parse(YAML::Node node) {
+void UpdateBehavior::parse(const YAML::Node &node) {
   std::string type;
   SERIALIZE_VAR(type);
 
@@ -65,7 +65,7 @@ void UpdateBehavior::parse(YAML::Node node) {
   DAISI_CHECK(handled, "Invalid update behavior type");
 }
 
-void PeerDiscoveryAttribute::parse(YAML::Node node) {
+void PeerDiscoveryAttribute::parse(const YAML::Node &node) {
   SERIALIZE_VAR(name);
   SERIALIZE_VAR(presence_behavior);
 

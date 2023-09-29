@@ -177,7 +177,7 @@ void MinhtonNode::send(const MessageVariant &msg) {
 
 void MinhtonNode::prepareSending(const MessageVariant &msg_variant) {
   std::visit(
-      [this](auto &&msg) {
+      [this](const auto &msg) {
         const MinhtonMessageHeader header = msg.getHeader();
         LOG_INFO("send " + getMessageTypeString(header.getMessageType()) + " to " +
                  header.getTarget().getString());
@@ -219,7 +219,7 @@ void MinhtonNode::recv(const MessageVariant &msg) {
 
 bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
   bool process_msg = std::visit(
-      [this, msg_variant](auto &&msg) {
+      [this, msg_variant](const auto &msg) {
         const MinhtonMessageHeader header = msg.getHeader();
         LOG_INFO("recv " + getMessageTypeString(header.getMessageType()) + " from " +
                  header.getSender().getString());
@@ -230,7 +230,7 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         // If a find_replacement msg reaches the node that wants to leave and is chosen as the
         // replacement node, this means it can leave the network on its own
         if (header.getMessageType() == MessageType::kFindReplacement) {
-          auto msg_find_repl = std::get<MessageFindReplacement>(msg_variant);
+          const auto &msg_find_repl = std::get<MessageFindReplacement>(msg_variant);
           if (msg_find_repl.getNodeToReplace() == getNodeInfo() &&
               msg_find_repl.getSearchProgress() == SearchProgress::kReplacementNode) {
             fsm_event.does_not_need_replacement = true;
@@ -430,8 +430,8 @@ std::future<FindResult> MinhtonNode::find([[maybe_unused]] const std::string &qu
 
 void MinhtonNode::performSearchExactTest(const NodeInfo &destination,
                                          std::shared_ptr<minhton::MessageSEVariant> query) {
-  uint64_t event_id =
-      std::visit([this](auto &&msg) -> uint64_t { return msg.getHeader().getEventId(); }, *query);
+  uint64_t event_id = std::visit(
+      [this](const auto &msg) -> uint64_t { return msg.getHeader().getEventId(); }, *query);
   LOG_SEARCH_EXACT(minhton::SearchExactTestEntryTypes::kStart, event_id, getNodeInfo(), destination,
                    minhton::NodeInfo());
   logic_->performSearchExactTest(destination, query);

@@ -67,11 +67,11 @@ public:
 
     for (auto [key, value] : service.key_values) {
       if (value.type() == typeid(std::string)) {
-        entry.push_back({key, std::any_cast<std::string>(value)});
+        entry.emplace_back(key, std::any_cast<std::string>(value));
       } else if (value.type() == typeid(float)) {
-        entry.push_back({key, std::any_cast<float>(value)});
+        entry.emplace_back(key, std::any_cast<float>(value));
       } else if (value.type() == typeid(int)) {
-        entry.push_back({key, std::any_cast<int>(value)});
+        entry.emplace_back(key, std::any_cast<int>(value));
       } else {
         throw std::runtime_error("invalid any");
       }

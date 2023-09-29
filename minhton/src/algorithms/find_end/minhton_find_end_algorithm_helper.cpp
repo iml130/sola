@@ -91,11 +91,12 @@ bool MinhtonFindEndAlgorithm::isCorrectParent() const {
     return own_criteria;
   }
 
-  auto children_left_side = getRoutingInfo()->getLeftRoutingTableNeighborChildrenLeftToRight();
+  const auto &children_left_side =
+      getRoutingInfo()->getLeftRoutingTableNeighborChildrenLeftToRight();
   // If the current node wants to accept the entering node / provide a replacement node and has a
   // left neighbor, the left neighbor must have children
   if (!children_left_side.empty()) {
-    auto last_child_left_side = children_left_side.back();
+    const auto &last_child_left_side = children_left_side.back();
 
     // Check if the left neighbor has no capacity left (last child exists)
     if (last_child_left_side.isInitialized()) {

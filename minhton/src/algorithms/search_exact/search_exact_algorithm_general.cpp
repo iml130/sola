@@ -39,7 +39,7 @@ void SearchExactAlgorithmGeneral::performSearchExact(const NodeInfo &destination
   double self_value = getSelfNodeInfo().getLogicalNodeInfo().getHorizontalValue();
   double dest_value = destination.getLogicalNodeInfo().getHorizontalValue();
   MinhtonMessageHeader query_header =
-      std::visit([](auto &&msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
+      std::visit([](const auto &msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
 
   // we are the searched node
   if (self_value == dest_value) {
@@ -96,7 +96,7 @@ void SearchExactAlgorithmGeneral::performSearchExact(const NodeInfo &destination
 void SearchExactAlgorithmGeneral::notifyAboutFailure(const NodeInfo &destination,
                                                      std::shared_ptr<MessageSEVariant> query) {
   MinhtonMessageHeader query_header =
-      std::visit([](auto &&msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
+      std::visit([](const auto &msg) -> MinhtonMessageHeader { return msg.getHeader(); }, *query);
   auto ref_event_id =
       query_header.getRefEventId() == 0 ? query_header.getEventId() : query_header.getRefEventId();
   MinhtonMessageHeader header(getSelfNodeInfo(), query_header.getSender(), ref_event_id);

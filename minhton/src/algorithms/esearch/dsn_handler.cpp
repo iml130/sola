@@ -264,7 +264,7 @@ DSNHandler::getUndecidedNodesAndMissingKeys(FindQuery &query, bool all_informati
       std::vector<NodeData::Key> missing_keys =
           query.evaluateMissingAttributes(distr_data, timestamp_now);
 
-      undecided.push_back({undecided_node, missing_keys});
+      undecided.emplace_back(undecided_node, missing_keys);
     }
   }
 
@@ -422,7 +422,7 @@ DSNHandler::getNodesAndKeysToUnsubscribe(uint64_t const &timestamp_now) {
       auto sub_order_keys = distr_data.getSubscriptionOrderKeys();
 
       for (auto const &key : sub_order_keys) {
-        current_sub_tuples.push_back({peer, distr_data, key});
+        current_sub_tuples.emplace_back(peer, distr_data, key);
         sub_keys.push_back(key);
       }
     }
@@ -539,7 +539,7 @@ NodeData::Attributes DSNHandler::getNodeAttributes(const NodeInfo &node) {
   auto it = cover_data_.find(node.getLogicalNodeInfo());
   if (it != cover_data_.end()) {
     for (auto &[key, value_timestamp_type] : it->second.getData()) {
-      attributes.push_back({key, std::get<0>(value_timestamp_type)});
+      attributes.emplace_back(key, std::get<0>(value_timestamp_type));
     }
   }
 

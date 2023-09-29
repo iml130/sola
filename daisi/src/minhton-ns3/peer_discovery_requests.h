@@ -31,7 +31,7 @@ namespace daisi::minhton_ns3 {
 struct ValidityThreshold {
   std::variant<ConstantTime> threshold;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /************************/
@@ -43,7 +43,7 @@ struct Absolute {
 
   uint64_t number;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct RandomNode {
@@ -51,13 +51,13 @@ struct RandomNode {
 
   double percentage;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Nodes {
   std::variant<RandomNode, Absolute> nodes;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /************************/
@@ -69,13 +69,13 @@ struct StaticTime {
 
   uint64_t time;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Frequency {
   std::variant<Gaussian, StaticTime> frequency;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /************************/
@@ -87,13 +87,13 @@ struct Static {
 
   uint8_t value;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Depth {
   std::variant<Uniform, Static> depth;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 /************************/
@@ -108,7 +108,7 @@ struct Requests {
   bool inquire_outdated;
   bool inquire_unknown;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 }  // namespace daisi::minhton_ns3

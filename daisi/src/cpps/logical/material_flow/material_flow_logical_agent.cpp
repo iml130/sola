@@ -100,9 +100,9 @@ void MaterialFlowLogicalAgent::setServices() {
   service.friendly_name = "service_material_flow_agent";
   service.uuid = solanet::uuidToString(solanet::generateUUID());
 
-  service.key_values.insert({"servicetype", std::string("assignmentinitiator")});
-  service.key_values.insert({"mfuuid", uuid_});
-  service.key_values.insert({"endpoint", communicator_->network.getConnectionString()});
+  service.key_values.try_emplace("servicetype", std::string("assignmentinitiator"));
+  service.key_values.try_emplace("mfuuid", uuid_);
+  service.key_values.try_emplace("endpoint", communicator_->network.getConnectionString());
   communicator_->sola.addService(service);
 }
 

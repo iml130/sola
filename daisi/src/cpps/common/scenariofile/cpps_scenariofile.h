@@ -34,7 +34,7 @@ struct TopologyScenario {
   double height = 0.0;
   double depth = 0.0;
 
-  void parse(YAML::Node node) {
+  void parse(const YAML::Node &node) {
     SERIALIZE_VAR(width);
     SERIALIZE_VAR(height);
     SERIALIZE_VAR(depth);
@@ -58,7 +58,7 @@ struct AlgorithmScenario {
           {"round_robin", logical::AlgorithmType::kRoundRobinParticipant},
   };
 
-  void parse(YAML::Node node) { SERIALIZE_VAR(assignment_strategy); }
+  void parse(const YAML::Node &node) { SERIALIZE_VAR(assignment_strategy); }
 
   logical::AlgorithmConfig getInitiatorAlgorithmConfig() const {
     logical::AlgorithmConfig algorithm_config;

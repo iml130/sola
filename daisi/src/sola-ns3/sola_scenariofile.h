@@ -30,7 +30,7 @@ struct StartSOLA {
 
   ns3::Time delay;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct SubscribeTopic {
@@ -39,7 +39,7 @@ struct SubscribeTopic {
   std::string topic;
   ns3::Time delay;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Delay {
@@ -47,7 +47,7 @@ struct Delay {
 
   ns3::Time delay;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct Publish {
@@ -57,13 +57,13 @@ struct Publish {
   uint64_t message_size;  // in bytes
   uint64_t node_id;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct SolaScenarioSequenceStep {
   std::variant<StartSOLA, SubscribeTopic, Delay, Publish> step;
 
-  void parse(YAML::Node node);
+  void parse(const YAML::Node &node);
 };
 
 struct SolaScenariofile : public GeneralScenariofile {
