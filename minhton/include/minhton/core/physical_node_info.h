@@ -14,14 +14,8 @@
 #include "solanet/serializer/serialize.h"
 
 namespace minhton {
-#define PORT_MIN 1024
-#define PORT_MAX UINT16_MAX
-
-#define INVALID_PORT "Invalid Port"
-#define INVALID_IP_ADDRESS "Adress has to be valid"
-
-#define IPv4_ADDRESS "127.0.0.1"
-#define IPv4_PORT 2906
+constexpr uint16_t kPortMin = 1024;
+constexpr uint16_t kPortMax = UINT16_MAX;
 
 ///
 /// A PhysicalNodeInfo represents the remote host, by having a IPv4/IPv6 IP address and a port

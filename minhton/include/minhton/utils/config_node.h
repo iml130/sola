@@ -37,7 +37,7 @@ private:
 
   /// is only used when the node is root. But it is not required to set since the default treemapper
   /// value of a MINHTON network is 100.
-  uint16_t treemapper_ = k_TREEMAPPER_ROOT_VALUE;  // missing getter
+  uint16_t treemapper_ = kTreeMapperRootValue;  // missing getter
 
   /// logger type
   std::vector<Logger::LoggerPtr> logger_;

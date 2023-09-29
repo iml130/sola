@@ -25,8 +25,6 @@ using namespace ns3;
 
 namespace daisi::natter_ns3 {
 
-#define TOPIC "TOPIC1"
-
 NatterManager::NatterManager(const std::string &scenariofile_path)
     : scenariofile_(scenariofile_path) {}
 
@@ -68,7 +66,7 @@ void NatterManager::addPeer(uint32_t other_id, const NodeInfo &info) {
   natter_info.network_info = {info.ip, info.port};
   natter_info.uuid = info.own_uuid;
 
-  getApplication(other_id)->addPeer(TOPIC, natter_info);
+  getApplication(other_id)->addPeer(topic_, natter_info);
 }
 
 void NatterManager::connectParent(const NodeInfo &info) {
@@ -162,7 +160,7 @@ void NatterManager::connectRoutingTableNeighborChildren(const NodeInfo &info,
       natter_info.network_info = {child_net_info.ip, child_net_info.port};
       natter_info.uuid = app_child->getUUID();
 
-      getApplication(neighbor)->addPeer(TOPIC, natter_info);
+      getApplication(neighbor)->addPeer(topic_, natter_info);
     }
   }
 }
@@ -179,7 +177,7 @@ void NatterManager::joinMinhton() {
     natter::minhcast::NatterMinhcast::NodeInfo natter_info;
     natter_info.position = {info.own_level, info.own_number, info.fanout};
 
-    info.app->subscribeTopic(TOPIC, natter_info);
+    info.app->subscribeTopic(topic_, natter_info);
 
     // Log all peers to database
     info.app->setLevelNumber({info.own_level, info.own_number});
@@ -206,7 +204,7 @@ void NatterManager::publish(uint32_t message_size, uint32_t publishing_node) {
 
   std::cout << "PUBLISH AT " << Simulator::Now().GetMicroSeconds() << " FROM " << publishing_node
             << std::endl;
-  getApplication(publishing_node)->publish(TOPIC, std::string(message_size, 'a'));
+  getApplication(publishing_node)->publish(topic_, std::string(message_size, 'a'));
 }
 
 void NatterManager::publishRandom(uint32_t message_size) {

@@ -13,7 +13,7 @@ NodeInfo LeaveAlgorithmGeneral::getAdjacentLeftFromVector(const NodeInfo &consid
                                                           std::vector<NodeInfo> neighbors) {
   NodeInfo closest;
   double considered_node_value = considered_node.getLogicalNodeInfo().getHorizontalValue();
-  double best_diff = k_TREEMAPPER_ROOT_VALUE * 2;
+  double best_diff = kTreeMapperRootValue * 2;
 
   for (auto const &node : neighbors) {
     double node_value = node.getLogicalNodeInfo().getHorizontalValue();
@@ -34,7 +34,7 @@ NodeInfo LeaveAlgorithmGeneral::getAdjacentRightFromVector(const NodeInfo &consi
                                                            std::vector<NodeInfo> neighbors) {
   NodeInfo closest;
   double considered_node_value = considered_node.getLogicalNodeInfo().getHorizontalValue();
-  double best_diff = k_TREEMAPPER_ROOT_VALUE * 2;
+  double best_diff = kTreeMapperRootValue * 2;
 
   for (auto const &node : neighbors) {
     double node_value = node.getLogicalNodeInfo().getHorizontalValue();

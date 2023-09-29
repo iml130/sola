@@ -124,7 +124,7 @@ std::string LogicalNodeInfo::getUuid() const { return solanet::uuidToString(this
 solanet::UUID LogicalNodeInfo::getRawUuid() const { return this->uuid_; }
 
 double LogicalNodeInfo::getHorizontalValue() const {
-  double value = treeMapper(this->level_, this->number_, this->fanout_, k_TREEMAPPER_ROOT_VALUE);
+  double value = treeMapper(this->level_, this->number_, this->fanout_, kTreeMapperRootValue);
   return value;
 }
 

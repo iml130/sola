@@ -38,8 +38,8 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
   }
 
   // Find the free child position closest to root (general null balancing)
-  double best_diff = k_TREEMAPPER_ROOT_VALUE * 2 + 1;
-  double root_value = k_TREEMAPPER_ROOT_VALUE;
+  double best_diff = kTreeMapperRootValue * 2 + 1;
+  double root_value = kTreeMapperRootValue;
   uint32_t best_num = UINT32_MAX;
 
   for (uint16_t i = 0; i < getRoutingInfo()->getFanout(); i++) {
@@ -47,7 +47,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
     if (!getRoutingInfo()->getChildren()[i].isInitialized()) {
       uint32_t current_num = getSelfNodeInfo().getNumber() * getRoutingInfo()->getFanout() + i;
       double current_value = treeMapper(getSelfNodeInfo().getLevel() + 1, current_num,
-                                        getRoutingInfo()->getFanout(), k_TREEMAPPER_ROOT_VALUE);
+                                        getRoutingInfo()->getFanout(), kTreeMapperRootValue);
       double current_diff = std::abs(root_value - current_value);
 
       if (current_diff < best_diff) {
@@ -116,7 +116,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentRightOfNewChild(
   // also adding ourselves because we could also be the adjacent
   right_neighbors.push_back(getSelfNodeInfo());
 
-  double best_value = k_TREEMAPPER_ROOT_VALUE * 2 + 1;
+  double best_value = kTreeMapperRootValue * 2 + 1;
   for (auto const &node : right_neighbors) {
     double current_value = node.getLogicalNodeInfo().getHorizontalValue();
     if (target_value < current_value && current_value < best_value) {

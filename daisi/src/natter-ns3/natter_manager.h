@@ -80,6 +80,8 @@ private:
   ns3::NodeContainer nodes_;
 
   CoreNetwork core_network_;
+
+  const std::string topic_ = "TOPIC1";
 };
 
 }  // namespace daisi::natter_ns3

@@ -11,8 +11,6 @@
 #include "natter/natter_minhcast.h"
 #include "solanet/uuid.h"
 
-#define TOPIC "mytopic"
-
 static constexpr uint32_t kFanout = 2;
 
 // See README.md for more information
@@ -62,13 +60,15 @@ public:
             [](const std::string & /*missing_msg_id*/) { /* intentionally not implemented */ }) {}
 
   void run() {
+    static const std::string topic = "myTopic";
+
     std::cout << "Starting chat" << std::endl;
     natter::minhcast::LevelNumber own_node_data = ownNodeData();
     const NetworkInfoIPv4 own_network = natter_.getNetworkInfo();
     std::cout << "Your connection ID: " << own_network.ip << ";" << own_network.port << ";"
               << std::get<0>(own_node_data) << ";" << std::get<1>(own_node_data) << std::endl;
     minhcast::MinhcastNodeInfo own_node{own_node_data, {}};  // Only position needed
-    natter_.subscribeTopic(TOPIC, own_node);
+    natter_.subscribeTopic(topic, own_node);
 
     std::cout << "Use :connect to connect to another peer" << std::endl;
     std::cout << "Use :quit to exit" << std::endl;
@@ -82,9 +82,9 @@ public:
         auto [ip, port, tree_pos] = connectionInput();
 
         minhcast::MinhcastNodeInfo info{tree_pos, {ip, port}};
-        natter_.addPeer(TOPIC, info);
+        natter_.addPeer(topic, info);
       } else {
-        natter_.publish(TOPIC, line);
+        natter_.publish(topic, line);
       }
     }
   }

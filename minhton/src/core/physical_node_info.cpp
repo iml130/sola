@@ -36,17 +36,17 @@ uint16_t PhysicalNodeInfo::getPort() const { return this->port_; }
 std::string PhysicalNodeInfo::getAddress() const { return this->address_; }
 
 void PhysicalNodeInfo::setPort(uint16_t port) {
-  if (port < PORT_MIN || port >= PORT_MAX) throw std::invalid_argument(INVALID_PORT);
+  if (port < kPortMin || port >= kPortMax) throw std::invalid_argument("Invalid Port");
 
   this->port_ = port;
 }
 void PhysicalNodeInfo::setAddress(std::string address) {
   if (address.length() == 0) {
-    throw std::invalid_argument(INVALID_IP_ADDRESS);
+    throw std::invalid_argument("Adress has to be valid");
   }
 
   if (!PhysicalNodeInfo::isIpv4Address(address) && !PhysicalNodeInfo::isIpv6Address(address)) {
-    throw std::invalid_argument(INVALID_IP_ADDRESS);
+    throw std::invalid_argument("Adress has to be valid");
   }
 
   this->address_ = address;
