@@ -30,7 +30,7 @@ public:
   /// Constructs a SQLite logger and generates database
   /// \param file_path Absolute path to the location where the database should be created
   /// \param file_name Name of the database to be created
-  SQLiteHelper(const std::string &file_path, const std::string &file_name);
+  SQLiteHelper(std::string file_path, std::string file_name);
 
   /// Disconnects and renames the temporary database filename to final name
   ~SQLiteHelper();

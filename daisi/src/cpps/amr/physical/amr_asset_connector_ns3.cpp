@@ -53,8 +53,8 @@ AmrAssetConnector::~AmrAssetConnector() = default;
 AmrAssetConnector::AmrAssetConnector(AmrAssetConnector &&other) noexcept = default;
 
 void AmrAssetConnector::execute(const FunctionalityVariant &functionality,
-                                const FunctionalityDoneCallback notifyDone) {
-  pimpl_->mobility_model->execute(functionality, description_, topology_, notifyDone);
+                                FunctionalityDoneCallback notifyDone) {
+  pimpl_->mobility_model->execute(functionality, description_, topology_, std::move(notifyDone));
 }
 
 util::Position AmrAssetConnector::getPosition() const {

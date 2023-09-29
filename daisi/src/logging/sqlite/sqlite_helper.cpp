@@ -31,7 +31,7 @@ static constexpr size_t kMaxQueueSize = 100000;
 
 namespace daisi {
 
-SQLiteHelper::SQLiteHelper(const std::string &file_path, const std::string &file_name)
+SQLiteHelper::SQLiteHelper(std::string file_path, std::string file_name)
     : file_path_(std::move(file_path)), file_name_(std::move(file_name)) {
   this->connect();
 }

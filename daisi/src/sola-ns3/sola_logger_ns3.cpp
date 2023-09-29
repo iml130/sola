@@ -28,7 +28,7 @@ namespace daisi::sola_ns3 {
 
 SolaLoggerNs3::SolaLoggerNs3(LogDeviceApp log_device_application, LogFunction log)
     : sola::LoggerInterface("NOT-INITIALIZED"),
-      log_device_application_(log_device_application),
+      log_device_application_(std::move(log_device_application)),
       log_(std::move(log)) {}
 
 SolaLoggerNs3::~SolaLoggerNs3() {

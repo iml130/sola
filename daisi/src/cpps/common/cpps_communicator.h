@@ -32,7 +32,8 @@ struct CppsCommunicator {
                    const sola::EventDisseminationMinhcast::Config &event_dissemination_config,
                    sola::TopicMessageReceiveFct topic_recv, sola::LoggerPtr logger,
                    const std::function<void(const solanet::Message &)> &callback)
-      : sola(storage_config, event_dissemination_config, topic_recv, logger), network(callback) {}
+      : sola(storage_config, event_dissemination_config, std::move(topic_recv), logger),
+        network(callback) {}
 
   sola::SOLA<sola::ManagementOverlayMinhton, sola::EventDisseminationMinhcast> sola;
   solanet::Network network;

@@ -36,7 +36,7 @@ public:
   Task() = default;
 
   Task(std::string name, std::string connection_string, const std::vector<Order> &orders,
-       const std::vector<std::string> &follow_up_task_uuids);
+       std::vector<std::string> follow_up_task_uuids);
 
   const std::string &getUuid() const;
   const std::string &getName() const;
