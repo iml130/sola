@@ -36,13 +36,13 @@ AmrDescription buildBasicAmrDescription() {
 
 Topology buildBasicTopology() { return Topology{{20, 20, 0}}; }
 
-daisi::util::Position p0(0, 0);
-daisi::util::Position p1(10, 0);
-daisi::util::Position p2(10, 10);
-daisi::util::Position p3(0, 10);
-daisi::util::Position p4(5, 10);
-daisi::util::Position p5(20, 0);
-daisi::util::Position p6(20, 10);
+const daisi::util::Position p0(0, 0);
+const daisi::util::Position p1(10, 0);
+const daisi::util::Position p2(10, 10);
+const daisi::util::Position p3(0, 10);
+const daisi::util::Position p4(5, 10);
+const daisi::util::Position p5(20, 0);
+const daisi::util::Position p6(20, 10);
 
 TEST_CASE("One Simple Transport Order", "[basic]") {
   // arrange

@@ -132,7 +132,7 @@ void LoggerManager::updateTestSetupEventCount(const uint64_t &count) {
 }
 
 static std::string readMinhtonConfigFileContent(std::string path) {
-  char *minhton_path_ptr = std::getenv("MINHTONDIR");
+  const char *minhton_path_ptr = std::getenv("MINHTONDIR");
   if (minhton_path_ptr == nullptr)
     throw std::runtime_error("MINHTONDIR environment variable not specified!");
   std::string minhton_path(minhton_path_ptr);
