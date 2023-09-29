@@ -59,15 +59,16 @@ public:
   // -----------------------------------------
 
   std::vector<amr::AmrStaticAbility> getFittingExistingAbilities(
-      const amr::AmrStaticAbility &ability_requirement);
+      const amr::AmrStaticAbility &ability_requirement) const;
 
-  amr::AmrStaticAbility getClosestExistingAbility(const amr::AmrStaticAbility &ability_requirement);
+  amr::AmrStaticAbility getClosestExistingAbility(
+      const amr::AmrStaticAbility &ability_requirement) const;
 
-  std::vector<amr::AmrStaticAbility> getAllExistingAbilities();
+  std::vector<amr::AmrStaticAbility> getAllExistingAbilities() const;
 
-  std::string getTopicForAbility(const amr::AmrStaticAbility &ability);
+  std::string getTopicForAbility(const amr::AmrStaticAbility &ability) const;
 
-  AmrKinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability);
+  AmrKinematics getKinematicsOfAbility(const amr::AmrStaticAbility &ability) const;
 
   static std::string getDefaultTopic() { return "defaulttopic"; }
 };

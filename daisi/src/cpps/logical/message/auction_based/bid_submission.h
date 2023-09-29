@@ -45,7 +45,7 @@ public:
 
   const amr::AmrStaticAbility &getParticipantAbility() const { return participant_ability_; }
 
-  const MetricsComposition &getMetricsComposition() { return metrics_composition_; }
+  const MetricsComposition &getMetricsComposition() const { return metrics_composition_; }
 
   bool operator>(const BidSubmission &other) const {
     if (metrics_composition_ != other.metrics_composition_) {

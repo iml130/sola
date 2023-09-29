@@ -186,7 +186,7 @@ protected:
   /// \returns vector of all NodeInfo objects for the routing table neighbors of the new child
   ///
   std::vector<minhton::NodeInfo> getRoutingTableNeighborsForNewChild(
-      const minhton::NodeInfo &new_child);
+      const minhton::NodeInfo &new_child) const;
 
   ///
   /// Looks for the position of a new free child. The position which is horizontally
@@ -218,7 +218,7 @@ protected:
   ///
   /// \returns NodeInfo object of adjacent left of new child, or uninitialized NodeInfo if
   /// entering_node doesn't have one
-  minhton::NodeInfo calcAdjacentLeftOfNewChild(const minhton::NodeInfo &entering_node);
+  minhton::NodeInfo calcAdjacentLeftOfNewChild(const minhton::NodeInfo &entering_node) const;
 
   ///
   /// Calculates the new adjacent right of the entering node, which we accept as our child.
@@ -233,7 +233,7 @@ protected:
   ///
   /// \returns NodeInfo object of adjacent right of new child, or uninitialized NodeInfo if
   /// entering_node doesn't have one
-  minhton::NodeInfo calcAdjacentRightOfNewChild(const minhton::NodeInfo &entering_node);
+  minhton::NodeInfo calcAdjacentRightOfNewChild(const minhton::NodeInfo &entering_node) const;
 
   ///
   /// Calculates the new adjacent left for us, which might change when we accept the entering node

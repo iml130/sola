@@ -100,7 +100,7 @@ public:
     return msg.uuid;
   }
 
-  bool isStorageRunning() { return storage_->isRunning(); }
+  bool isStorageRunning() const { return storage_->isRunning(); }
 
 private:
   std::shared_ptr<StorageT> storage_;

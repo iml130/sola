@@ -46,7 +46,7 @@ public:
 
   /// @brief Calculating winners for the different ability groups based on received bids.
   /// @return Vector of winners with information to send WinnerNotifications.
-  std::vector<Winner> selectWinner();
+  std::vector<Winner> selectWinner() const;
 
   /// @brief Counting how many times winner responses were successful or not.
   /// Throwing an exception if there were no bid submissions too many times.

@@ -37,7 +37,7 @@ public:
   void processTimeout(const Timeout &timeout_event);
 
   bool isBootstrapResponseValid() const;
-  bool canLeaveWithoutReplacement();
+  bool canLeaveWithoutReplacement() const;
 
   void performSearchExactTest(const minhton::NodeInfo &destination,
                               std::shared_ptr<minhton::MessageSEVariant> query);

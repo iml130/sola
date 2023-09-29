@@ -112,7 +112,7 @@ void MinhtonApplication::setStaticBuildNeighbors(const minhton::NodeInfo &self_p
   }
 }
 
-minhton::NodeInfo MinhtonApplication::getNodeInfo() {
+minhton::NodeInfo MinhtonApplication::getNodeInfo() const {
   DAISI_CHECK(minhton_node_, "MINHTON not initialized");
   return minhton_node_->getNodeInfo();
 }

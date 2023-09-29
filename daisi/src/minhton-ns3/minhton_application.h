@@ -36,7 +36,7 @@ public:
 
   void processSignal(const minhton::Signal &signal);
 
-  minhton::NodeInfo getNodeInfo();
+  minhton::NodeInfo getNodeInfo() const;
 
   void executeSearchExactTest(uint32_t dest_level, uint32_t dest_number);
 

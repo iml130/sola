@@ -68,7 +68,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcNewChildPosition(bool use_complete_b
 }
 
 minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
-    const minhton::NodeInfo &entering_node) {
+    const minhton::NodeInfo &entering_node) const {
   minhton::NodeInfo best_node;
   double target_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
 
@@ -99,7 +99,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentLeftOfNewChild(
 }
 
 minhton::NodeInfo JoinAlgorithmGeneral::calcAdjacentRightOfNewChild(
-    const minhton::NodeInfo &entering_node) {
+    const minhton::NodeInfo &entering_node) const {
   minhton::NodeInfo best_node;
   double target_value = entering_node.getLogicalNodeInfo().getHorizontalValue();
 
@@ -192,7 +192,7 @@ minhton::NodeInfo JoinAlgorithmGeneral::calcOurNewAdjacentRight(
 /// and return them
 ///
 std::vector<minhton::NodeInfo> JoinAlgorithmGeneral::getRoutingTableNeighborsForNewChild(
-    const minhton::NodeInfo &new_child) {
+    const minhton::NodeInfo &new_child) const {
   if (!getSelfNodeInfo().isInitialized()) {
     throw std::logic_error("RoutingInformation not initialized");
   }

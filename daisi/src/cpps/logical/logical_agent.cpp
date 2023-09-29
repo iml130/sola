@@ -83,9 +83,9 @@ void LogicalAgent::topicMessageReceiveFunction(const sola::TopicMessage &msg) {
   processMessage(logical_message);
 }
 
-bool LogicalAgent::isRunning() { return communicator_->sola.isStorageRunning(); }
+bool LogicalAgent::isRunning() const { return communicator_->sola.isStorageRunning(); }
 
-bool LogicalAgent::canStop() { return communicator_->sola.canStop(); }
+bool LogicalAgent::canStop() const { return communicator_->sola.canStop(); }
 
 void LogicalAgent::prepareStop() { communicator_->sola.stop(); }
 

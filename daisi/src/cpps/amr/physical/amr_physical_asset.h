@@ -78,7 +78,7 @@ private:
   void sendDescriptionNs3();
   void scheduleVehicleStatusUpdateNs3();
   void startVehicleStatusUpdates();
-  void stopVehicleStatusUpdatesNs3();
+  void stopVehicleStatusUpdatesNs3() const;
   ns3::EventId next_update_event_;
 
   void processMessageOrderInfo(const AmrOrderInfo &order_info);

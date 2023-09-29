@@ -139,7 +139,7 @@ bool LogicContainer::isBootstrapResponseValid() const {
   return this->bootstrap_algo_->isBootstrapResponseValid();
 }
 
-bool LogicContainer::canLeaveWithoutReplacement() {
+bool LogicContainer::canLeaveWithoutReplacement() const {
   return this->leave_algo_->canLeaveWithoutReplacement();
 }
 

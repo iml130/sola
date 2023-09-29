@@ -97,7 +97,7 @@ void AuctionInitiatorState::countBidSubmissionProcessing() {
   }
 }
 
-std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner() {
+std::vector<AuctionInitiatorState::Winner> AuctionInitiatorState::selectWinner() const {
   if (bid_submissions_.empty()) {
     return {};
   }

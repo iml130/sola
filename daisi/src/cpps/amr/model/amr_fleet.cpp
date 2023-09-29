@@ -23,7 +23,7 @@ namespace daisi::cpps {
 /// as tau(t) of task t in thesis
 /// where ability_requirement is h(t)
 std::vector<amr::AmrStaticAbility> AmrFleet::getFittingExistingAbilities(
-    const amr::AmrStaticAbility &ability_requirement) {
+    const amr::AmrStaticAbility &ability_requirement) const {
   std::vector<amr::AmrStaticAbility> fitting_abilities;
   for (auto const &[existing_ability, _] : infos_) {
     if (ability_requirement <= existing_ability) {
@@ -35,7 +35,7 @@ std::vector<amr::AmrStaticAbility> AmrFleet::getFittingExistingAbilities(
 }
 
 amr::AmrStaticAbility AmrFleet::getClosestExistingAbility(
-    const amr::AmrStaticAbility &ability_requirement) {
+    const amr::AmrStaticAbility &ability_requirement) const {
   /*
   finding minimal element in tau(t), where h(t) = ability_requirement
 
@@ -77,7 +77,7 @@ amr::AmrStaticAbility AmrFleet::getClosestExistingAbility(
 }
 
 /// \mathcal{G} = {G1, G2, ...} in thesis
-std::vector<amr::AmrStaticAbility> AmrFleet::getAllExistingAbilities() {
+std::vector<amr::AmrStaticAbility> AmrFleet::getAllExistingAbilities() const {
   std::vector<amr::AmrStaticAbility> abilities;
   for (auto const &[ability, _] : infos_) {
     abilities.push_back(ability);
@@ -85,7 +85,7 @@ std::vector<amr::AmrStaticAbility> AmrFleet::getAllExistingAbilities() {
   return abilities;
 }
 
-std::string AmrFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
+std::string AmrFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) const {
   std::ostringstream stream;
   stream << "topic";
   stream << ability;
@@ -93,7 +93,7 @@ std::string AmrFleet::getTopicForAbility(const amr::AmrStaticAbility &ability) {
   return topic;
 }
 
-AmrKinematics AmrFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) {
+AmrKinematics AmrFleet::getKinematicsOfAbility(const amr::AmrStaticAbility &ability) const {
   for (auto const &[existing_ability, kinematics] : infos_) {
     if (ability == existing_ability) {
       return kinematics;

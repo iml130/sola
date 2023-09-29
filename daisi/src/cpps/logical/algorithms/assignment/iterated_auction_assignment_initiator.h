@@ -102,7 +102,7 @@ private:
   /// @param tasks Relevant tasks to be mapped
   std::unordered_map<amr::AmrStaticAbility, std::vector<daisi::material_flow::Task>,
                      amr::AmrStaticAbilityHasher>
-  getTaskAbilityMapping(const std::vector<daisi::material_flow::Task> &tasks);
+  getTaskAbilityMapping(const std::vector<daisi::material_flow::Task> &tasks) const;
 
   /// @brief Helper class for storing information about tasks and their layers in a precedence
   /// graph, according to the pIA algorithm.

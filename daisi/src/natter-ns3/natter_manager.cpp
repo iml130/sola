@@ -53,7 +53,7 @@ ns3::Ptr<NatterApplication> NatterManager::getApplication(uint32_t id) const {
   return nodes_.Get(id)->GetApplication(0)->GetObject<NatterApplication>();
 }
 
-NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) {
+NatterManager::NodeInfo NatterManager::getNodeInfo(uint32_t index) const {
   uint16_t fanout = scenariofile_.fanout;
   const uint32_t own_level = natter_ns3::calculateLevel(index, fanout);
   const uint32_t own_number = natter_ns3::calculateNumber(index, fanout, own_level);

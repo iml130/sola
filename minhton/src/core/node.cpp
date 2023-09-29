@@ -401,7 +401,7 @@ uint16_t MinhtonNode::getTimeoutLength(const TimeoutType &timeout_type) const {
   return 0;
 }
 
-FSMState MinhtonNode::getFsmState() { return FSMState{fsm_.current_state()}; }
+FSMState MinhtonNode::getFsmState() const { return FSMState{fsm_.current_state()}; }
 
 void MinhtonNode::initFSM(minhton::FSMState &init_state) {
   fsm_ = minhton::FiniteStateMachine(init_state);

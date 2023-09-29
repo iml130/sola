@@ -68,7 +68,7 @@ public:
 
   void initFSM(minhton::FSMState &init_state);
 
-  FSMState getFsmState();
+  FSMState getFsmState() const;
 
   std::shared_ptr<minhton::RoutingInformation> getRoutingInformation();
 
