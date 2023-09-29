@@ -315,7 +315,7 @@ private:
 };
 
 template <typename NumericType> class NumericComparisonExpression : public AtomicBooleanExpression {
-  static_assert(std::is_same<NumericType, int>::value || std::is_same<NumericType, float>::value,
+  static_assert(std::is_same_v<NumericType, int> || std::is_same_v<NumericType, float>,
                 "NumericType must be int or float");
 
 public:
