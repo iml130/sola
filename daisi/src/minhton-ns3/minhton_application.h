@@ -30,7 +30,7 @@ class MinhtonApplication final : public ns3::Application {
 public:
   static ns3::TypeId GetTypeId();
   MinhtonApplication() = default;
-  ~MinhtonApplication() final = default;
+  ~MinhtonApplication() override = default;
 
   void initializeNode(minhton::ConfigNode config);
 
@@ -51,10 +51,10 @@ public:
                                const minhton::NodeInfo &adj_left,
                                const minhton::NodeInfo &adj_right);
 
-  void StopApplication() final;
+  void StopApplication() override;
 
 private:
-  void StartApplication() final;
+  void StartApplication() override;
 
   std::unique_ptr<minhton::MinhtonNode> minhton_node_;
 

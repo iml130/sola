@@ -24,9 +24,9 @@ class SerializerCereal final : public ISerializer {
 public:
   ~SerializerCereal() override = default;
 
-  std::string serialize(const minhton::MessageVariant &msg) final;
+  std::string serialize(const minhton::MessageVariant &msg) override;
 
-  minhton::MessageVariant deserialize(const std::string &str) final;
+  minhton::MessageVariant deserialize(const std::string &str) override;
 };
 }  // namespace minhton::serializer
 #endif

@@ -48,12 +48,12 @@ public:
   EventDisseminationMinhcast(TopicMessageReceiveFct msgRecvFct, std::shared_ptr<Storage> storage_,
                              const Config &config, LoggerPtr logger);
   ~EventDisseminationMinhcast() override = default;
-  void publish(const TopicMessage &msg) final;
-  void subscribe(const std::string &topic) final;
-  void unsubscribe(const std::string &topic) final;
+  void publish(const TopicMessage &msg) override;
+  void subscribe(const std::string &topic) override;
+  void unsubscribe(const std::string &topic) override;
 
-  void stop() final;
-  bool canStop() const final;
+  void stop() override;
+  bool canStop() const override;
 
 private:
   void waitForResults(const std::string &topic);
