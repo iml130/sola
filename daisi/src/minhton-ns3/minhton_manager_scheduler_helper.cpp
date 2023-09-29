@@ -168,16 +168,6 @@ void MinhtonManager::Scheduler::executeOneJoinOnRoot() {
 
 void MinhtonManager::Scheduler::executeOneJoinDiscover() {
   throw std::runtime_error("currently not supported");
-  // if (uninit_index_deque_.empty()) {
-  //   throw std::logic_error("No uninit join to enter the network left");
-  // }
-
-  // uint64_t uninit_index = uninit_index_deque_.front();
-  // std::cout << "\texecuteOneJoinDiscover from " << uninit_index << " at "
-  //           << Simulator::Now().GetMilliSeconds() << std::endl;
-  // this->initiateJoinNowDiscover(uninit_index);
-  // uninit_index_deque_.pop_front();
-  // init_index_deque_.push_back(uninit_index);
 }
 
 void MinhtonManager::Scheduler::Scheduler::executeOneRandomJoin() {
@@ -347,7 +337,6 @@ void MinhtonManager::Scheduler::scheduleSearchExactMany(ns3::Time delay, uint32_
 
   auto existing_positions_tuple = this->getExistingPositions();
   auto existing_positions = std::get<1>(existing_positions_tuple);
-  // auto existing_indices = std::get<0>(existing_positions_tuple);
 
   assert(number <= existing_positions.size() * (existing_positions.size() - 1));
 
@@ -561,7 +550,6 @@ void MinhtonManager::Scheduler::executeStaticNetworkBuild(uint32_t number) {
     }
     return (uint32_t)(((1 - pow(fanout, l)) / (1 - fanout)) + n);
   };
-  // auto calc_index = [&](const uint32_t &l, const uint32_t &n) { return pow(fanout, l) - 1 + n; };
 
   manager_.nodes_.Get(0)->GetApplication(0)->GetObject<MinhtonApplication>()->getNodeInfo();
 

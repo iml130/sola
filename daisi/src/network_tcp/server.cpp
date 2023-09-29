@@ -100,10 +100,6 @@ void Server::processPacket(ns3::Ptr<ns3::Packet> packet, TcpSocketHandle sender)
   }
 }
 
-void Server::successfulConnect(ns3::Ptr<ns3::Packet>) {}
-
-void Server::failedConnect(ns3::Ptr<ns3::Packet>) { throw std::runtime_error("failed to connect"); }
-
 bool Server::connectionRequest(ns3::Ptr<ns3::Socket>, const ns3::Address &) {
   // Always accept
   return true;

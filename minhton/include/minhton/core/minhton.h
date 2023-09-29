@@ -29,7 +29,6 @@ public:
   void insert(const std::vector<Entry> &data);
   void update(const std::vector<Entry> &data);
   void remove(const std::vector<std::string> &keys);
-  // void find(std::string query);
   std::future<FindResult> find(const FindQuery &query);
 
   State getState();

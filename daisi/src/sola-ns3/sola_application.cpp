@@ -43,15 +43,6 @@ TypeId SolaApplication::GetTypeId() {
   return tid;
 }
 
-void SolaApplication::DoDispose() {
-  StopApplication();
-  Application::DoDispose();
-}
-
-void SolaApplication::StartApplication() {}
-
-void SolaApplication::StopApplication() {}
-
 uint16_t SolaApplication::getPort() const { return listening_port_; }
 
 std::string SolaApplication::getIP() const {

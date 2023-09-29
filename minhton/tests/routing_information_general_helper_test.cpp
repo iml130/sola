@@ -1031,13 +1031,10 @@ TEST_CASE("RoutingInformationGeneralHelper removeNeighbor",
   routing_info.setAdjacentRight(node_4_9);
   routing_info.updateNeighbor(node_2_2);  // parent
   routing_info.updateNeighbor(node_3_0);
-  // routing_info.updateNeighbor(node_3_1);
   routing_info.updateNeighbor(node_3_2);
   routing_info.updateNeighbor(node_3_3);
-  // routing_info.updateNeighbor(node_3_4);
   routing_info.updateNeighbor(node_3_5);
   routing_info.updateNeighbor(node_3_6);
-  // routing_info.updateNeighbor(node_3_7);
   routing_info.updateNeighbor(node_4_0);
   routing_info.updateNeighbor(node_4_1);
   routing_info.updateNeighbor(node_4_4);
@@ -1327,12 +1324,9 @@ TEST_CASE(
 TEST_CASE("RoutingInformationGeneralHelper getNodeInfoByPosition",
           "[RoutingInformationGeneralHelper][Methods][getNodeInfoByPosition]") {
   minhton::RoutingInformation routing_info_empty{};
-  // REQUIRE_THROWS_AS(routing_info_empty.getNodeInfoByPosition(3, 2), std::logic_error);
 
   minhton::NodeInfo node(1, 1, 3);
   minhton::RoutingInformation routing_info(node, Logger());
-
-  // REQUIRE_THROWS_AS(routing_info_empty.getNodeInfoByPosition(1, 1000), std::invalid_argument);
 
   minhton::NodeInfo node_1_0(1, 0, (uint16_t)3, "1.2.3.4", 2000);
   minhton::NodeInfo node_2_1(2, 1, (uint16_t)3, "1.2.3.4", 2000);

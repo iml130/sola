@@ -162,28 +162,28 @@ void MinhtonEntitySearchAlgorithm::logKeyValueContentUpdateInsert(NodeData::Key 
     bool bool_value = std::get<bool>(value);
     LOG_CONTENT(node, ContentStatus::kContentInsertUpdate, key, type, std::to_string(bool_value));
   } catch (std::bad_variant_access const &ex) {
-  };
+  }
 
   try {
     int int_value = std::get<int>(value);
     LOG_CONTENT(node, ContentStatus::kContentInsertUpdate, key, type, std::to_string(int_value));
     return;
   } catch (std::bad_variant_access const &ex) {
-  };
+  }
 
   try {
     float float_value = std::get<float>(value);
     LOG_CONTENT(node, ContentStatus::kContentInsertUpdate, key, type, std::to_string(float_value));
     return;
   } catch (std::bad_variant_access const &ex) {
-  };
+  }
 
   try {
     std::string string_value = std::get<std::string>(value);
     LOG_CONTENT(node, ContentStatus::kContentInsertUpdate, key, type, string_value);
     return;
   } catch (std::bad_variant_access const &ex) {
-  };
+  }
 }
 
 void MinhtonEntitySearchAlgorithm::logKeyValueContentRemove(NodeData::Key key) {

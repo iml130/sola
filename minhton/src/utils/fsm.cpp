@@ -235,19 +235,6 @@ bool FiniteStateMachine::sendLeaveRelatedMsgInIdleState(const SendMessage &event
   return event.msg_type == minhton::MessageType::kUnlockNeighbor ||
          event.msg_type == minhton::MessageType::kSignOffParentRequest ||
          event.msg_type == minhton::MessageType::kReplacementAck;
-  // return event.msg_type_ == minhton::MessageType::kUpdateNeighbors ||
-  //        event.msg_type_ == minhton::MessageType::kRemoveNeighbor ||
-  //        event.msg_type_ == minhton::MessageType::kSearchExact ||
-  //        event.msg_type_ == minhton::MessageType::kSearchExactFailure ||
-  //        event.msg_type_ == minhton::MessageType::kFindReplacement ||
-  //        event.msg_type_ == minhton::MessageType::kReplacementUpdate ||
-  //        event.msg_type_ == minhton::MessageType::kAttributeInquiryRequest ||
-  //        event.msg_type_ == minhton::MessageType::kReplacementOffer ||
-  //        event.msg_type_ == minhton::MessageType::kUnlockNeighbor ||
-  //        event.msg_type_ == minhton::MessageType::kRemoveAndUpdateNeighbor || // TODO
-  //        Only forwarding!!! event.msg_type_ ==
-  //        minhton::MessageType::kAttributeInquiryAnswer || event.msg_type_ ==
-  //        minhton::MessageType::kAttributeInquiryRequest;
 }
 
 }  // namespace minhton

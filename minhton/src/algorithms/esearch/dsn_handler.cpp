@@ -42,11 +42,6 @@ bool DSNHandler::isActive() {
 }
 
 void DSNHandler::checkPosition() {
-  // if (previous_node_info_ == routing_info_->getSelfNodeInfo()) {
-  //   // nothing changed
-  //   return;
-  // }
-
   this->is_active_ = false;  // only setting to true, if we have reached the end
 
   // node info changed
