@@ -38,7 +38,7 @@ public:
   const std::string &getUuid() const;
 
   const TransportOrderStep &getDeliveryTransportOrderStep() const;
-  const std::vector<TransportOrderStep> getPickupTransportOrderSteps() const;
+  std::vector<TransportOrderStep> getPickupTransportOrderSteps() const;
 
   bool operator==(const TransportOrder &other) const;
 

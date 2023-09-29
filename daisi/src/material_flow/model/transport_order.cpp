@@ -40,7 +40,7 @@ const TransportOrderStep &TransportOrder::getDeliveryTransportOrderStep() const 
   return delivery_transport_order_step_;
 }
 
-const std::vector<TransportOrderStep> TransportOrder::getPickupTransportOrderSteps() const {
+std::vector<TransportOrderStep> TransportOrder::getPickupTransportOrderSteps() const {
   return pickup_transport_order_steps_;
 }
 
