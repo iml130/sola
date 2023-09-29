@@ -29,6 +29,6 @@ const std::string &Location::getId() const { return id_; }
 
 const std::string &Location::getType() const { return type_; }
 
-const daisi::util::Position Location::getPosition() const { return position_; }
+daisi::util::Position Location::getPosition() const { return position_; }
 
 }  // namespace daisi::material_flow

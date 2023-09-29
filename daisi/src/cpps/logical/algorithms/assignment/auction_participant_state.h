@@ -39,7 +39,7 @@ struct AuctionParticipantTaskState {
 
   const MetricsComposition &getMetricsComposition() const;
 
-  const std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> getInsertionPoint() const;
+  std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> getInsertionPoint() const;
 
   /// @brief Checking whether both metrics and insertion point are initialized.
   bool isValid() const;

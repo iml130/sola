@@ -42,7 +42,7 @@ const MetricsComposition &AuctionParticipantTaskState::getMetricsComposition() c
   return metrics_composition_.value();
 }
 
-const std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint>
+std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint>
 AuctionParticipantTaskState::getInsertionPoint() const {
   return insertion_point_;
 }
