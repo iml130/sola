@@ -17,7 +17,7 @@
 
 namespace minhton {
 
-#define k_TREEMAPPER_ROOT_VALUE 100
+const uint32_t kTreeMapperRootValue = 100;
 
 const uint16_t kFanoutMinimum = 2;
 const uint16_t kFanoutMaximum = 255;

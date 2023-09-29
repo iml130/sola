@@ -47,7 +47,7 @@ minhton::ConfigNode readConfig(std::string path_to_file) {
 
     config.setVerbose(config_file["verbose"].as<bool>(false));
     config.setFanout(config_file["fanout"].as<uint16_t>(2));
-    config.setTreemapper(config_file["treemapper"].as<uint16_t>(k_TREEMAPPER_ROOT_VALUE));
+    config.setTreemapper(config_file["treemapper"].as<uint16_t>(kTreeMapperRootValue));
     config.setIsRoot(config_file["root"].as<bool>(false));
 
     auto join_mode = readRequired<std::string>("join_mode", config_file);

@@ -12,21 +12,24 @@
 using namespace minhton;
 
 TEST_CASE("PhysicalNodeInfo Test Constructor", "[PhysicalNodeInfo][Init]") {
+  const std::string ipv4_address = "127.0.0.1";
+  const uint32_t ipv4_port = 2906;
+
   // empty
   minhton::PhysicalNodeInfo test;
   REQUIRE(test.getPort() == 0);
   REQUIRE(test.getAddress() == "");
 
   // with valid address and port
-  minhton::PhysicalNodeInfo test_2(IPv4_ADDRESS, IPv4_PORT);
-  REQUIRE(test_2.getPort() == IPv4_PORT);
-  REQUIRE(test_2.getAddress() == IPv4_ADDRESS);
+  minhton::PhysicalNodeInfo test_2(ipv4_address, ipv4_port);
+  REQUIRE(test_2.getPort() == ipv4_port);
+  REQUIRE(test_2.getAddress() == ipv4_address);
 
   // with invalid address
-  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo("", IPv4_PORT), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo("", ipv4_port), std::invalid_argument);
 
   // with invalid port
-  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo(IPv4_ADDRESS, 0), std::invalid_argument);
+  REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo(ipv4_address, 0), std::invalid_argument);
 
   // with invalid address and port
   REQUIRE_THROWS_AS(new minhton::PhysicalNodeInfo("", 0), std::invalid_argument);
@@ -38,8 +41,8 @@ TEST_CASE("PhysicalNodeInfo setPort getPort", "[PhysicalNodeInfo][Method][setPor
 
   REQUIRE_NOTHROW(test.setPort(testValue));
   REQUIRE(test.getPort() == testValue);
-  REQUIRE_THROWS_AS(test.setPort(PORT_MAX), std::invalid_argument);
-  REQUIRE_THROWS_AS(test.setPort(PORT_MIN - 1), std::invalid_argument);
+  REQUIRE_THROWS_AS(test.setPort(kPortMax), std::invalid_argument);
+  REQUIRE_THROWS_AS(test.setPort(kPortMin - 1), std::invalid_argument);
 }
 
 TEST_CASE("PhysicalNodeInfo setAddress getAddress",

@@ -19,7 +19,7 @@
 #include "queue.h"
 #include "solanet/network_udp/message.h"
 
-#define MAX_DATAGRAM_SIZE 65535
+static constexpr uint32_t kMaxDatagramSize = 65535;
 
 namespace solanet {
 
@@ -109,7 +109,7 @@ Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> 
       sender_socket_(io_service_),
       receive_callback_(std::move(callback)) {
   sender_socket_.open(asio::ip::udp::v4());
-  buffer_.resize(MAX_DATAGRAM_SIZE);
+  buffer_.resize(kMaxDatagramSize);
 
   // Start threads
   receiver_thread_ = std::thread(&Network::Impl::receiveFunction, this);
@@ -132,7 +132,7 @@ Network::Impl::~Impl() {
 }
 
 void Network::Impl::send(const Message &msg) {
-  if (msg.getMessage().size() > MAX_DATAGRAM_SIZE)
+  if (msg.getMessage().size() > kMaxDatagramSize)
     throw std::runtime_error("Cannot send message. Message too large!");
 
   sending_queue_.push(msg);
