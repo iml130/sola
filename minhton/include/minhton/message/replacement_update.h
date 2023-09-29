@@ -39,7 +39,7 @@ public:
 
   MessageReplacementUpdate() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
@@ -48,7 +48,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   /// The node who is replacing and who's position will be empty afterwards.
   NodeInfo removed_position_node_;
 

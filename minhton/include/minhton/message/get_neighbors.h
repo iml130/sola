@@ -31,7 +31,7 @@ public:
 
   MessageGetNeighbors() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
@@ -40,7 +40,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   NodeInfo send_back_to_node_;
 
   /// A vector of all the neighbor relationships the sender wants to know about.

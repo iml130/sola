@@ -25,7 +25,7 @@ public:
 
   MessageSignoffParentAnswer() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   /// The header contains always required fields like the sender and target
@@ -34,7 +34,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   /// A vector of all neighbors the leaving node has information about
   bool successful_ = false;
 };

@@ -37,7 +37,7 @@ public:
 
   MessageAttributeInquiryAnswer() = default;
 
-protected:
+private:
   friend MinhtonMessage;
 
   MinhtonMessageHeader header_;
@@ -45,7 +45,6 @@ protected:
   /// Checks if the message was constructed with all of the necessary information
   bool validateImpl() const;
 
-private:
   NodeInfo inquired_node_;
 
   std::unordered_map<std::string, NodeData::ValueAndType> attribute_values_and_types_;
