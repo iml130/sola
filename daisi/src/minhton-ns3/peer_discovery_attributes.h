@@ -83,7 +83,8 @@ struct ContentBehavior {
 struct StaticUpdate {
   static std::string typeName() { return "static"; }
 
-  void parse(YAML::Node) {}
+  void parse(YAML::Node) { /* nothing required */
+  }
 };
 
 struct UpdateBehavior {

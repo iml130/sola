@@ -26,7 +26,7 @@ EventDisseminationMinhcast::EventDisseminationMinhcast(TopicMessageReceiveFct ms
           [msgRecvFct](const natter::Message &m) {
             msgRecvFct(solanet::serializer::deserialize<sola::TopicMessage>(m.content));
           },
-          [](const std::string & /*unused*/) {}, config.logger)),
+          [](const std::string & /*unused*/) { /* not passed to user */ }, config.logger)),
       storage_(std::move(storage)),
       logger_(std::move(logger)) {}
 
