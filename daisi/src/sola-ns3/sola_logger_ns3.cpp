@@ -44,7 +44,6 @@ TableDefinition kTopicEvent("SolaTopicEvent", {DatabaseColumnInfo{"Id"},
                                                {"SolaApplicationId", "%s", true},
                                                {"Subscribe", "%u", true}});
 static const std::string kCreateTopicEvent = getCreateTableStatement(kTopicEvent);
-static bool topic_event_exists_ = false;
 
 void SolaLoggerNs3::logSubscribeTopic(const std::string &topic) const {
   logTopicEvent(topic, kSubscribe);
@@ -55,9 +54,10 @@ void SolaLoggerNs3::logUnsubscribeTopic(const std::string &topic) const {
 };
 
 void SolaLoggerNs3::logTopicEvent(const std::string &topic, TopicEventType event_type) const {
-  if (!topic_event_exists_) {
+  static bool topic_event_exists = false;
+  if (!topic_event_exists) {
     log_(kCreateTopicEvent);
-    topic_event_exists_ = true;
+    topic_event_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -76,7 +76,6 @@ TableDefinition kTopicMessage("SolaTopicMessage", {DatabaseColumnInfo{"Id"},
                                                    {"SolaApplicationId", "%s", true},
                                                    {"Receive", "%u", true}});
 static const std::string kCreateTopicMessage = getCreateTableStatement(kTopicMessage);
-static bool topic_message_exists_ = false;
 
 void SolaLoggerNs3::logPublishTopicMessage(const sola::TopicMessage &msg) const {
   logTopicMessage(msg, kPublish);
@@ -87,9 +86,10 @@ void SolaLoggerNs3::logReceiveTopicMessage(const sola::TopicMessage &msg) const 
 };
 
 void SolaLoggerNs3::logTopicMessage(const sola::TopicMessage &msg, TopicPublishType type) const {
-  if (!topic_message_exists_) {
+  static bool topic_message_exists = false;
+  if (!topic_message_exists) {
     log_(kCreateTopicMessage);
-    topic_message_exists_ = true;
+    topic_message_exists = true;
   }
 
   // Store msg_uuid separately due to lifetime/invalidation of .c_str() in tuple
@@ -111,10 +111,10 @@ TableDefinition kMessageIdMapping("SolaMessageIdMapping",
                                       {"EventDisseminationMessageUuid", "%s", true},
                                   });
 static const std::string kCreateMessageIdMapping = getCreateTableStatement(kMessageIdMapping);
-static bool message_id_mapping_exists = false;
 
 void SolaLoggerNs3::logMessageIDMapping(const solanet::UUID &sola_msg_uuid,
                                         const solanet::UUID &ed_msg_uuid) const {
+  static bool message_id_mapping_exists = false;
   if (!message_id_mapping_exists) {
     log_(kCreateMessageIdMapping);
     message_id_mapping_exists = true;

@@ -31,12 +31,12 @@ TableDefinition kAmrHistory("CppsAMRHistory",
                              {"PosY_m", "%f", true},
                              {"State", "%u", true}});
 static const std::string kCreateAmrHistory = getCreateTableStatement(kAmrHistory);
-static bool amr_history_exists_ = false;
 
 void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info) {
-  if (!amr_history_exists_) {
+  static bool amr_history_exists = false;
+  if (!amr_history_exists) {
     log_(kCreateAmrHistory);
-    amr_history_exists_ = true;
+    amr_history_exists = true;
   }
 
   std::string amr_id = "(SELECT Id FROM CppsAutonomousMobileRobot WHERE ApplicationUuid='" +
@@ -73,12 +73,12 @@ TableDefinition kAutonomousMobileRobot("CppsAutonomousMobileRobot",
                                         {"MaxAcceleration_mpss", "%f", true},
                                         {"MaxDeceleration_mpss", "%f", true}});
 static const std::string kCreateAmr = getCreateTableStatement(kAutonomousMobileRobot);
-static bool amr_exists_ = false;
 
 void CppsLoggerNs3::logAMR(const AmrLoggingInfo &amr_info) {
-  if (!amr_exists_) {
+  static bool amr_exists = false;
+  if (!amr_exists) {
     log_(kCreateAmr);
-    amr_exists_ = true;
+    amr_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -107,12 +107,12 @@ TableDefinition kService("CppsService", {{"Uuid", "%s", true, "", true},
                                          {"StartTime_ms", "%u"},
                                          {"Type", "%u", true}});
 static const std::string kCreateService = getCreateTableStatement(kService);
-static bool service_exists_ = false;
 
 void CppsLoggerNs3::logService(const std::string &uuid, uint8_t type) {
-  if (!service_exists_) {
+  static bool service_exists = false;
+  if (!service_exists) {
     log_(kCreateService);
-    service_exists_ = true;
+    service_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -130,12 +130,12 @@ TableDefinition kServiceTransport("CppsServiceTransport",
                                    {"LoadCarrierType", "%s", true},
                                    {"MaxWeightPayload_kg", "%f", true}});
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
-static bool service_exists_transport_ = false;
 
 void CppsLoggerNs3::logTransportService(const sola::Service &service, bool /*active*/) {
-  if (!service_exists_transport_) {
+  static bool service_exists_transport = false;
+  if (!service_exists_transport) {
     log_(kCreateServiceTransport);
-    service_exists_transport_ = true;
+    service_exists_transport = true;
   }
 
   auto amr_uuid = std::any_cast<std::string>(service.key_values.at("amruuid"));

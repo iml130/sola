@@ -20,9 +20,6 @@
 
 namespace sola {
 
-// For debugging: Detecting invalid topic creations
-static std::set<std::string> created_topics;
-
 void EventDisseminationMinhcast::getResult(const std::string &topic,
                                            const std::function<void()> &on_result) {
   using namespace std::chrono_literals;
@@ -40,6 +37,9 @@ void EventDisseminationMinhcast::getResult(const std::string &topic,
 }
 
 void EventDisseminationMinhcast::checkTopicJoin(const std::string &topic, bool should_exist) {
+  // For debugging: Detecting invalid topic creations
+  static std::set<std::string> created_topics;
+
   const bool topic_exist = created_topics.find(topic) != created_topics.end();
   if (should_exist) {
     SOLA_CHECK(topic_exist, "Tried joining topic, which does not exist already");

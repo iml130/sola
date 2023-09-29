@@ -50,12 +50,12 @@ TableDefinition kExecutedOrderUtility("CppsExecutedOrderUtility",
                                       "PRIMARY KEY(AMRUuid, OrderUuid, Timestamp_ms)");
 static const std::string kCreateExecutedOrderUtility =
     getCreateTableStatement(kExecutedOrderUtility);
-static bool executed_order_utility_exists_ = false;
 
 void CppsLoggerNs3::logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &logging_info) {
-  if (!executed_order_utility_exists_) {
+  static bool executed_order_utility_exists = false;
+  if (!executed_order_utility_exists) {
     log_(kCreateExecutedOrderUtility);
-    executed_order_utility_exists_ = true;
+    executed_order_utility_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -89,13 +89,13 @@ TableDefinition kMaterialFlow("CppsMaterialFlow", {DatabaseColumnInfo{"Id"},
                                                    {"PortLogicalCore", "%u", true},
                                                    {"State", "%u", true}});
 static const std::string kCreateMaterialFlow = getCreateTableStatement(kMaterialFlow);
-static bool material_flow_exists_ = false;
 
 void CppsLoggerNs3::logMaterialFlow(const std::string &mf_uuid, const std::string &ip,
                                     uint16_t port, uint8_t state) {
-  if (!material_flow_exists_) {
+  static bool material_flow_exists = false;
+  if (!material_flow_exists) {
     log_(kCreateMaterialFlow);
-    material_flow_exists_ = true;
+    material_flow_exists = true;
   }
 
   auto t = std::make_tuple(
@@ -119,7 +119,6 @@ TableDefinition kNegotiationTraffic("CppsNegotiationTraffic",
                                      {"MsgType", "%u", true},
                                      {"Content", "%s"}});
 static const std::string kCreateNegotiationTraffic = getCreateTableStatement(kNegotiationTraffic);
-static bool negotiation_traffic_exists_ = false;
 
 TableDefinition kEnumCppsMessageType("enumCppsMessageType",
                                      {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
@@ -141,9 +140,9 @@ TableDefinition kCppsMessage("CppsTopicMessage", {
                                                      {"MessageContent", "%s", true},
                                                  });
 static const std::string kCreateCppsMessage = getCreateTableStatement(kCppsMessage);
-static bool cpps_message_exists = false;
 
 void CppsLoggerNs3::logCppsMessage(solanet::UUID msg_uuid, const std::string &msg_content) {
+  static bool cpps_message_exists = false;
   if (!cpps_message_exists) {
     log_(kCreateCppsMessage);
     cpps_message_exists = true;
@@ -164,9 +163,10 @@ static const std::string kCreateViewNegotiationTraffic = getCreateViewStatement(
     {"LEFT JOIN enumCppsMessageType ON CppsNegotiationTraffic.MsgType = enumCppsMessageType.Id"});
 
 void CppsLoggerNs3::logNegotiationTraffic(const NegotiationTrafficLoggingInfo &logging_info) {
-  if (!negotiation_traffic_exists_) {
+  static bool negotiation_traffic_exists = false;
+  if (!negotiation_traffic_exists) {
     log_(kCreateNegotiationTraffic);
-    negotiation_traffic_exists_ = true;
+    negotiation_traffic_exists = true;
 
     log_(kCreateEnumCppsMessageType);
     logCppsMessageTypes();
@@ -199,14 +199,14 @@ TableDefinition kStation("CppsStation", {DatabaseColumnInfo{"Id"},
                                          {"PosX_m", "%lf", true},
                                          {"PosY_M", "%lf", true}});
 static const std::string kCreateStation = getCreateTableStatement(kStation);
-static bool station_exists_ = false;
 
 void CppsLoggerNs3::logStation(const std::string &name, const std::string &type,
                                ns3::Vector2D position,
                                const std::vector<ns3::Vector2D> &additionalPositions) {
-  if (!station_exists_) {
+  static bool station_exists = false;
+  if (!station_exists) {
     log_(kCreateStation);
-    station_exists_ = true;
+    station_exists = true;
   }
 
   std::stringstream stream;

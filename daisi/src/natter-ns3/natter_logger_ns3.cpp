@@ -43,7 +43,6 @@ TableDefinition kNatterConnection("NatterConnection",
                                    {"NodeId", "sql%u", true, "NatterNode(Id)"},
                                    {"NewNodeId", "sql%u", true, "NatterNode(Id)"}});
 static const std::string kCreateNatterConnection = getCreateTableStatement(kNatterConnection);
-static bool natter_connection_exists_ = false;
 
 ViewDefinition kNatterConnectionReplacements = {
     {"NodeId",
@@ -59,10 +58,12 @@ static const std::string kCreateViewNatterConnection =
 
 void NatterLoggerNs3::logNs3PeerConnection(uint64_t timestamp, bool active, solanet::UUID node_uuid,
                                            solanet::UUID new_node_uuid) {
-  if (!natter_connection_exists_) {
+  static bool natter_connection_exists = false;
+
+  if (!natter_connection_exists) {
     log_(kCreateNatterConnection);
     log_(kCreateViewNatterConnection);
-    natter_connection_exists_ = true;
+    natter_connection_exists = true;
   }
 
   std::string node_id = "(SELECT Id FROM NatterNode WHERE ApplicationUuid='" +
@@ -82,14 +83,15 @@ TableDefinition kMessage("NatterMessage", {DatabaseColumnInfo{"Id"},
                                            {"Uuid", "%s", true},
                                            /*{"Content", "%s"},*/ {"Topic", "%s"}});
 static const std::string kCreateMessage = getCreateTableStatement(kMessage);
-static bool message_exists_ = false;
 
 // TODO: Enable Content after passing unserialized string?
 void NatterLoggerNs3::logNewMessage(const std::string &topic, const std::string & /*msg*/,
                                     solanet::UUID msg_uuid) {
-  if (!message_exists_) {
+  static bool message_exists = false;
+
+  if (!message_exists) {
     log_(kCreateMessage);
-    message_exists_ = true;
+    message_exists = true;
   }
 
   auto uuid_string = solanet::uuidToString(msg_uuid);
@@ -111,7 +113,6 @@ TableDefinition kNatterNode("NatterNode",
                              {"Ip", "%s", true},
                              {"Port", "%u", true}});
 static const std::string kCreateNatterNode = getCreateTableStatement(kNatterNode);
-static bool natter_node_exists_ = false;
 
 void NatterLoggerNs3::logNewPeer(const std::string & /*ip*/, uint16_t /*port*/,
                                  solanet::UUID /*uuid*/, const std::string & /*topic*/) const {
@@ -125,9 +126,11 @@ void NatterLoggerNs3::logRemovePeer(const std::string & /*ip*/, uint16_t /*port*
 
 void NatterLoggerNs3::logNewNetworkPeer(solanet::UUID uuid, const std::string &ip, uint16_t port,
                                         int level, int number) {
-  if (!natter_node_exists_) {
+  static bool natter_node_exists = false;
+
+  if (!natter_node_exists) {
     log_(kCreateNatterNode);
-    natter_node_exists_ = true;
+    natter_node_exists = true;
   }
 
   auto uuid_string = solanet::uuidToString(uuid);
@@ -152,7 +155,6 @@ TableDefinition kNatterCtrlMsg("NatterControlMessage",
                                 {"MessageId", "sql%u", false, "NatterMessage(Id)"}
                                 /*{"AdditionalContent", "%s"}*/});
 static const std::string kCreateTrafficForward = getCreateTableStatement(kNatterCtrlMsg);
-static bool natter_ctrl_msg_exists_ = false;
 
 ViewDefinition kNatterTrafficReplacements = {
     {"SenderNodeId",
@@ -170,10 +172,12 @@ static const std::string kCreateViewNatterTraffic = getCreateViewStatement(
 
 void NatterLoggerNs3::logSendReceive(solanet::UUID msg_uuid, solanet::UUID sender,
                                      solanet::UUID own_uuid, MsgType type, Mode mode) {
-  if (!natter_ctrl_msg_exists_) {
+  static bool natter_ctrl_msg_exists = false;
+
+  if (!natter_ctrl_msg_exists) {
     log_(kCreateTrafficForward);
     log_(kCreateViewNatterTraffic);
-    natter_ctrl_msg_exists_ = true;
+    natter_ctrl_msg_exists = true;
   }
 
   // TODO: own_uuid is minhton posUUID sometimes when used from cpps
@@ -223,7 +227,6 @@ TableDefinition kTopicMessage("NatterDeliveredTopicMessage",
                                {"MessageId", "sql%u", true, "NatterMessage(Id)"},
                                {"Round", "%i", true}});
 static const std::string kCreateTopicMessage = getCreateTableStatement(kTopicMessage);
-static bool topic_message_exists_ = false;
 
 ViewDefinition kTopicMessageReplacements = {
     {"NodeId", "N1.ApplicationUuid AS NApplicationUuid, N1.Level AS NLevel, N1.Number AS NNumber, "
@@ -240,10 +243,12 @@ static const std::string kCreateViewTopicMessage = getCreateViewStatement(
 
 void NatterLoggerNs3::logReceivedMessages(solanet::UUID node_uuid, solanet::UUID initial_sender,
                                           solanet::UUID message, uint32_t round) {
-  if (!topic_message_exists_) {
+  static bool topic_message_exists = false;
+
+  if (!topic_message_exists) {
     log_(kCreateTopicMessage);
     log_(kCreateViewTopicMessage);
-    topic_message_exists_ = true;
+    topic_message_exists = true;
   }
 
   // TODO: Messages should always identified by peer_uuid. Position can change, solanet::UUID not.
