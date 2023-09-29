@@ -29,7 +29,7 @@ namespace daisi::cpps::logical {
 /// @brief Enum to represent the different layers tasks can be on in this precedence graph.
 /// The free layer is also referred to as T_F, the second layer as T_L, the hidden layer as T_H, and
 /// the scheduled layer as T_S.
-enum PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
+enum class PrecedenceGraphLayer { kFree, kSecond, kHidden, kScheduled, kNone };
 
 struct LPCVertex {
   /// @brief Initializing the vertex by setting the task and everything else as invalid.

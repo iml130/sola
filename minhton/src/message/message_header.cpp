@@ -14,7 +14,7 @@ namespace minhton {
 
 // adding a key-value map to get the string for easier debugging purposes
 // (explicit external to allow external linkage)
-extern const std::unordered_map<uint32_t, std::string> kMapMinhtonMessageTypeStrings = {
+extern const std::unordered_map<MessageType, std::string> kMapMinhtonMessageTypeStrings = {
     {MessageType::kInit, "INIT"},
 
     {MessageType::kJoin, "JOIN"},
@@ -98,14 +98,14 @@ void MinhtonMessageHeader::setTarget(const NodeInfo &target) { this->target_ = t
 void MinhtonMessageHeader::setMessageType(MessageType type) { this->message_type_ = type; }
 
 MessageLoggingInfo MinhtonMessageHeader::getMessageLoggingInfo(bool receive) const {
-  MessageLoggingInfo logging_info{
-      (int)getMessageType(),
-      receive ? MessageProcessingModes::kReceiving : MessageProcessingModes::kSending,
-      getEventId(),
-      getRefEventId(),
-      getSender().getLogicalNodeInfo().getUuid(),
-      getTarget().getLogicalNodeInfo().getUuid(),
-      getAdditionalLoggingInfo()};
+  MessageLoggingInfo logging_info{(int)getMessageType(),
+                                  static_cast<uint8_t>(receive ? MessageProcessingModes::kReceiving
+                                                               : MessageProcessingModes::kSending),
+                                  getEventId(),
+                                  getRefEventId(),
+                                  getSender().getLogicalNodeInfo().getUuid(),
+                                  getTarget().getLogicalNodeInfo().getUuid(),
+                                  getAdditionalLoggingInfo()};
   return logging_info;
 }
 

@@ -22,7 +22,8 @@ MessageUpdateNeighbors::MessageUpdateNeighbors(
     minhton::NodeInfo neighbor = std::get<0>(neighbor_rel);
     minhton::NeighborRelationship rel = std::get<1>(neighbor_rel);
 
-    std::string current_text = "(" + neighbor.getString() + "," + std::to_string(rel) + "),";
+    std::string current_text =
+        "(" + neighbor.getString() + "," + std::to_string(static_cast<uint8_t>(rel)) + "),";
     text += current_text;
   }
   text += "}";

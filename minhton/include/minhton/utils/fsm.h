@@ -15,12 +15,12 @@
 namespace minhton {
 
 struct ReceiveMessage {
-  minhton::MessageType msg_type = minhton::kInit;
+  minhton::MessageType msg_type{MessageType::kInit};
   bool does_not_need_replacement = false;
 };
 
 struct SendMessage {
-  minhton::MessageType msg_type = minhton::kInit;
+  minhton::MessageType msg_type{MessageType::kInit};
 };
 
 struct Signal {

@@ -117,7 +117,7 @@ void JoinAlgorithmGeneral::performAcceptChild(NodeInfo entering_node,
     // one adjacent is wrong
 
     NodeInfo target;
-    NeighborRelationship relationship = kUnknownRelationship;
+    NeighborRelationship relationship{NeighborRelationship::kUnknownRelationship};
     if (adj_left_wrong) {
       target = entering_node_adjacent_left;
       relationship = NeighborRelationship::kAdjacentRight;
@@ -218,7 +218,7 @@ void JoinAlgorithmGeneral::processJoinAccept(const MessageJoinAccept &msg) {
   // logging that we are now an existing peer
   LOG_NODE(getSelfNodeInfo());
 
-  getRoutingInfo()->setNodeStatus(kRunning, msg.getHeader().getRefEventId());
+  getRoutingInfo()->setNodeStatus(NodeStatus::kRunning, msg.getHeader().getRefEventId());
 
   // setting our parent
   getRoutingInfo()->setParent(our_new_parent, msg.getHeader().getRefEventId());

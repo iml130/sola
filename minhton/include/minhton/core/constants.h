@@ -38,13 +38,13 @@ const uint16_t kDefaultIpPort = 2000;
 const uint16_t kDefaultTimeoutLength = 2500;
 
 // for logging
-enum SearchExactTestEntryTypes : uint8_t { kStart = 0, kHop = 1, kSuccess = 2, kFailure = 3 };
+enum class SearchExactTestEntryTypes : uint8_t { kStart = 0, kHop = 1, kSuccess = 2, kFailure = 3 };
 
 // for logging
-enum MessageProcessingModes : uint8_t { kReceiving = 0, kSending = 1 };
+enum class MessageProcessingModes : uint8_t { kReceiving = 0, kSending = 1 };
 
 // for logging
-enum NeighborRelationship : uint8_t {
+enum class NeighborRelationship : uint8_t {
   kParent = 0,
   kChild = 1,
   kAdjacentLeft = 2,
@@ -55,7 +55,7 @@ enum NeighborRelationship : uint8_t {
 };
 
 // for logging
-enum EventType : uint8_t {
+enum class EventType : uint8_t {
   kJoinEvent = 0,
   kLeaveEvent = 1,
   kFindQueryEvent = 3,
@@ -63,20 +63,20 @@ enum EventType : uint8_t {
 };
 
 // for logging
-enum ContentStatus : uint8_t {
+enum class ContentStatus : uint8_t {
   kContentInsertUpdate = 0,
   kContentRemove = 1,
 };
 
 // for fsm
-enum SignalType : uint8_t {
+enum class SignalType : uint8_t {
   kJoinNetwork = 0,
   kLeaveNetwork = 1,
   kCleanupSignal = 2,
 };
 
 // for fsm
-enum TimeoutType : uint8_t {
+enum class TimeoutType : uint8_t {
   kBootstrapResponseTimeout = 0,
   kJoinAcceptResponseTimeout = 1,
   kJoinAcceptAckResponseTimeout = 2,
@@ -105,23 +105,23 @@ enum FSMState : int {
   kJoinFailed,
 };
 
-enum JoinAlgorithms {
+enum class JoinAlgorithms {
   kJoinMinhton,
 };
 
-enum LeaveAlgorithms {
+enum class LeaveAlgorithms {
   kLeaveMinhton,
 };
 
-enum SearchExactAlgorithms {
+enum class SearchExactAlgorithms {
   kSearchExactMinhton,
 };
 
-enum ResponseAlgorithms {
+enum class ResponseAlgorithms {
   kResponseGeneral,
 };
 
-enum BootstrapAlgorithms {
+enum class BootstrapAlgorithms {
   kBootstrapGeneral,
 };
 }  // namespace minhton

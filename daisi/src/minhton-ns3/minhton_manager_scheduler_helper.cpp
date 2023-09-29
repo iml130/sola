@@ -895,7 +895,7 @@ MinhtonManager::Scheduler::createBooleanExpressionForKey(minhton::NodeData::Key 
     // gaussian or uniform numeric
     auto rand_val = uniform_zero_one_distribution_(daisi::global_random_engine);
 
-    minhton::ComparisonTypes comp_type = minhton::kEqualTo;
+    minhton::ComparisonTypes comp_type = minhton::ComparisonTypes::kEqualTo;
     rand_val *= 4;  // [0,4]
     if (rand_val <= 1) {
       comp_type = minhton::ComparisonTypes::kLessThan;

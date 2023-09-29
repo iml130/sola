@@ -140,7 +140,7 @@ minhton::NodeInfo MinhtonNode::getNodeInfo() const { return routing_info_->getSe
 
 void MinhtonNode::processSignal(Signal signal) {
   if (signal.signal_type == SignalType::kLeaveNetwork) {
-    TimeoutType type = minhton::kSelfDepartureRetry;
+    TimeoutType type = TimeoutType::kSelfDepartureRetry;
     watchdog_.addJob(
         [this]() {
           if (fsm_.current_state() != minhton::kIdle) {
@@ -229,7 +229,7 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
 
         // If a find_replacement msg reaches the node that wants to leave and is chosen as the
         // replacement node, this means it can leave the network on its own
-        if (header.getMessageType() == kFindReplacement) {
+        if (header.getMessageType() == MessageType::kFindReplacement) {
           auto msg_find_repl = std::get<MessageFindReplacement>(msg_variant);
           if (msg_find_repl.getNodeToReplace() == getNodeInfo() &&
               msg_find_repl.getSearchProgress() == SearchProgress::kReplacementNode) {
@@ -239,12 +239,13 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
 
         if (fsm_.current_state() == kIdle && replacing_node_.isInitialized()) {
           // Drop specific messages
-          if (header.getMessageType() == kFindReplacement || header.getMessageType() == kJoin) {
+          if (header.getMessageType() == MessageType::kFindReplacement ||
+              header.getMessageType() == MessageType::kJoin) {
             return false;
           }
 
           // Forward messages to old node
-          if (header.getMessageType() == kAttributeInquiryRequest) {
+          if (header.getMessageType() == MessageType::kAttributeInquiryRequest) {
             auto old_attribute_request = std::get<MessageAttributeInquiryRequest>(msg_variant);
             auto new_header = old_attribute_request.getHeader();
             new_header.setTarget(replacing_node_);
@@ -254,7 +255,7 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
             send(attribute_request);
           }
 
-          else if (header.getMessageType() == kSignOffParentRequest) {
+          else if (header.getMessageType() == MessageType::kSignOffParentRequest) {
             auto old_signoff_parent_request = std::get<MessageSignoffParentRequest>(msg_variant);
             auto new_header = old_signoff_parent_request.getHeader();
             new_header.setTarget(replacing_node_);
@@ -262,7 +263,7 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
             send(signoff_parent_request);
           }
 
-          else if (header.getMessageType() == kAttributeInquiryAnswer) {
+          else if (header.getMessageType() == MessageType::kAttributeInquiryAnswer) {
             auto old_attribute_answer = std::get<MessageAttributeInquiryAnswer>(msg_variant);
             auto new_header = old_attribute_answer.getHeader();
             new_header.setTarget(replacing_node_);
@@ -278,7 +279,7 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
           return false;
         }
 
-        if (header.getMessageType() == kFindReplacement &&
+        if (header.getMessageType() == MessageType::kFindReplacement &&
             header.getTarget().getLogicalNodeInfo() !=
                 routing_info_->getSelfNodeInfo().getLogicalNodeInfo()) {
           // Message was forwarded to us because with knowledge of the sender we are nearer to the
@@ -307,10 +308,10 @@ bool MinhtonNode::prepareReceiving(const MessageVariant &msg_variant) {
         }
 
         if (header.getMessageType() == MessageType::kReplacementNack) {
-          watchdog_.cancelJob(minhton::kReplacementOfferResponseTimeout);
-          watchdog_.cancelJob(minhton::kSelfDepartureRetry);
+          watchdog_.cancelJob(TimeoutType::kReplacementOfferResponseTimeout);
+          watchdog_.cancelJob(TimeoutType::kSelfDepartureRetry);
 
-          TimeoutType type = minhton::kSelfDepartureRetry;
+          TimeoutType type = TimeoutType::kSelfDepartureRetry;
           watchdog_.addJob([this]() { processSignal(Signal::leaveNetwork()); }, 1000, type);
 
           return false;
@@ -352,10 +353,10 @@ void MinhtonNode::triggerTimeout(const TimeoutType &timeout_type) {
     throw FSMException(state, timeout_event, "");
   }
 
-  if (timeout_type == kJoinAcceptResponseTimeout) {
+  if (timeout_type == TimeoutType::kJoinAcceptResponseTimeout) {
     // TODO Should be handled in join algorithm
     assert(fsm_.current_state() == FSMState::kJoinFailed);
-    TimeoutType type = kJoinRetry;
+    TimeoutType type = TimeoutType::kJoinRetry;
     watchdog_.addJob(
         [this]() {
           processSignal(minhton::Signal::joinNetworkViaAddress("255.255.255.255", 9999));

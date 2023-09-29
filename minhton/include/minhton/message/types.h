@@ -14,7 +14,7 @@ namespace minhton {
 /// there are various types of the messages for MinhtonNode. For further details for about the
 /// messages, check the corresponding message headers
 ///
-enum MessageType : uint32_t {
+enum class MessageType : uint32_t {
   // General
   kInit = 0,
 

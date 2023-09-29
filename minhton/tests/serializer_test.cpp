@@ -118,7 +118,9 @@ TEST_CASE("JsonSerializer Serialize/Deserialize", "[JsonSerializer][Serialize/De
     MinhtonMessageHeader header;
     header.setSender(NodeInfo(2, 10, 4, "127.0.0.1", 1234));
     header.setTarget(NodeInfo(3, 13, 4, "127.0.0.2", 4321));
-    std::vector<NeighborRelationship> relationships = {kParent, kAdjacentLeft, kChild};
+    std::vector<NeighborRelationship> relationships = {NeighborRelationship::kParent,
+                                                       NeighborRelationship::kAdjacentLeft,
+                                                       NeighborRelationship::kChild};
     MessageGetNeighbors msg(header, NodeInfo(), relationships);
     auto deserialized_msg = serialize_deserialize_message_and_check<MessageGetNeighbors>(msg);
 
@@ -261,7 +263,7 @@ TEST_CASE("JsonSerializer Serialize/Deserialize", "[JsonSerializer][Serialize/De
     header.setSender(NodeInfo(1, 4, 7, "127.0.0.1", 1234));
     header.setTarget(NodeInfo(1, 5, 7, "127.0.0.2", 2001));
     std::vector<std::tuple<minhton::NodeInfo, minhton::NeighborRelationship>> relationship;
-    relationship.push_back(std::make_tuple<>(NodeInfo(1, 3, 7), kParent));
+    relationship.push_back(std::make_tuple<>(NodeInfo(1, 3, 7), NeighborRelationship::kParent));
     MessageUpdateNeighbors msg(header, relationship);
     auto deserialized_msg = serialize_deserialize_message_and_check<MessageUpdateNeighbors>(msg);
 

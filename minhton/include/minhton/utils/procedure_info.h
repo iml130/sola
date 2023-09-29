@@ -18,7 +18,7 @@
 
 namespace minhton {
 
-enum ProcedureKey : uint8_t {
+enum class ProcedureKey : uint8_t {
   kBootstrapProcess,
   kJoinProcedure,
   kLeaveProcedure,

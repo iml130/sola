@@ -127,7 +127,7 @@ void RoutingInformation::updateRoutingTableNeighbor(minhton::NodeInfo routing_ta
       // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
       it->setLogicalNodeInfo(routing_table_neighbor.getLogicalNodeInfo());
       it->setPhysicalNodeInfo(routing_table_neighbor.getPhysicalNodeInfo());
-      this->notifyNeighborChange(*it, kRoutingTableNeighbor, ref_event_id,
+      this->notifyNeighborChange(*it, NeighborRelationship::kRoutingTableNeighbor, ref_event_id,
                                  old_node);  // TODO Index
     }
   }
@@ -158,8 +158,8 @@ void RoutingInformation::updateRoutingTableNeighborChild(
       // Setting the LogicalNodeInfo is necessary because the UUID needs to be updated
       it->setLogicalNodeInfo(routing_table_neighbor_child.getLogicalNodeInfo());
       it->setPhysicalNodeInfo(routing_table_neighbor_child.getPhysicalNodeInfo());
-      this->notifyNeighborChange(routing_table_neighbor_child, kRoutingTableNeighborChild,
-                                 ref_event_id);
+      this->notifyNeighborChange(routing_table_neighbor_child,
+                                 NeighborRelationship::kRoutingTableNeighborChild, ref_event_id);
     }
   }
 }
