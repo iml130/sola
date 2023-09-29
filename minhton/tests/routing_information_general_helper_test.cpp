@@ -1107,7 +1107,7 @@ TEST_CASE("RoutingInformationGeneralHelper calcRTNeighborParents",
   minhton::NodeInfo node(3, 0, fanout);
   minhton::RoutingInformation routing_info(node, Logger());
 
-  auto neighbors = routing_info.calcRoutingTableNeighborParents(node);
+  auto neighbors = minhton::RoutingInformation::calcRoutingTableNeighborParents(node);
   REQUIRE(neighbors.size() == 2);
 
   bool inside = false;
@@ -1151,7 +1151,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
     std::vector<minhton::NodeInfo> v1{node_a_init, node_b_init};
     std::vector<minhton::NodeInfo> v2{node_b_init, node_c_init};
 
-    auto combi = routing_info.combiningNodeVectorsWithoutDuplicate(v1, v2);
+    auto combi = minhton::RoutingInformation::combiningNodeVectorsWithoutDuplicate(v1, v2);
     REQUIRE(combi.size() == 3);
 
     bool inside = false;
@@ -1187,7 +1187,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
     std::vector<minhton::NodeInfo> v1{node_a_init, node_b_init};
     std::vector<minhton::NodeInfo> v2{node_b_uninit, node_c_init};
 
-    auto combi = routing_info.combiningNodeVectorsWithoutDuplicate(v1, v2);
+    auto combi = minhton::RoutingInformation::combiningNodeVectorsWithoutDuplicate(v1, v2);
     REQUIRE(combi.size() == 3);
 
     bool inside = false;
@@ -1222,7 +1222,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
     std::vector<minhton::NodeInfo> v1{node_a_uninit, node_b_uninit};
     std::vector<minhton::NodeInfo> v2{node_b_uninit, node_c_init, node_d_uninit};
 
-    auto combi = routing_info.combiningNodeVectorsWithoutDuplicate(v1, v2);
+    auto combi = minhton::RoutingInformation::combiningNodeVectorsWithoutDuplicate(v1, v2);
     REQUIRE(combi.size() == 4);
 
     bool inside = false;
@@ -1266,7 +1266,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
     std::vector<minhton::NodeInfo> v1{};
     std::vector<minhton::NodeInfo> v2{node_b_uninit, node_c_init, node_d_uninit};
 
-    auto combi = routing_info.combiningNodeVectorsWithoutDuplicate(v1, v2);
+    auto combi = minhton::RoutingInformation::combiningNodeVectorsWithoutDuplicate(v1, v2);
     REQUIRE(combi.size() == 3);
   }
 
@@ -1274,7 +1274,7 @@ TEST_CASE("RoutingInformationGeneralHelper combNodeVectorsWithoutDuplicate",
     std::vector<minhton::NodeInfo> v1{node_b_uninit, node_c_init, node_d_uninit};
     std::vector<minhton::NodeInfo> v2{};
 
-    auto combi = routing_info.combiningNodeVectorsWithoutDuplicate(v1, v2);
+    auto combi = minhton::RoutingInformation::combiningNodeVectorsWithoutDuplicate(v1, v2);
     REQUIRE(combi.size() == 3);
   }
 }

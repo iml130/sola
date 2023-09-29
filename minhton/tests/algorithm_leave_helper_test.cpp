@@ -51,8 +51,8 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
   SECTION("Case 1") {
     std::vector<minhton::NodeInfo> neighbors = {node_3_1, node_3_2, node_3_4, node_2_0};
 
-    auto adj_left = leave_algo.getAdjacentLeftFromVector(node_3_0, neighbors);
-    auto adj_right = leave_algo.getAdjacentRightFromVector(node_3_0, neighbors);
+    auto adj_left = MinhtonLeaveAlgorithmForTest::getAdjacentLeftFromVector(node_3_0, neighbors);
+    auto adj_right = MinhtonLeaveAlgorithmForTest::getAdjacentRightFromVector(node_3_0, neighbors);
 
     REQUIRE_FALSE(adj_left.isInitialized());
     REQUIRE(adj_right.isInitialized());
@@ -62,8 +62,8 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
   SECTION("Case 2") {
     std::vector<minhton::NodeInfo> neighbors = {node_3_6, node_3_5, node_3_3, node_2_3};
 
-    auto adj_left = leave_algo.getAdjacentLeftFromVector(node_3_7, neighbors);
-    auto adj_right = leave_algo.getAdjacentRightFromVector(node_3_7, neighbors);
+    auto adj_left = MinhtonLeaveAlgorithmForTest::getAdjacentLeftFromVector(node_3_7, neighbors);
+    auto adj_right = MinhtonLeaveAlgorithmForTest::getAdjacentRightFromVector(node_3_7, neighbors);
 
     REQUIRE_FALSE(adj_right.isInitialized());
     REQUIRE(adj_left.isInitialized());
@@ -74,8 +74,8 @@ TEST_CASE("LeaveAlgorithmGeneral getAdjacentFromVector Left and Right",
     std::vector<minhton::NodeInfo> neighbors = {node_3_2, node_0_0, node_1_0,
                                                 node_2_0, node_2_2, node_2_3};
 
-    auto adj_left = leave_algo.getAdjacentLeftFromVector(node_2_1, neighbors);
-    auto adj_right = leave_algo.getAdjacentRightFromVector(node_2_1, neighbors);
+    auto adj_left = MinhtonLeaveAlgorithmForTest::getAdjacentLeftFromVector(node_2_1, neighbors);
+    auto adj_right = MinhtonLeaveAlgorithmForTest::getAdjacentRightFromVector(node_2_1, neighbors);
 
     REQUIRE(adj_right.isInitialized());
     REQUIRE(adj_right.getLogicalNodeInfo() == node_0_0.getLogicalNodeInfo());
