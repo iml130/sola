@@ -141,7 +141,7 @@ jobs:
         build/tests/unittests/DaisiDatastructureDirectedGraphTest
         build/tests/unittests/DaisiDatastructureWeightedDirectedGraphTest
         build/tests/unittests/DaisiDatastructureSimpleTemporalNetworkTest
-        build/tests/unittests/DaisiCppsOrderManagementStnOrderManagement
+        build/tests/unittests/DaisiCppsTaskManagementStnTaskManagement
         build/tests/unittests/DaisiCppsLogicalAuctionParticipantState
         build/tests/unittests/network_tcp/daisi_network_tcp_framing_manager_test
     - name: Run MINHTON integrationtest

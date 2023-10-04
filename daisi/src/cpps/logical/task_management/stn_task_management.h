@@ -27,21 +27,21 @@
 
 namespace daisi::cpps::logical {
 
-class StnOrderManagement
-    : public AuctionBasedOrderManagement,
-      private daisi::datastructure::SimpleTemporalNetwork<StnOrderManagementVertex,
-                                                          StnOrderManagementEdge> {
+class StnTaskManagement
+    : public AuctionBasedTaskManagement,
+      private daisi::datastructure::SimpleTemporalNetwork<StnTaskManagementVertex,
+                                                          StnTaskManagementEdge> {
 public:
   struct StnInsertionPoint : public InsertionPoint {
-    StnOrderManagementVertex previous_finish;
-    std::optional<StnOrderManagementVertex> next_start;
+    StnTaskManagementVertex previous_finish;
+    std::optional<StnTaskManagementVertex> next_start;
     int new_index;
   };
 
-  StnOrderManagement(const AmrDescription &amr_description, const Topology &topology,
-                     const daisi::util::Pose &pose);
+  StnTaskManagement(const AmrDescription &amr_description, const Topology &topology,
+                    const daisi::util::Pose &pose);
 
-  ~StnOrderManagement() override = default;
+  ~StnTaskManagement() override = default;
 
   /// @brief check wether the task management has a current task assigned
   bool hasTasks() const override;
@@ -76,7 +76,7 @@ public:
   /// @param now
   void setCurrentTime(const daisi::util::Duration &now);
 
-  using VertexIterator = std::vector<StnOrderManagementVertex>::iterator;
+  using VertexIterator = std::vector<StnTaskManagementVertex>::iterator;
 
   /// @brief contains a task, the end locations, and metrics compositions for the single orders
   struct TaskInsertInfo {
@@ -111,11 +111,11 @@ protected:
 
   bool solve() override;
 
-  void addPrecedenceConstraintBetweenTask(const StnOrderManagementVertex &start_vertex,
+  void addPrecedenceConstraintBetweenTask(const StnTaskManagementVertex &start_vertex,
                                           const std::string &precedence_task_name);
 
-  void addDurationConstraints(const StnOrderManagementVertex &start_vertex,
-                              const StnOrderManagementVertex &finish_vertex,
+  void addDurationConstraints(const StnTaskManagementVertex &start_vertex,
+                              const StnTaskManagementVertex &finish_vertex,
                               const daisi::material_flow::Order &order,
                               const TaskInsertInfo &task_insert_info);
 
@@ -127,7 +127,7 @@ protected:
                                          TaskInsertInfo &task_insert_info);
 
   std::optional<std::pair<MetricsComposition, std::shared_ptr<StnInsertionPoint>>> addBestOrdering(
-      StnOrderManagement::TaskInsertInfo &task_insert_info);
+      StnTaskManagement::TaskInsertInfo &task_insert_info);
 
   std::vector<StnInsertionPoint> calcInsertionPoints();
 
@@ -154,8 +154,8 @@ protected:
   // simple helper
   VertexIterator getVertexIteratorOfOrder(const daisi::material_flow::Order &order, bool start);
   int getVertexIndexOfOrder(const daisi::material_flow::Order &order, bool start);
-  const StnOrderManagementVertex &getVertexOfOrder(const daisi::material_flow::Order &order,
-                                                   bool start);
+  const StnTaskManagementVertex &getVertexOfOrder(const daisi::material_flow::Order &order,
+                                                  bool start);
 
 private:
   void updateOriginConstraints(const daisi::util::Duration &time_difference);

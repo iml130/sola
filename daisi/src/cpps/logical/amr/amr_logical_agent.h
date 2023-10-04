@@ -110,7 +110,7 @@ private:
   /// @brief The address of the AmrPhysicalAsset after it connected to AmrLogicalAgent.
   ns3::Address physical_address_;
 
-  std::shared_ptr<OrderManagement> task_management_;
+  std::shared_ptr<TaskManagement> task_management_;
 };
 }  // namespace daisi::cpps::logical
 

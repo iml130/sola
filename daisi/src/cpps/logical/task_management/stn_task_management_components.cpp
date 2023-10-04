@@ -20,31 +20,31 @@ using namespace daisi::material_flow;
 
 namespace daisi::cpps::logical {
 
-StnOrderManagementVertex::StnOrderManagementVertex(Order order, const bool is_start)
+StnTaskManagementVertex::StnTaskManagementVertex(Order order, const bool is_start)
     : order_(std::move(order)), is_start_(is_start) {}
 
-StnOrderManagementVertex StnOrderManagementVertex::createOrigin() {
+StnTaskManagementVertex StnTaskManagementVertex::createOrigin() {
   MoveOrder tmp(
       "origin",
       MoveOrderStep("origin", {}, Location("origin", "origin", daisi::util::Position(-1, -1))));
-  auto v = StnOrderManagementVertex(tmp, true);
+  auto v = StnTaskManagementVertex(tmp, true);
   v.is_origin_ = true;
   return v;
 }
 
-const Order &StnOrderManagementVertex::getOrder() const { return order_; }
-bool StnOrderManagementVertex::isStart() const { return is_start_; }
-bool StnOrderManagementVertex::isOrigin() const { return is_origin_; }
+const Order &StnTaskManagementVertex::getOrder() const { return order_; }
+bool StnTaskManagementVertex::isStart() const { return is_start_; }
+bool StnTaskManagementVertex::isOrigin() const { return is_origin_; }
 
-void StnOrderManagementVertex::setLastPosition(const daisi::util::Position &position) {
+void StnTaskManagementVertex::setLastPosition(const daisi::util::Position &position) {
   if (is_start_) {
     position_ = position;
   }
 }
 
-const daisi::util::Position &StnOrderManagementVertex::getLastPosition() const { return position_; }
+const daisi::util::Position &StnTaskManagementVertex::getLastPosition() const { return position_; }
 
-bool operator==(const StnOrderManagementVertex &v1, const StnOrderManagementVertex &v2) {
+bool operator==(const StnTaskManagementVertex &v1, const StnTaskManagementVertex &v2) {
   if (v1.is_origin_ && v2.is_origin_) {
     return true;
   }

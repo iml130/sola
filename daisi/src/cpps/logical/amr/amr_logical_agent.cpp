@@ -54,7 +54,7 @@ void AmrLogicalAgent::initAlgorithms() {
   for (const auto &algo_type : algorithm_config_.algorithm_types) {
     switch (algo_type) {
       case AlgorithmType::kIteratedAuctionAssignmentParticipant: {
-        auto stn_task_management = std::make_shared<StnOrderManagement>(
+        auto stn_task_management = std::make_shared<StnTaskManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
         task_management_ = stn_task_management;
 
@@ -66,7 +66,7 @@ void AmrLogicalAgent::initAlgorithms() {
         break;
       }
       case AlgorithmType::kRoundRobinParticipant: {
-        auto simple_task_management = std::make_shared<SimpleOrderManagement>(
+        auto simple_task_management = std::make_shared<SimpleTaskManagement>(
             description_, topology_, daisi::util::Pose{execution_state_.getPosition()});
         task_management_ = simple_task_management;
 

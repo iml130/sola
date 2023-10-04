@@ -32,15 +32,15 @@
 
 namespace daisi::cpps::logical {
 
-class OrderManagement {
+class TaskManagement {
 public:
-  explicit OrderManagement(AmrDescription amr_description, Topology topology,
-                           const daisi::util::Pose &pose)
+  explicit TaskManagement(AmrDescription amr_description, Topology topology,
+                          const daisi::util::Pose &pose)
       : amr_description_(std::move(amr_description)),
         topology_(std::move(topology)),
         current_pose_(pose) {}
 
-  virtual ~OrderManagement() = default;
+  virtual ~TaskManagement() = default;
 
   /// @brief check wether the task management has a current task assigned
   virtual bool hasTasks() const = 0;

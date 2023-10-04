@@ -28,7 +28,7 @@ namespace daisi::cpps::logical {
 class CentralizedParticipant : public AssignmentParticipant {
 public:
   CentralizedParticipant(daisi::cpps::common::CppsCommunicatorPtr communicator,
-                         std::shared_ptr<SimpleOrderManagement> task_management);
+                         std::shared_ptr<SimpleTaskManagement> task_management);
   ~CentralizedParticipant() override = default;
 
   /// @brief React on new task assignment and respond to it.
@@ -39,7 +39,7 @@ public:
 
 private:
   /// @brief the AMR's task management. Simply accepts a new task assignment.
-  std::shared_ptr<SimpleOrderManagement> task_management_;
+  std::shared_ptr<SimpleTaskManagement> task_management_;
 };
 }  // namespace daisi::cpps::logical
 

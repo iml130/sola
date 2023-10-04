@@ -23,7 +23,7 @@ namespace daisi::cpps::logical {
 
 IteratedAuctionAssignmentParticipant::IteratedAuctionAssignmentParticipant(
     daisi::cpps::common::CppsCommunicatorPtr communicator,
-    std::shared_ptr<AuctionBasedOrderManagement> task_management, AmrDescription description)
+    std::shared_ptr<AuctionBasedTaskManagement> task_management, AmrDescription description)
     : AssignmentParticipant(communicator),
       task_management_(std::move(task_management)),
       description_(std::move(description)) {

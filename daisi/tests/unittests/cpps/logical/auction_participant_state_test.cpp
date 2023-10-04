@@ -107,7 +107,7 @@ TEST_CASE("Small Examples", "[pickBest]") {
 
   AuctionParticipantState state(tasks);
 
-  auto basic_insertion_point = std::make_shared<AuctionBasedOrderManagement::InsertionPoint>();
+  auto basic_insertion_point = std::make_shared<AuctionBasedTaskManagement::InsertionPoint>();
 
   auto m1 = getMetrics1();
   auto m2 = getMetrics2();
