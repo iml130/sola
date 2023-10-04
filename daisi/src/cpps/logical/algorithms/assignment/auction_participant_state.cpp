@@ -23,7 +23,7 @@ AuctionParticipantTaskState::AuctionParticipantTaskState(daisi::material_flow::T
 
 void AuctionParticipantTaskState::setInformation(
     const MetricsComposition &metrics_composition,
-    std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint> insertion_point) {
+    std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint> insertion_point) {
   metrics_composition_ = metrics_composition;
   insertion_point_ = insertion_point;
 }
@@ -42,7 +42,7 @@ const MetricsComposition &AuctionParticipantTaskState::getMetricsComposition() c
   return metrics_composition_.value();
 }
 
-const std::shared_ptr<AuctionBasedOrderManagement::InsertionPoint>
+const std::shared_ptr<AuctionBasedTaskManagement::InsertionPoint>
 AuctionParticipantTaskState::getInsertionPoint() const {
   return insertion_point_;
 }

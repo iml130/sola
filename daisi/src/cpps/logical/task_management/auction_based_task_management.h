@@ -22,15 +22,15 @@
 
 namespace daisi::cpps::logical {
 
-class AuctionBasedOrderManagement : public OrderManagement {
+class AuctionBasedTaskManagement : public TaskManagement {
 public:
   struct InsertionPoint {};
 
-  AuctionBasedOrderManagement(const AmrDescription &amr_description, const Topology &topology,
-                              const daisi::util::Pose &pose)
-      : OrderManagement(amr_description, topology, pose) {}
+  AuctionBasedTaskManagement(const AmrDescription &amr_description, const Topology &topology,
+                             const daisi::util::Pose &pose)
+      : TaskManagement(amr_description, topology, pose) {}
 
-  ~AuctionBasedOrderManagement() override = default;
+  ~AuctionBasedTaskManagement() override = default;
 
   virtual bool addTask(const daisi::material_flow::Task &task,
                        std::shared_ptr<InsertionPoint> insertion_point = nullptr) = 0;

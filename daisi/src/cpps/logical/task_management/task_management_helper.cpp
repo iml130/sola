@@ -21,7 +21,7 @@ namespace daisi::cpps::logical {
 
 template <class> inline constexpr bool kAlwaysFalseV = false;
 
-std::optional<Location> OrderManagementHelper::getEndLocationOfOrder(const Order &order) {
+std::optional<Location> TaskManagementHelper::getEndLocationOfOrder(const Order &order) {
   return std::visit(
       [&](auto &&arg) -> std::optional<Location> {
         using T = std::decay_t<decltype(arg)>;

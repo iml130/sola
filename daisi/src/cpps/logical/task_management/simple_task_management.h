@@ -22,12 +22,12 @@
 #include "task_management.h"
 
 namespace daisi::cpps::logical {
-class SimpleOrderManagement : public OrderManagement {
+class SimpleTaskManagement : public TaskManagement {
 public:
-  SimpleOrderManagement(const AmrDescription &amr_description, const Topology &topology,
-                        const daisi::util::Pose &pose);
+  SimpleTaskManagement(const AmrDescription &amr_description, const Topology &topology,
+                       const daisi::util::Pose &pose);
 
-  ~SimpleOrderManagement() override = default;
+  ~SimpleTaskManagement() override = default;
 
   /// @brief return the metrics of the final order contained in the last task that has been added to
   /// the management

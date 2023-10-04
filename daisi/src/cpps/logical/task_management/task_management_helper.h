@@ -23,7 +23,7 @@
 
 namespace daisi::cpps::logical {
 
-class OrderManagementHelper {
+class TaskManagementHelper {
 public:
   /// @brief get the end location of a given order.
   /// @param order the order to get the end location for

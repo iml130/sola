@@ -38,7 +38,7 @@ class IteratedAuctionAssignmentParticipant : public AssignmentParticipant {
 public:
   explicit IteratedAuctionAssignmentParticipant(
       daisi::cpps::common::CppsCommunicatorPtr communicator,
-      std::shared_ptr<AuctionBasedOrderManagement> task_management, AmrDescription description);
+      std::shared_ptr<AuctionBasedTaskManagement> task_management, AmrDescription description);
 
   ~IteratedAuctionAssignmentParticipant() override = default;
 
@@ -65,7 +65,7 @@ private:
 
   /// @brief Pointer to the task management of the corresponding AmrLogicalAgent.
   /// We need access to calculate bids and add tasks after receiving WinnerNotifications.
-  std::shared_ptr<AuctionBasedOrderManagement> task_management_;
+  std::shared_ptr<AuctionBasedTaskManagement> task_management_;
 
   /// @brief Calculating bids for each open task in a state.
   /// @param state Relevant auction state.
