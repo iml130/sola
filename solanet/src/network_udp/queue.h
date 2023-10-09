@@ -50,7 +50,7 @@ public:
    * @return first element in the queue or empty message if queue was stopped.
    */
   T pop() {
-    std::unique_lock<std::mutex> lk(queue_mutex_);
+    std::unique_lock lk(queue_mutex_);
     if (queue_.empty()) cv_queue_.wait(lk, [this] { return !running_ || !queue_.empty(); });
 
     if (!running_) return {};  // Return empty message if we should stop
