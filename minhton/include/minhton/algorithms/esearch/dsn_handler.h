@@ -163,7 +163,7 @@ private:
   std::unordered_map<NodeData::Key, std::queue<uint64_t>> request_timestamps_;
 
   /// Limit on how many request and subscription update timestamps will be stored per key.
-  uint8_t timestamp_storage_limit_;
+  uint8_t timestamp_storage_limit_ = 5;
 
   std::function<void(const NodeInfo &)> request_attribute_inquiry_callback_;
 

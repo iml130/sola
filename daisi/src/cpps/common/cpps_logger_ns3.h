@@ -131,11 +131,10 @@ public:
 
 protected:
   // TODO Refactor to other class
-  LogDeviceApp log_device_application_;
-  LogFunction log_;
+  const LogDeviceApp log_device_application_;
+  const LogFunction log_;
 
-private:
-  std::string uuid_;
+  std::string uuid_ = "NOT-KNOWN-YET";
 };
 
 }  // namespace daisi::cpps

@@ -8,15 +8,12 @@
 
 namespace minhton {
 
-AlgorithmException::AlgorithmException(const std::string &message) noexcept {
-  this->type_ = AlgorithmType::kUndefinedAlgorithm;
-  this->error_message_ = AlgorithmException::getAlgorithmTypeString(this->type_) + message;
-}
+AlgorithmException::AlgorithmException(const std::string &message) noexcept
+    : type_(AlgorithmType::kUndefinedAlgorithm),
+      error_message_(AlgorithmException::getAlgorithmTypeString(this->type_) + message) {}
 
-AlgorithmException::AlgorithmException(AlgorithmType type, const std::string &message) noexcept {
-  this->type_ = type;
-  this->error_message_ = AlgorithmException::getAlgorithmTypeString(type) + message;
-}
+AlgorithmException::AlgorithmException(AlgorithmType type, const std::string &message) noexcept
+    : type_(type), error_message_(AlgorithmException::getAlgorithmTypeString(type) + message) {}
 
 const char *AlgorithmException::what() const noexcept { return this->error_message_.c_str(); }
 

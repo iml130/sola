@@ -57,9 +57,7 @@ class FiniteStateMachine : public fsmlite::fsm<FiniteStateMachine> {
 public:
   using event = int;
 
-  explicit FiniteStateMachine(state_type init_state = kIdle) : fsm(init_state) {
-    this->valid_action_ = false;
-  }
+  explicit FiniteStateMachine(state_type init_state = kIdle) : fsm(init_state) {}
 
   bool isActionValid() {
     if (this->valid_action_) {
@@ -119,7 +117,7 @@ private:
   bool sendRemoveAndUpdateNeighbor(const SendMessage &event) const;
   bool sendUpdateNeighborsMessage(const SendMessage &event) const;
 
-  bool valid_action_;
+  bool valid_action_ = false;
 
   using m = FiniteStateMachine;
 

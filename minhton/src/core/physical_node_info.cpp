@@ -18,14 +18,7 @@ static constexpr int kBitshift1{24};
 static constexpr int kBitshift2{16};
 static constexpr int kBitshift3{8};
 
-PhysicalNodeInfo::PhysicalNodeInfo() {
-  this->address_ = "";
-  this->port_ = 0;
-}
-
 PhysicalNodeInfo::PhysicalNodeInfo(const std::string &address, uint16_t port) {
-  this->address_ = "";
-  this->port_ = 0;
   try {
     this->setAddress(address);
   } catch (const std::exception &e) {

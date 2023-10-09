@@ -46,7 +46,7 @@ public:
   uint16_t getPort() const;
 
 private:
-  Ptr<Socket> socket_;
+  Ptr<Socket> socket_ = daisi::SocketManager::get().createSocket(daisi::SocketType::kUDP);
   std::string ip_;
   uint16_t port_;
   void readFromSocket(Ptr<Socket> socket);
@@ -65,8 +65,7 @@ std::set<Network::Impl *> Network::Impl::network_interfaces_;
 #endif
 
 Network::Impl::Impl(const std::string &ip, std::function<void(const Message &)> callback)
-    : socket_(daisi::SocketManager::get().createSocket(daisi::SocketType::kUDP)),
-      callback_(std::move(callback)) {
+    : callback_(std::move(callback)) {
   socket_->SetRecvCallback(MakeCallback(&Impl::readFromSocket, this));
 
   // https://groups.google.com/g/ns-3-users/c/tZmjq_KoCfo/m/x1xBvn-H31gJ

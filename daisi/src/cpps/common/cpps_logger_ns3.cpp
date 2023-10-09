@@ -225,9 +225,7 @@ void CppsLoggerNs3::logStation(const std::string &name, const std::string &type,
 
 // * Constructor & Other methods
 CppsLoggerNs3::CppsLoggerNs3(LogDeviceApp log_device_application, LogFunction log)
-    : log_device_application_(log_device_application),
-      log_(std::move(log)),
-      uuid_("NOT-KNOWN-YET") {}
+    : log_device_application_(std::move(log_device_application)), log_(std::move(log)) {}
 
 CppsLoggerNs3::~CppsLoggerNs3() {
   auto current_time = ns3::Simulator::Now().GetMilliSeconds();

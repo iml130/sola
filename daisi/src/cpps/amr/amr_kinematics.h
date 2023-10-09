@@ -24,12 +24,11 @@ class AmrKinematics {
 public:
   AmrKinematics() = default;
   AmrKinematics(double max_velocity_m_s, double min_velocity_m_s, double max_acceleration_m_s2,
-                double max_deceleration_m_s2) {
-    max_velocity_m_s_ = max_velocity_m_s;
-    min_velocity_m_s_ = min_velocity_m_s;
-    max_acceleration_m_s2_ = max_acceleration_m_s2;
-    max_deceleration_m_s2_ = max_deceleration_m_s2;
-  }
+                double max_deceleration_m_s2)
+      : max_velocity_m_s_(max_velocity_m_s),
+        min_velocity_m_s_(min_velocity_m_s),
+        max_acceleration_m_s2_(max_acceleration_m_s2),
+        max_deceleration_m_s2_(max_deceleration_m_s2) {}
 
   /// @{
   /// Return velocity in m/s

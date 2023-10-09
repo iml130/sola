@@ -13,7 +13,6 @@ namespace minhton {
 
 DistributedData::DistributedData(const PhysicalNodeInfo &p_node_info) {
   setPhysicalNodeInfo(p_node_info);
-  this->timestamp_storage_limit_ = 5;
 }
 
 void DistributedData::setPhysicalNodeInfo(const PhysicalNodeInfo &p_node_info) {

@@ -49,8 +49,7 @@ public:
               topic_recv(m);
             },
             storage_, event_dissemination_config, logger)),
-        logger_(std::move(logger)),
-        uuid_(solanet::generateUUID()) {
+        logger_(std::move(logger)) {
     logger_->setApplicationUUID(solanet::uuidToString(uuid_));
   }
 
@@ -107,7 +106,7 @@ private:
   std::shared_ptr<StorageT> storage_;
   std::unique_ptr<EventDisseminationT> ed_;
   LoggerPtr logger_;
-  solanet::UUID uuid_;  /// UUID of this SOLA instance
+  solanet::UUID uuid_ = solanet::generateUUID();  /// UUID of this SOLA instance
 };
 }  // namespace sola
 

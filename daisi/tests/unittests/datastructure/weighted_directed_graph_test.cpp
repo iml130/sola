@@ -20,7 +20,7 @@
 #include <string>
 
 struct TestVertex {
-  explicit TestVertex(const std::string &name) : test_member_(0), name_(name){};
+  explicit TestVertex(const std::string &name) : name_(name){};
 
   static TestVertex createOrigin() { return TestVertex("origin"); }
 
@@ -30,7 +30,7 @@ struct TestVertex {
 
   std::string getName() const { return name_; }
 
-  int test_member_;
+  int test_member_ = 0;
 
 private:
   std::string name_;

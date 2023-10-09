@@ -8,17 +8,8 @@
 
 namespace minhton {
 
-InvalidMessageException::InvalidMessageException(const MinhtonMessageHeader &header) noexcept {
-  // this->processing_mode_ = mode;
-  this->message_type_ = header.getMessageType();
-
-  // std::string mode_text;
-  // if (mode == MessageProcessingModes::kReceiving) {
-  //   mode_text = "Receiving";
-  // } else {
-  //   mode_text = "Sending";
-  // }
-
+InvalidMessageException::InvalidMessageException(const MinhtonMessageHeader &header) noexcept
+    : message_type_(header.getMessageType()) {
   this->error_message_ = /*"InvalidMessageException: " + mode_text + " " +*/
       getMessageTypeString(header.getMessageType()) + " Sender: " + header.getSender().getString() +
       " - Target: " + header.getTarget().getString();

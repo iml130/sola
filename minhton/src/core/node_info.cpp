@@ -7,16 +7,12 @@
 #include "minhton/core/node_info.h"
 namespace minhton {
 
-NodeInfo::NodeInfo(uint32_t level, uint32_t number, uint16_t fanout) {
-  this->p_node_info_ = minhton::PhysicalNodeInfo();
-  this->l_node_info_ = minhton::LogicalNodeInfo(level, number, fanout);
-}
+NodeInfo::NodeInfo(uint32_t level, uint32_t number, uint16_t fanout)
+    : l_node_info_(level, number, fanout) {}
 
 NodeInfo::NodeInfo(uint32_t level, uint32_t number, uint16_t fanout, const std::string &address,
-                   uint16_t port) {
-  this->p_node_info_ = minhton::PhysicalNodeInfo(address, port);
-  this->l_node_info_ = minhton::LogicalNodeInfo(level, number, fanout);
-}
+                   uint16_t port)
+    : l_node_info_(level, number, fanout), p_node_info_(address, port) {}
 
 std::string NodeInfo::getString() const {
   std::string init = this->isInitialized() ? "init" : "uninit";

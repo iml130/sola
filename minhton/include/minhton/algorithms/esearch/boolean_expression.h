@@ -321,9 +321,9 @@ template <typename NumericType> class NumericComparisonExpression : public Atomi
 public:
   explicit NumericComparisonExpression(NodeData::Key key, ComparisonTypes comparison_type,
                                        NumericType comparison_value)
-      : AtomicBooleanExpression(key), comparison_type_(comparison_type) {
-    this->comparison_value_ = comparison_value;
-  };
+      : AtomicBooleanExpression(key),
+        comparison_type_(comparison_type),
+        comparison_value_(comparison_value){};
 
   ~NumericComparisonExpression() override = default;
 

@@ -22,7 +22,7 @@ namespace minhton
 ///
 class LogicalNodeInfo {
 public:
-  LogicalNodeInfo();
+  LogicalNodeInfo() = default;
 
   ///
   /// Creates a LogicalNodeInfo object without a given position. It's optional to give a fanout.

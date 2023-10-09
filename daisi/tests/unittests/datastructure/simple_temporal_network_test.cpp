@@ -22,7 +22,7 @@
 using namespace daisi::datastructure;
 
 struct TestVertex {
-  explicit TestVertex(const std::string &name) : name_(name), is_origin_(false){};
+  explicit TestVertex(const std::string &name) : name_(name){};
 
   static TestVertex createOrigin() {
     auto vertex = TestVertex("origin");
@@ -45,7 +45,7 @@ struct TestVertex {
 private:
   std::string name_;
   double value_ = 0.0;
-  bool is_origin_;
+  bool is_origin_ = false;
 };
 
 struct TestEdge {
