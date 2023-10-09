@@ -31,9 +31,7 @@ template <class> inline constexpr bool kAlwaysFalseV = false;
 
 StnTaskManagement::StnTaskManagement(const AmrDescription &amr_description,
                                      const Topology &topology, const daisi::util::Pose &pose)
-    : AuctionBasedTaskManagement(amr_description, topology, pose),
-      current_task_end_location_(std::nullopt),
-      latest_calculated_insertion_info_(std::nullopt) {
+    : AuctionBasedTaskManagement(amr_description, topology, pose) {
   current_total_metrics_.setStartTime(0);
 }
 

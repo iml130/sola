@@ -95,7 +95,7 @@ static void handleRouterPhyRxDrop(ns3::Ptr<const ns3::Packet>) {
   throw std::runtime_error("Packet was dropped (PhyRxDrop at Router)!");
 }
 
-CoreNetwork::CoreNetwork() : core_router_(ns3::CreateObject<ns3::Node>()) {
+CoreNetwork::CoreNetwork() {
   ns3::InternetStackHelper internet;
   internet.Install(core_router_);
 }

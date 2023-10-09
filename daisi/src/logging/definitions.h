@@ -63,12 +63,12 @@ template <typename... Tp> inline std::string toSQL(const std::string &format_str
 class DatabaseColumnInfo {
 public:
   std::string name;
-  std::string format;
+  std::string format = "NULL";
   bool not_null = false;
   bool is_id = false;
   std::string foreign_key = "";
   bool is_primary_key = false;
-  std::string data_type;
+  std::string data_type = "INTEGER";
 
   void setDataType() {
     static const std::unordered_set<std::string> int_specifiers{"%d",  "%i",  "%ld",
@@ -100,8 +100,7 @@ public:
   // TODO: Declare as explicit(false) for implicit conversion in C++20
   /// @brief Constructor for primary key id column
   /// @param name Column name
-  explicit DatabaseColumnInfo(std::string name)
-      : name(std::move(name)), format("NULL"), is_id(true), data_type("INTEGER"){};
+  explicit DatabaseColumnInfo(std::string name) : name(std::move(name)), is_id(true){};
 
   /// @brief Constructor for regular and foreign key column
   /// @param name Column name

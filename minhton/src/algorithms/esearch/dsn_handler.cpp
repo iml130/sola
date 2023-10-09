@@ -33,7 +33,6 @@ DSNHandler::DSNHandler(std::shared_ptr<RoutingInformation> routing_info,
   checkPosition();
 
   this->is_active_ = false;
-  this->timestamp_storage_limit_ = 5;
 }
 
 bool DSNHandler::isActive() {

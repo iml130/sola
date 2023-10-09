@@ -26,9 +26,7 @@ namespace daisi::minhton_ns3 {
 
 void MinhtonManager::scheduleEvents() { scheduler_->schedule(); }
 
-MinhtonManager::Scheduler::Scheduler(MinhtonManager &manager)
-    : manager_(manager),
-      uniform_zero_one_distribution_(std::uniform_real_distribution<double>(0.0, 1.0)){};
+MinhtonManager::Scheduler::Scheduler(MinhtonManager &manager) : manager_(manager){};
 
 void MinhtonManager::Scheduler::schedule() {
   ns3::Time current_time(0);

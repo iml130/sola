@@ -49,7 +49,7 @@ private:
       uint32_t number_of_subnets, ns3::NetDeviceContainer core_router_devices,
       std::vector<ns3::NetDeviceContainer> app_node_devices, uint32_t &base_address);
 
-  ns3::Ptr<ns3::Node> core_router_;
+  ns3::Ptr<ns3::Node> core_router_ = ns3::CreateObject<ns3::Node>();
   uint32_t next_base_address_csma_ = 16842752;    // 1.1.0.0
   uint32_t next_base_address_wifi_ = 3232235520;  // 192.168.0.0
 };

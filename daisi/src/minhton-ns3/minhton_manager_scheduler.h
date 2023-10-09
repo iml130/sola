@@ -183,7 +183,8 @@ private:
       minhton::NodeData::Key key);
   void activateRequestCountdown(uint16_t limit);
 
-  std::uniform_real_distribution<double> uniform_zero_one_distribution_;
+  std::uniform_real_distribution<double> uniform_zero_one_distribution_ =
+      std::uniform_real_distribution<double>(0.0, 1.0);
 
   bool attributes_off_ = false;
   bool requests_off_ = false;

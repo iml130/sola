@@ -31,7 +31,7 @@ public:
   ///
   /// Constructing an empty uninitialized PhysicalNodeInfo object.
   ///
-  PhysicalNodeInfo();
+  PhysicalNodeInfo() = default;
 
   ///
   /// Constructing an initialized PhysicalNodeInfo object with the given information.
@@ -101,8 +101,8 @@ public:
   SERIALIZE(address_, port_);
 
 private:
-  uint16_t port_;
-  std::string address_;
+  uint16_t port_ = 0;
+  std::string address_ = "";
 
   std::vector<std::string> splitString(const std::string &, char token);
 
