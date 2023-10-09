@@ -23,8 +23,7 @@
 #include "ns3/simulator.h"
 #include "utils/daisi_check.h"
 
-#define TableDefinition static const DatabaseTable
-#define ViewDefinition static const std::unordered_map<std::string, std::string>
+using TableDefinition = const DatabaseTable;
 
 namespace daisi {
 
@@ -37,7 +36,7 @@ static uint64_t getDeviceId() {
 }
 
 // * Device
-TableDefinition kDevice("Device", {{"Id", "%lu", true, "", true}});
+static TableDefinition kDevice("Device", {{"Id", "%lu", true, "", true}});
 const std::string kCreateDevice = getCreateTableStatement(kDevice);
 
 void LoggerManager::logDevice(uint32_t id) {
@@ -50,12 +49,13 @@ void LoggerManager::logDevice(uint32_t id) {
 }
 
 // * DeviceApplication
-TableDefinition kDeviceApplication("DeviceApplication",
-                                   {DatabaseColumnInfo{"ApplicationUuid", "%s", true, "", true},
-                                    {"ApplicationName", "%s", true},
-                                    {"DeviceUuid", "%lu", true, "Device(Id)"},
-                                    {"StartTime_ms", "%lu", true},
-                                    {"StopTime_ms", "%lu"}});
+static TableDefinition kDeviceApplication("DeviceApplication",
+                                          {DatabaseColumnInfo{"ApplicationUuid", "%s", true, "",
+                                                              true},
+                                           {"ApplicationName", "%s", true},
+                                           {"DeviceUuid", "%lu", true, "Device(Id)"},
+                                           {"StartTime_ms", "%lu", true},
+                                           {"StopTime_ms", "%lu"}});
 const std::string kCreateDeviceApplication = getCreateTableStatement(kDeviceApplication);
 
 void LoggerManager::logDeviceApplication(const std::string &application_uuid,
@@ -72,12 +72,12 @@ void LoggerManager::logDeviceApplication(const std::string &application_uuid,
 }
 
 // * Event
-TableDefinition kEvent("Event",
-                       {DatabaseColumnInfo{"Id"},
-                        {"Uuid", "%s", true},
-                        {"Timestamp_ms", "%lu", true},
-                        {"Type", "%u", true},
-                        {"ApplicationUuid", "%s", true, "DeviceApplication(ApplicationUuid)"}});
+static TableDefinition kEvent("Event", {DatabaseColumnInfo{"Id"},
+                                        {"Uuid", "%s", true},
+                                        {"Timestamp_ms", "%lu", true},
+                                        {"Type", "%u", true},
+                                        {"ApplicationUuid", "%s", true,
+                                         "DeviceApplication(ApplicationUuid)"}});
 const std::string kCreateEvent = getCreateTableStatement(kEvent);
 
 void LoggerManager::logEvent(const std::string &event_uuid, uint16_t event_type,
@@ -90,12 +90,12 @@ void LoggerManager::logEvent(const std::string &event_uuid, uint16_t event_type,
 }
 
 // * General
-TableDefinition kGeneral("General", {{"StartTime_ut", "%lu", true},
-                                     {"StopTime_ut", "%lu", true},
-                                     {"NumberOfEvents", "%lu", true},
-                                     {"Exception", "%s"},
-                                     {"Config", "%s"},
-                                     {"AdditionalParameters", "%s"}});
+static TableDefinition kGeneral("General", {{"StartTime_ut", "%lu", true},
+                                            {"StopTime_ut", "%lu", true},
+                                            {"NumberOfEvents", "%lu", true},
+                                            {"Exception", "%s"},
+                                            {"Config", "%s"},
+                                            {"AdditionalParameters", "%s"}});
 const std::string kCreateGeneral = getCreateTableStatement(kGeneral);
 std::vector<std::string> general_updates_;
 
@@ -266,6 +266,3 @@ std::shared_ptr<sola_ns3::SolaLoggerNs3> LoggerManager::createSolaLogger() {
 }
 
 }  // namespace daisi
-
-#undef TableDefinition
-#undef ViewDefinition

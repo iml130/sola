@@ -20,8 +20,8 @@
 
 #include "ns3/simulator.h"
 
-#define TableDefinition static const DatabaseTable
-#define ViewDefinition static const std::unordered_map<std::string, std::string>
+using TableDefinition = const DatabaseTable;
+using ViewDefinition = const std::unordered_map<std::string, std::string>;
 
 namespace minhton {
 
@@ -37,12 +37,12 @@ void MinhtonLoggerNs3::logEvent(const LoggerInfoAddEvent &info) {
 }
 
 // * FindQuery
-TableDefinition kFindQuery("MinhtonFindQuery",
-                           {DatabaseColumnInfo{"Id"},
-                            {"Timestamp_ms", "%lu", true},
-                            {"EventId", "%lu", true, "Event(Id)"},
-                            {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                            {"Query", "%s"}});
+static TableDefinition kFindQuery("MinhtonFindQuery",
+                                  {DatabaseColumnInfo{"Id"},
+                                   {"Timestamp_ms", "%lu", true},
+                                   {"EventId", "%lu", true, "Event(Id)"},
+                                   {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                                   {"Query", "%s"}});
 static const std::string kCreateFindQuery = getCreateTableStatement(kFindQuery);
 
 void MinhtonLoggerNs3::logFindQuery(const LoggerInfoAddFindQuery &info) {
@@ -60,11 +60,11 @@ void MinhtonLoggerNs3::logFindQuery(const LoggerInfoAddFindQuery &info) {
 }
 
 // * FindQueryResult
-TableDefinition kFindQueryResult("MinhtonFindQueryResult",
-                                 {DatabaseColumnInfo{"Id"},
-                                  {"Timestamp_ms", "%lu", true},
-                                  {"EventId", "%lu", true, "Event(Id)"},
-                                  {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"}});
+static TableDefinition kFindQueryResult("MinhtonFindQueryResult",
+                                        {DatabaseColumnInfo{"Id"},
+                                         {"Timestamp_ms", "%lu", true},
+                                         {"EventId", "%lu", true, "Event(Id)"},
+                                         {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"}});
 static const std::string kCreateFindQueryResult = getCreateTableStatement(kFindQueryResult);
 
 void MinhtonLoggerNs3::logFindQueryResult(const LoggerInfoAddFindQueryResult &info) {
@@ -81,11 +81,11 @@ void MinhtonLoggerNs3::logFindQueryResult(const LoggerInfoAddFindQueryResult &in
 }
 
 // * MinhtonPhysicalNodeInfo
-TableDefinition kMinhtonPhysicalNodeInfo("MinhtonPhysicalNodeInfo",
-                                         {{"ApplicationUuid", "%s", true,
-                                           "DeviceApplication(ApplicationUuid)", true},
-                                          {"Ip", "%s", true},
-                                          {"Port", "%u", true}});
+static TableDefinition kMinhtonPhysicalNodeInfo("MinhtonPhysicalNodeInfo",
+                                                {{"ApplicationUuid", "%s", true,
+                                                  "DeviceApplication(ApplicationUuid)", true},
+                                                 {"Ip", "%s", true},
+                                                 {"Port", "%u", true}});
 static const std::string kCreateMinhtonPhysicalNodeInfo =
     getCreateTableStatement(kMinhtonPhysicalNodeInfo);
 
@@ -103,12 +103,12 @@ void MinhtonLoggerNs3::logPhysicalNodeInfo(const LoggerPhysicalNodeInfo &info) {
 }
 
 // * MinhtonNode
-TableDefinition kMinhtonNode("MinhtonNode",
-                             {{"PositionUuid", "%s", true, "", true},
-                              {"ApplicationUuid", "%s", true, "DeviceApplication(ApplicationUuid)"},
-                              {"Level", "%u"},
-                              {"Number", "%u"},
-                              {"Fanout", "%u"}});
+static TableDefinition kMinhtonNode("MinhtonNode", {{"PositionUuid", "%s", true, "", true},
+                                                    {"ApplicationUuid", "%s", true,
+                                                     "DeviceApplication(ApplicationUuid)"},
+                                                    {"Level", "%u"},
+                                                    {"Number", "%u"},
+                                                    {"Fanout", "%u"}});
 static const std::string kCreateMinhtonNode = getCreateTableStatement(kMinhtonNode);
 
 void MinhtonLoggerNs3::logNode(const LoggerInfoAddNode &info) {
@@ -137,18 +137,18 @@ void MinhtonLoggerNs3::logNode(const LoggerInfoAddNode &info) {
 }
 
 // * MinhtonNodeState
-TableDefinition kMinhtonNodeState("MinhtonNodeState",
-                                  {DatabaseColumnInfo{"Id"},
-                                   {"PositionUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                                   {"Timestamp_ms", "%u", true},
-                                   {"State", "%u", true},
-                                   {"EventId", "%lu", true, "Event(Id)"}},
-                                  "UNIQUE(PositionUuid, State)");
+static TableDefinition kMinhtonNodeState("MinhtonNodeState",
+                                         {DatabaseColumnInfo{"Id"},
+                                          {"PositionUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                                          {"Timestamp_ms", "%u", true},
+                                          {"State", "%u", true},
+                                          {"EventId", "%lu", true, "Event(Id)"}},
+                                         "UNIQUE(PositionUuid, State)");
 static const std::string kCreateMinhtonNodeState = getCreateTableStatement(kMinhtonNodeState);
 static bool minhton_node_state_exists_ = false;
 
-TableDefinition kEnumMinhtonNodeState("enumMinhtonNodeState",
-                                      {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
+static TableDefinition kEnumMinhtonNodeState("enumMinhtonNodeState",
+                                             {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
 static const std::string kCreateEnumMinhtonNodeState =
     getCreateTableStatement(kEnumMinhtonNodeState);
 
@@ -167,7 +167,7 @@ void MinhtonLoggerNs3::logMinhtonNodeStates() {
   }
 }
 
-ViewDefinition kNodeStateReplacements = {
+static ViewDefinition kNodeStateReplacements = {
     {"PositionUuid", "N1.Level AS Level, N1.Number AS Number, Net1.Ip AS Ip, Net1.Port AS Port"},
     {"State", "enumMinhtonNodeState.Name AS State"}};
 static const std::string kCreateViewMinhtonNodeState = getCreateViewStatement(
@@ -231,23 +231,23 @@ void MinhtonLoggerNs3::logNodeLeft(const LoggerInfoNodeState &info) {
 }
 
 // * MinhtonTraffic
-TableDefinition kMinhtonTraffic("MinhtonTraffic",
-                                {DatabaseColumnInfo{"Id"},
-                                 {"Timestamp_ms", "%lu", true},
-                                 {"MsgType", "%u", true},
-                                 {"Mode", "%u", true},
-                                 {"EventId", "%lu", true, "Event(Id)"},
-                                 {"RefEventId", "%lu", true, "Event(Id)"},
-                                 {"SenderNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                                 {"TargetNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                                 {"PrimaryOtherNodeUuid", "%s", false, "MinhtonNode(PositionUuid)"},
-                                 {"SecondaryOtherNodeUuid", "%s", false,
-                                  "MinhtonNode(PositionUuid)"},
-                                 {"Content", "%s"}});
+static TableDefinition kMinhtonTraffic(
+    "MinhtonTraffic", {DatabaseColumnInfo{"Id"},
+                       {"Timestamp_ms", "%lu", true},
+                       {"MsgType", "%u", true},
+                       {"Mode", "%u", true},
+                       {"EventId", "%lu", true, "Event(Id)"},
+                       {"RefEventId", "%lu", true, "Event(Id)"},
+                       {"SenderNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                       {"TargetNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                       {"PrimaryOtherNodeUuid", "%s", false, "MinhtonNode(PositionUuid)"},
+                       {"SecondaryOtherNodeUuid", "%s", false, "MinhtonNode(PositionUuid)"},
+                       {"Content", "%s"}});
 static const std::string kCreateMinhtonTraffic = getCreateTableStatement(kMinhtonTraffic);
 
-TableDefinition kEnumMinhtonMessageType("enumMinhtonMessageType",
-                                        {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
+static TableDefinition kEnumMinhtonMessageType("enumMinhtonMessageType",
+                                               {{"Id", "%u", true, "", true},
+                                                {"Name", "%s", true}});
 static const std::string kCreateEnumMinhtonMessageType =
     getCreateTableStatement(kEnumMinhtonMessageType);
 
@@ -260,7 +260,7 @@ void MinhtonLoggerNs3::logMinhtonMessageTypes() {
   }
 }
 
-ViewDefinition kTrafficReplacements = {
+static ViewDefinition kTrafficReplacements = {
     {"MsgType", "enumMinhtonMessageType.Name AS MessageType"},
     {"SenderNodeUuid", "SNode.Level AS SLevel, SNode.Number AS SNumber, SNetwork.Ip AS SIp"},
     {"TargetNodeUuid", "TNode.Level AS TLevel, TNode.Number AS TNumber, TNetwork.Ip AS TIp"},
@@ -312,14 +312,14 @@ void MinhtonLoggerNs3::logTraffic(const MessageLoggingInfo &info) {
 }
 
 // * SearchContent
-TableDefinition kSearchContent("MinhtonSearchContent",
-                               {DatabaseColumnInfo{"Id"},
-                                {"Timestamp_ms", "%lu", true},
-                                {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                                {"State", "%u", true},
-                                {"AttributeName", "%s"},
-                                {"Type", "%u", true},
-                                {"Text", "%s"}});
+static TableDefinition kSearchContent("MinhtonSearchContent",
+                                      {DatabaseColumnInfo{"Id"},
+                                       {"Timestamp_ms", "%lu", true},
+                                       {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                                       {"State", "%u", true},
+                                       {"AttributeName", "%s"},
+                                       {"Type", "%u", true},
+                                       {"Text", "%s"}});
 static const std::string kCreateCreateTraffic = getCreateTableStatement(kSearchContent);
 
 void MinhtonLoggerNs3::logContent(const LoggerInfoAddContent &info) {
@@ -340,16 +340,16 @@ void MinhtonLoggerNs3::logContent(const LoggerInfoAddContent &info) {
 }
 
 // * MinhtonSearchTest
-TableDefinition kSearchTest("MinhtonSearchTest", {DatabaseColumnInfo{"Id"},
-                                                  {"Timestamp_ms", "%lu", true},
-                                                  {"EventId", "%lu", true, "Event(Id)"},
-                                                  {"State", "%u", true},
-                                                  {"SenderLevel", "%u"},
-                                                  {"SenderNumber", "%u"},
-                                                  {"TargetLevel", "%u"},
-                                                  {"TargetNumber", "%u"},
-                                                  {"HopLevel", "%u"},
-                                                  {"HopNumber", "%u"}});
+static TableDefinition kSearchTest("MinhtonSearchTest", {DatabaseColumnInfo{"Id"},
+                                                         {"Timestamp_ms", "%lu", true},
+                                                         {"EventId", "%lu", true, "Event(Id)"},
+                                                         {"State", "%u", true},
+                                                         {"SenderLevel", "%u"},
+                                                         {"SenderNumber", "%u"},
+                                                         {"TargetLevel", "%u"},
+                                                         {"TargetNumber", "%u"},
+                                                         {"HopLevel", "%u"},
+                                                         {"HopNumber", "%u"}});
 static const std::string kCreateSearchTest = getCreateTableStatement(kSearchTest);
 
 void MinhtonLoggerNs3::logSearchExactTest(const LoggerInfoSearchExact &info) {
@@ -373,17 +373,18 @@ void MinhtonLoggerNs3::logSearchExactTest(const LoggerInfoSearchExact &info) {
 }
 
 // * RoutingInfo
-TableDefinition kRoutingInfo("MinhtonRoutingInfo",
-                             {DatabaseColumnInfo{"Id"},
-                              {"Timestamp_ms", "%lu", true},
-                              {"EventId", "%lu", true, "Event(Id)"},
-                              {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                              {"NeighborNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
-                              {"Relationship", "%u", true}});
+static TableDefinition kRoutingInfo("MinhtonRoutingInfo",
+                                    {DatabaseColumnInfo{"Id"},
+                                     {"Timestamp_ms", "%lu", true},
+                                     {"EventId", "%lu", true, "Event(Id)"},
+                                     {"NodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                                     {"NeighborNodeUuid", "%s", true, "MinhtonNode(PositionUuid)"},
+                                     {"Relationship", "%u", true}});
 static const std::string kCreateRoutingInfo = getCreateTableStatement(kRoutingInfo);
 
-TableDefinition kEnumMinhtonRelationship("enumMinhtonRelationship",
-                                         {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
+static TableDefinition kEnumMinhtonRelationship("enumMinhtonRelationship",
+                                                {{"Id", "%u", true, "", true},
+                                                 {"Name", "%s", true}});
 static const std::string kCreateEnumMinhtonRelationship =
     getCreateTableStatement(kEnumMinhtonRelationship);
 
@@ -405,7 +406,7 @@ void MinhtonLoggerNs3::logMinhtonRelationships() {
   }
 }
 
-ViewDefinition kRtReplacements = {
+static ViewDefinition kRtReplacements = {
     {"NodeUuid",
      "N1.Level AS NodeLevel, N1.Number AS NodeNumber, Net1.Ip AS NodeIp, Net1.Port AS NodePort"},
     {"NeighborNodeUuid", "N2.Level AS NeighborLevel, N2.Number AS NeighborNumber, "
@@ -469,6 +470,3 @@ void MinhtonLoggerNs3::logDebug(const std::string & /*msg*/) const {
 }
 
 }  // namespace minhton
-
-#undef TableDefinition
-#undef ViewDefinition
