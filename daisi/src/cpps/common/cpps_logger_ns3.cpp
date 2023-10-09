@@ -18,8 +18,8 @@
 
 #include "ns3/simulator.h"
 
-#define TableDefinition static const DatabaseTable
-#define ViewDefinition static const std::unordered_map<std::string, std::string>
+using TableDefinition = const DatabaseTable;
+using ViewDefinition = const std::unordered_map<std::string, std::string>;
 
 namespace daisi::cpps {
 
@@ -27,27 +27,28 @@ namespace daisi::cpps {
 //! Don't forget to use .c_str() to convert std::string into a char array
 
 // * CppsExecutedOrderUtility
-TableDefinition kExecutedOrderUtility("CppsExecutedOrderUtility",
-                                      {{"OrderUuid", "%s", true, "TransportOrder(OrderUuid)"},
-                                       {"AMRUuid", "%s", true, "AMR(ApplicationUuid)"},
-                                       {"Timestamp_ms", "%lu", true},
-                                       {"ExpectedStartTime_ms", "%lf", true},
-                                       {"ExecutionDuration_ms", "%lf", true},
-                                       {"ExecutionDistance_m", "%lf", true},
-                                       {"TravelToPickupDuration_ms", "%lf", true},
-                                       {"TravelToPickupDistance_m", "%lf", true},
-                                       {"Makespan", "%lf", true},
-                                       {"Delay_ms", "%lf", true},
-                                       {"DeltaExecutionDuration_ms", "%lf", true},
-                                       {"DeltaExecutionDistance_m", "%lf", true},
-                                       {"DeltaTravelToPickupDuration_ms", "%lf", true},
-                                       {"DeltaTravelToPickupDistance_m", "%lf", true},
-                                       {"DeltaMakespan", "%lf", true},
-                                       {"QueueSize", "%u", true},
-                                       {"Quality", "%lf", true},
-                                       {"Costs", "%lf", true},
-                                       {"Utility", "%lf", true}},
-                                      "PRIMARY KEY(AMRUuid, OrderUuid, Timestamp_ms)");
+static TableDefinition kExecutedOrderUtility("CppsExecutedOrderUtility",
+                                             {{"OrderUuid", "%s", true,
+                                               "TransportOrder(OrderUuid)"},
+                                              {"AMRUuid", "%s", true, "AMR(ApplicationUuid)"},
+                                              {"Timestamp_ms", "%lu", true},
+                                              {"ExpectedStartTime_ms", "%lf", true},
+                                              {"ExecutionDuration_ms", "%lf", true},
+                                              {"ExecutionDistance_m", "%lf", true},
+                                              {"TravelToPickupDuration_ms", "%lf", true},
+                                              {"TravelToPickupDistance_m", "%lf", true},
+                                              {"Makespan", "%lf", true},
+                                              {"Delay_ms", "%lf", true},
+                                              {"DeltaExecutionDuration_ms", "%lf", true},
+                                              {"DeltaExecutionDistance_m", "%lf", true},
+                                              {"DeltaTravelToPickupDuration_ms", "%lf", true},
+                                              {"DeltaTravelToPickupDistance_m", "%lf", true},
+                                              {"DeltaMakespan", "%lf", true},
+                                              {"QueueSize", "%u", true},
+                                              {"Quality", "%lf", true},
+                                              {"Costs", "%lf", true},
+                                              {"Utility", "%lf", true}},
+                                             "PRIMARY KEY(AMRUuid, OrderUuid, Timestamp_ms)");
 static const std::string kCreateExecutedOrderUtility =
     getCreateTableStatement(kExecutedOrderUtility);
 
@@ -82,12 +83,12 @@ void CppsLoggerNs3::logExecutedOrderCost(const ExecutedOrderUtilityLoggingInfo &
 }
 
 // * CppsMaterialFlow
-TableDefinition kMaterialFlow("CppsMaterialFlow", {DatabaseColumnInfo{"Id"},
-                                                   {"Timestamp_ms", "%u", true},
-                                                   {"Uuid", "%s", true},
-                                                   {"IpLogicalCore", "%s", true},
-                                                   {"PortLogicalCore", "%u", true},
-                                                   {"State", "%u", true}});
+static TableDefinition kMaterialFlow("CppsMaterialFlow", {DatabaseColumnInfo{"Id"},
+                                                          {"Timestamp_ms", "%u", true},
+                                                          {"Uuid", "%s", true},
+                                                          {"IpLogicalCore", "%s", true},
+                                                          {"PortLogicalCore", "%u", true},
+                                                          {"State", "%u", true}});
 static const std::string kCreateMaterialFlow = getCreateTableStatement(kMaterialFlow);
 
 void CppsLoggerNs3::logMaterialFlow(const std::string &mf_uuid, const std::string &ip,
@@ -108,20 +109,20 @@ void CppsLoggerNs3::logMaterialFlow(const std::string &mf_uuid, const std::strin
 }
 
 // * CppsNegotiationTraffic
-TableDefinition kNegotiationTraffic("CppsNegotiationTraffic",
-                                    {DatabaseColumnInfo{"Id"},
-                                     {"TransportOrderId", "sql%u", true, "TransportOrder(Id)"},
-                                     {"Timestamp_ms", "%u", true},
-                                     {"SenderIp", "%s", true},
-                                     {"SenderPort", "%u", true},
-                                     {"TargetIp", "%s", true},
-                                     {"TargetPort", "%u", true},
-                                     {"MsgType", "%u", true},
-                                     {"Content", "%s"}});
+static TableDefinition kNegotiationTraffic("CppsNegotiationTraffic", {DatabaseColumnInfo{"Id"},
+                                                                      {"TransportOrderId", "sql%u",
+                                                                       true, "TransportOrder(Id)"},
+                                                                      {"Timestamp_ms", "%u", true},
+                                                                      {"SenderIp", "%s", true},
+                                                                      {"SenderPort", "%u", true},
+                                                                      {"TargetIp", "%s", true},
+                                                                      {"TargetPort", "%u", true},
+                                                                      {"MsgType", "%u", true},
+                                                                      {"Content", "%s"}});
 static const std::string kCreateNegotiationTraffic = getCreateTableStatement(kNegotiationTraffic);
 
-TableDefinition kEnumCppsMessageType("enumCppsMessageType",
-                                     {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
+static TableDefinition kEnumCppsMessageType("enumCppsMessageType",
+                                            {{"Id", "%u", true, "", true}, {"Name", "%s", true}});
 static const std::string kCreateEnumCppsMessageType = getCreateTableStatement(kEnumCppsMessageType);
 
 void CppsLoggerNs3::logCppsMessageTypes() {
@@ -134,11 +135,11 @@ void CppsLoggerNs3::logCppsMessageTypes() {
   // }
 }
 
-TableDefinition kCppsMessage("CppsTopicMessage", {
-                                                     DatabaseColumnInfo{"Id"},
-                                                     {"MessageUuid", "%s", true},
-                                                     {"MessageContent", "%s", true},
-                                                 });
+static TableDefinition kCppsMessage("CppsTopicMessage", {
+                                                            DatabaseColumnInfo{"Id"},
+                                                            {"MessageUuid", "%s", true},
+                                                            {"MessageContent", "%s", true},
+                                                        });
 static const std::string kCreateCppsMessage = getCreateTableStatement(kCppsMessage);
 
 void CppsLoggerNs3::logCppsMessage(solanet::UUID msg_uuid, const std::string &msg_content) {
@@ -156,7 +157,7 @@ void CppsLoggerNs3::logCppsMessage(solanet::UUID msg_uuid, const std::string &ms
   log_(getInsertStatement(kCppsMessage, t));
 }
 
-ViewDefinition kNegotiationTrafficReplacements = {
+static ViewDefinition kNegotiationTrafficReplacements = {
     {"MsgType", "enumCppsMessageType.Name AS MessageType"}};
 static const std::string kCreateViewNegotiationTraffic = getCreateViewStatement(
     kNegotiationTraffic, kNegotiationTrafficReplacements,
@@ -192,12 +193,12 @@ void CppsLoggerNs3::logNegotiationTraffic(const NegotiationTrafficLoggingInfo &l
 }
 
 // * CppsStation
-TableDefinition kStation("CppsStation", {DatabaseColumnInfo{"Id"},
-                                         // {"ApplicationUuid", "%s", true},
-                                         {"Name", "%s", true},
-                                         {"Type", "%s", true},
-                                         {"PosX_m", "%lf", true},
-                                         {"PosY_M", "%lf", true}});
+static TableDefinition kStation("CppsStation", {DatabaseColumnInfo{"Id"},
+                                                // {"ApplicationUuid", "%s", true},
+                                                {"Name", "%s", true},
+                                                {"Type", "%s", true},
+                                                {"PosX_m", "%lf", true},
+                                                {"PosY_M", "%lf", true}});
 static const std::string kCreateStation = getCreateTableStatement(kStation);
 
 void CppsLoggerNs3::logStation(const std::string &name, const std::string &type,
@@ -234,6 +235,3 @@ CppsLoggerNs3::~CppsLoggerNs3() {
 }
 
 }  // namespace daisi::cpps
-
-#undef TableDefinition
-#undef ViewDefinition

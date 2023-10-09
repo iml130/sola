@@ -17,19 +17,18 @@
 #include "cpps_logger_ns3.h"
 #include "ns3/simulator.h"
 
-#define TableDefinition static const DatabaseTable
-#define ViewDefinition static const std::unordered_map<std::string, std::string>
+using TableDefinition = const DatabaseTable;
 
 namespace daisi::cpps {
 
 // * CppsAMRHistory
-TableDefinition kAmrHistory("CppsAMRHistory",
-                            {DatabaseColumnInfo{"Id"},
-                             {"Timestamp_ms", "%u", true},
-                             {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
-                             {"PosX_m", "%f", true},
-                             {"PosY_m", "%f", true},
-                             {"State", "%u", true}});
+static TableDefinition kAmrHistory("CppsAMRHistory",
+                                   {DatabaseColumnInfo{"Id"},
+                                    {"Timestamp_ms", "%u", true},
+                                    {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
+                                    {"PosX_m", "%f", true},
+                                    {"PosY_m", "%f", true},
+                                    {"State", "%u", true}});
 static const std::string kCreateAmrHistory = getCreateTableStatement(kAmrHistory);
 
 void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info) {
@@ -52,26 +51,26 @@ void CppsLoggerNs3::logPositionUpdate(const AmrPositionLoggingInfo &logging_info
 }
 
 // * CppsAutonomousMobileRobot
-TableDefinition kAutonomousMobileRobot("CppsAutonomousMobileRobot",
-                                       {DatabaseColumnInfo{"Id"},
-                                        {"Timestamp_ms", "%u", true},
-                                        {"ApplicationUuid", "%s", true,
-                                         "DeviceApplication(ApplicationUuid)"},
-                                        {"FriendlyName", "%s"},
-                                        {"ModelName", "%s"},
-                                        {"IpLogicalService", "%s", true},
-                                        {"PortLogicalService", "%u", true},
-                                        {"IpPhysicalAsset", "%s", true},
-                                        {"PortPhysicalAsset", "%u", true},
-                                        {"IpLocalAsset", "%s", true},
-                                        {"PortLocalAsset", "%u", true},
-                                        {"LoadTime_ms", "%u", true},
-                                        {"UnloadTime_ms", "%u", true},
-                                        {"MaxWeight_kg", "%f", true},
-                                        {"MaxVelocity_mps", "%f", true},
-                                        {"MinVelocity_mps", "%f", true},
-                                        {"MaxAcceleration_mpss", "%f", true},
-                                        {"MaxDeceleration_mpss", "%f", true}});
+static TableDefinition kAutonomousMobileRobot("CppsAutonomousMobileRobot",
+                                              {DatabaseColumnInfo{"Id"},
+                                               {"Timestamp_ms", "%u", true},
+                                               {"ApplicationUuid", "%s", true,
+                                                "DeviceApplication(ApplicationUuid)"},
+                                               {"FriendlyName", "%s"},
+                                               {"ModelName", "%s"},
+                                               {"IpLogicalService", "%s", true},
+                                               {"PortLogicalService", "%u", true},
+                                               {"IpPhysicalAsset", "%s", true},
+                                               {"PortPhysicalAsset", "%u", true},
+                                               {"IpLocalAsset", "%s", true},
+                                               {"PortLocalAsset", "%u", true},
+                                               {"LoadTime_ms", "%u", true},
+                                               {"UnloadTime_ms", "%u", true},
+                                               {"MaxWeight_kg", "%f", true},
+                                               {"MaxVelocity_mps", "%f", true},
+                                               {"MinVelocity_mps", "%f", true},
+                                               {"MaxAcceleration_mpss", "%f", true},
+                                               {"MaxDeceleration_mpss", "%f", true}});
 static const std::string kCreateAmr = getCreateTableStatement(kAutonomousMobileRobot);
 
 void CppsLoggerNs3::logAMR(const AmrLoggingInfo &amr_info) {
@@ -103,9 +102,9 @@ void CppsLoggerNs3::logAMR(const AmrLoggingInfo &amr_info) {
 }
 
 // * CppsService
-TableDefinition kService("CppsService", {{"Uuid", "%s", true, "", true},
-                                         {"StartTime_ms", "%u"},
-                                         {"Type", "%u", true}});
+static TableDefinition kService("CppsService", {{"Uuid", "%s", true, "", true},
+                                                {"StartTime_ms", "%u"},
+                                                {"Type", "%u", true}});
 static const std::string kCreateService = getCreateTableStatement(kService);
 
 void CppsLoggerNs3::logService(const std::string &uuid, uint8_t type) {
@@ -123,12 +122,12 @@ void CppsLoggerNs3::logService(const std::string &uuid, uint8_t type) {
 }
 
 // * CppsServiceTransport
-TableDefinition kServiceTransport("CppsServiceTransport",
-                                  {DatabaseColumnInfo{"Id"},
-                                   {"Uuid", "%s", true},
-                                   {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
-                                   {"LoadCarrierType", "%s", true},
-                                   {"MaxWeightPayload_kg", "%f", true}});
+static TableDefinition kServiceTransport("CppsServiceTransport",
+                                         {DatabaseColumnInfo{"Id"},
+                                          {"Uuid", "%s", true},
+                                          {"AmrId", "sql%u", true, "CppsAutonomousMobileRobot(Id)"},
+                                          {"LoadCarrierType", "%s", true},
+                                          {"MaxWeightPayload_kg", "%f", true}});
 static const std::string kCreateServiceTransport = getCreateTableStatement(kServiceTransport);
 
 void CppsLoggerNs3::logTransportService(const sola::Service &service, bool /*active*/) {

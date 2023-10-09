@@ -28,13 +28,13 @@
 #include <unordered_set>
 
 // Args: (Application UUID)
-using LogDeviceApp = const std::function<void(const std::string &)>;
+using LogDeviceApp = std::function<void(const std::string &)>;
 
 // Args: (SQL statement)
 using LogFunction = std::function<void(const std::string &)>;
 
 // Args: (Event UUID, Event type, Application ID)
-using LogEvent = const std::function<void(const std::string &, uint8_t, const std::string &)>;
+using LogEvent = std::function<void(const std::string &, uint8_t, const std::string &)>;
 
 /// @brief Creates a SQL Statement by calling snprintf. The amount of format specifiers in
 /// format_str has to be identical to the provided values
