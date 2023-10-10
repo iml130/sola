@@ -34,17 +34,14 @@ target_sources(minhton_message
     lock_neighbor_request.cpp
     lock_neighbor_response.cpp
 )
-target_link_libraries(minhton_message 
+target_link_libraries(minhton_message
   PUBLIC
     minhton_algorithms # For esearch/NodeData/FindQuery
     minhton_core_node_info
     minhton_core_constants
-    minhton_message_serialize
+    solanet_serialize
   PRIVATE
     minhton_exception_algorithm
     minhton_core_routing_calculations
     solanet_uuid_generator
 )
-
-add_library(minhton_message_serialize INTERFACE ${MINHTON_SOURCE_DIR}/include/minhton/message/serialize.h)
-target_link_libraries(minhton_message_serialize INTERFACE Cereal) # TODO Remove public dependency

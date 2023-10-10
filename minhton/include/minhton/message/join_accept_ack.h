@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_JOIN_ACCEPT_ACK_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** After receiving a MessageJoinAccept, the new child must send a

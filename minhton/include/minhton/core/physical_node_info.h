@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 #define PORT_MIN 1024

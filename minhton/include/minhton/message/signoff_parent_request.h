@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_SIGNOFF_PARENT_REQUEST_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** The last node of the network, the chosen successor, sends a

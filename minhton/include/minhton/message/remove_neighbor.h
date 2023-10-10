@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_REMOVE_NEIGHBOR_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node is leaving the network. This is a notification to remove the given

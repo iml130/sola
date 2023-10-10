@@ -16,7 +16,7 @@ What needs to be done for adding a new message type:
 
 - Create a new header file in `include/minhton/message` (Tip: Use join.h as a guideline)
     - Make sure to use a unique name for the ifndef include guide
-    - Make sure to include `#include "minhton/message/message.h"` and `#include "minhton/message/serialize.h"`
+    - Make sure to include `#include "minhton/message/message.h"` and `#include "solanet/serializer/serialize.h"`
     - Place a `SERIALIZE(...)` with required attributes under public visibility (Tip: Look at `include/minhton/algorithms/esearch/find_query.h` if the message type needs separate load and save functions)
     - Apart from the constructor for general usage which should have all parameters to create a valid message, a default constructor is required for serialization purposes.
     - Always required and the same are the `protected` fields that all message types must have.

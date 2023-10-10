@@ -8,7 +8,7 @@ target_link_libraries(minhton_core_node_info
   PUBLIC
     minhton_core_physical_node_info
     minhton_core_logical_node_info
-    minhton_message_serialize
+    solanet_serialize
 )
 
 # LogicalNodeInfo
@@ -19,7 +19,7 @@ target_include_directories(minhton_core_logical_node_info
 )
 target_link_libraries(minhton_core_logical_node_info
   PUBLIC
-    minhton_message_serialize
+    solanet_serialize
     solanet_uuid
     solanet_uuid_generator
   PRIVATE
@@ -35,7 +35,7 @@ target_include_directories(minhton_core_physical_node_info
 )
 target_link_libraries(minhton_core_physical_node_info
   PUBLIC
-    minhton_message_serialize
+    solanet_serialize
 )
 
 # Routing Calculations

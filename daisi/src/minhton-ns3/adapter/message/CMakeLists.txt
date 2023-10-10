@@ -38,7 +38,7 @@ target_link_libraries(minhton_message_sim
     minhton_algorithms_sim # For esearch/NodeData/FindQuery
     minhton_core_node_info_sim
     minhton_core_constants
-    minhton_message_serialize
+    solanet_serialize
   PRIVATE
     minhton_exception_algorithm
     minhton_core_routing_calculations

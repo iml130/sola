@@ -9,7 +9,7 @@
 
 #include "minhton/message/message.h"
 #include "minhton/message/se_types.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node wants to send a message to another node in the network, but does not

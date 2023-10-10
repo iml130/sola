@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_REPLACEMENT_ACK_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** The node that wants to leave the network receives a MessageReplacementOffer

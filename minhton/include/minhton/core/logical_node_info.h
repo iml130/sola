@@ -9,7 +9,7 @@
 
 #include <string>
 
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 #include "solanet/uuid.h"
 #include "solanet/uuid_generator.h"
 

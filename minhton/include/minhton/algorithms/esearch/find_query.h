@@ -15,7 +15,7 @@
 #include "minhton/algorithms/esearch/local_data.h"
 #include "minhton/algorithms/esearch/node_data.h"
 #include "minhton/core/node_info.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 class FindQuery {

@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_GET_NEIGHBORS_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** Currently only used in the join accept procedure in rare cases by the parent

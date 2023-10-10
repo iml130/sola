@@ -11,7 +11,7 @@
 
 #include "minhton/algorithms/esearch/find_query.h"
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node that wants to find data in the network can call the Entity Search

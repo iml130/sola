@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_BOOTSTRAP_DISCOVER_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node wants to join the network but does not have access to a node's

@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_REMOVE_NEIGHBOR_ACK_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** Is sent as a reply to either a MessageReplacementUpdate or
