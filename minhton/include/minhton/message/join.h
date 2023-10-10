@@ -9,7 +9,7 @@
 
 #include "minhton/message/find_end.h"
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** When a node wants to join the network, it sends a MessageJoin to one node in

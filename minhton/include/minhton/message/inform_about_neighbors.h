@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_INFORM_ABOUT_NEIGHBORS_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** This message is an answer to a MessageGetNeighbors. It contains the node

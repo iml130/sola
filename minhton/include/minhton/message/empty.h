@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_EMPTY_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A helper message type for the Search Exact Test. It has no functionality by

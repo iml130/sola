@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_REPLACEMENT_OFFER_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A MessageFindReplacement reached a node that can replace the leaving node.

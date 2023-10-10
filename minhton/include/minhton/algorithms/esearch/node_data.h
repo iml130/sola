@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "minhton/core/node_info.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 

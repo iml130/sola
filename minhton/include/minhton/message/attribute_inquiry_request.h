@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node that is not a DSN may receive a MessageAttributeInquiryRequest during

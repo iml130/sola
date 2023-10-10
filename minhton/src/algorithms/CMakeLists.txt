@@ -31,12 +31,12 @@ target_include_directories(minhton_algorithms PUBLIC
   ${MINHTON_SOURCE_DIR}/include # TODO
 )
 
-target_link_libraries(minhton_algorithms 
+target_link_libraries(minhton_algorithms
   PUBLIC
     minhton_core_physical_node_info
     minhton_core_node_info
     minhton_core_routing_table
-    minhton_message_serialize
+    solanet_serialize
     minhton_message
     minhton_core_definitions
     minhton_core_access_container

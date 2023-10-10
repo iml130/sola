@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_LOCK_NEIGHBOR_REQUEST_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** The parent of a successor node sends a Lock Neighbor Request to its right

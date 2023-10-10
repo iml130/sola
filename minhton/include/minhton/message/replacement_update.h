@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_REPLACEMENT_UPDATE_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** During the replacement process, the neighbor nodes of the leaving node / the

@@ -11,7 +11,7 @@
 
 #include "minhton/algorithms/esearch/node_data.h"
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** The message that the node which received a MessageAttributeInquiryRequest

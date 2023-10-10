@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_BOOTSTRAP_RESPONSE_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** After receiving a MessageBootstrapDiscover, the node receiving the message

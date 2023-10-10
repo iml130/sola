@@ -28,16 +28,16 @@ target_sources(minhton_algorithms_sim
     ${MINHTON_SOURCE_DIR}/src/algorithms/esearch/minhton_entity_search_algorithm_helper.cpp
 )
 
-target_include_directories(minhton_algorithms_sim 
+target_include_directories(minhton_algorithms_sim
     PUBLIC
         ${MINHTON_SOURCE_DIR}/include
 )
-target_link_libraries(minhton_algorithms_sim 
+target_link_libraries(minhton_algorithms_sim
   PUBLIC
     minhton_core_physical_node_info
     minhton_core_node_info_sim
     minhton_core_routing_table_sim
-    minhton_message_serialize
+    solanet_serialize
     minhton_message_sim
     minhton_core_definitions
     minhton_core_access_container_sim

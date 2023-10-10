@@ -9,7 +9,7 @@
 
 #include "minhton/algorithms/esearch/node_data.h"
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** If a node's local data is modified (inserted, updated or removed), it will

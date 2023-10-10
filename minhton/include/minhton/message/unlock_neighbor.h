@@ -8,7 +8,7 @@
 #define MINHTON_MESSAGE_UNLOCK_NEIGHBOR_H_
 
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** Used for unlocking nodes after they were locked during a concurrent

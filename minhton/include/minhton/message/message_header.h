@@ -13,8 +13,8 @@
 #include "minhton/core/constants.h"
 #include "minhton/core/node_info.h"
 #include "minhton/message/message_logging.h"
-#include "minhton/message/serialize.h"
 #include "minhton/message/types.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 ///

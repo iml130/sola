@@ -9,7 +9,7 @@
 
 #include "minhton/message/find_end.h"
 #include "minhton/message/message.h"
-#include "minhton/message/serialize.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** A node wants to leave the network, but cannot leave the position directly

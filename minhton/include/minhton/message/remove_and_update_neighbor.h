@@ -9,8 +9,8 @@
 
 #include "minhton/message/message.h"
 #include "minhton/message/remove_neighbor.h"
-#include "minhton/message/serialize.h"
 #include "minhton/message/update_neighbors.h"
+#include "solanet/serializer/serialize.h"
 
 namespace minhton {
 /// @brief * **Usage:** Used in the leave and response algorithms for updating the routing
