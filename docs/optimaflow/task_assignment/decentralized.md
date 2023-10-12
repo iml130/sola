@@ -1,5 +1,3 @@
-!!!danger "This is work in progress!"
-
 # Decentralized Task Assignment
 
 In the decentralized OptiMaFlow architecture, the task assignment process involves multiple Material Flow Logical Agents, each responsible for managing one or a few [material flows](../participants/material_flow.md#material-flow-description).

@@ -1,13 +1,8 @@
-!!! danger "This is work in progress!"
-
 # Glossary Optimaflow
 
 ## A
 
 **Action Order**:<br />
-See [Material Flow](participants/material_flow.md#structure)
-
-**Action Order Step**:<br />
 See [Material Flow](participants/material_flow.md#structure)
 
 **Autonomous Mobile Robot (AMR)**:<br />
@@ -29,10 +24,10 @@ See [Material Flow](participants/material_flow.md)
 **Move Order**:<br />
 See [Material Flow](participants/material_flow.md#structure)
 
-**Move Order Step**:<br />
-See [Material Flow](participants/material_flow.md#structure)
-
 ## O
+
+**OptiMaFlow**:<br />
+See [OptiMaFlow](introduction.md#what-is-optimaflow)
 
 **Order**:<br />
 See [Material Flow](participants/material_flow.md#structure)
@@ -54,5 +49,3 @@ The nodes of the graph are positions on the traversable area.
 **Transport Order**:<br />
 See [Material Flow](participants/material_flow.md#structure)
 
-**Transport Order Step**:<br />
-See [Material Flow](participants/material_flow.md#structure)
