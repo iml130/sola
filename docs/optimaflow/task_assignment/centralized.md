@@ -1,5 +1,3 @@
-!!!danger "This is work in progress!"
-
 # Centralized Optimization
 
 The idea of a centralized optimizer is to store all relevant information centrally in one place.

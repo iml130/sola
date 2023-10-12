@@ -52,13 +52,11 @@ nav:
   - OptiMaFlow:
     - Introduction: optimaflow/introduction.md
     - Participants:
-      - Overview: optimaflow/participants/overview.md
       - Material Flow: optimaflow/participants/material_flow.md
-      - AMR: optimaflow/participants/amr.md
+      - Autonomous Mobile Robot: optimaflow/participants/amr.md
     - Task Assignment:
+      - Centralized: optimaflow/task_assignment/centralized.md
       - Decentralized: optimaflow/task_assignment/decentralized.md
-      - Centralized: optimaflow/task_assignment/round_robin.md
-    - Logging: optimaflow/logging.md
     - Glossary: optimaflow/glossary.md
 
   - ns-3 Integration:
