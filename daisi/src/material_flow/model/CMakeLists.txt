@@ -91,6 +91,7 @@ target_sources(daisi_material_flow_model_transport_order
 target_link_libraries(daisi_material_flow_model_transport_order
     PUBLIC
     daisi_material_flow_model_transport_order_step
+    daisi_cpps_model_order_states
     PRIVATE
     solanet_serialize
     solanet_uuid
@@ -111,6 +112,7 @@ target_link_libraries(daisi_material_flow_model_task
     daisi_cpps_amr_model_amr_static_ability
     daisi_material_flow_model_time_window
     solanet_serialize
+    daisi_cpps_model_order_states
 
     PRIVATE
     solanet_uuid
@@ -126,7 +128,8 @@ target_sources(daisi_material_flow_model_material_flow
 target_link_libraries(daisi_material_flow_model_material_flow
     PUBLIC
     daisi_material_flow_model_task
-
+    daisi_cpps_model_order_states
+    daisi_cpps_logical_message_material_flow_update
     PRIVATE
     solanet_serialize
 )

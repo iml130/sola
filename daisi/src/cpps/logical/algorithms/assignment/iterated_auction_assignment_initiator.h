@@ -24,6 +24,7 @@
 #include "auction_initiator_state.h"
 #include "cpps/common/cpps_communicator.h"
 #include "layered_precedence_graph.h"
+#include "material_flow/model/material_flow.h"
 #include "utils/structure_helpers.h"
 
 namespace daisi::cpps::logical {
@@ -130,6 +131,8 @@ private:
     daisi::util::Duration waiting_to_receive_winner_responses = 0.3;
 
   } delays_;
+
+  std::shared_ptr<material_flow::MFDLScheduler> material_flow_;
 };
 
 }  // namespace daisi::cpps::logical

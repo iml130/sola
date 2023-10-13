@@ -50,7 +50,7 @@ target_link_libraries(daisi_cpps_common_cpps_logger_ns3
         daisi_logging_definitions
         daisi_material_flow_model_task
         solanet_uuid
-
+        daisi_cpps_logical_message_material_flow_update
         PRIVATE
         solanet_serializer
         solanet_serialize

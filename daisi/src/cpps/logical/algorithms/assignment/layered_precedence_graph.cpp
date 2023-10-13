@@ -21,7 +21,7 @@
 namespace daisi::cpps::logical {
 
 LayeredPrecedenceGraph::LayeredPrecedenceGraph(
-    std::shared_ptr<daisi::material_flow::MFDLScheduler> /*scheduler*/,
+    std::shared_ptr<daisi::material_flow::MFDLScheduler> scheduler,
     const std::string &connection_string) {
   // TODO transform scheduler content to vertices and edges
 
@@ -47,6 +47,12 @@ LayeredPrecedenceGraph::LayeredPrecedenceGraph(
         "tos32", {}, material_flow::Location("0x0", "type", util::Position(5, 5)));
     material_flow::TransportOrder to3({pickup3}, delivery3);
     material_flow::Task task3("task3", connection_string, {to3}, {});
+
+    // TODO Workaround to add tasks to materialflow object
+    // while Material flow is hardcoded here.
+    scheduler->addTask(task1);
+    scheduler->addTask(task2);
+    scheduler->addTask(task3);
 
     amr::AmrStaticAbility ability1(amr::LoadCarrier(amr::LoadCarrier::Types::kPackage), 20);
     amr::AmrStaticAbility ability2(amr::LoadCarrier(amr::LoadCarrier::Types::kEuroBox), 20);

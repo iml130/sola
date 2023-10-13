@@ -28,24 +28,21 @@ namespace daisi::cpps::logical {
 
 class MaterialFlowStateLogger : public AlgorithmInterface {
 public:
-  MaterialFlowStateLogger(daisi::cpps::common::CppsCommunicatorPtr communicator,
-                          std::shared_ptr<CppsLoggerNs3> logger)
-      : AlgorithmInterface(std::move(communicator)), logger_(std::move(logger)) {}
+  explicit MaterialFlowStateLogger(daisi::cpps::common::CppsCommunicatorPtr communicator)
+      : AlgorithmInterface(std::move(communicator)) {}
+
+  void setMaterialflow(std::shared_ptr<daisi::material_flow::MFDLScheduler> material_flow) {
+    material_flow_ = material_flow;
+  }
 
   bool process(const MaterialFlowUpdate &msg) override {
-    MaterialFlowOrderUpdateLoggingInfo logging_info;
-    logging_info.amr_uuid = msg.amr_uuid;
-    logging_info.task = msg.task;
-    logging_info.position = msg.position;
-    logging_info.order_state = msg.order_state;
-    logging_info.order_index = msg.order_index;
-    logger_->logMaterialFlowOrderUpdate(logging_info);
-
+    assert(material_flow_);
+    material_flow_->processOrderUpdate(msg);
     return true;
   }
 
 private:
-  std::shared_ptr<CppsLoggerNs3> logger_;
+  std::shared_ptr<daisi::material_flow::MFDLScheduler> material_flow_;
 };
 
 MaterialFlowLogicalAgent::MaterialFlowLogicalAgent(const AlgorithmConfig &config_algo,
@@ -75,7 +72,7 @@ void MaterialFlowLogicalAgent::initAlgorithms() {
     }
   }
 
-  algorithms_.push_back(std::make_unique<MaterialFlowStateLogger>(communicator_, logger_));
+  algorithms_.push_back(std::make_unique<MaterialFlowStateLogger>(communicator_));
 }
 
 void MaterialFlowLogicalAgent::messageReceiveFunction(const solanet::Message &msg) {
@@ -90,10 +87,12 @@ void MaterialFlowLogicalAgent::topicMessageReceiveFunction(const sola::TopicMess
 
 void MaterialFlowLogicalAgent::setWaitingForStart() { waiting_for_start_ = true; }
 
-bool MaterialFlowLogicalAgent::isBusy() { return !material_flows_.empty(); }
+bool MaterialFlowLogicalAgent::isBusy() const {
+  return material_flow_ != nullptr && !material_flow_->isFinished();
+}
 
 bool MaterialFlowLogicalAgent::isFinished() const {
-  return false;  // TODO
+  return material_flow_ != nullptr && material_flow_->isFinished();
 }
 
 void MaterialFlowLogicalAgent::setServices() {
@@ -108,8 +107,14 @@ void MaterialFlowLogicalAgent::setServices() {
 }
 
 void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
-  // TODO save scheduler somewhere?
-  auto scheduler = std::make_shared<material_flow::MFDLScheduler>(mfdl_program);
+  if (material_flow_ && !material_flow_->isFinished()) {
+    throw std::runtime_error("Material flow still/already in progress");
+  }
+
+  material_flow_ = std::make_shared<material_flow::MFDLScheduler>(
+      mfdl_program, [this](const MaterialFlowUpdate &update) {
+        this->logger_->logMaterialFlowOrderUpdate(update);
+      });
 
   // TODO there could be multiple algorithm interfaces in the future
   // TODO Currently only algorithm and logger
@@ -118,7 +123,9 @@ void MaterialFlowLogicalAgent::addMaterialFlow(std::string mfdl_program) {
   assert(dynamic_cast<MaterialFlowStateLogger *>(algorithms_[1].get()));
 
   auto tmp = dynamic_cast<AssignmentInitiator *>(algorithms_[0].get());
-  tmp->addMaterialFlow(scheduler);
+  tmp->addMaterialFlow(material_flow_);
+
+  dynamic_cast<MaterialFlowStateLogger *>(algorithms_[1].get())->setMaterialflow(material_flow_);
 
   const std::string ip = communicator_->network.getIP();
   const uint16_t port = communicator_->network.getPort();

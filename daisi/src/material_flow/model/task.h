@@ -21,6 +21,7 @@
 
 #include "action_order.h"
 #include "cpps/amr/model/amr_static_ability.h"
+#include "cpps/model/order_states.h"
 #include "move_order.h"
 #include "solanet/serializer/serialize.h"
 #include "time_window.h"
@@ -55,6 +56,8 @@ public:
   const TimeWindow &getTimeWindow() const;
   void setSpawnTime(const util::Duration &spawn_time);
 
+  void setOrderState(uint8_t order_index, daisi::cpps::OrderStates state);
+
   bool operator<(const Task &other) const { return uuid_ < other.uuid_; }
   bool operator==(const Task &other) const { return uuid_ == other.uuid_; }
   bool operator!=(const Task &other) const { return uuid_ != other.uuid_; }
@@ -63,6 +66,10 @@ public:
             ability_requirement_)
 
 private:
+  void setOrderState(TransportOrder &order, daisi::cpps::OrderStates state);
+  void setOrderState(MoveOrder &order, daisi::cpps::OrderStates state);
+  void setOrderState(ActionOrder &order, daisi::cpps::OrderStates state);
+
   std::string uuid_;
   std::string name_;
   std::string connection_string_;

@@ -49,7 +49,7 @@ public:
   /// @brief Checking whether the agent is currently handling a material flow or running idle
   /// instead.
   /// @return status whether the agent is busy or not
-  bool isBusy();
+  bool isBusy() const;
 
   bool isFinished() const;
 
@@ -68,13 +68,13 @@ protected:
   /// @param m received message
   void topicMessageReceiveFunction(const sola::TopicMessage &m) override;
 
-  /// @brief Material flows that
-  std::vector<std::shared_ptr<daisi::material_flow::MFDLScheduler>> material_flows_;
-
   /// @brief make the mf agent discoverable for findService queries
   void setServices();
 
 private:
+  /// @brief Current material flow
+  std::shared_ptr<daisi::material_flow::MFDLScheduler> material_flow_;
+
   /// Simple flag to represent that the agent is still in the initialization process.
   bool waiting_for_start_ = false;
 

@@ -249,7 +249,10 @@ void CppsManager::executeMaterialFlow(int index, const std::string & /*friendly_
 }
 
 void CppsManager::clearFinishedMaterialFlows() {
-  bool found_running_matrial_flow_app = false;
+  // Number of finished material flows on the current material flow agents.
+  // Due to timing issues, currently only a single MF agent is used. When more agents are used,
+  // this method may not work!
+  uint64_t current_number_material_flows_finished = 0;
 
   for (uint32_t i = 0; i < material_flows_.GetN(); i++) {
     const auto &mf_app = material_flows_.Get(i)
@@ -258,15 +261,15 @@ void CppsManager::clearFinishedMaterialFlows() {
                              ->application;
 
     if (mf_app && mf_app->isFinished()) {
-      number_material_flows_finished_++;
-      found_running_matrial_flow_app = true;
+      current_number_material_flows_finished++;
     }
   }
 
   bool all_material_flows_executed =
-      number_material_flows_finished_ == scenario_.number_of_material_flow_agents;
+      current_number_material_flows_finished + number_material_flows_finished_ ==
+      scenario_.number_of_material_flow_agents;
 
-  if (!found_running_matrial_flow_app && all_material_flows_executed) {
+  if (all_material_flows_executed) {
     ns3::Simulator::Stop();
   } else {
     ns3::Simulator::Schedule(Seconds(10), &CppsManager::clearFinishedMaterialFlows, this);
@@ -274,8 +277,12 @@ void CppsManager::clearFinishedMaterialFlows() {
 }
 
 void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
-  if (scenario_.number_of_material_flow_agents == number_material_flows_scheduled_for_execution_)
+  if (scenario_.number_of_material_flow_agents == number_material_flows_scheduled_for_execution_) {
+    // All material flows are spawned now; wait till all are finished before stopping the
+    // simulation
+    Simulator::Schedule(Seconds(1), &CppsManager::clearFinishedMaterialFlows, this);
     return;
+  }
 
   // Search for next free index
   uint32_t i = 0;
@@ -306,6 +313,9 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
 
     Simulator::ScheduleWithContext(material_flows_.Get(i)->GetId(), Seconds(2),
                                    &CppsManager::startMF, this, i);
+  } else {
+    // Previous MF of this agent is finished
+    number_material_flows_finished_++;
   }
 
   Simulator::ScheduleWithContext(material_flows_.Get(i)->GetId(), Seconds(4),
@@ -331,7 +341,6 @@ void CppsManager::scheduleMaterialFlow(const SpawnInfoScenario &info) {
 }
 
 void CppsManager::scheduleEvents() {
-  Simulator::Schedule(Seconds(1), &CppsManager::clearFinishedMaterialFlows, this);
   ns3::Time current_time = Simulator::Now();
   const ns3::Time delay = scenario_.default_delay;
 
