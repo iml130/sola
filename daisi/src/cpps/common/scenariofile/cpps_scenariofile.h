@@ -82,9 +82,7 @@ struct AlgorithmScenario {
 struct CppsScenariofile : public GeneralScenariofile {
   explicit CppsScenariofile(const std::string &path_to_file) : GeneralScenariofile(path_to_file) {
     SERIALIZE_VAR(initial_number_of_amrs);
-    SERIALIZE_VAR(number_of_material_flows);
     SERIALIZE_VAR(number_of_material_flow_agents);
-    SERIALIZE_VAR(do_material_flow_agents_leave_after_finish);
 
     SERIALIZE_VAR(algorithm);
     SERIALIZE_VAR(topology);
@@ -99,10 +97,7 @@ struct CppsScenariofile : public GeneralScenariofile {
   }
 
   uint16_t initial_number_of_amrs = 0;
-  uint16_t number_of_material_flows = 0;
   uint16_t number_of_material_flow_agents = 0;
-
-  bool do_material_flow_agents_leave_after_finish = false;
 
   AlgorithmScenario algorithm;
   TopologyScenario topology;
