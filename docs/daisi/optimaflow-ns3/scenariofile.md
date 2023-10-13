@@ -107,16 +107,6 @@ Currently the number of AMRs cannot be changed at runtime, hence this is the tot
     - Reasonable default: `12`
     - Data type: ``uint64_t``
 
-#### ``number_of_material_flows``
-
-Currently unused.
-
-??? properties
-
-    - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `5`
-    - Data type: ``uint64_t``
-
 #### ``number_of_material_flow_agents``
 
 Number of Material flow agents that should be spawned.
@@ -127,17 +117,6 @@ For each agent a separate ns-3 node is created.
     - Required: :fontawesome-solid-star-of-life:
     - Reasonable default: `5`
     - Data type: ``uint64_t``
-
-#### ``do_material_flow_agents_leave_after_finish``
-
-Specifies whether a Material Flow agent should shutdown (disconnect from all network functionalities) after the material flow was finished.
-If set to ``false``, the Material Flow agent stays connected and can be reused for another material flow.
-
-??? properties
-
-    - Required: :fontawesome-solid-star-of-life:
-    - Reasonable default: `false`
-    - Data type: ``bool``
 
 #### ``algorithm``
 

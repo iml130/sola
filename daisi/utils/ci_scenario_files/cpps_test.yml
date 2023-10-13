@@ -10,9 +10,7 @@ topology:
     depth:   0
 
 initial_number_of_amrs: 12
-number_of_material_flows: 5
 number_of_material_flow_agents: 5
-do_material_flow_agents_leave_after_finish: false
 
 algorithm:
   assignment_strategy: iterated_auction

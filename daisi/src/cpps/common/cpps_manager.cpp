@@ -257,22 +257,9 @@ void CppsManager::clearFinishedMaterialFlows() {
                              ->GetObject<MaterialFlowLogicalAgentApplication>()
                              ->application;
 
-    if (mf_app) {
-      if (scenario_.do_material_flow_agents_leave_after_finish && mf_app->canStop()) {
-        found_running_matrial_flow_app = true;
-        material_flows_.Get(i)
-            ->GetApplication(0)
-            ->GetObject<MaterialFlowLogicalAgentApplication>()
-            ->application.reset();
-
-      } else if (mf_app->isFinished()) {
-        number_material_flows_finished_++;
-        found_running_matrial_flow_app = true;
-
-        if (scenario_.do_material_flow_agents_leave_after_finish) {
-          mf_app->prepareStop();
-        }
-      }
+    if (mf_app && mf_app->isFinished()) {
+      number_material_flows_finished_++;
+      found_running_matrial_flow_app = true;
     }
   }
 
