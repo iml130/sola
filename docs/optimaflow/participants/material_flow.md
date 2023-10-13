@@ -1,6 +1,6 @@
 # Material Flow
 
-In OptiMaFlow, we utilize the [Material Flow Description Language (MFDL)](https://git.openlogisticsfoundation.org/silicon-economy/libraries/mfdl) to describe material flows in a declarative manner.
+In OptiMaFlow, we intend to use the [Material Flow Description Language (MFDL)](https://git.openlogisticsfoundation.org/silicon-economy/libraries/mfdl) to describe material flows in a declarative manner.
 A material flow is composed of a set of tasks. 
 Each task consists of multiple orders that are assigned to a single AMR.
 The transport order represents the process of picking up an item from location A and transporting it to a designated delivery location B.
