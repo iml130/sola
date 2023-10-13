@@ -64,12 +64,6 @@ protected:
   /// @param info The necessary information about the new participant.
   virtual void storeParticipant(ParticipantInfo &info) = 0;
 
-  /// @brief Log the new state of a task.
-  /// @param task The changed task.
-  /// @param order_state The new order state.
-  void logMaterialFlowOrderStatesOfTask(const material_flow::Task &task,
-                                        const OrderStates &order_state);
-
   /// @brief All material flows that have been received to assign their tasks.
   std::vector<material_flow::MFDLScheduler> material_flows_;
 
