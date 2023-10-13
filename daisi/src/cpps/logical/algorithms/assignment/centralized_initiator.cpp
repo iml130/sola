@@ -82,17 +82,4 @@ void CentralizedInitiator::readAmrRequestFuture() {
   preparation_finished_ = true;
 }
 
-void CentralizedInitiator::logMaterialFlowOrderStatesOfTask(const material_flow::Task &task,
-                                                            const OrderStates &order_state) {
-  // log each order of the task
-  for (auto i = 0; i < task.getOrders().size(); i++) {
-    MaterialFlowOrderUpdateLoggingInfo logging_info;
-    logging_info.task = task;
-    logging_info.order_index = i;
-    logging_info.order_state = order_state;
-
-    logger_->logMaterialFlowOrderUpdate(logging_info);
-  }
-}
-
 }  // namespace daisi::cpps::logical
