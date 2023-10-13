@@ -21,6 +21,7 @@
 
 #include "SOLA/service.h"
 #include "cpps/amr/message/amr_state.h"
+#include "cpps/logical/message/material_flow_update.h"
 #include "cpps/model/order_states.h"
 #include "logging/definitions.h"
 #include "material_flow/model/task.h"
@@ -92,15 +93,6 @@ struct ExecutedOrderUtilityLoggingInfo {
   double utility;
 };
 
-struct MaterialFlowOrderUpdateLoggingInfo {
-  std::string amr_uuid;
-  AmrState amr_state = AmrState::kIdle;
-  OrderStates order_state = OrderStates::kCreated;
-  material_flow::Task task;
-  uint8_t order_index = 0;
-  util::Position position;
-};
-
 class CppsLoggerNs3 {
 public:
   CppsLoggerNs3() = delete;
@@ -123,7 +115,7 @@ public:
                        uint8_t state);
   void logMaterialFlowOrder(const material_flow::Order &order, const std::string &task_uuid);
   void logMaterialFlowTask(const material_flow::Task &task, const std::string &material_flow_uuid);
-  void logMaterialFlowOrderUpdate(const MaterialFlowOrderUpdateLoggingInfo &logging_info);
+  void logMaterialFlowOrderUpdate(const cpps::logical::MaterialFlowUpdate &logging_info);
 
   // Used for loggers which are initialized before node starts
   // TODO Refactor to other class

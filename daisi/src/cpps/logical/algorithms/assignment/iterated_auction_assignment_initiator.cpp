@@ -17,6 +17,7 @@
 #include "iterated_auction_assignment_initiator.h"
 
 #include "cpps/amr/model/amr_fleet.h"
+#include "cpps/logical/message/material_flow_update.h"
 #include "ns3/simulator.h"
 
 namespace daisi::cpps::logical {
@@ -38,6 +39,8 @@ void IteratedAuctionAssignmentInitiator::addMaterialFlow(
     throw std::runtime_error("A material flow is already processed currently. Support of multiple "
                              "is not implemented yet.");
   }
+
+  material_flow_ = scheduler;
 
   layered_precedence_graph_ = std::make_shared<LayeredPrecedenceGraph>(
       scheduler, communicator_->network.getConnectionString());
@@ -95,6 +98,7 @@ void IteratedAuctionAssignmentInitiator::finishIteration() {
   } else {
     layered_precedence_graph_ = nullptr;
     auction_initiator_state_ = nullptr;
+    material_flow_ = nullptr;
   }
 }
 
@@ -226,12 +230,11 @@ void IteratedAuctionAssignmentInitiator::logMaterialFlowContent(
 void IteratedAuctionAssignmentInitiator::logMaterialFlowOrderStatesOfTask(
     const material_flow::Task &task, const OrderStates &order_state) {
   for (auto i = 0; i < task.getOrders().size(); i++) {
-    MaterialFlowOrderUpdateLoggingInfo logging_info;
-    logging_info.task = task;
-    logging_info.order_index = i;
-    logging_info.order_state = order_state;
-
-    logger_->logMaterialFlowOrderUpdate(logging_info);
+    MaterialFlowUpdate update;
+    update.task = task;
+    update.order_index = i;
+    update.order_state = order_state;
+    material_flow_->processOrderUpdate(update);
   }
 }
 

@@ -71,4 +71,21 @@ void Task::setSpawnTime(const util::Duration &spawn_time) {
   throw std::runtime_error("TimeWindow not set");
 }
 
+void Task::setOrderState(uint8_t order_index, daisi::cpps::OrderStates state) {
+  auto &order = orders_.at(order_index);
+  std::visit([this, state](auto &ord) { this->setOrderState(ord, state); }, order);
+}
+
+void Task::setOrderState(TransportOrder &order, daisi::cpps::OrderStates state) {
+  order.setOrderState(state);
+}
+
+void Task::setOrderState(MoveOrder & /*order*/, daisi::cpps::OrderStates /*state*/) {
+  throw std::runtime_error("not supported yet");
+}
+
+void Task::setOrderState(ActionOrder & /*order*/, daisi::cpps::OrderStates /*state*/) {
+  throw std::runtime_error("not supported yet");
+}
+
 }  // namespace daisi::material_flow

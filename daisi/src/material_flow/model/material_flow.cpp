@@ -16,8 +16,29 @@
 
 #include "material_flow.h"
 
+#include <algorithm>
+#include <cassert>
+
 namespace daisi::material_flow {
 
-// TODO
+void MFDLScheduler::processOrderUpdate(const daisi::cpps::logical::MaterialFlowUpdate &update) {
+  log_order_state_update_fct_(update);
+  auto it = std::find(tasks_.begin(), tasks_.end(), update.task);
+  assert(it != tasks_.end());
+  it->setOrderState(update.order_index, update.order_state);
+}
+
+bool MFDLScheduler::isFinished() const {
+  for (const Task &task : tasks_) {
+    const auto &orders = task.getOrders();
+    const bool all_finished = std::all_of(orders.begin(), orders.end(), [](const Order &order) {
+      return std::get<TransportOrder>(order).getOrderState() == cpps::OrderStates::kFinished;
+    });
+    if (!all_finished) return false;
+  }
+  return true;
+}
+
+void MFDLScheduler::addTask(Task task) { tasks_.push_back(std::move(task)); }
 
 }  // namespace daisi::material_flow

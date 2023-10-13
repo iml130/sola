@@ -168,7 +168,7 @@ static const std::string kCreateMaterialFlowOrderHistory =
 static bool material_flow_order_history_exists_ = false;
 
 void CppsLoggerNs3::logMaterialFlowOrderUpdate(
-    const MaterialFlowOrderUpdateLoggingInfo &logging_info) {
+    const cpps::logical::MaterialFlowUpdate &logging_info) {
   if (!material_flow_order_history_exists_) {
     log_(kCreateMaterialFlowOrderHistory);
     material_flow_order_history_exists_ = true;

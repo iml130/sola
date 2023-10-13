@@ -37,6 +37,8 @@ target_link_libraries(daisi_cpps_logical_algorithms_assignment_iterated_auction_
     ns3::libcore
     daisi_cpps_amr_model_amr_fleet
     daisi_cpps_common_cpps_communicator
+    daisi_cpps_logical_message_material_flow_update
+    daisi_material_flow_model_material_flow
 )
 
 add_library(daisi_cpps_logical_algorithms_assignment_iterated_auction_assignment_participant STATIC)
