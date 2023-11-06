@@ -29,7 +29,10 @@ jobs:
       - name: Install pip dependencies
         run: pip install -r docs/requirements.txt
       - name: Install doxygen
-        run: sudo apt-get install -y doxygen
+        run: |
+          curl -LO https://github.com/doxygen/doxygen/releases/download/Release_1_9_8/doxygen-1.9.8.linux.bin.tar.gz
+          tar xzfv doxygen-1.9.8.linux.bin.tar.gz -C ~
+          rm doxygen-1.9.8.linux.bin.tar.gz
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -37,6 +40,7 @@ jobs:
         run: mkdocs build
       - name: Build doxygen
         run: |
+          export PATH="~/doxygen-1.9.8/bin:$PATH"
           doxygen
           rm html/doxygen -r # Remove doxygen placeholder folder
           mv doxygen_output/html html/doxygen
