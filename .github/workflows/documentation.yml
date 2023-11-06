@@ -38,6 +38,7 @@ jobs:
       - name: Build doxygen
         run: |
           doxygen
+          rm html/doxygen -r # Remove doxygen placeholder folder
           mv doxygen_output/html html/doxygen
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
