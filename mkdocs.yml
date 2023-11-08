@@ -77,7 +77,7 @@ nav:
       - Logging: daisi/optimaflow-ns3/logging.md
       - Specifics: daisi/optimaflow-ns3/specifics.md
 
-  - Doxygen: doxygen/index.html
+  - Doxygen: https://iml130.github.io/sola/doxygen/index.html
 
   - Glossary: glossary.md
 
