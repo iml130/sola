@@ -47,7 +47,7 @@ jobs:
           tar xzfv doxygen-1.9.8.linux.bin.tar.gz -C ~
           rm doxygen-1.9.8.linux.bin.tar.gz
       - name: Build mkdocs
-        run: mkdocs build
+        run: mkdocs build --strict
       - name: Build doxygen
         run: |
          export PATH="~/doxygen-1.9.8/bin:$PATH"
