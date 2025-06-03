@@ -1,5 +1,7 @@
 # SOLA
 
+:warning: This project is currently not maintained!
+
 ![SOLA](./docs/img/sola_dark.png#gh-dark-mode-only)
 ![SOLA](./docs/img/sola_light.png#gh-light-mode-only)
 
